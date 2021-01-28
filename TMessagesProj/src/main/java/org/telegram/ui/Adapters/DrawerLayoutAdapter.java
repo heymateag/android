@@ -23,6 +23,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerAddCell;
+import org.telegram.ui.Cells.DrawerManageOffersCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
@@ -37,7 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
-    private ArrayList<Item> items = new ArrayList<>(11);
+    private ArrayList<Item> items = new ArrayList<>(12);
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShown;
     private DrawerProfileCell profileCell;
@@ -130,6 +131,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             case 5:
                 view = new DrawerAddCell(mContext);
                 break;
+            case 6:
+                view = new DrawerManageOffersCell(mContext);
+                break;
             case 1:
             default:
                 view = new EmptyCell(mContext, AndroidUtilities.dp(8));
@@ -181,6 +185,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                     if (i == accountNumbers.size()){
                         return 5;
                     } else if (i == accountNumbers.size() + 1) {
+                        return 6;
+                    } else if (i == accountNumbers.size() + 2) {
                         return 2;
                     }
                 } else {
