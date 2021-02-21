@@ -39,6 +39,8 @@ dependencies {
     implementation "com.microsoft.appcenter:appcenter-crashes:3.3.1"
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
+    implementation 'com.amplifyframework:aws-api:1.16.11'
+    implementation 'com.amplifyframework:aws-datastore:1.16.11'
     implementation files('libs/libgsaverification-client.aar')
 
     //

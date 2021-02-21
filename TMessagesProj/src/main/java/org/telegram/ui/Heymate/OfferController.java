@@ -52,8 +52,8 @@ public class OfferController extends BaseController {
             database.executeFast("PRAGMA temp_store = MEMORY").stepThis().dispose();
             database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
             database.executeFast("PRAGMA journal_size_limit = 10485760").stepThis().dispose();
-            database.executeFast("DROP TABLE offer;").stepThis().dispose();;
-            database.executeFast("CREATE TABLE IF NOT EXISTS offer(uid INTEGER PRIMARY KEY, title TEXT, rate INTEGER, rateType INTEGER, currency TEXT, location TEXT, time TEXT);").stepThis().dispose();;
+//            database.executeFast("DROP TABLE IF EXISTS offer;").stepThis().dispose();;
+            database.executeFast("CREATE TABLE IF NOT EXISTS offer(uid INTEGER PRIMARY KEY, title TEXT, rate INTEGER, rateType INTEGER, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER);").stepThis().dispose();
 
             if (createTable) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -79,16 +79,104 @@ public class OfferController extends BaseController {
         return instance;
     }
 
-    public void addOffer(String title, int rate, String rateType, String currency, String location, String time){
+    public int addOffer(String title, int rate, String rateType, String currency, String location, String time, String category, String subCategory, String configText, String terms, String description, int status) {
         try {
             database.beginTransaction();
-            SQLitePreparedStatement statement = database.executeFast("INSERT INTO offer(title, rate, rateType, currency, location, time) VALUES(?,?,?,?,?,?);");
-            statement.bindString(1,title);
-            statement.bindInteger(2,rate);
-            statement.bindString(3,rateType);
-            statement.bindString(4,currency);
-            statement.bindString(5,location);
-            statement.bindString(6,time);
+            SQLitePreparedStatement statement = database.executeFast("INSERT INTO offer(title, rate, rateType, currency, location, time, category, subCategory, configText, terms, description, status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);");
+            statement.bindString(1, title);
+            statement.bindInteger(2, rate);
+            statement.bindString(3, rateType);
+            statement.bindString(4, currency);
+            statement.bindString(5, location);
+            statement.bindString(6, time);
+            statement.bindString(7, category);
+            statement.bindString(8, subCategory);
+            statement.bindString(9, configText);
+            statement.bindString(10, terms);
+            statement.bindString(11, description);
+            statement.bindInteger(12, status);
+            database.commitTransaction();
+//            SQLiteCursor cursor = database.queryFinalized("SELECT MAX(uid) FROM offer;");
+//            cursor.next();
+//            return cursor.intValue(0);
+            return 10;
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void addOffer(int offerId, String title, int rate, String rateType, String currency, String location, String time, String category, String subCategory, String configText, String terms, String description, int status) {
+        try {
+            database.beginTransaction();
+            SQLitePreparedStatement statement2 = database.executeFast("UPDATE offer SET title = ?, rate = ?, rateType = ?, currency = ?, location = ?, time = ?, category = ?, subCategory = ?, configText = ?, terms = ?, description = ?, status = ? WHERE uid = ?;");
+            statement2.bindString(1, title);
+            statement2.bindInteger(2, rate);
+            statement2.bindString(3, rateType);
+            statement2.bindString(4, currency);
+            statement2.bindString(5, location);
+            statement2.bindString(6, time);
+            statement2.bindString(7, category);
+            statement2.bindString(8, subCategory);
+            statement2.bindString(9, configText);
+            statement2.bindString(10, terms);
+            statement2.bindString(11, description);
+            statement2.bindInteger(12, status);
+            statement2.bindInteger(13, offerId);
+            statement2.step();
+            database.commitTransaction();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public OfferDto getOffer(int id) {
+        try {
+            SQLiteCursor cursor = database.queryFinalized("SELECT * FROM offer WHERE uid = ? LIMIT 1;", id);
+            OfferDto offerDto = new OfferDto();
+            cursor.next();
+            offerDto.setId(cursor.intValue(0));
+            offerDto.setTitle(cursor.stringValue(1));
+            offerDto.setRate(cursor.intValue(2));
+            offerDto.setRateType(cursor.stringValue(3));
+            offerDto.setCurrency(cursor.stringValue(4));
+            offerDto.setLocation(cursor.stringValue(5));
+            offerDto.setTime(cursor.stringValue(6));
+            offerDto.setCategory(cursor.stringValue(7));
+            offerDto.setSubCategory(cursor.stringValue(8));
+            offerDto.setConfigText(cursor.stringValue(9));
+            offerDto.setTerms(cursor.stringValue(10));
+            offerDto.setDescription(cursor.stringValue(11));
+            offerDto.setStatus(getOfferStatus(cursor.intValue(12)));
+            return offerDto;
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private OfferStatus getOfferStatus(int offerStatus) {
+        switch (offerStatus) {
+            case 1: {
+                return OfferStatus.ACTIVE;
+            }
+            case 2: {
+                return OfferStatus.DRAFTED;
+            }
+            case 3: {
+                return OfferStatus.ARCHIVED;
+            }
+            default: {
+                return OfferStatus.EXPIRED;
+            }
+        }
+    }
+
+    public void archiveOffer(int id) {
+        try {
+            database.beginTransaction();
+            SQLitePreparedStatement statement = database.executeFast("UPDATE offer SET status = 3 WHERE uid = ?;");
+            statement.bindInteger(1, id);
             statement.step();
             database.commitTransaction();
         } catch (SQLiteException e) {
@@ -96,44 +184,109 @@ public class OfferController extends BaseController {
         }
     }
 
-    public OfferDto getOffer(int id){
-        try {
-            openDatabase(1);
-            SQLiteCursor cursor = database.queryFinalized("SELECT * FROM offer LIMIT 1;");
+    private ArrayList<OfferDto> extract(SQLiteCursor cursor) throws SQLiteException {
+        ArrayList<OfferDto> offers = new ArrayList<>();
+        while (cursor.next()) {
             OfferDto offerDto = new OfferDto();
-            cursor.next();
+            offerDto.setId(cursor.intValue(0));
             offerDto.setTitle(cursor.stringValue(1));
             offerDto.setRate(cursor.intValue(2));
             offerDto.setRateType(cursor.stringValue(3));
             offerDto.setCurrency(cursor.stringValue(4));
             offerDto.setLocation(cursor.stringValue(5));
             offerDto.setTime(cursor.stringValue(6));
-            return offerDto;
+            offerDto.setCategory(cursor.stringValue(7));
+            offerDto.setSubCategory(cursor.stringValue(8));
+            offerDto.setConfigText(cursor.stringValue(9));
+            offerDto.setTerms(cursor.stringValue(10));
+            offerDto.setDescription(cursor.stringValue(11));
+            offerDto.setStatus(getOfferStatus(cursor.intValue(12)));
+            offers.add(offerDto);
+        }
+        return offers;
+    }
+
+    public ArrayList<OfferDto> getOffers(String category, String subCategory, int status) {
+        try {
+            SQLiteCursor cursor;
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND status = ? AND subCategory = ? ORDER BY uid DESC;", category, status, subCategory);
+            return extract(cursor);
         } catch (SQLiteException e) {
             e.printStackTrace();
-            return  null;
+            return null;
         }
     }
 
-    public ArrayList<OfferDto> getAllOffers(){
+    public ArrayList<OfferDto> getOffers(String category, String subCategory) {
         try {
-            SQLiteCursor cursor = database.queryFinalized("SELECT * FROM offer ORDER BY uid DESC LIMIT 20;");
+            SQLiteCursor cursor;
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND subCategory = ? ORDER BY uid DESC;", category, subCategory);
+            return extract(cursor);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<OfferDto> getOffers(String category, int status) {
+        try {
+            SQLiteCursor cursor;
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND status = ? ORDER BY uid DESC;", category, status);
+            return extract(cursor);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<OfferDto> getOffers(int status) {
+        try {
+            SQLiteCursor cursor;
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE status = ? ORDER BY uid DESC;", status);
+            return extract(cursor);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<OfferDto> getOffers(String category) {
+        try {
+            SQLiteCursor cursor;
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? ORDER BY uid DESC;", category);
+            return extract(cursor);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ArrayList<OfferDto> getAllOffers() {
+        try {
+            SQLiteCursor cursor = database.queryFinalized("SELECT * FROM offer ORDER BY uid DESC;");
             ArrayList<OfferDto> offers = new ArrayList<>();
             int i = 0;
-            while (cursor.next()){
+            while (cursor.next()) {
                 OfferDto offerDto = new OfferDto();
+                offerDto.setId(cursor.intValue(0));
                 offerDto.setTitle(cursor.stringValue(1));
                 offerDto.setRate(cursor.intValue(2));
                 offerDto.setRateType(cursor.stringValue(3));
                 offerDto.setCurrency(cursor.stringValue(4));
                 offerDto.setLocation(cursor.stringValue(5));
                 offerDto.setTime(cursor.stringValue(6));
+                offerDto.setCategory(cursor.stringValue(7));
+                offerDto.setSubCategory(cursor.stringValue(8));
+                offerDto.setConfigText(cursor.stringValue(9));
+                offerDto.setTerms(cursor.stringValue(10));
+                offerDto.setDescription(cursor.stringValue(11));
+                offerDto.setStatus(getOfferStatus(cursor.intValue(12)));
                 offers.add(offerDto);
             }
             return offers;
         } catch (SQLiteException e) {
             e.printStackTrace();
-            return  null;
+            return null;
         }
     }
 

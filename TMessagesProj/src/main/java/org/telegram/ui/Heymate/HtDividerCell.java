@@ -32,19 +32,26 @@ import java.util.ArrayList;
 public class HtDividerCell extends FrameLayout {
 
     private TextView valueTextView;
-
-    public HtDividerCell(Context context) {
-        this(context, 21);
-    }
-
-    public HtDividerCell(Context context, int padding) {
+    private boolean narrow = false;
+    public HtDividerCell(Context context, boolean narrow) {
         super(context);
 
         valueTextView = new TextView(context);
         valueTextView.setBackgroundColor(Theme.getColor(Theme.key_graySection));
         valueTextView.setVisibility(VISIBLE);
-        addView(valueTextView, LayoutHelper.createLinear(400, 15));
+        if(!narrow)
+            addView(valueTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 15));
+        else
+            addView(valueTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 1));
         requestLayout();
+    }
+
+    public HtDividerCell(Context context) {
+        this(context, false);
+    }
+
+    public HtDividerCell(Context context, int padding) {
+        this(context, false);
     }
 
     @Override

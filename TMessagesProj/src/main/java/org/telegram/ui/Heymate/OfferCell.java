@@ -9,20 +9,15 @@
 package org.telegram.ui.Heymate;
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -40,18 +35,16 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.ProfileActivity;
 
-import java.util.ArrayList;
-
-public class OfferCell extends FrameLayout {
+public class OfferCell<T> extends FrameLayout {
 
     private Context context;
-    private OffersActivity parentFragment;
+    private int place;
+    private T parentFragment;
     private OfferDto dto;
     private LinearLayout holderLayout;
     private LinearLayout mainLayout;
@@ -65,9 +58,19 @@ public class OfferCell extends FrameLayout {
     private boolean showingDetails = false;
     private boolean duringShowingDetails = false;
     private OfferDetailsLayout offerDetailsLayout;
+    private ImageView slideImage;
 
-    public OfferCell(Context context, OffersActivity parentFragment, OfferDto dto) {
+    private int getOfferStatusColor(OfferStatus offerStatus){
+        switch (offerStatus){
+            case ACTIVE: return context.getResources().getColor(R.color.ht_green);
+            case EXPIRED: return Theme.getColor(Theme.key_wallet_redText);
+            default: return Theme.getColor(Theme.key_dialogGrayLine);
+        }
+    }
+
+    public OfferCell(Context context, T parentFragment, OfferDto dto, int place) {
         super(context);
+        this.place = place;
         this.context = context;
         this.parentFragment = parentFragment;
         this.dto = dto;
@@ -76,6 +79,11 @@ public class OfferCell extends FrameLayout {
         detailLayout = new RelativeLayout(context);
         mainLayout = new LinearLayout(context);
         secondHolder = new LinearLayout(context);
+        LinearLayout statusLayout = new LinearLayout(context);
+        statusLayout.setBackgroundColor(getOfferStatusColor(dto.getStatus()));
+        mainLayout.addView(statusLayout, LayoutHelper.createFrame(AndroidUtilities.dp(2), LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0,0,15,0));
+        LinearLayout titleLayout = new LinearLayout(context);
+        titleLayout.setOrientation(LinearLayout.VERTICAL);
         TextView offerTitle = new TextView(context);
         offerTitle.setText(dto.getTitle());
         offerTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -86,19 +94,55 @@ public class OfferCell extends FrameLayout {
         offerTitle.setCompoundDrawablesWithIntrinsicBounds(offerTitleDrawable, null, null, null);
         offerTitle.setCompoundDrawablePadding(AndroidUtilities.dp(10));
         offerTitle.setGravity(Gravity.CENTER_HORIZONTAL | RelativeLayout.CENTER_VERTICAL);
-        mainLayout.addView(offerTitle, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+        titleLayout.addView(offerTitle, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
         TextView offerRate = new TextView(context);
         offerRate.setText(dto.getRate() + dto.getCurrency());
         offerRate.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         offerRate.setGravity(Gravity.CENTER);
         offerRate.setTypeface(offerRate.getTypeface(), Typeface.BOLD);
+        titleLayout.addView(offerRate, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
+        TextView offerStatus = new TextView(context);
+        offerStatus.setText(dto.getStatus().toString());
+        offerStatus.setTextColor(getOfferStatusColor(dto.getStatus()));
+        offerStatus.setGravity(Gravity.CENTER);
+        offerStatus.setTypeface(offerRate.getTypeface(), Typeface.BOLD);
+        titleLayout.addView(offerStatus, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
+        slideImage = new ImageView(context);
+        Drawable slideDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+        slideDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
+        slideImage.setImageDrawable(slideDrawable);
+        slideImage.setRotation(270);
+        titleLayout.addView(slideImage, LayoutHelper.createLinear(17,17));
+        if(place == 2){
+            ImageView galleryImage = new ImageView(context) {
+                @Override
+                public void setEnabled(boolean enabled) {
+                    super.setEnabled(enabled);
+                    setAlpha(enabled ? 1.0f : 0.5f);
+                }
+            };
+            Drawable galleryDrawable = context.getResources().getDrawable(R.drawable.msg_gallery);
+            galleryDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue), PorterDuff.Mode.MULTIPLY));
+            galleryImage.setImageDrawable(galleryDrawable);
+            galleryImage.setEnabled(true);
+            galleryImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(parentFragment instanceof ProfileActivity){
+                        ((ProfileActivity) parentFragment).presentFragment(new OfferGalleryActivity(context, dto));
+                    }
+                }
+            });
+            titleLayout.addView(galleryImage, LayoutHelper.createFrame(30,30));
+        }
         LinearLayout infoLayout = new LinearLayout(context);
         infoLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLayout.addView(titleLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
         TextView offerTime = new TextView(context);
         offerTime.setText(dto.getTime());
         offerTime.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         offerTime.setGravity(Gravity.CENTER);
-        offerTime.setTypeface(offerRate.getTypeface(), Typeface.BOLD);
+        offerTime.setTypeface(offerTime.getTypeface(), Typeface.BOLD);
         offerTime.setMinLines(2);
         offerTime.setMaxLines(3);
         Drawable offerTimeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
@@ -113,7 +157,7 @@ public class OfferCell extends FrameLayout {
         offerLocation.setText("2KM");
         offerLocation.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         offerLocation.setGravity(Gravity.CENTER);
-        offerLocation.setTypeface(offerRate.getTypeface(), Typeface.BOLD);
+        offerLocation.setTypeface(offerLocation.getTypeface(), Typeface.BOLD);
         Drawable offerLocationDrawable = context.getResources().getDrawable(R.drawable.msg_location);
         Bitmap b4 = ((BitmapDrawable) offerLocationDrawable).getBitmap();
         Bitmap bitmapResized4 = Bitmap.createScaledBitmap(b4, 60, 60, false);
@@ -122,9 +166,8 @@ public class OfferCell extends FrameLayout {
         offerLocation.setCompoundDrawablesWithIntrinsicBounds(gdrawable4, null, null, null);
         offerLocation.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         infoLayout.addView(offerLocation, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 20, 0, 0, 20));
-        mainLayout.addView(offerRate, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
         mainLayout.addView(infoLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
-        detailLayout.addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 40,0,0,0));
+        detailLayout.addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 20,0,0,0));
         holderLayout.addView(detailLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER, 0,0,0,0));
         holderLayout.addView(secondHolder, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER, 0,0,0,0));
         holderLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT,Gravity.CENTER, 40,0,40,0));
@@ -148,10 +191,13 @@ public class OfferCell extends FrameLayout {
         if(duringShowingOptions)
             return;
         duringShowingOptions = true;
+        ObjectAnimator slideAnim = ObjectAnimator.ofFloat(slideImage, "rotation", 90);
+        slideAnim.setDuration(300);
+        slideAnim.start();
         OfferCell father = this;
-        ObjectAnimator anim1 = ObjectAnimator.ofFloat(mainLayout, "x", AndroidUtilities.dp(180));
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(mainLayout, "x", place == 1 ? AndroidUtilities.dp(180) : AndroidUtilities.dp(70));
         anim1.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim1.setDuration(600);
+        anim1.setDuration(place == 1 ? 600 : 200);
         anim1.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -163,7 +209,7 @@ public class OfferCell extends FrameLayout {
                 Animation colorAnim = new Animation() {
                     @Override
                     protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        infoIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
+                        infoIcon.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
                     }
                 };
                 infoIcon.startAnimation(colorAnim);
@@ -199,6 +245,8 @@ public class OfferCell extends FrameLayout {
                 anim2.start();
 
                 editIcon = new ImageView(context);
+                if(place == 2)
+                    editIcon.setVisibility(GONE);
                 Drawable editIconDrawable = context.getResources().getDrawable(R.drawable.msg_edit);
                 editIconDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue), PorterDuff.Mode.MULTIPLY));
                 editIcon.setImageDrawable(editIconDrawable);
@@ -218,12 +266,16 @@ public class OfferCell extends FrameLayout {
                 anim4.setDuration(350);
                 anim4.start();
                 archiveIcon = new ImageView(context);
-                Drawable archiveIconDrawable = context.getResources().getDrawable(R.drawable.chats_archive);
-                archiveIconDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogRedIcon), PorterDuff.Mode.MULTIPLY));
+                if(place == 2)
+                    archiveIcon.setVisibility(GONE);
+                Drawable archiveIconDrawable = context.getResources().getDrawable(R.drawable.share);
+                archiveIconDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
                 archiveIcon.setImageDrawable(archiveIconDrawable);
                 archiveIcon.setMaxWidth(AndroidUtilities.dp(25));
                 archiveIcon.setMaxHeight(AndroidUtilities.dp(25));
                 archiveIcon.setEnabled(true);
+                if(dto.getStatus() == OfferStatus.ARCHIVED)
+                    archiveIcon.setVisibility(GONE);
                 archiveIcon.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -232,6 +284,12 @@ public class OfferCell extends FrameLayout {
                         archiveIcon.startAnimation(anim3);
                         ObjectAnimator anim5 = ObjectAnimator.ofFloat(mainLayout, "x", AndroidUtilities.dp(400));
                         anim5.setDuration(600);
+
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("text/plain");
+                        share.putExtra(Intent.EXTRA_TEXT, "##:HtOffer##:"+dto.getTitle()+"##:"+dto.getRate()+"##:"+dto.getRateType()+"##:"+dto.getCurrency()+"##:"+dto.getLocation()+"##:"+dto.getTime()+"##:"+dto.getCategory()+"##:"+dto.getSubCategory());
+                        context.startActivity(Intent.createChooser(share, "Promote your Offer"));
+
                         anim5.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -240,7 +298,7 @@ public class OfferCell extends FrameLayout {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                parentFragment.getOffersLayout().removeView(father);
+
                             }
 
                             @Override
@@ -280,6 +338,10 @@ public class OfferCell extends FrameLayout {
             return;
         duringShowingOptions = true;
         hideDetails();
+        ObjectAnimator slideAnim = ObjectAnimator.ofFloat(slideImage, "rotation", 270);
+        slideAnim.setDuration(300);
+        slideAnim.start();
+
         ObjectAnimator anim5 = ObjectAnimator.ofFloat(infoIcon, View.ALPHA, 1, 0);
         anim5.setDuration(350);
         anim5.start();
@@ -298,12 +360,15 @@ public class OfferCell extends FrameLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                ObjectAnimator anim1 = ObjectAnimator.ofFloat(mainLayout, "x", AndroidUtilities.dp(40));
+                ObjectAnimator anim1 = ObjectAnimator.ofFloat(mainLayout, "x", AndroidUtilities.dp(20));
                 anim1.setInterpolator(new AccelerateDecelerateInterpolator());
                 anim1.setDuration(600);
                 anim1.start();
                 showingOptions = false;
                 duringShowingOptions = false;
+                detailLayout.removeView(infoIcon);
+                detailLayout.removeView(editIcon);
+                detailLayout.removeView(archiveIcon);
             }
 
             @Override
@@ -322,10 +387,31 @@ public class OfferCell extends FrameLayout {
     private void showDetails(){
         if(duringShowingDetails)
             return;
-        duringShowingOptions = true;
+        duringShowingDetails = true;
         offerDetailsLayout = new OfferDetailsLayout(context, dto);
         secondHolder.addView(offerDetailsLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0,0,0,0));
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(offerDetailsLayout, "scaleX", 0, 1);
+        anim1.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                duringShowingDetails = false;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         anim1.start();
     }
 
@@ -343,6 +429,7 @@ public class OfferCell extends FrameLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 secondHolder.removeView(offerDetailsLayout);
+                duringShowingDetails = false;
             }
 
             @Override
@@ -358,6 +445,8 @@ public class OfferCell extends FrameLayout {
         anim1.start();
     }
 
+
+
     private class OfferDetailsLayout extends LinearLayout {
         private Context context;
 
@@ -369,37 +458,37 @@ public class OfferCell extends FrameLayout {
             titleLayout.setOrientation(VERTICAL);
             TextView titleLabel = new TextView(context);
             titleLabel.setText(dto.getTitle());
-            titleLabel.setTextColor(Theme.getColor(Theme.key_chat_inGreenCall));
+            titleLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
             titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             titleLabel.setTextSize(16);
             titleLayout.addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
             LinearLayout rateLayout = new LinearLayout(context);
             TextView rateLabel = new TextView(context);
             rateLabel.setText(""+ dto.getRate());
-            rateLabel.setTextColor(Theme.getColor(Theme.key_chat_inGreenCall));
+            rateLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundOrange));
             rateLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             rateLabel.setTextSize(16);
             rateLayout.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
             TextView currencyLabel = new TextView(context);
             currencyLabel.setText(dto.getCurrency());
-            currencyLabel.setTextColor(Theme.getColor(Theme.key_chat_inGreenCall));
+            currencyLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundOrange));
             currencyLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             currencyLabel.setTextSize(16);
             rateLayout.addView(currencyLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
             TextView rateTypeLabel = new TextView(context);
             rateTypeLabel.setText("" + dto.getRateType());
-            rateTypeLabel.setTextColor(Theme.getColor(Theme.key_wallet_redText));
+            rateTypeLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundOrange));
             rateTypeLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             rateTypeLabel.setTextSize(16);
             rateLayout.addView(rateTypeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
             LinearLayout locationLayout = new LinearLayout(context);
             TextView locationLabel = new TextView(context);
             Drawable locationDrawable = context.getResources().getDrawable(R.drawable.menu_location);
-            locationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
+            locationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_backgroundCyan), PorterDuff.Mode.MULTIPLY));
             locationLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
             locationLabel.setCompoundDrawablesWithIntrinsicBounds(locationDrawable, null, null, null);
             locationLabel.setText(dto.getLocation());
-            locationLabel.setTextColor(Theme.getColor(Theme.key_chat_inGreenCall));
+            locationLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundCyan));
             locationLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             locationLabel.setTextSize(16);
             locationLabel.setMaxLines(5);
@@ -407,20 +496,44 @@ public class OfferCell extends FrameLayout {
             LinearLayout timeLayout = new LinearLayout(context);
             TextView timeLabel = new TextView(context);
             Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
-            timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
+            timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_backgroundViolet), PorterDuff.Mode.MULTIPLY));
             timeLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
             timeLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
             timeLabel.setText(dto.getTime());
-            timeLabel.setTextColor(Theme.getColor(Theme.key_chat_inGreenCall));
+            timeLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundViolet));
             timeLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             timeLabel.setTextSize(16);
             timeLayout.addView(timeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+            LinearLayout categoryLayout = new LinearLayout(context);
+            TextView categoryLabel = new TextView(context);
+            categoryLabel.setText(dto.getCategory());
+            categoryLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundSaved));
+            categoryLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
+            categoryLabel.setTextSize(16);
+            categoryLayout.addView(categoryLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+            TextView subCategoryLabel = new TextView(context);
+            subCategoryLabel.setText(dto.getSubCategory());
+            subCategoryLabel.setTextColor(Theme.getColor(Theme.key_avatar_nameInMessageRed));
+            subCategoryLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
+            subCategoryLabel.setTextSize(16);
+            categoryLayout.addView(subCategoryLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+            LinearLayout statusLayout = new LinearLayout(context);
+            TextView statusLabel = new TextView(context);
+            statusLabel.setText(dto.getStatus().toString());
+            statusLabel.setTextColor(getOfferStatusColor(dto.getStatus()));
+            statusLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
+            statusLabel.setTextSize(16);
+            statusLayout.addView(statusLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
 
-            this.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+            this.addView(new HtDividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             this.addView(titleLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             this.addView(rateLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             this.addView(locationLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             this.addView(timeLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            this.addView(categoryLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            this.addView(statusLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            this.addView(new HtDividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         }
     }
 }

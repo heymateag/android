@@ -982,7 +982,7 @@ public class ActionBar extends FrameLayout {
         }
         lastOverlayTitle = title;
 
-        CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : lastTitle;
+        CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : "Heymate";
         boolean ellipsize = false;
         if (title != null) {
 

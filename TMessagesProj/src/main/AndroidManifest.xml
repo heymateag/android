@@ -83,7 +83,8 @@
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:supportsRtl="false"
         android:requestLegacyExternalStorage="true"
-        tools:replace="android:supportsRtl">
+        tools:replace="android:name">
+        <!--tools:replace="android:supportsRtl"-->
 
         <activity
             android:name="org.telegram.ui.LaunchActivity"
@@ -147,6 +148,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="tg" />
+                <data android:scheme="ht" />
             </intent-filter>
             <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:priority="1">
                 <action android:name="android.intent.action.VIEW" />

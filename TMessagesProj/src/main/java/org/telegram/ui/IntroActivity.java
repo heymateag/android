@@ -95,16 +95,16 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         preferences.edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
 
         titles = new String[]{
-                LocaleController.getString("Page1Title", R.string.Page1Title),
-                LocaleController.getString("Page2Title", R.string.Page2Title),
+                "Heymate Telegram",
+                "Offers",
                 LocaleController.getString("Page3Title", R.string.Page3Title),
                 LocaleController.getString("Page5Title", R.string.Page5Title),
                 LocaleController.getString("Page4Title", R.string.Page4Title),
                 LocaleController.getString("Page6Title", R.string.Page6Title)
         };
         messages = new String[]{
-                LocaleController.getString("Page1Message", R.string.Page1Message),
-                LocaleController.getString("Page2Message", R.string.Page2Message),
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
                 LocaleController.getString("Page3Message", R.string.Page3Message),
                 LocaleController.getString("Page5Message", R.string.Page5Message),
                 LocaleController.getString("Page4Message", R.string.Page4Message),
@@ -144,7 +144,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         frameLayout.addView(frameLayout2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 78, 0, 0));
 
         TextureView textureView = new TextureView(this);
-        frameLayout2.addView(textureView, LayoutHelper.createFrame(200, 150, Gravity.CENTER));
+        frameLayout2.addView(textureView, LayoutHelper.createFrame(450, 150, Gravity.CENTER));
         textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -223,7 +223,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         startMessagingButton.setTextColor(0xffffffff);
         startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         startMessagingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff50a8eb, 0xff439bde));
+        startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), 0xff36bba9, 0xff36bba9));
         startMessagingButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         frameLayout.addView(startMessagingButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 10, 0, 10, 76));
         startMessagingButton.setOnClickListener(view -> {
@@ -566,10 +566,10 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             gl = eglContext.getGL();
 
             GLES20.glGenTextures(23, textures, 0);
-            loadTexture(R.drawable.intro_fast_arrow_shadow, 0);
-            loadTexture(R.drawable.intro_fast_arrow, 1);
-            loadTexture(R.drawable.intro_fast_body, 2);
-            loadTexture(R.drawable.intro_fast_spiral, 3);
+            loadTexture(R.drawable.places_btn, 0);
+            loadTexture(R.drawable.places_btn, 1);
+            loadTexture(R.drawable.group_350, 2);
+            loadTexture(R.drawable.places_btn, 3);
             loadTexture(R.drawable.intro_ic_bubble_dot, 4);
             loadTexture(R.drawable.intro_ic_bubble, 5);
             loadTexture(R.drawable.intro_ic_cam_lens, 6);
@@ -587,8 +587,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.intro_tg_plane, 21);
-            loadTexture(R.drawable.intro_tg_sphere, 22);
+            loadTexture(R.drawable.group_4, 21);
+            loadTexture(R.drawable.background_hd, 22);
 
             Intro.setTelegramTextures(textures[22], textures[21]);
             Intro.setPowerfulTextures(textures[17], textures[18], textures[16], textures[15]);

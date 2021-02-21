@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -52,10 +51,8 @@ public class DrawerManageOffersCell extends FrameLayout {
         super.onAttachedToWindow();
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
         textView.setText("Manage Offers");
-        Drawable drawable = getResources().getDrawable(R.drawable.msg_mention);
-        if (drawable != null) {
-            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), PorterDuff.Mode.MULTIPLY));
-        }
+        Drawable drawable = getResources().getDrawable(R.drawable.offer);
+        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
         textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 }

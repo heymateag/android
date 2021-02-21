@@ -38,7 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
-    private ArrayList<Item> items = new ArrayList<>(12);
+    private ArrayList<Item> items = new ArrayList<>(11);
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShown;
     private DrawerProfileCell profileCell;
@@ -131,7 +131,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             case 5:
                 view = new DrawerAddCell(mContext);
                 break;
-            case 6:
+            case 102:
                 view = new DrawerManageOffersCell(mContext);
                 break;
             case 1:
@@ -185,8 +185,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                     if (i == accountNumbers.size()){
                         return 5;
                     } else if (i == accountNumbers.size() + 1) {
-                        return 6;
-                    } else if (i == accountNumbers.size() + 2) {
                         return 2;
                     }
                 } else {
@@ -253,6 +251,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int inviteIcon;
         int helpIcon;
         int peopleNearbyIcon;
+        int manageOffersIcon = R.drawable.offer;
         if (eventType == 0) {
             newGroupIcon = R.drawable.menu_groups_ny;
             //newSecretIcon = R.drawable.menu_secret_ny;
@@ -299,6 +298,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             peopleNearbyIcon = R.drawable.menu_nearby;
         }
         items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
+        items.add(new Item(102, "Manage Offers", manageOffersIcon));
         //items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
         //items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
