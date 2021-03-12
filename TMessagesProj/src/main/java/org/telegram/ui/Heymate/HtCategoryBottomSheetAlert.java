@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class HtCategoryBottomSheetAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
+
     private BaseFragment parent;
     private LinearLayout categoryLayout;
     private LinearLayout subCategoryLayout;
@@ -53,13 +55,16 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
     public void initSheet(Context context){
         setDisableScroll(true);
         containerView = new LinearLayout(context);
+
         LinearLayout mainLayout = new LinearLayout(context);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setMinimumHeight(700);
         mainLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_actionBarDefault)));
+
         LinearLayout upperLayout = new LinearLayout(context);
         upperLayout.setGravity(Gravity.RIGHT);
+
         ImageView applyImage = new ImageView(context);
         Drawable applyDrawable = context.getResources().getDrawable(R.drawable.ht_check_circle);
         applyDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
@@ -72,17 +77,26 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                 hide();
             }
         });
+
         upperLayout.addView(applyImage, LayoutHelper.createLinear(45, 45, 15,35,15,15));
+
         mainLayout.addView(upperLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         LinearLayout mainLayout2 = new LinearLayout(context);
+
         LinearLayout categoryMainLayout = new LinearLayout(context);
         categoryMainLayout.setOrientation(LinearLayout.VERTICAL);
+
         ScrollView categoryScroll = new ScrollView(context);
+
         categoryLayout = new LinearLayout(context);
+
         categoryLayout.setOrientation(LinearLayout.VERTICAL);
+
         final ArrayList<HtTextCell>[] categories = new ArrayList[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
         final ArrayList<HtTextCell>[] subCategories = new ArrayList[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
         final HashMap<String, ArrayList<HtTextCell>> subCategoriesBase = new HashMap<>();
+
         SearchField categorySearch = new SearchField(context){
             @Override
             public void onTextChange(String text) {
@@ -100,8 +114,9 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                 }
             }
         };
-        categorySearch.setHint("Category");
+        categorySearch.setHint(LocaleController.getString("HtCategory", R.string.HtCategory));
         categoryMainLayout.addView(categorySearch, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 3,10,3,10));
+
         final HtTextCell[] prev = {null};
         Object[] categoryStore = DummyCategories.categories.keySet().stream().sorted().toArray();
         ArrayList<String> subCategoriesStore = new ArrayList<String>();
@@ -112,6 +127,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                 subCategoriesRootStore.add(cat.toString());
             }
         }
+
         for(int i = 0;i < categoryStore.length; i++){
             subCategoriesBase.put(categoryStore[i].toString(), new ArrayList<>());
             HtTextCell categoryCell = new HtTextCell(context);
@@ -135,9 +151,11 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
             categories[2].add(categoryCell);
         }
         updateCategories(categories[1], categories[2]);
+
         categoryScroll.addView(categoryLayout);
         categoryMainLayout.addView(categoryScroll);
         mainLayout2.addView(categoryMainLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f));
+
         LinearLayout subCategoryMainLayout = new LinearLayout(context);
         subCategoryMainLayout.setOrientation(LinearLayout.VERTICAL);
         ScrollView subCategoryScroll = new ScrollView(context);
@@ -160,9 +178,10 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                 }
             }
         };;
-        subCategorySearch.setHint("SubCategory");
+        subCategorySearch.setHint(LocaleController.getString("HtSubCategory", R.string.HtSubCategory));
         final HtTextCell[] prevSub = {null};
         subCategoryMainLayout.addView(subCategorySearch, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 3,10,3,10));
+
         for(int i = 0;i < subCategoriesStore.size(); i++){
             HtTextCell subCategoryCell = new HtTextCell(context);
             subCategoriesBase.get(subCategoriesRootStore.get(i)).add(subCategoryCell);
@@ -189,6 +208,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
         subCategoryMainLayout.addView(subCategoryScroll);
         mainLayout2.addView(subCategoryMainLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f));
         mainLayout.addView(mainLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
         containerView.addView(mainLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 700));
     }
 

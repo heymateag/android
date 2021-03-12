@@ -24,23 +24,21 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.HashMap;
 
 public class HtScheduleInputCell extends LinearLayout {
-    private RectF rect = new RectF();
-    Paint paint = new Paint();
-    TextPaint textPaint = new TextPaint();
-    String title;
-    private HashMap<String, Object> argsRes;
-    private TextView[] argValues;
+
+    private String title;
+    private HashMap<String, Object> paremetersValues;
+    private TextView[] parametersViews;
     private Drawable[] iconValues;
     private HashMap<String, Runnable> args;
 
     public HtScheduleInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
         super(context);
-        setWillNotDraw(false);
-        argsRes = new HashMap<>();
-        argValues = new TextView[args.size()];
+        paremetersValues = new HashMap<>();
+        parametersViews = new TextView[args.size()];
         iconValues = new Drawable[args.size()];
         this.args = args;
         this.title = title;
+
         LinearLayout titleLayout = new LinearLayout(context);
         ImageView titleImage = new ImageView(context);
         Drawable titleDrawable = context.getResources().getDrawable(icon);
@@ -50,18 +48,21 @@ public class HtScheduleInputCell extends LinearLayout {
         LinearLayout titleLayout2 = new LinearLayout(context);
         titleLayout2.setOrientation(LinearLayout.VERTICAL);
         LinearLayout titleLayout3 = new LinearLayout(context);
+
         TextView titleLabel = new TextView(context);
         titleLabel.setText(title);
         titleLabel.setTextSize(16);
         titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleLabel.setPadding(15, 0, 0, 0);
         titleLayout3.addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 1f, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 0, 15));
+
         ImageView expandIcon = new ImageView(context);
         Drawable expandDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
         expandDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         expandIcon.setImageDrawable(expandDrawable);
         titleLayout3.addView(expandIcon, LayoutHelper.createLinear(15, 15, AndroidUtilities.dp(20), AndroidUtilities.dp(4), 30, 15));
-titleLayout2.addView(titleLayout3);
+        titleLayout2.addView(titleLayout3);
+
         LinearLayout categoryLayout = new LinearLayout(context);
         expandIcon.setEnabled(true);
         expandIcon.setHovered(true);
@@ -135,6 +136,7 @@ titleLayout2.addView(titleLayout3);
             }
         });
         int i = 0;
+
         for (Object arg : args.keySet().stream().sorted().toArray()) {
             LinearLayout selectedArgLayout = new LinearLayout(context);
             selectedArgLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
@@ -164,26 +166,12 @@ titleLayout2.addView(titleLayout3);
 
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-/*        paint.setColor(Theme.getColor(Theme.key_wallet_grayBackground));
-        paint.setStrokeWidth(3);
-        rect.set(AndroidUtilities.dp(5), AndroidUtilities.dp(5), getMeasuredWidth() - AndroidUtilities.dp(5), getMeasuredHeight() - AndroidUtilities.dp(5));
-        canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);
-        paint.setColor(Theme.getColor(Theme.key_graySection));
-        paint.setStrokeWidth(3);
-        rect.set(AndroidUtilities.dp(9), AndroidUtilities.dp(9), getMeasuredWidth() - AndroidUtilities.dp(9), getMeasuredHeight() - AndroidUtilities.dp(9));
-        textPaint.setTextSize(16);
-        textPaint.setColor(Theme.getColor(Theme.key_dialogTextBlack));
-        canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);*/
-    }
-
     public void setRes(String arg, Object value, int position) {
-        argsRes.put(arg, value);
+        paremetersValues.put(arg, value);
     }
 
     public String getRes(String arg){
-        return (String) argsRes.get(arg);
+        return (String) paremetersValues.get(arg);
     }
 
 

@@ -25,23 +25,22 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.HashMap;
 
 public class HtPriceInputCell extends LinearLayout {
-    private RectF rect = new RectF();
-    Paint paint = new Paint();
-    TextPaint textPaint = new TextPaint();
-    String title;
-    private HashMap<String, Object> argsRes;
-    private TextView[] argValues;
+
+    private String title;
+    private HashMap<String, Object> paremetersValues;
+    private TextView[] parametersViews;
     private Drawable iconValue;
     private HashMap<String, Runnable> args;
     private int position = 0;
 
     public HtPriceInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit, int position) {
         super(context);
-        argsRes = new HashMap<>();
-        argValues = new TextView[args.size()];
+        paremetersValues = new HashMap<>();
+        parametersViews = new TextView[args.size()];
         this.position = position;
         this.args = args;
         this.title = title;
+
         LinearLayout titleLayout = new LinearLayout(context);
         ImageView titleImage = new ImageView(context);
         iconValue = context.getResources().getDrawable(icon);
@@ -51,6 +50,7 @@ public class HtPriceInputCell extends LinearLayout {
         LinearLayout titleLayout2 = new LinearLayout(context);
         titleLayout2.setOrientation(LinearLayout.VERTICAL);
         LinearLayout titleLayout3 = new LinearLayout(context);
+
         TextView titleLabel = new TextView(context);
         titleLabel.setText(title);
         titleLabel.setTextSize(16);
@@ -63,6 +63,7 @@ public class HtPriceInputCell extends LinearLayout {
         expandIcon.setImageDrawable(expandDrawable);
         titleLayout3.addView(expandIcon, LayoutHelper.createLinear(15, 15, AndroidUtilities.dp(20), AndroidUtilities.dp(4), 30, 15));
         titleLayout2.addView(titleLayout3);
+
         LinearLayout categoryLayout = new LinearLayout(context);
         expandIcon.setEnabled(true);
         expandIcon.setHovered(true);
@@ -136,22 +137,19 @@ public class HtPriceInputCell extends LinearLayout {
             }
         });
         int i = 0;
+
         for (Object arg : args.keySet().stream().sorted().toArray()) {
             LinearLayout selectedArgLayout = new LinearLayout(context);
             selectedArgLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
             selectedArgLayout.setGravity(Gravity.CENTER);
-            argValues[i] = new TextView(context);
-            argValues[i].setText(((String) arg).substring(2));
-            argValues[i].setTextColor(context.getResources().getColor(R.color.ht_green));
-            argValues[i].setPaintFlags(argValues[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            argValues[i].setTypeface(argValues[i].getTypeface(), Typeface.BOLD);
-            Drawable drawable;
-            if (canEdit)
-                drawable = context.getResources().getDrawable(R.drawable.ht_touch);
-            else
-                drawable = context.getResources().getDrawable(R.drawable.menu_info);
-//            argValues[i].setCompoundDrawablesWithIntrinsicBounds(iconValues[i], null, null, null);
-            selectedArgLayout.addView(argValues[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10, 5, 10, 5));
+
+            parametersViews[i] = new TextView(context);
+            parametersViews[i].setText(((String) arg).substring(2));
+            parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
+            parametersViews[i].setPaintFlags(parametersViews[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            parametersViews[i].setTypeface(parametersViews[i].getTypeface(), Typeface.BOLD);
+            selectedArgLayout.addView(parametersViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10, 5, 10, 5));
+
             if (canEdit) {
                 titleLayout3.setEnabled(true);
                 titleLayout3.setHovered(true);
@@ -173,28 +171,15 @@ public class HtPriceInputCell extends LinearLayout {
 
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-/*        paint.setColor(Theme.getColor(Theme.key_wallet_grayBackground));
-        paint.setStrokeWidth(3);
-        rect.set(AndroidUtilities.dp(5), AndroidUtilities.dp(5), getMeasuredWidth() - AndroidUtilities.dp(5), getMeasuredHeight() - AndroidUtilities.dp(5));
-        canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);
-        paint.setColor(Theme.getColor(Theme.key_graySection));
-        paint.setStrokeWidth(3);
-        rect.set(AndroidUtilities.dp(9), AndroidUtilities.dp(9), getMeasuredWidth() - AndroidUtilities.dp(9), getMeasuredHeight() - AndroidUtilities.dp(9));
-        textPaint.setTextSize(16);
-        textPaint.setColor(Theme.getColor(Theme.key_dialogTextBlack));
-        canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);*/
-    }
 
     public void setRes(String arg, Object value, int position) {
-        argsRes.put(arg, value);
-        argValues[position].setText(value.toString());
-        argValues[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
+        paremetersValues.put(arg, value);
+        parametersViews[position].setText(value.toString());
+        parametersViews[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
     }
 
     public String getRes(String arg) {
-        return (String) argsRes.get(arg);
+        return (String) paremetersValues.get(arg);
     }
 
 

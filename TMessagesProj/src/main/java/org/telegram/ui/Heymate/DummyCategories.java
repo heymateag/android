@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DummyCategories {
+
     private static DummyCategories instance = new DummyCategories();
     static public HashMap<String, ArrayList<String>> categories;
 

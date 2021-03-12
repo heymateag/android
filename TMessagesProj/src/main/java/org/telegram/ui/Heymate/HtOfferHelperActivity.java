@@ -28,16 +28,9 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class HtOfferHelperActivity extends BaseFragment {
 
-    private EditTextBoldCursor titleTextField;
-    private EditTextBoldCursor rateTextField;
-    private EditTextBoldCursor locationTextField;
-    private EditTextBoldCursor availablityTextField;
     private View searchButton;
     private ImageView nextBtn;
-    private TextView categoryTextMain;
-    private TextView categoryTextSub;
-    private TextView rateSelectText;
-    private TextView rateSymbolSelect;
+
 
 
     private final static int search_button = 1;
@@ -65,10 +58,11 @@ public class HtOfferHelperActivity extends BaseFragment {
         nextBtn.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
         nextBtn.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
         nextBtn.setScaleType(ImageView.ScaleType.CENTER);
+
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setSearchTextColor(0xff4488, true);
-        actionBar.setTitle(LocaleController.getString("CreateOffer", R.string.CreateOffer));
+        actionBar.setTitle(LocaleController.getString("HtCreateOffer", R.string.HtCreateOffer));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -81,10 +75,12 @@ public class HtOfferHelperActivity extends BaseFragment {
         ActionBarMenu menu = actionBar.createMenu();
         searchButton = menu.addItemWithWidth(search_button, R.drawable.menu_search, AndroidUtilities.dp(56));
         searchButton.setContentDescription(LocaleController.getString("Search", R.string.Search));
+
         fragmentView = new LinearLayout(context);
         LinearLayout mainLayout = (LinearLayout) fragmentView;
         mainLayout.setGravity(Gravity.CENTER);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
+
         ImageView helperImage = new ImageView(context);
         helperImage.setScaleType(ImageView.ScaleType.FIT_XY);
         Drawable helperDrawable = context.getResources().getDrawable(R.drawable.offerhelper);
@@ -92,16 +88,18 @@ public class HtOfferHelperActivity extends BaseFragment {
         mainLayout.addView(helperImage, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,350));
 
         TextView text1 = new TextView(context);
-        text1.setText("What is an Offer?");
+        text1.setText(LocaleController.getString("HtWhatAnOffer", R.string.HtWhatAnOffer));
         text1.setTextSize(19);
         text1.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         mainLayout.addView(text1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,7,15,7));
+
         TextView text2 = new TextView(context);
         text2.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit,\nsed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         text2.setMinLines(2);
         text2.setTextSize(14);
         text2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         mainLayout.addView(text2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,7,15,7));
+
         LinearLayout buyLayout = new LinearLayout(context) {
             @Override
             public void setEnabled(boolean enabled) {
@@ -110,8 +108,9 @@ public class HtOfferHelperActivity extends BaseFragment {
             }
         };
         buyLayout.setGravity(Gravity.CENTER);
+
         TextView buyLabel = new TextView(context);
-        buyLabel.setText("Lets Go!");
+        buyLabel.setText(LocaleController.getString("HtLetsGo", R.string.HtLetsGo));
         buyLabel.setTextSize(16);
         buyLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
         buyLabel.setTypeface(buyLabel.getTypeface(), Typeface.BOLD);

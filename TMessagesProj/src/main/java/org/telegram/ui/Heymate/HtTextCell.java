@@ -15,6 +15,7 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class HtTextCell extends LinearLayout {
+
     private TextView titleLabel;
     private boolean selected;
 
@@ -43,14 +44,7 @@ public class HtTextCell extends LinearLayout {
         int colorTo = Theme.getColor(Theme.key_chat_serviceBackgroundSelected);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), (int) animator.getAnimatedValue()));
-            }
-
-        });
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground)));
         colorAnimation.start();
     }
 
@@ -59,13 +53,7 @@ public class HtTextCell extends LinearLayout {
         int colorTo = Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), (int) animator.getAnimatedValue()));            }
-
-        });
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_chat_serviceBackgroundSelected)));
         colorAnimation.start();
     }
 }

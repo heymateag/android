@@ -25,43 +25,45 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.HashMap;
 
 public class HtCategoryInputCell extends LinearLayout {
-    private RectF rect = new RectF();
-    Paint paint = new Paint();
-    TextPaint textPaint = new TextPaint();
-    String title;
-    private HashMap<String, Object> argsRes;
-    private TextView[] argValues;
+
+    private String title;
+    private HashMap<String, Object> parameterValues;
+    private TextView[] parameterViews;
     private Drawable iconValue;
     private HashMap<String, Runnable> args;
 
     public HtCategoryInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
         super(context);
-        setWillNotDraw(false);
-        argsRes = new HashMap<>();
-        argValues = new TextView[args.size()];
+        parameterValues = new HashMap<>();
+        parameterViews = new TextView[args.size()];
         this.args = args;
         this.title = title;
+
         LinearLayout titleLayout = new LinearLayout(context);
         ImageView titleImage = new ImageView(context);
         iconValue = context.getResources().getDrawable(icon);
         iconValue.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         titleImage.setImageDrawable(iconValue);
         titleLayout.addView(titleImage, LayoutHelper.createLinear(20, 20, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 15, 15));
+
         LinearLayout titleLayout2 = new LinearLayout(context);
         titleLayout2.setOrientation(LinearLayout.VERTICAL);
         LinearLayout titleLayout3 = new LinearLayout(context);
+
         TextView titleLabel = new TextView(context);
         titleLabel.setText(title);
         titleLabel.setTextSize(16);
         titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleLabel.setPadding(15, 0, 0, 0);
         titleLayout3.addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 1f, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 0, 15));
+
         ImageView expandIcon = new ImageView(context);
         Drawable expandDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
         expandDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         expandIcon.setImageDrawable(expandDrawable);
         titleLayout3.addView(expandIcon, LayoutHelper.createLinear(15, 15, AndroidUtilities.dp(20), AndroidUtilities.dp(4), 30, 15));
         titleLayout2.addView(titleLayout3);
+
         LinearLayout categoryLayout = new LinearLayout(context);
         expandIcon.setEnabled(true);
         expandIcon.setHovered(true);
@@ -140,21 +142,18 @@ public class HtCategoryInputCell extends LinearLayout {
             LinearLayout outerLayout = new LinearLayout(context);
             outerLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5), context.getResources().getColor(R.color.ht_green)));
             outerLayout.setGravity(Gravity.CENTER);
+
             LinearLayout selectedArgLayout = new LinearLayout(context);
             selectedArgLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
             selectedArgLayout.setGravity(Gravity.CENTER);
-            argValues[i] = new TextView(context);
-            argValues[i].setText(((String) arg).substring(2));
-            argValues[i].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-            argValues[i].setTypeface(argValues[i].getTypeface(), Typeface.BOLD);
-            Drawable drawable;
-            if(canEdit)
-                drawable = context.getResources().getDrawable(R.drawable.ht_touch);
-            else
-                drawable = context.getResources().getDrawable(R.drawable.menu_info);
-//            argValues[i].setCompoundDrawablesWithIntrinsicBounds(iconValues[i], null, null, null);
-            selectedArgLayout.addView(argValues[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,5,10,5));
+
+            parameterViews[i] = new TextView(context);
+            parameterViews[i].setText(((String) arg).substring(2));
+            parameterViews[i].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+            parameterViews[i].setTypeface(parameterViews[i].getTypeface(), Typeface.BOLD);
+            selectedArgLayout.addView(parameterViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,5,10,5));
             outerLayout.addView(selectedArgLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 2, 2, 2, 2));
+
             if(canEdit) {
                 titleLayout3.setEnabled(true);
                 titleLayout3.setHovered(true);
@@ -176,28 +175,14 @@ public class HtCategoryInputCell extends LinearLayout {
 
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-/*        paint.setColor(Theme.getColor(Theme.key_wallet_grayBackground));
-        paint.setStrokeWidth(3);
-        rect.set(AndroidUtilities.dp(5), AndroidUtilities.dp(5), getMeasuredWidth() - AndroidUtilities.dp(5), getMeasuredHeight() - AndroidUtilities.dp(5));
-        canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);
-        paint.setColor(Theme.getColor(Theme.key_graySection));
-        paint.setStrokeWidth(3);
-        rect.set(AndroidUtilities.dp(9), AndroidUtilities.dp(9), getMeasuredWidth() - AndroidUtilities.dp(9), getMeasuredHeight() - AndroidUtilities.dp(9));
-        textPaint.setTextSize(16);
-        textPaint.setColor(Theme.getColor(Theme.key_dialogTextBlack));
-        canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), paint);*/
-    }
-
     public void setRes(String arg, Object value, int position) {
-        argsRes.put(arg, value);
-        argValues[position].setText(value.toString());
-        argValues[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
+        parameterValues.put(arg, value);
+        parameterViews[position].setText(value.toString());
+        parameterViews[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
     }
 
     public String getRes(String arg){
-        return (String) argsRes.get(arg);
+        return (String) parameterValues.get(arg);
     }
 
 

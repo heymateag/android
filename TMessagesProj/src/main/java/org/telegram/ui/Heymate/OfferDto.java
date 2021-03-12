@@ -1,6 +1,7 @@
 package org.telegram.ui.Heymate;
 
 public class OfferDto {
+
     private int id;
     private String title;
     private String description;

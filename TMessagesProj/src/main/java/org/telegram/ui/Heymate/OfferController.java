@@ -12,19 +12,19 @@ import org.telegram.messenger.FileLog;
 import java.io.File;
 import java.util.ArrayList;
 
-public class OfferController extends BaseController {
+public class OfferController {
+
     private static OfferController instance = new OfferController(0);
     private SQLiteDatabase database;
 
-    private OfferController(int num) {
-        super(num);
+    private OfferController(int currentAccount) {
         try {
             File filesDir = ApplicationLoader.getFilesDirFixed();
             cacheFile = new File(filesDir, "cache4.db");
             walCacheFile = new File(filesDir, "cache4.db-wal");
             shmCacheFile = new File(filesDir, "cache4.db-shm");
             database = new SQLiteDatabase(cacheFile.getPath());
-            openDatabase(1);
+            openDatabase(currentAccount);
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
@@ -34,7 +34,7 @@ public class OfferController extends BaseController {
     private File walCacheFile;
     private File shmCacheFile;
 
-    public void openDatabase(int openTries) {
+    public void openDatabase(int currentAccount) {
         File filesDir = ApplicationLoader.getFilesDirFixed();
         if (currentAccount != 0) {
             filesDir = new File(filesDir, "account" + currentAccount + "/");
@@ -53,7 +53,7 @@ public class OfferController extends BaseController {
             database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
             database.executeFast("PRAGMA journal_size_limit = 10485760").stepThis().dispose();
 //            database.executeFast("DROP TABLE IF EXISTS offer;").stepThis().dispose();;
-            database.executeFast("CREATE TABLE IF NOT EXISTS offer(uid INTEGER PRIMARY KEY, title TEXT, rate INTEGER, rateType INTEGER, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER);").stepThis().dispose();
+            database.executeFast("CREATE TABLE IF NOT EXISTS offer(uid INTEGER PRIMARY KEY, title TEXT, rate INTEGER, rateType INTEGER, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, accountNumber INTEGER);").stepThis().dispose();
 
             if (createTable) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -79,10 +79,10 @@ public class OfferController extends BaseController {
         return instance;
     }
 
-    public int addOffer(String title, int rate, String rateType, String currency, String location, String time, String category, String subCategory, String configText, String terms, String description, int status) {
+    public int addOffer(String title, int rate, String rateType, String currency, String location, String time, String category, String subCategory, String configText, String terms, String description, int status, int accountNumber) {
         try {
             database.beginTransaction();
-            SQLitePreparedStatement statement = database.executeFast("INSERT INTO offer(title, rate, rateType, currency, location, time, category, subCategory, configText, terms, description, status) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);");
+            SQLitePreparedStatement statement = database.executeFast("INSERT INTO offer(title, rate, rateType, currency, location, time, category, subCategory, configText, terms, description, status, accountNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);");
             statement.bindString(1, title);
             statement.bindInteger(2, rate);
             statement.bindString(3, rateType);
@@ -95,11 +95,12 @@ public class OfferController extends BaseController {
             statement.bindString(10, terms);
             statement.bindString(11, description);
             statement.bindInteger(12, status);
+            statement.bindInteger(13, accountNumber);
+            statement.step();
             database.commitTransaction();
-//            SQLiteCursor cursor = database.queryFinalized("SELECT MAX(uid) FROM offer;");
-//            cursor.next();
-//            return cursor.intValue(0);
-            return 10;
+            SQLiteCursor cursor = database.queryFinalized("SELECT MAX(uid) FROM offer;");
+            cursor.next();
+            return cursor.intValue(0);
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
@@ -206,10 +207,10 @@ public class OfferController extends BaseController {
         return offers;
     }
 
-    public ArrayList<OfferDto> getOffers(String category, String subCategory, int status) {
+    public ArrayList<OfferDto> getOffers(String category, String subCategory, int status, int accountNumber) {
         try {
             SQLiteCursor cursor;
-            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND status = ? AND subCategory = ? ORDER BY uid DESC;", category, status, subCategory);
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND status = ? AND subCategory = ? AND accountNumber = ? ORDER BY uid DESC;", category, status, subCategory, accountNumber);
             return extract(cursor);
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -217,10 +218,10 @@ public class OfferController extends BaseController {
         }
     }
 
-    public ArrayList<OfferDto> getOffers(String category, String subCategory) {
+    public ArrayList<OfferDto> getOffers(String category, String subCategory, int accountNumber) {
         try {
             SQLiteCursor cursor;
-            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND subCategory = ? ORDER BY uid DESC;", category, subCategory);
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND subCategory = ? AND accountNumber = ? ORDER BY uid DESC;", category, subCategory, accountNumber);
             return extract(cursor);
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -228,10 +229,10 @@ public class OfferController extends BaseController {
         }
     }
 
-    public ArrayList<OfferDto> getOffers(String category, int status) {
+    public ArrayList<OfferDto> getOffers(String category, int status, int accountNumber) {
         try {
             SQLiteCursor cursor;
-            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND status = ? ORDER BY uid DESC;", category, status);
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND status = ? AND accountNumber = ? ORDER BY uid DESC;", category, status, accountNumber);
             return extract(cursor);
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -239,10 +240,10 @@ public class OfferController extends BaseController {
         }
     }
 
-    public ArrayList<OfferDto> getOffers(int status) {
+    public ArrayList<OfferDto> getOffers(int status, int accountNumber) {
         try {
             SQLiteCursor cursor;
-            cursor = database.queryFinalized("SELECT * FROM offer WHERE status = ? ORDER BY uid DESC;", status);
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE status = ? AND accountNumber = ? ORDER BY uid DESC;", status, accountNumber);
             return extract(cursor);
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -250,10 +251,10 @@ public class OfferController extends BaseController {
         }
     }
 
-    public ArrayList<OfferDto> getOffers(String category) {
+    public ArrayList<OfferDto> getOffers(String category, int accountNumber) {
         try {
             SQLiteCursor cursor;
-            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? ORDER BY uid DESC;", category);
+            cursor = database.queryFinalized("SELECT * FROM offer WHERE category = ? AND accountNumber = ? ORDER BY uid DESC;", category, accountNumber);
             return extract(cursor);
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -261,9 +262,9 @@ public class OfferController extends BaseController {
         }
     }
 
-    public ArrayList<OfferDto> getAllOffers() {
+    public ArrayList<OfferDto> getAllOffers(int accountNumber) {
         try {
-            SQLiteCursor cursor = database.queryFinalized("SELECT * FROM offer ORDER BY uid DESC;");
+            SQLiteCursor cursor = database.queryFinalized("SELECT * FROM offer WHERE accountNumber = ? ORDER BY uid DESC;", accountNumber);
             ArrayList<OfferDto> offers = new ArrayList<>();
             int i = 0;
             while (cursor.next()) {

@@ -35,11 +35,8 @@ public class CategoryCell extends FrameLayout {
     private boolean needDivider;
     private boolean canDisable;
 
-    public CategoryCell(Context context) {
-        this(context, 21);
-    }
 
-    public CategoryCell(Context context, int padding) {
+    public CategoryCell(Context context) {
         super(context);
 
         valueTextView = new TextView(context);
