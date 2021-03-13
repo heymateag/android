@@ -13,6 +13,7 @@ import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 
+import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
 
 public class WalletActivity extends BaseFragment {
@@ -54,7 +55,19 @@ public class WalletActivity extends BaseFragment {
         mRightButton = content.findViewById(R.id.rightbutton);
 
         mActionBar.setBackButtonDrawable(new BackDrawable(false));
-        mActionBar.setTitle();
+        mActionBar.setTitle(Texts.get(Texts.WALLET));
+        mActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                if (getParentActivity() == null) {
+                    return;
+                }
+
+                if (id == -1) {
+                    finishFragment();
+                }
+            }
+        });
 
         Wallet wallet = Wallet.get(TG2HM.getCurrentPhoneNumber());
 
