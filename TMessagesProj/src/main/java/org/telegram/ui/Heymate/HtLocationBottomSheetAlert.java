@@ -50,9 +50,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HtLocationBottomSheetAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
 
-    private BaseFragment parent;
+    private HtCreateOfferActivity parent;
 
-    public HtLocationBottomSheetAlert(Context context, boolean needFocus, BaseFragment parent) {
+    public HtLocationBottomSheetAlert(Context context, boolean needFocus, HtCreateOfferActivity parent) {
         super(context, needFocus);
         this.parent = parent;
         initSheet(context);
@@ -132,10 +132,9 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
                 }
                 LocationActivity fragment = new LocationActivity(LocationActivity.LOCATION_TYPE_SEND);
                 fragment.setDelegate((location, live, notify, scheduleDate) -> {
-                    TLRPC.TL_channelLocation channelLocation = new TLRPC.TL_channelLocation();
-                    channelLocation.address = location.address;
-                    channelLocation.geo_point = location.geo;
-                    ((HtCreateOfferActivity) parent).setLocationAddress(descriptionTextField.getText().toString());
+                    parent.setLongitude(location.geo._long);
+                    parent.setLongitude(location.geo.lat);
+                    parent.setLocationAddress(descriptionTextField.getText().toString());
                 });
                 parent.presentFragment(fragment);
                 dismiss();

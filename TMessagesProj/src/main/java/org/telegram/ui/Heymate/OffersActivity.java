@@ -31,12 +31,14 @@ import androidx.annotation.RequiresApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -45,6 +47,7 @@ import java.util.Date;
 
 public class OffersActivity extends BaseFragment {
 
+    private boolean inited = false;
     private OfferController offerController = OfferController.getInstance();
     private LinearLayout offersLayout;
     private Context context;
@@ -56,11 +59,15 @@ public class OffersActivity extends BaseFragment {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View createView(Context context) {
-        DatabaseWatchDog.getInstance().config();
+        DatabaseWatchDog.getInstance().config(currentAccount);
         this.context = context;
         Configuration configuration = context.getResources().getConfiguration();
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
+
+        OfferController.getInstance().setParent(this);
+        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance().getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
+        OfferController.getInstance().updateOffers(fetchedOffers, currentAccount);
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
@@ -185,10 +192,13 @@ public class OffersActivity extends BaseFragment {
         relativeLayout2.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 45, Gravity.BOTTOM, 0, dpHeight - 70 - 55, 0, 0));
 
         linearLayout.addView(relativeLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.END, 0, 0, 0, 0));
+        inited = true;
         return fragmentView;
     }
 
     public void addOffersToLayout(ArrayList<OfferDto> offers) {
+        if(!inited)
+            return;
         offersLayout.removeAllViews();
         if (offers == null)
             return;

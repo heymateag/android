@@ -29,6 +29,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -43,6 +45,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,6 +56,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import static org.webrtc.ContextUtils.getApplicationContext;
@@ -78,6 +82,9 @@ public class HtCreateOfferActivity extends BaseFragment {
     private LinearLayout actionLayout;
     private int offerId = -1;
     private Uri pickedImage;
+    private double longitude;
+    private double latitude;
+    private Date expireDate;
 
     public enum ActionType {
         CREATE,
@@ -259,7 +266,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         mainLayout.addView(detailsLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 0, 15, 15));
 
         HashMap<String, Runnable> categoryArgs = new HashMap<>();
-        BaseFragment parent = this;
+        HtCreateOfferActivity parent = this;
 
         categoryArgs.put(HtConstants.arguments_Category, new Runnable() {
             @Override
@@ -555,6 +562,11 @@ public class HtCreateOfferActivity extends BaseFragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         expireInputCell.setRes(HtConstants.arguments_Expire, dayOfMonth + "-" + month + "-" + year, 0);
+                        Calendar expireDateCal = Calendar.getInstance();
+                        expireDateCal.set(Calendar.YEAR, year);
+                        expireDateCal.set(Calendar.MONTH, month);
+                        expireDateCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        expireDate = expireDateCal.getTime();
                     }
                 }, year, month, day);
                 mTimePicker.setTitle(LocaleController.getString("HtSelectDate", R.string.HtSelectDate));
@@ -684,11 +696,33 @@ public class HtCreateOfferActivity extends BaseFragment {
                 });
             } else {
                 Object[] configRes = paymentInputCell.getRes();
-                String configText = "";
+                String configText = "{";
+                int ii = 0;
                 for (Object config : configRes) {
-                    configText = configText + config.toString() + "###";
+                    configText = configText + "\"arg" + ii++ + "\" : \"" + config.toString() + "\",";
                 }
-                OfferController.getInstance().addOffer(titleTextField.getText().toString(), Integer.parseInt(priceInputCell.getRes(HtConstants.arguments_Price)), priceInputCell.getRes(HtConstants.arguments_RateType), priceInputCell.getRes(HtConstants.arguments_Currency), locationInputCell.getRes(HtConstants.arguments_Address), expireInputCell.getRes(HtConstants.arguments_Expire), categoryInputCell.getRes(HtConstants.arguments_Category), categoryInputCell.getRes(HtConstants.arguments_SubCategory), configText, termsInputCell.getRes(HtConstants.arguments_Terms), descriptionTextField.getText().toString(), 1, currentAccount);
+                configText = configText.substring(0, configText.length() - 1) + "}";
+
+                OfferDto newOffer = new OfferDto();
+                newOffer.setTitle(titleTextField.getText().toString());
+                newOffer.setDescription(descriptionTextField.getText().toString());
+                newOffer.setTerms(termsInputCell.getRes(HtConstants.arguments_Terms));
+                newOffer.setConfigText(configText);
+                newOffer.setCategory(categoryInputCell.getRes(HtConstants.arguments_Category));
+                newOffer.setSubCategory(categoryInputCell.getRes(HtConstants.arguments_SubCategory));
+                newOffer.setExpire(expireDate);
+                newOffer.setLocation(locationInputCell.getRes(HtConstants.arguments_Address));
+                newOffer.setCurrency(priceInputCell.getRes(HtConstants.arguments_Currency));
+                newOffer.setRateType(priceInputCell.getRes(HtConstants.arguments_RateType));
+                newOffer.setRate(priceInputCell.getRes(HtConstants.arguments_Price));
+                newOffer.setLatitude(latitude);
+                newOffer.setLongitude(longitude);
+                newOffer.setStatus(OfferStatus.ACTIVE);
+                newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+                Offer createdOffer = HtAmplify.getInstance().createOffer(newOffer);
+
+                OfferController.getInstance().addOffer(createdOffer, currentAccount);
+
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 TLRPC.Message message = new TLRPC.TL_message();
@@ -763,15 +797,35 @@ public class HtCreateOfferActivity extends BaseFragment {
                 });
             } else {
                 Object[] configRes = paymentInputCell.getRes();
-                String configText = "";
+                String configText = "{";
+                int ii = 0;
                 for (Object config : configRes) {
-                    configText = configText + config.toString() + "###";
+                    configText = configText + "\"arg" + ii++ + "\" : \"" + config.toString() + "\",";
                 }
+                configText = configText.substring(0, configText.length() - 1) + "}";
+                OfferDto newOffer = new OfferDto();
+                newOffer.setTitle(titleTextField.getText().toString());
+                newOffer.setDescription(descriptionTextField.getText().toString());
+                newOffer.setTerms(termsInputCell.getRes(HtConstants.arguments_Terms));
+                newOffer.setConfigText(configText);
+                newOffer.setCategory(categoryInputCell.getRes(HtConstants.arguments_Category));
+                newOffer.setSubCategory(categoryInputCell.getRes(HtConstants.arguments_SubCategory));
+                newOffer.setExpire(expireDate);
+                newOffer.setLocation(locationInputCell.getRes(HtConstants.arguments_Address));
+                newOffer.setCurrency(priceInputCell.getRes(HtConstants.arguments_Currency));
+                newOffer.setRateType(priceInputCell.getRes(HtConstants.arguments_RateType));
+                newOffer.setRate(priceInputCell.getRes(HtConstants.arguments_Price));
+                newOffer.setLatitude(latitude);
+                newOffer.setLongitude(longitude);
+                newOffer.setStatus(OfferStatus.ACTIVE);
+                newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 if (actionType != ActionType.EDIT) {
-                    offerId = OfferController.getInstance().addOffer(titleTextField.getText().toString(), Integer.parseInt(priceInputCell.getRes(HtConstants.arguments_Price)), priceInputCell.getRes(HtConstants.arguments_RateType), priceInputCell.getRes(HtConstants.arguments_Currency), locationInputCell.getRes(HtConstants.arguments_Address), expireInputCell.getRes(HtConstants.arguments_Expire), categoryInputCell.getRes(HtConstants.arguments_Category), categoryInputCell.getRes(HtConstants.arguments_SubCategory), configText, termsInputCell.getRes(HtConstants.arguments_Terms), descriptionTextField.getText().toString(), 2, currentAccount);
+                    Offer createdOffer = HtAmplify.getInstance().createOffer(newOffer);
+
+                    offerId = OfferController.getInstance().addOffer(createdOffer, currentAccount);
                     SendMessagesHelper.getInstance(currentAccount).sendMessage("https://ht.me/" + HtConstants.offerMessagePrefix + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(HtConstants.arguments_Price)) + "___" + priceInputCell.getRes(HtConstants.arguments_RateType) + "___" + priceInputCell.getRes(HtConstants.arguments_Currency) + "___" + locationInputCell.getRes(HtConstants.arguments_Address) + "___" + expireInputCell.getRes(HtConstants.arguments_Expire) + "___" + categoryInputCell.getRes(HtConstants.arguments_Category) + "___" + categoryInputCell.getRes(HtConstants.arguments_SubCategory) + "___" + configText + "___" + termsInputCell.getRes(HtConstants.arguments_Terms) + "___" + descriptionTextField.getText().toString()).getBytes()), (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
                 } else {
-                    OfferController.getInstance().addOffer(offerId, titleTextField.getText().toString(), Integer.parseInt(priceInputCell.getRes(HtConstants.arguments_Price)), priceInputCell.getRes(HtConstants.arguments_RateType), priceInputCell.getRes(HtConstants.arguments_Currency), locationInputCell.getRes(HtConstants.arguments_Address), expireInputCell.getRes(HtConstants.arguments_Expire), categoryInputCell.getRes(HtConstants.arguments_Category), categoryInputCell.getRes(HtConstants.arguments_SubCategory), configText, termsInputCell.getRes(HtConstants.arguments_Terms), descriptionTextField.getText().toString(), 2);
+                    OfferController.getInstance().addOffer(offerId, newOffer);
                 }
                 if (pickedImage != null) {
                     String[] filePath = {MediaStore.Images.Media.DATA};
@@ -838,6 +892,22 @@ public class HtCreateOfferActivity extends BaseFragment {
             pricesInputCell.get(position - 1).setRes(HtConstants.arguments_Price, text, 1);
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
     public void setRateType(String text, int position) {
         if (position == 0)
             priceInputCell.setRes(HtConstants.arguments_RateType, text, 0);
@@ -886,15 +956,12 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     public void setPaymentConfig(String config) {
-        String[] configs = config.split("###");
-        if (configs.length == 4) {
-            for (int i = 0; i < 4; i++) {
-                paymentInputCell.setRes(configs[i].toString(), i);
-            }
-        } else {
-            for (int i = 0; i < 7; i++) {
-                paymentInputCell.setRes(configs[i].toString(), i);
-            }
+        try {
+            JSONObject json = new JSONObject(config);
+            for(int i = 0; i< 7;i++)
+                paymentInputCell.setRes(json.get("arg" + i), i);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

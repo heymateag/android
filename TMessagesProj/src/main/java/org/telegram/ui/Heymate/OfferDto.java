@@ -1,11 +1,15 @@
 package org.telegram.ui.Heymate;
 
+import org.telegram.ui.Heymate.AmplifyModels.Offer;
+
+import java.util.Date;
+
 public class OfferDto {
 
     private int id;
     private String title;
     private String description;
-    private int rate;
+    private String rate;
     private String rateType;
     private String currency;
     private String location;
@@ -15,6 +19,42 @@ public class OfferDto {
     private String configText;
     private String terms;
     private OfferStatus status;
+    private int userId;
+    private Date expire;
+    private double longitude;
+    private double latitude;
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Date getExpire() {
+        return expire;
+    }
+
+    public void setExpire(Date expire) {
+        this.expire = expire;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public void setDescription(String description) {
         this.description = description;
@@ -80,11 +120,11 @@ public class OfferDto {
         this.title = title;
     }
 
-    public int getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
@@ -119,4 +159,9 @@ public class OfferDto {
     public void setTime(String time) {
         this.time = time;
     }
+
+/*    public static OfferDto from(Offer offer){
+        OfferDto dto = new OfferDto();
+
+    }*/
 }

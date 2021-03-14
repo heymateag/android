@@ -3,9 +3,9 @@ package org.telegram.ui.Heymate;
 public class DatabaseWatchDog {
 
     public static DatabaseWatchDog instance = new DatabaseWatchDog();
-    public void config(){
+    public void config(int currentAccount){
         OfferController offerController = OfferController.getInstance();
-        offerController.openDatabase(1);
+        offerController.openDatabase(currentAccount);
     }
 
     private DatabaseWatchDog(){

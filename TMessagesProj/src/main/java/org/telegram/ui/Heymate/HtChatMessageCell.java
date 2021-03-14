@@ -67,7 +67,7 @@ public class HtChatMessageCell extends FrameLayout {
     private String currency = "";
     private String category = "";
     private String subCategory = "";
-    private String paymentConfig = "10###20###30###40###";
+    private String paymentConfig = "{\"arg1\": \"1\",\"arg2\": \"2\",\"arg3\": \"3\",\"arg4\": \"4\",\"arg5\": \"5\",\"arg6\": \"6\",\"arg7\": \"7\"}";
     private String terms = "";
     private OfferStatus status;
     private int offerId = -1;

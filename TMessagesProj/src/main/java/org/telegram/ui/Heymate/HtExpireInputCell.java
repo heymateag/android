@@ -22,6 +22,7 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
+import java.util.Date;
 import java.util.HashMap;
 
 public class HtExpireInputCell extends LinearLayout {

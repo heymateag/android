@@ -12,6 +12,7 @@ public class HtConstants {
     public static final String arguments_Price = "1_Price";
     public static final String arguments_Currency = "2_Currency";
     public static final String arguments_Expire = "0_Expire";
+    public static final String arguments_ExpireDate = "1_Expire";
     public static final String arguments_Terms = "0_Terms";
     public static final String offerMessagePrefix = "___HtOffer___";
 }
