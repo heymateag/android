@@ -9,6 +9,8 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
+
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.util.ArrayList;
@@ -22,19 +24,14 @@ import java.util.concurrent.Future;
 public class HtAmplify {
 
     private static HtAmplify instance;
-    private static Context context;
 
-    public static HtAmplify getInstance() {
+    public static HtAmplify getInstance(Context context) {
+        if(instance == null)
+            instance = new HtAmplify(context.getApplicationContext());
         return instance;
     }
 
-    public static void setContext(Context context) {
-        HtAmplify.context = context;
-        if(instance == null)
-            instance = new HtAmplify();
-    }
-
-    private HtAmplify(){
+    private HtAmplify(Context context){
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(context);
@@ -88,7 +85,7 @@ public class HtAmplify {
                             for (Offer offer : response.getData()) {
                                 offers.add(offer);
                             }
-                            OfferController.getInstance().updateOffers(offers, currentAccount);
+                            HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
                         },
                         error -> Log.e("HtAmplify", "Query failure", error)
                 );
@@ -100,10 +97,10 @@ public class HtAmplify {
             return future.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 }

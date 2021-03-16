@@ -14,14 +14,12 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -41,7 +39,6 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
@@ -51,7 +48,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -59,10 +55,22 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import static org.webrtc.ContextUtils.getApplicationContext;
-
 public class HtCreateOfferActivity extends BaseFragment {
 
+    public static final String ARGUMENTS_CATEGORY = "0_Category";
+    public static final String ARGUMENTS_SUB_CATEGORY = "1_Sub-Category";
+    public static final String ARGUMENTS_ADDRESS = "0_Address";
+    public static final String ARGUMENTS_RATE_TYPE = "0_Rate Type";
+    public static final String ARGUMENTS_PRICE = "1_Price";
+    public static final String ARGUMENTS_CURRENCY = "2_Currency";
+    public static final String ARGUMENTS_EXPIRE = "0_Expire";
+    public static final String ARGUMENTS_EXPIRE_DATE = "1_Expire";
+    public static final String ARGUMENTS_TERMS = "0_Terms";
+    public static final String OFFER_IMAGES_DIR = "offerImages";
+    public static final String OFFER_IMAGES_NAME = "offerImage";
+    public static final String OFFER_IMAGES_EXTENSION = ".jpg";
+    public static final String OFFER_MESSAGE_PREFIX = "___HtOffer___";
+    
     private Context context;
     private ImageView cameraImage;
     private EditTextBoldCursor titleTextField;
@@ -142,8 +150,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         Drawable cameraDrawable;
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(HtConstants.offerImagesDir, Context.MODE_PRIVATE);
-        File file = new File(directory, HtConstants.offerImageName + offerId + HtConstants.offerImageExtension);
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -268,7 +276,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         HashMap<String, Runnable> categoryArgs = new HashMap<>();
         HtCreateOfferActivity parent = this;
 
-        categoryArgs.put(HtConstants.arguments_Category, new Runnable() {
+        categoryArgs.put(ARGUMENTS_CATEGORY, new Runnable() {
             @Override
             public void run() {
                 if (actionType != ActionType.VIEW) {
@@ -277,7 +285,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 }
             }
         });
-        categoryArgs.put(HtConstants.arguments_SubCategory, new Runnable() {
+        categoryArgs.put(ARGUMENTS_SUB_CATEGORY, new Runnable() {
             @Override
             public void run() {
                 if (actionType != ActionType.VIEW) {
@@ -290,7 +298,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         mainLayout.addView(categoryInputCell);
 
         HashMap<String, Runnable> locationArgs = new HashMap<>();
-        locationArgs.put(HtConstants.arguments_Address, new Runnable() {
+        locationArgs.put(ARGUMENTS_ADDRESS, new Runnable() {
             @Override
             public void run() {
                 if (actionType != ActionType.VIEW) {
@@ -305,7 +313,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         mainLayout.addView(scheduleInputCell);
 
         HashMap<String, Runnable> priceArgs = new HashMap<>();
-        priceArgs.put(HtConstants.arguments_RateType, new Runnable() {
+        priceArgs.put(ARGUMENTS_RATE_TYPE, new Runnable() {
             @Override
             public void run() {
                 if (actionType == ActionType.VIEW)
@@ -336,7 +344,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 showDialog(alertDialog);
             }
         });
-        priceArgs.put(HtConstants.arguments_Price, new Runnable() {
+        priceArgs.put(ARGUMENTS_PRICE, new Runnable() {
             @Override
             public void run() {
                 if (actionType == ActionType.VIEW)
@@ -372,7 +380,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
             }
         });
-        priceArgs.put(HtConstants.arguments_Currency, new Runnable() {
+        priceArgs.put(ARGUMENTS_CURRENCY, new Runnable() {
             @Override
             public void run() {
                 if (actionType == ActionType.VIEW)
@@ -405,8 +413,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         });
 
         priceInputCell = new HtPriceInputCell(context, LocaleController.getString("HtPrice", R.string.HtPrice), priceArgs, R.drawable.money, canEdit, 0);
-        priceInputCell.setRes(HtConstants.arguments_RateType, LocaleController.getString("HtPerItem", R.string.HtPerItem), 0);
-        priceInputCell.setRes(HtConstants.arguments_Currency, "R$", 2);
+        priceInputCell.setRes(ARGUMENTS_RATE_TYPE, LocaleController.getString("HtPerItem", R.string.HtPerItem), 0);
+        priceInputCell.setRes(ARGUMENTS_CURRENCY, "R$", 2);
         mainLayout.addView(priceInputCell);
 
         if (canEdit) {
@@ -427,7 +435,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 public void onClick(View v) {
                     HtPriceInputCell newPriceCell;
                     HashMap<String, Runnable> priceArgs = new HashMap<>();
-                    priceArgs.put(HtConstants.arguments_RateType, new Runnable() {
+                    priceArgs.put(ARGUMENTS_RATE_TYPE, new Runnable() {
                         @Override
                         public void run() {
                             if (actionType == ActionType.VIEW)
@@ -458,7 +466,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                             showDialog(alertDialog);
                         }
                     });
-                    priceArgs.put(HtConstants.arguments_Price, new Runnable() {
+                    priceArgs.put(ARGUMENTS_PRICE, new Runnable() {
                         @Override
                         public void run() {
                             if (actionType == ActionType.VIEW)
@@ -494,7 +502,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                         }
                     });
-                    priceArgs.put(HtConstants.arguments_Currency, new Runnable() {
+                    priceArgs.put(ARGUMENTS_CURRENCY, new Runnable() {
                         @Override
                         public void run() {
                             if (actionType == ActionType.VIEW)
@@ -547,7 +555,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             mcurrentTime.add(Calendar.MONTH, 1);
         int year = mcurrentTime.get(Calendar.YEAR);
         int month = mcurrentTime.get(Calendar.MONTH);
-        expireArgs.put(HtConstants.arguments_Expire, new Runnable() {
+        expireArgs.put(ARGUMENTS_EXPIRE, new Runnable() {
             @Override
             public void run() {
                 if (actionType == ActionType.VIEW)
@@ -561,7 +569,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        expireInputCell.setRes(HtConstants.arguments_Expire, dayOfMonth + "-" + month + "-" + year, 0);
+                        expireInputCell.setRes(ARGUMENTS_EXPIRE, dayOfMonth + "-" + month + "-" + year, 0);
                         Calendar expireDateCal = Calendar.getInstance();
                         expireDateCal.set(Calendar.YEAR, year);
                         expireDateCal.set(Calendar.MONTH, month);
@@ -575,11 +583,11 @@ public class HtCreateOfferActivity extends BaseFragment {
         });
 
         expireInputCell = new HtExpireInputCell(context, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.msg_timer, canEdit);
-        expireInputCell.setRes(HtConstants.arguments_Expire, day1 + "-" + month + "-" + year, 0);
+        expireInputCell.setRes(ARGUMENTS_EXPIRE, day1 + "-" + month + "-" + year, 0);
         mainLayout.addView(expireInputCell);
 
         HashMap<String, Runnable> termsArgs = new HashMap<>();
-        termsArgs.put(HtConstants.arguments_Terms, new Runnable() {
+        termsArgs.put(ARGUMENTS_TERMS, new Runnable() {
             @Override
             public void run() {
                 if (actionType == ActionType.VIEW)
@@ -617,7 +625,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
-                        termsInputCell.setRes(HtConstants.arguments_Terms, feeTextField.getText().toString(), 0);
+                        termsInputCell.setRes(ARGUMENTS_TERMS, feeTextField.getText().toString(), 0);
                 });
                 AlertDialog alertDialog = builder.create();
                 showDialog(alertDialog);
@@ -625,7 +633,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         });
 
         termsInputCell = new HtTermsInputCell(context, LocaleController.getString("HtTermsAndConditions", R.string.HtTermsAndConditions), termsArgs, R.drawable.ht_pplicy, canEdit);
-        termsInputCell.setRes(HtConstants.arguments_Terms, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+        termsInputCell.setRes(ARGUMENTS_TERMS, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
@@ -674,19 +682,19 @@ public class HtCreateOfferActivity extends BaseFragment {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
                 errors += LocaleController.getString("HtDescriptionEmpty", R.string.HtDescriptionEmpty);
             }
-            if (priceInputCell.getRes(HtConstants.arguments_Price) == null) {
+            if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-            if (locationInputCell.getRes(HtConstants.arguments_Address) == null) {
+            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
                 locationInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
             }
-            if (categoryInputCell.getRes(HtConstants.arguments_Category) == null) {
+            if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
             }
-            if (categoryInputCell.getRes(HtConstants.arguments_SubCategory) == null) {
+            if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
                 categoryInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtSubCategoryEmpty", R.string.HtSubCategoryEmpty);
             }
@@ -706,22 +714,22 @@ public class HtCreateOfferActivity extends BaseFragment {
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
-                newOffer.setTerms(termsInputCell.getRes(HtConstants.arguments_Terms));
+                newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
                 newOffer.setConfigText(configText);
-                newOffer.setCategory(categoryInputCell.getRes(HtConstants.arguments_Category));
-                newOffer.setSubCategory(categoryInputCell.getRes(HtConstants.arguments_SubCategory));
+                newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
+                newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInputCell.getRes(HtConstants.arguments_Address));
-                newOffer.setCurrency(priceInputCell.getRes(HtConstants.arguments_Currency));
-                newOffer.setRateType(priceInputCell.getRes(HtConstants.arguments_RateType));
-                newOffer.setRate(priceInputCell.getRes(HtConstants.arguments_Price));
+                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+                newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
+                newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
+                newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
                 newOffer.setLatitude(latitude);
                 newOffer.setLongitude(longitude);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                Offer createdOffer = HtAmplify.getInstance().createOffer(newOffer);
+                Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
 
-                OfferController.getInstance().addOffer(createdOffer, currentAccount);
+                HtSQLite.getInstance().addOffer(createdOffer);
 
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
@@ -729,7 +737,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 message.message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer);
                 ArrayList<TLRPC.MessageEntity> entities = new ArrayList<>();
                 TLRPC.TL_messageEntityTextUrl url = new TLRPC.TL_messageEntityTextUrl();
-                url.url = "https://ht.me/" + HtConstants.offerMessagePrefix + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(HtConstants.arguments_Price)) + "___" + priceInputCell.getRes(HtConstants.arguments_RateType) + "___" + priceInputCell.getRes(HtConstants.arguments_Currency) + "___" + locationInputCell.getRes(HtConstants.arguments_Address) + "___" + expireInputCell.getRes(HtConstants.arguments_Expire) + "___" + categoryInputCell.getRes(HtConstants.arguments_Category) + "___" + categoryInputCell.getRes(HtConstants.arguments_SubCategory) + "___" + configText + "___" + termsInputCell.getRes(HtConstants.arguments_Terms) + "___" + descriptionTextField.getText().toString()).getBytes());
+                url.url = "https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(ARGUMENTS_PRICE)) + "___" + priceInputCell.getRes(ARGUMENTS_RATE_TYPE) + "___" + priceInputCell.getRes(ARGUMENTS_CURRENCY) + "___" + locationInputCell.getRes(ARGUMENTS_ADDRESS) + "___" + expireInputCell.getRes(ARGUMENTS_EXPIRE) + "___" + categoryInputCell.getRes(ARGUMENTS_CATEGORY) + "___" + categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) + "___" + configText + "___" + termsInputCell.getRes(ARGUMENTS_TERMS) + "___" + descriptionTextField.getText().toString()).getBytes());
                 url.offset = 0;
                 url.length = message.message.length();
                 entities.add(url);
@@ -775,19 +783,19 @@ public class HtCreateOfferActivity extends BaseFragment {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
                 errors += LocaleController.getString("HtDescriptionEmpty", R.string.HtDescriptionEmpty);
             }
-            if (priceInputCell.getRes(HtConstants.arguments_Price) == null) {
+            if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-            if (locationInputCell.getRes(HtConstants.arguments_Address) == null) {
+            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
                 locationInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
             }
-            if (categoryInputCell.getRes(HtConstants.arguments_Category) == null) {
+            if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
             }
-            if (categoryInputCell.getRes(HtConstants.arguments_SubCategory) == null) {
+            if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
                 categoryInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtSubCategoryEmpty", R.string.HtSubCategoryEmpty);
             }
@@ -806,26 +814,26 @@ public class HtCreateOfferActivity extends BaseFragment {
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
-                newOffer.setTerms(termsInputCell.getRes(HtConstants.arguments_Terms));
+                newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
                 newOffer.setConfigText(configText);
-                newOffer.setCategory(categoryInputCell.getRes(HtConstants.arguments_Category));
-                newOffer.setSubCategory(categoryInputCell.getRes(HtConstants.arguments_SubCategory));
+                newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
+                newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInputCell.getRes(HtConstants.arguments_Address));
-                newOffer.setCurrency(priceInputCell.getRes(HtConstants.arguments_Currency));
-                newOffer.setRateType(priceInputCell.getRes(HtConstants.arguments_RateType));
-                newOffer.setRate(priceInputCell.getRes(HtConstants.arguments_Price));
+                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+                newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
+                newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
+                newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
                 newOffer.setLatitude(latitude);
                 newOffer.setLongitude(longitude);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 if (actionType != ActionType.EDIT) {
-                    Offer createdOffer = HtAmplify.getInstance().createOffer(newOffer);
+                    Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
 
-                    offerId = OfferController.getInstance().addOffer(createdOffer, currentAccount);
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage("https://ht.me/" + HtConstants.offerMessagePrefix + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(HtConstants.arguments_Price)) + "___" + priceInputCell.getRes(HtConstants.arguments_RateType) + "___" + priceInputCell.getRes(HtConstants.arguments_Currency) + "___" + locationInputCell.getRes(HtConstants.arguments_Address) + "___" + expireInputCell.getRes(HtConstants.arguments_Expire) + "___" + categoryInputCell.getRes(HtConstants.arguments_Category) + "___" + categoryInputCell.getRes(HtConstants.arguments_SubCategory) + "___" + configText + "___" + termsInputCell.getRes(HtConstants.arguments_Terms) + "___" + descriptionTextField.getText().toString()).getBytes()), (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
+                    offerId = HtSQLite.getInstance().addOffer(createdOffer);
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(ARGUMENTS_PRICE)) + "___" + priceInputCell.getRes(ARGUMENTS_RATE_TYPE) + "___" + priceInputCell.getRes(ARGUMENTS_CURRENCY) + "___" + locationInputCell.getRes(ARGUMENTS_ADDRESS) + "___" + expireInputCell.getRes(ARGUMENTS_EXPIRE) + "___" + categoryInputCell.getRes(ARGUMENTS_CATEGORY) + "___" + categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) + "___" + configText + "___" + termsInputCell.getRes(ARGUMENTS_TERMS) + "___" + descriptionTextField.getText().toString()).getBytes()), (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
                 } else {
-                    OfferController.getInstance().addOffer(offerId, newOffer);
+                    HtSQLite.getInstance().addOffer(offerId, newOffer);
                 }
                 if (pickedImage != null) {
                     String[] filePath = {MediaStore.Images.Media.DATA};
@@ -838,8 +846,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                     Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
                     cursor.close();
                     ContextWrapper cw2 = new ContextWrapper(context);
-                    File directory2 = cw2.getDir(HtConstants.offerImagesDir, Context.MODE_PRIVATE);
-                    File myPath = new File(directory2, HtConstants.offerImageName + offerId + HtConstants.offerImageExtension);
+                    File directory2 = cw2.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+                    File myPath = new File(directory2, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
                     FileOutputStream fos = null;
                     try {
                         fos = new FileOutputStream(myPath);
@@ -877,19 +885,19 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     public void setCategory(String text) {
-        categoryInputCell.setRes(HtConstants.arguments_Category, text, 0);
+        categoryInputCell.setRes(ARGUMENTS_CATEGORY, text, 0);
     }
 
     public void setSubCategory(String text) {
-        categoryInputCell.setRes(HtConstants.arguments_SubCategory, text, 1);
+        categoryInputCell.setRes(ARGUMENTS_SUB_CATEGORY, text, 1);
     }
 
     public void setFee(String text, int position) {
-        priceInputCell.setRes(HtConstants.arguments_Price, text, 1);
+        priceInputCell.setRes(ARGUMENTS_PRICE, text, 1);
         if (position == 0)
-            priceInputCell.setRes(HtConstants.arguments_Price, text, 1);
+            priceInputCell.setRes(ARGUMENTS_PRICE, text, 1);
         else
-            pricesInputCell.get(position - 1).setRes(HtConstants.arguments_Price, text, 1);
+            pricesInputCell.get(position - 1).setRes(ARGUMENTS_PRICE, text, 1);
     }
 
     public double getLongitude() {
@@ -910,21 +918,21 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setRateType(String text, int position) {
         if (position == 0)
-            priceInputCell.setRes(HtConstants.arguments_RateType, text, 0);
+            priceInputCell.setRes(ARGUMENTS_RATE_TYPE, text, 0);
         else
-            pricesInputCell.get(position - 1).setRes(HtConstants.arguments_RateType, text, 0);
+            pricesInputCell.get(position - 1).setRes(ARGUMENTS_RATE_TYPE, text, 0);
     }
 
     public void setCurrency(String text, int position) {
         if (position == 0)
-            priceInputCell.setRes(HtConstants.arguments_Currency, text, 2);
+            priceInputCell.setRes(ARGUMENTS_CURRENCY, text, 2);
         else
-            pricesInputCell.get(position - 1).setRes(HtConstants.arguments_Currency, text, 2);
+            pricesInputCell.get(position - 1).setRes(ARGUMENTS_CURRENCY, text, 2);
 
     }
 
     public void setLocationAddress(String address) {
-        locationInputCell.setRes(HtConstants.arguments_Address, address, 0);
+        locationInputCell.setRes(ARGUMENTS_ADDRESS, address, 0);
     }
 
     public void setCanEdit(boolean canEdit) {
@@ -939,8 +947,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         this.offerId = offerId;
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(HtConstants.offerImagesDir, Context.MODE_PRIVATE);
-        File file = new File(directory, HtConstants.offerImageName + offerId + HtConstants.offerImageExtension);
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -966,7 +974,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     public void setTerms(String terms) {
-        termsInputCell.setRes(HtConstants.arguments_Terms, terms, 0);
+        termsInputCell.setRes(ARGUMENTS_TERMS, terms, 0);
     }
 
     public void setActionType(ActionType actionType) {

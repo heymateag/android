@@ -179,7 +179,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
             }
         };;
         subCategorySearch.setHint(LocaleController.getString("HtSubCategory", R.string.HtSubCategory));
-        final HtTextCell[] prevSub = {null};
+        final HtTextCell[] previousSelectedSubCategory = {null};
         subCategoryMainLayout.addView(subCategorySearch, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 3,10,3,10));
 
         for(int i = 0;i < subCategoriesStore.size(); i++){
@@ -189,10 +189,10 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
             subCategoryCell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(prevSub[0] != null)
-                        prevSub[0].unSelect();
+                    if(previousSelectedSubCategory[0] != null)
+                        previousSelectedSubCategory[0].unSelect();
                     subCategoryCell.select();
-                    prevSub[0] = subCategoryCell;
+                    previousSelectedSubCategory[0] = subCategoryCell;
                     if(parent instanceof HtCreateOfferActivity){
                         ((HtCreateOfferActivity) parent).setSubCategory(subCategoryCell.getText());
                     }

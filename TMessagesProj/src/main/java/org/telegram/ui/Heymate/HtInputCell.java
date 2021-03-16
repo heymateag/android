@@ -66,7 +66,7 @@ public class HtInputCell extends LinearLayout {
         int i = 0;
 
         for (Object arg : args.keySet().stream().sorted().toArray()) {
-            LinearLayout selectedArgLayout = new LinearLayout(context);
+            LinearLayout parametersLayout = new LinearLayout(context);
             parametersViews[i] = new TextView(context);
             parametersViews[i].setText(((String) arg).substring(2));
             parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
@@ -80,12 +80,12 @@ public class HtInputCell extends LinearLayout {
             parametersViews[i].setCompoundDrawablePadding(AndroidUtilities.dp(5));
             iconValues[i].setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue2), PorterDuff.Mode.MULTIPLY));
             parametersViews[i].setCompoundDrawablesWithIntrinsicBounds(iconValues[i], null, null, null);
-            selectedArgLayout.addView(parametersViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 0, 15, 15));
-            titleLayout2.addView(selectedArgLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 25, 0, 0, 0));
+            parametersLayout.addView(parametersViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 0, 15, 15));
+            titleLayout2.addView(parametersLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 25, 0, 0, 0));
             if(canEdit) {
                 titleLayout3.setEnabled(true);
                 titleLayout3.setHovered(true);
-                selectedArgLayout.setOnClickListener(new View.OnClickListener() {
+                parametersLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         args.get(arg).run();

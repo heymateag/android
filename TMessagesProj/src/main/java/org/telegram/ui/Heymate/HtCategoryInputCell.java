@@ -143,21 +143,21 @@ public class HtCategoryInputCell extends LinearLayout {
             outerLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5), context.getResources().getColor(R.color.ht_green)));
             outerLayout.setGravity(Gravity.CENTER);
 
-            LinearLayout selectedArgLayout = new LinearLayout(context);
-            selectedArgLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
-            selectedArgLayout.setGravity(Gravity.CENTER);
+            LinearLayout parametersLayout = new LinearLayout(context);
+            parametersLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+            parametersLayout.setGravity(Gravity.CENTER);
 
             parameterViews[i] = new TextView(context);
             parameterViews[i].setText(((String) arg).substring(2));
             parameterViews[i].setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
             parameterViews[i].setTypeface(parameterViews[i].getTypeface(), Typeface.BOLD);
-            selectedArgLayout.addView(parameterViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,5,10,5));
-            outerLayout.addView(selectedArgLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 2, 2, 2, 2));
+            parametersLayout.addView(parameterViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,5,10,5));
+            outerLayout.addView(parametersLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 2, 2, 2, 2));
 
             if(canEdit) {
                 titleLayout3.setEnabled(true);
                 titleLayout3.setHovered(true);
-                selectedArgLayout.setOnClickListener(new View.OnClickListener() {
+                parametersLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         args.get(arg).run();

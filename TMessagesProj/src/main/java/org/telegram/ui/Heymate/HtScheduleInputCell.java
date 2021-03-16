@@ -138,24 +138,24 @@ public class HtScheduleInputCell extends LinearLayout {
         int i = 0;
 
         for (Object arg : args.keySet().stream().sorted().toArray()) {
-            LinearLayout selectedArgLayout = new LinearLayout(context);
-            selectedArgLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
-            selectedArgLayout.setGravity(Gravity.CENTER);
+            LinearLayout parametersLayout = new LinearLayout(context);
+            parametersLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+            parametersLayout.setGravity(Gravity.CENTER);
             ImageView mapImage = new ImageView(context);
             Drawable mapDrawable = context.getResources().getDrawable(R.drawable.google_maps_logo);
             mapImage.setImageDrawable(mapDrawable);
-            selectedArgLayout.addView(mapImage, LayoutHelper.createLinear(200, 120, 10,5,10,5));
+            parametersLayout.addView(mapImage, LayoutHelper.createLinear(200, 120, 10,5,10,5));
             if(canEdit) {
                 titleLayout3.setEnabled(true);
                 titleLayout3.setHovered(true);
-                selectedArgLayout.setOnClickListener(new OnClickListener() {
+                parametersLayout.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         args.get(arg).run();
                     }
                 });
             }
-            categoryLayout.addView(selectedArgLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0,25,25,0));
+            categoryLayout.addView(parametersLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0,25,25,0));
             i++;
         }
         titleLayout2.addView(categoryLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));

@@ -49,9 +49,9 @@ public class HtOfferDialogCell extends FrameLayout {
         avatar.setRoundRadius(AndroidUtilities.dp(4));
         mainLayout.addView(avatar, LayoutHelper.createFrame(40, 40, Gravity.LEFT, 10, 10, 17, 10));
 
-        LinearLayout statusbar = new LinearLayout(context);
-        statusbar.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        mainLayout.addView(statusbar, LayoutHelper.createFrame(2, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0,8,0,12));
+        LinearLayout statusBar = new LinearLayout(context);
+        statusBar.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        mainLayout.addView(statusBar, LayoutHelper.createFrame(2, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0,8,0,12));
 
         LinearLayout titleLayout = new LinearLayout(context);
         titleLayout.setOrientation(LinearLayout.VERTICAL);

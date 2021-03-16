@@ -10,7 +10,6 @@ package org.telegram.ui.Heymate;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -45,6 +44,8 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_MESSAGE_PREFIX;
+
 public class OffersActivity extends BaseFragment {
 
     private boolean inited = false;
@@ -65,9 +66,9 @@ public class OffersActivity extends BaseFragment {
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
 
-        OfferController.getInstance().setParent(this);
-        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance().getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
-        OfferController.getInstance().updateOffers(fetchedOffers, currentAccount);
+//        HtSQLite.getInstance().setParent(this);
+        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
+        HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
@@ -171,7 +172,7 @@ public class OffersActivity extends BaseFragment {
 //        scrollviewLayout.addView(new HtDividerCell(context));
 
         // ------------ DATABASE DEMO ----------------
-        ArrayList<OfferDto> offers = offerController.getAllOffers(currentAccount);
+        ArrayList<OfferDto> offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
         // --------------------------------------------
 
 
@@ -240,9 +241,9 @@ public class OffersActivity extends BaseFragment {
             offerCell1.setSubCategory(offerDto.getSubCategory());
             offerCell1.setPaymentConfig(offerDto.getConfigText());
             offerCell1.setTerms(offerDto.getTerms());
-            offerCell1.timeLabel.setText(offerDto.getTime());
+            offerCell1.expireLabel.setText(offerDto.getTime());
             offerCell1.setParent(this);
-            offerCell1.setMessageText("https://ht.me/" + HtConstants.offerMessagePrefix + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));
+            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));
             offersLayout.addView(offerCell1);
             ObjectAnimator anim1 = ObjectAnimator.ofFloat(offerCell1, "scaleX", 0, 1);
             anim1.start();
@@ -255,7 +256,7 @@ public class OffersActivity extends BaseFragment {
     public void onResume() {
         super.onResume();
         offersLayout.removeAllViews();
-        ArrayList<OfferDto> offers = offerController.getAllOffers(currentAccount);
+        ArrayList<OfferDto> offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
         addOffersToLayout(offers);
     }
 
@@ -279,31 +280,31 @@ public class OffersActivity extends BaseFragment {
         if (categoryFilter.equalsIgnoreCase("all")) {
             if (subCategoryFilter.equalsIgnoreCase("all")) {
                 if (statusFilter.ordinal() == 0) {
-                    offers = OfferController.getInstance().getAllOffers(currentAccount);
+                    offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
                 } else {
-                    offers = OfferController.getInstance().getOffers(statusFilter.ordinal(), currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
                 }
             } else {
                 if (statusFilter.ordinal() == 0) {
-                    offers = OfferController.getInstance().getOffers(subCategoryFilter, currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(subCategoryFilter, UserConfig.getInstance(currentAccount).clientUserId);
 
                 } else {
-                    offers = OfferController.getInstance().getOffers(subCategoryFilter, statusFilter.ordinal(), currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(subCategoryFilter, statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
                 }
             }
         } else {
             if (subCategoryFilter.equalsIgnoreCase("all")) {
                 if (statusFilter.ordinal() == 0) {
-                    offers = OfferController.getInstance().getOffers(categoryFilter, currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(categoryFilter, UserConfig.getInstance(currentAccount).clientUserId);
                 } else {
-                    offers = OfferController.getInstance().getOffers(categoryFilter, statusFilter.ordinal(), currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(categoryFilter, statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
                 }
             } else {
                 if (statusFilter.ordinal() == 0) {
-                    offers = OfferController.getInstance().getOffers(categoryFilter, subCategoryFilter, currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(categoryFilter, subCategoryFilter, UserConfig.getInstance(currentAccount).clientUserId);
 
                 } else {
-                    offers = OfferController.getInstance().getOffers(categoryFilter, subCategoryFilter, statusFilter.ordinal(), currentAccount);
+                    offers = HtSQLite.getInstance().getOffers(categoryFilter, subCategoryFilter, statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
                 }
             }
         }

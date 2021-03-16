@@ -29,7 +29,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -43,6 +43,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_DIR;
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_EXTENSION;
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_NAME;
+
 public class HtChatMessageCell extends FrameLayout {
 
     private Context context;
@@ -54,7 +58,7 @@ public class HtChatMessageCell extends FrameLayout {
     public TextView msgTimeLabel;
     public TextView rateLabel;
     public TextView addressLabel;
-    public TextView timeLabel;
+    public TextView expireLabel;
     private boolean out = false;
     private LinearLayout promoteLayout;
     private LinearLayout buyLayout;
@@ -148,7 +152,7 @@ public class HtChatMessageCell extends FrameLayout {
         editIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferDto offerDto = OfferController.getInstance().getOffer(offerId);
+                OfferDto offerDto = HtSQLite.getInstance().getOffer(offerId);
                 HtCreateOfferActivity fragment = new HtCreateOfferActivity();
                 parent.presentFragment(fragment);
                 fragment.setActionType(HtCreateOfferActivity.ActionType.EDIT);
@@ -175,9 +179,9 @@ public class HtChatMessageCell extends FrameLayout {
         archiveIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferController.getInstance().archiveOffer(offerId);
+                HtSQLite.getInstance().archiveOffer(offerId);
                 if(parent instanceof OffersActivity){
-                    ((OffersActivity) parent).addOffersToLayout(OfferController.getInstance().getAllOffers(parent.getCurrentAccount()));
+                    ((OffersActivity) parent).addOffersToLayout(HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(parent.getCurrentAccount()).clientUserId));
                 }
             }
         });
@@ -191,8 +195,8 @@ public class HtChatMessageCell extends FrameLayout {
         image.setRoundRadius(AndroidUtilities.dp(4));
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(HtConstants.offerImagesDir, Context.MODE_PRIVATE);
-        File file = new File(directory, HtConstants.offerImageName + offerId + HtConstants.offerImageExtension);
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -247,8 +251,8 @@ public class HtChatMessageCell extends FrameLayout {
         mainLayout.addView(showPropsLayout);
         mainLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 5,20,5));
 
-        LinearLayout animLayout = new LinearLayout(context);
-        animLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout expandableDetailsLayout = new LinearLayout(context);
+        expandableDetailsLayout.setOrientation(LinearLayout.VERTICAL);
         addressLabel = new TextView(context);
         addressLabel.setText("No. 489, 13th Street, Yousefabad District, Tehran, Iran");
         addressLabel.setTextSize(15);
@@ -259,49 +263,49 @@ public class HtChatMessageCell extends FrameLayout {
         addressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
         addressLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         addressLabel.setCompoundDrawablesWithIntrinsicBounds(addressDrawable, null, null, null);
-        animLayout.addView(addressLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
+        expandableDetailsLayout.addView(addressLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
 
         LinearLayout midLayer = new LinearLayout(context);
-        timeLabel = new TextView(context);
-        timeLabel.setText("01-01-2021");
-        timeLabel.setTextSize(14);
-        timeLabel.setTypeface(timeLabel.getTypeface(), Typeface.BOLD);
-        timeLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        expireLabel = new TextView(context);
+        expireLabel.setText("01-01-2021");
+        expireLabel.setTextSize(14);
+        expireLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
+        expireLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
 
         Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
         timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
-        timeLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
-        timeLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
-        midLayer.addView(timeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 30, 20, 0, 20));
+        expireLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+        expireLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
+        midLayer.addView(expireLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 30, 20, 0, 20));
 
         rateLabel = new TextView(context);
         rateLabel.setText("50$ Per 1 Lesson");
         rateLabel.setTextSize(14);
-        rateLabel.setTypeface(timeLabel.getTypeface(), Typeface.BOLD);
+        rateLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
         rateLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         Drawable rateDrawable = context.getResources().getDrawable(R.drawable.offer);
         rateDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
         rateLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         rateLabel.setCompoundDrawablesWithIntrinsicBounds(rateDrawable, null, null, null);
         midLayer.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 20));
-        animLayout.addView(midLayer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 0, 0, 0));
+        expandableDetailsLayout.addView(midLayer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 0, 0, 0));
 
         LinearLayout bottomLayer = new LinearLayout(context);
         bottomLayer.setGravity(Gravity.CENTER);
-        animLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 60, 0, 0));
-        mainLayout.addView(animLayout);
+        expandableDetailsLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 60, 0, 0));
+        mainLayout.addView(expandableDetailsLayout);
         showPropsIcon.setEnabled(true);
-        animLayout.setVisibility(GONE);
+        expandableDetailsLayout.setVisibility(GONE);
         showPropsLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!showingDetails){
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(animLayout, "scaleY" , 0f, 1f);
+                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(expandableDetailsLayout, "scaleY" , 0f, 1f);
                     anim3.setDuration(500);
                     anim3.start();
                     ObjectAnimator anim2 = ObjectAnimator.ofFloat(showPropsIcon, "rotation", 0, 180);
                     anim2.start();
-                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(animLayout, "alpha", 0f, 1f);
+                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(expandableDetailsLayout, "alpha", 0f, 1f);
                     anim4.setDuration(750);
                     anim4.start();
                     TranslateAnimation anim1 = new TranslateAnimation(
@@ -310,22 +314,22 @@ public class HtChatMessageCell extends FrameLayout {
                             Animation.RELATIVE_TO_SELF, -1f,
                             Animation.RELATIVE_TO_SELF,0f);
                     anim1.setDuration(300);
-                    animLayout.setVisibility(VISIBLE);
+                    expandableDetailsLayout.setVisibility(VISIBLE);
 
-                    animLayout.startAnimation(anim1);
+                    expandableDetailsLayout.startAnimation(anim1);
                 } else {
-                    animLayout.setVisibility(VISIBLE);
+                    expandableDetailsLayout.setVisibility(VISIBLE);
                     TranslateAnimation anim1 = new TranslateAnimation(
                             Animation.RELATIVE_TO_SELF, 0f,
                             Animation.RELATIVE_TO_SELF, 0f,
                             Animation.RELATIVE_TO_SELF, 0f,
                             Animation.RELATIVE_TO_SELF,-1f);
                     anim1.setDuration(300);
-                    animLayout.startAnimation(anim1);
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(animLayout, "scaleY" , 1f, 0f);
+                    expandableDetailsLayout.startAnimation(anim1);
+                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(expandableDetailsLayout, "scaleY" , 1f, 0f);
                     anim3.setDuration(500);
                     anim3.start();
-                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(animLayout, "alpha", 1f, 0f);
+                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(expandableDetailsLayout, "alpha", 1f, 0f);
                     anim4.setDuration(750);
                     anim4.start();
                     anim1.setAnimationListener(new Animation.AnimationListener() {
@@ -334,7 +338,7 @@ public class HtChatMessageCell extends FrameLayout {
                         }
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            animLayout.setVisibility(GONE);
+                            expandableDetailsLayout.setVisibility(GONE);
                         }
                         @Override
                         public void onAnimationRepeat(Animation animation) {
@@ -542,8 +546,8 @@ public class HtChatMessageCell extends FrameLayout {
         this.offerId = offerId;
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(HtConstants.offerImagesDir , Context.MODE_PRIVATE);
-        File file = new File(directory, HtConstants.offerImageName + offerId + HtConstants.offerImageExtension);
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));

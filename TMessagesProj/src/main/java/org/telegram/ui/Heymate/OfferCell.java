@@ -210,7 +210,6 @@ public class OfferCell<T> extends FrameLayout {
         ObjectAnimator slideAnim = ObjectAnimator.ofFloat(slideImage, "rotation", 90);
         slideAnim.setDuration(300);
         slideAnim.start();
-        OfferCell father = this;
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(mainLayout, "x", place == 1 ? AndroidUtilities.dp(180) : AndroidUtilities.dp(70));
         anim1.setInterpolator(new AccelerateDecelerateInterpolator());
         anim1.setDuration(place == 1 ? 600 : 200);
