@@ -70,8 +70,8 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
         LinearLayout mainLayout = new LinearLayout(context);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setMinimumHeight(700);
-        mainLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
-        mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_actionBarDefault)));
+        mainLayout.setBackgroundColor(Theme.getColor(Theme.key_wallet_whiteBackground));
+        mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_wallet_whiteBackground)));
 
         ImageView closeImage = new ImageView(context);
         Drawable closeDrawable = context.getResources().getDrawable(R.drawable.close_bottom);

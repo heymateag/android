@@ -66,7 +66,6 @@ public class OffersActivity extends BaseFragment {
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
 
-//        HtSQLite.getInstance().setParent(this);
         ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
         HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
 

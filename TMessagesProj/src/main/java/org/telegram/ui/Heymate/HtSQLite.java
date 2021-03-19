@@ -34,6 +34,7 @@ public class HtSQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+//        db.execSQL("DROP TABLE IF EXISTS offer;");
         db.execSQL("CREATE TABLE IF NOT EXISTS offer(uid INTEGER PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER,  serverUUID TEXT, userId TEXT, longitude TEXT, latitude TEXT);");
         db.close();
     }
@@ -212,7 +213,9 @@ public class HtSQLite extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
         cursor = database.rawQuery("SELECT * FROM offer WHERE userId = ? ORDER BY uid DESC;", new String[]{"" + userId});
-        return extract(cursor);
+        ArrayList<OfferDto> result = extract(cursor);
+        database.close();
+        return result;
     }
 
     public void updateOffers(ArrayList<Offer> offers, int userId) {

@@ -363,6 +363,7 @@ public class HtChatMessageCell extends FrameLayout {
         buyLabel.setText(LocaleController.getString("HtBuy", R.string.HtBuy));
         buyLabel.setTextSize(16);
         buyLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        buyLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
         buyLabel.setTypeface(buyLabel.getTypeface(), Typeface.BOLD);
         Drawable buyDrawable = context.getResources().getDrawable(R.drawable.pay);
         buyLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
@@ -391,6 +392,7 @@ public class HtChatMessageCell extends FrameLayout {
         promoteLabel.setText(LocaleController.getString("HtPromote", R.string.HtPromote));
         promoteLabel.setTextSize(16);
         promoteLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        promoteLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
         promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
         Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.share);
         promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
@@ -430,6 +432,7 @@ public class HtChatMessageCell extends FrameLayout {
         viewLabel.setText(LocaleController.getString("HtView", R.string.HtView));
         viewLabel.setTextSize(16);
         viewLayout.setBackgroundColor(Theme.getColor(Theme.key_statisticChartLine_blue));
+        viewLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_statisticChartLine_blue)));
         viewLabel.setTypeface(viewLabel.getTypeface(), Typeface.BOLD);
 
         Drawable viewDrawable = context.getResources().getDrawable(R.drawable.msg_views);

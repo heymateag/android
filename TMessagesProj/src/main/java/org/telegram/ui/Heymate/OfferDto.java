@@ -1,7 +1,11 @@
 package org.telegram.ui.Heymate;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class OfferDto {
@@ -23,6 +27,15 @@ public class OfferDto {
     private Date expire;
     private double longitude;
     private double latitude;
+    private ArrayList<Long> dateSlots;
+
+    public ArrayList<Long> getDateSlots() {
+        return dateSlots;
+    }
+
+    public void setDateSlots(ArrayList<Long> dateSlots) {
+        this.dateSlots = dateSlots;
+    }
 
     public double getLongitude() {
         return longitude;
@@ -160,8 +173,17 @@ public class OfferDto {
         this.time = time;
     }
 
-/*    public static OfferDto from(Offer offer){
-        OfferDto dto = new OfferDto();
-
-    }*/
+    public String getTimeSlotsAsJson(){
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray();
+        for(int i = 0; i < dateSlots.size(); i += 2){
+            array.put("" + dateSlots.get(i) + " - " + dateSlots.get(i + 1));
+        }
+        try {
+            json.put("times", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json.toString();
+    }
 }

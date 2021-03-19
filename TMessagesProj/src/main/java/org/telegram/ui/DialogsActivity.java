@@ -1740,7 +1740,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public View createView(final Context context) {
-        HtAmplify.setContext(context);
 
         searching = false;
         searchWas = false;

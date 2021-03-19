@@ -1383,6 +1383,9 @@
     <string name="HtAddNewPrice">Add new price</string>
     <string name="HtPaymentTerms">Payment Terms</string>
     <string name="HtSelectDate">Select Date</string>
+    <string name="HtSelectStartTime">Select Start Time</string>
+    <string name="HtSelectEndTime">Select End Time</string>
+    <string name="HtAddNewDate">Add New Date</string>
     <string name="HtExpiration">Expiration</string>
     <string name="HtTermsAndConditions">Terms And Conditions</string>
     <string name="HtPlacePolicy">Place the policy here</string>

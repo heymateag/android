@@ -93,6 +93,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private double longitude;
     private double latitude;
     private Date expireDate;
+    private ArrayList<Long> dateSlots = new ArrayList<>();
 
     public enum ActionType {
         CREATE,
@@ -306,10 +307,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                 }
             }
         });
-        locationInputCell = new HtLocationInputCell(context, LocaleController.getString("HtLocation", R.string.HtLocation), locationArgs, R.drawable.menu_location, canEdit);
+        locationInputCell = new HtLocationInputCell(context, LocaleController.getString("HtLocation", R.string.HtLocation), locationArgs, R.drawable.location_on_24_px_1, canEdit);
         mainLayout.addView(locationInputCell);
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
-        scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", R.string.HtSchedule), scheduleArgs, R.drawable.ht_calendar, canEdit);
+        scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", R.string.HtSchedule), scheduleArgs, R.drawable.watch_later_24_px_1, canEdit, this);
         mainLayout.addView(scheduleInputCell);
 
         HashMap<String, Runnable> priceArgs = new HashMap<>();
@@ -582,7 +583,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        expireInputCell = new HtExpireInputCell(context, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.msg_timer, canEdit);
+        expireInputCell = new HtExpireInputCell(context, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.alarm_off_24_px, canEdit);
         expireInputCell.setRes(ARGUMENTS_EXPIRE, day1 + "-" + month + "-" + year, 0);
         mainLayout.addView(expireInputCell);
 
@@ -725,6 +726,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
                 newOffer.setLatitude(latitude);
                 newOffer.setLongitude(longitude);
+                newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
@@ -826,6 +828,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setLatitude(latitude);
                 newOffer.setLongitude(longitude);
                 newOffer.setStatus(OfferStatus.ACTIVE);
+                newOffer.setDateSlots(dateSlots);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 if (actionType != ActionType.EDIT) {
                     Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
@@ -890,6 +893,10 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setSubCategory(String text) {
         categoryInputCell.setRes(ARGUMENTS_SUB_CATEGORY, text, 1);
+    }
+
+    public void setDateSlots(ArrayList<Long> dates) {
+        this.dateSlots = dates;
     }
 
     public void setFee(String text, int position) {

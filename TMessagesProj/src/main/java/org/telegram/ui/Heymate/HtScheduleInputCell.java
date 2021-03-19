@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -31,7 +32,7 @@ public class HtScheduleInputCell extends LinearLayout {
     private Drawable[] iconValues;
     private HashMap<String, Runnable> args;
 
-    public HtScheduleInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
+    public HtScheduleInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit, HtCreateOfferActivity parent) {
         super(context);
         paremetersValues = new HashMap<>();
         parametersViews = new TextView[args.size()];
@@ -67,72 +68,11 @@ public class HtScheduleInputCell extends LinearLayout {
         expandIcon.setEnabled(true);
         expandIcon.setHovered(true);
         final boolean[] isOpen = {false};
-        titleLayout3.setOnClickListener(new OnClickListener() {
+        titleLayout3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isOpen[0]){
-                    ObjectAnimator anim1 = ObjectAnimator.ofFloat(categoryLayout, "scaleY", 0f, 1f);
-                    anim1.setDuration(250);
-                    anim1.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            ObjectAnimator anim2 = ObjectAnimator.ofFloat(categoryLayout, "alpha", 0f, 1f);
-                            anim2.setDuration(500);
-                            anim2.start();
-                            categoryLayout.setVisibility(VISIBLE);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            isOpen[0] = true;
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-
-                        }
-                    });
-                    anim1.start();
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(expandIcon, "rotationX", 0, 180);
-                    anim3.setDuration(250);
-                    anim3.start();
-                } else {
-                    ObjectAnimator anim1 = ObjectAnimator.ofFloat(categoryLayout, "scaleY", 1f, 0f);
-                    anim1.setDuration(250);
-                    anim1.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            ObjectAnimator anim2 = ObjectAnimator.ofFloat(categoryLayout, "alpha", 1f, 0f);
-                            anim2.setDuration(500);
-                            anim2.start();
-                            categoryLayout.setVisibility(VISIBLE);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            isOpen[0] = false;
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-
-                        }
-                    });
-                    anim1.start();
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(expandIcon, "rotationX", 180, 0);
-                    anim3.setDuration(250);
-                    anim3.start();
-                }
+                HtCalendarBottomSheet calendarBottomSheet = new HtCalendarBottomSheet(context, true, parent);
+                parent.showDialog(calendarBottomSheet);
             }
         });
         int i = 0;

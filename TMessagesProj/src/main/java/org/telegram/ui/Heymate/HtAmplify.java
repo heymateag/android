@@ -54,7 +54,7 @@ public class HtAmplify {
                 .description(dto.getDescription())
                 .expiry(new Temporal.Date(dto.getExpire()))
                 .id(UUID.randomUUID().toString())
-                .availabilitySlot("{\"time\": \"01-01-2021\"}")
+                .availabilitySlot(dto.getTimeSlotsAsJson())
                 .locationData(dto.getLocation())
                 .isActive(true)
                 .terms(dto.getTerms())
@@ -82,10 +82,12 @@ public class HtAmplify {
                 Amplify.API.query(
                         ModelQuery.list(Offer.class, Offer.USER_ID.eq("" + userId)),
                         response -> {
-                            for (Offer offer : response.getData()) {
-                                offers.add(offer);
+                            if(response.getData() != null) {
+                                for (Offer offer : response.getData()) {
+                                    offers.add(offer);
+                                }
+                                HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
                             }
-                            HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
                         },
                         error -> Log.e("HtAmplify", "Query failure", error)
                 );
