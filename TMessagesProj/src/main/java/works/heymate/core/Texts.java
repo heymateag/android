@@ -7,7 +7,17 @@ import java.util.Map;
 
 public class Texts {
 
-    public static final String WALLET = "Wallet";
+    public static final String SECURE = "secure";
+    public static final String LATER = "later";
+
+    public static final String YOUR_WALLET = "your_wallet";
+    public static final String NO_WALLET_DETECTED = "no_wallet_detected";
+    public static final String NO_WALLET_DETECTED_MESSAGE = "no_wallet_detected_message";
+    public static final String CREATE_NEW_WALLET = "create_new_wallet";
+    public static final String IMPORT_EXISTING_WALLET = "import_existing_wallet";
+    public static final String WALLET_DETECTED = "wallet_detected";
+    public static final String WALLET_DETECTED_MESSAGE = "wallet_detected_message";
+    public static final String WALLET_NETWORK_ERROR = "wallet_network_error";
 
     private static final String STRING_RESOURCE_PREFIX = "hm_";
 

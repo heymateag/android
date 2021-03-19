@@ -4,10 +4,14 @@
     <Vertical>
         <Span id="actionbar" size="wrap"/>
         <Span size="73ph"/>
-        <Span id="image_wallet" size="104ph"/>
-        <Span size="45.7ph"/>
+        <Span id="image_wallet" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@image_wallet">
+        <Span size="121.5dp"/>
+        <Span size="32.3ph"/>
         <Span id="text_title" size="wrap"/>
-        <Span size="18pw"/>
+        <Span size="18ph"/>
         <Span id="text_status" size="wrap"/>
         <Span size="1w"/>
         <Span id="bottombar" size="49dp"/>
@@ -57,7 +61,7 @@
 
     <Horizontal>
         <Span size="1w"/>
-        <Span id="image_wallet" size="wrap"/>
+        <Span id="image_wallet" size="111.7dp"/>
         <Span size="1w"/>
     </Horizontal>
 

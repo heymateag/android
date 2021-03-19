@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ht_secure">Secure</string>
+    <string name="ht_later">Later</string>
+    
+    <string name="ht_your_wallet">Your wallet</string>
+    <string name="ht_no_wallet_detected">No Wallet Detected</string>
+    <string name="ht_no_wallet_detected_message">It seems you have not created a wallet. Would you like to create a wallet or import an existing one?</string>
+    <string name="ht_create_new_wallet">Create new</string>
+    <string name="ht_import_existing_wallet">Import existing</string>
+    <string name="ht_wallet_detected">Congratulations!</string>
+    <string name="ht_wallet_detected_message">You have a new wallet! Would you like to secure your wallet with a biometric/PIN or continue with your transaction.\n\nWrite down the key in case you lose your phone.\n__Show my key__</string>
+    <string name="ht_wallet_network_error">Could not transfer data with node.</string>
+    
+</resources>

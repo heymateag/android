@@ -13,7 +13,9 @@ import java.util.Map;
 
 public class HeymateEvents {
 
-    public static final int WALLET_CREATED = 0;
+    public static final int WALLET_CREATED = 0; // Wallet
+    public static final int PHONE_NUMBER_VERIFIED_STATUS_UPDATED = 1; // Wallet, VerifiedStatus, CeloError
+
 
     public interface HeymateEventObserver {
 
@@ -23,10 +25,8 @@ public class HeymateEvents {
 
     private static Map<Integer, List<WeakReference<HeymateEventObserver>>> mObservers = new Hashtable<>();
 
-    private static Handler mHandler = null;
-
     public static void register(int event, HeymateEventObserver observer) {
-        runOnUIThread(() -> {
+        Utils.runOnUIThread(() -> {
             List<WeakReference<HeymateEventObserver>> observerReferences = mObservers.get(event);
 
             if (observerReferences == null) {
@@ -53,7 +53,7 @@ public class HeymateEvents {
     }
 
     public static void unregister(int event, HeymateEventObserver observer) {
-        runOnUIThread(() -> {
+        Utils.runOnUIThread(() -> {
             List<WeakReference<HeymateEventObserver>> observerReferences = mObservers.get(event);
 
             if (observerReferences == null) {
@@ -77,7 +77,7 @@ public class HeymateEvents {
     }
 
     public static void notify(int event, Object... args) {
-        runOnUIThread(() -> {
+        Utils.postOnUIThread(() -> {
             List<WeakReference<HeymateEventObserver>> observerReferences = mObservers.get(event);
 
             if (observerReferences == null) {
@@ -94,21 +94,6 @@ public class HeymateEvents {
                 }
             }
         });
-    }
-
-    private static void runOnUIThread(Runnable runnable) {
-        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
-            runnable.run();
-            return;
-        }
-
-        synchronized (HeymateEvents.class) {
-            if (mHandler == null) {
-                mHandler = new Handler(Looper.getMainLooper());
-            }
-        }
-
-        mHandler.post(runnable);
     }
 
 }
