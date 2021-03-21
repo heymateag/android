@@ -146,7 +146,7 @@ public class HtExpireInputCell extends LinearLayout {
             parametersViews[i] = new TextView(context);
             parametersViews[i].setText(((String) arg).substring(2));
             parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
-            parametersViews[i].setPaintFlags(parametersViews[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//            parametersViews[i].setPaintFlags(parametersViews[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             parametersViews[i].setTypeface(parametersViews[i].getTypeface(), Typeface.BOLD);
             parametersLayout.addView(parametersViews[i], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,5,10,5));
             if(canEdit) {

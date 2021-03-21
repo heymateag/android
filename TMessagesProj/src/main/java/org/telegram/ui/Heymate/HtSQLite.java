@@ -20,7 +20,7 @@ public class HtSQLite extends SQLiteOpenHelper {
     public static void setInstance(Context context){
         if(instance == null){
             File dbFile = new File(ApplicationLoader.getFilesDirFixed().getPath(), "cache4.db");
-            instance = new HtSQLite(context, dbFile.getPath() , null, 74);
+            instance = new HtSQLite(context, dbFile.getPath() , null, 75);
         }
     }
 
@@ -34,19 +34,19 @@ public class HtSQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL("DROP TABLE IF EXISTS offer;");
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uid INTEGER PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER,  serverUUID TEXT, userId TEXT, longitude TEXT, latitude TEXT);");
-        db.close();
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS offer;");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT);");
     }
 
-    public int addOffer(Offer offer) {
+    public String addOffer(Offer offer) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put("uuid", offer.getId());
         contentValues.put("title", offer.getTitle());
         contentValues.put("rate", offer.getRate());
         contentValues.put("rateType", offer.getRateType());
@@ -59,16 +59,14 @@ public class HtSQLite extends SQLiteOpenHelper {
         contentValues.put("terms", offer.getTerms());
         contentValues.put("description", offer.getDescription());
         contentValues.put("status", OfferStatus.ACTIVE.ordinal());
-        contentValues.put("serverUUID", offer.getId());
         contentValues.put("userId", offer.getUserId());
         contentValues.put("longitude", offer.getLongitude());
         contentValues.put("latitude", offer.getLatitude());
-        int createdId =  (int) database.insert("offer", null, contentValues);
-        database.close();
-        return createdId;
+        database.insert("offer", null, contentValues);
+        return offer.getId();
     }
 
-    public void addOffer(int offerId, OfferDto offer) {
+    public void addOffer(String uuid, OfferDto offer) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", offer.getTitle());
@@ -85,17 +83,15 @@ public class HtSQLite extends SQLiteOpenHelper {
         contentValues.put("status", OfferStatus.ACTIVE.ordinal());
         contentValues.put("longitude", "" + offer.getLongitude());
         contentValues.put("latitude", "" + offer.getLatitude());
-        contentValues.put("uid", offerId);
-        database.update("offer", contentValues, "uid = ?", new String[]{"" + offerId});
-        database.close();
+        contentValues.put("uuid", uuid);
+        database.update("offer", contentValues, "uuid = ?", new String[]{uuid});
     }
 
-    public OfferDto getOffer(int id) {
+    public OfferDto getOffer(String uuid) {
         SQLiteDatabase database = this.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM offer WHERE uid = ? LIMIT 1;", new String[]{"" + id});
+        Cursor cursor = database.rawQuery("SELECT * FROM offer WHERE uuid = ? LIMIT 1;", new String[]{uuid});
         if (cursor.moveToFirst()) {
             OfferDto offerDto = new OfferDto();
-            offerDto.setId(cursor.getInt(0));
             offerDto.setTitle(cursor.getString(1));
             offerDto.setRate(cursor.getString(2));
             offerDto.setRateType(cursor.getString(3));
@@ -108,10 +104,9 @@ public class HtSQLite extends SQLiteOpenHelper {
             offerDto.setTerms(cursor.getString(10));
             offerDto.setDescription(cursor.getString(11));
             offerDto.setStatus(getOfferStatus(cursor.getInt(12)));
-            database.close();
+            offerDto.setServerUUID(cursor.getString(0));
             return offerDto;
         }
-        database.close();
         return null;
     }
 
@@ -132,12 +127,11 @@ public class HtSQLite extends SQLiteOpenHelper {
         }
     }
 
-    public void archiveOffer(int id) {
+    public void archiveOffer(String uuid) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("status", 3);
-        database.update("offer", contentValues, "uid = ?", new String[]{"" + id});
-        database.close();
+        database.update("offer", contentValues, "uuid = ?", new String[]{uuid});
     }
 
     private ArrayList<OfferDto> extract(Cursor cursor) {
@@ -145,7 +139,6 @@ public class HtSQLite extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 OfferDto offerDto = new OfferDto();
-                offerDto.setId(cursor.getInt(0));
                 offerDto.setTitle(cursor.getString(1));
                 offerDto.setRate(cursor.getString(2));
                 offerDto.setRateType(cursor.getString(3));
@@ -158,6 +151,7 @@ public class HtSQLite extends SQLiteOpenHelper {
                 offerDto.setTerms(cursor.getString(10));
                 offerDto.setDescription(cursor.getString(11));
                 offerDto.setStatus(getOfferStatus(cursor.getInt(12)));
+                offerDto.setServerUUID(cursor.getString(0));
                 offers.add(offerDto);
             } while (cursor.moveToNext());
         }
@@ -167,65 +161,67 @@ public class HtSQLite extends SQLiteOpenHelper {
     public ArrayList<OfferDto> getOffers(String category, String subCategory, int status, int userId) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
-        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND status = ? AND subCategory = ? AND userId = ? ORDER BY uid DESC;", new String[]{category, "" + status, subCategory, "" + userId});
-        ArrayList<OfferDto> result =  extract(cursor);
-        database.close();
-        return result;
+        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND status = ? AND subCategory = ? AND userId = ? ORDER BY uuid DESC;", new String[]{category, "" + status, subCategory, "" + userId});
+        return extract(cursor);
     }
 
     public ArrayList<OfferDto> getOffers(String category, String subCategory, int userId) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
-        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND subCategory = ? AND userId = ? ORDER BY uid DESC;", new String[]{category, subCategory, "" + userId});
-        ArrayList<OfferDto> result =  extract(cursor);
-        database.close();
-        return result;
+        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND subCategory = ? AND userId = ? ORDER BY uuid DESC;", new String[]{category, subCategory, "" + userId});
+        return extract(cursor);
     }
 
     public ArrayList<OfferDto> getOffers(String category, int status, int userId) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
-        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND status = ? AND userId = ? ORDER BY uid DESC;", new String[]{category, "" + status, "" + userId});
-        ArrayList<OfferDto> result =  extract(cursor);
-        database.close();
-        return result;
+        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND status = ? AND userId = ? ORDER BY uuid DESC;", new String[]{category, "" + status, "" + userId});
+        return extract(cursor);
     }
 
     public ArrayList<OfferDto> getOffers(int status, int userId) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
-        cursor = database.rawQuery("SELECT * FROM offer WHERE status = ? AND userId = ? ORDER BY uid DESC;", new String[]{"" + status, "" + userId});
-        ArrayList<OfferDto> result =  extract(cursor);
-        database.close();
-        return result;
+        cursor = database.rawQuery("SELECT * FROM offer WHERE status = ? AND userId = ? ORDER BY uuid DESC;", new String[]{"" + status, "" + userId});
+        return extract(cursor);
     }
 
     public ArrayList<OfferDto> getOffers(String category, int userId) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
-        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND userId = ? ORDER BY uid DESC;", new String[]{category, "" + userId});
-        ArrayList<OfferDto> result =  extract(cursor);
-        database.close();
-        return result;
+        cursor = database.rawQuery("SELECT * FROM offer WHERE category = ? AND userId = ? ORDER BY uuid DESC;", new String[]{category, "" + userId});
+        return extract(cursor);
     }
 
     public ArrayList<OfferDto> getAllOffers(int userId) {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor;
-        cursor = database.rawQuery("SELECT * FROM offer WHERE userId = ? ORDER BY uid DESC;", new String[]{"" + userId});
-        ArrayList<OfferDto> result = extract(cursor);
-        database.close();
-        return result;
+        cursor = database.rawQuery("SELECT * FROM offer WHERE userId = ? ORDER BY uuid DESC;", new String[]{"" + userId});
+        return extract(cursor);
     }
 
     public void updateOffers(ArrayList<Offer> offers, int userId) {
         SQLiteDatabase database = this.getWritableDatabase();
-        database.beginTransaction();
         for (Offer offer : offers) {
-            database.execSQL("INSERT INTO offer(title, rate, rateType, currency, location, time, category, subCategory, configText, terms, description, status, userId, serverUUID, userId, longitude, latitude) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE not exists(SELECT * FROM offer WHERE serverUUID = ?);", new String[]{offer.getTitle(), offer.getRate(), offer.getRateType(), offer.getCurrency(), offer.getLocationData(), offer.getExpiry().toDate().toLocaleString(), offer.getCategory(), offer.getSubCategory(), offer.getTermsConfig(), offer.getTerms(), offer.getDescription(), "" + OfferStatus.ACTIVE.ordinal(), "" + userId, offer.getId(), offer.getUserId(), offer.getLongitude(), offer.getLatitude(), offer.getId()});
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("title", offer.getTitle());
+            contentValues.put("rate", offer.getRate());
+            contentValues.put("rateType", offer.getRateType());
+            contentValues.put("currency", offer.getCurrency());
+            contentValues.put("location", offer.getLocationData());
+            contentValues.put("time", offer.getExpiry().toDate().toLocaleString());
+            contentValues.put("category", offer.getCategory());
+            contentValues.put("subCategory", offer.getSubCategory());
+            contentValues.put("configText", offer.getTermsConfig());
+            contentValues.put("terms", offer.getTerms());
+            contentValues.put("description", offer.getDescription());
+            contentValues.put("status", OfferStatus.ACTIVE.ordinal());
+            contentValues.put("uuid", offer.getId());
+            contentValues.put("userId", offer.getUserId());
+            contentValues.put("longitude", offer.getLongitude());
+            contentValues.put("latitude", offer.getLatitude());
+            database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         }
-        database.endTransaction();
-        database.close();
     }
 
 }

@@ -49,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
@@ -88,7 +89,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private ActionType actionType;
     private LinearLayout addPriceLayout;
     private LinearLayout actionLayout;
-    private int offerId = -1;
+    private String offerUUID = "";
     private Uri pickedImage;
     private double longitude;
     private double latitude;
@@ -152,7 +153,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -228,6 +229,16 @@ public class HtCreateOfferActivity extends BaseFragment {
             titleTextField.setClickable(false);
             titleTextField.setFocusable(false);
         }
+        titleTextField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    titleTextField.clearFocus();
+                    titleTextField.hideActionMode();
+                    AndroidUtilities.hideKeyboard(titleTextField);
+                }
+            }
+        });
 
         titleInputLayout.addView(titleTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
         descriptionTextField = new EditTextBoldCursor(context);
@@ -256,6 +267,16 @@ public class HtCreateOfferActivity extends BaseFragment {
                 AndroidUtilities.hideKeyboard(descriptionTextField);
             }
             return false;
+        });
+        descriptionTextField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    descriptionTextField.clearFocus();
+                    descriptionTextField.hideActionMode();
+                    AndroidUtilities.hideKeyboard(descriptionTextField);
+                }
+            }
         });
         if (actionType == ActionType.VIEW) {
             descriptionTextField.setKeyListener(null);
@@ -556,6 +577,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             mcurrentTime.add(Calendar.MONTH, 1);
         int year = mcurrentTime.get(Calendar.YEAR);
         int month = mcurrentTime.get(Calendar.MONTH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         expireArgs.put(ARGUMENTS_EXPIRE, new Runnable() {
             @Override
             public void run() {
@@ -570,11 +592,11 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        expireInputCell.setRes(ARGUMENTS_EXPIRE, dayOfMonth + "-" + month + "-" + year, 0);
                         Calendar expireDateCal = Calendar.getInstance();
                         expireDateCal.set(Calendar.YEAR, year);
                         expireDateCal.set(Calendar.MONTH, month);
                         expireDateCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(expireDateCal.getTime()), 0);
                         expireDate = expireDateCal.getTime();
                     }
                 }, year, month, day);
@@ -584,7 +606,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         });
 
         expireInputCell = new HtExpireInputCell(context, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.alarm_off_24_px, canEdit);
-        expireInputCell.setRes(ARGUMENTS_EXPIRE, day1 + "-" + month + "-" + year, 0);
+        expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(mcurrentTime.getTime()), 0);
+        expireDate = mcurrentTime.getTime();
         mainLayout.addView(expireInputCell);
 
         HashMap<String, Runnable> termsArgs = new HashMap<>();
@@ -831,12 +854,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 if (actionType != ActionType.EDIT) {
-                    Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
-
-                    offerId = HtSQLite.getInstance().addOffer(createdOffer);
+                    HtAmplify.getInstance(context).createOffer(newOffer);
                     SendMessagesHelper.getInstance(currentAccount).sendMessage("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(ARGUMENTS_PRICE)) + "___" + priceInputCell.getRes(ARGUMENTS_RATE_TYPE) + "___" + priceInputCell.getRes(ARGUMENTS_CURRENCY) + "___" + locationInputCell.getRes(ARGUMENTS_ADDRESS) + "___" + expireInputCell.getRes(ARGUMENTS_EXPIRE) + "___" + categoryInputCell.getRes(ARGUMENTS_CATEGORY) + "___" + categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) + "___" + configText + "___" + termsInputCell.getRes(ARGUMENTS_TERMS) + "___" + descriptionTextField.getText().toString()).getBytes()), (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
                 } else {
-                    HtSQLite.getInstance().addOffer(offerId, newOffer);
+                    HtSQLite.getInstance().addOffer(offerUUID, newOffer);
                 }
                 if (pickedImage != null) {
                     String[] filePath = {MediaStore.Images.Media.DATA};
@@ -850,7 +871,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                     cursor.close();
                     ContextWrapper cw2 = new ContextWrapper(context);
                     File directory2 = cw2.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-                    File myPath = new File(directory2, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
+                    File myPath = new File(directory2, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
                     FileOutputStream fos = null;
                     try {
                         fos = new FileOutputStream(myPath);
@@ -950,12 +971,12 @@ public class HtCreateOfferActivity extends BaseFragment {
         titleTextField.setText(title);
     }
 
-    public void setOfferId(int offerId) {
-        this.offerId = offerId;
+    public void setOfferUUID(String offerUUID) {
+        this.offerUUID = offerUUID;
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));

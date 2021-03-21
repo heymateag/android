@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class OfferDto {
@@ -28,6 +29,15 @@ public class OfferDto {
     private double longitude;
     private double latitude;
     private ArrayList<Long> dateSlots;
+    private String serverUUID;
+
+    public String getServerUUID() {
+        return serverUUID;
+    }
+
+    public void setServerUUID(String serverUUID) {
+        this.serverUUID = serverUUID;
+    }
 
     public ArrayList<Long> getDateSlots() {
         return dateSlots;
@@ -180,6 +190,7 @@ public class OfferDto {
             array.put("" + dateSlots.get(i) + " - " + dateSlots.get(i + 1));
         }
         try {
+            json.put("timeZone", Calendar.getInstance().getTimeZone().getDisplayName());
             json.put("times", array);
         } catch (JSONException e) {
             e.printStackTrace();

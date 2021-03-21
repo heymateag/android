@@ -11,6 +11,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -30,6 +32,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -74,7 +77,7 @@ public class HtChatMessageCell extends FrameLayout {
     private String paymentConfig = "{\"arg1\": \"1\",\"arg2\": \"2\",\"arg3\": \"3\",\"arg4\": \"4\",\"arg5\": \"5\",\"arg6\": \"6\",\"arg7\": \"7\"}";
     private String terms = "";
     private OfferStatus status;
-    private int offerId = -1;
+    private String offerUUID = "";
     private LinearLayout statusLayout;
     private boolean archived;
     private Drawable archiveDrawable;
@@ -152,7 +155,7 @@ public class HtChatMessageCell extends FrameLayout {
         editIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferDto offerDto = HtSQLite.getInstance().getOffer(offerId);
+                OfferDto offerDto = HtSQLite.getInstance().getOffer(offerUUID);
                 HtCreateOfferActivity fragment = new HtCreateOfferActivity();
                 parent.presentFragment(fragment);
                 fragment.setActionType(HtCreateOfferActivity.ActionType.EDIT);
@@ -167,7 +170,7 @@ public class HtChatMessageCell extends FrameLayout {
                 fragment.setTitle(offerDto.getTitle());
                 fragment.setTerms(offerDto.getTerms());
                 fragment.setPaymentConfig(offerDto.getConfigText());
-                fragment.setOfferId(offerId);
+                fragment.setOfferUUID(offerUUID);
             }
         });
         topLayer.addView(editIcon, LayoutHelper.createFrame(25, 25, Gravity.RIGHT, 0, 0, 20, 0));
@@ -179,7 +182,7 @@ public class HtChatMessageCell extends FrameLayout {
         archiveIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HtSQLite.getInstance().archiveOffer(offerId);
+                HtSQLite.getInstance().archiveOffer(offerUUID);
                 if(parent instanceof OffersActivity){
                     ((OffersActivity) parent).addOffersToLayout(HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(parent.getCurrentAccount()).clientUserId));
                 }
@@ -196,7 +199,7 @@ public class HtChatMessageCell extends FrameLayout {
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));
@@ -363,7 +366,9 @@ public class HtChatMessageCell extends FrameLayout {
         buyLabel.setText(LocaleController.getString("HtBuy", R.string.HtBuy));
         buyLabel.setTextSize(16);
         buyLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        buyLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
+        ShapeDrawable defaultDrawable3 = new ShapeDrawable(new RoundRectShape(new float[]{AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0, 0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4)}, null, null));
+        defaultDrawable3.getPaint().setColor(context.getResources().getColor(R.color.ht_green));
+        buyLayout.setBackground(defaultDrawable3);
         buyLabel.setTypeface(buyLabel.getTypeface(), Typeface.BOLD);
         Drawable buyDrawable = context.getResources().getDrawable(R.drawable.pay);
         buyLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
@@ -392,7 +397,9 @@ public class HtChatMessageCell extends FrameLayout {
         promoteLabel.setText(LocaleController.getString("HtPromote", R.string.HtPromote));
         promoteLabel.setTextSize(16);
         promoteLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        promoteLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
+        ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0, 0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4)}, null, null));
+        defaultDrawable.getPaint().setColor(context.getResources().getColor(R.color.ht_green));
+        promoteLayout.setBackground(defaultDrawable);
         promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
         Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.share);
         promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
@@ -432,7 +439,9 @@ public class HtChatMessageCell extends FrameLayout {
         viewLabel.setText(LocaleController.getString("HtView", R.string.HtView));
         viewLabel.setTextSize(16);
         viewLayout.setBackgroundColor(Theme.getColor(Theme.key_statisticChartLine_blue));
-        viewLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_statisticChartLine_blue)));
+        ShapeDrawable defaultDrawable2 = new ShapeDrawable(new RoundRectShape(new float[]{0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0}, null, null));
+        defaultDrawable2.getPaint().setColor(Theme.getColor(Theme.key_statisticChartLine_blue));
+        viewLayout.setBackground(defaultDrawable2);
         viewLabel.setTypeface(viewLabel.getTypeface(), Typeface.BOLD);
 
         Drawable viewDrawable = context.getResources().getDrawable(R.drawable.msg_views);
@@ -453,21 +462,15 @@ public class HtChatMessageCell extends FrameLayout {
         viewLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HtCreateOfferActivity fragment = new HtCreateOfferActivity();
-                parent.presentFragment(fragment);
-                fragment.setActionType(HtCreateOfferActivity.ActionType.VIEW);
-                fragment.setCanEdit(false);
-                fragment.setTerms(terms);
-                fragment.setPaymentConfig(paymentConfig);
-                fragment.setTitle(titleLabel.getText().toString());
-                fragment.setLocationAddress(addressLabel.getText().toString());
-                fragment.setCategory(category);
-                fragment.setSubCategory(subCategory);
-                fragment.setCurrency(currency, 0);
-                fragment.setFee(rate, 0);
-                fragment.setRateType(rateType, 0);
-                fragment.setDescription(descriptionLabel.getText().toString());
-                fragment.setOfferId(offerId);
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, 0, offerUUID);
+                AlertDialog dialog = detailsPopUp.create();
+                detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                parent.showDialog(dialog);
             }
         });
 
@@ -545,22 +548,6 @@ public class HtChatMessageCell extends FrameLayout {
         }
     }
 
-    public void setOfferId(int offerId){
-        this.offerId = offerId;
-        Bitmap b;
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerId + OFFER_IMAGES_EXTENSION);
-        if (file.exists()) {
-            try {
-                b = BitmapFactory.decodeStream(new FileInputStream(file));
-                image.setImageBitmap(b);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void setArchived(boolean archived){
         this.archived = archived;
         if(archived){
@@ -568,6 +555,26 @@ public class HtChatMessageCell extends FrameLayout {
             archiveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_graySection), PorterDuff.Mode.MULTIPLY));
             archiveIcon.setOnClickListener(null);
             archiveIcon.setVisibility(GONE);
+        }
+    }
+
+    public String getOfferUUID() {
+        return offerUUID;
+    }
+
+    public void setOfferUUID(String offerUUID) {
+        this.offerUUID = offerUUID;
+        Bitmap b;
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
+        if (file.exists()) {
+            try {
+                b = BitmapFactory.decodeStream(new FileInputStream(file));
+                image.setImageBitmap(b);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

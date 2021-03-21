@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Components.LayoutHelper;
@@ -21,7 +22,7 @@ public class HtTextCell extends LinearLayout {
 
     public HtTextCell(Context context) {
         super(context);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue)));
         titleLabel = new TextView(context);
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
         addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,10,10,10));
@@ -40,20 +41,20 @@ public class HtTextCell extends LinearLayout {
     }
 
     public void select(){
-        int colorFrom = Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground);
-        int colorTo = Theme.getColor(Theme.key_chat_serviceBackgroundSelected);
+        int colorFrom = Theme.getColor(Theme.key_dialogTextBlue);
+        int colorTo = Theme.getColor(Theme.key_dialogTextBlue3);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue)));
         colorAnimation.start();
     }
 
     public void unSelect(){
-        int colorFrom = Theme.getColor(Theme.key_chat_serviceBackgroundSelected);
-        int colorTo = Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground);
+        int colorFrom = Theme.getColor(Theme.key_dialogTextBlue3);
+        int colorTo = Theme.getColor(Theme.key_dialogTextBlue);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_chat_serviceBackgroundSelected)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue3)));
         colorAnimation.start();
     }
 }

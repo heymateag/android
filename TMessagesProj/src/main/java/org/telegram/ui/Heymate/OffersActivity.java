@@ -66,6 +66,8 @@ public class OffersActivity extends BaseFragment {
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
 
+//        HtAmplify.getInstance(context).signUp(currentAccount);
+//        HtAmplify.getInstance(context).signIn(currentAccount);
         ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
         HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
 
@@ -212,9 +214,10 @@ public class OffersActivity extends BaseFragment {
                     setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(Theme.getColor(Theme.key_dialogTextGray)));
                 }
             };
+            offerCell1.setOfferUUID(offerDto.getServerUUID());
             offerCell1.setOut(true);
             offerCell1.setStatus(offerDto.getStatus());
-            offerCell1.setOfferId(offerDto.getId());
+            offerCell1.setOfferUUID(offerDto.getServerUUID());
             offerCell1.setArchived(offerDto.getStatus() == OfferStatus.ARCHIVED);
             offerCell1.titleLabel.setText(offerDto.getTitle());
             offerCell1.descriptionLabel.setText(offerDto.getDescription());

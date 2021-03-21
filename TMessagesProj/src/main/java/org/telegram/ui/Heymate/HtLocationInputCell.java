@@ -150,7 +150,7 @@ public class HtLocationInputCell extends LinearLayout {
             parametersViews[i] = new TextView(context);
             parametersViews[i].setText(((String) arg).substring(2));
             parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
-            parametersViews[i].setPaintFlags(parametersViews[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//            parametersViews[i].setPaintFlags(parametersViews[i].getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             parametersViews[i].setTypeface(parametersViews[i].getTypeface(), Typeface.BOLD);
 
             Drawable drawable;
