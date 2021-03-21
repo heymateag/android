@@ -9,6 +9,8 @@ public class Texts {
 
     public static final String SECURE = "secure";
     public static final String LATER = "later";
+    public static final String NEXT = "next";
+    public static final String CONFIRM = "confirm";
 
     public static final String YOUR_WALLET = "your_wallet";
     public static final String NO_WALLET_DETECTED = "no_wallet_detected";
@@ -18,6 +20,9 @@ public class Texts {
     public static final String WALLET_DETECTED = "wallet_detected";
     public static final String WALLET_DETECTED_MESSAGE = "wallet_detected_message";
     public static final String WALLET_NETWORK_ERROR = "wallet_network_error";
+
+    public static final String ATTESTATION_CHECK_MESSAGES = "attestation_check_messages";
+    public static final String ATTESTATION_CHECK_MESSAGES_DESCRIPTION = "attestation_check_message_description";
 
     private static final String STRING_RESOURCE_PREFIX = "hm_";
 
