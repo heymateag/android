@@ -40,6 +40,8 @@ import java.io.File;
 
 import androidx.multidex.MultiDex;
 
+import works.heymate.core.Texts;
+
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
@@ -178,6 +180,8 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
+        Texts.initialize(this);
+
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {

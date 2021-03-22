@@ -1,5 +1,6 @@
 package org.telegram.ui.Heymate;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
-import works.heymate.core.wallet.AttestationRequestCallback;
 import works.heymate.core.wallet.VerifiedStatus;
 import works.heymate.core.wallet.Wallet;
 
@@ -43,6 +43,11 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
 
     private boolean mCanUpdateVerifiedStatus = true;
     private boolean mHasPendingAttestationRequest = false;
+    private boolean mCanRequestMoreAttestations = true;
+
+    private String mPin = null;
+
+    private boolean mRequestingComplete = false;
 
     @Override
     public boolean onFragmentCreate() {
@@ -71,7 +76,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         mImageNext = content.findViewById(R.id.image_next);
         mButtonNext = content.findViewById(R.id.button_next);
 
-        setupTheme();
+        setupTheme(content);
 
         mTextTitle.setText(Texts.get(Texts.ATTESTATION_CHECK_MESSAGES));
         mTextDescription.setText(Texts.get(Texts.ATTESTATION_CHECK_MESSAGES_DESCRIPTION));
@@ -93,11 +98,59 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         });
 
         mInputCode.setPinReceiver(pin -> {
-            // TODO
+            mPin = pin;
+
+            updateState();
         });
 
         mButtonNext.setOnClickListener(v -> {
-            // TODO
+            mRequestingComplete = true;
+
+            updateState();
+
+            mWallet.completeAttestation(mPin, (success, verified, errorCause) -> {
+                if (isFinishing()) {
+                    return;
+                }
+
+                mRequestingComplete = false;
+
+                mCanRequestMoreAttestations = true;
+
+                if (success) {
+                    mPin = null;
+                    mInputCode.setPin("");
+                }
+                else {
+                    // TODO Improve
+                    CharSequence error = null;
+
+                    switch (errorCause.getError()) {
+                        case BAD_ATTESTATION_CODE:
+                            error = Texts.get(Texts.ATTESTATION_BAD_CODE);
+                            break;
+                        case INVALID_ATTESTATION_CODE:
+                            error = Texts.get(Texts.ATTESTATION_INVALID_CODE);
+                            break;
+                        case ATTESTATION_CODE_USED:
+                            error = Texts.get(Texts.ATTESTATION_USED_CODE);
+                            break;
+                    }
+
+                    if (error == null) {
+                        if (errorCause.getMainCause().getError() == CeloError.NETWORK_ERROR) {
+                            error = Texts.get(Texts.NETWORK_ERROR);
+                        }
+                        else {
+                            error = errorCause.getError().getMessage();
+                        }
+                    }
+
+                    Toast.makeText(mButtonNext.getContext(), error, Toast.LENGTH_LONG).show();
+                }
+
+                updateState();
+            });
         });
 
         mWallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
@@ -120,9 +173,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         }
     }
 
-    private void setupTheme() {
-        View content = getFragmentView();
-
+    private void setupTheme(View content) {
         content.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         mTextTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mTextDescription.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
@@ -130,8 +181,8 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         mInputCode.setIndicatorColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
         mIndicatorStep.setMainColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
         mIndicatorStep.setOthersColor(Theme.getColor(Theme.key_divider));
-        mTextNext.setTextColor(Theme.getColor(Theme.key_profile_actionIcon));
-        mImageNext.setColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN);
+        mTextNext.setTextColor(Theme.getColor(Theme.key_actionBarDefault));
+        mImageNext.setColorFilter(Theme.getColor(Theme.key_actionBarDefault), PorterDuff.Mode.SRC_IN);
         mButtonNext.setBackgroundColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
     }
 
@@ -139,7 +190,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         VerifiedStatus verifiedStatus = mWallet.getVerifiedStatus();
 
         if (verifiedStatus == null) {
-            // TODO disable
+            setEnabled(false);
 
             if (mWallet.isCheckingVerifiedStatus()) {
                 return;
@@ -150,7 +201,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
             }
             else {
                 // TODO Improve behavior
-                Toast.makeText(mInputCode.getContext(), Texts.get(Texts.WALLET_NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(mInputCode.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
 
                 finishFragment(true);
             }
@@ -186,27 +237,61 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
             mImageNext.setImageResource(R.drawable.msg_arrowright);
         }
 
-        if (verifiedStatus.totalAttestations < ATTESTATION_COUNT && !mHasPendingAttestationRequest) {
-            // TODO disable
-
-            requestAttestation();
+        if (mHasPendingAttestationRequest || (verifiedStatus.totalAttestations < ATTESTATION_COUNT && requestAttestation()) || mRequestingComplete) {
+            setEnabled(false);
             return;
         }
 
-        // TODO
+        setEnabled(true);
     }
 
-    private void requestAttestation() {
+    private boolean requestAttestation() {
+        if (mHasPendingAttestationRequest || !mCanRequestMoreAttestations) {
+            return false;
+        }
+
         mHasPendingAttestationRequest = true;
 
+        AlertDialog waitDialog = new AlertDialog.Builder(mButtonNext.getContext())
+                .setTitle(Texts.get(Texts.ATTESTATION_REQUESTING))
+                .setMessage(Texts.get(Texts.ATTESTATION_REQUESTING_MESSAGE))
+                .setCancelable(false)
+                .create();
+
+        waitDialog.show();
+
         mWallet.requestAttestations((wallet, newAttestations, requiresMore, exception) -> {
+            if (isFinishing()) {
+                return;
+            }
+
             mHasPendingAttestationRequest = false;
 
+            waitDialog.dismiss();
+
             if (newAttestations == 0 && exception != null && exception.getMainCause().getError() == CeloError.NETWORK_ERROR) {
-//                Toast.makeText()
-                        // TODO
+                mCanRequestMoreAttestations = false;
+
+                Toast.makeText(mButtonNext.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+
+                updateState();
+            }
+            else {
+                // Done. Await the SMS
             }
         });
+
+        return true;
+    }
+
+    private void setEnabled(boolean enabled) {
+        mInputCode.setEnabled(enabled);
+
+        boolean nextEnabled = enabled && mPin != null;
+
+        mButtonNext.setEnabled(nextEnabled);
+        mTextNext.setAlpha(nextEnabled ? 1f : 0.6f);
+        mImageNext.setAlpha(nextEnabled ? 1f : 0.6f);
     }
 
 }

@@ -698,6 +698,11 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         saveLayout.setEnabled(true);
         saveLayout.setOnClickListener(v -> {
+            presentFragment(new WalletActivity()); // TODO Set FREE
+            if (saveLayout != null) {
+                return;
+            }
+
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
             locationInputCell.setError(false, 0);

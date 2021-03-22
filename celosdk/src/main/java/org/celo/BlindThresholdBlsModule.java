@@ -15,6 +15,7 @@ import android.util.Base64;
 public class BlindThresholdBlsModule {
 
     static {
+//        Native.loadLibrary("blind_threshold_bls", BlindThresholdBlsModule.class);
         Native.register(BlindThresholdBlsModule.class, "blind_threshold_bls");
     }
 

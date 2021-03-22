@@ -2,7 +2,6 @@
 <Sequences>
 
     <Vertical>
-        <Span id="actionbar" size="wrap"/>
         <Span size="73ph"/>
         <Span id="image_wallet" size="wrap"/>
     </Vertical>
@@ -56,10 +55,6 @@
     </Vertical>
 
     <Horizontal>
-        <Span id="actionbar" size="100%"/>
-    </Horizontal>
-
-    <Horizontal>
         <Span size="1w"/>
         <Span id="image_wallet" size="111.7dp"/>
         <Span size="1w"/>
@@ -72,9 +67,9 @@
     </Horizontal>
 
     <Horizontal>
-        <Span size="1w"/>
-        <Span id="text_status" size="wrap"/>
-        <Span size="1w"/>
+        <Span size="16dp"/>
+        <Span id="text_status" size="1w"/>
+        <Span size="16dp"/>
     </Horizontal>
 
     <Horizontal>
@@ -91,7 +86,7 @@
         <Span size="1w"/>
         <Span id="text_leftbutton" size="wrap"/>
         <Span size="6.6dp"/>
-        <Span id="image_leftbutton" size="100%v image_leftbutton"/>
+        <Span id="image_leftbutton" size="21dp"/>
         <Span size="1w"/>
     </Horizontal>
 
@@ -99,7 +94,7 @@
         <Span size="1w"/>
         <Span id="text_rightbutton" size="wrap"/>
         <Span size="6.6dp"/>
-        <Span id="image_rightbutton" size="100%v image_rightbutton"/>
+        <Span id="image_rightbutton" size="21dp"/>
         <Span size="1w"/>
     </Horizontal>
 

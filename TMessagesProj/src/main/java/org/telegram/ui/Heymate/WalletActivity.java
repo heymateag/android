@@ -2,14 +2,14 @@ package org.telegram.ui.Heymate;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.MetricAffectingSpan;
-import android.text.style.StyleSpan;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
@@ -81,7 +80,9 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
         mImageRightButton = content.findViewById(R.id.image_rightbutton);
         mRightButton = content.findViewById(R.id.rightbutton);
 
-        setupTheme();
+        mTextStatus.setMovementMethod(LinkMovementMethod.getInstance());
+
+        setupTheme(content);
 
         ActionBar actionBar = getActionBar();
         actionBar.setBackButtonDrawable(new BackDrawable(false));
@@ -122,7 +123,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                 // TODO Later
             }
             else {
-                // TODO Temporary code
+                // TODO Improve
                 EditText input = new EditText(v.getContext());
                 input.setInputType(EditorInfo.TYPE_CLASS_TEXT);
                 input.setHint("Type your mnemonic");
@@ -174,17 +175,15 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
         }
     }
 
-    private void setupTheme() {
-        View content = getFragmentView();
-
+    private void setupTheme(View content) {
         content.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         mTextTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mTextStatus.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        mTextLeftButton.setTextColor(Theme.getColor(Theme.key_profile_actionIcon));
-        mTextRightButton.setTextColor(Theme.getColor(Theme.key_profile_actionIcon));
-        mImageLeftButton.setColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN);
-        mImageRightButton.setColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN);
-        content.findViewById(R.id.divider).setBackgroundColor(Theme.getColor(Theme.key_profile_actionIcon));
+        mTextLeftButton.setTextColor(Theme.getColor(Theme.key_actionBarDefault));
+        mTextRightButton.setTextColor(Theme.getColor(Theme.key_actionBarDefault));
+        mImageLeftButton.setColorFilter(Theme.getColor(Theme.key_actionBarDefault), PorterDuff.Mode.SRC_IN);
+        mImageRightButton.setColorFilter(Theme.getColor(Theme.key_actionBarDefault), PorterDuff.Mode.SRC_IN);
+        content.findViewById(R.id.divider).setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         content.findViewById(R.id.bottombar).setBackgroundColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
     }
 
@@ -228,7 +227,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
 
                 int myKeyEndIndex = message.indexOf("__", myKeyStartIndex + 2);
 
-                SpannableStringBuilder ssb = new SpannableStringBuilder(message);
+                SpannableStringBuilder ssb = new SpannableStringBuilder();
                 ssb.append(message.substring(0, myKeyStartIndex));
                 ssb.append(message.substring(myKeyStartIndex + 2, myKeyEndIndex));
                 ssb.setSpan(new MetricAffectingSpan() {
@@ -250,7 +249,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        // TODO Temporary code
+                        // TODO Improve
                         new AlertDialog.Builder(widget.getContext())
                                 .setTitle("Your Key")
                                 .setMessage(mWallet.getMnemonic())
@@ -286,7 +285,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                     }
                     else {
                         // TODO Improve behavior
-                        Toast.makeText(mLeftButton.getContext(), Texts.get(Texts.WALLET_NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mLeftButton.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
 
                         finishFragment(true);
                     }
@@ -294,7 +293,19 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
             }
             else {
                 if (!verifiedStatus.verified) {
-                    presentFragment(new AttestationActivity(), true);
+                    // TODO NEED DESIGN
+                    TextView addressView = new TextView(mLeftButton.getContext());
+                    addressView.setText(mWallet.getAddress() + "\nhttps://celo.org/developers/faucet");
+                    addressView.setAutoLinkMask(Linkify.WEB_URLS);
+                    addressView.setTextIsSelectable(true);
+                    addressView.setMovementMethod(LinkMovementMethod.getInstance());
+                    new AlertDialog.Builder(mLeftButton.getContext())
+                            .setTitle("Go to attestation?")
+                            .setView(addressView)
+                            .setPositiveButton("Go", (dialog, which) -> {
+                                dialog.dismiss();
+                                presentFragment(new AttestationActivity(), true);
+                            });
                     return;
                 }
 

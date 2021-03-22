@@ -8,11 +8,6 @@
     app:pageWidth="420"
     app:sequences="@xml/sequences_wallet">
 
-    <org.telegram.ui.ActionBar.ActionBar
-        android:id="@+id/actionbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <ImageView
         android:id="@+id/image_wallet"
         android:layout_width="wrap_content"
@@ -30,7 +25,8 @@
         android:id="@+id/text_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:gravity="center"/>
 
     <View
         android:id="@+id/bottombar"

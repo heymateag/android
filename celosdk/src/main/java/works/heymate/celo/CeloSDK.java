@@ -44,7 +44,6 @@ public class CeloSDK {
     private final Credentials mAccount;
 
     private final List<ContractKitCallback> mContractKitCallbacks = new ArrayList<>();
-    private final List<AddressCallback> mAddressCallbacks = new ArrayList<>(1);
     private final Map<String, List<PhoneNumberLookupCallback>> mPhoneNumberLookupCallbacks = new Hashtable<>(2);
     private final List<PhoneNumberOwnershipLookupCallback> mPhoneNumberOwnershipLookupCallbacks = new ArrayList<>(1);
     private final List<BalanceCallback> mBalanceCallbacks = new ArrayList<>(1);
@@ -84,14 +83,8 @@ public class CeloSDK {
         mLocalHandler.sendEmptyMessage(MESSAGE_GET_CONTRACT_KIT);
     }
 
-    public void getAddress(AddressCallback callback) {
-        mAddressCallbacks.add(callback);
-
-        if (mAddressCallbacks.size() > 1) {
-            return;
-        }
-
-        mLocalHandler.sendEmptyMessage(MESSAGE_GET_ADDRESS);
+    public String getAddress() {
+        return mAccount.getAddress();
     }
 
     public void lookupPhoneNumber(String phoneNumber, PhoneNumberLookupCallback callback) {
@@ -358,28 +351,6 @@ public class CeloSDK {
         }
     }
 
-    private void getAddressInternal() {
-        try {
-            ensureContractKit();
-        } catch (CeloException e) {
-            List<AddressCallback> callbacks = new ArrayList<>(mAddressCallbacks);
-            mAddressCallbacks.clear();
-
-            for (AddressCallback callback: callbacks) {
-                callback.onAddressResult(false, null, e);
-            }
-        }
-
-        String address = mContractKit.getAddress();
-
-        List<AddressCallback> callbacks = new ArrayList<>(mAddressCallbacks);
-        mAddressCallbacks.clear();
-
-        for (AddressCallback callback: callbacks) {
-            callback.onAddressResult(true, address, null);
-        }
-    }
-
     private void getContractKitInternal() {
         try {
             ensureContractKit();
@@ -411,7 +382,8 @@ public class CeloSDK {
                 contractKit.addAccount(mAccount);
 
                 if (!contractKit.contracts.getAccounts().isAccount(contractKit.getAddress()).send()) {
-                    contractKit.contracts.getAccounts().createAccount().send();
+                    // TODO Why create account costs money? insufficient funds for gas * price + value + gatewayFee
+//                     contractKit.contracts.getAccounts().createAccount().send();
                 }
             } catch (Throwable t) {
                 throw new CeloException(CeloError.NETWORK_ERROR, t);
@@ -432,9 +404,6 @@ public class CeloSDK {
             switch (msg.what) {
                 case MESSAGE_GET_CONTRACT_KIT:
                     getContractKitInternal();
-                    return;
-                case MESSAGE_GET_ADDRESS:
-                    getAddressInternal();
                     return;
                 case MESSAGE_LOOKUP_PHONE_NUMBER:
                     lookupPhoneNumberInternal((String) msg.obj);

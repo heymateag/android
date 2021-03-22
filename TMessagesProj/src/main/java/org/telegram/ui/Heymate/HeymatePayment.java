@@ -6,17 +6,17 @@ import works.heymate.core.wallet.Wallet;
 
 public class HeymatePayment {
 
-    public static BaseFragment initPayment(OfferDto offer) {
-        String phoneNumber = TG2HM.getCurrentPhoneNumber();
-
-        Wallet wallet = Wallet.get(phoneNumber);
-
-        if (wallet != null) {
-            wallet.initPayment(offer);
-            return null;
-        }
-
-
-    }
+//    public static BaseFragment initPayment(OfferDto offer) {
+//        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+//
+//        Wallet wallet = Wallet.get(phoneNumber);
+//
+//        if (wallet != null) {
+//            wallet.initPayment(offer);
+//            return null;
+//        }
+//
+//
+//    }
 
 }

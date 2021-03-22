@@ -105,6 +105,18 @@ public class PinInput extends View {
         return mPin.toString();
     }
 
+    public void setPin(String pin) {
+        if (pin == null) {
+            pin = "";
+        }
+
+        mPin.clear();
+        mPin.append(pin);
+
+        onPinChanged();
+        invalidate();
+    }
+
     public void setIndicatorColor(int color) {
         mIndicatorPaint.setColor(color);
         invalidate();

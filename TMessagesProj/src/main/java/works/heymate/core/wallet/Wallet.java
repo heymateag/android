@@ -42,6 +42,10 @@ public class Wallet {
             return null;
         }
 
+        if (!phoneNumber.startsWith("+")) {
+            phoneNumber = "+" + phoneNumber;
+        }
+
         Wallet wallet = mWallets.get(phoneNumber);
 
         if (wallet == null) {
@@ -69,8 +73,6 @@ public class Wallet {
         mPreferences = context.getSharedPreferences(PREFERENCES + keyFromPhoneNumber(phoneNumber), Context.MODE_PRIVATE);
 
         mPhoneNumber = phoneNumber;
-
-        updateVerifiedStatus();
     }
 
     public boolean isCreated() {
@@ -226,6 +228,12 @@ public class Wallet {
         String publicKey = mPreferences.getString(KEY_PUBLIC_KEY, null);
 
         return new CeloAccount(privateKey, publicKey);
+    }
+
+    public String getAddress() {
+        ensureCeloSDK();
+
+        return mCeloSDK.getAddress();
     }
 
     public String getMnemonic() {
