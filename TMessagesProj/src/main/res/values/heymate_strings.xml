@@ -6,7 +6,15 @@
     <string name="hm_later">Later</string>
     <string name="hm_next">Next</string>
     <string name="hm_confirm">Confirm</string>
-    
+
+    <string name="hm_sunday_short">Sun</string>
+    <string name="hm_monday_short">Mon</string>
+    <string name="hm_tuesday_short">Tue</string>
+    <string name="hm_wednesday_short">Web</string>
+    <string name="hm_thursday_short">Thu</string>
+    <string name="hm_friday_short">Fri</string>
+    <string name="hm_saturday_short">Sat</string>
+
     <string name="hm_your_wallet">Your wallet</string>
     <string name="hm_no_wallet_detected">No Wallet Detected</string>
     <string name="hm_no_wallet_detected_message">It seems you have not created a wallet. Would you like to create a wallet or import an existing one?</string>

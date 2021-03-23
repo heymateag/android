@@ -13,6 +13,14 @@ public class Texts {
     public static final String CONFIRM = "confirm";
     public static final String NETWORK_ERROR = "network_error";
 
+    public static final String SUNDAY_SHORT = "sunday_short";
+    public static final String MONDAY_SHORT = "monday_short";
+    public static final String TUESDAY_SHORT = "tuesday_short";
+    public static final String WEDNESDAY_SHORT = "wednesday_short";
+    public static final String THURSDAY_SHORT = "thursday_short";
+    public static final String FRIDAY_SHORT = "friday_short";
+    public static final String SATURDAY_SHORT = "saturday_short";
+
     public static final String YOUR_WALLET = "your_wallet";
     public static final String NO_WALLET_DETECTED = "no_wallet_detected";
     public static final String NO_WALLET_DETECTED_MESSAGE = "no_wallet_detected_message";
