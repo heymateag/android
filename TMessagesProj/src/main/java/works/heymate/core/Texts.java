@@ -11,6 +11,7 @@ public class Texts {
     public static final String LATER = "later";
     public static final String NEXT = "next";
     public static final String CONFIRM = "confirm";
+    public static final String DAY = "day";
     public static final String NETWORK_ERROR = "network_error";
 
     public static final String SUNDAY_SHORT = "sunday_short";
