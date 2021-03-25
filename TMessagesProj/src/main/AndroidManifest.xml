@@ -48,6 +48,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
     <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
@@ -81,7 +83,8 @@
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:supportsRtl="false"
         android:requestLegacyExternalStorage="true"
-        tools:replace="android:supportsRtl">
+        tools:replace="android:name">
+        <!--tools:replace="android:supportsRtl"-->
 
         <activity
             android:name="org.telegram.ui.LaunchActivity"
@@ -145,6 +148,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="tg" />
+                <data android:scheme="ht" />
             </intent-filter>
             <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:priority="1">
                 <action android:name="android.intent.action.VIEW" />
@@ -203,6 +207,9 @@
             android:name="org.telegram.ui.IntroActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode">
+        </activity>
+        <activity android:name="org.telegram.ui.Heymate.OffersActivity">
+
         </activity>
         <activity
             android:name="org.telegram.messenger.OpenChatReceiver"

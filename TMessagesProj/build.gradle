@@ -4,6 +4,10 @@ repositories {
     mavenCentral()
     google()
     jcenter()
+
+    maven {
+        url  "https://dl.bintray.com/celo/celo"
+    }
 }
 
 configurations {
@@ -39,9 +43,16 @@ dependencies {
     implementation "com.microsoft.appcenter:appcenter-crashes:3.3.1"
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
+    implementation 'com.amplifyframework:aws-api:1.16.11'
+    implementation 'com.amplifyframework:aws-datastore:1.16.11'
     implementation files('libs/libgsaverification-client.aar')
 
+    //
+    implementation 'com.google.android.material:material:1.2.1'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+
+    implementation 'com.yashoid:sequencelayout:2.0.0'
+    implementation project(':celosdk')
 }
 
 android {
@@ -307,7 +318,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 29
         versionName "7.3.1"
 

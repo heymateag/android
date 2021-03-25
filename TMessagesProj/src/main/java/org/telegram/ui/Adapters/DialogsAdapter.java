@@ -52,10 +52,12 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.Heymate.HtOfferDialogCell;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Random;
 
 public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
@@ -78,10 +80,16 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     private PullForegroundDrawable pullForegroundDrawable;
 
     private DialogsPreloader preloader;
+    private boolean isShops = false;
+
 
     public DialogsAdapter(Context context, int type, int folder, boolean onlySelect, ArrayList<Long> selected, int account) {
         mContext = context;
         dialogsType = type;
+        if(dialogsType == Integer.MAX_VALUE - 1){
+            isShops = true;
+            dialogsType = 0;
+        }
         folderId = folder;
         isOnlySelect = onlySelect;
         hasHints = folder == 0 && type == 0 && !onlySelect;
@@ -130,7 +138,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override
     public int getItemCount() {
-        ArrayList<TLRPC.Dialog> array = DialogsActivity.getDialogsArray(currentAccount, dialogsType, folderId, dialogsListFrozen);
+        ArrayList<TLRPC.Dialog> array = DialogsActivity.getDialogsArray(currentAccount, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId, dialogsListFrozen);
         int dialogsCount = array.size();
         if (dialogsType != 7 && dialogsType != 8 && dialogsCount == 0 && (folderId != 0 || MessagesController.getInstance(currentAccount).isLoadingDialogs(folderId) || !MessagesController.getInstance(currentAccount).isDialogsEndReached(folderId))) {
             onlineContacts = null;
@@ -199,7 +207,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         if (showArchiveHint) {
             i -= 2;
         }
-        ArrayList<TLRPC.Dialog> arrayList = DialogsActivity.getDialogsArray(currentAccount, dialogsType, folderId, dialogsListFrozen);
+        ArrayList<TLRPC.Dialog> arrayList = DialogsActivity.getDialogsArray(currentAccount, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId, dialogsListFrozen);
         if (hasHints) {
             int count = MessagesController.getInstance(currentAccount).hintDialogs.size();
             if (i < 2 + count) {
@@ -307,10 +315,14 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         View view;
         switch (viewType) {
             case 0:
-                DialogCell dialogCell = new DialogCell(mContext, true, false, currentAccount);
-                dialogCell.setArchivedPullAnimation(pullForegroundDrawable);
-                dialogCell.setPreloader(preloader);
-                view = dialogCell;
+                if(!isShops && dialogsType != Integer.MAX_VALUE - 1){
+                    DialogCell dialogCell = new DialogCell(mContext, true, false, currentAccount);
+                    dialogCell.setArchivedPullAnimation(pullForegroundDrawable);
+                    dialogCell.setPreloader(preloader);
+                    view = dialogCell;
+                } else {
+                    view = new HtOfferDialogCell(mContext);
+                }
                 break;
             case 1:
                 view = new LoadingCell(mContext);
@@ -382,7 +394,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 view = new View(mContext) {
                     @Override
                     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        int size = DialogsActivity.getDialogsArray(currentAccount, dialogsType, folderId, dialogsListFrozen).size();
+                        int size = DialogsActivity.getDialogsArray(currentAccount, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId, dialogsListFrozen).size();
                         boolean hasArchive = dialogsType == 0 && MessagesController.getInstance(currentAccount).dialogs_dict.get(DialogObject.makeFolderDialogId(1)) != null;
                         View parent = (View) getParent();
                         int height;
@@ -433,6 +445,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         switch (holder.getItemViewType()) {
             case 0: {
+                if(holder.itemView instanceof HtOfferDialogCell) {
+                    HtOfferDialogCell cell = (HtOfferDialogCell) holder.itemView;
+                    TLRPC.Dialog dialog = (TLRPC.Dialog) getItem(i);
+                    cell.setDialog(dialog);
+                    break;
+                }
                 DialogCell cell = (DialogCell) holder.itemView;
                 TLRPC.Dialog dialog = (TLRPC.Dialog) getItem(i);
                 TLRPC.Dialog nextDialog = (TLRPC.Dialog) getItem(i + 1);
@@ -442,13 +460,13 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     cell.useSeparator = (i != getItemCount() - 1);
                 }
                 cell.fullSeparator = dialog.pinned && nextDialog != null && !nextDialog.pinned;
-                if (dialogsType == 0) {
+                if (dialogsType == 0 || dialogsType == Integer.MAX_VALUE - 1) {
                     if (AndroidUtilities.isTablet()) {
                         cell.setDialogSelected(dialog.id == openedDialogId);
                     }
                 }
                 cell.setChecked(selectedDialogs.contains(dialog.id), false);
-                cell.setDialog(dialog, dialogsType, folderId);
+                cell.setDialog(dialog, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId);
                 if (preloader != null && i < 10) {
                     preloader.add(dialog.id);
                 }
@@ -514,7 +532,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 i -= 2;
             }
         }
-        int size = DialogsActivity.getDialogsArray(currentAccount, dialogsType, folderId, dialogsListFrozen).size();
+        int size = DialogsActivity.getDialogsArray(currentAccount, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId, dialogsListFrozen).size();
         if (i == size) {
             if (dialogsType != 7 && dialogsType != 8 && !MessagesController.getInstance(currentAccount).isDialogsEndReached(folderId)) {
                 return 1;
@@ -531,7 +549,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override
     public void notifyItemMoved(int fromPosition, int toPosition) {
-        ArrayList<TLRPC.Dialog> dialogs = DialogsActivity.getDialogsArray(currentAccount, dialogsType, folderId, false);
+        ArrayList<TLRPC.Dialog> dialogs = DialogsActivity.getDialogsArray(currentAccount, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId, false);
         int fromIndex = fixPosition(fromPosition);
         int toIndex = fixPosition(toPosition);
         TLRPC.Dialog fromDialog = dialogs.get(fromIndex);

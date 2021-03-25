@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">Telegram</string>
-    <string name="AppNameBeta">Telegram Beta</string>
+    <string name="AppName">Heymate Telegram</string>
+    <string name="AppNameBeta">Heymate Telegram</string>
     <string name="LanguageName">English</string>
     <string name="English">English</string>
     <string name="LanguageNameInEnglish">English</string>
@@ -1353,9 +1353,15 @@
     <string name="NewContact">New Contact</string>
     <string name="AddToExistingContact">Add to Existing Contact</string>
     <string name="UserBio">Bio</string>
+    <string name="HtTermsAndConditions">Terms And Conditions</string>
+    <string name="HtShortTitle">Short title</string>
+    <string name="CreateOffer">Create Offer</string>
     <string name="UserBioDetail">Add a few words about yourself</string>
     <string name="UserBioEmpty">None</string>
     <string name="UserBioInfo">You can add a few lines about yourself. Anyone who opens your profile will see this text.</string>
+    <string name="HtTermsAndConditionsInfo">Insert your terms and conditions</string>
+    <string name="HtServiceProvider">Service Provider Promises</string>
+    <string name="HtAdvancedPaymentOptions">Advanced Payment Options and Cancellation Conditions</string>
     <string name="StartEncryptedChat">Start Secret Chat</string>
     <string name="GroupsInCommon">Groups in Common</string>
     <string name="GroupsInCommonTitle">Groups in common</string>
@@ -1591,6 +1597,12 @@
     <!--settings view-->
     <string name="ResetNotificationsText">All notification settings reset to default</string>
     <string name="ResetNotificationsAlertTitle">Reset all notifications</string>
+    <string name="HtChooseCategory">Choose Category</string>
+    <string name="HtChooseCategorySub">Choose Sub Category</string>
+    <string name="HtRate">Rate</string>
+    <string name="HtLocation">Or put your address here</string>
+    <string name="HtAvailability">Put to availability conditions here</string>
+    <string name="HtRateSymbol">Rate Symbol</string>
     <string name="ResetNotificationsAlert">Are you sure you want to reset all notification settings to default?</string>
     <string name="TextSizeHeader">Message text size</string>
     <string name="AskAQuestion">Ask a Question</string>
@@ -3153,7 +3165,7 @@
     <string name="ViewMessageStatistic">Message Statistic</string>
     <string name="ViewMessage">Open Message</string>
     <!--Intro view-->
-    <string name="Page1Title">Telegram</string>
+    <string name="Page1Title">Heymate Telegram</string>
     <string name="Page2Title">Fast</string>
     <string name="Page3Title">Free</string>
     <string name="Page4Title">Secure</string>

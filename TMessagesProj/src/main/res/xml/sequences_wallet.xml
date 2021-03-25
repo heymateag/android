@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="73ph"/>
+        <Span id="image_wallet" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@image_wallet">
+        <Span size="121.5dp"/>
+        <Span size="32.3ph"/>
+        <Span id="text_title" size="wrap"/>
+        <Span size="18ph"/>
+        <Span id="text_status" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="bottombar" size="49dp"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span size="1w"/>
+        <Span id="text_leftbutton" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span size="1w"/>
+        <Span id="text_rightbutton" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span size="1w"/>
+        <Span id="image_leftbutton" size="21dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span size="1w"/>
+        <Span id="image_rightbutton" size="21dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span size="6.5dp"/>
+        <Span id="divider" size="1w"/>
+        <Span size="6.5dp"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span id="leftbutton" size="100%"/>
+    </Vertical>
+
+    <Vertical start="start@bottombar" end="end@bottombar">
+        <Span id="rightbutton" size="100%"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="image_wallet" size="111.7dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="text_title" size="wrap"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="text_status" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="bottombar" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="leftbutton" size="1w"/>
+        <Span id="divider" size="1dp"/>
+        <Span id="rightbutton" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@leftbutton" end="end@leftbutton">
+        <Span size="1w"/>
+        <Span id="text_leftbutton" size="wrap"/>
+        <Span size="6.6dp"/>
+        <Span id="image_leftbutton" size="21dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@rightbutton" end="end@rightbutton">
+        <Span size="1w"/>
+        <Span id="text_rightbutton" size="wrap"/>
+        <Span size="6.6dp"/>
+        <Span id="image_rightbutton" size="21dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+
+</Sequences>

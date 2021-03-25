@@ -1945,7 +1945,7 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onDrawFrame(JNIEnv *env, jclass
         if (direct == 0) {
             glEnable(GL_BLEND);
             glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
+/*
             change_segmented_square(&spiral, r1, D2R(rr + seg), D2R(speedometer_scroll_offset + calculated_speedometer_sin + t(-seg + ang, 0, 0, duration_const, EaseOut)));
 
             spiral.params.scale = xyzMake(1, 1, 1);
@@ -1956,7 +1956,7 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onDrawFrame(JNIEnv *env, jclass
             fast_arrow.params.alpha = fast_arrow_shadow.params.alpha = t(1, 0, 0, duration_const, Linear);
             fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = t(rr, rr - 180 - 160, 0, duration_const, EaseOut) + speedometer_scroll_offset + calculated_speedometer_sin;
             draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL_ONE);
-            draw_textured_shape(&fast_arrow, main_matrix, NORMAL_ONE);
+            draw_textured_shape(&fast_arrow, main_matrix, NORMAL_ONE);*/
         }
     } else if (current_page == 1) {
         glEnable(GL_BLEND);
@@ -1976,17 +1976,17 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onDrawFrame(JNIEnv *env, jclass
 
             float ta = t(0, 180.0f, 0, duration_const, EaseOut);
 
-            change_segmented_square(&spiral, r1, D2R(rr + seg), D2R(-seg + value + speedometer_scroll_offset));
+//            change_segmented_square(&spiral, r1, D2R(rr + seg), D2R(-seg + value + speedometer_scroll_offset));
 
-            spiral.params.scale = xyzMake(1, 1, 1);
-            spiral.params.rotation = ta;
-            spiral.params.alpha = t(0, 1, 0, duration_const, Linear);
-            draw_textured_shape(&spiral, main_matrix, NORMAL_ONE);
-
-            fast_arrow.params.alpha = fast_arrow_shadow.params.alpha = t(0, 1, 0, duration_const, Linear);
-            fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = -330 + value + ta + speedometer_scroll_offset;
-            draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL_ONE);
-            draw_textured_shape(&fast_arrow, main_matrix, NORMAL_ONE);
+//            spiral.params.scale = xyzMake(1, 1, 1);
+//            spiral.params.rotation = ta;
+//            spiral.params.alpha = t(0, 1, 0, duration_const, Linear);
+//            draw_textured_shape(&spiral, main_matrix, NORMAL_ONE);
+//
+//            fast_arrow.params.alpha = fast_arrow_shadow.params.alpha = t(0, 1, 0, duration_const, Linear);
+//            fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = -330 + value + ta + speedometer_scroll_offset;
+//            draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL_ONE);
+//            draw_textured_shape(&fast_arrow, main_matrix, NORMAL_ONE);
 
         } else {
             spiral.params.alpha = fast_arrow.params.alpha = fast_arrow_shadow.params.alpha = 1;
@@ -2000,16 +2000,16 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onDrawFrame(JNIEnv *env, jclass
             value = 180 - 90 - (180 - 90) * powf(e, -0.055f * arg * 2) * cosf(0.08f * arg * 3);
             value *= -1;
 
-            change_segmented_square(&spiral, r1, D2R(rr + seg), D2R(speedometer_scroll_offset + value + calculated_speedometer_sin + t(360, 360 - dangle - seg, 0, duration_const, EaseInEaseOut)));
+//            change_segmented_square(&spiral, r1, D2R(rr + seg), D2R(speedometer_scroll_offset + value + calculated_speedometer_sin + t(360, 360 - dangle - seg, 0, duration_const, EaseInEaseOut)));
 
             float scale = t(1.18, 1, 0, duration_const, EaseInEaseOut);
-            spiral.params.scale = xyzMake(scale, scale, 1);
-            spiral.params.rotation = t(360, 180, 0, duration_const, EaseInEaseOut);
-            draw_textured_shape(&spiral, main_matrix, NORMAL);
-
-            fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = speedometer_scroll_offset + value + calculated_speedometer_sin + t(rr + 360 + 6, rr + 360 - 180 - dangle, 0, duration_const, EaseInEaseOut);
-            draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL);
-            draw_textured_shape(&fast_arrow, main_matrix, NORMAL);
+//            spiral.params.scale = xyzMake(scale, scale, 1);
+//            spiral.params.rotation = t(360, 180, 0, duration_const, EaseInEaseOut);
+//            draw_textured_shape(&spiral, main_matrix, NORMAL);
+//
+//            fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = speedometer_scroll_offset + value + calculated_speedometer_sin + t(rr + 360 + 6, rr + 360 - 180 - dangle, 0, duration_const, EaseInEaseOut);
+//            draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL);
+//            draw_textured_shape(&fast_arrow, main_matrix, NORMAL);
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             free_bg.params.alpha = t(1, 0, 0, duration_const, Linear);
@@ -2023,18 +2023,18 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onDrawFrame(JNIEnv *env, jclass
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         if (direct == 1) {
-            spiral.params.alpha = fast_arrow.params.alpha = fast_arrow_shadow.params.alpha = 1;
-
-            change_segmented_square(&spiral, r1, D2R(rr + seg + speedometer_scroll_offset), D2R(t(-seg + ang, 360, 0, duration_const, EaseInEaseOut)));
-
-            float scale = t(1, 1.18, 0, duration_const, EaseInEaseOut);
-            spiral.params.scale = xyzMake(scale, scale, 1);
-            spiral.params.rotation = t(180, 360, 0, duration_const, EaseInEaseOut);
-            draw_textured_shape(&spiral, main_matrix, NORMAL);
-
-            fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = speedometer_scroll_offset + t(rr, rr + 360 + 6, 0, duration_const, EaseInEaseOut);
-            draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL);
-            draw_textured_shape(&fast_arrow, main_matrix, NORMAL);
+//            spiral.params.alpha = fast_arrow.params.alpha = fast_arrow_shadow.params.alpha = 1;
+//
+//            change_segmented_square(&spiral, r1, D2R(rr + seg + speedometer_scroll_offset), D2R(t(-seg + ang, 360, 0, duration_const, EaseInEaseOut)));
+//
+//            float scale = t(1, 1.18, 0, duration_const, EaseInEaseOut);
+//            spiral.params.scale = xyzMake(scale, scale, 1);
+//            spiral.params.rotation = t(180, 360, 0, duration_const, EaseInEaseOut);
+//            draw_textured_shape(&spiral, main_matrix, NORMAL);
+//
+//            fast_arrow.params.rotation = fast_arrow_shadow.params.rotation = speedometer_scroll_offset + t(rr, rr + 360 + 6, 0, duration_const, EaseInEaseOut);
+//            draw_textured_shape(&fast_arrow_shadow, main_matrix, NORMAL);
+//            draw_textured_shape(&fast_arrow, main_matrix, NORMAL);
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             free_bg.params.alpha = t(0, 1, 0, duration_const, Linear);
@@ -2696,15 +2696,15 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onSurfaceCreated(JNIEnv *env, j
 
     fast_body = create_textured_rectangle(CSizeMake(148, 148), fast_body_texture);
 
-    fast_arrow_shadow = create_textured_rectangle(CSizeMake(164 / 2, 44 / 2), fast_arrow_shadow_texture);
+    fast_arrow_shadow = create_textured_rectangle(CSizeMake(0, 0), fast_arrow_shadow_texture);
     fast_arrow_shadow.params.position.x = -1;
     fast_arrow_shadow.params.position.y = 2;
 
-    fast_arrow = create_textured_rectangle(CSizeMake(164 / 2, 44 / 2), fast_arrow_texture);
+    fast_arrow = create_textured_rectangle(CSizeMake(0, 0), fast_arrow_texture);
     fast_arrow.params.anchor.x = fast_arrow_shadow.params.anchor.x = -19;
 
     int32_t ang = 180;
-    spiral = create_segmented_square(r1, D2R(35 + 1), D2R(35 + 1 - 10 + ang), fast_spiral_texture);
+    spiral = create_segmented_square(r1, D2R(0), D2R(0 + ang), fast_spiral_texture);
 
     vec4 free_bg_color = {246 / 255.0f, 73 / 255.0f, 55 / 255.0f, 1};
     free_bg = create_rectangle(CSizeMake(160 * 2, 160 * 2), free_bg_color);

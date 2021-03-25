@@ -4395,6 +4395,7 @@ public class Theme {
             FileLog.e(e);
         }
         if (applyingTheme == null) {
+//            applyingTheme = currentNightTheme;
             applyingTheme = defaultTheme;
         } else {
             currentDayTheme = applyingTheme;

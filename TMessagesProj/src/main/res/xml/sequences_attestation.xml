@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="22.9dp"/>
+        <Span id="image_step" size="73.4dp"/>
+        <Span size="11.1dp"/>
+        <Span id="text_title" size="wrap"/>
+        <Span size="17dp"/>
+        <Span id="text_description" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="input_code" size="32dp"/>
+        <Span size="55.1dp"/>
+        <Span id="indicator_step" size="6dp"/>
+        <Span size="1w"/>
+        <Span id="button_next" size="49dp"/>
+    </Vertical>
+
+    <Vertical start="start@button_next" end="end@button_next">
+        <Span size="1w"/>
+        <Span id="text_next" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@button_next" end="end@button_next">
+        <Span size="1w"/>
+        <Span id="image_next" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="image_step" size="wrap"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="text_title" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="text_description" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="input_code" size="206dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="indicator_step" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="button_next" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="text_next" size="wrap"/>
+        <Span size="5dp"/>
+        <Span id="image_next" size="24dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+</Sequences>

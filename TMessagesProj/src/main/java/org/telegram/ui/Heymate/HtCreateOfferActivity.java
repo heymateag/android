@@ -1,0 +1,934 @@
+package org.telegram.ui.Heymate;
+
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.InputType;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.EditTextBoldCursor;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.UndoView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.HashMap;
+
+import static org.webrtc.ContextUtils.getApplicationContext;
+
+public class HtCreateOfferActivity extends BaseFragment {
+    private Context context;
+    private ImageView cameraImage;
+    private EditTextBoldCursor titleTextField;
+    private EditTextBoldCursor descriptionTextField;
+    private HtCategoryInputCell categoryInputCell;
+    private HtLocationInputCell locationInputCell;
+    private HtScheduleInputCell scheduleInputCell;
+    private HtPriceInputCell priceInputCell;
+    private ArrayList<HtPriceInputCell> pricesInputCell = new ArrayList<>();
+    private HtExpireInputCell expireInputCell;
+    private HtTermsInputCell termsInputCell;
+    private HtPaymentConfigInputCell paymentInputCell;
+    private int priceCellsCount = 0;
+    private boolean canEdit = true;
+    private ActionType actionType;
+    private LinearLayout addPriceLayout;
+    private LinearLayout actionLayout;
+    private int offerId;
+    private Uri pickedImage;
+
+    public enum ActionType {
+        CREATE,
+        EDIT,
+        VIEW
+    }
+
+    @Override
+    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+        super.onActivityResultFragment(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            cameraImage.setImageURI(data.getData());
+            cameraImage.getLayoutParams().height = 180;
+            cameraImage.getLayoutParams().width = 120;
+            cameraImage.requestLayout();
+            pickedImage = data.getData();
+        }
+    }
+
+    @Override
+    public View createView(Context context) {
+        super.createView(context);
+        this.context = context;
+        if (canEdit)
+            actionBar.setTitle("Create Offer");
+        else
+            actionBar.setTitle("View Offer");
+        fragmentView = new LinearLayout(context);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setAllowOverlayTitle(true);
+        actionBar.setSearchTextColor(0xff4488, true);
+        actionBar.setTitle(LocaleController.getString("CreateOffer", R.string.CreateOffer));
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    finishFragment();
+                }
+            }
+        });
+        LinearLayout fragmentMainLayout = (LinearLayout) fragmentView;
+        ScrollView mainScrollView = new ScrollView(context);
+        LinearLayout mainLayout = new LinearLayout(context);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        mainLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+        LinearLayout titleLayout = new LinearLayout(context);
+        LinearLayout imageLayout = new LinearLayout(context);
+        imageLayout.setGravity(Gravity.CENTER);
+        imageLayout.setOrientation(LinearLayout.VERTICAL);
+        imageLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        imageLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(R.color.ht_green)));
+        cameraImage = new ImageView(context);
+        Drawable cameraDrawable;
+        Bitmap b;
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("offerImages", Context.MODE_PRIVATE);
+        File file = new File(directory, "offerImage" + offerId + ".jpg");
+        if (file.exists()) {
+            try {
+                b = BitmapFactory.decodeStream(new FileInputStream(file));
+                cameraImage.setImageBitmap(b);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            cameraDrawable = context.getResources().getDrawable(R.drawable.instant_camera);
+            cameraImage.setImageDrawable(cameraDrawable);
+            cameraImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
+        }
+        imageLayout.addView(cameraImage, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
+        TextView cameraLabel = new TextView(context);
+        cameraLabel.setText(" Add\nPhoto");
+        cameraLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
+        cameraLabel.setLines(2);
+        imageLayout.addView(cameraLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 5, 15, 15));
+        titleLayout.addView(imageLayout, LayoutHelper.createLinear(80, 130, 15, 15, 15, 0));
+        imageLayout.setEnabled(true);
+        if (actionType != ActionType.VIEW) {
+            imageLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    getIntent.setType("image/*");
+
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    pickIntent.setType("image/*");
+
+                    Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                    startActivityForResult(chooserIntent, 1);
+
+
+                }
+            });
+        }
+        LinearLayout titleInputLayout = new LinearLayout(context);
+        titleInputLayout.setOrientation(LinearLayout.VERTICAL);
+        titleTextField = new EditTextBoldCursor(context);
+        titleTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        titleTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        titleTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        titleTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        titleTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
+        titleTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+        titleTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        titleTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        titleTextField.setMinHeight(AndroidUtilities.dp(36));
+        titleTextField.setHint(LocaleController.getString("HtShortTitle", R.string.HtShortTitle));
+        titleTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        titleTextField.setCursorSize(AndroidUtilities.dp(15));
+        titleTextField.setCursorWidth(1.5f);
+        titleTextField.setMaxLines(1);
+        titleTextField.setLines(1);
+        titleTextField.setSingleLine(true);
+        titleTextField.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_DONE || event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION)) {
+                titleTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(titleTextField);
+                titleTextField.clearFocus();
+            }
+            return false;
+        });
+        if (actionType == ActionType.VIEW) {
+            titleTextField.setKeyListener(null);
+            titleTextField.setEnabled(false);
+            titleTextField.setClickable(false);
+            titleTextField.setFocusable(false);
+        }
+        titleInputLayout.addView(titleTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
+        descriptionTextField = new EditTextBoldCursor(context);
+        descriptionTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        descriptionTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        descriptionTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        descriptionTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+        descriptionTextField.setMaxLines(4);
+        descriptionTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
+        descriptionTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+        descriptionTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        descriptionTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        descriptionTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        descriptionTextField.setMinHeight(AndroidUtilities.dp(36));
+        descriptionTextField.setHint("Description");
+        descriptionTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        descriptionTextField.setCursorSize(AndroidUtilities.dp(15));
+        descriptionTextField.setCursorWidth(1.5f);
+        descriptionTextField.setMaxLines(1);
+        descriptionTextField.setLines(1);
+        descriptionTextField.setSingleLine(true);
+        descriptionTextField.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_DONE || event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION)) {
+                descriptionTextField.clearFocus();
+                descriptionTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(descriptionTextField);
+            }
+            return false;
+        });
+        if (actionType == ActionType.VIEW) {
+            descriptionTextField.setKeyListener(null);
+            descriptionTextField.setEnabled(false);
+            descriptionTextField.setClickable(false);
+            descriptionTextField.setFocusable(false);
+        }
+        titleInputLayout.addView(descriptionTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
+        titleLayout.addView(titleInputLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        mainLayout.addView(titleLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        mainLayout.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 25, 0, 25));
+        TextView detailsLabel = new TextView(context);
+        detailsLabel.setText("Details");
+        detailsLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+        mainLayout.addView(detailsLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 0, 15, 15));
+        HashMap<String, Runnable> categoryArgs = new HashMap<>();
+        BaseFragment parent = this;
+        categoryArgs.put("0_Category", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType != ActionType.VIEW) {
+                    HtCategoryBottomSheetAlert bottomSheetAlert = new HtCategoryBottomSheetAlert(context, true, parent);
+                    showDialog(bottomSheetAlert);
+                }
+            }
+        });
+        categoryArgs.put("1_Sub-Category", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType != ActionType.VIEW) {
+                    HtCategoryBottomSheetAlert bottomSheetAlert = new HtCategoryBottomSheetAlert(context, true, parent);
+                    showDialog(bottomSheetAlert);
+                }
+            }
+        });
+        categoryInputCell = new HtCategoryInputCell(context, "Category", categoryArgs, R.drawable.category, canEdit);
+        mainLayout.addView(categoryInputCell);
+        HashMap<String, Runnable> locationArgs = new HashMap<>();
+        locationArgs.put("0_Address", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType != ActionType.VIEW) {
+                    showDialog(new HtLocationBottomSheetAlert(context, true, parent));
+                }
+            }
+        });
+        locationInputCell = new HtLocationInputCell(context, "Location", locationArgs, R.drawable.menu_location, canEdit);
+        mainLayout.addView(locationInputCell);
+        HashMap<String, Runnable> scheduleArgs = new HashMap<>();
+        scheduleInputCell = new HtScheduleInputCell(context, "Schedule", scheduleArgs, R.drawable.ht_calendar, canEdit);
+        mainLayout.addView(scheduleInputCell);
+        HashMap<String, Runnable> priceArgs = new HashMap<>();
+        priceArgs.put("0_Rate Type", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType == ActionType.VIEW)
+                    return;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle("Rate Type");
+                String[] subItems = new String[3];
+                int[] icons = new int[3];
+
+                for (int i = 0; i < 3; i++) {
+                    icons[i] = R.drawable.msg_arrowright;
+                }
+                subItems[0] = "Per Item";
+                subItems[1] = "Per Hour";
+                subItems[2] = "Range";
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setRateType(subItems[which], 0);
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                showDialog(alertDialog);
+            }
+        });
+        priceArgs.put("1_Price", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType == ActionType.VIEW)
+                    return;
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Price");
+                LinearLayout mainLayout = new LinearLayout(context);
+                EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
+                feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                feeTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                feeTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                feeTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+                feeTextField.setMaxLines(4);
+                feeTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
+                feeTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+                feeTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+                feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                feeTextField.setMinHeight(AndroidUtilities.dp(36));
+                feeTextField.setHint("Amount");
+                feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                feeTextField.setCursorSize(AndroidUtilities.dp(15));
+                feeTextField.setCursorWidth(1.5f);
+                feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
+                mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
+                builder.setView(mainLayout);
+                builder.setPositiveButton("Apply", (dialog, which) -> {
+                    if (feeTextField.getText().toString().length() > 0)
+                        setFee(feeTextField.getText().toString(), 0);
+                });
+                AlertDialog alertDialog = builder.create();
+                showDialog(alertDialog);
+
+            }
+        });
+        priceArgs.put("2_Currency", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType == ActionType.VIEW)
+                    return;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle("Currency");
+                String[] subItems = new String[3];
+                int[] icons = new int[3];
+
+                for (int i = 0; i < 3; i++) {
+                    icons[i] = R.drawable.msg_arrowright;
+                }
+                subItems[0] = "R$";
+                subItems[1] = "US$";
+                subItems[2] = "EUR";
+                builder.setSubtitle("Current Rate Symbol: US$");
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setCurrency(subItems[which], 0);
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                showDialog(alertDialog);
+            }
+        });
+        priceInputCell = new HtPriceInputCell(context, "Price", priceArgs, R.drawable.money, canEdit, 0);
+        priceInputCell.setRes("0_Rate Type", "Per Item", 0);
+        priceInputCell.setRes("2_Currency", "R$", 2);
+        mainLayout.addView(priceInputCell);
+        if (canEdit) {
+            addPriceLayout = new LinearLayout(context);
+            TextView addPriceLabel = new TextView(context);
+            addPriceLabel.setText("Add new price");
+            addPriceLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+            addPriceLabel.setTypeface(addPriceLabel.getTypeface(), Typeface.BOLD);
+            Drawable addPriceDrawable = context.getResources().getDrawable(R.drawable.plus);
+            addPriceDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+            addPriceLabel.setCompoundDrawablePadding(AndroidUtilities.dp(6));
+            addPriceLabel.setCompoundDrawablesWithIntrinsicBounds(addPriceDrawable, null, null, null);
+            addPriceLayout.addView(addPriceLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, AndroidUtilities.dp(9), AndroidUtilities.dp(9), AndroidUtilities.dp(9), AndroidUtilities.dp(9)));
+            addPriceLayout.setEnabled(true);
+            addPriceLayout.setHovered(true);
+            addPriceLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HtPriceInputCell newPriceCell;
+                    HashMap<String, Runnable> priceArgs = new HashMap<>();
+                    priceArgs.put("0_Rate Type", new Runnable() {
+                        @Override
+                        public void run() {
+                            if (actionType == ActionType.VIEW)
+                                return;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                            builder.setTitle("Rate Type");
+                            String[] subItems = new String[3];
+                            int[] icons = new int[3];
+
+                            for (int i = 0; i < 3; i++) {
+                                icons[i] = R.drawable.msg_arrowright;
+                            }
+                            subItems[0] = "Per Item";
+                            subItems[1] = "Per Hour";
+                            subItems[2] = "Range";
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    setRateType(subItems[which], priceCellsCount + 1);
+                                }
+                            });
+                            AlertDialog alertDialog = builder.create();
+                            showDialog(alertDialog);
+                        }
+                    });
+                    priceArgs.put("1_Price", new Runnable() {
+                        @Override
+                        public void run() {
+                            if (actionType == ActionType.VIEW)
+                                return;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle("Price");
+                            LinearLayout mainLayout = new LinearLayout(context);
+                            EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
+                            feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                            feeTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                            feeTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                            feeTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+                            feeTextField.setMaxLines(4);
+                            feeTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
+                            feeTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+                            feeTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+                            feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                            feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                            feeTextField.setMinHeight(AndroidUtilities.dp(36));
+                            feeTextField.setHint("Amount");
+                            feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                            feeTextField.setCursorSize(AndroidUtilities.dp(15));
+                            feeTextField.setCursorWidth(1.5f);
+                            feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
+                            builder.setView(mainLayout);
+                            builder.setPositiveButton("Apply", (dialog, which) -> {
+                                if (feeTextField.getText().toString().length() > 0)
+                                    setFee(feeTextField.getText().toString(), priceCellsCount + 1);
+                            });
+                            AlertDialog alertDialog = builder.create();
+                            showDialog(alertDialog);
+
+                        }
+                    });
+                    priceArgs.put("2_Currency", new Runnable() {
+                        @Override
+                        public void run() {
+                            if (actionType == ActionType.VIEW)
+                                return;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                            builder.setTitle("Currency");
+                            String[] subItems = new String[3];
+                            int[] icons = new int[3];
+
+                            for (int i = 0; i < 3; i++) {
+                                icons[i] = R.drawable.msg_arrowright;
+                            }
+                            subItems[0] = "R$";
+                            subItems[1] = "US$";
+                            subItems[2] = "EUR";
+                            builder.setSubtitle("Current Rate Symbol: US$");
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    setCurrency(subItems[which], priceCellsCount + 1);
+                                }
+                            });
+                            AlertDialog alertDialog = builder.create();
+                            showDialog(alertDialog);
+                        }
+                    });
+                    newPriceCell = new HtPriceInputCell(context, "Price", priceArgs, R.drawable.money, canEdit, priceCellsCount + 1);
+                    pricesInputCell.add(newPriceCell);
+                    mainLayout.addView(newPriceCell, 8 + priceCellsCount++);
+                }
+            });
+            priceCellsCount--;
+            mainLayout.addView(addPriceLayout);
+        }
+        HashMap<String, Runnable> paymentArgs = new HashMap<>();
+        paymentInputCell = new HtPaymentConfigInputCell(context, "Payment Terms", paymentArgs, R.drawable.pay, this, actionType);
+        mainLayout.addView(paymentInputCell);
+        HashMap<String, Runnable> expireArgs = new HashMap<>();
+        Calendar mcurrentTime = Calendar.getInstance();
+        int day2 = mcurrentTime.get(Calendar.DAY_OF_MONTH);
+        mcurrentTime.add(Calendar.DATE, 7);
+        int day1 = mcurrentTime.get(Calendar.DAY_OF_MONTH);
+        if (day1 < day2)
+            mcurrentTime.add(Calendar.MONTH, 1);
+        int year = mcurrentTime.get(Calendar.YEAR);
+        int month = mcurrentTime.get(Calendar.MONTH);
+        expireArgs.put("0_Expire", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType == ActionType.VIEW)
+                    return;
+                Calendar mcurrentTime = Calendar.getInstance();
+                int year = mcurrentTime.get(Calendar.YEAR);
+                int month = mcurrentTime.get(Calendar.MONTH);
+                int day = mcurrentTime.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog mTimePicker;
+                mTimePicker = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        expireInputCell.setRes("0_Expire", dayOfMonth + "-" + month + "-" + year, 0);
+                    }
+                }, year, month, day);
+                mTimePicker.setTitle("Select Date");
+                mTimePicker.show();
+            }
+        });
+
+        expireInputCell = new HtExpireInputCell(context, "Expiration", expireArgs, R.drawable.msg_timer, canEdit);
+        expireInputCell.setRes("0_Expire", day1 + "-" + month + "-" + year, 0);
+        mainLayout.addView(expireInputCell);
+        HashMap<String, Runnable> termsArgs = new HashMap<>();
+        termsArgs.put("0_Terms", new Runnable() {
+            @Override
+            public void run() {
+                if (actionType == ActionType.VIEW)
+                    return;
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Terms And Conditions");
+                LinearLayout mainLayout = new LinearLayout(context);
+                EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
+                feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                feeTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                feeTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                feeTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
+                feeTextField.setMaxLines(14);
+                feeTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
+                feeTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+                feeTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+                feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                feeTextField.setMinLines(4);
+                feeTextField.setMinHeight(AndroidUtilities.dp(36));
+                feeTextField.setHint("Place the policy here");
+                feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                feeTextField.setCursorSize(AndroidUtilities.dp(15));
+                feeTextField.setCursorWidth(1.5f);
+                feeTextField.setLines(1);
+                feeTextField.setSingleLine(true);
+                feeTextField.setOnEditorActionListener((v, actionId, event) -> {
+                    if (event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                        feeTextField.hideActionMode();
+                        AndroidUtilities.hideKeyboard(feeTextField);
+                    }
+                    return false;
+                });
+                mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 400, 20, 0, 20, 15));
+                builder.setView(mainLayout);
+                builder.setPositiveButton("Apply", (dialog, which) -> {
+                    if (feeTextField.getText().toString().length() > 0)
+                        termsInputCell.setRes("0_Terms", feeTextField.getText().toString(), 0);
+                });
+                AlertDialog alertDialog = builder.create();
+                showDialog(alertDialog);
+            }
+        });
+        termsInputCell = new HtTermsInputCell(context, "Terms and Conditions", termsArgs, R.drawable.ht_pplicy, canEdit);
+        termsInputCell.setRes("0_Terms", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0);
+        mainLayout.addView(termsInputCell);
+        LinearLayout alertLayout = new LinearLayout(context);
+        mainLayout.addView(alertLayout);
+        actionLayout = new LinearLayout(context);
+        actionLayout.setGravity(Gravity.CENTER);
+        LinearLayout promoteLayout = new LinearLayout(context);
+        promoteLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        promoteLayout.setGravity(Gravity.CENTER);
+        TextView promoteLabel = new TextView(context);
+        promoteLabel.setText("Promote");
+        promoteLabel.setTextSize(17);
+        promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
+        promoteLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+        promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
+        Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.share);
+        promoteDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
+        promoteLabel.setCompoundDrawablesWithIntrinsicBounds(promoteDrawable, null, null, null);
+        promoteLayout.addView(promoteLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
+        promoteLayout.setEnabled(true);
+        promoteLayout.setOnClickListener(v -> {
+            titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
+            priceInputCell.setError(false, 1);
+            locationInputCell.setError(false, 0);
+            categoryInputCell.setError(false, 0);
+            categoryInputCell.setError(false, 1);
+
+            UndoView undoView = new UndoView(context, true);
+            undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
+            alertLayout.removeAllViews();
+            String errors = "";
+            alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
+            if (titleTextField.getText().toString().isEmpty()) {
+                titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
+                errors += "Title should not be empty\n";
+            }
+            if (descriptionTextField.getText().toString().isEmpty()) {
+                descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
+                errors += "Description should not be empty\n";
+            }
+            if (priceInputCell.getRes("1_Price") == null) {
+                priceInputCell.setError(true, 1);
+                errors += "Price should not be empty\n";
+            }
+            if (locationInputCell.getRes("0_Address") == null) {
+                locationInputCell.setError(true, 0);
+                errors += "Location should not be empty\n";
+            }
+            if (categoryInputCell.getRes("0_Category") == null) {
+                categoryInputCell.setError(true, 0);
+                errors += "Category should not be empty\n";
+            }
+            if (categoryInputCell.getRes("1_Sub-Category") == null) {
+                categoryInputCell.setError(true, 1);
+                errors += "Sub-Category should not be empty\n";
+            }
+            if (!errors.isEmpty()) {
+                undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
+                    undoView.setVisibility(View.GONE);
+                });
+            } else {
+                Object[] configRes = paymentInputCell.getRes();
+                String configText = "";
+                for (Object config : configRes) {
+                    configText = configText + config.toString() + "###";
+                }
+                OfferController.getInstance().addOffer(titleTextField.getText().toString(), Integer.parseInt(priceInputCell.getRes("1_Price")), priceInputCell.getRes("0_Rate Type"), priceInputCell.getRes("2_Currency"), locationInputCell.getRes("0_Address"), expireInputCell.getRes("0_Expire"), categoryInputCell.getRes("0_Category"), categoryInputCell.getRes("1_Sub-Category"), configText, termsInputCell.getRes("0_Terms"), descriptionTextField.getText().toString(), 1);
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                TLRPC.Message message = new TLRPC.TL_message();
+                message.message = "This is a Heymate Offer, Tap to open";
+                ArrayList<TLRPC.MessageEntity> entities = new ArrayList<>();
+                TLRPC.TL_messageEntityTextUrl url = new TLRPC.TL_messageEntityTextUrl();
+                url.url = "https://ht.me/___HtOffer___" + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes("1_Price")) + "___" + priceInputCell.getRes("0_Rate Type") + "___" + priceInputCell.getRes("2_Currency") + "___" + locationInputCell.getRes("0_Address") + "___" + expireInputCell.getRes("0_Expire") + "___" + categoryInputCell.getRes("0_Category") + "___" + categoryInputCell.getRes("1_Sub-Category") + "___" + configText + "___" + termsInputCell.getRes("0_Terms") + "___" + descriptionTextField.getText().toString()).getBytes());
+                url.offset = 0;
+                url.length = message.message.length();
+                entities.add(url);
+                share.putExtra(Intent.EXTRA_TEXT, url.url);
+                getParentActivity().startActivity(Intent.createChooser(share, "Promote your Offer"));
+                parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
+                finishFragment();
+            }
+        });
+        LinearLayout saveLayout = new LinearLayout(context);
+        saveLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogTextBlue));
+        saveLayout.setGravity(Gravity.CENTER);
+        TextView saveLabel = new TextView(context);
+        saveLabel.setText("Save");
+        saveLabel.setTextSize(17);
+        saveLabel.setTypeface(saveLabel.getTypeface(), Typeface.BOLD);
+        saveLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+        saveLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
+        Drawable saveDrawable = context.getResources().getDrawable(R.drawable.menu_saved);
+        saveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
+        saveLabel.setCompoundDrawablesWithIntrinsicBounds(saveDrawable, null, null, null);
+        saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
+        saveLayout.setEnabled(true);
+        saveLayout.setOnClickListener(v -> {
+            presentFragment(new WalletActivity()); // TODO Set FREE
+            if (saveLayout != null) {
+                return;
+            }
+
+            titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
+            priceInputCell.setError(false, 1);
+            locationInputCell.setError(false, 0);
+            categoryInputCell.setError(false, 0);
+            categoryInputCell.setError(false, 1);
+
+            UndoView undoView = new UndoView(context, true);
+            undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
+            alertLayout.removeAllViews();
+            String errors = "";
+            alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
+            if (titleTextField.getText().toString().isEmpty()) {
+                titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
+                errors += "Title should not be empty\n";
+            }
+            if (descriptionTextField.getText().toString().isEmpty()) {
+                descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
+                errors += "Description should not be empty\n";
+            }
+            if (priceInputCell.getRes("1_Price") == null) {
+                priceInputCell.setError(true, 1);
+                errors += "Price should not be empty\n";
+            }
+            if (locationInputCell.getRes("0_Address") == null) {
+                locationInputCell.setError(true, 0);
+                errors += "Location should not be empty\n";
+            }
+            if (categoryInputCell.getRes("0_Category") == null) {
+                categoryInputCell.setError(true, 0);
+                errors += "Category should not be empty\n";
+            }
+            if (categoryInputCell.getRes("1_Sub-Category") == null) {
+                categoryInputCell.setError(true, 1);
+                errors += "Sub-Category should not be empty\n";
+            }
+            if (!errors.isEmpty()) {
+                undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
+                    undoView.setVisibility(View.GONE);
+                });
+            } else {
+                Object[] configRes = paymentInputCell.getRes();
+                String configText = "";
+                for (Object config : configRes) {
+                    configText = configText + config.toString() + "###";
+                }
+                if (actionType != ActionType.EDIT) {
+                    offerId = OfferController.getInstance().addOffer(titleTextField.getText().toString(), Integer.parseInt(priceInputCell.getRes("1_Price")), priceInputCell.getRes("0_Rate Type"), priceInputCell.getRes("2_Currency"), locationInputCell.getRes("0_Address"), expireInputCell.getRes("0_Expire"), categoryInputCell.getRes("0_Category"), categoryInputCell.getRes("1_Sub-Category"), configText, termsInputCell.getRes("0_Terms"), descriptionTextField.getText().toString(), 2);
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage("https://ht.me/___HtOffer___" + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes("1_Price")) + "___" + priceInputCell.getRes("0_Rate Type") + "___" + priceInputCell.getRes("2_Currency") + "___" + locationInputCell.getRes("0_Address") + "___" + expireInputCell.getRes("0_Expire") + "___" + categoryInputCell.getRes("0_Category") + "___" + categoryInputCell.getRes("1_Sub-Category") + "___" + configText + "___" + termsInputCell.getRes("0_Terms") + "___" + descriptionTextField.getText().toString()).getBytes()), (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
+                } else {
+                    OfferController.getInstance().addOffer(offerId, titleTextField.getText().toString(), Integer.parseInt(priceInputCell.getRes("1_Price")), priceInputCell.getRes("0_Rate Type"), priceInputCell.getRes("2_Currency"), locationInputCell.getRes("0_Address"), expireInputCell.getRes("0_Expire"), categoryInputCell.getRes("0_Category"), categoryInputCell.getRes("1_Sub-Category"), configText, termsInputCell.getRes("0_Terms"), descriptionTextField.getText().toString(), 2);
+                }
+                if (pickedImage != null) {
+                    String[] filePath = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = context.getContentResolver().query(pickedImage, filePath, null, null, null);
+                    cursor.moveToFirst();
+                    String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                    cursor.close();
+                    ContextWrapper cw2 = new ContextWrapper(context);
+                    File directory2 = cw2.getDir("offerImages", Context.MODE_PRIVATE);
+                    File myPath = new File(directory2, "offerImage" + offerId + ".jpg");
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(myPath);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            fos.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                undoView.setColors(context.getResources().getColor(R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
+                undoView.showWithAction(0, UndoView.ACTION_OFFER_SAVED, errors, null, () -> {
+                    undoView.setVisibility(View.GONE);
+                });
+                presentFragment(new OffersActivity());
+                parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
+                if (actionType == ActionType.EDIT)
+                    parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 3);
+                finishFragment();
+            }
+        });
+
+        actionLayout.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, 0.5f));
+        if (canEdit)
+            actionLayout.addView(saveLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, 0.5f));
+        mainLayout.addView(actionLayout);
+        mainScrollView.addView(mainLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        fragmentMainLayout.addView(mainScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        return fragmentView;
+    }
+
+    public void setCategory(String text) {
+        categoryInputCell.setRes("0_Category", text, 0);
+    }
+
+    public void setSubCategory(String text) {
+        categoryInputCell.setRes("1_Sub-Category", text, 1);
+    }
+
+    public void setFee(String text, int position) {
+        priceInputCell.setRes("1_Price", text, 1);
+        if (position == 0)
+            priceInputCell.setRes("1_Price", text, 1);
+        else
+            pricesInputCell.get(position - 1).setRes("1_Price", text, 1);
+    }
+
+    public void setRateType(String text, int position) {
+        if (position == 0)
+            priceInputCell.setRes("0_Rate Type", text, 0);
+        else
+            pricesInputCell.get(position - 1).setRes("0_Rate Type", text, 0);
+    }
+
+    public void setCurrency(String text, int position) {
+        if (position == 0)
+            priceInputCell.setRes("2_Currency", text, 2);
+        else
+            pricesInputCell.get(position - 1).setRes("2_Currency", text, 2);
+
+    }
+
+    public void setLocationAddress(String address) {
+        locationInputCell.setRes("0_Address", address, 0);
+    }
+
+    public void setCanEdit(boolean canEdit) {
+        this.canEdit = canEdit;
+    }
+
+    public void setTitle(String title) {
+        titleTextField.setText(title);
+    }
+
+    public void setOfferId(int offerId) {
+        this.offerId = offerId;
+        Bitmap b;
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("offerImages", Context.MODE_PRIVATE);
+        File file = new File(directory, "offerImage" + offerId + ".jpg");
+        if (file.exists()) {
+            try {
+                b = BitmapFactory.decodeStream(new FileInputStream(file));
+                cameraImage.setImageBitmap(b);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setDescription(String description) {
+        descriptionTextField.setText(description);
+    }
+
+    public void setPaymentConfig(String config) {
+        String[] configs = config.split("###");
+        if (configs.length == 4) {
+            for (int i = 0; i < 4; i++) {
+                paymentInputCell.setRes(configs[i].toString(), i);
+            }
+        } else {
+            for (int i = 0; i < 7; i++) {
+                paymentInputCell.setRes(configs[i].toString(), i);
+            }
+        }
+    }
+
+    public void setTerms(String terms) {
+        termsInputCell.setRes("0_Terms", terms, 0);
+    }
+
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
+        paymentInputCell.setActionType(actionType);
+        if (actionType == ActionType.VIEW) {
+            addPriceLayout.setVisibility(View.GONE);
+            titleTextField.setKeyListener(null);
+            titleTextField.setEnabled(false);
+            titleTextField.setClickable(false);
+            titleTextField.setFocusable(false);
+
+            descriptionTextField.setKeyListener(null);
+            descriptionTextField.setEnabled(false);
+            descriptionTextField.setClickable(false);
+            descriptionTextField.setFocusable(false);
+
+            actionLayout.removeAllViews();
+            LinearLayout contactSenderLayout = new LinearLayout(context);
+            contactSenderLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogTextBlue));
+            contactSenderLayout.setGravity(Gravity.CENTER);
+            TextView contactSenderLabel = new TextView(context);
+            contactSenderLabel.setText("Contact Sender");
+            contactSenderLabel.setTextSize(17);
+            contactSenderLabel.setTypeface(contactSenderLabel.getTypeface(), Typeface.BOLD);
+            contactSenderLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+            contactSenderLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
+            Drawable saveDrawable = context.getResources().getDrawable(R.drawable.floating_message);
+            saveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
+            contactSenderLabel.setCompoundDrawablesWithIntrinsicBounds(saveDrawable, null, null, null);
+            contactSenderLayout.addView(contactSenderLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
+
+            actionLayout.addView(contactSenderLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, 1f));
+
+        }
+        switch (actionType) {
+            case CREATE: {
+                actionBar.setTitle("Create Offer");
+                break;
+            }
+            case EDIT: {
+                actionBar.setTitle("Edit Draft");
+                break;
+            }
+            case VIEW: {
+                actionBar.setTitle("View Offer");
+                break;
+            }
+        }
+    }
+}

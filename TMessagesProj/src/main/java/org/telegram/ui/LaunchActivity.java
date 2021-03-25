@@ -105,6 +105,7 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
+import org.telegram.ui.Cells.DrawerManageOffersCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
@@ -131,6 +132,9 @@ import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
+import org.telegram.ui.Heymate.DatabaseWatchDog;
+import org.telegram.ui.Heymate.HtOfferHelperActivity;
+import org.telegram.ui.Heymate.OffersActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -207,6 +211,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DatabaseWatchDog.getInstance().config();
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         currentAccount = UserConfig.selectedAccount;
@@ -246,6 +251,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        Theme.applyTheme(Theme.getCurrentNightTheme());
         setTheme(R.style.Theme_TMessages);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
@@ -500,6 +506,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     presentFragment(new LoginActivity(freeAccount));
                 }
                 drawerLayoutContainer.closeDrawer(false);
+            } else if (view instanceof DrawerManageOffersCell) {
+                presentFragment(new HtOfferHelperActivity());
+                drawerLayoutContainer.closeDrawer(false);
             } else {
                 int id = drawerLayoutAdapter.getId(position);
                 if (id == 2) {
@@ -540,7 +549,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 } else if (id == 10) {
                     presentFragment(new CallLogActivity());
                     drawerLayoutContainer.closeDrawer(false);
-                } else if (id == 11) {
+                } else if (id == 102) {
+                    presentFragment(new HtOfferHelperActivity());
+                    drawerLayoutContainer.closeDrawer(false);
+                }else if (id == 11) {
                     Bundle args = new Bundle();
                     args.putInt("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
                     presentFragment(new ChatActivity(args));
@@ -3194,7 +3206,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     public void showBulletin(Function<BulletinFactory, Bulletin> createBulletin) {
         BaseFragment topFragment = null;
         if (!layerFragmentsStack.isEmpty()) {
-             topFragment = layerFragmentsStack.get(layerFragmentsStack.size() - 1);
+            topFragment = layerFragmentsStack.get(layerFragmentsStack.size() - 1);
         } else if (!rightFragmentsStack.isEmpty()) {
             topFragment = rightFragmentsStack.get(rightFragmentsStack.size() - 1);
         } else if (!mainFragmentsStack.isEmpty()) {

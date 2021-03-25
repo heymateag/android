@@ -6,10 +6,13 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.amplifyframework:amplify-tools-gradle-plugin:1.0.2'
     }
 }
 repositories {
     google()
 }
+
+apply plugin: 'com.amplifyframework.amplifytools'

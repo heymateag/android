@@ -114,6 +114,8 @@ public class UndoView extends FrameLayout {
     public final static int ACTION_VOIP_REMOVED = 32;
     public final static int ACTION_VOIP_LINK_COPIED = 33;
     public final static int ACTION_VOIP_INVITED = 34;
+    public final static int ACTION_OFFER_DATA_INCOMPLETE = 135;
+    public final static int ACTION_OFFER_SAVED = 136;
 
     private CharSequence infoText;
 
@@ -384,7 +386,16 @@ public class UndoView extends FrameLayout {
                 avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, user);
                 avatarImageView.setVisibility(VISIBLE);
                 timeLeft = 3000;
-            } else if (action == ACTION_VOIP_LINK_COPIED) {
+            } else if(action == ACTION_OFFER_DATA_INCOMPLETE){
+                infoText = "Some incomplete fields";
+                icon = R.drawable.ic_close_white;
+                subInfoText = "Please complete all the provided feilds";
+
+            } else if(action == ACTION_OFFER_SAVED){
+                infoText = "Some saved";
+                subInfoText = "";
+                icon = R.drawable.ic_close_white;
+            }else if (action == ACTION_VOIP_LINK_COPIED) {
                 infoText = LocaleController.getString("VoipGroupCopyInviteLinkCopied", R.string.VoipGroupCopyInviteLinkCopied);
                 subInfoText = null;
                 icon = R.raw.voip_invite;
@@ -509,7 +520,7 @@ public class UndoView extends FrameLayout {
                 infoText = this.infoText;
                 subInfoText = null;
                 icon = R.raw.chats_infotip;
-            } else {
+            }  else {
                 if (action == ACTION_ARCHIVE_HINT) {
                     infoText = LocaleController.getString("ChatArchived", R.string.ChatArchived);
                 } else {
@@ -808,7 +819,15 @@ public class UndoView extends FrameLayout {
                         infoTextView.setText(LocaleController.getString("GroupDeletedUndo", R.string.GroupDeletedUndo));
                     }
                 } else {
-                    infoTextView.setText(LocaleController.getString("ChatDeletedUndo", R.string.ChatDeletedUndo));
+                    if(action == ACTION_OFFER_DATA_INCOMPLETE){
+                        undoButton.setVisibility(GONE);
+                        infoTextView.setText("Incomplete Offer Info\n" + infoObject.toString());
+                    } else if(action == ACTION_OFFER_SAVED){
+                        undoButton.setVisibility(GONE);
+                        infoTextView.setText("Offer Saved");
+                    } else {
+                        infoTextView.setText(LocaleController.getString("ChatDeletedUndo", R.string.ChatDeletedUndo));
+                    }
                 }
             }
             MessagesController.getInstance(currentAccount).addDialogAction(did, currentAction == ACTION_CLEAR);
