@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -68,7 +69,7 @@ public class OfferCell<T> extends FrameLayout {
         }
     }
 
-    public OfferCell(Context context, T parentFragment, OfferDto dto, int place) {
+    public OfferCell(Context context, T parentFragment) {
         super(context);
         this.place = place;
         this.context = context;
@@ -79,14 +80,18 @@ public class OfferCell<T> extends FrameLayout {
         detailLayout = new RelativeLayout(context);
         mainLayout = new LinearLayout(context);
         secondHolder = new LinearLayout(context);
+
         LinearLayout statusLayout = new LinearLayout(context);
         statusLayout.setBackgroundColor(getOfferStatusColor(dto.getStatus()));
         mainLayout.addView(statusLayout, LayoutHelper.createFrame(AndroidUtilities.dp(2), LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0,0,15,0));
+
         LinearLayout titleLayout = new LinearLayout(context);
         titleLayout.setOrientation(LinearLayout.VERTICAL);
+
         TextView offerTitle = new TextView(context);
         offerTitle.setText(dto.getTitle());
         offerTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+
         Drawable offerTitleDrawable = context.getResources().getDrawable(R.drawable.menu_jobtitle);
         offerTitle.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         offerTitle.setTypeface(offerTitle.getTypeface(), Typeface.BOLD);
@@ -95,24 +100,28 @@ public class OfferCell<T> extends FrameLayout {
         offerTitle.setCompoundDrawablePadding(AndroidUtilities.dp(10));
         offerTitle.setGravity(Gravity.CENTER_HORIZONTAL | RelativeLayout.CENTER_VERTICAL);
         titleLayout.addView(offerTitle, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
         TextView offerRate = new TextView(context);
         offerRate.setText(dto.getRate() + dto.getCurrency());
         offerRate.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         offerRate.setGravity(Gravity.CENTER);
         offerRate.setTypeface(offerRate.getTypeface(), Typeface.BOLD);
         titleLayout.addView(offerRate, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
+
         TextView offerStatus = new TextView(context);
         offerStatus.setText(dto.getStatus().toString());
         offerStatus.setTextColor(getOfferStatusColor(dto.getStatus()));
         offerStatus.setGravity(Gravity.CENTER);
         offerStatus.setTypeface(offerRate.getTypeface(), Typeface.BOLD);
         titleLayout.addView(offerStatus, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
+
         slideImage = new ImageView(context);
         Drawable slideDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
         slideDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
         slideImage.setImageDrawable(slideDrawable);
         slideImage.setRotation(270);
         titleLayout.addView(slideImage, LayoutHelper.createLinear(17,17));
+
         if(place == 2){
             ImageView galleryImage = new ImageView(context) {
                 @Override
@@ -129,15 +138,19 @@ public class OfferCell<T> extends FrameLayout {
                 @Override
                 public void onClick(View v) {
                     if(parentFragment instanceof ProfileActivity){
-                        ((ProfileActivity) parentFragment).presentFragment(new OfferGalleryActivity(context, dto));
+                        OfferGalleryActivity fragment = new OfferGalleryActivity(context);
+                        ((ProfileActivity) parentFragment).presentFragment(fragment);
+                        fragment.setDto(dto);
                     }
                 }
             });
             titleLayout.addView(galleryImage, LayoutHelper.createFrame(30,30));
         }
+
         LinearLayout infoLayout = new LinearLayout(context);
         infoLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.addView(titleLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
         TextView offerTime = new TextView(context);
         offerTime.setText(dto.getTime());
         offerTime.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
@@ -145,6 +158,7 @@ public class OfferCell<T> extends FrameLayout {
         offerTime.setTypeface(offerTime.getTypeface(), Typeface.BOLD);
         offerTime.setMinLines(2);
         offerTime.setMaxLines(3);
+
         Drawable offerTimeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
         Bitmap b = ((BitmapDrawable) offerTimeDrawable).getBitmap();
         Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 60, 60, false);
@@ -153,11 +167,13 @@ public class OfferCell<T> extends FrameLayout {
         offerTime.setCompoundDrawablesWithIntrinsicBounds(gdrawable, null, null, null);
         offerTime.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         infoLayout.addView(offerTime, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 20, 0, 0, 20));
+
         TextView offerLocation = new TextView(context);
         offerLocation.setText("2KM");
         offerLocation.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         offerLocation.setGravity(Gravity.CENTER);
         offerLocation.setTypeface(offerLocation.getTypeface(), Typeface.BOLD);
+
         Drawable offerLocationDrawable = context.getResources().getDrawable(R.drawable.msg_location);
         Bitmap b4 = ((BitmapDrawable) offerLocationDrawable).getBitmap();
         Bitmap bitmapResized4 = Bitmap.createScaledBitmap(b4, 60, 60, false);
@@ -194,7 +210,6 @@ public class OfferCell<T> extends FrameLayout {
         ObjectAnimator slideAnim = ObjectAnimator.ofFloat(slideImage, "rotation", 90);
         slideAnim.setDuration(300);
         slideAnim.start();
-        OfferCell father = this;
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(mainLayout, "x", place == 1 ? AndroidUtilities.dp(180) : AndroidUtilities.dp(70));
         anim1.setInterpolator(new AccelerateDecelerateInterpolator());
         anim1.setDuration(place == 1 ? 600 : 200);
@@ -240,6 +255,7 @@ public class OfferCell<T> extends FrameLayout {
                     }
                 });
                 detailLayout.addView(infoIcon, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 0, 0, 0));
+
                 ObjectAnimator anim2 = ObjectAnimator.ofFloat(infoIcon, View.ALPHA, 0, 1);
                 anim2.setDuration(350);
                 anim2.start();
@@ -247,6 +263,7 @@ public class OfferCell<T> extends FrameLayout {
                 editIcon = new ImageView(context);
                 if(place == 2)
                     editIcon.setVisibility(GONE);
+
                 Drawable editIconDrawable = context.getResources().getDrawable(R.drawable.msg_edit);
                 editIconDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue), PorterDuff.Mode.MULTIPLY));
                 editIcon.setImageDrawable(editIconDrawable);
@@ -262,12 +279,15 @@ public class OfferCell<T> extends FrameLayout {
                     }
                 });
                 detailLayout.addView(editIcon, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 70, 0, 0, 0));
+
                 ObjectAnimator anim4 = ObjectAnimator.ofFloat(editIcon, View.ALPHA, 0, 1);
                 anim4.setDuration(350);
                 anim4.start();
+
                 archiveIcon = new ImageView(context);
                 if(place == 2)
                     archiveIcon.setVisibility(GONE);
+
                 Drawable archiveIconDrawable = context.getResources().getDrawable(R.drawable.share);
                 archiveIconDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
                 archiveIcon.setImageDrawable(archiveIconDrawable);
@@ -288,7 +308,7 @@ public class OfferCell<T> extends FrameLayout {
                         Intent share = new Intent(Intent.ACTION_SEND);
                         share.setType("text/plain");
                         share.putExtra(Intent.EXTRA_TEXT, "##:HtOffer##:"+dto.getTitle()+"##:"+dto.getRate()+"##:"+dto.getRateType()+"##:"+dto.getCurrency()+"##:"+dto.getLocation()+"##:"+dto.getTime()+"##:"+dto.getCategory()+"##:"+dto.getSubCategory());
-                        context.startActivity(Intent.createChooser(share, "Promote your Offer"));
+                        context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
 
                         anim5.addListener(new Animator.AnimatorListener() {
                             @Override
@@ -456,12 +476,14 @@ public class OfferCell<T> extends FrameLayout {
             this.setOrientation(VERTICAL);
             LinearLayout titleLayout = new LinearLayout(context);
             titleLayout.setOrientation(VERTICAL);
+
             TextView titleLabel = new TextView(context);
             titleLabel.setText(dto.getTitle());
             titleLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
             titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             titleLabel.setTextSize(16);
             titleLayout.addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+
             LinearLayout rateLayout = new LinearLayout(context);
             TextView rateLabel = new TextView(context);
             rateLabel.setText(""+ dto.getRate());
@@ -469,12 +491,14 @@ public class OfferCell<T> extends FrameLayout {
             rateLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             rateLabel.setTextSize(16);
             rateLayout.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+
             TextView currencyLabel = new TextView(context);
             currencyLabel.setText(dto.getCurrency());
             currencyLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundOrange));
             currencyLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             currencyLabel.setTextSize(16);
             rateLayout.addView(currencyLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+
             TextView rateTypeLabel = new TextView(context);
             rateTypeLabel.setText("" + dto.getRateType());
             rateTypeLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundOrange));
@@ -482,6 +506,7 @@ public class OfferCell<T> extends FrameLayout {
             rateTypeLabel.setTextSize(16);
             rateLayout.addView(rateTypeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
             LinearLayout locationLayout = new LinearLayout(context);
+
             TextView locationLabel = new TextView(context);
             Drawable locationDrawable = context.getResources().getDrawable(R.drawable.menu_location);
             locationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_backgroundCyan), PorterDuff.Mode.MULTIPLY));
@@ -493,8 +518,10 @@ public class OfferCell<T> extends FrameLayout {
             locationLabel.setTextSize(16);
             locationLabel.setMaxLines(5);
             locationLayout.addView(locationLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+
             LinearLayout timeLayout = new LinearLayout(context);
             TextView timeLabel = new TextView(context);
+
             Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
             timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_backgroundViolet), PorterDuff.Mode.MULTIPLY));
             timeLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
@@ -505,18 +532,21 @@ public class OfferCell<T> extends FrameLayout {
             timeLabel.setTextSize(16);
             timeLayout.addView(timeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
             LinearLayout categoryLayout = new LinearLayout(context);
+
             TextView categoryLabel = new TextView(context);
             categoryLabel.setText(dto.getCategory());
             categoryLabel.setTextColor(Theme.getColor(Theme.key_avatar_backgroundSaved));
             categoryLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             categoryLabel.setTextSize(16);
             categoryLayout.addView(categoryLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+
             TextView subCategoryLabel = new TextView(context);
             subCategoryLabel.setText(dto.getSubCategory());
             subCategoryLabel.setTextColor(Theme.getColor(Theme.key_avatar_nameInMessageRed));
             subCategoryLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             subCategoryLabel.setTextSize(16);
             categoryLayout.addView(subCategoryLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
+
             LinearLayout statusLayout = new LinearLayout(context);
             TextView statusLabel = new TextView(context);
             statusLabel.setText(dto.getStatus().toString());
@@ -535,5 +565,13 @@ public class OfferCell<T> extends FrameLayout {
             this.addView(new HtDividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         }
+    }
+
+    public void setPlace(int place) {
+        this.place = place;
+    }
+
+    public void setDto(OfferDto dto) {
+        this.dto = dto;
     }
 }

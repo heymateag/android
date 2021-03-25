@@ -33,6 +33,7 @@ public class HtDividerCell extends FrameLayout {
 
     private TextView valueTextView;
     private boolean narrow = false;
+
     public HtDividerCell(Context context, boolean narrow) {
         super(context);
 

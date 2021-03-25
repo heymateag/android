@@ -231,7 +231,6 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
-    private BaseFragment me;
     protected TLRPC.Chat currentChat;
     protected TLRPC.User currentUser;
     protected TLRPC.EncryptedChat currentEncryptedChat;
@@ -1104,7 +1103,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public ChatActivity(Bundle args) {
         super(args);
-        this.me = this;
     }
 
     @Override
@@ -21123,10 +21121,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             offerCell.setSubCategory(offerDetails[7]);
                             offerCell.setPaymentConfig(offerDetails[8]);
                             offerCell.setTerms(offerDetails[9]);
-                            offerCell.timeLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
+                            offerCell.expireLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
                             offerCell.setOut(message.isOut());
                             offerCell.setMessage(message);
-                            offerCell.setParent(me);
                         } catch (Exception e) {
 
                         }

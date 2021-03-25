@@ -24,6 +24,7 @@ import org.telegram.ui.DialogsActivity;
 import java.util.ArrayList;
 
 public class HtFiltersCell extends LinearLayout {
+
     private String categorySelect = "All";
     private String subCategorySelect = "All";
     private int statusSelect = 0;
@@ -36,12 +37,14 @@ public class HtFiltersCell extends LinearLayout {
         for(Object category: categories){
             subCategories.addAll(DummyCategories.categories.get(category.toString()));
         }
+
         LinearLayout mainLayout = new LinearLayout(context);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setGravity(Gravity.CENTER);
+
         LinearLayout upperLayout = new LinearLayout(context);
         if(!(parent instanceof DialogsActivity)){
-            Button statusFilter = new Button(context, "Status") {
+            Button statusFilter = new Button(context, LocaleController.getString("HtStatus", R.string.HtStatus)) {
                 @Override
                 public void setEnabled(boolean enabled) {
                     super.setEnabled(enabled);
@@ -81,14 +84,15 @@ public class HtFiltersCell extends LinearLayout {
             });
             upperLayout.addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.33f,0, 5, 0, 5));
         }
-        Button categoryFilter = new Button(context, "Category") {
+
+        Button categoryFilter = new Button(context, LocaleController.getString("HtCategory", R.string.HtCategory)) {
             @Override
             public void setEnabled(boolean enabled) {
                 super.setEnabled(enabled);
                 setAlpha(enabled ? 1.0f : 0.5f);
             }
         };
-        Button subCategoryFilter = new Button(context, "SubCategory") {
+        Button subCategoryFilter = new Button(context, LocaleController.getString("HtSubCategory", R.string.HtSubCategory)) {
             @Override
             public void setEnabled(boolean enabled) {
                 super.setEnabled(enabled);
@@ -106,7 +110,7 @@ public class HtFiltersCell extends LinearLayout {
                 items[i] = categories[i - 1].toString();
                 icons[i] = R.drawable.msg_arrowright;
             }
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }
@@ -127,6 +131,7 @@ public class HtFiltersCell extends LinearLayout {
             AlertDialog alertDialog = builder.create();
             parent.showDialog(alertDialog);
         });
+
         subCategoryFilter.setEnabled(true);
         subCategoryFilter.setOnClickListener((v) -> {
             if(subCategories.size() == 0)
@@ -140,7 +145,7 @@ public class HtFiltersCell extends LinearLayout {
                 items[i] = subCategories.get(i - 1);
                 icons[i] = R.drawable.msg_arrowright;
             }
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }

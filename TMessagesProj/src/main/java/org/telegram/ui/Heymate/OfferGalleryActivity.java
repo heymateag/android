@@ -24,10 +24,15 @@ import org.telegram.ui.Components.ProfileGalleryView;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class OfferGalleryActivity extends BaseFragment {
+
     private Context context;
     private OfferDto dto;
-    public OfferGalleryActivity(Context context, OfferDto dto){
+    public OfferGalleryActivity(Context context){
         this.context = context;
+        this.dto = dto;
+    }
+
+    public void setDto(OfferDto dto) {
         this.dto = dto;
     }
 
@@ -37,6 +42,7 @@ public class OfferGalleryActivity extends BaseFragment {
         Configuration configuration = context.getResources().getConfiguration();
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
+
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setSearchTextColor(0xff4488, true);
@@ -49,8 +55,10 @@ public class OfferGalleryActivity extends BaseFragment {
                 }
             }
         });
+
         fragmentView = new LinearLayout(context);
         LinearLayout mainLayout = (LinearLayout) fragmentView;
+
         ScrollView galleryScroll = new ScrollView(context);
         RelativeLayout galleryLayout = new RelativeLayout(context);
         int i = 0;

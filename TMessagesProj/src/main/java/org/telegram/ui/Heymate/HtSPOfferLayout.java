@@ -13,16 +13,17 @@ public class HtSPOfferLayout extends LinearLayout {
     public HtSPOfferLayout(Context context, ProfileActivity parentFragment) {
         super(context);
         setOrientation(VERTICAL);
-        ArrayList<OfferDto> offers = OfferController.getInstance().getOffers("All", "All", 1);
+        ArrayList<OfferDto> offers = HtSQLite.getInstance().getOffers("All", "All", 1);
         for (OfferDto offerDto : offers) {
-            OfferCell offerCell = new OfferCell<ProfileActivity>(context, parentFragment, offerDto, 2) {
+            OfferCell offerCell = new OfferCell<ProfileActivity>(context, parentFragment) {
                 @Override
                 public void setEnabled(boolean enabled) {
                     super.setEnabled(enabled);
                     setAlpha(enabled ? 1.0f : 0.5f);
                 }
             };
-            ;
+            offerCell.setPlace(2);
+            offerCell.setDto(offerDto);
             offerCell.setEnabled(true);
             offerCell.setHovered(true);
             offerCell.setOnClickListener((v) -> {

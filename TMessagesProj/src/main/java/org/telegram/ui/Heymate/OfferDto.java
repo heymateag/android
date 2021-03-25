@@ -1,10 +1,20 @@
 package org.telegram.ui.Heymate;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.telegram.ui.Heymate.AmplifyModels.Offer;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 public class OfferDto {
+
     private int id;
     private String title;
     private String description;
-    private int rate;
+    private String rate;
     private String rateType;
     private String currency;
     private String location;
@@ -14,6 +24,60 @@ public class OfferDto {
     private String configText;
     private String terms;
     private OfferStatus status;
+    private int userId;
+    private Date expire;
+    private double longitude;
+    private double latitude;
+    private ArrayList<Long> dateSlots;
+    private String serverUUID;
+
+    public String getServerUUID() {
+        return serverUUID;
+    }
+
+    public void setServerUUID(String serverUUID) {
+        this.serverUUID = serverUUID;
+    }
+
+    public ArrayList<Long> getDateSlots() {
+        return dateSlots;
+    }
+
+    public void setDateSlots(ArrayList<Long> dateSlots) {
+        this.dateSlots = dateSlots;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Date getExpire() {
+        return expire;
+    }
+
+    public void setExpire(Date expire) {
+        this.expire = expire;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public void setDescription(String description) {
         this.description = description;
@@ -79,11 +143,11 @@ public class OfferDto {
         this.title = title;
     }
 
-    public int getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
@@ -117,5 +181,20 @@ public class OfferDto {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getTimeSlotsAsJson(){
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray();
+        for(int i = 0; i < dateSlots.size(); i += 2){
+            array.put("" + dateSlots.get(i) + " - " + dateSlots.get(i + 1));
+        }
+        try {
+            json.put("timeZone", Calendar.getInstance().getTimeZone().getDisplayName());
+            json.put("times", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json.toString();
     }
 }

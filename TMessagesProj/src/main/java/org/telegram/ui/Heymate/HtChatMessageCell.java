@@ -11,6 +11,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -25,10 +27,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -42,8 +46,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_DIR;
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_EXTENSION;
+import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_NAME;
+
 public class HtChatMessageCell extends FrameLayout {
+
     private Context context;
+    private BackupImageView image;
     private ImageView editIcon;
     private boolean showingDetails = false;
     public TextView titleLabel;
@@ -51,7 +61,7 @@ public class HtChatMessageCell extends FrameLayout {
     public TextView msgTimeLabel;
     public TextView rateLabel;
     public TextView addressLabel;
-    public TextView timeLabel;
+    public TextView expireLabel;
     private boolean out = false;
     private LinearLayout promoteLayout;
     private LinearLayout buyLayout;
@@ -64,10 +74,10 @@ public class HtChatMessageCell extends FrameLayout {
     private String currency = "";
     private String category = "";
     private String subCategory = "";
-    private String paymentConfig = "10###20###30###40###";
+    private String paymentConfig = "{\"arg1\": \"1\",\"arg2\": \"2\",\"arg3\": \"3\",\"arg4\": \"4\",\"arg5\": \"5\",\"arg6\": \"6\",\"arg7\": \"7\"}";
     private String terms = "";
     private OfferStatus status;
-    private int offerId;
+    private String offerUUID = "";
     private LinearLayout statusLayout;
     private boolean archived;
     private Drawable archiveDrawable;
@@ -108,22 +118,26 @@ public class HtChatMessageCell extends FrameLayout {
         Configuration configuration = context.getResources().getConfiguration();
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
+
         LinearLayout mainLayout = new LinearLayout(context);
         mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_chat_topPanelBackground)));
         mainLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout topLayer = new LinearLayout(context);
         mainLayout.setBackgroundColor(Theme.getColor(Theme.key_chat_topPanelBackground));
+
+        LinearLayout topLayer = new LinearLayout(context);
         statusLayout = new LinearLayout(context);
         LinearLayout titleLayout = new LinearLayout(context);
         titleLayout.setOrientation(LinearLayout.VERTICAL);
         statusLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
         topLayer.addView(statusLayout, LayoutHelper.createFrame(2, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0, 0, 20, 0));
+
         titleLabel = new TextView(context);
         titleLabel.setText("Nail Polish");
         titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
         titleLabel.setTextSize(16);
         titleLayout.addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+
         TextView ownerLabel = new TextView(context);
         ownerLabel.setText("Owner");
         ownerLabel.setTypeface(ownerLabel.getTypeface(), Typeface.BOLD);
@@ -131,15 +145,17 @@ public class HtChatMessageCell extends FrameLayout {
         ownerLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
         titleLayout.addView(ownerLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 10, 0, 0));
         topLayer.addView(titleLayout, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.25f));
+
         editIcon = new ImageView(context);
         editIcon.setVisibility(GONE);
+
         Drawable editDrawable = context.getResources().getDrawable(R.drawable.msg_edit);
         editDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_statisticChartLine_lightblue), PorterDuff.Mode.MULTIPLY));
         editIcon.setImageDrawable(editDrawable);
         editIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferDto offerDto = OfferController.getInstance().getOffer(offerId);
+                OfferDto offerDto = HtSQLite.getInstance().getOffer(offerUUID);
                 HtCreateOfferActivity fragment = new HtCreateOfferActivity();
                 parent.presentFragment(fragment);
                 fragment.setActionType(HtCreateOfferActivity.ActionType.EDIT);
@@ -154,7 +170,7 @@ public class HtChatMessageCell extends FrameLayout {
                 fragment.setTitle(offerDto.getTitle());
                 fragment.setTerms(offerDto.getTerms());
                 fragment.setPaymentConfig(offerDto.getConfigText());
-                fragment.setOfferId(offerId);
+                fragment.setOfferUUID(offerUUID);
             }
         });
         topLayer.addView(editIcon, LayoutHelper.createFrame(25, 25, Gravity.RIGHT, 0, 0, 20, 0));
@@ -166,45 +182,49 @@ public class HtChatMessageCell extends FrameLayout {
         archiveIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferController.getInstance().archiveOffer(offerId);
+                HtSQLite.getInstance().archiveOffer(offerUUID);
                 if(parent instanceof OffersActivity){
-                    ((OffersActivity) parent).addOffersToLayout(OfferController.getInstance().getAllOffers());
+                    ((OffersActivity) parent).addOffersToLayout(HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(parent.getCurrentAccount()).clientUserId));
                 }
             }
         });
         topLayer.addView(archiveIcon, LayoutHelper.createFrame(25, 25, Gravity.RIGHT, 0, 0, 20, 0));
         mainLayout.addView(topLayer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 0));
+
         LinearLayout photoLayout = new LinearLayout(context);
         photoLayout.setGravity(Gravity.CENTER);
-        BackupImageView photo = new BackupImageView(context);
-        photo.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
-        photo.setRoundRadius(AndroidUtilities.dp(4));
+        image = new BackupImageView(context);
+        image.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+        image.setRoundRadius(AndroidUtilities.dp(4));
         Bitmap b;
         ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir("offerImages", Context.MODE_PRIVATE);
-        File file = new File(directory, "offerImage" + offerId + ".jpg");
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
         if (file.exists()) {
             try {
                 b = BitmapFactory.decodeStream(new FileInputStream(file));
-                photo.setImageBitmap(b);
+                image.setImageBitmap(b);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        photoLayout.addView(photo, LayoutHelper.createLinear((int) (dpWidth * 0.82), 150));
+        photoLayout.addView(image, LayoutHelper.createLinear((int) (dpWidth * 0.82), 150));
         mainLayout.addView(photoLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0,12,0,8));
+
         descriptionLabel = new TextView(context);
         descriptionLabel.setText("Lorem ipsum some text some text some text some text some text some text some text");
         descriptionLabel.setTextSize(15);
         descriptionLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         descriptionLabel.setMaxLines(5);
         mainLayout.addView(descriptionLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
+
         LinearLayout showPropsLayout = new LinearLayout(context);
         showPropsLayout.setGravity(Gravity.CENTER);
         ImageView showPropsIcon = new ImageView(context);
         Drawable showPropsDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
         showPropsDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
         showPropsIcon.setImageDrawable(showPropsDrawable);
+
         LinearLayout viewDetailsFrame = new LinearLayout(context) {
             @Override
             public void setEnabled(boolean enabled) {
@@ -215,8 +235,9 @@ public class HtChatMessageCell extends FrameLayout {
         };
         viewDetailsFrame.setEnabled(true);
         viewDetailsFrame.setGravity(Gravity.CENTER);
+
         TextView viewDetailsLabel = new TextView(context);
-        viewDetailsLabel.setText("View Details");
+        viewDetailsLabel.setText(LocaleController.getString("HtViewDetails", R.string.HtViewDetails));
         viewDetailsLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
         viewDetailsLabel.setTextSize(15);
         viewDetailsLabel.setTypeface(viewDetailsLabel.getTypeface(), Typeface.BOLD);
@@ -232,8 +253,9 @@ public class HtChatMessageCell extends FrameLayout {
         showPropsLayout.addView(msgTimeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 15, 15, 20, 5));
         mainLayout.addView(showPropsLayout);
         mainLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT,LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 5,20,5));
-        LinearLayout animLayout = new LinearLayout(context);
-        animLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout expandableDetailsLayout = new LinearLayout(context);
+        expandableDetailsLayout.setOrientation(LinearLayout.VERTICAL);
         addressLabel = new TextView(context);
         addressLabel.setText("No. 489, 13th Street, Yousefabad District, Tehran, Iran");
         addressLabel.setTextSize(15);
@@ -244,45 +266,49 @@ public class HtChatMessageCell extends FrameLayout {
         addressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
         addressLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         addressLabel.setCompoundDrawablesWithIntrinsicBounds(addressDrawable, null, null, null);
-        animLayout.addView(addressLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
+        expandableDetailsLayout.addView(addressLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
+
         LinearLayout midLayer = new LinearLayout(context);
-        timeLabel = new TextView(context);
-        timeLabel.setText("01-01-2021");
-        timeLabel.setTextSize(14);
-        timeLabel.setTypeface(timeLabel.getTypeface(), Typeface.BOLD);
-        timeLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        expireLabel = new TextView(context);
+        expireLabel.setText("01-01-2021");
+        expireLabel.setTextSize(14);
+        expireLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
+        expireLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+
         Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
         timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
-        timeLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
-        timeLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
-        midLayer.addView(timeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 30, 20, 0, 20));
+        expireLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+        expireLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
+        midLayer.addView(expireLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 30, 20, 0, 20));
+
         rateLabel = new TextView(context);
         rateLabel.setText("50$ Per 1 Lesson");
         rateLabel.setTextSize(14);
-        rateLabel.setTypeface(timeLabel.getTypeface(), Typeface.BOLD);
+        rateLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
         rateLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         Drawable rateDrawable = context.getResources().getDrawable(R.drawable.offer);
         rateDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
         rateLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         rateLabel.setCompoundDrawablesWithIntrinsicBounds(rateDrawable, null, null, null);
         midLayer.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 20));
-        animLayout.addView(midLayer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 0, 0, 0));
+        expandableDetailsLayout.addView(midLayer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 0, 0, 0));
+
         LinearLayout bottomLayer = new LinearLayout(context);
         bottomLayer.setGravity(Gravity.CENTER);
-        animLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 60, 0, 0));
-        mainLayout.addView(animLayout);
+        expandableDetailsLayout.addView(new DividerCell(context), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 60, 0, 0));
+        mainLayout.addView(expandableDetailsLayout);
         showPropsIcon.setEnabled(true);
-        animLayout.setVisibility(GONE);
+        expandableDetailsLayout.setVisibility(GONE);
         showPropsLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!showingDetails){
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(animLayout, "scaleY" , 0f, 1f);
+                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(expandableDetailsLayout, "scaleY" , 0f, 1f);
                     anim3.setDuration(500);
                     anim3.start();
                     ObjectAnimator anim2 = ObjectAnimator.ofFloat(showPropsIcon, "rotation", 0, 180);
                     anim2.start();
-                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(animLayout, "alpha", 0f, 1f);
+                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(expandableDetailsLayout, "alpha", 0f, 1f);
                     anim4.setDuration(750);
                     anim4.start();
                     TranslateAnimation anim1 = new TranslateAnimation(
@@ -291,24 +317,22 @@ public class HtChatMessageCell extends FrameLayout {
                             Animation.RELATIVE_TO_SELF, -1f,
                             Animation.RELATIVE_TO_SELF,0f);
                     anim1.setDuration(300);
-                    animLayout.setVisibility(VISIBLE);
+                    expandableDetailsLayout.setVisibility(VISIBLE);
 
-                    animLayout.startAnimation(anim1);
+                    expandableDetailsLayout.startAnimation(anim1);
                 } else {
-                    animLayout.setVisibility(VISIBLE);
-/*                    ObjectAnimator anim1 = ObjectAnimator.ofFloat(animLayout, "scaleY", 1f, 0f);
-                    anim1.start();*/
+                    expandableDetailsLayout.setVisibility(VISIBLE);
                     TranslateAnimation anim1 = new TranslateAnimation(
                             Animation.RELATIVE_TO_SELF, 0f,
                             Animation.RELATIVE_TO_SELF, 0f,
                             Animation.RELATIVE_TO_SELF, 0f,
                             Animation.RELATIVE_TO_SELF,-1f);
                     anim1.setDuration(300);
-                    animLayout.startAnimation(anim1);
-                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(animLayout, "scaleY" , 1f, 0f);
+                    expandableDetailsLayout.startAnimation(anim1);
+                    ObjectAnimator anim3 = ObjectAnimator.ofFloat(expandableDetailsLayout, "scaleY" , 1f, 0f);
                     anim3.setDuration(500);
                     anim3.start();
-                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(animLayout, "alpha", 1f, 0f);
+                    ObjectAnimator anim4 = ObjectAnimator.ofFloat(expandableDetailsLayout, "alpha", 1f, 0f);
                     anim4.setDuration(750);
                     anim4.start();
                     anim1.setAnimationListener(new Animation.AnimationListener() {
@@ -317,7 +341,7 @@ public class HtChatMessageCell extends FrameLayout {
                         }
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            animLayout.setVisibility(GONE);
+                            expandableDetailsLayout.setVisibility(GONE);
                         }
                         @Override
                         public void onAnimationRepeat(Animation animation) {
@@ -337,10 +361,14 @@ public class HtChatMessageCell extends FrameLayout {
             }
         };
         buyLayout.setGravity(Gravity.CENTER);
+
         TextView buyLabel = new TextView(context);
-        buyLabel.setText("Buy");
+        buyLabel.setText(LocaleController.getString("HtBuy", R.string.HtBuy));
         buyLabel.setTextSize(16);
         buyLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        ShapeDrawable defaultDrawable3 = new ShapeDrawable(new RoundRectShape(new float[]{AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0, 0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4)}, null, null));
+        defaultDrawable3.getPaint().setColor(context.getResources().getColor(R.color.ht_green));
+        buyLayout.setBackground(defaultDrawable3);
         buyLabel.setTypeface(buyLabel.getTypeface(), Typeface.BOLD);
         Drawable buyDrawable = context.getResources().getDrawable(R.drawable.pay);
         buyLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
@@ -363,11 +391,15 @@ public class HtChatMessageCell extends FrameLayout {
                 setAlpha(enabled ? 1.0f : 0.5f);
             }
         };
+
         promoteLayout.setGravity(Gravity.CENTER);
         TextView promoteLabel = new TextView(context);
-        promoteLabel.setText("Promote");
+        promoteLabel.setText(LocaleController.getString("HtPromote", R.string.HtPromote));
         promoteLabel.setTextSize(16);
         promoteLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0, 0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4)}, null, null));
+        defaultDrawable.getPaint().setColor(context.getResources().getColor(R.color.ht_green));
+        promoteLayout.setBackground(defaultDrawable);
         promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
         Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.share);
         promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
@@ -389,11 +421,12 @@ public class HtChatMessageCell extends FrameLayout {
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, message != null ? message.messageText.toString() : messageText);
-                parent.getParentActivity().startActivity(Intent.createChooser(share, "Promote your Offer"));
+                parent.getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
             } catch (Exception e){
 
             }
         });
+
         viewLayout = new LinearLayout(context) {
             @Override
             public void setEnabled(boolean enabled) {
@@ -403,10 +436,14 @@ public class HtChatMessageCell extends FrameLayout {
         };
         viewLayout.setGravity(Gravity.CENTER);
         TextView viewLabel = new TextView(context);
-        viewLabel.setText("View");
+        viewLabel.setText(LocaleController.getString("HtView", R.string.HtView));
         viewLabel.setTextSize(16);
         viewLayout.setBackgroundColor(Theme.getColor(Theme.key_statisticChartLine_blue));
+        ShapeDrawable defaultDrawable2 = new ShapeDrawable(new RoundRectShape(new float[]{0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0}, null, null));
+        defaultDrawable2.getPaint().setColor(Theme.getColor(Theme.key_statisticChartLine_blue));
+        viewLayout.setBackground(defaultDrawable2);
         viewLabel.setTypeface(viewLabel.getTypeface(), Typeface.BOLD);
+
         Drawable viewDrawable = context.getResources().getDrawable(R.drawable.msg_views);
         viewLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         viewDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
@@ -425,22 +462,18 @@ public class HtChatMessageCell extends FrameLayout {
         viewLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HtCreateOfferActivity fragment = new HtCreateOfferActivity();
-                parent.presentFragment(fragment);
-                fragment.setActionType(HtCreateOfferActivity.ActionType.VIEW);
-                fragment.setCanEdit(false);
-                fragment.setTerms(terms);
-                fragment.setPaymentConfig(paymentConfig);
-                fragment.setTitle(titleLabel.getText().toString());
-                fragment.setLocationAddress(addressLabel.getText().toString());
-                fragment.setCategory(category);
-                fragment.setSubCategory(subCategory);
-                fragment.setCurrency(currency, 0);
-                fragment.setFee(rate, 0);
-                fragment.setRateType(rateType, 0);
-                fragment.setDescription(descriptionLabel.getText().toString());
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, 0, offerUUID);
+                AlertDialog dialog = detailsPopUp.create();
+                detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                parent.showDialog(dialog);
             }
         });
+
         LinearLayout forwardLayout = new LinearLayout(context);
         forwardLayout.setGravity(Gravity.CENTER);
         ImageView forwardImage = new ImageView(context);
@@ -515,10 +548,6 @@ public class HtChatMessageCell extends FrameLayout {
         }
     }
 
-    public void setOfferId(int offerId){
-        this.offerId = offerId;
-    }
-
     public void setArchived(boolean archived){
         this.archived = archived;
         if(archived){
@@ -526,6 +555,26 @@ public class HtChatMessageCell extends FrameLayout {
             archiveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_graySection), PorterDuff.Mode.MULTIPLY));
             archiveIcon.setOnClickListener(null);
             archiveIcon.setVisibility(GONE);
+        }
+    }
+
+    public String getOfferUUID() {
+        return offerUUID;
+    }
+
+    public void setOfferUUID(String offerUUID) {
+        this.offerUUID = offerUUID;
+        Bitmap b;
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
+        if (file.exists()) {
+            try {
+                b = BitmapFactory.decodeStream(new FileInputStream(file));
+                image.setImageBitmap(b);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

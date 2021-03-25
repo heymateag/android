@@ -165,6 +165,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
+import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtFiltersCell;
 
 import java.util.ArrayList;
@@ -1739,6 +1740,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public View createView(final Context context) {
+
         searching = false;
         searchWas = false;
         pacmanAnimation = null;

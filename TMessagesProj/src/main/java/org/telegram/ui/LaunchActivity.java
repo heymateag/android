@@ -134,6 +134,7 @@ import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.DatabaseWatchDog;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
+import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.OffersActivity;
 
 import java.io.File;
@@ -211,7 +212,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DatabaseWatchDog.getInstance().config();
+        HtSQLite.setInstance(this);
+        DatabaseWatchDog.getInstance().config(currentAccount);
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         currentAccount = UserConfig.selectedAccount;

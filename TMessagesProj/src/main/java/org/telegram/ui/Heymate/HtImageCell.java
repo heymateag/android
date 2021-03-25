@@ -11,6 +11,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 
 public class HtImageCell extends ImageView {
+
     public HtImageCell(Context context, BaseFragment parentFragment, boolean inner) {
         super(context);
         Drawable drawable = context.getResources().getDrawable(R.drawable.theme_preview_image);

@@ -25,6 +25,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class HtOfferDialogCell extends FrameLayout {
+
     private Context context;
     private TLRPC.Dialog dialog;
     private BackupImageView avatar;
@@ -39,36 +40,45 @@ public class HtOfferDialogCell extends FrameLayout {
     public HtOfferDialogCell(@NonNull Context context) {
         super(context);
         this.context = context;
+
         LinearLayout holderLayout = new LinearLayout(context);
         holderLayout.setOrientation(LinearLayout.VERTICAL);
+
         LinearLayout mainLayout = new LinearLayout(context);
         avatar = new BackupImageView(context);
         avatar.setRoundRadius(AndroidUtilities.dp(4));
         mainLayout.addView(avatar, LayoutHelper.createFrame(40, 40, Gravity.LEFT, 10, 10, 17, 10));
-        LinearLayout statusbar = new LinearLayout(context);
-        statusbar.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        mainLayout.addView(statusbar, LayoutHelper.createFrame(2, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0,8,0,12));
+
+        LinearLayout statusBar = new LinearLayout(context);
+        statusBar.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        mainLayout.addView(statusBar, LayoutHelper.createFrame(2, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0,8,0,12));
+
         LinearLayout titleLayout = new LinearLayout(context);
         titleLayout.setOrientation(LinearLayout.VERTICAL);
         titleLabel = new TextView(context);
         titleLayout.addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 10,10,10,0));
+
         TextView categoryLabel = new TextView(context);
         categoryLabel.setText("Nail Implants");
         categoryLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         categoryLabel.setTextSize(13);
         titleLayout.addView(categoryLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 10,0,10,10));
         mainLayout.addView(titleLayout, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,0.99f));
+
         LinearLayout rightLayout = new LinearLayout(context);
         rightLayout.setGravity(Gravity.RIGHT);
         rightLayout.setOrientation(LinearLayout.VERTICAL);
+
         timeLabel = new TextView(context);
         timeLabel.setTextSize(11);
         timeLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
         rightLayout.addView(timeLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 10,10,10,10));
+
         LinearLayout unreadLayout = new LinearLayout(context);
         unreadLayout.setGravity(Gravity.CENTER);
         unreadLayout.setBackgroundColor(Theme.getColor(Theme.key_voipgroup_overlayGreen1));
         unreadLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(14), Theme.getColor(Theme.key_voipgroup_overlayGreen1)));
+
         unreadLabel = new TextView(context);
         unreadLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         unreadLabel.setTextSize(12);
