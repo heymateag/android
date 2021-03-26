@@ -308,6 +308,10 @@ public class CeloSDK {
         try {
             salt = ODISSaltUtil.getSalt(mContext, mContractKit, mCeloContext.odisURL, mCeloContext.odisPublicKey, phoneNumber);
         } catch (CeloException e) {
+            if (isSaltHasFailedBecauseOfBrandNewAccount(e)) {
+                return new AttestationsWrapper.AttestationsStatus(false, AttestationRequester.NUM_ATTESTATIONS_REQUIRED, 0, 0);
+            }
+
             throw new CeloException(CeloError.SALTING_ERROR, e);
         }
 
@@ -409,10 +413,6 @@ public class CeloSDK {
                 contractKit = ContractKit.build(new HttpService(mCeloContext.networkAddress));
 
                 contractKit.addAccount(mAccount);
-
-                if (!contractKit.contracts.getAccounts().isAccount(contractKit.getAddress()).send()) {
-                    contractKit.contracts.getAccounts().createAccount().send();
-                }
             } catch (Throwable t) {
                 throw new CeloException(CeloError.NETWORK_ERROR, t);
             }

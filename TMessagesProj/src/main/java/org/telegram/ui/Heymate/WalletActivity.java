@@ -166,7 +166,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                 }
                 return;
             case HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED:
-                CeloException error = (CeloException) args[1];
+                CeloException error = (CeloException) args[2];
 
                 mCanUpdateVerifiedStatus = error != null && error.getMainCause().getError() == CeloError.NETWORK_ERROR;
 
@@ -305,7 +305,8 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                             .setPositiveButton("Go", (dialog, which) -> {
                                 dialog.dismiss();
                                 presentFragment(new AttestationActivity(), true);
-                            });
+                            })
+                            .show();
                     return;
                 }
 
@@ -317,6 +318,12 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                 mImageRightButton.setAlpha(1f);
             }
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        finishFragment(true);
+        return super.onBackPressed();
     }
 
 }

@@ -1,5 +1,6 @@
 package org.telegram.ui.Heymate.widget;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -16,7 +17,10 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
@@ -32,7 +36,7 @@ public class PinInput extends View {
 
     private static final int DIGIT_COUNT = 8;
     private static final float DIGIT_GAP = 12;
-    private static final float INDICATOR_HEIGHT = 4;
+    private static final float INDICATOR_HEIGHT = 2;
     private static final float MIN_TEXT_SIZE = 8;
     private static final float MAX_TEXT_SIZE = 32;
     private static final float MAX_TEXT_MARGIN = 4;
@@ -40,6 +44,8 @@ public class PinInput extends View {
     public interface PinReceiver {
 
         void onPinReady(String pin);
+
+        void onPinNotReady();
 
     }
 
@@ -95,6 +101,17 @@ public class PinInput extends View {
         mPin.setFilters(new InputFilter[] { new InputFilter.LengthFilter(DIGIT_COUNT) });
 
         setFocusable(true);
+        setFocusableInTouchMode(true);
+
+        setOnClickListener(v -> {
+            if (!hasFocus()) {
+                requestLayout();
+            }
+            else {
+                mIMM.showSoftInput(this, InputMethodManager.SHOW_FORCED);
+            }
+        });
+        setOnLongClickListener(v -> showContextMenu());
     }
 
     public void setPinReceiver(PinReceiver pinReceiver) {
@@ -137,6 +154,11 @@ public class PinInput extends View {
     }
 
     @Override
+    protected void onCreateContextMenu(ContextMenu menu) {
+        menu.add(0, android.R.id.paste, 0, android.R.string.paste);
+    }
+
+    @Override
     public boolean onCheckIsTextEditor() {
         return true;
     }
@@ -152,8 +174,9 @@ public class PinInput extends View {
         return new BaseInputConnection(this, false) {
 
             @Override
-            public boolean performPrivateCommand(String action, Bundle data) {
-                return super.performPrivateCommand(action, data);
+            public boolean performEditorAction(int actionCode) {
+                mIMM.hideSoftInputFromWindow(getWindowToken(), 0);
+                return true;
             }
 
             @Override
@@ -196,6 +219,8 @@ public class PinInput extends View {
                 else if (id == android.R.id.cut) {
                     mPin.clear();
                     onPinChanged();
+
+                    return true;
                 }
 
                 return false;
@@ -206,7 +231,7 @@ public class PinInput extends View {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        switch (event.getKeyCode()) {
+        switch (keyCode) {
             case KeyEvent.KEYCODE_DEL:
                 if (mPin.length() > 0) {
                     mPin.delete(mPin.length() - 1, mPin.length());
@@ -364,6 +389,9 @@ public class PinInput extends View {
             if (notifyPin(mPin.toString())) {
                 mIMM.hideSoftInputFromWindow(getWindowToken(), 0);
             }
+        }
+        else if (mPinReceiver != null) {
+            mPinReceiver.onPinNotReady();
         }
 
         invalidate();

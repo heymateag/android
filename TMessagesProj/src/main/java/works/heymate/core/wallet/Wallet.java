@@ -23,7 +23,7 @@ public class Wallet {
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
 
-    private static final String PREFERENCES = "heymate_celo_";
+    private static final String PREFERENCES = "heymate_celo_1"; // TODO clear preferences name
     private static final String KEY_PUBLIC_KEY = "public_key";
     private static final String KEY_PRIVATE_KEY = "private_key";
 
@@ -166,9 +166,9 @@ public class Wallet {
                     }
                     else {
                         mVerifiedStatus = null;
-                    }
 
-                    Log.e(TAG, "Failed to get verified status", errorCause);
+                        Log.e(TAG, "Failed to get verified status", errorCause);
+                    }
 
                     HeymateEvents.notify(HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED, Wallet.this, mVerifiedStatus, errorCause);
         });
@@ -237,7 +237,7 @@ public class Wallet {
     }
 
     public String getMnemonic() {
-        if (!isCreating()) {
+        if (isCreating()) {
             return null;
         }
 

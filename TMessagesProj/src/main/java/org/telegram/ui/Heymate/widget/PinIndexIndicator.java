@@ -161,7 +161,7 @@ public class PinIndexIndicator extends View {
         float nextEndX = currentX;
 
         if (mIndex < COUNT - 1) {
-            float nextX = nextStartX * (1 - mRatio) + nextEndX + mRatio;
+            float nextX = nextStartX * (1 - mRatio) + nextEndX * mRatio;
             canvas.drawCircle(nextX, centerY, mRadius, mOthersPaint);
         }
 
@@ -172,7 +172,7 @@ public class PinIndexIndicator extends View {
         mHelperRect.bottom = centerY + mRadius;
         canvas.drawRoundRect(mHelperRect, mRadius, mRadius, mMainPaint);
 
-        currentX = mHelperRect.right + 2 * mRadius;
+        currentX += 8 * mRadius;
 
         for (int i = mIndex + 2; i < COUNT; i++) {
             canvas.drawCircle(currentX, centerY, mRadius, mOthersPaint);

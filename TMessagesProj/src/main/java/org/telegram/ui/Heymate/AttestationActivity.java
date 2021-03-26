@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
@@ -97,10 +99,20 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
             }
         });
 
-        mInputCode.setPinReceiver(pin -> {
-            mPin = pin;
+        mInputCode.setPinReceiver(new PinInput.PinReceiver() {
 
-            updateState();
+            @Override
+            public void onPinReady(String pin) {
+                mPin = pin;
+                updateState();
+            }
+
+            @Override
+            public void onPinNotReady() {
+                mPin = null;
+                updateState();
+            }
+
         });
 
         mButtonNext.setOnClickListener(v -> {
@@ -164,7 +176,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
     public void onHeymateEvent(int event, Object... args) {
         switch (event) {
             case HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED:
-                CeloException error = (CeloException) args[1];
+                CeloException error = (CeloException) args[2];
 
                 mCanUpdateVerifiedStatus = error != null && error.getMainCause().getError() == CeloError.NETWORK_ERROR;
 
@@ -273,12 +285,12 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
                 mCanRequestMoreAttestations = false;
 
                 Toast.makeText(mButtonNext.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
-
-                updateState();
             }
             else {
                 // Done. Await the SMS
             }
+
+            updateState();
         });
 
         return true;
@@ -292,6 +304,12 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         mButtonNext.setEnabled(nextEnabled);
         mTextNext.setAlpha(nextEnabled ? 1f : 0.6f);
         mImageNext.setAlpha(nextEnabled ? 1f : 0.6f);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        finishFragment(true);
+        return super.onBackPressed();
     }
 
 }
