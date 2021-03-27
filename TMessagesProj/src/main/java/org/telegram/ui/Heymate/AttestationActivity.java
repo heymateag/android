@@ -193,8 +193,8 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         mInputCode.setIndicatorColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
         mIndicatorStep.setMainColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
         mIndicatorStep.setOthersColor(Theme.getColor(Theme.key_divider));
-        mTextNext.setTextColor(Theme.getColor(Theme.key_actionBarDefault));
-        mImageNext.setColorFilter(Theme.getColor(Theme.key_actionBarDefault), PorterDuff.Mode.SRC_IN);
+        mTextNext.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
+        mImageNext.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
         mButtonNext.setBackgroundColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
     }
 

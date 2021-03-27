@@ -179,10 +179,10 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
         content.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         mTextTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mTextStatus.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        mTextLeftButton.setTextColor(Theme.getColor(Theme.key_actionBarDefault));
-        mTextRightButton.setTextColor(Theme.getColor(Theme.key_actionBarDefault));
-        mImageLeftButton.setColorFilter(Theme.getColor(Theme.key_actionBarDefault), PorterDuff.Mode.SRC_IN);
-        mImageRightButton.setColorFilter(Theme.getColor(Theme.key_actionBarDefault), PorterDuff.Mode.SRC_IN);
+        mTextLeftButton.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
+        mTextRightButton.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
+        mImageLeftButton.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
+        mImageRightButton.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
         content.findViewById(R.id.divider).setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         content.findViewById(R.id.bottombar).setBackgroundColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
     }
