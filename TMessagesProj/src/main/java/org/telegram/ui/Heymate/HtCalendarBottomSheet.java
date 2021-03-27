@@ -51,10 +51,10 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
     public HtCalendarBottomSheet(Context context, boolean needFocus, HtCreateOfferActivity parent) {
         super(context, needFocus);
-        initSheet(context);
+        initSheet(context, parent);
     }
 
-    public void initSheet(Context context) {
+    public void initSheet(Context context, HtCreateOfferActivity parent) {
         setDisableScroll(true);
         containerView = new LinearLayout(context);
         checkBoxesState = new HashMap<>();
@@ -81,6 +81,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
         applyImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                parent.setDateSlots(getDates());
                 dismiss();
             }
         });
@@ -288,7 +289,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
                                     endTimeCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                                     endTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                                     endTimeCal.set(Calendar.MINUTE, minute);
-                                    selectedStartDates.put(newDateCheckBox.getId(), endTimeCal.toInstant().toEpochMilli());
+                                    selectedEndDates.put(newDateCheckBox.getId(), endTimeCal.toInstant().toEpochMilli());
                                 }
                             }, 0, 0, true);
                             mTimePicker.setTitle(LocaleController.getString("HtSelectEndTime", R.string.HtSelectEndTime));

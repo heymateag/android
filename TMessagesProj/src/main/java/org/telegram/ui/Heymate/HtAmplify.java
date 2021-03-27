@@ -4,32 +4,21 @@ import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
-import com.amazonaws.mobileconnectors.appsync.sigv4.BasicAPIKeyAuthProvider;
-import com.amazonaws.mobileconnectors.appsync.sigv4.BasicCognitoUserPoolsAuthProvider;
-import com.amazonaws.mobileconnectors.appsync.sigv4.CognitoUserPoolsAuthProvider;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserPool;
-import com.amazonaws.regions.Regions;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.aws.ApiAuthProviders;
 import com.amplifyframework.api.aws.sigv4.ApiKeyAuthProvider;
-import com.amplifyframework.api.graphql.QueryType;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
-import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
-import com.amplifyframework.auth.cognito.AWSCognitoAuthSession;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
-import com.apollographql.apollo.api.Query;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
-import java.util.Base64;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -40,7 +29,6 @@ import java.util.concurrent.Future;
 public class HtAmplify {
 
     private static HtAmplify instance;
-    private AWSAppSyncClient awsClient;
 
     private static String API_KEY = "da2-gmv546zpg5edxi6eej66aq263u";
 
@@ -99,7 +87,150 @@ public class HtAmplify {
                 error -> Log.e("HtAmplify", "Create failed", error)
         );
 
+        ArrayList<Long> times = dto.getDateSlots();
+        for (int i = 0; i < times.size(); i += 2) {
+
+            TimeSlot timeSlot = TimeSlot.builder()
+                    .startTime(times.get(i).intValue())
+                    .endTime(times.get(i + 1).intValue())
+                    .offerId(newOffer.getId())
+                    .status(HtTimeSlotStatus.AVAILABLE.ordinal())
+                    .clientUserId("0")
+                    .build();
+
+            Amplify.API.mutate(ModelMutation.create(timeSlot),
+                    response -> {
+                        Log.i("HtAmplify", "Time Slot created");
+                    },
+                    error -> Log.e("HtAmplify", "Time Slot creation failed", error)
+            );
+        }
+
         return newOffer;
+    }
+
+    public void bookTimeSlot(String timeSlotId, String clientUserId) {
+        Log.i("HtAmplify", "Booking a time slot.");
+
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future future = pool.submit(new Callable() {
+            @Override
+            public Boolean call() throws Exception {
+                Amplify.API.query(
+                        ModelQuery.list(TimeSlot.class, TimeSlot.ID.eq(timeSlotId)),
+                        response -> {
+                            if (response.getData() != null) {
+                                for (TimeSlot timeSlot : response.getData()) {
+                                    TimeSlot toUpdate = timeSlot.copyOfBuilder()
+                                            .clientUserId(clientUserId)
+                                            .status(HtTimeSlotStatus.BOOKED.ordinal())
+                                            .build();
+
+                                    Amplify.API.mutate(
+                                            ModelMutation.update(toUpdate),
+                                            response2 -> {
+                                                Log.i("HtAmplify", "TimeSlot updated.");
+                                            },
+                                            error2 -> Log.e("HtAmplify", "Failed to update", error2)
+                                    );
+                                }
+                            }
+                        },
+                        error -> Log.e("HtAmplify", "Query failure", error)
+                );
+
+                return true;
+            }
+        });
+    }
+
+    public void startTimeSlot(String timeSlotId) {
+        Log.i("HtAmplify", "Starting a time slot.");
+
+        updateTimeSlot(timeSlotId, HtTimeSlotStatus.STARTED);
+    }
+
+    public void endTimeSlot(String timeSlotId) {
+        Log.i("HtAmplify", "Ending a time slot.");
+
+        updateTimeSlot(timeSlotId, HtTimeSlotStatus.ENDED);
+    }
+
+    public void cancelTimeSlot(String timeSlotId) {
+        Log.i("HtAmplify", "Cancelling a time slot.");
+
+        updateTimeSlot(timeSlotId, HtTimeSlotStatus.CANCELLED);
+    }
+
+    private void updateTimeSlot(String timeSlotId, HtTimeSlotStatus status) {
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future future = pool.submit(new Callable() {
+            @Override
+            public Boolean call() throws Exception {
+                Amplify.API.query(
+                        ModelQuery.list(TimeSlot.class, TimeSlot.ID.eq(timeSlotId)),
+                        response -> {
+                            if (response.getData() != null) {
+                                for (TimeSlot timeSlot : response.getData()) {
+                                    TimeSlot toUpdate = timeSlot.copyOfBuilder()
+                                            .status(status.ordinal())
+                                            .build();
+
+                                    Amplify.API.mutate(
+                                            ModelMutation.update(toUpdate),
+                                            response2 -> {
+                                                Log.i("HtAmplify", "TimeSlot updated.");
+                                            },
+                                            error2 -> Log.e("HtAmplify", "Failed to update", error2)
+                                    );
+                                }
+                            }
+                        },
+                        error -> Log.e("HtAmplify", "Query failure", error)
+                );
+
+                return true;
+            }
+        });
+    }
+
+    public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId) {
+        Log.i("HtAmplify", "Getting time slots");
+
+        Log.i("HtAmplify", "Getting Offers");
+
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<ArrayList<TimeSlot>> future = pool.submit(new Callable<ArrayList<TimeSlot>>() {
+            @Override
+            public ArrayList<TimeSlot> call() throws Exception {
+                ArrayList<TimeSlot> timeSlots = new ArrayList();
+
+                Amplify.API.query(
+                        ModelQuery.list(
+                                TimeSlot.class, TimeSlot.OFFER_ID.eq("" + offerId)
+                                        .and(TimeSlot.STATUS.eq(HtTimeSlotStatus.AVAILABLE.ordinal()))),
+                        response -> {
+                            if (response.getData() != null) {
+                                for (TimeSlot timeSlot : response.getData()) {
+                                    timeSlots.add(timeSlot);
+                                }
+                            }
+                        },
+                        error -> Log.e("HtAmplify", "Query failure", error)
+                );
+                return timeSlots;
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public ArrayList<Offer> getOffers(int userId, int currentAccount) {
@@ -110,7 +241,6 @@ public class HtAmplify {
             @Override
             public ArrayList<Offer> call() throws Exception {
                 ArrayList<Offer> offers = new ArrayList();
-
                 Amplify.API.query(
                         ModelQuery.list(Offer.class, Offer.USER_ID.eq("" + userId)),
                         response -> {
