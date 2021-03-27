@@ -58,7 +58,7 @@ public class SecureWalletActivity extends BaseFragment {
         mButtonPin = new RadioButtonCellWithIcon(context);
         mButtonPin.setTextAndValue(Texts.get(Texts.SECURE_PIN).toString(), Texts.get(Texts.SECURE_PIN_DESCRIPTION).toString(), false, false);
         mButtonPin.setIcon(R.drawable.ic_pin);
-        content.addView(mButtonPin, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 31));
+        content.addView(mButtonPin, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
         content.addView(new ShadowSectionCell(context, 12, Theme.getColor(Theme.key_windowBackgroundGray)), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
