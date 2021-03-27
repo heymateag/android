@@ -106,7 +106,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
             }
 
             if (mWallet.isCreated()) {
-                // TODO SECURE
+                presentFragment(new SecureWalletActivity());
             }
             else {
                 mWallet.createNew();

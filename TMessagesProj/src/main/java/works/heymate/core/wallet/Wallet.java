@@ -75,6 +75,10 @@ public class Wallet {
         mPhoneNumber = phoneNumber;
     }
 
+    SharedPreferences getPreferences() {
+        return mPreferences;
+    }
+
     public boolean isCreated() {
         return mPreferences.contains(KEY_PRIVATE_KEY);
     }

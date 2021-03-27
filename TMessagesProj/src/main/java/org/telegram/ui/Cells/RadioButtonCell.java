@@ -71,7 +71,7 @@ public class RadioButtonCell extends FrameLayout {
         valueTextView.setMaxLines(0);
         valueTextView.setSingleLine(false);
         valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(12));
-        addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 17 : 61), 35, (LocaleController.isRTL ? 61 : 17), 0));
+        addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 17 : 61), 35, (LocaleController.isRTL ? 61 : 17), 31));
     }
 
     @Override

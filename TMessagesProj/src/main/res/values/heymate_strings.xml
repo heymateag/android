@@ -24,6 +24,11 @@
     <string name="hm_wallet_detected">Congratulations!</string>
     <string name="hm_wallet_detected_message">You have a new wallet! Would you like to secure your wallet with a biometric/PIN or continue with your transaction.\n\nWrite down the key in case you lose your phone.\n__Show my key__</string>
     
+    <string name="hm_secure_biometric">Biometric</string>
+    <string name="hm_secure_biometric_description">Perform a biometric identification before every payment.</string>
+    <string name="hm_secure_pin">Pin</string>
+    <string name="hm_secure_pin_description">Enter your device\'s pin before every payment.</string>
+    
     <string name="hm_attestation_check_messages">Check your messages</string>
     <string name="hm_attestation_check_message_description">Please enter the codes received via the three SMSs</string>
     <string name="hm_attestation_requesting">Please wait</string>

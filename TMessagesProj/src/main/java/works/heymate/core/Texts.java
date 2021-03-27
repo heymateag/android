@@ -30,6 +30,11 @@ public class Texts {
     public static final String WALLET_DETECTED = "wallet_detected";
     public static final String WALLET_DETECTED_MESSAGE = "wallet_detected_message";
 
+    public static final String SECURE_BIOMETRIC = "secure_biometric";
+    public static final String SECURE_BIOMETRIC_DESCRIPTION = "secure_biometric_description";
+    public static final String SECURE_PIN = "secure_pin";
+    public static final String SECURE_PIN_DESCRIPTION = "secure_pin_description";
+
     public static final String ATTESTATION_CHECK_MESSAGES = "attestation_check_messages";
     public static final String ATTESTATION_CHECK_MESSAGES_DESCRIPTION = "attestation_check_message_description";
     public static final String ATTESTATION_REQUESTING = "attestation_requesting";
