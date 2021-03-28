@@ -3,15 +3,11 @@ package org.telegram.ui.Heymate;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.InputType;
-import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -29,8 +26,10 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
-import java.util.Arrays;
 import java.util.HashMap;
+
+import works.heymate.core.Utils;
+import works.heymate.core.offer.OfferUtils;
 
 public class HtPaymentConfigInputCell extends LinearLayout {
 
@@ -42,6 +41,14 @@ public class HtPaymentConfigInputCell extends LinearLayout {
     private String delay1 = "30";
     private String cancellation1 = "2";
     private String cancellation2 = "6";
+
+    private String delayMinutes = "30";
+    private String delayPercent = null;
+    private String initialDeposit = null;
+    private String cancelHours1 = "2";
+    private String cancelPercent1 = null;
+    private String cancelHours2 = "6";
+    private String cancelPercent2 = null;
 
     public HtPaymentConfigInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, BaseFragment parent, HtCreateOfferActivity.ActionType actionType) {
         super(context);
@@ -210,6 +217,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                     if (feeTextField.getText().toString().length() > 0) {
                         parametersViews[finalI2].setText(LocaleController.getString("HtDelayInStart", R.string.HtDelayInStart) + " > " + feeTextField.getText().toString() + " " + LocaleController.getString("HtMinutes", R.string.HtMinutes));
                         delay1 = feeTextField.getText().toString();
+                        delayMinutes = delay1;
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -251,8 +259,10 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0)
+                    if (feeTextField.getText().toString().length() > 0) {
                         parametersViews[i1].setText(feeTextField.getText().toString() + "%");
+                    }
+                    delayPercent = feeTextField.getText().toString();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
@@ -306,6 +316,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         parametersViews[i2].setText(feeTextField.getText().toString() + "%");
+                    initialDeposit = feeTextField.getText().toString();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
@@ -350,6 +361,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                     if (feeTextField.getText().toString().length() > 0) {
                         parametersViews[finalI1].setText(LocaleController.getString("HtCancellationIn", R.string.HtCancellationIn) + " < " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", R.string.HtHoursOfStart));
                         cancellation1 = feeTextField.getText().toString();
+                        cancelHours1 = cancellation1;
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -393,6 +405,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         parametersViews[i3].setText(feeTextField.getText().toString() + "%");
+                    cancelPercent1 = feeTextField.getText().toString();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
@@ -437,6 +450,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                     if (feeTextField.getText().toString().length() > 0) {
                         parametersViews[finalI].setText(LocaleController.getString("HtCancellationIn", R.string.HtCancellationIn) + " " + cancellation1 + " - " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", R.string.HtHoursOfStart));
                         cancellation2 = feeTextField.getText().toString();
+                        cancelHours2 = cancellation2;
                     }
                 });
                 AlertDialog alertDialog = builder.create();
@@ -481,6 +495,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         parametersViews[i4].setText(feeTextField.getText().toString() + "%");
+                    cancelPercent2 = feeTextField.getText().toString();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
@@ -501,8 +516,20 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         parametersViews[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
     }
 
-    public Object[] getRes() {
-        return Arrays.stream(parametersViews).map((a) -> a.getText().toString()).toArray();
+    public JSONObject getRes() {
+        JSONObject json = new JSONObject();
+
+        Utils.putValues(json,
+                OfferUtils.DELAY_TIME, delayMinutes,
+                OfferUtils.DELAY_PERCENT, delayPercent,
+                OfferUtils.INITIAL_DEPOSIT, initialDeposit,
+                OfferUtils.CANCEL_HOURS1, cancelHours1,
+                OfferUtils.CANCEL_PERCENT1, cancelPercent1,
+                OfferUtils.CANCEL_HOURS2, cancelHours2,
+                OfferUtils.CANCEL_PERCENT2, cancelPercent2
+        );
+
+        return json;
     }
 
     public void setActionType(HtCreateOfferActivity.ActionType actionType){

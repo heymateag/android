@@ -211,6 +211,7 @@ import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewHelper;
 import org.telegram.ui.Components.voip.VoIPHelper;
+import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.HtChatMessageCell;
 
 import java.io.BufferedWriter;
@@ -228,6 +229,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import works.heymate.core.offer.OfferUtils;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -21105,28 +21108,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 });
                     }
                     String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
-                    if(finalMessage.startsWith("https://ht.me/___HtOffer___") && message.messageText.toString().length() > 10) {
-                        try {
-                            String decoded = new String((Base64.getDecoder().decode(finalMessage.substring("https://ht.me/___HtOffer___".length()))));
-                            String[] offerDetails = decoded.split("___");
-                            offerCell.titleLabel.setText(offerDetails[0]);
-                            offerCell.descriptionLabel.setText(offerDetails[10]);
-                            offerCell.rateLabel.setText(offerDetails[1] + offerDetails[3] + " " + offerDetails[2]);
-                            offerCell.msgTimeLabel.setText("Valid until\n"  + offerDetails[5]);
-                            offerCell.addressLabel.setText(offerDetails[4]);
-                            offerCell.setRate(offerDetails[1]);
-                            offerCell.setRateType(offerDetails[2]);
-                            offerCell.setCurrency(offerDetails[3]);
-                            offerCell.setCategory(offerDetails[6]);
-                            offerCell.setSubCategory(offerDetails[7]);
-                            offerCell.setPaymentConfig(offerDetails[8]);
-                            offerCell.setTerms(offerDetails[9]);
-                            offerCell.expireLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
-                            offerCell.setOut(message.isOut());
-                            offerCell.setMessage(message);
-                        } catch (Exception e) {
-
-                        }
+                    Offer offer = OfferUtils.readBeautiful(finalMessage);
+                    if (offer != null) {
+                        offerCell.setOffer(offer);
+                        offerCell.titleLabel.setText(offer.getTitle());
+                        offerCell.descriptionLabel.setText(offer.getDescription());
+                        offerCell.rateLabel.setText(offer.getRate() + offer.getCurrency() + " " + offer.getRateType());
+                        offerCell.msgTimeLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
+                        offerCell.addressLabel.setText(offer.getLocationData());
+                        offerCell.setRate(offer.getRate());
+                        offerCell.setRateType(offer.getRateType());
+                        offerCell.setCurrency(offer.getCurrency());
+                        offerCell.setCategory(offer.getCategory());
+                        offerCell.setSubCategory(offer.getSubCategory());
+                        offerCell.setPaymentConfig(offer.getTermsConfig());
+                        offerCell.setTerms(offer.getTerms());
+                        offerCell.expireLabel.setText("Valid until\n"  + offer.getExpiry().format());
+                        offerCell.setOut(message.isOut());
+                        offerCell.setMessage(message);
                     }
                 }
                 if (view instanceof ChatMessageCell) {
@@ -21352,13 +21351,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             });
                 }
                 String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
-                if(finalMessage.startsWith("https://ht.me/___HtOffer___") && message.messageText.toString().length() > 10) {
-                    try {
-                        String decoded = new String((Base64.getDecoder().decode(finalMessage.substring("https://ht.me/___HtOffer___".length()))));
-                        return 10;
-                    } catch (Exception e) {
-                        return 0;
-                    }
+                if(OfferUtils.readBeautiful(finalMessage) != null) {
+                    return 10;
                 }
                 return messages.get(position - messagesStartRow).contentType;
             } else if (position == botInfoRow) {

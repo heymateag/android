@@ -44,8 +44,6 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_MESSAGE_PREFIX;
-
 public class OffersActivity extends BaseFragment {
 
     private boolean inited = false;
@@ -244,8 +242,8 @@ public class OffersActivity extends BaseFragment {
             offerCell1.setPaymentConfig(offerDto.getConfigText());
             offerCell1.setTerms(offerDto.getTerms());
             offerCell1.expireLabel.setText(offerDto.getTime());
-            offerCell1.setParent(this);
-            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));
+            offerCell1.setParent(this); // TODO
+//            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));
             offersLayout.addView(offerCell1);
             ObjectAnimator anim1 = ObjectAnimator.ofFloat(offerCell1, "scaleX", 0, 1);
             anim1.start();

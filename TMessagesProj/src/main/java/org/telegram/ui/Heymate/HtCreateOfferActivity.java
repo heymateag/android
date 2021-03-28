@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -56,6 +57,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import works.heymate.core.offer.OfferUtils;
+
 public class HtCreateOfferActivity extends BaseFragment {
 
     public static final String ARGUMENTS_CATEGORY = "0_Category";
@@ -70,7 +73,6 @@ public class HtCreateOfferActivity extends BaseFragment {
     public static final String OFFER_IMAGES_DIR = "offerImages";
     public static final String OFFER_IMAGES_NAME = "offerImage";
     public static final String OFFER_IMAGES_EXTENSION = ".jpg";
-    public static final String OFFER_MESSAGE_PREFIX = "___HtOffer___";
     
     private Context context;
     private ImageView cameraImage;
@@ -727,13 +729,9 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
-                Object[] configRes = paymentInputCell.getRes();
-                String configText = "{";
-                int ii = 0;
-                for (Object config : configRes) {
-                    configText = configText + "\"arg" + ii++ + "\" : \"" + config.toString() + "\",";
-                }
-                configText = configText.substring(0, configText.length() - 1) + "}";
+                // TODO Wrong promote logic.
+
+                String configText = paymentInputCell.getRes().toString();
 
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
@@ -758,15 +756,8 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                TLRPC.Message message = new TLRPC.TL_message();
-                message.message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer);
-                ArrayList<TLRPC.MessageEntity> entities = new ArrayList<>();
-                TLRPC.TL_messageEntityTextUrl url = new TLRPC.TL_messageEntityTextUrl();
-                url.url = "https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(ARGUMENTS_PRICE)) + "___" + priceInputCell.getRes(ARGUMENTS_RATE_TYPE) + "___" + priceInputCell.getRes(ARGUMENTS_CURRENCY) + "___" + locationInputCell.getRes(ARGUMENTS_ADDRESS) + "___" + expireInputCell.getRes(ARGUMENTS_EXPIRE) + "___" + categoryInputCell.getRes(ARGUMENTS_CATEGORY) + "___" + categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) + "___" + configText + "___" + termsInputCell.getRes(ARGUMENTS_TERMS) + "___" + descriptionTextField.getText().toString()).getBytes());
-                url.offset = 0;
-                url.length = message.message.length();
-                entities.add(url);
-                share.putExtra(Intent.EXTRA_TEXT, url.url);
+                String message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
+                share.putExtra(Intent.EXTRA_TEXT, message);
                 getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", R.string.HtPromoteYourOffer)));
                 parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
                 finishFragment();
@@ -789,10 +780,10 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         saveLayout.setEnabled(true);
         saveLayout.setOnClickListener(v -> {
-            presentFragment(new WalletActivity()); // TODO Set FREE
-            if (saveLayout != null) {
-                return;
-            }
+//            presentFragment(new WalletActivity()); // TODO Set FREE
+//            if (saveLayout != null) {
+//                return;
+//            }
 
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
@@ -834,13 +825,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
-                Object[] configRes = paymentInputCell.getRes();
-                String configText = "{";
-                int ii = 0;
-                for (Object config : configRes) {
-                    configText = configText + "\"arg" + ii++ + "\" : \"" + config.toString() + "\",";
-                }
-                configText = configText.substring(0, configText.length() - 1) + "}";
+                String configText = paymentInputCell.getRes().toString();
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
@@ -859,8 +844,26 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 if (actionType != ActionType.EDIT) {
-                    HtAmplify.getInstance(context).createOffer(newOffer);
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((titleTextField.getText().toString() + "___" + Integer.parseInt(priceInputCell.getRes(ARGUMENTS_PRICE)) + "___" + priceInputCell.getRes(ARGUMENTS_RATE_TYPE) + "___" + priceInputCell.getRes(ARGUMENTS_CURRENCY) + "___" + locationInputCell.getRes(ARGUMENTS_ADDRESS) + "___" + expireInputCell.getRes(ARGUMENTS_EXPIRE) + "___" + categoryInputCell.getRes(ARGUMENTS_CATEGORY) + "___" + categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) + "___" + configText + "___" + termsInputCell.getRes(ARGUMENTS_TERMS) + "___" + descriptionTextField.getText().toString()).getBytes()), (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
+                    Offer offer = HtAmplify.getInstance(context).createOffer(newOffer);
+
+                    TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+
+                    String name;
+
+                    if (user.username != null) {
+                        name = "@" + user.username;
+                    }
+                    else {
+                        name = user.first_name;
+
+                        if (!TextUtils.isEmpty(user.last_name)) {
+                            name = name + " " + user.last_name;
+                        }
+                    }
+
+                    String phrase = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage(phrase, (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
                 } else {
                     HtSQLite.getInstance().addOffer(offerUUID, newOffer);
                 }
