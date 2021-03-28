@@ -77,6 +77,8 @@ public class HtAmplify {
                 .termsConfig(dto.getConfigText())
                 .latitude("" + dto.getLatitude())
                 .longitude("" + dto.getLongitude())
+                .serviceProviderAddress("Address goes here")
+                .serviceProviderSignature("Signature goes here")
                 .build();
 
         Amplify.API.mutate(ModelMutation.create(newOffer),
