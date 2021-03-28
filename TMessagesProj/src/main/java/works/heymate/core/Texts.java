@@ -3,9 +3,12 @@ package works.heymate.core;
 import android.content.Context;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Texts {
+
+    public static final String OFFER_PHRASE_NAME = "offer_phrase_name";
 
     public static final String SECURE = "secure";
     public static final String LATER = "later";
@@ -51,6 +54,14 @@ public class Texts {
 
     public static void initialize(Context context) {
         mContext = context.getApplicationContext();
+    }
+
+    public static String getLanguageCode() {
+        return Locale.getDefault().getLanguage(); // TODO Revisit this.
+    }
+
+    public static CharSequence get(String key, String languageCode) { // TODO Attempt to get it considering the language code.
+        return get(key);
     }
 
     public static CharSequence get(String key) {

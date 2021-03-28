@@ -15,39 +15,25 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is an auto generated class representing the User type in your schema. */
+/** This is an auto generated class representing the OfferCalendar type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "Users")
-public final class User implements Model {
-  public static final QueryField ID = field("User", "id");
-  public static final QueryField OFFERS = field("User", "Offers");
-  public static final QueryField NAME = field("User", "name");
-  public static final QueryField PHONE_NO = field("User", "phoneNo");
+@ModelConfig(pluralName = "OfferCalendars")
+public final class OfferCalendar implements Model {
+  public static final QueryField ID = field("OfferCalendar", "id");
+  public static final QueryField OFFER_ID = field("OfferCalendar", "offerId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="ModelOfferConnection") ModelOfferConnection Offers;
-  private final @ModelField(targetType="String") String name;
-  private final @ModelField(targetType="String") String phoneNo;
+  private final @ModelField(targetType="ID") String offerId;
   public String getId() {
       return id;
   }
   
-  public ModelOfferConnection getOffers() {
-      return Offers;
+  public String getOfferId() {
+      return offerId;
   }
   
-  public String getName() {
-      return name;
-  }
-  
-  public String getPhoneNo() {
-      return phoneNo;
-  }
-  
-  private User(String id, ModelOfferConnection Offers, String name, String phoneNo) {
+  private OfferCalendar(String id, String offerId) {
     this.id = id;
-    this.Offers = Offers;
-    this.name = name;
-    this.phoneNo = phoneNo;
+    this.offerId = offerId;
   }
   
   @Override
@@ -57,11 +43,9 @@ public final class User implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      User user = (User) obj;
-      return ObjectsCompat.equals(getId(), user.getId()) &&
-              ObjectsCompat.equals(getOffers(), user.getOffers()) &&
-              ObjectsCompat.equals(getName(), user.getName()) &&
-              ObjectsCompat.equals(getPhoneNo(), user.getPhoneNo());
+      OfferCalendar offerCalendar = (OfferCalendar) obj;
+      return ObjectsCompat.equals(getId(), offerCalendar.getId()) &&
+              ObjectsCompat.equals(getOfferId(), offerCalendar.getOfferId());
       }
   }
   
@@ -69,9 +53,7 @@ public final class User implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getOffers())
-      .append(getName())
-      .append(getPhoneNo())
+      .append(getOfferId())
       .toString()
       .hashCode();
   }
@@ -79,11 +61,9 @@ public final class User implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("User {")
+      .append("OfferCalendar {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("Offers=" + String.valueOf(getOffers()) + ", ")
-      .append("name=" + String.valueOf(getName()) + ", ")
-      .append("phoneNo=" + String.valueOf(getPhoneNo()))
+      .append("offerId=" + String.valueOf(getOfferId()))
       .append("}")
       .toString();
   }
@@ -101,7 +81,7 @@ public final class User implements Model {
    * @return an instance of this model with only ID populated
    * @throws IllegalArgumentException Checks that ID is in the proper format
    */
-  public static User justId(String id) {
+  public static OfferCalendar justId(String id) {
     try {
       UUID.fromString(id); // Check that ID is in the UUID format - if not an exception is thrown
     } catch (Exception exception) {
@@ -111,60 +91,38 @@ public final class User implements Model {
               "creating a new object, use the standard builder method and leave the ID field blank."
       );
     }
-    return new User(
+    return new OfferCalendar(
       id,
-      null,
-      null,
       null
     );
   }
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      Offers,
-      name,
-      phoneNo);
+      offerId);
   }
   public interface BuildStep {
-    User build();
+    OfferCalendar build();
     BuildStep id(String id) throws IllegalArgumentException;
-    BuildStep offers(ModelOfferConnection offers);
-    BuildStep name(String name);
-    BuildStep phoneNo(String phoneNo);
+    BuildStep offerId(String offerId);
   }
   
 
   public static class Builder implements BuildStep {
     private String id;
-    private ModelOfferConnection Offers;
-    private String name;
-    private String phoneNo;
+    private String offerId;
     @Override
-     public User build() {
+     public OfferCalendar build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new User(
+        return new OfferCalendar(
           id,
-          Offers,
-          name,
-          phoneNo);
+          offerId);
     }
     
     @Override
-     public BuildStep offers(ModelOfferConnection offers) {
-        this.Offers = offers;
-        return this;
-    }
-    
-    @Override
-     public BuildStep name(String name) {
-        this.name = name;
-        return this;
-    }
-    
-    @Override
-     public BuildStep phoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+     public BuildStep offerId(String offerId) {
+        this.offerId = offerId;
         return this;
     }
     
@@ -191,26 +149,14 @@ public final class User implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, ModelOfferConnection offers, String name, String phoneNo) {
+    private CopyOfBuilder(String id, String offerId) {
       super.id(id);
-      super.offers(offers)
-        .name(name)
-        .phoneNo(phoneNo);
+      super.offerId(offerId);
     }
     
     @Override
-     public CopyOfBuilder offers(ModelOfferConnection offers) {
-      return (CopyOfBuilder) super.offers(offers);
-    }
-    
-    @Override
-     public CopyOfBuilder name(String name) {
-      return (CopyOfBuilder) super.name(name);
-    }
-    
-    @Override
-     public CopyOfBuilder phoneNo(String phoneNo) {
-      return (CopyOfBuilder) super.phoneNo(phoneNo);
+     public CopyOfBuilder offerId(String offerId) {
+      return (CopyOfBuilder) super.offerId(offerId);
     }
   }
   

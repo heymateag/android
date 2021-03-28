@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,15 @@ public class OfferDto {
     private double latitude;
     private ArrayList<Long> dateSlots;
     private String serverUUID;
+    private ArrayList<TimeSlot> timeSlots;
+
+    public ArrayList<TimeSlot> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public void setTimeSlots(ArrayList<TimeSlot> timeSlots) {
+        this.timeSlots = timeSlots;
+    }
 
     public String getServerUUID() {
         return serverUUID;

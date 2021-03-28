@@ -40,6 +40,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -82,6 +83,12 @@ public class HtChatMessageCell extends FrameLayout {
     private boolean archived;
     private Drawable archiveDrawable;
     private ImageView archiveIcon;
+
+    private Offer offer;
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
+    }
 
     public void setRate(String rate) {
         this.rate = rate;
@@ -380,7 +387,7 @@ public class HtChatMessageCell extends FrameLayout {
         buyLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // TODO
             }
         });
         bottomLayer.addView(buyLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.25f));
