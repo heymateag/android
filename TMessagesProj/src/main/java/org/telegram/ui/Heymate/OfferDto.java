@@ -35,6 +35,24 @@ public class OfferDto {
     private ArrayList<Long> dateSlots;
     private String serverUUID;
     private ArrayList<TimeSlot> timeSlots;
+    private int createdAt;
+    private int editedAt;
+
+    public int getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(int createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getEditedAt() {
+        return editedAt;
+    }
+
+    public void setEditedAt(int editedAt) {
+        this.editedAt = editedAt;
+    }
 
     public Offer asOffer() {
         Offer.BuildStep builder = new Offer.Builder()
@@ -50,7 +68,9 @@ public class OfferDto {
                 .latitude(String.valueOf(latitude))
                 .longitude(String.valueOf(longitude))
                 .termsConfig(configText)
-                .terms(terms);
+                .terms(terms)
+                .createdAt(createdAt)
+                .editedAt(editedAt);
 
         if (expire != null) {
             builder.expiry(new Temporal.Date(expire));

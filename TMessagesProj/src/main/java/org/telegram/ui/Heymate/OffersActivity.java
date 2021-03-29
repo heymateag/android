@@ -24,8 +24,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+
+import com.amplifyframework.api.graphql.PaginatedResult;
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -38,11 +42,15 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+
+import works.heymate.core.Texts;
+import works.heymate.core.Utils;
 
 public class OffersActivity extends BaseFragment {
 
@@ -243,6 +251,28 @@ public class OffersActivity extends BaseFragment {
             offerCell1.setPaymentConfig(offerDto.getConfigText());
             offerCell1.setTerms(offerDto.getTerms());
             offerCell1.expireLabel.setText(offerDto.getTime());
+            ArrayList<TimeSlot> timeSlots = new ArrayList<>();
+            HtAmplify.getInstance(context).getAvailableTimeSlots(offerDto.getServerUUID(), ((success, data, exception) -> {
+                Utils.runOnUIThread(() -> {
+                    if (!success) {
+                        if (exception != null) {
+                            Log.e("HtAmplify", "Failed to get time slots for offer with id " + offerDto.getServerUUID(), exception);
+                        }
+                        return;
+                    }
+                    for (TimeSlot timeSlot : ((PaginatedResult<TimeSlot>)(data)).getItems()) {
+                        timeSlots.add(timeSlot);
+                    }
+                    ArrayList<Long> dates = new ArrayList<>();
+                    for(TimeSlot timeSlot : timeSlots){
+                        dates.add(((long) (timeSlot.getStartTime())) * 1000);
+                        dates.add(((long) (timeSlot.getEndTime())) * 1000);
+                    }
+                    offerCell1.setDateSlots(dates);
+                });
+            }));
+            ArrayList<Long> dates = new ArrayList<>();
+            offerCell1.setDateSlots(dates);
             offerCell1.setParent(this);
             // TODO
 //            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));

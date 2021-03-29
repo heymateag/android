@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.amplifyframework.api.graphql.PaginatedResult;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
@@ -55,7 +56,7 @@ public class HeymatePayment {
                     return;
                 }
 
-                initPayment(fragment, offer);
+                initPayment(fragment, (Offer) offer);
             });
         }));
     }
@@ -90,8 +91,8 @@ public class HeymatePayment {
                     }
 
                     timeSlots.add(new TimeSlot.Builder()
-                            .startTime(Long.valueOf(timeSlotStr.substring(0, index)))
-                            .endTime(Long.valueOf(timeSlotStr.substring(index + 3)))
+                            .startTime((int) (Long.parseLong(timeSlotStr.substring(0, index)) / 1000))
+                            .endTime((int) (Long.parseLong(timeSlotStr.substring(index + 3)) / 1000))
 //                            .id("NO ID")
                             .status(HtTimeSlotStatus.AVAILABLE.ordinal())
                             .build()

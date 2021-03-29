@@ -22,6 +22,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HtScheduleInputCell extends LinearLayout {
@@ -31,6 +32,11 @@ public class HtScheduleInputCell extends LinearLayout {
     private TextView[] parametersViews;
     private Drawable[] iconValues;
     private HashMap<String, Runnable> args;
+    private ArrayList<Long> dateSlots = new ArrayList<>();
+
+    public void setDateSlots(ArrayList<Long> dateSlots) {
+        this.dateSlots = dateSlots;
+    }
 
     public HtScheduleInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit, HtCreateOfferActivity parent) {
         super(context);
@@ -72,6 +78,7 @@ public class HtScheduleInputCell extends LinearLayout {
             @Override
             public void onClick(View v) {
                 HtCalendarBottomSheet calendarBottomSheet = new HtCalendarBottomSheet(context, true, parent);
+                calendarBottomSheet.setDates(dateSlots);
                 parent.showDialog(calendarBottomSheet);
             }
         });

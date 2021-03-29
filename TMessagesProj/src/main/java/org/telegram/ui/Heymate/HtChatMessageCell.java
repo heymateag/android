@@ -83,6 +83,15 @@ public class HtChatMessageCell extends FrameLayout {
     private boolean archived;
     private Drawable archiveDrawable;
     private ImageView archiveIcon;
+    private ArrayList<Long> dateSlots = new ArrayList<>();
+
+    public ArrayList<Long> getDateSlots() {
+        return dateSlots;
+    }
+
+    public void setDateSlots(ArrayList<Long> dateSlots) {
+        this.dateSlots = dateSlots;
+    }
 
     private Offer offer;
 
@@ -178,6 +187,7 @@ public class HtChatMessageCell extends FrameLayout {
                 fragment.setTerms(offerDto.getTerms());
                 fragment.setPaymentConfig(offerDto.getConfigText());
                 fragment.setOfferUUID(offerUUID);
+                fragment.setDateSlots(dateSlots);
             }
         });
         topLayer.addView(editIcon, LayoutHelper.createFrame(25, 25, Gravity.RIGHT, 0, 0, 20, 0));
@@ -390,7 +400,7 @@ public class HtChatMessageCell extends FrameLayout {
                 HeymatePayment.initPayment(parent, offer.getId());
             }
         });
-        bottomLayer.addView(buyLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.25f));
+        bottomLayer.addView(buyLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
         promoteLayout = new LinearLayout(context) {
             @Override
             public void setEnabled(boolean enabled) {
@@ -421,7 +431,7 @@ public class HtChatMessageCell extends FrameLayout {
 
             }
         });
-        bottomLayer.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.25f));
+        bottomLayer.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
         promoteLayout.setVisibility(GONE);
         promoteLayout.setOnClickListener(v -> {
             try{
@@ -464,7 +474,7 @@ public class HtChatMessageCell extends FrameLayout {
 
             }
         });
-        bottomLayer.addView(viewLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.25f));
+        bottomLayer.addView(viewLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
         viewLayout.setEnabled(true);
         viewLayout.setOnClickListener(new OnClickListener() {
             @Override
@@ -506,7 +516,7 @@ public class HtChatMessageCell extends FrameLayout {
             }
         });
         bottomLayer.addView(forwardLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT,LayoutHelper.WRAP_CONTENT));
-        mainLayout.addView(bottomLayer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        mainLayout.addView(bottomLayer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 40));
         mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_chat_topPanelBackground)));
         addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 10, 20, 10));
     }

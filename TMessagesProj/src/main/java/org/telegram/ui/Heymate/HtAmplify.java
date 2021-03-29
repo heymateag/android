@@ -3,7 +3,6 @@ package org.telegram.ui.Heymate;
 import android.content.Context;
 import android.util.Log;
 
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
@@ -11,7 +10,6 @@ import com.amplifyframework.api.aws.ApiAuthProviders;
 import com.amplifyframework.api.aws.sigv4.ApiKeyAuthProvider;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
-import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
 
@@ -20,7 +18,6 @@ import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -28,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HtAmplify {
 
@@ -35,9 +33,9 @@ public class HtAmplify {
 
     private static String API_KEY = "da2-gmv546zpg5edxi6eej66aq263u";
 
-    public interface OfferCallback {
+    public interface OfferCallback <T> {
 
-        void onOfferQueryResult(boolean success, Offer offer, ApiException exception);
+        void onOfferQueryResult(boolean success, T data, ApiException exception);
 
     }
 
@@ -81,11 +79,13 @@ public class HtAmplify {
                 .id(UUID.randomUUID().toString())
                 .availabilitySlot(dto.getTimeSlotsAsJson())
                 .locationData(dto.getLocation())
-                .isActive(true)
                 .terms(dto.getTerms())
                 .termsConfig(dto.getConfigText())
                 .latitude("" + dto.getLatitude())
                 .longitude("" + dto.getLongitude())
+                .status(dto.getStatus().ordinal())
+                .createdAt(dto.getCreatedAt())
+                .editedAt(dto.getEditedAt())
                 .build();
 
         Amplify.API.mutate(ModelMutation.create(newOffer),
@@ -100,8 +100,71 @@ public class HtAmplify {
         for (int i = 0; i < times.size(); i += 2) {
 
             TimeSlot timeSlot = TimeSlot.builder()
-                    .startTime(times.get(i))
-                    .endTime(times.get(i + 1))
+                    .startTime((int) (times.get(i) / 1000))
+                    .endTime((int) (times.get(i + 1) / 1000))
+                    .offerId(newOffer.getId())
+                    .status(HtTimeSlotStatus.AVAILABLE.ordinal())
+                    .clientUserId("0")
+                    .build();
+
+            Amplify.API.mutate(ModelMutation.create(timeSlot),
+                    response -> {
+                        Log.i("HtAmplify", "Time Slot created");
+                    },
+                    error -> Log.e("HtAmplify", "Time Slot creation failed", error)
+            );
+        }
+
+        return newOffer;
+    }
+
+    public Offer updateOffer(OfferDto dto) {
+        Offer newOffer = Offer.builder()
+                .userId("" + dto.getUserId())
+                .title(dto.getTitle())
+                .category(dto.getCategory())
+                .subCategory(dto.getSubCategory())
+                .rate("" + dto.getRate())
+                .rateType(dto.getRateType())
+                .currency(dto.getCurrency())
+                .description(dto.getDescription())
+                .expiry(new Temporal.Date(dto.getExpire()))
+                .id(dto.getServerUUID())
+                .availabilitySlot(dto.getTimeSlotsAsJson())
+                .locationData(dto.getLocation())
+                .terms(dto.getTerms())
+                .termsConfig(dto.getConfigText())
+                .latitude("" + dto.getLatitude())
+                .longitude("" + dto.getLongitude())
+                .status(dto.getStatus().ordinal())
+                .createdAt(dto.getCreatedAt())
+                .editedAt((int) ((new Date()).toInstant().getEpochSecond() / 1000))
+                .build();
+
+        Amplify.API.query(
+                ModelQuery.list(TimeSlot.class, TimeSlot.OFFER_ID.eq(dto.getServerUUID())),
+                response -> {
+                    if (response.getData() != null) {
+                        for (TimeSlot timeSlot : response.getData()) {
+                            Amplify.API.mutate(
+                                    ModelMutation.delete(timeSlot),
+                                    response2 -> {
+                                        Log.i("HtAmplify", "TimeSlot updated.");
+                                    },
+                                    error2 -> Log.e("HtAmplify", "Failed to update", error2)
+                            );
+                        }
+                    }
+                },
+                error -> Log.e("HtAmplify", "Query failure", error)
+        );
+
+        ArrayList<Long> times = dto.getDateSlots();
+        for (int i = 0; i < times.size(); i += 2) {
+
+            TimeSlot timeSlot = TimeSlot.builder()
+                    .startTime((int) (times.get(i) / 1000))
+                    .endTime((int) (times.get(i + 1) / 1000))
                     .offerId(newOffer.getId())
                     .status(HtTimeSlotStatus.AVAILABLE.ordinal())
                     .clientUserId("0")
@@ -203,10 +266,50 @@ public class HtAmplify {
         });
     }
 
-    public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId) {
+    public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId, OfferCallback callback) {
         Log.i("HtAmplify", "Getting time slots");
 
         Log.i("HtAmplify", "Getting Offers");
+
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<ArrayList<TimeSlot>> future = pool.submit(new Callable<ArrayList<TimeSlot>>() {
+            @Override
+            public ArrayList<TimeSlot> call() throws Exception {
+                ArrayList<TimeSlot> timeSlots = new ArrayList();
+
+                Amplify.API.query(
+                        ModelQuery.list(
+                                TimeSlot.class, TimeSlot.OFFER_ID.eq("" + offerId)
+                                        .and(TimeSlot.STATUS.eq(HtTimeSlotStatus.AVAILABLE.ordinal()))),
+                        response -> {
+                            if (response.hasData()) {
+                                callback.onOfferQueryResult(true, response.getData(), null);
+                            }
+                            else {
+                                callback.onOfferQueryResult(false, null, null);
+                            }
+                        },
+                        error -> callback.onOfferQueryResult(false, null, error)
+                );
+                return timeSlots;
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId) {
+        Log.i("HtAmplify", "Getting time slots");
+
+        AtomicBoolean completed = new AtomicBoolean(false);
 
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future<ArrayList<TimeSlot>> future = pool.submit(new Callable<ArrayList<TimeSlot>>() {
@@ -224,14 +327,19 @@ public class HtAmplify {
                                     timeSlots.add(timeSlot);
                                 }
                             }
+                            completed.set(true);
                         },
-                        error -> Log.e("HtAmplify", "Query failure", error)
+                        error -> {
+                            Log.e("HtAmplify", "Query failure", error);
+                            completed.set(true);
+                        }
                 );
                 return timeSlots;
             }
         });
 
         try {
+            while (!completed.get()); // The worst approach ever, Will fix ASAP
             return future.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -289,6 +397,41 @@ public class HtAmplify {
         } catch (InterruptedException e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public Offer getOffer(String offerUUID) {
+        Log.i("HtAmplify", "Getting Offer");
+
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<Offer> future = pool.submit(new Callable<Offer>() {
+            @Override
+            public Offer call() throws Exception {
+                final Offer[] fetchedOffer = new Offer[1];
+                Amplify.API.query(
+                        ModelQuery.list(Offer.class, Offer.ID.eq(offerUUID)),
+                        response -> {
+                            if (response.getData() != null) {
+                                for (Offer offer : response.getData()) {
+                                    fetchedOffer[0] = offer;
+                                    HtSQLite.getInstance().addOffer(offer);
+                                }
+                            }
+                        },
+                        error -> Log.e("HtAmplify", "Query failure", error)
+                );
+                return fetchedOffer[0];
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

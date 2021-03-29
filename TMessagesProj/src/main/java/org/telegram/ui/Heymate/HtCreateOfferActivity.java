@@ -326,7 +326,9 @@ public class HtCreateOfferActivity extends BaseFragment {
             @Override
             public void run() {
                 if (actionType != ActionType.VIEW) {
-                    showDialog(new HtLocationBottomSheetAlert(context, true, parent));
+                    HtLocationBottomSheetAlert sheet = new HtLocationBottomSheetAlert(context, true, parent);
+                    sheet.setLocation(longitude, latitude);
+                    showDialog(sheet);
                 }
             }
         });
@@ -750,13 +752,33 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+                int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
+                newOffer.setCreatedAt(currentTime);
+                newOffer.setEditedAt(currentTime);
                 Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
 
                 HtSQLite.getInstance().addOffer(createdOffer);
 
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                String message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
+
+                TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+
+                String name;
+
+                if (user.username != null) {
+                    name = "@" + user.username;
+                }
+                else {
+                    name = user.first_name;
+
+                    if (!TextUtils.isEmpty(user.last_name)) {
+                        name = name + " " + user.last_name;
+                    }
+                }
+
+//                String message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
+                String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                 share.putExtra(Intent.EXTRA_TEXT, message);
                 getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", R.string.HtPromoteYourOffer)));
                 parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
@@ -840,9 +862,12 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
                 newOffer.setLatitude(latitude);
                 newOffer.setLongitude(longitude);
-                newOffer.setStatus(OfferStatus.ACTIVE);
+                newOffer.setStatus(OfferStatus.DRAFTED);
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+                int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
+                newOffer.setCreatedAt(currentTime);
+                newOffer.setEditedAt(currentTime);
                 if (actionType != ActionType.EDIT) {
                     Offer offer = HtAmplify.getInstance(context).createOffer(newOffer);
 
@@ -866,6 +891,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(phrase, (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
                 } else {
                     HtSQLite.getInstance().addOffer(offerUUID, newOffer);
+                    newOffer.setServerUUID(offerUUID);
+                    HtAmplify.getInstance(context).updateOffer(newOffer);
                 }
                 if (pickedImage != null) {
                     String[] filePath = {MediaStore.Images.Media.DATA};
@@ -926,6 +953,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setDateSlots(ArrayList<Long> dates) {
         this.dateSlots = dates;
+        scheduleInputCell.setDateSlots(dateSlots);
     }
 
     public void setFee(String text, int position) {

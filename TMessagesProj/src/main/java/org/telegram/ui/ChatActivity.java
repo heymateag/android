@@ -94,6 +94,7 @@ import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -212,7 +213,9 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewHelper;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtChatMessageCell;
+import org.telegram.ui.Heymate.HtSQLite;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -230,6 +233,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import works.heymate.core.Texts;
+import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 
 @SuppressWarnings("unchecked")
@@ -21111,6 +21116,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
                     Offer offer = OfferUtils.readBeautiful(finalMessage);
                     if (offer != null) {
+                        HtAmplify.getInstance(mContext).getOffer(offer.getId(), ((success, fetchedOffer, exception) -> {
+                            Utils.runOnUIThread(() -> {
+                                if (!success) {
+                                    if (exception != null) {
+                                        Log.e("HtAmplify", "Failed to get offer with id " + offer.getId(), exception);
+                                    }
+
+                                    return;
+                                }
+
+                                HtSQLite.getInstance().addOffer((Offer) fetchedOffer);
+                            });
+                        }));
                         offerCell.setOffer(offer);
                         offerCell.titleLabel.setText(offer.getTitle());
                         offerCell.descriptionLabel.setText(offer.getDescription());
@@ -21127,6 +21145,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         offerCell.expireLabel.setText("Valid until\n"  + offer.getExpiry().format());
                         offerCell.setOut(message.isOut());
                         offerCell.setMessage(message);
+                        offerCell.setOfferUUID(offer.getId());
                     }
                 }
                 if (view instanceof ChatMessageCell) {
