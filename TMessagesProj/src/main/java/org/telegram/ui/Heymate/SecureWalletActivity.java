@@ -25,10 +25,20 @@ import works.heymate.core.wallet.Wallet;
 
 public class SecureWalletActivity extends BaseFragment {
 
+    private Runnable mFinishTask = null;
+
     private RadioButtonCellWithIcon mButtonBiometric;
     private RadioButtonCellWithIcon mButtonPin;
 
     private Wallet mWallet;
+
+    public SecureWalletActivity() {
+
+    }
+
+    public SecureWalletActivity(Runnable finishTask) {
+        mFinishTask = finishTask;
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -74,6 +84,10 @@ public class SecureWalletActivity extends BaseFragment {
 
                 if (id == -1) {
                     finishFragment();
+
+                    if (mFinishTask != null) {
+                        mFinishTask.run();
+                    }
                 }
             }
         });
@@ -142,6 +156,11 @@ public class SecureWalletActivity extends BaseFragment {
     @Override
     public boolean onBackPressed() {
         finishFragment(true);
+
+        if (mFinishTask != null) {
+            mFinishTask.run();
+        }
+
         return super.onBackPressed();
     }
 

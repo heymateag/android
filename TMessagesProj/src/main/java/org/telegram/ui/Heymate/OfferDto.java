@@ -1,5 +1,7 @@
 package org.telegram.ui.Heymate;
 
+import com.amplifyframework.core.model.temporal.Temporal;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,7 @@ import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class OfferDto {
 
@@ -32,6 +35,29 @@ public class OfferDto {
     private ArrayList<Long> dateSlots;
     private String serverUUID;
     private ArrayList<TimeSlot> timeSlots;
+
+    public Offer asOffer() {
+        Offer.BuildStep builder = new Offer.Builder()
+                .id(serverUUID)
+                .title(title)
+                .description(description)
+                .category(category)
+                .subCategory(subCategory)
+                .rate(rate)
+                .currency(currency)
+                .rateType(rateType)
+                .locationData(location)
+                .latitude(String.valueOf(latitude))
+                .longitude(String.valueOf(longitude))
+                .termsConfig(configText)
+                .terms(terms);
+
+        if (expire != null) {
+            builder.expiry(new Temporal.Date(expire));
+        }
+
+        return builder.build();
+    }
 
     public ArrayList<TimeSlot> getTimeSlots() {
         return timeSlots;
@@ -196,11 +222,13 @@ public class OfferDto {
     public String getTimeSlotsAsJson(){
         JSONObject json = new JSONObject();
         JSONArray array = new JSONArray();
-        for(int i = 0; i < dateSlots.size(); i += 2){
-            array.put("" + dateSlots.get(i) + " - " + dateSlots.get(i + 1));
+        if (dateSlots != null) {
+            for(int i = 0; i < dateSlots.size(); i += 2){
+                array.put("" + dateSlots.get(i) + " - " + dateSlots.get(i + 1));
+            }
         }
         try {
-            json.put("timeZone", Calendar.getInstance().getTimeZone().getDisplayName());
+            json.put("timeZone", Calendar.getInstance().getTimeZone().getID());
             json.put("times", array);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -14,7 +14,9 @@ public class Texts {
     public static final String LATER = "later";
     public static final String NEXT = "next";
     public static final String CONFIRM = "confirm";
+    public static final String CANCEL = "cancel";
     public static final String DAY = "day";
+    public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";
     public static final String NETWORK_ERROR = "network_error";
 
     public static final String SUNDAY_SHORT = "sunday_short";
@@ -24,6 +26,9 @@ public class Texts {
     public static final String THURSDAY_SHORT = "thursday_short";
     public static final String FRIDAY_SHORT = "friday_short";
     public static final String SATURDAY_SHORT = "saturday_short";
+
+    public static final String AUTHENTICATION = "authentication";
+    public static final String AUTHENTICATION_DESCRIPTION = "authentication_description";
 
     public static final String YOUR_WALLET = "your_wallet";
     public static final String NO_WALLET_DETECTED = "no_wallet_detected";
@@ -45,6 +50,8 @@ public class Texts {
     public static final String ATTESTATION_BAD_CODE = "attestation_bad_code";
     public static final String ATTESTATION_INVALID_CODE = "attestation_invalid_code";
     public static final String ATTESTATION_USED_CODE = "attestation_used_code";
+
+    public static final String TIMESLOTSSELECTED_TITLE = "timeslotselection_title";
 
     private static final String STRING_RESOURCE_PREFIX = "hm_";
 

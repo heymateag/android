@@ -20358,6 +20358,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             View view = null;
             if(viewType == 10){
                 view = new HtChatMessageCell(mContext);
+                ((HtChatMessageCell) view).setParent(ChatActivity.this);
             }
             if (viewType == 0) {
 

@@ -36,6 +36,8 @@ import works.heymate.core.wallet.Wallet;
 
 public class WalletActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
+    private Runnable mFinishTask;
+
     private ImageView mImageWallet;
     private TextView mTextTitle;
     private TextView mTextStatus;
@@ -49,6 +51,10 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
     private Wallet mWallet;
 
     private boolean mCanUpdateVerifiedStatus = true;
+
+    public WalletActivity(Runnable finishTask) {
+        mFinishTask = finishTask;
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -285,7 +291,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                     }
                     else {
                         // TODO Improve behavior
-                        Toast.makeText(mLeftButton.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                        Toast.makeText(mLeftButton.getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
 
                         finishFragment(true);
                     }
@@ -304,7 +310,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                             .setView(addressView)
                             .setPositiveButton("Go", (dialog, which) -> {
                                 dialog.dismiss();
-                                presentFragment(new AttestationActivity(), true);
+                                presentFragment(new AttestationActivity(mFinishTask), true);
                             })
                             .show();
                     return;

@@ -387,7 +387,7 @@ public class HtChatMessageCell extends FrameLayout {
         buyLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
+                HeymatePayment.initPayment(parent, offer.getId());
             }
         });
         bottomLayer.addView(buyLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.25f));

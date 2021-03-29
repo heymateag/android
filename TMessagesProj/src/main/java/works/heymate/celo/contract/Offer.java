@@ -83,23 +83,23 @@ public class Offer extends Contract {
 
     public static final String FUNC_SETOWNER = "setOwner";
 
-    public static final Event CANCELLEDBYCONSUMER_EVENT = new Event("CancelledByConsumer", 
+    public static final Event CANCELLEDBYCONSUMER_EVENT = new Event("CancelledByConsumer",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
     ;
 
-    public static final Event CANCELLEDBYSERVICEPROVIDER_EVENT = new Event("CancelledByServiceProvider", 
+    public static final Event CANCELLEDBYSERVICEPROVIDER_EVENT = new Event("CancelledByServiceProvider",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
     ;
 
-    public static final Event CREATED_EVENT = new Event("Created", 
+    public static final Event CREATED_EVENT = new Event("Created",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
     ;
 
-    public static final Event RELEASED_EVENT = new Event("Released", 
+    public static final Event RELEASED_EVENT = new Event("Released",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
     ;
 
-    public static final Event STARTSERVICE_EVENT = new Event("StartService", 
+    public static final Event STARTSERVICE_EVENT = new Event("StartService",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
     ;
 
@@ -277,36 +277,36 @@ public class Offer extends Contract {
     }
 
     public RemoteFunctionCall<BigInteger> cancellationValueDeposit() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CANCELLATIONVALUEDEPOSIT, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CANCELLATIONVALUEDEPOSIT,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<String> consumer() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CONSUMER, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CONSUMER,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<BigInteger> delayCompensation() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_DELAYCOMPENSATION, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_DELAYCOMPENSATION,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<BigInteger> feesAvailableForWithdraw() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FEESAVAILABLEFORWITHDRAW, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_FEESAVAILABLEFORWITHDRAW,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<Tuple14<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>> offers(byte[] param0) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OFFERS, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(param0)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OFFERS,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(param0)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint32>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint8>() {}));
         return new RemoteFunctionCall<Tuple14<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>>(function,
                 new Callable<Tuple14<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>>() {
@@ -314,160 +314,160 @@ public class Offer extends Contract {
                     public Tuple14<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger> call() throws Exception {
                         List<Type> results = executeCallMultipleValueReturn(function);
                         return new Tuple14<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>(
-                                (Boolean) results.get(0).getValue(), 
-                                (BigInteger) results.get(1).getValue(), 
-                                (BigInteger) results.get(2).getValue(), 
-                                (BigInteger) results.get(3).getValue(), 
-                                (BigInteger) results.get(4).getValue(), 
-                                (BigInteger) results.get(5).getValue(), 
-                                (BigInteger) results.get(6).getValue(), 
-                                (BigInteger) results.get(7).getValue(), 
-                                (BigInteger) results.get(8).getValue(), 
-                                (BigInteger) results.get(9).getValue(), 
-                                (BigInteger) results.get(10).getValue(), 
-                                (BigInteger) results.get(11).getValue(), 
-                                (BigInteger) results.get(12).getValue(), 
+                                (Boolean) results.get(0).getValue(),
+                                (BigInteger) results.get(1).getValue(),
+                                (BigInteger) results.get(2).getValue(),
+                                (BigInteger) results.get(3).getValue(),
+                                (BigInteger) results.get(4).getValue(),
+                                (BigInteger) results.get(5).getValue(),
+                                (BigInteger) results.get(6).getValue(),
+                                (BigInteger) results.get(7).getValue(),
+                                (BigInteger) results.get(8).getValue(),
+                                (BigInteger) results.get(9).getValue(),
+                                (BigInteger) results.get(10).getValue(),
+                                (BigInteger) results.get(11).getValue(),
+                                (BigInteger) results.get(12).getValue(),
                                 (BigInteger) results.get(13).getValue());
                     }
                 });
     }
 
     public RemoteFunctionCall<String> owner() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OWNER, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_OWNER,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<BigInteger> releaseAmount() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RELEASEAMOUNT, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_RELEASEAMOUNT,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<String> serviceProvider() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SERVICEPROVIDER, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_SERVICEPROVIDER,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
     }
 
     public RemoteFunctionCall<BigInteger> totalFees() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_TOTALFEES, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_TOTALFEES,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<byte[]> tradeHash() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_TRADEHASH, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_TRADEHASH,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
     public RemoteFunctionCall<TransactionReceipt> EscrowTransfer(byte[] identifier, String token, BigInteger value, BigInteger expirySeconds, String paymentId, BigInteger minAttestations, BigInteger weiValue) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_ESCROWTRANSFER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(identifier), 
-                new org.web3j.abi.datatypes.Address(160, token), 
-                new org.web3j.abi.datatypes.generated.Uint256(value), 
-                new org.web3j.abi.datatypes.generated.Uint256(expirySeconds), 
-                new org.web3j.abi.datatypes.Address(160, paymentId), 
-                new org.web3j.abi.datatypes.generated.Uint256(minAttestations)), 
+                FUNC_ESCROWTRANSFER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(identifier),
+                        new org.web3j.abi.datatypes.Address(160, token),
+                        new org.web3j.abi.datatypes.generated.Uint256(value),
+                        new org.web3j.abi.datatypes.generated.Uint256(expirySeconds),
+                        new org.web3j.abi.datatypes.Address(160, paymentId),
+                        new org.web3j.abi.datatypes.generated.Uint256(minAttestations)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function, weiValue);
     }
 
     public RemoteFunctionCall<TransactionReceipt> createOffer(byte[] _tradeID, BigInteger _amount, BigInteger _fee, BigInteger _expiry, BigInteger _slotTime, BigInteger _initialDeposit, List<String> userAddress, List<BigInteger> config, byte[] signature, BigInteger weiValue) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_CREATEOFFER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID), 
-                new org.web3j.abi.datatypes.generated.Uint256(_amount), 
-                new org.web3j.abi.datatypes.generated.Uint16(_fee), 
-                new org.web3j.abi.datatypes.generated.Uint32(_expiry), 
-                new org.web3j.abi.datatypes.generated.Uint32(_slotTime), 
-                new org.web3j.abi.datatypes.generated.Uint256(_initialDeposit), 
-                new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
-                        org.web3j.abi.datatypes.Address.class,
-                        org.web3j.abi.Utils.typeMap(userAddress, org.web3j.abi.datatypes.Address.class)), 
-                new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint32>(
-                        org.web3j.abi.datatypes.generated.Uint32.class,
-                        org.web3j.abi.Utils.typeMap(config, org.web3j.abi.datatypes.generated.Uint32.class)), 
-                new org.web3j.abi.datatypes.DynamicBytes(signature)), 
+                FUNC_CREATEOFFER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
+                        new org.web3j.abi.datatypes.generated.Uint256(_amount),
+                        new org.web3j.abi.datatypes.generated.Uint16(_fee),
+                        new org.web3j.abi.datatypes.generated.Uint32(_expiry),
+                        new org.web3j.abi.datatypes.generated.Uint32(_slotTime),
+                        new org.web3j.abi.datatypes.generated.Uint256(_initialDeposit),
+                        new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
+                                org.web3j.abi.datatypes.Address.class,
+                                org.web3j.abi.Utils.typeMap(userAddress, org.web3j.abi.datatypes.Address.class)),
+                        new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint32>(
+                                org.web3j.abi.datatypes.generated.Uint32.class,
+                                org.web3j.abi.Utils.typeMap(config, org.web3j.abi.datatypes.generated.Uint32.class)),
+                        new org.web3j.abi.datatypes.DynamicBytes(signature)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function, weiValue);
     }
 
     public RemoteFunctionCall<byte[]> prefixed(byte[] hash) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_PREFIXED, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(hash)), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_PREFIXED,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(hash)),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
     public RemoteFunctionCall<TransactionReceipt> startService(byte[] _tradeID, String _serviceProvider, String _consumer, BigInteger _amount, BigInteger _fee) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_STARTSERVICE, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID), 
-                new org.web3j.abi.datatypes.Address(160, _serviceProvider), 
-                new org.web3j.abi.datatypes.Address(160, _consumer), 
-                new org.web3j.abi.datatypes.generated.Uint256(_amount), 
-                new org.web3j.abi.datatypes.generated.Uint16(_fee)), 
+                FUNC_STARTSERVICE,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
+                        new org.web3j.abi.datatypes.Address(160, _serviceProvider),
+                        new org.web3j.abi.datatypes.Address(160, _consumer),
+                        new org.web3j.abi.datatypes.generated.Uint256(_amount),
+                        new org.web3j.abi.datatypes.generated.Uint16(_fee)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> release(byte[] _tradeID, String _serviceProvider, String _consumer, BigInteger _amount, BigInteger _fee, BigInteger weiValue) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_RELEASE, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID), 
-                new org.web3j.abi.datatypes.Address(160, _serviceProvider), 
-                new org.web3j.abi.datatypes.Address(160, _consumer), 
-                new org.web3j.abi.datatypes.generated.Uint256(_amount), 
-                new org.web3j.abi.datatypes.generated.Uint16(_fee)), 
+                FUNC_RELEASE,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
+                        new org.web3j.abi.datatypes.Address(160, _serviceProvider),
+                        new org.web3j.abi.datatypes.Address(160, _consumer),
+                        new org.web3j.abi.datatypes.generated.Uint256(_amount),
+                        new org.web3j.abi.datatypes.generated.Uint16(_fee)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function, weiValue);
     }
 
     public RemoteFunctionCall<TransactionReceipt> consumerCancel(byte[] _tradeID, String _serviceProvider, String _consumer, BigInteger _amount, BigInteger _fee) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_CONSUMERCANCEL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID), 
-                new org.web3j.abi.datatypes.Address(160, _serviceProvider), 
-                new org.web3j.abi.datatypes.Address(160, _consumer), 
-                new org.web3j.abi.datatypes.generated.Uint256(_amount), 
-                new org.web3j.abi.datatypes.generated.Uint16(_fee)), 
+                FUNC_CONSUMERCANCEL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
+                        new org.web3j.abi.datatypes.Address(160, _serviceProvider),
+                        new org.web3j.abi.datatypes.Address(160, _consumer),
+                        new org.web3j.abi.datatypes.generated.Uint256(_amount),
+                        new org.web3j.abi.datatypes.generated.Uint16(_fee)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> serviceProviderCancel(byte[] _tradeID, String _serviceProvider, String _consumer, BigInteger _amount, BigInteger _fee) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SERVICEPROVIDERCANCEL, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID), 
-                new org.web3j.abi.datatypes.Address(160, _serviceProvider), 
-                new org.web3j.abi.datatypes.Address(160, _consumer), 
-                new org.web3j.abi.datatypes.generated.Uint256(_amount), 
-                new org.web3j.abi.datatypes.generated.Uint16(_fee)), 
+                FUNC_SERVICEPROVIDERCANCEL,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
+                        new org.web3j.abi.datatypes.Address(160, _serviceProvider),
+                        new org.web3j.abi.datatypes.Address(160, _consumer),
+                        new org.web3j.abi.datatypes.generated.Uint256(_amount),
+                        new org.web3j.abi.datatypes.generated.Uint16(_fee)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> withdrawFees(String _to, BigInteger _amount) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_WITHDRAWFEES, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _to), 
-                new org.web3j.abi.datatypes.generated.Uint256(_amount)), 
+                FUNC_WITHDRAWFEES,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _to),
+                        new org.web3j.abi.datatypes.generated.Uint256(_amount)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<TransactionReceipt> setOwner(String _newOwner) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SETOWNER, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _newOwner)), 
+                FUNC_SETOWNER,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, _newOwner)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

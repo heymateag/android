@@ -2,6 +2,8 @@ package works.heymate.celo;
 
 import org.celo.contractkit.ContractKit;
 import org.celo.contractkit.protocol.CeloRawTransaction;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.web3j.protocol.Web3j;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -10,6 +12,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import works.heymate.celo.contract.Offer;
+import works.heymate.core.offer.OfferUtils;
 
 public class CeloOffer {
 
@@ -40,6 +43,15 @@ public class CeloOffer {
         new SecureRandom().nextBytes(tradeId);
 
         long amount = (long) (Double.parseDouble(offer.getRate()) * 100);
+
+        int initialDeposit;
+//        offer.get
+
+        try {
+            JSONObject config = new JSONObject(offer.getTermsConfig());
+        } catch (JSONException e) {
+            // TODO
+        }
 
 //        mContract.createOffer(
 //                tradeId,

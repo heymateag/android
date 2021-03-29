@@ -212,6 +212,7 @@ public class OffersActivity extends BaseFragment {
                     setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(Theme.getColor(Theme.key_dialogTextGray)));
                 }
             };
+            offerCell1.setOffer(offerDto.asOffer());
             offerCell1.setOfferUUID(offerDto.getServerUUID());
             offerCell1.setOut(true);
             offerCell1.setStatus(offerDto.getStatus());
@@ -242,7 +243,8 @@ public class OffersActivity extends BaseFragment {
             offerCell1.setPaymentConfig(offerDto.getConfigText());
             offerCell1.setTerms(offerDto.getTerms());
             offerCell1.expireLabel.setText(offerDto.getTime());
-            offerCell1.setParent(this); // TODO
+            offerCell1.setParent(this);
+            // TODO
 //            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));
             offersLayout.addView(offerCell1);
             ObjectAnimator anim1 = ObjectAnimator.ofFloat(offerCell1, "scaleX", 0, 1);

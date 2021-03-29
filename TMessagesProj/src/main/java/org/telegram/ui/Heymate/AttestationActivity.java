@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
@@ -32,6 +30,8 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
 
     private static final int ATTESTATION_COUNT = 3;  // TODO Connect all the counts to Celo SDK.
 
+    private Runnable mFinishTask;
+
     private ImageView mImageStep;
     private TextView mTextTitle;
     private TextView mTextDescription;
@@ -50,6 +50,14 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
     private String mPin = null;
 
     private boolean mRequestingComplete = false;
+
+    public AttestationActivity(Runnable finishTask) {
+        mFinishTask = finishTask;
+    }
+
+    public AttestationActivity(String pin) {
+        mPin = pin;
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -151,7 +159,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
 
                     if (error == null) {
                         if (errorCause.getMainCause().getError() == CeloError.NETWORK_ERROR) {
-                            error = Texts.get(Texts.NETWORK_ERROR);
+                            error = Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR);
                         }
                         else {
                             error = errorCause.getError().getMessage();
@@ -168,6 +176,10 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         mWallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
         updateState();
+
+        if (mPin != null && mButtonNext.isEnabled()) {
+            mButtonNext.performClick();
+        }
 
         return content;
     }
@@ -213,7 +225,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
             }
             else {
                 // TODO Improve behavior
-                Toast.makeText(mInputCode.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(mInputCode.getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
 
                 finishFragment(true);
             }
@@ -222,7 +234,11 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         }
 
         if (verifiedStatus.verified) {
-            presentFragment(new WalletActivity(), true);
+            finishFragment();
+
+            if (mFinishTask != null) {
+                mFinishTask.run();
+            }
             return;
         }
 
@@ -284,7 +300,7 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
             if (newAttestations == 0 && exception != null && exception.getMainCause().getError() == CeloError.NETWORK_ERROR) {
                 mCanRequestMoreAttestations = false;
 
-                Toast.makeText(mButtonNext.getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                Toast.makeText(mButtonNext.getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
             }
             else {
                 // Done. Await the SMS

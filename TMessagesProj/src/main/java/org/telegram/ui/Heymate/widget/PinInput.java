@@ -231,47 +231,60 @@ public class PinInput extends View {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        boolean keyRead = false;
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_DEL:
                 if (mPin.length() > 0) {
                     mPin.delete(mPin.length() - 1, mPin.length());
                 }
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_0:
                 mPin.append('0');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_1:
                 mPin.append('1');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_2:
                 mPin.append('2');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_3:
                 mPin.append('3');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_4:
                 mPin.append('4');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_5:
                 mPin.append('5');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_6:
                 mPin.append('6');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_7:
                 mPin.append('7');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_8:
                 mPin.append('8');
+                keyRead = true;
                 break;
             case KeyEvent.KEYCODE_9:
                 mPin.append('9');
+                keyRead = true;
                 break;
         }
 
         onPinChanged();
         invalidate();
-        return true;
+        return keyRead;
     }
 
     @Override

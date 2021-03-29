@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -96,11 +97,14 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
             protected void onScrollChanged(int currentHorizontalScroll, int t, int previousHorizontalScroll, int oldt) {
                 super.onScrollChanged(currentHorizontalScroll, t, previousHorizontalScroll, oldt);
 
+                mTimeSlotView.invalidate();
+
                 removeCallbacks(mTimeSlotRequester);
                 postDelayed(mTimeSlotRequester, DELAY_BEFORE_REQUESTING_TIME_SLOTS);
             }
 
         };
+        mScrollTimeSlot.setHorizontalScrollBarEnabled(false);
         mScrollTimeSlot.addView(mTimeSlotView, LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         addView(mScrollTimeSlot);
 
@@ -213,7 +217,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
     }
 
     public void setDayTextSize(float textSize) {
-        mTextDay.setTextSize(textSize);
+        mTextDay.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
     }
 
     public void setDayTextColor(int color) {
@@ -226,7 +230,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
     public void setHourTextSize(float textSize) {
         for (TextView textView: mTextsHour) {
-            textView.setTextSize(textSize);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         }
     }
 
@@ -649,6 +653,11 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = ((ViewGroup) getParent()).getMeasuredWidth();
+
+            if (width == 0) {
+                post(this::requestLayout);
+            }
+
             mCalendar.setTimeInMillis(System.currentTimeMillis());
             int yearWidth = width * mCalendar.getActualMaximum(Calendar.DAY_OF_YEAR) / mCalendar.getMaximum(Calendar.DAY_OF_WEEK);
             super.onMeasure(MeasureSpec.makeMeasureSpec(yearWidth, MeasureSpec.EXACTLY), heightMeasureSpec);
@@ -678,8 +687,8 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
             mTimeAreaHeight = (int) (verticalMargin + dayOfWeekHeight + timeMiddleMargin + dateHeight + verticalMargin);
 
-            mDayOfWeekDrawY = verticalMargin + dayOfWeekHeight / 2f + (dayOfWeekMetrics.ascent + dayOfWeekMetrics.descent) / 2f;
-            mDateDrawY = verticalMargin + dayOfWeekHeight + timeMiddleMargin + dateHeight / 2f + (dateMetrics.ascent + dateMetrics.descent) / 2f;
+            mDayOfWeekDrawY = verticalMargin + dayOfWeekHeight / 2f - (dayOfWeekMetrics.ascent + dayOfWeekMetrics.descent) / 2f;
+            mDateDrawY = verticalMargin + dayOfWeekHeight + timeMiddleMargin + dateHeight / 2f - (dateMetrics.ascent + dateMetrics.descent) / 2f;
 
             ViewGroup parent = (ViewGroup) getParent();
             int width = parent.getWidth();
@@ -713,7 +722,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
             canvas.save();
 
-            canvas.translate(mSlotWidth * passedDays, 0);
+            canvas.translate(mSlotWidth * passedDays + 1.5f, 0); // TODO 1.5f is fix for slots stroke.
 
             int slotIndex = 0;
 

@@ -27,9 +27,9 @@ public final class TimeSlot implements Model {
   public static final QueryField STATUS = field("TimeSlot", "status");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String clientUserId;
-  private final @ModelField(targetType="Int") Integer endTime;
+  private final @ModelField(targetType="Int") Long endTime;
   private final @ModelField(targetType="String") String offerId;
-  private final @ModelField(targetType="Int") Integer startTime;
+  private final @ModelField(targetType="Int") Long startTime;
   private final @ModelField(targetType="Int") Integer status;
   public String getId() {
       return id;
@@ -39,7 +39,7 @@ public final class TimeSlot implements Model {
       return clientUserId;
   }
   
-  public Integer getEndTime() {
+  public Long getEndTime() {
       return endTime;
   }
   
@@ -47,7 +47,7 @@ public final class TimeSlot implements Model {
       return offerId;
   }
   
-  public Integer getStartTime() {
+  public Long getStartTime() {
       return startTime;
   }
   
@@ -55,7 +55,7 @@ public final class TimeSlot implements Model {
       return status;
   }
   
-  private TimeSlot(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status) {
+  private TimeSlot(String id, String clientUserId, Long endTime, String offerId, Long startTime, Integer status) {
     this.id = id;
     this.clientUserId = clientUserId;
     this.endTime = endTime;
@@ -153,9 +153,9 @@ public final class TimeSlot implements Model {
     TimeSlot build();
     BuildStep id(String id) throws IllegalArgumentException;
     BuildStep clientUserId(String clientUserId);
-    BuildStep endTime(Integer endTime);
+    BuildStep endTime(Long endTime);
     BuildStep offerId(String offerId);
-    BuildStep startTime(Integer startTime);
+    BuildStep startTime(Long startTime);
     BuildStep status(Integer status);
   }
   
@@ -163,9 +163,9 @@ public final class TimeSlot implements Model {
   public static class Builder implements BuildStep {
     private String id;
     private String clientUserId;
-    private Integer endTime;
+    private Long endTime;
     private String offerId;
-    private Integer startTime;
+    private Long startTime;
     private Integer status;
     @Override
      public TimeSlot build() {
@@ -187,7 +187,7 @@ public final class TimeSlot implements Model {
     }
     
     @Override
-     public BuildStep endTime(Integer endTime) {
+     public BuildStep endTime(Long endTime) {
         this.endTime = endTime;
         return this;
     }
@@ -199,7 +199,7 @@ public final class TimeSlot implements Model {
     }
     
     @Override
-     public BuildStep startTime(Integer startTime) {
+     public BuildStep startTime(Long startTime) {
         this.startTime = startTime;
         return this;
     }
@@ -233,7 +233,7 @@ public final class TimeSlot implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status) {
+    private CopyOfBuilder(String id, String clientUserId, Long endTime, String offerId, Long startTime, Integer status) {
       super.id(id);
       super.clientUserId(clientUserId)
         .endTime(endTime)
@@ -248,7 +248,7 @@ public final class TimeSlot implements Model {
     }
     
     @Override
-     public CopyOfBuilder endTime(Integer endTime) {
+     public CopyOfBuilder endTime(Long endTime) {
       return (CopyOfBuilder) super.endTime(endTime);
     }
     
@@ -258,7 +258,7 @@ public final class TimeSlot implements Model {
     }
     
     @Override
-     public CopyOfBuilder startTime(Integer startTime) {
+     public CopyOfBuilder startTime(Long startTime) {
       return (CopyOfBuilder) super.startTime(startTime);
     }
     

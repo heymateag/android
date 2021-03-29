@@ -316,6 +316,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
+        // buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment()); TODO Why is there a buy button here?
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(150), AndroidUtilities.dp(50));
         buyButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());

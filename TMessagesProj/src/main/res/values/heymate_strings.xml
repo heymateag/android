@@ -8,8 +8,10 @@
     <string name="hm_later">Later</string>
     <string name="hm_next">Next</string>
     <string name="hm_confirm">Confirm</string>
+    <string name="hm_cancel">Cancel</string>
     <string name="hm_day">Day</string>
-    <string name="hm_network_error">Could not transfer data with node.</string>
+    <string name="hm_network_blockchain_error">Could not transfer data with node.</string>
+    <string name="hm_network_error">Could not transfer data with server.</string>
 
     <string name="hm_sunday_short">Sun</string>
     <string name="hm_monday_short">Mon</string>
@@ -18,6 +20,9 @@
     <string name="hm_thursday_short">Thu</string>
     <string name="hm_friday_short">Fri</string>
     <string name="hm_saturday_short">Sat</string>
+
+    <string name="hm_authentication">Authentication</string>
+    <string name="hm_authentication_description">Authentication is required to perform this action.</string>
 
     <string name="hm_your_wallet">Your wallet</string>
     <string name="hm_no_wallet_detected">No Wallet Detected</string>
@@ -39,5 +44,7 @@
     <string name="hm_attestation_bad_code">This is not a code</string>
     <string name="hm_attestation_invalid_code">This is the wrong code</string>
     <string name="hm_attestation_used_code">Code already used</string>
+
+    <string name="hm_timeslotselection_title">Time Slots</string>
 
 </resources>

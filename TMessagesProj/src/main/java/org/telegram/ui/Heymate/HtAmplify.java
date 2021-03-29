@@ -5,11 +5,13 @@ import android.util.Log;
 
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.aws.ApiAuthProviders;
 import com.amplifyframework.api.aws.sigv4.ApiKeyAuthProvider;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
 
@@ -18,6 +20,7 @@ import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -31,6 +34,12 @@ public class HtAmplify {
     private static HtAmplify instance;
 
     private static String API_KEY = "da2-gmv546zpg5edxi6eej66aq263u";
+
+    public interface OfferCallback {
+
+        void onOfferQueryResult(boolean success, Offer offer, ApiException exception);
+
+    }
 
     public static HtAmplify getInstance(Context context) {
         if (instance == null)
@@ -91,8 +100,8 @@ public class HtAmplify {
         for (int i = 0; i < times.size(); i += 2) {
 
             TimeSlot timeSlot = TimeSlot.builder()
-                    .startTime(times.get(i).intValue())
-                    .endTime(times.get(i + 1).intValue())
+                    .startTime(times.get(i))
+                    .endTime(times.get(i + 1))
                     .offerId(newOffer.getId())
                     .status(HtTimeSlotStatus.AVAILABLE.ordinal())
                     .clientUserId("0")
@@ -231,6 +240,21 @@ public class HtAmplify {
             e.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    public void getOffer(String offerId, OfferCallback callback) {
+        Amplify.API.query(
+                ModelQuery.get(Offer.class, offerId),
+                response -> {
+                    if (response.hasData()) {
+                        callback.onOfferQueryResult(true, response.getData(), null);
+                    }
+                    else {
+                        callback.onOfferQueryResult(false, null, null);
+                    }
+                },
+                error -> callback.onOfferQueryResult(false, null, error)
+        );
     }
 
     public ArrayList<Offer> getOffers(int userId, int currentAccount) {
