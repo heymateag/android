@@ -1,25 +1,49 @@
 package works.heymate.celo;
 
 import org.celo.contractkit.ContractKit;
-import org.celo.contractkit.protocol.CeloRawTransaction;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.web3j.protocol.Web3j;
-import org.web3j.tx.TransactionManager;
+import org.web3j.crypto.Sign;
+import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import works.heymate.celo.contract.Offer;
 import works.heymate.core.offer.OfferUtils;
 
 public class CeloOffer {
 
-    private Offer mContract;
+    private static final BigInteger SIXTY = BigInteger.valueOf(60L);
+
+    private final ContractKit mContractKit;
+    private final Offer mContract;
 
     public CeloOffer(String address, ContractKit contractKit) {
+        mContractKit = contractKit;
         mContract = Offer.load(address, contractKit.web3j, contractKit.transactionManager, new DefaultGasProvider());
+    }
+
+    public String createOfferSignature(String rate, String termsConfig) throws Exception {
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(rate) * 100));
+
+        JSONObject configJSON = new JSONObject(termsConfig);
+
+        BigInteger initialDeposit = new BigInteger(configJSON.getString(OfferUtils.INITIAL_DEPOSIT));
+        BigInteger[] config = getConfig(configJSON).toArray(new BigInteger[0]);
+
+        Sign.SignatureData signatureData = Sign.signPrefixedMessage(getBytes(amount, initialDeposit, config), mContractKit.transactionManager.getCredentials().getEcKeyPair());
+
+        byte[] signature = getBytes(signatureData.getV(), signatureData.getR(), signatureData.getS());
+
+        return Numeric.toHexString(signature);
     }
 
     /*
@@ -38,28 +62,121 @@ public class CeloOffer {
     serviceProviderAddress: string
     serviceProviderSignature: string
      */
-    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, long startTime) {
+    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress, long startTime) throws CeloException, JSONException {
         byte[] tradeId = new byte[16];
         new SecureRandom().nextBytes(tradeId);
 
-        long amount = (long) (Double.parseDouble(offer.getRate()) * 100);
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 
-        int initialDeposit;
-//        offer.get
+        BigInteger initialDeposit;
+
+        List<String> userAddresses = Arrays.asList(offer.getServiceProviderAddress(), consumerAddress);
+
+        JSONObject configJSON = new JSONObject(offer.getTermsConfig());
+
+        initialDeposit = new BigInteger(configJSON.getString(OfferUtils.INITIAL_DEPOSIT));
+        List<BigInteger> config = getConfig(configJSON);
 
         try {
-            JSONObject config = new JSONObject(offer.getTermsConfig());
-        } catch (JSONException e) {
-            // TODO
+            mContractKit.contracts.getStableToken().approve(mContract.getContractAddress(), amount).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(CeloError.INSUFFICIENT_BALANCE, e);
+            }
+
+            throw new CeloException(CeloError.NETWORK_ERROR, e);
         }
 
-//        mContract.createOffer(
-//                tradeId,
-//                BigInteger.valueOf(amount),
-//                BigInteger.ONE, // fee
-//                BigInteger.valueOf(offer.getExpiry().toDate().getTime()),
-//                BigInteger.valueOf(startTime),
-//                initialDeposit, userAddresses, IntsConfig, signature, BigInteger.ZERO).send();
+        try {
+            mContract.createOffer(
+                    tradeId,
+                    amount,
+                    BigInteger.ONE, // fee
+                    BigInteger.valueOf(offer.getExpiry().toDate().getTime()),
+                    BigInteger.valueOf(startTime),
+                    initialDeposit,
+                    userAddresses,
+                    config,
+                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature()),
+                    BigInteger.ZERO
+            ).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
+    }
+
+    private static List<BigInteger> getConfig(JSONObject configJSON) throws JSONException {
+        List<BigInteger> config = new ArrayList<>(8);
+
+        BigInteger hours1 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_HOURS1)).multiply(SIXTY);
+        BigInteger percent1 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_PERCENT1));
+        BigInteger hours2 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_HOURS2)).multiply(SIXTY);
+        BigInteger percent2 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_PERCENT2));
+        BigInteger delayTime = new BigInteger(configJSON.getString(OfferUtils.DELAY_TIME));
+        BigInteger delayPercent = new BigInteger(configJSON.getString(OfferUtils.DELAY_PERCENT));
+
+        if (hours1.compareTo(hours2) > 0) {
+            config.add(hours1);
+            config.add(percent1);
+            config.add(hours2);
+            config.add(percent2);
+        }
+        else {
+            config.add(hours2);
+            config.add(percent2);
+            config.add(hours1);
+            config.add(percent1);
+        }
+
+        config.add(delayTime);
+        config.add(delayPercent);
+        config.add(BigInteger.ZERO);
+        config.add(BigInteger.ZERO);
+
+        return config;
+    }
+
+    private static byte[] getBytes(Object... params) {
+        byte[][] bytes = new byte[params.length][];
+        int length = 0;
+
+        for (int i = 0; i < params.length; i++) {
+            Object obj = params[i];
+
+            if (obj instanceof byte[]) {
+                bytes[i] = (byte[]) obj;
+            }
+            else if (obj instanceof BigInteger) {
+                bytes[i] = ((BigInteger) obj).toByteArray();
+            }
+            else if (obj instanceof String) {
+                bytes[i] = ((String) obj).getBytes();
+            }
+            else if (obj.getClass().isArray()) {
+                bytes[i] = getBytes(obj);
+            }
+            else {
+                throw new IllegalArgumentException("Unsupported type");
+            }
+
+            length += bytes[i].length;
+        }
+
+        byte[] combinedBytes = new byte[length];
+
+        length = 0;
+
+        for (byte[] bs : bytes) {
+            System.arraycopy(bs, 0, combinedBytes, length, bs.length);
+            length += bs.length;
+        }
+
+        return combinedBytes;
     }
 
 }
