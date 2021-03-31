@@ -32,6 +32,8 @@ public final class Offer implements Model {
   public static final QueryField LONGITUDE = field("Offer", "longitude");
   public static final QueryField RATE = field("Offer", "rate");
   public static final QueryField RATE_TYPE = field("Offer", "rateType");
+  public static final QueryField SERVICE_PROVIDER_ADDRESS = field("Offer", "serviceProviderAddress");
+  public static final QueryField SERVICE_PROVIDER_SIGNATURE = field("Offer", "serviceProviderSignature");
   public static final QueryField SUB_CATEGORY = field("Offer", "subCategory");
   public static final QueryField TERMS = field("Offer", "terms");
   public static final QueryField TERMS_CONFIG = field("Offer", "termsConfig");
@@ -49,6 +51,8 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String longitude;
   private final @ModelField(targetType="String") String rate;
   private final @ModelField(targetType="String") String rateType;
+  private final @ModelField(targetType="String") String serviceProviderAddress;
+  private final @ModelField(targetType="String") String serviceProviderSignature;
   private final @ModelField(targetType="String") String subCategory;
   private final @ModelField(targetType="String") String terms;
   private final @ModelField(targetType="AWSJSON") String termsConfig;
@@ -102,6 +106,14 @@ public final class Offer implements Model {
       return rateType;
   }
   
+  public String getServiceProviderAddress() {
+      return serviceProviderAddress;
+  }
+  
+  public String getServiceProviderSignature() {
+      return serviceProviderSignature;
+  }
+  
   public String getSubCategory() {
       return subCategory;
   }
@@ -122,7 +134,7 @@ public final class Offer implements Model {
       return userID;
   }
   
-  private Offer(String id, String availabilitySlot, String category, String currency, String description, Temporal.Date expiry, Boolean isActive, String latitude, String locationData, String longitude, String rate, String rateType, String subCategory, String terms, String termsConfig, String title, String userID) {
+  private Offer(String id, String availabilitySlot, String category, String currency, String description, Temporal.Date expiry, Boolean isActive, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, String subCategory, String terms, String termsConfig, String title, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
@@ -135,6 +147,8 @@ public final class Offer implements Model {
     this.longitude = longitude;
     this.rate = rate;
     this.rateType = rateType;
+    this.serviceProviderAddress = serviceProviderAddress;
+    this.serviceProviderSignature = serviceProviderSignature;
     this.subCategory = subCategory;
     this.terms = terms;
     this.termsConfig = termsConfig;
@@ -162,6 +176,8 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getLongitude(), offer.getLongitude()) &&
               ObjectsCompat.equals(getRate(), offer.getRate()) &&
               ObjectsCompat.equals(getRateType(), offer.getRateType()) &&
+              ObjectsCompat.equals(getServiceProviderAddress(), offer.getServiceProviderAddress()) &&
+              ObjectsCompat.equals(getServiceProviderSignature(), offer.getServiceProviderSignature()) &&
               ObjectsCompat.equals(getSubCategory(), offer.getSubCategory()) &&
               ObjectsCompat.equals(getTerms(), offer.getTerms()) &&
               ObjectsCompat.equals(getTermsConfig(), offer.getTermsConfig()) &&
@@ -185,6 +201,8 @@ public final class Offer implements Model {
       .append(getLongitude())
       .append(getRate())
       .append(getRateType())
+      .append(getServiceProviderAddress())
+      .append(getServiceProviderSignature())
       .append(getSubCategory())
       .append(getTerms())
       .append(getTermsConfig())
@@ -210,6 +228,8 @@ public final class Offer implements Model {
       .append("longitude=" + String.valueOf(getLongitude()) + ", ")
       .append("rate=" + String.valueOf(getRate()) + ", ")
       .append("rateType=" + String.valueOf(getRateType()) + ", ")
+      .append("serviceProviderAddress=" + String.valueOf(getServiceProviderAddress()) + ", ")
+      .append("serviceProviderSignature=" + String.valueOf(getServiceProviderSignature()) + ", ")
       .append("subCategory=" + String.valueOf(getSubCategory()) + ", ")
       .append("terms=" + String.valueOf(getTerms()) + ", ")
       .append("termsConfig=" + String.valueOf(getTermsConfig()) + ", ")
@@ -259,6 +279,8 @@ public final class Offer implements Model {
       null,
       null,
       null,
+      null,
+      null,
       null
     );
   }
@@ -276,6 +298,8 @@ public final class Offer implements Model {
       longitude,
       rate,
       rateType,
+      serviceProviderAddress,
+      serviceProviderSignature,
       subCategory,
       terms,
       termsConfig,
@@ -301,6 +325,8 @@ public final class Offer implements Model {
     BuildStep longitude(String longitude);
     BuildStep rate(String rate);
     BuildStep rateType(String rateType);
+    BuildStep serviceProviderAddress(String serviceProviderAddress);
+    BuildStep serviceProviderSignature(String serviceProviderSignature);
     BuildStep subCategory(String subCategory);
     BuildStep terms(String terms);
     BuildStep termsConfig(String termsConfig);
@@ -322,6 +348,8 @@ public final class Offer implements Model {
     private String longitude;
     private String rate;
     private String rateType;
+    private String serviceProviderAddress;
+    private String serviceProviderSignature;
     private String subCategory;
     private String terms;
     private String termsConfig;
@@ -343,6 +371,8 @@ public final class Offer implements Model {
           longitude,
           rate,
           rateType,
+          serviceProviderAddress,
+          serviceProviderSignature,
           subCategory,
           terms,
           termsConfig,
@@ -424,6 +454,18 @@ public final class Offer implements Model {
     }
     
     @Override
+     public BuildStep serviceProviderAddress(String serviceProviderAddress) {
+        this.serviceProviderAddress = serviceProviderAddress;
+        return this;
+    }
+    
+    @Override
+     public BuildStep serviceProviderSignature(String serviceProviderSignature) {
+        this.serviceProviderSignature = serviceProviderSignature;
+        return this;
+    }
+    
+    @Override
      public BuildStep subCategory(String subCategory) {
         this.subCategory = subCategory;
         return this;
@@ -470,7 +512,7 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, String currency, String description, Temporal.Date expiry, Boolean isActive, String latitude, String locationData, String longitude, String rate, String rateType, String subCategory, String terms, String termsConfig, String title, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, String currency, String description, Temporal.Date expiry, Boolean isActive, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, String subCategory, String terms, String termsConfig, String title, String userId) {
       super.id(id);
       super.userId(userId)
         .availabilitySlot(availabilitySlot)
@@ -484,6 +526,8 @@ public final class Offer implements Model {
         .longitude(longitude)
         .rate(rate)
         .rateType(rateType)
+        .serviceProviderAddress(serviceProviderAddress)
+        .serviceProviderSignature(serviceProviderSignature)
         .subCategory(subCategory)
         .terms(terms)
         .termsConfig(termsConfig)
@@ -548,6 +592,16 @@ public final class Offer implements Model {
     @Override
      public CopyOfBuilder rateType(String rateType) {
       return (CopyOfBuilder) super.rateType(rateType);
+    }
+    
+    @Override
+     public CopyOfBuilder serviceProviderAddress(String serviceProviderAddress) {
+      return (CopyOfBuilder) super.serviceProviderAddress(serviceProviderAddress);
+    }
+    
+    @Override
+     public CopyOfBuilder serviceProviderSignature(String serviceProviderSignature) {
+      return (CopyOfBuilder) super.serviceProviderSignature(serviceProviderSignature);
     }
     
     @Override
