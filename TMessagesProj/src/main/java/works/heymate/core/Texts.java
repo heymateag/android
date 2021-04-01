@@ -16,8 +16,12 @@ public class Texts {
     public static final String CONFIRM = "confirm";
     public static final String CANCEL = "cancel";
     public static final String DAY = "day";
+    public static final String CREATE_WALLET = "create_wallet";
+
     public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";
     public static final String NETWORK_ERROR = "network_error";
+    public static final String UNKNOWN_ERROR = "unknown_error";
+    public static final String INSUFFICIENT_BALANCE = "insufficient_balance";
 
     public static final String SUNDAY_SHORT = "sunday_short";
     public static final String MONDAY_SHORT = "monday_short";
@@ -29,6 +33,9 @@ public class Texts {
 
     public static final String AUTHENTICATION = "authentication";
     public static final String AUTHENTICATION_DESCRIPTION = "authentication_description";
+
+    public static final String CREATE_OFFER_NO_WALLET = "create_offer_no_wallet";
+    public static final String CREATE_OFFER_NO_WALLET_DESCRIPTION = "create_offer_no_wallet_description";
 
     public static final String YOUR_WALLET = "your_wallet";
     public static final String NO_WALLET_DETECTED = "no_wallet_detected";

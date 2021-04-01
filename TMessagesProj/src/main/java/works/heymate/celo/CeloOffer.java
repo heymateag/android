@@ -158,7 +158,7 @@ public class CeloOffer {
                 bytes[i] = ((String) obj).getBytes();
             }
             else if (obj.getClass().isArray()) {
-                bytes[i] = getBytes(obj);
+                bytes[i] = getBytes((Object[]) obj);
             }
             else {
                 throw new IllegalArgumentException("Unsupported type");

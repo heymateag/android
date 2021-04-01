@@ -67,7 +67,7 @@ public class HtAmplify {
         }
     }
 
-    public Offer createOffer(OfferDto dto) {
+    public Offer createOffer(OfferDto dto, String address, String signature) {
         Offer newOffer = Offer.builder()
                 .userId("" + dto.getUserId())
                 .title(dto.getTitle())
@@ -88,6 +88,8 @@ public class HtAmplify {
                 .longitude("" + dto.getLongitude())
                 .serviceProviderAddress("Address goes here")
                 .serviceProviderSignature("Signature goes here")
+                .serviceProviderAddress(address)
+                .serviceProviderSignature(signature)
                 .build();
 
         Amplify.API.mutate(ModelMutation.create(newOffer),

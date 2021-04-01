@@ -24,6 +24,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -33,7 +34,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     private int idCounter = 1;
     public ImageView closeImage;
 
-    public HtOfferDetailsPopUp(Context context, int progressStyle, String offerUUID) {
+    public HtOfferDetailsPopUp(Context context, int progressStyle, String offerUUID, BaseFragment fragment) {
         super(context, progressStyle);
         AlertDialog.Builder builder = this;
 
@@ -316,7 +317,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
-        // buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment()); TODO Why is there a buy button here?
+        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(fragment, offerUUID)); // TODO Why is there a buy button here?
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(150), AndroidUtilities.dp(50));
         buyButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());

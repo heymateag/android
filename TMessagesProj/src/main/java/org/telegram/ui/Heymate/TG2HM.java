@@ -5,7 +5,8 @@ import org.telegram.messenger.UserConfig;
 public class TG2HM {
 
     public static String getCurrentPhoneNumber() {
-        return getPhoneNumber(UserConfig.selectedAccount);
+        String phoneNumber = getPhoneNumber(UserConfig.selectedAccount);
+        return phoneNumber.startsWith("+") ? phoneNumber : ("+" + phoneNumber);
     }
 
     public static String getPhoneNumber(int num) {

@@ -88,6 +88,7 @@ public class HtChatMessageCell extends FrameLayout {
 
     public void setOffer(Offer offer) {
         this.offer = offer;
+        offerUUID = offer.getId();
     }
 
     public void setRate(String rate) {
@@ -469,7 +470,7 @@ public class HtChatMessageCell extends FrameLayout {
         viewLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, 0, offerUUID);
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, 0, offerUUID, parent);
                 AlertDialog dialog = detailsPopUp.create();
                 detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
                     @Override

@@ -10,8 +10,12 @@
     <string name="hm_confirm">Confirm</string>
     <string name="hm_cancel">Cancel</string>
     <string name="hm_day">Day</string>
+    <string name="hm_create_wallet">Create Wallet</string>
+
     <string name="hm_network_blockchain_error">Could not transfer data with node.</string>
     <string name="hm_network_error">Could not transfer data with server.</string>
+    <string name="hm_unknown_error">Operation faced an unknown problem!</string>
+    <string name="hm_insufficient_balance">Not enough balance to perform this payment.</string>
 
     <string name="hm_sunday_short">Sun</string>
     <string name="hm_monday_short">Mon</string>
@@ -23,6 +27,9 @@
 
     <string name="hm_authentication">Authentication</string>
     <string name="hm_authentication_description">Authentication is required to perform this action.</string>
+
+    <string name="hm_create_offer_no_wallet">No Wallet Detected</string>
+    <string name="hm_create_offer_no_wallet_description">A wallet is required to receive payments.</string>
 
     <string name="hm_your_wallet">Your wallet</string>
     <string name="hm_no_wallet_detected">No Wallet Detected</string>

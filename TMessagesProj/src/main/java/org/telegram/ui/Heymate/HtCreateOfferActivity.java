@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +58,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.core.wallet.Wallet;
 
 public class HtCreateOfferActivity extends BaseFragment {
 
@@ -750,7 +753,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer);
+                Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer, null, null);
 
                 HtSQLite.getInstance().addOffer(createdOffer);
 
@@ -780,10 +783,18 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         saveLayout.setEnabled(true);
         saveLayout.setOnClickListener(v -> {
-//            presentFragment(new WalletActivity()); // TODO Set FREE
-//            if (saveLayout != null) {
-//                return;
-//            }
+            Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
+
+            if (!wallet.isCreated()) {
+                AlertDialog alert = new AlertDialog.Builder(getParentActivity())
+                        .setTitle(Texts.get(Texts.CREATE_OFFER_NO_WALLET))
+                        .setMessage(Texts.get(Texts.CREATE_OFFER_NO_WALLET_DESCRIPTION))
+                        .setPositiveButton(Texts.get(Texts.CREATE_WALLET), (dialog, which) -> presentFragment(new WalletActivity(saveLayout::performClick)))
+                        .setNegativeButton(Texts.get(Texts.CANCEL), (dialog, which) -> dialog.dismiss())
+                        .create();
+                showDialog(alert);
+                return;
+            }
 
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
@@ -794,116 +805,123 @@ public class HtCreateOfferActivity extends BaseFragment {
             UndoView undoView = new UndoView(context, true);
             undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
             alertLayout.removeAllViews();
-            String errors = "";
+            StringBuilder errors = new StringBuilder();
             alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
             if (titleTextField.getText().toString().isEmpty()) {
                 titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors += LocaleController.getString("HtTitleEmpty", R.string.HtTitleEmpty);
+                errors.append(LocaleController.getString("HtTitleEmpty", R.string.HtTitleEmpty));
             }
             if (descriptionTextField.getText().toString().isEmpty()) {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors += LocaleController.getString("HtDescriptionEmpty", R.string.HtDescriptionEmpty);
+                errors.append(LocaleController.getString("HtDescriptionEmpty", R.string.HtDescriptionEmpty));
             }
             if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
                 priceInputCell.setError(true, 1);
-                errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
+                errors.append(LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty));
             }
             if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
                 locationInputCell.setError(true, 0);
-                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
+                errors.append(LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty));
             }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
-                errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
+                errors.append(LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty));
             }
             if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
                 categoryInputCell.setError(true, 1);
-                errors += LocaleController.getString("HtSubCategoryEmpty", R.string.HtSubCategoryEmpty);
+                errors.append(LocaleController.getString("HtSubCategoryEmpty", R.string.HtSubCategoryEmpty));
             }
-            if (!errors.isEmpty()) {
+            if (errors.length() > -0) {
                 undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
                 String configText = paymentInputCell.getRes().toString();
-                OfferDto newOffer = new OfferDto();
-                newOffer.setTitle(titleTextField.getText().toString());
-                newOffer.setDescription(descriptionTextField.getText().toString());
-                newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
-                newOffer.setConfigText(configText);
-                newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
-                newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
-                newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
-                newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
-                newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
-                newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                newOffer.setLatitude(latitude);
-                newOffer.setLongitude(longitude);
-                newOffer.setStatus(OfferStatus.ACTIVE);
-                newOffer.setDateSlots(dateSlots);
-                newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                if (actionType != ActionType.EDIT) {
-                    Offer offer = HtAmplify.getInstance(context).createOffer(newOffer);
-
-                    TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-
-                    String name;
-
-                    if (user.username != null) {
-                        name = "@" + user.username;
+                wallet.signOffer(priceInputCell.getRes(ARGUMENTS_PRICE), configText, (successful, signature, exception) -> {
+                    if (!successful) {
+                        Toast.makeText(context, Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                        return;
                     }
-                    else {
-                        name = user.first_name;
 
-                        if (!TextUtils.isEmpty(user.last_name)) {
-                            name = name + " " + user.last_name;
+                    OfferDto newOffer = new OfferDto();
+                    newOffer.setTitle(titleTextField.getText().toString());
+                    newOffer.setDescription(descriptionTextField.getText().toString());
+                    newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
+                    newOffer.setConfigText(configText);
+                    newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
+                    newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
+                    newOffer.setExpire(expireDate);
+                    newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+                    newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
+                    newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
+                    newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
+                    newOffer.setLatitude(latitude);
+                    newOffer.setLongitude(longitude);
+                    newOffer.setStatus(OfferStatus.ACTIVE);
+                    newOffer.setDateSlots(dateSlots);
+                    newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+                    if (actionType != ActionType.EDIT) {
+                        Offer offer = HtAmplify.getInstance(context).createOffer(newOffer, wallet.getAddress(), signature);
+
+                        TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+
+                        String name;
+
+                        if (user.username != null) {
+                            name = "@" + user.username;
                         }
+                        else {
+                            name = user.first_name;
+
+                            if (!TextUtils.isEmpty(user.last_name)) {
+                                name = name + " " + user.last_name;
+                            }
+                        }
+
+                        String phrase = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(phrase, (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
+                    } else {
+                        HtSQLite.getInstance().addOffer(offerUUID, newOffer);
                     }
+                    if (pickedImage != null) {
+                        String[] filePath = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = context.getContentResolver().query(pickedImage, filePath, null, null, null);
+                        cursor.moveToFirst();
+                        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
 
-                    String phrase = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
-
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(phrase, (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
-                } else {
-                    HtSQLite.getInstance().addOffer(offerUUID, newOffer);
-                }
-                if (pickedImage != null) {
-                    String[] filePath = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = context.getContentResolver().query(pickedImage, filePath, null, null, null);
-                    cursor.moveToFirst();
-                    String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                    Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-                    cursor.close();
-                    ContextWrapper cw2 = new ContextWrapper(context);
-                    File directory2 = cw2.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-                    File myPath = new File(directory2, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
-                    FileOutputStream fos = null;
-                    try {
-                        fos = new FileOutputStream(myPath);
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    } finally {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+                        cursor.close();
+                        ContextWrapper cw2 = new ContextWrapper(context);
+                        File directory2 = cw2.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
+                        File myPath = new File(directory2, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
+                        FileOutputStream fos = null;
                         try {
-                            fos.close();
-                        } catch (IOException e) {
+                            fos = new FileOutputStream(myPath);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        } catch (Exception e) {
                             e.printStackTrace();
+                        } finally {
+                            try {
+                                fos.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
 
-                }
-                undoView.setColors(context.getResources().getColor(R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
-                undoView.showWithAction(0, UndoView.ACTION_OFFER_SAVED, errors, null, () -> {
-                    undoView.setVisibility(View.GONE);
+                    }
+                    undoView.setColors(context.getResources().getColor(R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
+                    undoView.showWithAction(0, UndoView.ACTION_OFFER_SAVED, errors, null, () -> {
+                        undoView.setVisibility(View.GONE);
+                    });
+                    presentFragment(new OffersActivity());
+                    parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
+                    if (actionType == ActionType.EDIT)
+                        parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 3);
+                    finishFragment();
                 });
-                presentFragment(new OffersActivity());
-                parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
-                if (actionType == ActionType.EDIT)
-                    parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 3);
-                finishFragment();
             }
         });
 

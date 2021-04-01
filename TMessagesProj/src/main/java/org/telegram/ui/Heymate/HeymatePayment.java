@@ -5,9 +5,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,6 +29,8 @@ import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
+import works.heymate.celo.CeloError;
+import works.heymate.celo.CeloException;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
@@ -148,10 +153,10 @@ public class HeymatePayment {
             return;
         }
 
-        if (!verifiedStatus.verified) {
-            fragment.presentFragment(new AttestationActivity(() -> initPayment(fragment, offer, timeSlot)));
-            return;
-        }
+//        if (!verifiedStatus.verified) { // TODO uncomment
+//            fragment.presentFragment(new AttestationActivity(() -> initPayment(fragment, offer, timeSlot)));
+//            return;
+//        }
 
         boolean needsSecuritySettings = !Security.ensureSecurity(
                 (FragmentActivity) fragment.getParentActivity(),
@@ -159,23 +164,70 @@ public class HeymatePayment {
                 Texts.get(Texts.AUTHENTICATION),
                 Texts.get(Texts.AUTHENTICATION_DESCRIPTION),
                 new IntentLauncherFragment(fragment),
-                () -> initPreparedPayment(fragment, offer, timeSlot));
+                () -> blah(fragment, offer, timeSlot));
 
         if (needsSecuritySettings) {
             fragment.presentFragment(new SecureWalletActivity(() -> initPayment(fragment, offer, timeSlot)));
         }
     }
 
-    private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-        // TODO
-        new AlertDialog.Builder(fragment.getParentActivity())
-                .setTitle("End Of Demo")
-                .setMessage("Come back later?")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .setCancelable(false)
+    private static void blah(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
+        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+
+        Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
+        Context context = fragment.getParentActivity();
+        TextView addressView = new TextView(context);
+        addressView.setText(wallet.getAddress() + "\nhttps://celo.org/developers/faucet");
+        addressView.setAutoLinkMask(Linkify.WEB_URLS);
+        addressView.setTextIsSelectable(true);
+        addressView.setMovementMethod(LinkMovementMethod.getInstance());
+        new AlertDialog.Builder(context)
+                .setTitle("Go to attestation?")
+                .setView(addressView)
+                .setPositiveButton("Go", (dialog, which) -> {
+                    dialog.dismiss();
+                    initPreparedPayment(fragment, offer, timeSlot);
+                })
                 .show();
-//        String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
-//        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
+    }
+
+    private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
+        String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
+        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
+
+        Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
+
+        wallet.createAcceptedOffer(offer, timeSlot.getStartTime(), (success, errorCause) -> {
+            if (success) {
+                // TODO
+                new AlertDialog.Builder(fragment.getParentActivity())
+                        .setTitle("Offer accepted")
+                        .setMessage("YAAAAY")
+                        .setCancelable(false)
+                        .setPositiveButton("Duh!", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
+            else {
+                Log.e(TAG, "Failed to create offer on blockchain", errorCause);
+
+                if (errorCause instanceof CeloException) {
+                    CeloError coreError = errorCause.getMainCause().getError();
+
+                    if (coreError == CeloError.INSUFFICIENT_BALANCE) {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
+                    }
+                    else if (coreError == CeloError.NETWORK_ERROR) {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private static class IntentLauncherFragment extends BaseFragment implements Security.IntentLauncher {
