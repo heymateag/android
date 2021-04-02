@@ -156,14 +156,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="ton" />
             </intent-filter>
-<<<<<<< HEAD
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-=======
 
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
->>>>>>> offer-creation-map
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="celo" android:host="wallet" />
