@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 repositories {
-    mavenCentral()
     google()
+    mavenCentral()
     jcenter()
 
     maven {
@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.amplifyframework:aws-api:1.16.11'
     implementation 'com.amplifyframework:aws-datastore:1.16.11'
     implementation 'com.amplifyframework:aws-auth-cognito:1.17.1'
-    implementation 'com.amazonaws:aws-android-sdk-core:2.15.2'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.22.2'
     //AppSync SDK
     implementation 'com.amazonaws:aws-android-sdk-appsync:2.9.0'
     implementation 'com.amazonaws:aws-android-sdk-appsync-api:2.9.0'

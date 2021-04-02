@@ -3229,14 +3229,14 @@
     <string name="ViewMessage">Open Message</string>
     <!--Intro view-->
     <string name="Page1Title">Heymate Telegram</string>
-    <string name="Page2Title">Fast</string>
-    <string name="Page3Title">Free</string>
+    <string name="Page2Title">Social Commerce</string>
+    <string name="Page3Title">DEFI services</string>
     <string name="Page4Title">Secure</string>
     <string name="Page5Title">Powerful</string>
     <string name="Page6Title">Cloud-Based</string>
-    <string name="Page1Message">The world\'s **fastest** messaging app.\nIt is **free** and **secure**.</string>
-    <string name="Page2Message">**Telegram** delivers messages faster than\nany other application.</string>
-    <string name="Page3Message">**Telegram** is free forever. No ads.\nNo subscription fees.</string>
+    <string name="Page1Message">Stay in touch with your customers on your existing social network on **Telegram**</string>
+    <string name="Page2Message">Create **shops**, **marketplaces**, promote your **offers**, plan your appointments and transact with your customers - all in one place easily!</string>
+    <string name="Page3Message">Get **insured**, **borrow credit** and so much more to come. Watch this space!</string>
     <string name="Page4Message">**Telegram** keeps your messages safe\nfrom hacker attacks.</string>
     <string name="Page5Message">**Telegram** has no limits on\nthe size of your media and chats.</string>
     <string name="Page6Message">**Telegram** lets you access your messages\nfrom multiple devices.</string>

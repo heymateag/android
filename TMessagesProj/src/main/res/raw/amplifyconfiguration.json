@@ -1,0 +1,48 @@
+{
+    "UserAgent": "aws-amplify-cli/2.0",
+    "Version": "1.0",
+    "api": {
+        "plugins": {
+            "awsAPIPlugin": {
+                "Heymateapp-staging": {
+                    "endpointType": "GraphQL",
+                    "endpoint": "https://ikcetye4svhsjhcmakz2jyxmke.appsync-api.us-east-1.amazonaws.com/graphql",
+                    "region": "us-east-1",
+                    "authorizationType": "API_KEY",
+                    "apiKey": "da2-tetwyzi5mjhq3h33zdz6qxfmii"
+                }
+            }
+        }
+    },
+    "auth": {
+        "plugins": {
+            "awsCognitoAuthPlugin": {
+                "UserAgent": "aws-amplify-cli/0.1.0",
+                "Version": "0.1.0",
+                "IdentityManager": {
+                    "Default": {}
+                },
+                "AppSync": {
+                    "Default": {
+                        "ApiUrl": "https://ikcetye4svhsjhcmakz2jyxmke.appsync-api.us-east-1.amazonaws.com/graphql",
+                        "Region": "us-east-1",
+                        "AuthMode": "API_KEY",
+                        "ApiKey": "da2-tetwyzi5mjhq3h33zdz6qxfmii",
+                        "ClientDatabasePrefix": "Heymateapp-staging_API_KEY"
+                    },
+                    "Heymate_AWS_IAM": {
+                        "ApiUrl": "https://ikcetye4svhsjhcmakz2jyxmke.appsync-api.us-east-1.amazonaws.com/graphql",
+                        "Region": "us-east-1",
+                        "AuthMode": "AWS_IAM",
+                        "ClientDatabasePrefix": "Heymateapp-staging_AWS_IAM"
+                    }
+                },
+                "Auth": {
+                    "Default": {
+                        "authenticationFlowType": "USER_SRP_AUTH"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -32,7 +32,7 @@ public class HtLocationInputCell extends LinearLayout {
     private Drawable iconValue;
     private HashMap<String, Runnable> args;
 
-    public HtLocationInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
+    public HtLocationInputCell(Context context, HtCreateOfferActivity parent, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
         super(context);
         setWillNotDraw(false);
         paremetersValues = new HashMap<>();
@@ -74,6 +74,13 @@ public class HtLocationInputCell extends LinearLayout {
         titleLayout3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                parent.titleTextField.clearFocus();
+                parent.titleTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(parent.titleTextField);
+                parent.descriptionTextField.clearFocus();
+                parent.descriptionTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(parent.descriptionTextField);
+
                 if(!isOpen[0]){
                     ObjectAnimator anim1 = ObjectAnimator.ofFloat(categoryLayout, "scaleY", 0f, 1f);
                     anim1.setDuration(250);

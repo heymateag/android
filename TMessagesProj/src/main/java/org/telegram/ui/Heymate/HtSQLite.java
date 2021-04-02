@@ -20,7 +20,7 @@ public class HtSQLite extends SQLiteOpenHelper {
     public static void setInstance(Context context){
         if(instance == null){
             File dbFile = new File(ApplicationLoader.getFilesDirFixed().getPath(), "cache4.db");
-            instance = new HtSQLite(context, dbFile.getPath() , null, 76);
+            instance = new HtSQLite(context, dbFile.getPath() , null, 79);
         }
     }
 
@@ -230,7 +230,7 @@ public class HtSQLite extends SQLiteOpenHelper {
             contentValues.put("latitude", offer.getLatitude());
             contentValues.put("createdAt", offer.getCreatedAt());
             contentValues.put("editedAt", offer.getEditedAt());
-            database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
+            database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 

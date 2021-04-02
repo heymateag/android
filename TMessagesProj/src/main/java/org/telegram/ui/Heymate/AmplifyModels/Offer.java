@@ -61,7 +61,7 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String terms;
   private final @ModelField(targetType="AWSJSON") String termsConfig;
   private final @ModelField(targetType="String") String title;
-  private final @ModelField(targetType="ID", isRequired = true) String userID;
+  private final @ModelField(targetType="String") String userID;
   public String getId() {
       return id;
   }
@@ -259,7 +259,7 @@ public final class Offer implements Model {
       .toString();
   }
   
-  public static UserIdStep builder() {
+  public static BuildStep builder() {
       return new Builder();
   }
   
@@ -330,11 +330,6 @@ public final class Offer implements Model {
       title,
       userID);
   }
-  public interface UserIdStep {
-    BuildStep userId(String userId);
-  }
-  
-
   public interface BuildStep {
     Offer build();
     BuildStep id(String id) throws IllegalArgumentException;
@@ -357,12 +352,12 @@ public final class Offer implements Model {
     BuildStep terms(String terms);
     BuildStep termsConfig(String termsConfig);
     BuildStep title(String title);
+    BuildStep userId(String userId);
   }
   
 
-  public static class Builder implements UserIdStep, BuildStep {
+  public static class Builder implements BuildStep {
     private String id;
-    private String userID;
     private String availabilitySlot;
     private String category;
     private Integer createdAt;
@@ -382,6 +377,7 @@ public final class Offer implements Model {
     private String terms;
     private String termsConfig;
     private String title;
+    private String userID;
     @Override
      public Offer build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -408,13 +404,6 @@ public final class Offer implements Model {
           termsConfig,
           title,
           userID);
-    }
-    
-    @Override
-     public BuildStep userId(String userId) {
-        Objects.requireNonNull(userId);
-        this.userID = userId;
-        return this;
     }
     
     @Override
@@ -531,6 +520,12 @@ public final class Offer implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep userId(String userId) {
+        this.userID = userId;
+        return this;
+    }
+    
     /** 
      * WARNING: Do not set ID when creating a new object. Leave this blank and one will be auto generated for you.
      * This should only be set when referring to an already existing object.
@@ -556,8 +551,7 @@ public final class Offer implements Model {
   public final class CopyOfBuilder extends Builder {
     private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
       super.id(id);
-      super.userId(userId)
-        .availabilitySlot(availabilitySlot)
+      super.availabilitySlot(availabilitySlot)
         .category(category)
         .createdAt(createdAt)
         .currency(currency)
@@ -575,12 +569,8 @@ public final class Offer implements Model {
         .subCategory(subCategory)
         .terms(terms)
         .termsConfig(termsConfig)
-        .title(title);
-    }
-    
-    @Override
-     public CopyOfBuilder userId(String userId) {
-      return (CopyOfBuilder) super.userId(userId);
+        .title(title)
+        .userId(userId);
     }
     
     @Override
@@ -676,6 +666,11 @@ public final class Offer implements Model {
     @Override
      public CopyOfBuilder title(String title) {
       return (CopyOfBuilder) super.title(title);
+    }
+    
+    @Override
+     public CopyOfBuilder userId(String userId) {
+      return (CopyOfBuilder) super.userId(userId);
     }
   }
   

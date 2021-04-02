@@ -1,0 +1,16 @@
+﻿{
+    "UserAgent": "aws-amplify-cli/0.1.0",
+    "Version": "1.0",
+    "IdentityManager": {
+        "Default": {}
+    },
+    "AppSync": {
+        "Default": {
+            "ApiUrl": "https://zk3fb5fk7ncjzhkzkglcghotly.appsync-api.eu-central-1.amazonaws.com/graphql",
+            "Region": "eu-central-1",
+            "AuthMode": "API_KEY",
+            "ApiKey": "da2-3zm4rhvatzcd5ls2zqrrjvrgde",
+            "ClientDatabasePrefix": "Heymate_API_KEY"
+        }
+    }
+}

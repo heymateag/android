@@ -3,10 +3,12 @@ package org.telegram.ui.Heymate;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
@@ -22,6 +24,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,10 +50,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_DIR;
-import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_EXTENSION;
-import static org.telegram.ui.Heymate.HtCreateOfferActivity.OFFER_IMAGES_NAME;
-
 public class HtChatMessageCell extends FrameLayout {
 
     private Context context;
@@ -61,6 +60,7 @@ public class HtChatMessageCell extends FrameLayout {
     public TextView descriptionLabel;
     public TextView msgTimeLabel;
     public TextView rateLabel;
+    public TextView configLabel;
     public TextView addressLabel;
     public TextView expireLabel;
     private boolean out = false;
@@ -211,20 +211,14 @@ public class HtChatMessageCell extends FrameLayout {
         LinearLayout photoLayout = new LinearLayout(context);
         photoLayout.setGravity(Gravity.CENTER);
         image = new BackupImageView(context);
-        image.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
-        image.setRoundRadius(AndroidUtilities.dp(4));
-        Bitmap b;
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
-        if (file.exists()) {
-            try {
-                b = BitmapFactory.decodeStream(new FileInputStream(file));
-                image.setImageBitmap(b);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
+        if(imageBitmap == null){
+            image.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+        } else {
+            image.setImageBitmap(imageBitmap);
         }
+        image.setRoundRadius(AndroidUtilities.dp(4));
+
         photoLayout.addView(image, LayoutHelper.createLinear((int) (dpWidth * 0.82), 150));
         mainLayout.addView(photoLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0,12,0,8));
 
@@ -280,7 +274,7 @@ public class HtChatMessageCell extends FrameLayout {
         addressLabel.setTypeface(addressLabel.getTypeface(), Typeface.BOLD);
         addressLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         Drawable addressDrawable = context.getResources().getDrawable(R.drawable.msg_location);
-        addressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
+        addressDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         addressLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         addressLabel.setCompoundDrawablesWithIntrinsicBounds(addressDrawable, null, null, null);
         expandableDetailsLayout.addView(addressLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
@@ -293,7 +287,7 @@ public class HtChatMessageCell extends FrameLayout {
         expireLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
 
         Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
-        timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
+        timeDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         expireLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         expireLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
         midLayer.addView(expireLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 30, 20, 0, 20));
@@ -304,11 +298,78 @@ public class HtChatMessageCell extends FrameLayout {
         rateLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
         rateLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         Drawable rateDrawable = context.getResources().getDrawable(R.drawable.offer);
-        rateDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_grayText), PorterDuff.Mode.MULTIPLY));
+        rateDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         rateLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         rateLabel.setCompoundDrawablesWithIntrinsicBounds(rateDrawable, null, null, null);
-        midLayer.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 20));
+        midLayer.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 0));
         expandableDetailsLayout.addView(midLayer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 0, 0, 0));
+
+        configLabel = new TextView(context);
+        configLabel.setText("50$ Per 1 Lesson");
+        configLabel.setTextSize(14);
+        configLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
+        configLabel.setTextColor(Theme.getColor(Theme.key_wallet_grayText2));
+        expandableDetailsLayout.addView(configLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 0, 20, 20));
+
+
+        TextView termsLinkText = new TextView(context);
+        termsLinkText.setTextSize(14);
+        termsLinkText.setTextColor(context.getResources().getColor(R.color.ht_green));
+        termsLinkText.setText("Terms And Conditions Link");
+        termsLinkText.setPaintFlags(termsLinkText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        expandableDetailsLayout.addView(termsLinkText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 20));
+
+        termsLinkText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+
+                RelativeLayout mainLayoout = new RelativeLayout(context);
+                TextView termsTitleText = new TextView(context);
+                termsTitleText.setId(1);
+                termsTitleText.setTextSize(18);
+                termsTitleText.setTextColor(context.getResources().getColor(R.color.ht_green));
+                termsTitleText.setText("Terms and Conditions");
+                termsTitleText.setTypeface(termsTitleText.getTypeface(), Typeface.BOLD);
+                RelativeLayout.LayoutParams termsTitleTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                termsTitleTextLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                termsTitleTextLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
+                mainLayoout.addView(termsTitleText, termsTitleTextLayoutParams);
+
+                TextView heymateTermsText = new TextView(context);
+                heymateTermsText.setId(2);
+                heymateTermsText.setTextSize(16);
+                heymateTermsText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                heymateTermsText.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+                RelativeLayout.LayoutParams heymateTermsTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                heymateTermsTextLayoutParams.addRule(RelativeLayout.BELOW, termsTitleText.getId());
+                heymateTermsTextLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
+                mainLayoout.addView(heymateTermsText, heymateTermsTextLayoutParams);
+
+                TextView termsText = new TextView(context);
+                termsText.setId(3);
+                termsText.setTextSize(16);
+                termsText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+                termsText.setText(terms);
+                RelativeLayout.LayoutParams termsTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                termsTextLayoutParams.addRule(RelativeLayout.BELOW, heymateTermsText.getId());
+                termsTextLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
+                mainLayoout.addView(termsText, termsTextLayoutParams);
+
+                builder.setView(mainLayoout);
+
+                AlertDialog dialog = builder.create();
+                parent.showDialog(dialog);
+            }
+        });
+
 
         LinearLayout bottomLayer = new LinearLayout(context);
         bottomLayer.setGravity(Gravity.CENTER);
@@ -479,7 +540,7 @@ public class HtChatMessageCell extends FrameLayout {
         viewLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, 0, offerUUID);
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, parent,  0, offerUUID);
                 AlertDialog dialog = detailsPopUp.create();
                 detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
                     @Override
@@ -581,17 +642,12 @@ public class HtChatMessageCell extends FrameLayout {
 
     public void setOfferUUID(String offerUUID) {
         this.offerUUID = offerUUID;
-        Bitmap b;
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
-        if (file.exists()) {
-            try {
-                b = BitmapFactory.decodeStream(new FileInputStream(file));
-                image.setImageBitmap(b);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
+        if(imageBitmap == null){
+            image.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+        } else {
+            image.setImageBitmap(imageBitmap);
         }
+        image.setRoundRadius(AndroidUtilities.dp(4));
     }
 }

@@ -16,6 +16,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -35,6 +36,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -51,6 +53,7 @@ import java.util.Date;
 
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
+import works.heymate.core.offer.OfferUtils;
 
 public class OffersActivity extends BaseFragment {
 
@@ -63,6 +66,11 @@ public class OffersActivity extends BaseFragment {
     private String subCategoryFilter = "All";
     private OfferStatus statusFilter = OfferStatus.ALL;
 
+    public OffersActivity(Context context){
+        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
+        HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View createView(Context context) {
@@ -74,8 +82,6 @@ public class OffersActivity extends BaseFragment {
 
 //        HtAmplify.getInstance(context).signUp(currentAccount);
 //        HtAmplify.getInstance(context).signIn(currentAccount);
-        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
-        HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
@@ -221,7 +227,6 @@ public class OffersActivity extends BaseFragment {
                 }
             };
             offerCell1.setOffer(offerDto.asOffer());
-            offerCell1.setOfferUUID(offerDto.getServerUUID());
             offerCell1.setOut(true);
             offerCell1.setStatus(offerDto.getStatus());
             offerCell1.setOfferUUID(offerDto.getServerUUID());
@@ -229,6 +234,21 @@ public class OffersActivity extends BaseFragment {
             offerCell1.titleLabel.setText(offerDto.getTitle());
             offerCell1.descriptionLabel.setText(offerDto.getDescription());
             offerCell1.rateLabel.setText(offerDto.getRate() + offerDto.getCurrency() + " " + offerDto.getRateType());
+            TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+            String name;
+
+            if (user.username != null) {
+                name = "@" + user.username;
+            }
+            else {
+                name = user.first_name;
+
+                if (!TextUtils.isEmpty(user.last_name)) {
+                    name = name + " " + user.last_name;
+                }
+            }
+            String message = OfferUtils.serializeBeautiful(offerDto.asOffer(), name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+            offerCell1.configLabel.setText(message);
             try {
                 String[] exp = offerDto.getTime().split("-");
                 Calendar cal = Calendar.getInstance();

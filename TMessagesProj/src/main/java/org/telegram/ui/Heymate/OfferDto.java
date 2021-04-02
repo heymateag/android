@@ -69,6 +69,7 @@ public class OfferDto {
                 .longitude(String.valueOf(longitude))
                 .termsConfig(configText)
                 .terms(terms)
+                .expiry(new Temporal.Date(new Date(time))) // Remove At Last
                 .createdAt(createdAt)
                 .editedAt(editedAt);
 

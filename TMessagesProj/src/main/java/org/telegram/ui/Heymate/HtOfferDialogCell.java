@@ -59,7 +59,7 @@ public class HtOfferDialogCell extends FrameLayout {
         titleLayout.addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 10,10,10,0));
 
         TextView categoryLabel = new TextView(context);
-        categoryLabel.setText("Nail Implants");
+        categoryLabel.setText("");
         categoryLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         categoryLabel.setTextSize(13);
         titleLayout.addView(categoryLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 10,0,10,10));
@@ -133,6 +133,7 @@ public class HtOfferDialogCell extends FrameLayout {
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
         titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         Drawable titleDrawable = context.getResources().getDrawable(R.drawable.offer);
+        titleDrawable.setAlpha(40);
         titleDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
         titleLabel.setCompoundDrawablesWithIntrinsicBounds(null, null, titleDrawable, null);
         titleLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));

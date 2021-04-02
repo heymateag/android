@@ -1,13 +1,19 @@
 package org.telegram.ui.Heymate;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.api.aws.ApiAuthProviders;
-import com.amplifyframework.api.aws.sigv4.ApiKeyAuthProvider;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
@@ -17,8 +23,10 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -30,10 +38,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class HtAmplify {
 
     private static HtAmplify instance;
+    private Context context;
 
-    private static String API_KEY = "da2-gmv546zpg5edxi6eej66aq263u";
+    public AmazonS3Client amazonS3Client;
 
-    public interface OfferCallback <T> {
+    public interface OfferCallback<T> {
 
         void onOfferQueryResult(boolean success, T data, ApiException exception);
 
@@ -45,19 +54,25 @@ public class HtAmplify {
         return instance;
     }
 
+    public Context getContext(){
+        return context;
+    }
+
     private HtAmplify(Context context) {
+        this.context = context;
+
         try {
             Amplify.addPlugin(new AWSApiPlugin());
-            ApiAuthProviders authProviders = ApiAuthProviders.builder()
-                    .apiKeyAuthProvider(new ApiKeyAuthProvider() {
-                        @Override
-                        public String getAPIKey() {
-                            return API_KEY;
-                        }
-                    })
-                    .build();
-            Amplify.addPlugin(new AWSApiPlugin(authProviders));
             Amplify.configure(context);
+
+
+            amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(
+                    "AKIATNEPMKIM2UIPWSPC",
+                    "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"
+            ));
+
+            amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
+            amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 
             Log.i("HtAmplify", "Initialized Amplify.");
         } catch (AmplifyException error) {
@@ -65,7 +80,7 @@ public class HtAmplify {
         }
     }
 
-    public Offer createOffer(OfferDto dto) {
+    public Offer createOffer(OfferDto dto, Uri pickedImage) {
         Offer newOffer = Offer.builder()
                 .userId("" + dto.getUserId())
                 .title(dto.getTitle())
@@ -91,6 +106,9 @@ public class HtAmplify {
         Amplify.API.mutate(ModelMutation.create(newOffer),
                 response -> {
                     HtSQLite.getInstance().addOffer(newOffer);
+                    if (pickedImage != null) {
+                        HtStorage.getInstance().setOfferImage(context, response.getData().getId(), pickedImage);
+                    }
                     Log.i("HtAmplify", "Offer Created.");
                 },
                 error -> Log.e("HtAmplify", "Create failed", error)
@@ -269,8 +287,6 @@ public class HtAmplify {
     public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId, OfferCallback callback) {
         Log.i("HtAmplify", "Getting time slots");
 
-        Log.i("HtAmplify", "Getting Offers");
-
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future<ArrayList<TimeSlot>> future = pool.submit(new Callable<ArrayList<TimeSlot>>() {
             @Override
@@ -284,8 +300,7 @@ public class HtAmplify {
                         response -> {
                             if (response.hasData()) {
                                 callback.onOfferQueryResult(true, response.getData(), null);
-                            }
-                            else {
+                            } else {
                                 callback.onOfferQueryResult(false, null, null);
                             }
                         },
@@ -339,7 +354,7 @@ public class HtAmplify {
         });
 
         try {
-            while (!completed.get()); // The worst approach ever, Will fix ASAP
+            while (!completed.get()) ; // The worst approach ever, Will fix ASAP
             return future.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -356,8 +371,7 @@ public class HtAmplify {
                 response -> {
                     if (response.hasData()) {
                         callback.onOfferQueryResult(true, response.getData(), null);
-                    }
-                    else {
+                    } else {
                         callback.onOfferQueryResult(false, null, null);
                     }
                 },
@@ -381,6 +395,22 @@ public class HtAmplify {
                                     offers.add(offer);
                                 }
                                 HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
+
+                                new Thread(){
+                                    @Override
+                                    public void run() {
+                                        HashMap<String, S3Object> images = new HashMap<>();
+                                        for(Offer offer : offers){
+                                            if(HtStorage.getInstance().imageExists(context, offer.getId()))
+                                                continue;
+                                            S3Object image = getOfferImage(offer.getId());
+                                            if(image != null){
+                                                images.put(offer.getId(), image);
+                                            }
+                                        }
+                                        HtStorage.getInstance().updateOfferImages(context, images);
+                                    }
+                                }.start();
                             }
                         },
                         error -> Log.e("HtAmplify", "Query failure", error)
@@ -421,6 +451,34 @@ public class HtAmplify {
                         error -> Log.e("HtAmplify", "Query failure", error)
                 );
                 return fetchedOffer[0];
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void saveOfferImage(String offerUUID, File file) {
+        amazonS3Client.putObject("offerdocuments", offerUUID, file);
+    }
+
+    public S3Object getOfferImage(String offerUUID) {
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<S3Object> future = pool.submit(new Callable<S3Object>() {
+            @Override
+            public S3Object call() throws Exception {
+                if(amazonS3Client.doesObjectExist("offerdocuments", offerUUID)) {
+                    return amazonS3Client.getObject("offerdocuments", offerUUID);
+                } else {
+                    return null;
+                }
             }
         });
 

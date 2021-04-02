@@ -77,6 +77,13 @@ public class HtScheduleInputCell extends LinearLayout {
         titleLayout3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                parent.titleTextField.clearFocus();
+                parent.titleTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(parent.titleTextField);
+                parent.descriptionTextField.clearFocus();
+                parent.descriptionTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(parent.descriptionTextField);
+
                 HtCalendarBottomSheet calendarBottomSheet = new HtCalendarBottomSheet(context, true, parent);
                 calendarBottomSheet.setDates(dateSlots);
                 parent.showDialog(calendarBottomSheet);

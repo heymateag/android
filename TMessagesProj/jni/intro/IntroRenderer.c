@@ -98,7 +98,7 @@ static LayerParams ic_pin_layer, ic_cam_layer, ic_videocam_layer, ic_smile_layer
 static float time_local = 0;
 static float knot_delays[4];
 static float offset_y;
-static float ribbonLength = 86.5f;
+static float ribbonLength = 0;
 static int32_t starsFar = 500;
 static float scroll_offset;
 
@@ -479,7 +479,7 @@ void setup_shaders() {
                     "void main(){"
                     "   gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);"
                     "   float p = gl_FragColor.w*u_Alpha;"
-                    "   gl_FragColor = vec4(210./255.,57./255.,41./255.,p);"
+                    "   gl_FragColor = vec4(255./255.,255./255.,255./255.,p);"
                     "}";
 
     texture_program_red = get_texture_program(build_program(vshader_texture_red, (GLint) strlen(vshader_texture_red), fshader_texture_red, (GLint) strlen(fshader_texture_red)));
@@ -502,7 +502,7 @@ void setup_shaders() {
                     "void main(){"
                     "    gl_FragColor = texture2D(u_TextureUnit, v_TextureCoordinates);"
                     "    float p = u_Alpha*gl_FragColor.w;"
-                    "    gl_FragColor = vec4(246./255., 73./255., 55./255., p);"
+                    "    gl_FragColor = vec4(255./255., 255./255., 255./255., p);"
                     "}";
 
     texture_program_light_red = get_texture_program(build_program(vshader, (GLint) strlen(vshader), fshader, (GLint) strlen(fshader)));
@@ -1320,7 +1320,7 @@ static void draw_ic(int32_t type) {
     float rotation;
     float beginTimeK;
     float commonDelay;
-    float beginY = 250;
+    float beginY = 180;
     int32_t bounce;
     texture_program_type COLOR, LIGHT_COLOR;
     if (type == 0) {
@@ -1580,21 +1580,9 @@ static void draw_ic(int32_t type) {
     mat4x4_layer(ic_matrix, ic_bubble_layer, 1, rotation);
     draw_textured_shape(&ic_bubble, ic_matrix, COLOR);
 
-    scale = 0.7f + 0.2f * bubble_dots_sinf(time * 10);
+    scale = 1;
     ic_bubble_dot.params.scale = xyzMake(scale, scale, scale);
-    ic_bubble_dot.params.position = xyzMake(0 - 80.5f, -9 / 2.0f, 0);
-    draw_textured_shape(&ic_bubble_dot, ic_matrix, LIGHT_COLOR);
-
-    scale = 0.7f + 0.2f * bubble_dots_sinf((float) -M_PI * 2 / 3 + time * 10);
-    if (anim_bubble_dots_stage == 0) scale = MAXf(.7, scale);
-    ic_bubble_dot.params.scale = xyzMake(scale, scale, scale);
-    ic_bubble_dot.params.position = xyzMake(0, -9 / 2.0f, 0);
-    draw_textured_shape(&ic_bubble_dot, ic_matrix, LIGHT_COLOR);
-
-    scale = 0.7f + 0.2f * bubble_dots_sinf((float) -M_PI * 2 / 3 * 2 + time * 10);
-    if (anim_bubble_dots_stage == 0) scale = MAXf(.7, scale);
-    ic_bubble_dot.params.scale = xyzMake(scale, scale, scale);
-    ic_bubble_dot.params.position = xyzMake(0 + 80.5f, -9 / 2.0f, 0);
+    ic_bubble_dot.params.position = xyzMake(0, 0, 0);
     draw_textured_shape(&ic_bubble_dot, ic_matrix, LIGHT_COLOR);
 
     if (type == 0) {
@@ -2642,7 +2630,7 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onSurfaceCreated(JNIEnv *env, j
     time = 0;
     time_local = 0;
     offset_y = 0;
-    ribbonLength = 86.5f;
+    ribbonLength = 0;
     starsFar = 500;
     scroll_offset = 0;
     calculated_speedometer_sin = 0;
@@ -2691,7 +2679,7 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onSurfaceCreated(JNIEnv *env, j
     mask1 = create_rounded_rectangle(CSizeMake(60, 60), 0, 16, black_color);
 
     telegram_sphere = create_textured_rectangle(CSizeMake(150, 150), telegram_sphere_texture);
-    telegram_plane = create_textured_rectangle(CSizeMake(82, 74), telegram_plane_texture);
+    telegram_plane = create_textured_rectangle(CSizeMake(141, 141), telegram_plane_texture);
     telegram_plane.params.anchor = xyzMake(6, -5, 0);
 
     fast_body = create_textured_rectangle(CSizeMake(148, 148), fast_body_texture);
@@ -2706,22 +2694,22 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onSurfaceCreated(JNIEnv *env, j
     int32_t ang = 180;
     spiral = create_segmented_square(r1, D2R(0), D2R(0 + ang), fast_spiral_texture);
 
-    vec4 free_bg_color = {246 / 255.0f, 73 / 255.0f, 55 / 255.0f, 1};
-    free_bg = create_rectangle(CSizeMake(160 * 2, 160 * 2), free_bg_color);
+    vec4 free_bg_color = {254 / 255.0f, 254 / 255.0f, 254 / 255.0f, 1};
+    free_bg = create_rectangle(CSizeMake(0, 0), free_bg_color);
 
-    free_knot1 = create_textured_rectangle(CSizeMake(138 / 3, 138 / 3), free_knot_up_texture);
-    free_knot1.params.anchor.x = -23 + 10;
-    free_knot1.params.anchor.y = 23 - 10;
+    free_knot1 = create_textured_rectangle(CSizeMake(200, 160), free_knot_up_texture);
+    free_knot1.params.anchor.x = 0;
+    free_knot1.params.anchor.y = 0;
 
-    free_knot2 = create_textured_rectangle(CSizeMake(138 / 3, 138 / 3), free_knot_up_texture);
+    free_knot2 = create_textured_rectangle(CSizeMake(0, 0), free_knot_up_texture);
     free_knot2.params.anchor.x = -23 + 10;
     free_knot2.params.anchor.y = 23 - 10;
 
-    free_knot3 = create_textured_rectangle(CSizeMake(150 / 3, 150 / 3), free_knot_down_texture);
+    free_knot3 = create_textured_rectangle(CSizeMake(0, 0), free_knot_down_texture);
     free_knot3.params.anchor.x = -100 / 4.0f + 20 / 2.0f;
     free_knot3.params.anchor.y = -100 / 4.0f + 20 / 2.0f;
 
-    free_knot4 = create_textured_rectangle(CSizeMake(150 / 3, 150 / 3), free_knot_down_texture);
+    free_knot4 = create_textured_rectangle(CSizeMake(0, 0), free_knot_down_texture);
     free_knot4.params.anchor.x = -100 / 4.0f + 20 / 2.0f;
     free_knot4.params.anchor.y = -100 / 4.0f + 20 / 2.0f;
 
@@ -2746,15 +2734,15 @@ JNIEXPORT void Java_org_telegram_messenger_Intro_onSurfaceCreated(JNIEnv *env, j
     ribbon1.params.position.y = ribbon2.params.position.y = ribbon3.params.position.y = ribbon4.params.position.y = -9;
 
 
-    ic_bubble_dot = create_textured_rectangle(CSizeMake(18 / 3, 18 / 3), ic_bubble_dot_texture);
-    ic_bubble = create_textured_rectangle(CSizeMake(102 / 3, 102 / 3), ic_bubble_texture);
-    ic_cam_lens = create_textured_rectangle(CSizeMake(36 / 3, 36 / 3), ic_cam_lens_texture);
-    ic_cam = create_textured_rectangle(CSizeMake(108 / 3, 96 / 3), ic_cam_texture);
-    ic_pencil = create_textured_rectangle(CSizeMake(86 / 3, 86 / 3), ic_pencil_texture);
-    ic_pin = create_textured_rectangle(CSizeMake(90 / 3, 120 / 3), ic_pin_texture);
-    ic_smile_eye = create_textured_rectangle(CSizeMake(18 / 3, 18 / 3), ic_smile_eye_texture);
-    ic_smile = create_textured_rectangle(CSizeMake(120 / 3, 120 / 3), ic_smile_texture);
-    ic_videocam = create_textured_rectangle(CSizeMake(144 / 3, 84 / 3), ic_videocam_texture);
+    ic_bubble_dot = create_textured_rectangle(CSizeMake(200, 160), ic_bubble_dot_texture);
+    ic_bubble = create_textured_rectangle(CSizeMake(0, 0), ic_bubble_texture);
+    ic_cam_lens = create_textured_rectangle(CSizeMake(0, 0), ic_cam_lens_texture);
+    ic_cam = create_textured_rectangle(CSizeMake(0, 0), ic_cam_texture);
+    ic_pencil = create_textured_rectangle(CSizeMake(0, 0), ic_pencil_texture);
+    ic_pin = create_textured_rectangle(CSizeMake(0, 0), ic_pin_texture);
+    ic_smile_eye = create_textured_rectangle(CSizeMake(0, 0), ic_smile_eye_texture);
+    ic_smile = create_textured_rectangle(CSizeMake(0, 0), ic_smile_texture);
+    ic_videocam = create_textured_rectangle(CSizeMake(0, 0), ic_videocam_texture);
 
     ic_pin_layer = ic_cam_layer = ic_videocam_layer = ic_smile_layer = ic_bubble_layer = ic_pencil_layer = default_layer_params();
 
