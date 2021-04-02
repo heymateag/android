@@ -44,6 +44,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.widget.LocationInputItem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,7 +78,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     public EditTextBoldCursor titleTextField;
     public EditTextBoldCursor descriptionTextField;
     private HtCategoryInputCell categoryInputCell;
-    private HtLocationInputCell locationInputCell;
+    private LocationInputItem locationInputCell;
     private HtScheduleInputCell scheduleInputCell;
     private HtPriceInputCell priceInputCell;
     private ArrayList<HtPriceInputCell> pricesInputCell = new ArrayList<>();
@@ -338,8 +339,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                 }
             }
         });
-        locationInputCell = new HtLocationInputCell(context, this, LocaleController.getString("HtLocation", R.string.HtLocation), locationArgs, R.drawable.location_on_24_px_1, canEdit);
-        mainLayout.addView(locationInputCell);
+        locationInputCell = new LocationInputItem(context);
+        mainLayout.addView(locationInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
         scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", R.string.HtSchedule), scheduleArgs, R.drawable.watch_later_24_px_1, canEdit, this);
         mainLayout.addView(scheduleInputCell);
@@ -574,7 +575,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         promoteLayout.setOnClickListener(v -> {
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
-            locationInputCell.setError(false, 0);
+//            locationInputCell.setError(false, 0); // TODO Location
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
@@ -595,10 +596,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
-                locationInputCell.setError(true, 0);
-                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
-            }
+//            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) { // TODO LOCATION
+//                locationInputCell.setError(true, 0);
+//                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
+//            }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
@@ -624,7 +625,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+//                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS)); // TODO Location
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
@@ -694,7 +695,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
-            locationInputCell.setError(false, 0);
+//            locationInputCell.setError(false, 0);  // TODO Location
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
@@ -715,10 +716,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
-                locationInputCell.setError(true, 0);
-                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
-            }
+//            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) { // TODO Location
+//                locationInputCell.setError(true, 0);
+//                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
+//            }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
@@ -741,7 +742,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+//                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS)); // TODO Location
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
@@ -750,6 +751,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setStatus(OfferStatus.DRAFTED);
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+
                 if(offerUUID == null) {
                     offerUUID = UUID.randomUUID().toString();
                     newOffer.setServerUUID(offerUUID);
@@ -857,7 +859,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     public void setLocationAddress(String address) {
-        locationInputCell.setRes(ARGUMENTS_ADDRESS, address, 0);
+//        locationInputCell.setRes(ARGUMENTS_ADDRESS, address, 0); // TODO Location
     }
 
     public void setCanEdit(boolean canEdit) {

@@ -10,8 +10,10 @@
     <string name="hm_confirm">Confirm</string>
     <string name="hm_cancel">Cancel</string>
     <string name="hm_day">Day</string>
+    <string name="hm_search_address">Search Address</string>
+
     <string name="hm_network_blockchain_error">Could not transfer data with node.</string>
-    <string name="hm_network_error">Could not transfer data with server.</string>
+    <string name="hm_network_error">Could not transfer data with node.</string>
 
     <string name="hm_sunday_short">Sun</string>
     <string name="hm_monday_short">Mon</string>

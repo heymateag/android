@@ -16,8 +16,10 @@ public class Texts {
     public static final String CONFIRM = "confirm";
     public static final String CANCEL = "cancel";
     public static final String DAY = "day";
-    public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";
+    public static final String SEARCH_ADDRESS = "search_address";
+
     public static final String NETWORK_ERROR = "network_error";
+    public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";
 
     public static final String SUNDAY_SHORT = "sunday_short";
     public static final String MONDAY_SHORT = "monday_short";
