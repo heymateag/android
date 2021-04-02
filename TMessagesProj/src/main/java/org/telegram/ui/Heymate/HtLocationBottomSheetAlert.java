@@ -139,9 +139,9 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
                 loc.geo_point.lat = latitude;
                 fragment.setInitialLocation(loc);
                 fragment.setDelegate((location, live, notify, scheduleDate) -> {
-                    parent.setLongitude(location.geo._long);
-                    parent.setLongitude(location.geo.lat);
-                    parent.setLocationAddress(descriptionTextField.getText().toString());
+//                    parent.setLongitude(location.geo._long);
+//                    parent.setLongitude(location.geo.lat);
+                    // parent.setLocationAddress(descriptionTextField.getText().toString()); // TODO No longer used
                 });
                 parent.presentFragment(fragment);
                 dismiss();

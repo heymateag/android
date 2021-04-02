@@ -180,7 +180,7 @@ public class HtChatMessageCell extends FrameLayout {
                 fragment.setFee("" + offerDto.getRate(), 0);
                 fragment.setCurrency(offerDto.getCurrency(), 0);
                 fragment.setCanEdit(true);
-                fragment.setLocationAddress(offerDto.getLocation());
+                fragment.setLocation(offerDto.getLocation(), offerDto.getLatitude(), offerDto.getLongitude());
                 fragment.setCategory(offerDto.getCategory());
                 fragment.setSubCategory(offerDto.getSubCategory());
                 fragment.setTitle(offerDto.getTitle());

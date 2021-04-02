@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -55,7 +56,7 @@ public class ExpandableItem extends FrameLayout {
 
         View divider = new View(context);
         divider.setBackgroundColor(Theme.getColor(Theme.key_graySection));
-        addView(divider, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 1, Gravity.BOTTOM, 92, 0, 0, 0));
+        addView(divider, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 1, Gravity.BOTTOM, 68, 0, 0, 0));
 
         clickableArea.setOnClickListener(v -> {
             if (mExpanded) {
@@ -190,6 +191,13 @@ public class ExpandableItem extends FrameLayout {
         );
 
         return mContent.getMeasuredHeight();
+    }
+
+    public void setError(boolean error) {
+        if (error)
+            mImageIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inRedCall), PorterDuff.Mode.MULTIPLY));
+        else
+            mImageIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue2), PorterDuff.Mode.MULTIPLY));
     }
 
 }

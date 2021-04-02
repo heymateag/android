@@ -92,8 +92,6 @@ public class HtCreateOfferActivity extends BaseFragment {
     private LinearLayout actionLayout;
     private String offerUUID;
     private Uri pickedImage;
-    private double longitude;
-    private double latitude;
     private Date expireDate;
     private ArrayList<Long> dateSlots = new ArrayList<>();
 
@@ -328,17 +326,6 @@ public class HtCreateOfferActivity extends BaseFragment {
         categoryInputCell = new HtCategoryInputCell(context, this, LocaleController.getString("HtCategory", R.string.HtCategory), categoryArgs, R.drawable.category, canEdit);
         mainLayout.addView(categoryInputCell);
 
-        HashMap<String, Runnable> locationArgs = new HashMap<>();
-        locationArgs.put(ARGUMENTS_ADDRESS, new Runnable() {
-            @Override
-            public void run() {
-                if (actionType != ActionType.VIEW) {
-                    HtLocationBottomSheetAlert sheet = new HtLocationBottomSheetAlert(context, true, parent);
-                    sheet.setLocation(longitude, latitude);
-                    showDialog(sheet);
-                }
-            }
-        });
         locationInputCell = new LocationInputItem(context);
         mainLayout.addView(locationInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
@@ -575,7 +562,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         promoteLayout.setOnClickListener(v -> {
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
-//            locationInputCell.setError(false, 0); // TODO Location
+            locationInputCell.setError(false);
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
@@ -596,10 +583,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-//            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) { // TODO LOCATION
-//                locationInputCell.setError(true, 0);
-//                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
-//            }
+            if (locationInputCell.getLocationInfo() == null) {
+                locationInputCell.setError(true);
+                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
+            }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
@@ -617,6 +604,8 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                 String configText = paymentInputCell.getRes().toString();
 
+                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
@@ -625,12 +614,12 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-//                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS)); // TODO Location
+                newOffer.setLocation(locationInfo.address);
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                newOffer.setLatitude(latitude);
-                newOffer.setLongitude(longitude);
+                newOffer.setLatitude(locationInfo.latitude);
+                newOffer.setLongitude(locationInfo.longitude);
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
@@ -695,7 +684,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
-//            locationInputCell.setError(false, 0);  // TODO Location
+            locationInputCell.setError(false);
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
@@ -716,10 +705,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-//            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) { // TODO Location
-//                locationInputCell.setError(true, 0);
-//                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
-//            }
+            if (locationInputCell.getLocationInfo() == null) {
+                locationInputCell.setError(true);
+                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
+            }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
                 errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
@@ -733,6 +722,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
+                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+
                 String configText = paymentInputCell.getRes().toString();
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
@@ -742,12 +733,12 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-//                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS)); // TODO Location
+                newOffer.setLocation(locationInfo.address);
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                newOffer.setLatitude(latitude);
-                newOffer.setLongitude(longitude);
+                newOffer.setLatitude(locationInfo.latitude);
+                newOffer.setLongitude(locationInfo.longitude);
                 newOffer.setStatus(OfferStatus.DRAFTED);
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
@@ -827,22 +818,6 @@ public class HtCreateOfferActivity extends BaseFragment {
             pricesInputCell.get(position - 1).setRes(ARGUMENTS_PRICE, text, 1);
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
     public void setRateType(String text, int position) {
         if (position == 0)
             priceInputCell.setRes(ARGUMENTS_RATE_TYPE, text, 0);
@@ -858,8 +833,8 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     }
 
-    public void setLocationAddress(String address) {
-//        locationInputCell.setRes(ARGUMENTS_ADDRESS, address, 0); // TODO Location
+    public void setLocation(String address, double latitude, double longitude) {
+        locationInputCell.setLocationInfo(address, latitude, longitude);
     }
 
     public void setCanEdit(boolean canEdit) {
