@@ -45,6 +45,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.widget.LocationInputItem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,6 +58,7 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
@@ -73,16 +75,13 @@ public class HtCreateOfferActivity extends BaseFragment {
     public static final String ARGUMENTS_EXPIRE = "0_Expire";
     public static final String ARGUMENTS_EXPIRE_DATE = "1_Expire";
     public static final String ARGUMENTS_TERMS = "0_Terms";
-    public static final String OFFER_IMAGES_DIR = "offerImages";
-    public static final String OFFER_IMAGES_NAME = "offerImage";
-    public static final String OFFER_IMAGES_EXTENSION = ".jpg";
-    
+
     private Context context;
     private ImageView cameraImage;
-    private EditTextBoldCursor titleTextField;
-    private EditTextBoldCursor descriptionTextField;
+    public EditTextBoldCursor titleTextField;
+    public EditTextBoldCursor descriptionTextField;
     private HtCategoryInputCell categoryInputCell;
-    private HtLocationInputCell locationInputCell;
+    private LocationInputItem locationInputCell;
     private HtScheduleInputCell scheduleInputCell;
     private HtPriceInputCell priceInputCell;
     private ArrayList<HtPriceInputCell> pricesInputCell = new ArrayList<>();
@@ -94,10 +93,8 @@ public class HtCreateOfferActivity extends BaseFragment {
     private ActionType actionType;
     private LinearLayout addPriceLayout;
     private LinearLayout actionLayout;
-    private String offerUUID = "";
+    private String offerUUID;
     private Uri pickedImage;
-    private double longitude;
-    private double latitude;
     private Date expireDate;
     private ArrayList<Long> dateSlots = new ArrayList<>();
 
@@ -155,18 +152,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         imageLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(R.color.ht_green)));
         cameraImage = new ImageView(context);
         Drawable cameraDrawable;
-        Bitmap b;
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
-        if (file.exists()) {
-            try {
-                b = BitmapFactory.decodeStream(new FileInputStream(file));
-                cameraImage.setImageBitmap(b);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
+        if(actionType != ActionType.EDIT){
             cameraDrawable = context.getResources().getDrawable(R.drawable.instant_camera);
             cameraImage.setImageDrawable(cameraDrawable);
             cameraImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
@@ -184,6 +170,13 @@ public class HtCreateOfferActivity extends BaseFragment {
             imageLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    titleTextField.clearFocus();
+                    titleTextField.hideActionMode();
+                    AndroidUtilities.hideKeyboard(titleTextField);
+                    descriptionTextField.clearFocus();
+                    descriptionTextField.hideActionMode();
+                    AndroidUtilities.hideKeyboard(descriptionTextField);
+
                     Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     getIntent.setType("image/*");
 
@@ -262,9 +255,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         descriptionTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         descriptionTextField.setCursorSize(AndroidUtilities.dp(15));
         descriptionTextField.setCursorWidth(1.5f);
-        descriptionTextField.setMaxLines(1);
-        descriptionTextField.setLines(1);
-        descriptionTextField.setSingleLine(true);
+        descriptionTextField.setMaxLines(5);
+        descriptionTextField.setLines(2);
         descriptionTextField.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_DONE || event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION)) {
                 descriptionTextField.clearFocus();
@@ -289,6 +281,19 @@ public class HtCreateOfferActivity extends BaseFragment {
             descriptionTextField.setClickable(false);
             descriptionTextField.setFocusable(false);
         }
+
+        mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                titleTextField.clearFocus();
+                titleTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(titleTextField);
+                descriptionTextField.clearFocus();
+                descriptionTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(descriptionTextField);
+            }
+        });
+
         titleInputLayout.addView(descriptionTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
         titleLayout.addView(titleInputLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         mainLayout.addView(titleLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -321,20 +326,11 @@ public class HtCreateOfferActivity extends BaseFragment {
                 }
             }
         });
-        categoryInputCell = new HtCategoryInputCell(context, LocaleController.getString("HtCategory", R.string.HtCategory), categoryArgs, R.drawable.category, canEdit);
+        categoryInputCell = new HtCategoryInputCell(context, this, LocaleController.getString("HtCategory", R.string.HtCategory), categoryArgs, R.drawable.category, canEdit);
         mainLayout.addView(categoryInputCell);
 
-        HashMap<String, Runnable> locationArgs = new HashMap<>();
-        locationArgs.put(ARGUMENTS_ADDRESS, new Runnable() {
-            @Override
-            public void run() {
-                if (actionType != ActionType.VIEW) {
-                    showDialog(new HtLocationBottomSheetAlert(context, true, parent));
-                }
-            }
-        });
-        locationInputCell = new HtLocationInputCell(context, LocaleController.getString("HtLocation", R.string.HtLocation), locationArgs, R.drawable.location_on_24_px_1, canEdit);
-        mainLayout.addView(locationInputCell);
+        locationInputCell = new LocationInputItem(context);
+        mainLayout.addView(locationInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
         scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", R.string.HtSchedule), scheduleArgs, R.drawable.watch_later_24_px_1, canEdit, this);
         mainLayout.addView(scheduleInputCell);
@@ -439,135 +435,10 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        priceInputCell = new HtPriceInputCell(context, LocaleController.getString("HtPrice", R.string.HtPrice), priceArgs, R.drawable.money, canEdit, 0);
+        priceInputCell = new HtPriceInputCell(context, this, LocaleController.getString("HtPrice", R.string.HtPrice), priceArgs, R.drawable.money, canEdit, 0);
         priceInputCell.setRes(ARGUMENTS_RATE_TYPE, LocaleController.getString("HtPerItem", R.string.HtPerItem), 0);
         priceInputCell.setRes(ARGUMENTS_CURRENCY, "R$", 2);
         mainLayout.addView(priceInputCell);
-
-        if (canEdit) {
-            addPriceLayout = new LinearLayout(context);
-            TextView addPriceLabel = new TextView(context);
-            addPriceLabel.setText(LocaleController.getString("HtAddPrice", R.string.HtAddNewPrice));
-            addPriceLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
-            addPriceLabel.setTypeface(addPriceLabel.getTypeface(), Typeface.BOLD);
-            Drawable addPriceDrawable = context.getResources().getDrawable(R.drawable.plus);
-            addPriceDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
-            addPriceLabel.setCompoundDrawablePadding(AndroidUtilities.dp(6));
-            addPriceLabel.setCompoundDrawablesWithIntrinsicBounds(addPriceDrawable, null, null, null);
-            addPriceLayout.addView(addPriceLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, AndroidUtilities.dp(9), AndroidUtilities.dp(9), AndroidUtilities.dp(9), AndroidUtilities.dp(9)));
-            addPriceLayout.setEnabled(true);
-            addPriceLayout.setHovered(true);
-            addPriceLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    HtPriceInputCell newPriceCell;
-                    HashMap<String, Runnable> priceArgs = new HashMap<>();
-                    priceArgs.put(ARGUMENTS_RATE_TYPE, new Runnable() {
-                        @Override
-                        public void run() {
-                            if (actionType == ActionType.VIEW)
-                                return;
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("HtRateType", R.string.HtRateType));
-                            String[] subItems = new String[3];
-                            int[] icons = new int[3];
-
-                            for (int i = 0; i < 3; i++) {
-                                icons[i] = R.drawable.msg_arrowright;
-                            }
-                            subItems[0] = LocaleController.getString("HtPerItem", R.string.HtPerItem);
-                            subItems[1] = LocaleController.getString("HtPerHour", R.string.HtPerHour);
-                            subItems[2] = LocaleController.getString("HtRange", R.string.HtRange);
-                            builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                            builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    setRateType(subItems[which], priceCellsCount + 1);
-                                }
-                            });
-                            AlertDialog alertDialog = builder.create();
-                            showDialog(alertDialog);
-                        }
-                    });
-                    priceArgs.put(ARGUMENTS_PRICE, new Runnable() {
-                        @Override
-                        public void run() {
-                            if (actionType == ActionType.VIEW)
-                                return;
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle(LocaleController.getString("HtPrice", R.string.HtPrice));
-                            LinearLayout mainLayout = new LinearLayout(context);
-                            EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
-                            feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                            feeTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-                            feeTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                            feeTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-                            feeTextField.setMaxLines(4);
-                            feeTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
-                            feeTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-                            feeTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-                            feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                            feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-                            feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                            feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
-                            feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                            feeTextField.setCursorSize(AndroidUtilities.dp(15));
-                            feeTextField.setCursorWidth(1.5f);
-                            feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
-                            builder.setView(mainLayout);
-                            builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
-                                if (feeTextField.getText().toString().length() > 0)
-                                    setFee(feeTextField.getText().toString(), priceCellsCount + 1);
-                            });
-                            AlertDialog alertDialog = builder.create();
-                            showDialog(alertDialog);
-
-                        }
-                    });
-                    priceArgs.put(ARGUMENTS_CURRENCY, new Runnable() {
-                        @Override
-                        public void run() {
-                            if (actionType == ActionType.VIEW)
-                                return;
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("HtCurrency", R.string.HtCurrency));
-                            String[] subItems = new String[3];
-                            int[] icons = new int[3];
-
-                            for (int i = 0; i < 3; i++) {
-                                icons[i] = R.drawable.msg_arrowright;
-                            }
-                            subItems[0] = "R$";
-                            subItems[1] = "US$";
-                            subItems[2] = "EUR";
-                            builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                            builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    setCurrency(subItems[which], priceCellsCount + 1);
-                                }
-                            });
-                            AlertDialog alertDialog = builder.create();
-                            showDialog(alertDialog);
-                        }
-                    });
-                    newPriceCell = new HtPriceInputCell(context, LocaleController.getString("HtPrice", R.string.HtPrice), priceArgs, R.drawable.money, canEdit, priceCellsCount + 1);
-                    pricesInputCell.add(newPriceCell);
-                    mainLayout.addView(newPriceCell, 8 + priceCellsCount++);
-                }
-            });
-            priceCellsCount--;
-            mainLayout.addView(addPriceLayout);
-        }
 
         HashMap<String, Runnable> paymentArgs = new HashMap<>();
         paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", R.string.HtPaymentTerms), paymentArgs, R.drawable.pay, this, actionType);
@@ -610,7 +481,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        expireInputCell = new HtExpireInputCell(context, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.alarm_off_24_px, canEdit);
+        expireInputCell = new HtExpireInputCell(context, this, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.alarm_off_24_px, canEdit);
         expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(mcurrentTime.getTime()), 0);
         expireDate = mcurrentTime.getTime();
         mainLayout.addView(expireInputCell);
@@ -661,7 +532,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        termsInputCell = new HtTermsInputCell(context, LocaleController.getString("HtTermsAndConditions", R.string.HtTermsAndConditions), termsArgs, R.drawable.ht_pplicy, canEdit);
+        termsInputCell = new HtTermsInputCell(context,this,  LocaleController.getString("HtTermsAndConditions", R.string.HtTermsAndConditions), termsArgs, R.drawable.ht_pplicy, canEdit);
         termsInputCell.setRes(ARGUMENTS_TERMS, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
@@ -694,7 +565,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         promoteLayout.setOnClickListener(v -> {
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
-            locationInputCell.setError(false, 0);
+            locationInputCell.setError(false);
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
@@ -715,8 +586,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
             }
-            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
-                locationInputCell.setError(true, 0);
+            if (locationInputCell.getLocationInfo() == null) {
+                locationInputCell.setError(true);
                 errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
             }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
@@ -736,6 +607,8 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                 String configText = paymentInputCell.getRes().toString();
 
+                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
@@ -744,22 +617,46 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+                newOffer.setLocation(locationInfo.address);
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                 newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                newOffer.setLatitude(latitude);
-                newOffer.setLongitude(longitude);
+                newOffer.setLatitude(locationInfo.latitude);
+                newOffer.setLongitude(locationInfo.longitude);
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer, null, null);
+                if(offerUUID == null) {
+                    offerUUID = UUID.randomUUID().toString();
+                    newOffer.setServerUUID(offerUUID);
+                }
+                int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
+                newOffer.setCreatedAt(currentTime);
+                newOffer.setEditedAt(currentTime);
+                Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, null, null);
 
                 HtSQLite.getInstance().addOffer(createdOffer);
 
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                String message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
+
+                TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+
+                String name;
+
+                if (user.username != null) {
+                    name = "@" + user.username;
+                }
+                else {
+                    name = user.first_name;
+
+                    if (!TextUtils.isEmpty(user.last_name)) {
+                        name = name + " " + user.last_name;
+                    }
+                }
+
+//                String message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
+                String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                 share.putExtra(Intent.EXTRA_TEXT, message);
                 getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", R.string.HtPromoteYourOffer)));
                 parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
@@ -798,7 +695,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
             titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
             priceInputCell.setError(false, 1);
-            locationInputCell.setError(false, 0);
+            locationInputCell.setError(false);
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
@@ -819,8 +716,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors.append(LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty));
             }
-            if (locationInputCell.getRes(ARGUMENTS_ADDRESS) == null) {
-                locationInputCell.setError(true, 0);
+            if (locationInputCell.getLocationInfo() == null) {
+                locationInputCell.setError(true);
                 errors.append(LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty));
             }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
@@ -836,6 +733,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
+                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+
                 String configText = paymentInputCell.getRes().toString();
                 wallet.signOffer(priceInputCell.getRes(ARGUMENTS_PRICE), configText, (successful, signature, exception) -> {
                     if (!successful) {
@@ -851,17 +750,25 @@ public class HtCreateOfferActivity extends BaseFragment {
                     newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                     newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                     newOffer.setExpire(expireDate);
-                    newOffer.setLocation(locationInputCell.getRes(ARGUMENTS_ADDRESS));
+                    newOffer.setLocation(locationInfo.address);
                     newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                     newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                     newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                    newOffer.setLatitude(latitude);
-                    newOffer.setLongitude(longitude);
+                    newOffer.setLatitude(locationInfo.latitude);
+                    newOffer.setLongitude(locationInfo.longitude);
                     newOffer.setStatus(OfferStatus.ACTIVE);
                     newOffer.setDateSlots(dateSlots);
                     newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+
+                    if(offerUUID == null) {
+                        offerUUID = UUID.randomUUID().toString();
+                        newOffer.setServerUUID(offerUUID);
+                    }
+                    int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
+                    newOffer.setCreatedAt(currentTime);
+                    newOffer.setEditedAt(currentTime);
                     if (actionType != ActionType.EDIT) {
-                        Offer offer = HtAmplify.getInstance(context).createOffer(newOffer, wallet.getAddress(), signature);
+                        Offer offer = HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, wallet.getAddress(), signature);
 
                         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
 
@@ -883,40 +790,14 @@ public class HtCreateOfferActivity extends BaseFragment {
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(phrase, (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
                     } else {
                         HtSQLite.getInstance().addOffer(offerUUID, newOffer);
-                    }
-                    if (pickedImage != null) {
-                        String[] filePath = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = context.getContentResolver().query(pickedImage, filePath, null, null, null);
-                        cursor.moveToFirst();
-                        String imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
-
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-                        cursor.close();
-                        ContextWrapper cw2 = new ContextWrapper(context);
-                        File directory2 = cw2.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-                        File myPath = new File(directory2, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
-                        FileOutputStream fos = null;
-                        try {
-                            fos = new FileOutputStream(myPath);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            try {
-                                fos.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
+                        newOffer.setServerUUID(offerUUID);
+                        HtAmplify.getInstance(context).updateOffer(newOffer);
                     }
                     undoView.setColors(context.getResources().getColor(R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
                     undoView.showWithAction(0, UndoView.ACTION_OFFER_SAVED, errors, null, () -> {
                         undoView.setVisibility(View.GONE);
                     });
-                    presentFragment(new OffersActivity());
+                    presentFragment(new OffersActivity(context));
                     parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
                     if (actionType == ActionType.EDIT)
                         parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 3);
@@ -944,6 +825,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setDateSlots(ArrayList<Long> dates) {
         this.dateSlots = dates;
+        scheduleInputCell.setDateSlots(dateSlots);
     }
 
     public void setFee(String text, int position) {
@@ -952,22 +834,6 @@ public class HtCreateOfferActivity extends BaseFragment {
             priceInputCell.setRes(ARGUMENTS_PRICE, text, 1);
         else
             pricesInputCell.get(position - 1).setRes(ARGUMENTS_PRICE, text, 1);
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
     }
 
     public void setRateType(String text, int position) {
@@ -985,8 +851,8 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     }
 
-    public void setLocationAddress(String address) {
-        locationInputCell.setRes(ARGUMENTS_ADDRESS, address, 0);
+    public void setLocation(String address, double latitude, double longitude) {
+        locationInputCell.setLocationInfo(address, latitude, longitude);
     }
 
     public void setCanEdit(boolean canEdit) {
@@ -999,18 +865,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setOfferUUID(String offerUUID) {
         this.offerUUID = offerUUID;
-        Bitmap b;
-        ContextWrapper cw = new ContextWrapper(context);
-        File directory = cw.getDir(OFFER_IMAGES_DIR, Context.MODE_PRIVATE);
-        File file = new File(directory, OFFER_IMAGES_NAME + offerUUID + OFFER_IMAGES_EXTENSION);
-        if (file.exists()) {
-            try {
-                b = BitmapFactory.decodeStream(new FileInputStream(file));
-                cameraImage.setImageBitmap(b);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+        cameraImage.setImageBitmap(HtStorage.getInstance().getOfferImage(context, offerUUID));
     }
 
     public void setDescription(String description) {

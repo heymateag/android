@@ -3,12 +3,14 @@ package org.telegram.ui.Heymate;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,20 +25,26 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import works.heymate.core.offer.OfferUtils;
+
 public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
     private int idCounter = 1;
     public ImageView closeImage;
+    private BaseFragment parent;
 
-    public HtOfferDetailsPopUp(Context context, int progressStyle, String offerUUID, BaseFragment fragment) {
+    public HtOfferDetailsPopUp(Context context, BaseFragment parent, int progressStyle, String offerUUID) {
         super(context, progressStyle);
         AlertDialog.Builder builder = this;
+        this.parent = parent;
 
         OfferDto dto = HtSQLite.getInstance().getOffer(offerUUID);
 
@@ -98,7 +106,12 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         BackupImageView offerImage = new BackupImageView(context);
         offerImage.setId(idCounter++);
-        offerImage.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+        Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
+        if(imageBitmap == null){
+            offerImage.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+        } else {
+            offerImage.setImageBitmap(imageBitmap);
+        }
         offerImage.setRoundRadius(AndroidUtilities.dp(4));
         RelativeLayout.LayoutParams offerImageLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(150));
         offerImageLayoutParams.addRule(RelativeLayout.BELOW, statusLayout.getId());
@@ -178,128 +191,30 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         priceTextLayoutParams.setMargins(AndroidUtilities.dp(2), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(priceText, priceTextLayoutParams);
 
-        JSONObject json = null;
-        try {
-            json = new JSONObject(dto.getConfigText());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
+        String name;
+
+        if (user.username != null) {
+            name = "@" + user.username;
         }
+        else {
+            name = user.first_name;
+
+            if (!TextUtils.isEmpty(user.last_name)) {
+                name = name + " " + user.last_name;
+            }
+        }
+        String message = OfferUtils.serializeBeautiful(dto.asOffer(), name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         TextView delayText = new TextView(context);
         delayText.setId(idCounter++);
         delayText.setTextSize(14);
         delayText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-        try {
-            delayText.setText("" + json.get("arg0"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        delayText.setText(message);
         RelativeLayout.LayoutParams delayTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         delayTextLayoutParams.addRule(RelativeLayout.BELOW, priceText.getId());
         delayTextLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(30), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(delayText, delayTextLayoutParams);
-
-        TextView delayValueText = new TextView(context);
-        delayValueText.setId(idCounter++);
-        delayValueText.setTextSize(14);
-        delayValueText.setTextColor(context.getResources().getColor(R.color.ht_green));
-        try {
-            delayValueText.setText("" + json.get("arg1"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        delayValueText.setPaintFlags(delayValueText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        RelativeLayout.LayoutParams delayValueTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        delayValueTextLayoutParams.addRule(RelativeLayout.BELOW, priceText.getId());
-        delayValueTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, delayText.getId());
-        delayValueTextLayoutParams.setMargins(0, AndroidUtilities.dp(30), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(delayValueText, delayValueTextLayoutParams);
-
-        TextView depositText = new TextView(context);
-        depositText.setId(idCounter++);
-        depositText.setTextSize(14);
-        depositText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-        depositText.setText("Deposit");
-        RelativeLayout.LayoutParams depositTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        depositTextLayoutParams.addRule(RelativeLayout.BELOW, delayText.getId());
-        depositTextLayoutParams.setMargins(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(depositText, depositTextLayoutParams);
-
-        TextView depositValueText = new TextView(context);
-        depositValueText.setId(idCounter++);
-        depositValueText.setTextSize(14);
-        depositValueText.setTextColor(context.getResources().getColor(R.color.ht_green));
-        try {
-            depositValueText.setText("" + json.get("arg2"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        depositValueText.setPaintFlags(depositValueText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        RelativeLayout.LayoutParams depositValueTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        depositValueTextLayoutParams.addRule(RelativeLayout.BELOW, delayText.getId());
-        depositValueTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, depositText.getId());
-        depositValueTextLayoutParams.setMargins(0, 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(depositValueText, depositValueTextLayoutParams);
-
-        TextView cancellation1Text = new TextView(context);
-        cancellation1Text.setId(idCounter++);
-        cancellation1Text.setTextSize(14);
-        cancellation1Text.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-        try {
-            cancellation1Text.setText("" + json.get("arg3"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RelativeLayout.LayoutParams cancellation1TextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cancellation1TextLayoutParams.addRule(RelativeLayout.BELOW, depositText.getId());
-        cancellation1TextLayoutParams.setMargins(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(cancellation1Text, cancellation1TextLayoutParams);
-
-        TextView cancellation1ValueText = new TextView(context);
-        cancellation1ValueText.setId(idCounter++);
-        cancellation1ValueText.setTextSize(14);
-        cancellation1ValueText.setTextColor(context.getResources().getColor(R.color.ht_green));
-        try {
-            cancellation1ValueText.setText("" + json.get("arg4"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        cancellation1ValueText.setPaintFlags(cancellation1ValueText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        RelativeLayout.LayoutParams cancellation1ValueTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cancellation1ValueTextLayoutParams.addRule(RelativeLayout.BELOW, depositText.getId());
-        cancellation1ValueTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, cancellation1Text.getId());
-        cancellation1ValueTextLayoutParams.setMargins(0, 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(cancellation1ValueText, cancellation1ValueTextLayoutParams);
-
-        TextView cancellation2Text = new TextView(context);
-        cancellation2Text.setId(idCounter++);
-        cancellation2Text.setTextSize(14);
-        cancellation2Text.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-        try {
-            cancellation2Text.setText("" + json.get("arg5"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RelativeLayout.LayoutParams cancellation2TextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cancellation2TextLayoutParams.addRule(RelativeLayout.BELOW, cancellation1Text.getId());
-        cancellation2TextLayoutParams.setMargins(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(cancellation2Text, cancellation2TextLayoutParams);
-
-        TextView cancellation2ValueText = new TextView(context);
-        cancellation2ValueText.setId(idCounter++);
-        cancellation2ValueText.setTextSize(14);
-        cancellation2ValueText.setTextColor(context.getResources().getColor(R.color.ht_green));
-        try {
-            cancellation2ValueText.setText("" + json.get("arg6"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        cancellation2ValueText.setPaintFlags(cancellation2ValueText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        RelativeLayout.LayoutParams cancellation2ValueTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        cancellation2ValueTextLayoutParams.addRule(RelativeLayout.BELOW, cancellation1Text.getId());
-        cancellation2ValueTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, cancellation2Text.getId());
-        cancellation2ValueTextLayoutParams.setMargins(0, 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
-        mainLayout.addView(cancellation2ValueText, cancellation2ValueTextLayoutParams);
 
         TextView termsLinkText = new TextView(context);
         termsLinkText.setId(idCounter++);
@@ -308,7 +223,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         termsLinkText.setText("Terms And Conditions Link");
         termsLinkText.setPaintFlags(termsLinkText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         RelativeLayout.LayoutParams termsLinkTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        termsLinkTextLayoutParams.addRule(RelativeLayout.BELOW, cancellation2Text.getId());
+        termsLinkTextLayoutParams.addRule(RelativeLayout.BELOW, delayText.getId());
         termsLinkTextLayoutParams.setMargins(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(termsLinkText, termsLinkTextLayoutParams);
 
@@ -317,7 +232,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
-        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(fragment, offerUUID)); // TODO Why is there a buy button here?
+        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offerUUID)); // TODO Why is there a buy button here?
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(150), AndroidUtilities.dp(50));
         buyButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());

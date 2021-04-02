@@ -95,20 +95,14 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         preferences.edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
 
         titles = new String[]{
-                "Heymate Telegram",
-                "Offers",
+                LocaleController.getString("Page1Title", R.string.Page1Title),
+                LocaleController.getString("Page2Title", R.string.Page2Title),
                 LocaleController.getString("Page3Title", R.string.Page3Title),
-                LocaleController.getString("Page5Title", R.string.Page5Title),
-                LocaleController.getString("Page4Title", R.string.Page4Title),
-                LocaleController.getString("Page6Title", R.string.Page6Title)
         };
         messages = new String[]{
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                LocaleController.getString("Page1Message", R.string.Page1Message),
+                LocaleController.getString("Page2Message", R.string.Page2Message),
                 LocaleController.getString("Page3Message", R.string.Page3Message),
-                LocaleController.getString("Page5Message", R.string.Page5Message),
-                LocaleController.getString("Page4Message", R.string.Page4Message),
-                LocaleController.getString("Page6Message", R.string.Page6Message)
         };
 
         ScrollView scrollView = new ScrollView(this);
@@ -244,8 +238,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             });
         }
 
-        bottomPages = new BottomPagesView(this, viewPager, 6);
-        frameLayout.addView(bottomPages, LayoutHelper.createFrame(66, 5, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 350, 0, 0));
+        bottomPages = new BottomPagesView(this, viewPager, 3);
+        frameLayout.addView(bottomPages, LayoutHelper.createFrame(33, 5, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 350, 0, 0));
 
         textView = new TextView(this);
         textView.setTextColor(0xff1393d2);
@@ -298,8 +292,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         super.onResume();
         if (justCreated) {
             if (LocaleController.isRTL) {
-                viewPager.setCurrentItem(6);
-                lastPage = 6;
+                viewPager.setCurrentItem(3);
+                lastPage = 3;
             } else {
                 viewPager.setCurrentItem(0);
                 lastPage = 0;
@@ -566,9 +560,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             gl = eglContext.getGL();
 
             GLES20.glGenTextures(23, textures, 0);
-            loadTexture(R.drawable.places_btn, 0);
-            loadTexture(R.drawable.places_btn, 1);
-            loadTexture(R.drawable.group_350, 2);
+            loadTexture(R.drawable.intro_heymate_sphere, 0);
+            loadTexture(R.drawable.intro_heymate_sphere, 1);
+            loadTexture(R.drawable.intro_heymate_offer, 2);
             loadTexture(R.drawable.places_btn, 3);
             loadTexture(R.drawable.intro_ic_bubble_dot, 4);
             loadTexture(R.drawable.intro_ic_bubble, 5);
@@ -580,15 +574,15 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             loadTexture(R.drawable.intro_ic_smile, 11);
             loadTexture(R.drawable.intro_ic_videocam, 12);
             loadTexture(R.drawable.intro_knot_down, 13);
-            loadTexture(R.drawable.intro_knot_up, 14);
+            loadTexture(R.drawable.heymate_intro_defi, 14);
             loadTexture(R.drawable.intro_powerful_infinity_white, 15);
             loadTexture(R.drawable.intro_powerful_infinity, 16);
             loadTexture(R.drawable.intro_powerful_mask, 17);
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.group_4, 21);
-            loadTexture(R.drawable.background_hd, 22);
+            loadTexture(R.drawable.heymate_logo, 21);
+            loadTexture(R.drawable.intro_heymate_sphere, 22);
 
             Intro.setTelegramTextures(textures[22], textures[21]);
             Intro.setPowerfulTextures(textures[17], textures[18], textures[16], textures[15]);

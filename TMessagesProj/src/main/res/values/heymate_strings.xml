@@ -10,6 +10,7 @@
     <string name="hm_confirm">Confirm</string>
     <string name="hm_cancel">Cancel</string>
     <string name="hm_day">Day</string>
+    <string name="hm_search_address">Search Address</string>
     <string name="hm_create_wallet">Create Wallet</string>
 
     <string name="hm_network_blockchain_error">Could not transfer data with node.</string>

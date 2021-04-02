@@ -29,6 +29,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
@@ -43,6 +44,8 @@ import java.util.Locale;
 
 public class HtCalendarBottomSheet extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
 
+    private Context context;
+    private RelativeLayout parentLayout;
     private int i = 0;
     private View prevView;
     private HashMap<Integer, Boolean> checkBoxesState;
@@ -51,6 +54,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
     public HtCalendarBottomSheet(Context context, boolean needFocus, HtCreateOfferActivity parent) {
         super(context, needFocus);
+        this.context = context;
         initSheet(context, parent);
     }
 
@@ -107,6 +111,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
         calendarImage.setImageDrawable(calendarDrawable);
         addDateImage.setOnClickListener(new AddDateOnClickListener(context, calendarAddLayout));
         calendarImage.setOnClickListener(new AddDateOnClickListener(context, calendarAddLayout));
+        parentLayout = calendarAddLayout;
         RelativeLayout.LayoutParams calendarImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(25), AndroidUtilities.dp(25));
         calendarImageLayoutParams.addRule(RelativeLayout.RIGHT_OF, addDateImage.getId());
         calendarImageLayoutParams.setMargins(AndroidUtilities.dp(5), 0, 0, AndroidUtilities.dp(15));
@@ -167,7 +172,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
         private Context context;
         private RelativeLayout parentLayout;
 
-        public AddDateOnClickListener(Context context,  RelativeLayout parentLayout) {
+        public AddDateOnClickListener(Context context, RelativeLayout parentLayout) {
             this.context = context;
             this.parentLayout = parentLayout;
         }
@@ -183,121 +188,11 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.set(Calendar.YEAR, year);
-                    selectedDate.set(Calendar.MONTH, month);
-                    selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                    RadioButton newDateCheckBox = new RadioButton(context);
-                    newDateCheckBox.setSize(AndroidUtilities.dp(20));
-                    newDateCheckBox.setColor(Theme.getColor(Theme.key_graySection), context.getResources().getColor(R.color.ht_green));
-                    newDateCheckBox.setChecked(true, true);
-                    newDateCheckBox.setId(++i);
-                    newDateCheckBox.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            checkBoxesState.put(newDateCheckBox.getId(), !checkBoxesState.get(newDateCheckBox.getId()));
-                            newDateCheckBox.setChecked(checkBoxesState.get(newDateCheckBox.getId()), true);
-                        }
-                    });
-                    checkBoxesState.put(newDateCheckBox.getId(), true);
-                    RelativeLayout.LayoutParams newDateCheckBoxLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
-                    newDateCheckBoxLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
-                    newDateCheckBoxLayoutParams.setMargins(AndroidUtilities.dp(45), AndroidUtilities.dp(10), 0, AndroidUtilities.dp(25));
-                    parentLayout.addView(newDateCheckBox, newDateCheckBoxLayoutParams);
-
-                    TextView newDateText = new TextView(context);
-                    newDateText.setTextSize(16);
-                    newDateText.setId(++i);
-                    newDateText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                    newDateText.setText(selectedDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()) + " " + simpleDateFormat2.format(selectedDate.getTime()));
-                    RelativeLayout.LayoutParams newDateTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    newDateTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, newDateCheckBox.getId());
-                    newDateTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
-                    newDateTextLayoutParams.setMargins(AndroidUtilities.dp(10), AndroidUtilities.dp(10), 0, AndroidUtilities.dp(25));
-                    parentLayout.addView(newDateText, newDateTextLayoutParams);
-
-                    EditTextBoldCursor startTimeText = new EditTextBoldCursor(context);
-                    startTimeText.setClickable(true);
-                    startTimeText.setFocusable(false);
-                    startTimeText.setInputType(InputType.TYPE_NULL);
-                    startTimeText.setTextSize(16);
-                    startTimeText.setId(++i);
-                    startTimeText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-                    startTimeText.setText("00:00");
-                    startTimeText.setBackgroundResource(R.drawable.border);
-                    RelativeLayout.LayoutParams startTimeTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    startTimeTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, newDateText.getId());
-                    startTimeTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
-                    startTimeTextLayoutParams.setMargins(AndroidUtilities.dp(10), 0, 0, AndroidUtilities.dp(45));
-                    parentLayout.addView(startTimeText, startTimeTextLayoutParams);
-
-                    startTimeText.setOnClickListener(new SetTimeOnClickListener(context, startTimeText));
-
-                    TextView toText = new TextView(context);
-                    toText.setTextSize(16);
-                    toText.setId(++i);
-                    toText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                    toText.setText("to");
-                    RelativeLayout.LayoutParams toTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    toTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, startTimeText.getId());
-                    toTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
-                    toTextLayoutParams.setMargins(AndroidUtilities.dp(10), AndroidUtilities.dp(10), 0, AndroidUtilities.dp(25));
-                    parentLayout.addView(toText, toTextLayoutParams);
-
-                    EditTextBoldCursor endTimeText = new EditTextBoldCursor(context);
-                    endTimeText.setClickable(true);
-                    endTimeText.setFocusable(false);
-                    endTimeText.setInputType(InputType.TYPE_NULL);
-                    endTimeText.setTextSize(16);
-                    endTimeText.setId(++i);
-                    endTimeText.setBackgroundResource(R.drawable.border);
-                    endTimeText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
-                    endTimeText.setText("00:00");
-                    RelativeLayout.LayoutParams endTimeTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    endTimeTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, toText.getId());
-                    endTimeTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
-                    endTimeTextLayoutParams.setMargins(AndroidUtilities.dp(10), 0, 0, AndroidUtilities.dp(55));
-                    parentLayout.addView(endTimeText, endTimeTextLayoutParams);
-
-                    prevView = newDateCheckBox;
-
-                    endTimeText.setOnClickListener(new SetTimeOnClickListener(context, endTimeText));
-
-                    TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                            startTimeText.setText(simpleDateFormat.format(new Date(0,0,0,hourOfDay, minute)));
-                            Calendar startTimeCal = Calendar.getInstance();
-                            startTimeCal.set(Calendar.YEAR, year);
-                            startTimeCal.set(Calendar.MONTH, month);
-                            startTimeCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                            startTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                            startTimeCal.set(Calendar.MINUTE, minute);
-                            selectedStartDates.put(newDateCheckBox.getId(), startTimeCal.toInstant().toEpochMilli());
-                            TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-
-                                @Override
-                                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                    endTimeText.setText(simpleDateFormat.format(new Date(0,0,0,hourOfDay, minute)));
-                                    Calendar endTimeCal = Calendar.getInstance();
-                                    endTimeCal.set(Calendar.YEAR, year);
-                                    endTimeCal.set(Calendar.MONTH, month);
-                                    endTimeCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                    endTimeCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                    endTimeCal.set(Calendar.MINUTE, minute);
-                                    selectedEndDates.put(newDateCheckBox.getId(), endTimeCal.toInstant().toEpochMilli());
-                                }
-                            }, 0, 0, true);
-                            mTimePicker.setTitle(LocaleController.getString("HtSelectEndTime", R.string.HtSelectEndTime));
-                            mTimePicker.show();
-                        }
-                    }, 0, 0, true);
-                    mTimePicker.setTitle(LocaleController.getString("HtSelectStartTime", R.string.HtSelectStartTime));
-                    mTimePicker.show();
+                    HashMap<String, Integer> extras = new HashMap<>();
+                    extras.put("DateYear", year);
+                    extras.put("DateMonth", month);
+                    extras.put("DateDay", dayOfMonth);
+                    HtTimeSlotView timeSlotView = new HtTimeSlotView(context, parentLayout, extras);
                 }
             }, cyear, cmonth, cday);
             mTimePicker.setTitle(LocaleController.getString("HtSelectDate", R.string.HtSelectDate));
@@ -324,7 +219,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                    target.setText(simpleDateFormat.format(new Date(0,0,0,hourOfDay, minute)));
+                    target.setText(simpleDateFormat.format(new Date(0, 0, 0, hourOfDay, minute)));
                 }
             }, 0, 0, true);
 
@@ -332,14 +227,190 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
         }
     }
 
-    public ArrayList<Long> getDates(){
+    public class HtTimeSlotView {
+        public HtTimeSlotView(Context context, RelativeLayout parentLayout, HashMap<String, Integer> extras) {
+            SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
+            Calendar selectedDate = Calendar.getInstance();
+            selectedDate.set(Calendar.YEAR, extras.get("DateYear"));
+            selectedDate.set(Calendar.MONTH, extras.get("DateMonth"));
+            selectedDate.set(Calendar.DAY_OF_MONTH, extras.get("DateDay"));
+
+            RadioButton newDateCheckBox = new RadioButton(context);
+            newDateCheckBox.setSize(AndroidUtilities.dp(20));
+            newDateCheckBox.setColor(Theme.getColor(Theme.key_graySection), context.getResources().getColor(R.color.ht_green));
+            newDateCheckBox.setChecked(true, true);
+            newDateCheckBox.setId(++i);
+            newDateCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkBoxesState.put(newDateCheckBox.getId(), !checkBoxesState.get(newDateCheckBox.getId()));
+                    newDateCheckBox.setChecked(checkBoxesState.get(newDateCheckBox.getId()), true);
+                }
+            });
+            checkBoxesState.put(newDateCheckBox.getId(), true);
+            RelativeLayout.LayoutParams newDateCheckBoxLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
+            newDateCheckBoxLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
+            newDateCheckBoxLayoutParams.setMargins(AndroidUtilities.dp(45), AndroidUtilities.dp(10), 0, AndroidUtilities.dp(25));
+            parentLayout.addView(newDateCheckBox, newDateCheckBoxLayoutParams);
+
+            TextView newDateText = new TextView(context);
+            newDateText.setTextSize(16);
+            newDateText.setId(++i);
+            newDateText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            newDateText.setText(selectedDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()) + " " + simpleDateFormat2.format(selectedDate.getTime()));
+            RelativeLayout.LayoutParams newDateTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            newDateTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, newDateCheckBox.getId());
+            newDateTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
+            newDateTextLayoutParams.setMargins(AndroidUtilities.dp(10), AndroidUtilities.dp(10), 0, AndroidUtilities.dp(25));
+            parentLayout.addView(newDateText, newDateTextLayoutParams);
+
+            EditTextBoldCursor startTimeText = new EditTextBoldCursor(context);
+            startTimeText.setClickable(true);
+            startTimeText.setFocusable(false);
+            startTimeText.setInputType(InputType.TYPE_NULL);
+            startTimeText.setTextSize(16);
+            startTimeText.setId(++i);
+            startTimeText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+            startTimeText.setText("00:00");
+            startTimeText.setBackgroundResource(R.drawable.border);
+            RelativeLayout.LayoutParams startTimeTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            startTimeTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, newDateText.getId());
+            startTimeTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
+            startTimeTextLayoutParams.setMargins(AndroidUtilities.dp(10), 0, 0, AndroidUtilities.dp(45));
+            parentLayout.addView(startTimeText, startTimeTextLayoutParams);
+
+            startTimeText.setOnClickListener(new SetTimeOnClickListener(context, startTimeText));
+
+            TextView toText = new TextView(context);
+            toText.setTextSize(16);
+            toText.setId(++i);
+            toText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            toText.setText("to");
+            RelativeLayout.LayoutParams toTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            toTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, startTimeText.getId());
+            toTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
+            toTextLayoutParams.setMargins(AndroidUtilities.dp(10), AndroidUtilities.dp(10), 0, AndroidUtilities.dp(25));
+            parentLayout.addView(toText, toTextLayoutParams);
+
+            EditTextBoldCursor endTimeText = new EditTextBoldCursor(context);
+            endTimeText.setClickable(true);
+            endTimeText.setFocusable(false);
+            endTimeText.setInputType(InputType.TYPE_NULL);
+            endTimeText.setTextSize(16);
+            endTimeText.setId(++i);
+            endTimeText.setBackgroundResource(R.drawable.border);
+            endTimeText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
+            endTimeText.setText("00:00");
+            RelativeLayout.LayoutParams endTimeTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            endTimeTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, toText.getId());
+            endTimeTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
+            endTimeTextLayoutParams.setMargins(AndroidUtilities.dp(10), 0, 0, AndroidUtilities.dp(55));
+            parentLayout.addView(endTimeText, endTimeTextLayoutParams);
+
+            prevView = newDateCheckBox;
+
+            endTimeText.setOnClickListener(new SetTimeOnClickListener(context, endTimeText));
+
+            TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    extras.put("StartYear", extras.get("DateYear"));
+                    extras.put("StartMonth", extras.get("DateMonth"));
+                    extras.put("StartDay", extras.get("DateDay"));
+                    extras.put("StartHour", hourOfDay);
+                    extras.put("StartMinute", minute);
+                    startDateSelected(context, startTimeText, endTimeText, newDateCheckBox, extras);
+                }
+            }, 0, 0, true);
+            mTimePicker.setTitle(LocaleController.getString("HtSelectStartTime", R.string.HtSelectStartTime));
+            if (extras.get("StartYear") == null)
+                mTimePicker.show();
+            else {
+                startDateSelected(context, startTimeText, endTimeText, newDateCheckBox, extras);
+            }
+        }
+
+        public void startDateSelected(Context context, TextView startTimeText, TextView endTimeText, RadioButton newDateCheckBox, HashMap<String, Integer> extras) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            startTimeText.setText(simpleDateFormat.format(new Date(0, 0, 0, extras.get("StartHour"), extras.get("StartMinute"))));
+            Calendar startTimeCal = Calendar.getInstance();
+            startTimeCal.set(Calendar.YEAR, extras.get("StartYear"));
+            startTimeCal.set(Calendar.MONTH, extras.get("StartMonth"));
+            startTimeCal.set(Calendar.DAY_OF_MONTH, extras.get("StartDay"));
+            startTimeCal.set(Calendar.HOUR_OF_DAY, extras.get("StartHour"));
+            startTimeCal.set(Calendar.MINUTE, extras.get("StartMinute"));
+            selectedStartDates.put(newDateCheckBox.getId(), startTimeCal.toInstant().toEpochMilli());
+            TimePickerDialog mTimePicker = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    extras.put("EndYear", extras.get("DateYear"));
+                    extras.put("EndMonth", extras.get("DateMonth"));
+                    extras.put("EndDay", extras.get("DateDay"));
+                    extras.put("EndHour", hourOfDay);
+                    extras.put("EndMinute", minute);
+                    endDateSelected(endTimeText, newDateCheckBox, extras);
+                }
+            }, 0, 0, true);
+            mTimePicker.setTitle(LocaleController.getString("HtSelectEndTime", R.string.HtSelectEndTime));
+            if (extras.get("EndYear") == null)
+                mTimePicker.show();
+            else {
+                endDateSelected(endTimeText, newDateCheckBox, extras);
+            }
+
+        }
+    }
+
+    public void endDateSelected(TextView endTimeText, RadioButton newDateCheckBox, HashMap<String, Integer> extras) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        endTimeText.setText(simpleDateFormat.format(new Date(0, 0, 0, extras.get("EndHour"), extras.get("EndMinute"))));
+        Calendar endTimeCal = Calendar.getInstance();
+        endTimeCal.set(Calendar.YEAR, extras.get("EndYear"));
+        endTimeCal.set(Calendar.MONTH, extras.get("EndMonth"));
+        endTimeCal.set(Calendar.DAY_OF_MONTH, extras.get("EndDay"));
+        endTimeCal.set(Calendar.HOUR_OF_DAY, extras.get("EndHour"));
+        endTimeCal.set(Calendar.MINUTE, extras.get("EndMinute"));
+        selectedEndDates.put(newDateCheckBox.getId(), endTimeCal.toInstant().toEpochMilli());
+    }
+
+    public ArrayList<Long> getDates() {
         ArrayList<Long> dates = new ArrayList<>();
-        for(int key : checkBoxesState.keySet()){
-            if(checkBoxesState.get(key)){
+        for (int key : checkBoxesState.keySet()) {
+            if (checkBoxesState.get(key)) {
                 dates.add(selectedStartDates.get(key));
                 dates.add(selectedEndDates.get(key));
             }
         }
         return dates;
+    }
+
+    public void setDates(ArrayList<Long> dates) {
+        for (int i = 0; i < dates.size(); i += 2) {
+            Calendar cal1 = Calendar.getInstance();
+            cal1.setTimeInMillis(dates.get(i));
+            HashMap<String, Integer> extras = new HashMap<>();
+
+            extras.put("DateYear", cal1.get(Calendar.YEAR));
+            extras.put("DateMonth", cal1.get(Calendar.MONTH));
+            extras.put("DateDay", cal1.get(Calendar.DAY_OF_MONTH));
+
+            extras.put("StartYear", cal1.get(Calendar.YEAR));
+            extras.put("StartMonth", cal1.get(Calendar.MONTH));
+            extras.put("StartDay", cal1.get(Calendar.DAY_OF_MONTH));
+            extras.put("StartHour", cal1.get(Calendar.HOUR_OF_DAY));
+            extras.put("StartMinute", cal1.get(Calendar.MINUTE));
+
+            cal1.setTimeInMillis(dates.get(i+1));
+            extras.put("EndYear", cal1.get(Calendar.YEAR));
+            extras.put("EndMonth", cal1.get(Calendar.MONTH));
+            extras.put("EndDay", cal1.get(Calendar.DAY_OF_MONTH));
+            extras.put("EndHour", cal1.get(Calendar.HOUR_OF_DAY));
+            extras.put("EndMinute", cal1.get(Calendar.MINUTE));
+
+            HtTimeSlotView timeSlotView = new HtTimeSlotView(context, parentLayout, extras);
+        }
+
     }
 }

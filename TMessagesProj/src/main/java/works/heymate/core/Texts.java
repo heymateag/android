@@ -16,6 +16,7 @@ public class Texts {
     public static final String CONFIRM = "confirm";
     public static final String CANCEL = "cancel";
     public static final String DAY = "day";
+    public static final String SEARCH_ADDRESS = "search_address";
     public static final String CREATE_WALLET = "create_wallet";
 
     public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";

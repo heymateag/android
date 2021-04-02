@@ -42,7 +42,6 @@ public class HtOfferHelperActivity extends BaseFragment {
         Configuration configuration = context.getResources().getConfiguration();
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
-
         nextBtn = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
@@ -83,22 +82,23 @@ public class HtOfferHelperActivity extends BaseFragment {
 
         ImageView helperImage = new ImageView(context);
         helperImage.setScaleType(ImageView.ScaleType.FIT_XY);
-        Drawable helperDrawable = context.getResources().getDrawable(R.drawable.offerhelper);
+        Drawable helperDrawable = context.getResources().getDrawable(R.drawable.ht_helper);
         helperImage.setImageDrawable(helperDrawable);
-        mainLayout.addView(helperImage, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,350));
+        mainLayout.addView(helperImage, LayoutHelper.createLinear(270,320));
 
         TextView text1 = new TextView(context);
         text1.setText(LocaleController.getString("HtWhatAnOffer", R.string.HtWhatAnOffer));
         text1.setTextSize(19);
-        text1.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
-        mainLayout.addView(text1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,7,15,7));
+        text1.setTypeface(text1.getTypeface(), Typeface.BOLD);
+        text1.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        mainLayout.addView(text1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,17,15,7));
 
         TextView text2 = new TextView(context);
         text2.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit,\nsed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
         text2.setMinLines(2);
         text2.setTextSize(14);
-        text2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        mainLayout.addView(text2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,7,15,7));
+        text2.setTextColor(Theme.getColor(Theme.key_wallet_grayText2));
+        mainLayout.addView(text2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,17,15,17));
 
         LinearLayout buyLayout = new LinearLayout(context) {
             @Override
@@ -114,14 +114,14 @@ public class HtOfferHelperActivity extends BaseFragment {
         buyLabel.setTextSize(16);
         buyLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
         buyLabel.setTypeface(buyLabel.getTypeface(), Typeface.BOLD);
-        buyLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        buyLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteBackground));
         buyLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5), context.getResources().getColor(R.color.ht_green)));
-        buyLayout.addView(buyLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12,6,12,6));
+        buyLayout.addView(buyLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15,10,15,10));
         buyLayout.setEnabled(true);
         buyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presentFragment(new OffersActivity());
+                presentFragment(new OffersActivity(context));
                 finishFragment();
             }
         });

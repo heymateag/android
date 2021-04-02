@@ -33,7 +33,7 @@ public class HtPriceInputCell extends LinearLayout {
     private HashMap<String, Runnable> args;
     private int position = 0;
 
-    public HtPriceInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, boolean canEdit, int position) {
+    public HtPriceInputCell(Context context, HtCreateOfferActivity parent, String title, HashMap<String, Runnable> args, int icon, boolean canEdit, int position) {
         super(context);
         paremetersValues = new HashMap<>();
         parametersViews = new TextView[args.size()];
@@ -71,6 +71,13 @@ public class HtPriceInputCell extends LinearLayout {
         titleLayout3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                parent.titleTextField.clearFocus();
+                parent.titleTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(parent.titleTextField);
+                parent.descriptionTextField.clearFocus();
+                parent.descriptionTextField.hideActionMode();
+                AndroidUtilities.hideKeyboard(parent.descriptionTextField);
+
                 if (!isOpen[0]) {
                     ObjectAnimator anim1 = ObjectAnimator.ofFloat(categoryLayout, "scaleY", 0f, 1f);
                     anim1.setDuration(250);

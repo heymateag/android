@@ -1,17 +1,21 @@
 package org.telegram.ui.Heymate;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 
-import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.api.aws.ApiAuthProviders;
-import com.amplifyframework.api.aws.sigv4.ApiKeyAuthProvider;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
-import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
 
@@ -19,25 +23,28 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HtAmplify {
 
     private static HtAmplify instance;
+    private Context context;
 
-    private static String API_KEY = "da2-gmv546zpg5edxi6eej66aq263u";
+    public AmazonS3Client amazonS3Client;
 
-    public interface OfferCallback {
+    public interface OfferCallback<T> {
 
-        void onOfferQueryResult(boolean success, Offer offer, ApiException exception);
+        void onOfferQueryResult(boolean success, T data, ApiException exception);
 
     }
 
@@ -47,19 +54,25 @@ public class HtAmplify {
         return instance;
     }
 
+    public Context getContext(){
+        return context;
+    }
+
     private HtAmplify(Context context) {
+        this.context = context;
+
         try {
             Amplify.addPlugin(new AWSApiPlugin());
-            ApiAuthProviders authProviders = ApiAuthProviders.builder()
-                    .apiKeyAuthProvider(new ApiKeyAuthProvider() {
-                        @Override
-                        public String getAPIKey() {
-                            return API_KEY;
-                        }
-                    })
-                    .build();
-            Amplify.addPlugin(new AWSApiPlugin(authProviders));
             Amplify.configure(context);
+
+
+            amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(
+                    "AKIATNEPMKIM2UIPWSPC",
+                    "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"
+            ));
+
+            amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
+            amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 
             Log.i("HtAmplify", "Initialized Amplify.");
         } catch (AmplifyException error) {
@@ -67,7 +80,7 @@ public class HtAmplify {
         }
     }
 
-    public Offer createOffer(OfferDto dto, String address, String signature) {
+    public Offer createOffer(OfferDto dto, Uri pickedImage, String address, String signature) {
         Offer newOffer = Offer.builder()
                 .userId("" + dto.getUserId())
                 .title(dto.getTitle())
@@ -81,20 +94,23 @@ public class HtAmplify {
                 .id(UUID.randomUUID().toString())
                 .availabilitySlot(dto.getTimeSlotsAsJson())
                 .locationData(dto.getLocation())
-                .isActive(true)
                 .terms(dto.getTerms())
                 .termsConfig(dto.getConfigText())
                 .latitude("" + dto.getLatitude())
                 .longitude("" + dto.getLongitude())
-                .serviceProviderAddress("Address goes here")
-                .serviceProviderSignature("Signature goes here")
                 .serviceProviderAddress(address)
                 .serviceProviderSignature(signature)
+                .status(dto.getStatus().ordinal())
+                .createdAt(dto.getCreatedAt())
+                .editedAt(dto.getEditedAt())
                 .build();
 
         Amplify.API.mutate(ModelMutation.create(newOffer),
                 response -> {
                     HtSQLite.getInstance().addOffer(newOffer);
+                    if (pickedImage != null) {
+                        HtStorage.getInstance().setOfferImage(context, response.getData().getId(), pickedImage);
+                    }
                     Log.i("HtAmplify", "Offer Created.");
                 },
                 error -> Log.e("HtAmplify", "Create failed", error)
@@ -104,8 +120,71 @@ public class HtAmplify {
         for (int i = 0; i < times.size(); i += 2) {
 
             TimeSlot timeSlot = TimeSlot.builder()
-                    .startTime(times.get(i))
-                    .endTime(times.get(i + 1))
+                    .startTime((int) (times.get(i) / 1000))
+                    .endTime((int) (times.get(i + 1) / 1000))
+                    .offerId(newOffer.getId())
+                    .status(HtTimeSlotStatus.AVAILABLE.ordinal())
+                    .clientUserId("0")
+                    .build();
+
+            Amplify.API.mutate(ModelMutation.create(timeSlot),
+                    response -> {
+                        Log.i("HtAmplify", "Time Slot created");
+                    },
+                    error -> Log.e("HtAmplify", "Time Slot creation failed", error)
+            );
+        }
+
+        return newOffer;
+    }
+
+    public Offer updateOffer(OfferDto dto) {
+        Offer newOffer = Offer.builder()
+                .userId("" + dto.getUserId())
+                .title(dto.getTitle())
+                .category(dto.getCategory())
+                .subCategory(dto.getSubCategory())
+                .rate("" + dto.getRate())
+                .rateType(dto.getRateType())
+                .currency(dto.getCurrency())
+                .description(dto.getDescription())
+                .expiry(new Temporal.Date(dto.getExpire()))
+                .id(dto.getServerUUID())
+                .availabilitySlot(dto.getTimeSlotsAsJson())
+                .locationData(dto.getLocation())
+                .terms(dto.getTerms())
+                .termsConfig(dto.getConfigText())
+                .latitude("" + dto.getLatitude())
+                .longitude("" + dto.getLongitude())
+                .status(dto.getStatus().ordinal())
+                .createdAt(dto.getCreatedAt())
+                .editedAt((int) ((new Date()).toInstant().getEpochSecond() / 1000))
+                .build();
+
+        Amplify.API.query(
+                ModelQuery.list(TimeSlot.class, TimeSlot.OFFER_ID.eq(dto.getServerUUID())),
+                response -> {
+                    if (response.getData() != null) {
+                        for (TimeSlot timeSlot : response.getData()) {
+                            Amplify.API.mutate(
+                                    ModelMutation.delete(timeSlot),
+                                    response2 -> {
+                                        Log.i("HtAmplify", "TimeSlot updated.");
+                                    },
+                                    error2 -> Log.e("HtAmplify", "Failed to update", error2)
+                            );
+                        }
+                    }
+                },
+                error -> Log.e("HtAmplify", "Query failure", error)
+        );
+
+        ArrayList<Long> times = dto.getDateSlots();
+        for (int i = 0; i < times.size(); i += 2) {
+
+            TimeSlot timeSlot = TimeSlot.builder()
+                    .startTime((int) (times.get(i) / 1000))
+                    .endTime((int) (times.get(i + 1) / 1000))
                     .offerId(newOffer.getId())
                     .status(HtTimeSlotStatus.AVAILABLE.ordinal())
                     .clientUserId("0")
@@ -207,10 +286,47 @@ public class HtAmplify {
         });
     }
 
+    public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId, OfferCallback callback) {
+        Log.i("HtAmplify", "Getting time slots");
+
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<ArrayList<TimeSlot>> future = pool.submit(new Callable<ArrayList<TimeSlot>>() {
+            @Override
+            public ArrayList<TimeSlot> call() throws Exception {
+                ArrayList<TimeSlot> timeSlots = new ArrayList();
+
+                Amplify.API.query(
+                        ModelQuery.list(
+                                TimeSlot.class, TimeSlot.OFFER_ID.eq("" + offerId)
+                                        .and(TimeSlot.STATUS.eq(HtTimeSlotStatus.AVAILABLE.ordinal()))),
+                        response -> {
+                            if (response.hasData()) {
+                                callback.onOfferQueryResult(true, response.getData(), null);
+                            } else {
+                                callback.onOfferQueryResult(false, null, null);
+                            }
+                        },
+                        error -> callback.onOfferQueryResult(false, null, error)
+                );
+                return timeSlots;
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId) {
         Log.i("HtAmplify", "Getting time slots");
 
-        Log.i("HtAmplify", "Getting Offers");
+        AtomicBoolean completed = new AtomicBoolean(false);
 
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future<ArrayList<TimeSlot>> future = pool.submit(new Callable<ArrayList<TimeSlot>>() {
@@ -228,14 +344,19 @@ public class HtAmplify {
                                     timeSlots.add(timeSlot);
                                 }
                             }
+                            completed.set(true);
                         },
-                        error -> Log.e("HtAmplify", "Query failure", error)
+                        error -> {
+                            Log.e("HtAmplify", "Query failure", error);
+                            completed.set(true);
+                        }
                 );
                 return timeSlots;
             }
         });
 
         try {
+            while (!completed.get()) ; // The worst approach ever, Will fix ASAP
             return future.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -252,8 +373,7 @@ public class HtAmplify {
                 response -> {
                     if (response.hasData()) {
                         callback.onOfferQueryResult(true, response.getData(), null);
-                    }
-                    else {
+                    } else {
                         callback.onOfferQueryResult(false, null, null);
                     }
                 },
@@ -277,6 +397,22 @@ public class HtAmplify {
                                     offers.add(offer);
                                 }
                                 HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
+
+                                new Thread(){
+                                    @Override
+                                    public void run() {
+                                        HashMap<String, S3Object> images = new HashMap<>();
+                                        for(Offer offer : offers){
+                                            if(HtStorage.getInstance().imageExists(context, offer.getId()))
+                                                continue;
+                                            S3Object image = getOfferImage(offer.getId());
+                                            if(image != null){
+                                                images.put(offer.getId(), image);
+                                            }
+                                        }
+                                        HtStorage.getInstance().updateOfferImages(context, images);
+                                    }
+                                }.start();
                             }
                         },
                         error -> Log.e("HtAmplify", "Query failure", error)
@@ -293,6 +429,69 @@ public class HtAmplify {
         } catch (InterruptedException e) {
             e.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public Offer getOffer(String offerUUID) {
+        Log.i("HtAmplify", "Getting Offer");
+
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<Offer> future = pool.submit(new Callable<Offer>() {
+            @Override
+            public Offer call() throws Exception {
+                final Offer[] fetchedOffer = new Offer[1];
+                Amplify.API.query(
+                        ModelQuery.list(Offer.class, Offer.ID.eq(offerUUID)),
+                        response -> {
+                            if (response.getData() != null) {
+                                for (Offer offer : response.getData()) {
+                                    fetchedOffer[0] = offer;
+                                    HtSQLite.getInstance().addOffer(offer);
+                                }
+                            }
+                        },
+                        error -> Log.e("HtAmplify", "Query failure", error)
+                );
+                return fetchedOffer[0];
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void saveOfferImage(String offerUUID, File file) {
+        amazonS3Client.putObject("offerdocuments", offerUUID, file);
+    }
+
+    public S3Object getOfferImage(String offerUUID) {
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Future<S3Object> future = pool.submit(new Callable<S3Object>() {
+            @Override
+            public S3Object call() throws Exception {
+                if(amazonS3Client.doesObjectExist("offerdocuments", offerUUID)) {
+                    return amazonS3Client.getObject("offerdocuments", offerUUID);
+                } else {
+                    return null;
+                }
+            }
+        });
+
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

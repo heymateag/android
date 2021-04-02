@@ -23,10 +23,11 @@ public final class Offer implements Model {
   public static final QueryField ID = field("Offer", "id");
   public static final QueryField AVAILABILITY_SLOT = field("Offer", "availabilitySlot");
   public static final QueryField CATEGORY = field("Offer", "category");
+  public static final QueryField CREATED_AT = field("Offer", "createdAt");
   public static final QueryField CURRENCY = field("Offer", "currency");
   public static final QueryField DESCRIPTION = field("Offer", "description");
+  public static final QueryField EDITED_AT = field("Offer", "editedAt");
   public static final QueryField EXPIRY = field("Offer", "expiry");
-  public static final QueryField IS_ACTIVE = field("Offer", "isActive");
   public static final QueryField LATITUDE = field("Offer", "latitude");
   public static final QueryField LOCATION_DATA = field("Offer", "locationData");
   public static final QueryField LONGITUDE = field("Offer", "longitude");
@@ -34,6 +35,7 @@ public final class Offer implements Model {
   public static final QueryField RATE_TYPE = field("Offer", "rateType");
   public static final QueryField SERVICE_PROVIDER_ADDRESS = field("Offer", "serviceProviderAddress");
   public static final QueryField SERVICE_PROVIDER_SIGNATURE = field("Offer", "serviceProviderSignature");
+  public static final QueryField STATUS = field("Offer", "status");
   public static final QueryField SUB_CATEGORY = field("Offer", "subCategory");
   public static final QueryField TERMS = field("Offer", "terms");
   public static final QueryField TERMS_CONFIG = field("Offer", "termsConfig");
@@ -42,10 +44,11 @@ public final class Offer implements Model {
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="AWSJSON") String availabilitySlot;
   private final @ModelField(targetType="String") String category;
+  private final @ModelField(targetType="Int") Integer createdAt;
   private final @ModelField(targetType="String") String currency;
   private final @ModelField(targetType="String") String description;
+  private final @ModelField(targetType="Int") Integer editedAt;
   private final @ModelField(targetType="AWSDate") Temporal.Date expiry;
-  private final @ModelField(targetType="Boolean") Boolean isActive;
   private final @ModelField(targetType="String") String latitude;
   private final @ModelField(targetType="String") String locationData;
   private final @ModelField(targetType="String") String longitude;
@@ -53,11 +56,12 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String rateType;
   private final @ModelField(targetType="String") String serviceProviderAddress;
   private final @ModelField(targetType="String") String serviceProviderSignature;
+  private final @ModelField(targetType="Int") Integer status;
   private final @ModelField(targetType="String") String subCategory;
   private final @ModelField(targetType="String") String terms;
   private final @ModelField(targetType="AWSJSON") String termsConfig;
   private final @ModelField(targetType="String") String title;
-  private final @ModelField(targetType="ID", isRequired = true) String userID;
+  private final @ModelField(targetType="String") String userID;
   public String getId() {
       return id;
   }
@@ -70,6 +74,10 @@ public final class Offer implements Model {
       return category;
   }
   
+  public Integer getCreatedAt() {
+      return createdAt;
+  }
+  
   public String getCurrency() {
       return currency;
   }
@@ -78,12 +86,12 @@ public final class Offer implements Model {
       return description;
   }
   
-  public Temporal.Date getExpiry() {
-      return expiry;
+  public Integer getEditedAt() {
+      return editedAt;
   }
   
-  public Boolean getIsActive() {
-      return isActive;
+  public Temporal.Date getExpiry() {
+      return expiry;
   }
   
   public String getLatitude() {
@@ -114,6 +122,10 @@ public final class Offer implements Model {
       return serviceProviderSignature;
   }
   
+  public Integer getStatus() {
+      return status;
+  }
+  
   public String getSubCategory() {
       return subCategory;
   }
@@ -133,15 +145,16 @@ public final class Offer implements Model {
   public String getUserId() {
       return userID;
   }
-  
-  private Offer(String id, String availabilitySlot, String category, String currency, String description, Temporal.Date expiry, Boolean isActive, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, String subCategory, String terms, String termsConfig, String title, String userID) {
+
+  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
+    this.createdAt = createdAt;
     this.currency = currency;
     this.description = description;
+    this.editedAt = editedAt;
     this.expiry = expiry;
-    this.isActive = isActive;
     this.latitude = latitude;
     this.locationData = locationData;
     this.longitude = longitude;
@@ -149,6 +162,7 @@ public final class Offer implements Model {
     this.rateType = rateType;
     this.serviceProviderAddress = serviceProviderAddress;
     this.serviceProviderSignature = serviceProviderSignature;
+    this.status = status;
     this.subCategory = subCategory;
     this.terms = terms;
     this.termsConfig = termsConfig;
@@ -167,10 +181,11 @@ public final class Offer implements Model {
       return ObjectsCompat.equals(getId(), offer.getId()) &&
               ObjectsCompat.equals(getAvailabilitySlot(), offer.getAvailabilitySlot()) &&
               ObjectsCompat.equals(getCategory(), offer.getCategory()) &&
+              ObjectsCompat.equals(getCreatedAt(), offer.getCreatedAt()) &&
               ObjectsCompat.equals(getCurrency(), offer.getCurrency()) &&
               ObjectsCompat.equals(getDescription(), offer.getDescription()) &&
+              ObjectsCompat.equals(getEditedAt(), offer.getEditedAt()) &&
               ObjectsCompat.equals(getExpiry(), offer.getExpiry()) &&
-              ObjectsCompat.equals(getIsActive(), offer.getIsActive()) &&
               ObjectsCompat.equals(getLatitude(), offer.getLatitude()) &&
               ObjectsCompat.equals(getLocationData(), offer.getLocationData()) &&
               ObjectsCompat.equals(getLongitude(), offer.getLongitude()) &&
@@ -178,6 +193,7 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getRateType(), offer.getRateType()) &&
               ObjectsCompat.equals(getServiceProviderAddress(), offer.getServiceProviderAddress()) &&
               ObjectsCompat.equals(getServiceProviderSignature(), offer.getServiceProviderSignature()) &&
+              ObjectsCompat.equals(getStatus(), offer.getStatus()) &&
               ObjectsCompat.equals(getSubCategory(), offer.getSubCategory()) &&
               ObjectsCompat.equals(getTerms(), offer.getTerms()) &&
               ObjectsCompat.equals(getTermsConfig(), offer.getTermsConfig()) &&
@@ -192,10 +208,11 @@ public final class Offer implements Model {
       .append(getId())
       .append(getAvailabilitySlot())
       .append(getCategory())
+      .append(getCreatedAt())
       .append(getCurrency())
       .append(getDescription())
+      .append(getEditedAt())
       .append(getExpiry())
-      .append(getIsActive())
       .append(getLatitude())
       .append(getLocationData())
       .append(getLongitude())
@@ -203,6 +220,7 @@ public final class Offer implements Model {
       .append(getRateType())
       .append(getServiceProviderAddress())
       .append(getServiceProviderSignature())
+      .append(getStatus())
       .append(getSubCategory())
       .append(getTerms())
       .append(getTermsConfig())
@@ -219,10 +237,11 @@ public final class Offer implements Model {
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("availabilitySlot=" + String.valueOf(getAvailabilitySlot()) + ", ")
       .append("category=" + String.valueOf(getCategory()) + ", ")
+      .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("currency=" + String.valueOf(getCurrency()) + ", ")
       .append("description=" + String.valueOf(getDescription()) + ", ")
+      .append("editedAt=" + String.valueOf(getEditedAt()) + ", ")
       .append("expiry=" + String.valueOf(getExpiry()) + ", ")
-      .append("isActive=" + String.valueOf(getIsActive()) + ", ")
       .append("latitude=" + String.valueOf(getLatitude()) + ", ")
       .append("locationData=" + String.valueOf(getLocationData()) + ", ")
       .append("longitude=" + String.valueOf(getLongitude()) + ", ")
@@ -230,6 +249,7 @@ public final class Offer implements Model {
       .append("rateType=" + String.valueOf(getRateType()) + ", ")
       .append("serviceProviderAddress=" + String.valueOf(getServiceProviderAddress()) + ", ")
       .append("serviceProviderSignature=" + String.valueOf(getServiceProviderSignature()) + ", ")
+      .append("status=" + String.valueOf(getStatus()) + ", ")
       .append("subCategory=" + String.valueOf(getSubCategory()) + ", ")
       .append("terms=" + String.valueOf(getTerms()) + ", ")
       .append("termsConfig=" + String.valueOf(getTermsConfig()) + ", ")
@@ -239,7 +259,7 @@ public final class Offer implements Model {
       .toString();
   }
   
-  public static UserIdStep builder() {
+  public static BuildStep builder() {
       return new Builder();
   }
   
@@ -281,6 +301,8 @@ public final class Offer implements Model {
       null,
       null,
       null,
+      null,
+      null,
       null
     );
   }
@@ -289,10 +311,11 @@ public final class Offer implements Model {
     return new CopyOfBuilder(id,
       availabilitySlot,
       category,
+      createdAt,
       currency,
       description,
+      editedAt,
       expiry,
-      isActive,
       latitude,
       locationData,
       longitude,
@@ -300,26 +323,23 @@ public final class Offer implements Model {
       rateType,
       serviceProviderAddress,
       serviceProviderSignature,
+      status,
       subCategory,
       terms,
       termsConfig,
       title,
       userID);
   }
-  public interface UserIdStep {
-    BuildStep userId(String userId);
-  }
-  
-
   public interface BuildStep {
     Offer build();
     BuildStep id(String id) throws IllegalArgumentException;
     BuildStep availabilitySlot(String availabilitySlot);
     BuildStep category(String category);
+    BuildStep createdAt(Integer createdAt);
     BuildStep currency(String currency);
     BuildStep description(String description);
+    BuildStep editedAt(Integer editedAt);
     BuildStep expiry(Temporal.Date expiry);
-    BuildStep isActive(Boolean isActive);
     BuildStep latitude(String latitude);
     BuildStep locationData(String locationData);
     BuildStep longitude(String longitude);
@@ -327,22 +347,24 @@ public final class Offer implements Model {
     BuildStep rateType(String rateType);
     BuildStep serviceProviderAddress(String serviceProviderAddress);
     BuildStep serviceProviderSignature(String serviceProviderSignature);
+    BuildStep status(Integer status);
     BuildStep subCategory(String subCategory);
     BuildStep terms(String terms);
     BuildStep termsConfig(String termsConfig);
     BuildStep title(String title);
+    BuildStep userId(String userId);
   }
   
 
-  public static class Builder implements UserIdStep, BuildStep {
+  public static class Builder implements BuildStep {
     private String id;
-    private String userID;
     private String availabilitySlot;
     private String category;
+    private Integer createdAt;
     private String currency;
     private String description;
+    private Integer editedAt;
     private Temporal.Date expiry;
-    private Boolean isActive;
     private String latitude;
     private String locationData;
     private String longitude;
@@ -350,10 +372,12 @@ public final class Offer implements Model {
     private String rateType;
     private String serviceProviderAddress;
     private String serviceProviderSignature;
+    private Integer status;
     private String subCategory;
     private String terms;
     private String termsConfig;
     private String title;
+    private String userID;
     @Override
      public Offer build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -362,10 +386,11 @@ public final class Offer implements Model {
           id,
           availabilitySlot,
           category,
+          createdAt,
           currency,
           description,
+          editedAt,
           expiry,
-          isActive,
           latitude,
           locationData,
           longitude,
@@ -373,18 +398,12 @@ public final class Offer implements Model {
           rateType,
           serviceProviderAddress,
           serviceProviderSignature,
+          status,
           subCategory,
           terms,
           termsConfig,
           title,
           userID);
-    }
-    
-    @Override
-     public BuildStep userId(String userId) {
-        Objects.requireNonNull(userId);
-        this.userID = userId;
-        return this;
     }
     
     @Override
@@ -396,6 +415,12 @@ public final class Offer implements Model {
     @Override
      public BuildStep category(String category) {
         this.category = category;
+        return this;
+    }
+    
+    @Override
+     public BuildStep createdAt(Integer createdAt) {
+        this.createdAt = createdAt;
         return this;
     }
     
@@ -412,14 +437,14 @@ public final class Offer implements Model {
     }
     
     @Override
-     public BuildStep expiry(Temporal.Date expiry) {
-        this.expiry = expiry;
+     public BuildStep editedAt(Integer editedAt) {
+        this.editedAt = editedAt;
         return this;
     }
     
     @Override
-     public BuildStep isActive(Boolean isActive) {
-        this.isActive = isActive;
+     public BuildStep expiry(Temporal.Date expiry) {
+        this.expiry = expiry;
         return this;
     }
     
@@ -466,6 +491,12 @@ public final class Offer implements Model {
     }
     
     @Override
+     public BuildStep status(Integer status) {
+        this.status = status;
+        return this;
+    }
+    
+    @Override
      public BuildStep subCategory(String subCategory) {
         this.subCategory = subCategory;
         return this;
@@ -486,6 +517,12 @@ public final class Offer implements Model {
     @Override
      public BuildStep title(String title) {
         this.title = title;
+        return this;
+    }
+    
+    @Override
+     public BuildStep userId(String userId) {
+        this.userID = userId;
         return this;
     }
     
@@ -512,15 +549,15 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, String currency, String description, Temporal.Date expiry, Boolean isActive, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, String subCategory, String terms, String termsConfig, String title, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
       super.id(id);
-      super.userId(userId)
-        .availabilitySlot(availabilitySlot)
+      super.availabilitySlot(availabilitySlot)
         .category(category)
+        .createdAt(createdAt)
         .currency(currency)
         .description(description)
+        .editedAt(editedAt)
         .expiry(expiry)
-        .isActive(isActive)
         .latitude(latitude)
         .locationData(locationData)
         .longitude(longitude)
@@ -528,15 +565,12 @@ public final class Offer implements Model {
         .rateType(rateType)
         .serviceProviderAddress(serviceProviderAddress)
         .serviceProviderSignature(serviceProviderSignature)
+        .status(status)
         .subCategory(subCategory)
         .terms(terms)
         .termsConfig(termsConfig)
-        .title(title);
-    }
-    
-    @Override
-     public CopyOfBuilder userId(String userId) {
-      return (CopyOfBuilder) super.userId(userId);
+        .title(title)
+        .userId(userId);
     }
     
     @Override
@@ -550,6 +584,11 @@ public final class Offer implements Model {
     }
     
     @Override
+     public CopyOfBuilder createdAt(Integer createdAt) {
+      return (CopyOfBuilder) super.createdAt(createdAt);
+    }
+    
+    @Override
      public CopyOfBuilder currency(String currency) {
       return (CopyOfBuilder) super.currency(currency);
     }
@@ -560,13 +599,13 @@ public final class Offer implements Model {
     }
     
     @Override
-     public CopyOfBuilder expiry(Temporal.Date expiry) {
-      return (CopyOfBuilder) super.expiry(expiry);
+     public CopyOfBuilder editedAt(Integer editedAt) {
+      return (CopyOfBuilder) super.editedAt(editedAt);
     }
     
     @Override
-     public CopyOfBuilder isActive(Boolean isActive) {
-      return (CopyOfBuilder) super.isActive(isActive);
+     public CopyOfBuilder expiry(Temporal.Date expiry) {
+      return (CopyOfBuilder) super.expiry(expiry);
     }
     
     @Override
@@ -605,6 +644,11 @@ public final class Offer implements Model {
     }
     
     @Override
+     public CopyOfBuilder status(Integer status) {
+      return (CopyOfBuilder) super.status(status);
+    }
+    
+    @Override
      public CopyOfBuilder subCategory(String subCategory) {
       return (CopyOfBuilder) super.subCategory(subCategory);
     }
@@ -622,6 +666,11 @@ public final class Offer implements Model {
     @Override
      public CopyOfBuilder title(String title) {
       return (CopyOfBuilder) super.title(title);
+    }
+    
+    @Override
+     public CopyOfBuilder userId(String userId) {
+      return (CopyOfBuilder) super.userId(userId);
     }
   }
   

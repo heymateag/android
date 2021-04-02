@@ -51,6 +51,8 @@ import javax.net.ssl.HttpsURLConnection;
 public class HtLocationBottomSheetAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
 
     private HtCreateOfferActivity parent;
+    private double longitude;
+    private double latitude;
 
     public HtLocationBottomSheetAlert(Context context, boolean needFocus, HtCreateOfferActivity parent) {
         super(context, needFocus);
@@ -131,10 +133,15 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
                     return;
                 }
                 LocationActivity fragment = new LocationActivity(LocationActivity.LOCATION_TYPE_SEND);
+                TLRPC.TL_channelLocation loc = new TLRPC.TL_channelLocation();
+                loc.geo_point = new TLRPC.TL_geoPoint();
+                loc.geo_point._long = longitude;
+                loc.geo_point.lat = latitude;
+                fragment.setInitialLocation(loc);
                 fragment.setDelegate((location, live, notify, scheduleDate) -> {
-                    parent.setLongitude(location.geo._long);
-                    parent.setLongitude(location.geo.lat);
-                    parent.setLocationAddress(descriptionTextField.getText().toString());
+//                    parent.setLongitude(location.geo._long);
+//                    parent.setLongitude(location.geo.lat);
+                    // parent.setLocationAddress(descriptionTextField.getText().toString()); // TODO No longer used
                 });
                 parent.presentFragment(fragment);
                 dismiss();
@@ -174,4 +181,8 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
 
     }
 
+    public void setLocation(double longitude, double latitude){
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
 }

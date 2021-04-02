@@ -82,7 +82,7 @@ public class HtFiltersCell extends LinearLayout {
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             });
-            upperLayout.addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.33f,0, 5, 0, 5));
+            upperLayout.addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,10, 5, 0, 5));
         }
 
         Button categoryFilter = new Button(context, LocaleController.getString("HtCategory", R.string.HtCategory)) {
@@ -98,7 +98,7 @@ public class HtFiltersCell extends LinearLayout {
                 super.setEnabled(enabled);
                 setAlpha(enabled ? 1.0f : 0.5f);
             }
-        };;
+        };
         categoryFilter.setEnabled(true);
         categoryFilter.setOnClickListener((v) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -164,8 +164,20 @@ public class HtFiltersCell extends LinearLayout {
             AlertDialog alertDialog = builder.create();
             parent.showDialog(alertDialog);
         });
-        upperLayout.addView(categoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT,0.33f,0, 5, 0, 5));
-        upperLayout.addView(subCategoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.33f,0, 5, 0, 5));
+        upperLayout.addView(categoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT,0.1f,0, 5, 0, 5));
+        upperLayout.addView(subCategoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,0, 5, 0, 5));
+
+        if(parent instanceof DialogsActivity){
+            TextView trendingText = new TextView(context);
+            trendingText.setText("Trending");
+            trendingText.setTextSize(13);
+            trendingText.setTextColor(Theme.getColor(Theme.key_wallet_redText));
+            trendingText.setCompoundDrawablePadding(AndroidUtilities.dp(6));
+            Drawable trendingDrawable = context.getResources().getDrawable(R.drawable.ht_sort);
+            trendingDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_redText), PorterDuff.Mode.MULTIPLY));
+            trendingText.setCompoundDrawablesWithIntrinsicBounds(trendingDrawable, null,null, null);
+            upperLayout.addView(trendingText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,20, 10, 0, 5));
+        }
 
         mainLayout.addView(upperLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -178,13 +190,10 @@ public class HtFiltersCell extends LinearLayout {
             super(context);
             titleLabel = new TextView(context);
             titleLabel.setText(title);
-            titleLabel.setTextSize(17);
+            titleLabel.setTextSize(13);
             titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
             titleLabel.setCompoundDrawablePadding(AndroidUtilities.dp(6));
             Drawable titleDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
-            titleLabel.setScaleX(0.7f);
-            titleLabel.setScaleY(0.7f);
-            titleLabel.setPaintFlags(titleLabel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             titleDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
             titleLabel.setCompoundDrawablesWithIntrinsicBounds(null, null, titleDrawable, null);
             addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 5, 0, 5));

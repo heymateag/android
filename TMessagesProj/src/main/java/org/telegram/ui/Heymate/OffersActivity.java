@@ -16,6 +16,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -24,13 +25,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+
+import com.amplifyframework.api.graphql.PaginatedResult;
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -38,11 +44,16 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
+
+import works.heymate.core.Texts;
+import works.heymate.core.Utils;
+import works.heymate.core.offer.OfferUtils;
 
 public class OffersActivity extends BaseFragment {
 
@@ -55,6 +66,11 @@ public class OffersActivity extends BaseFragment {
     private String subCategoryFilter = "All";
     private OfferStatus statusFilter = OfferStatus.ALL;
 
+    public OffersActivity(Context context){
+        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
+        HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View createView(Context context) {
@@ -66,8 +82,6 @@ public class OffersActivity extends BaseFragment {
 
 //        HtAmplify.getInstance(context).signUp(currentAccount);
 //        HtAmplify.getInstance(context).signIn(currentAccount);
-        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
-        HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
@@ -213,7 +227,6 @@ public class OffersActivity extends BaseFragment {
                 }
             };
             offerCell1.setOffer(offerDto.asOffer());
-            offerCell1.setOfferUUID(offerDto.getServerUUID());
             offerCell1.setOut(true);
             offerCell1.setStatus(offerDto.getStatus());
             offerCell1.setOfferUUID(offerDto.getServerUUID());
@@ -221,6 +234,21 @@ public class OffersActivity extends BaseFragment {
             offerCell1.titleLabel.setText(offerDto.getTitle());
             offerCell1.descriptionLabel.setText(offerDto.getDescription());
             offerCell1.rateLabel.setText(offerDto.getRate() + offerDto.getCurrency() + " " + offerDto.getRateType());
+            TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+            String name;
+
+            if (user.username != null) {
+                name = "@" + user.username;
+            }
+            else {
+                name = user.first_name;
+
+                if (!TextUtils.isEmpty(user.last_name)) {
+                    name = name + " " + user.last_name;
+                }
+            }
+            String message = OfferUtils.serializeBeautiful(offerDto.asOffer(), name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+            offerCell1.configLabel.setText(message);
             try {
                 String[] exp = offerDto.getTime().split("-");
                 Calendar cal = Calendar.getInstance();
@@ -243,6 +271,28 @@ public class OffersActivity extends BaseFragment {
             offerCell1.setPaymentConfig(offerDto.getConfigText());
             offerCell1.setTerms(offerDto.getTerms());
             offerCell1.expireLabel.setText(offerDto.getTime());
+            ArrayList<TimeSlot> timeSlots = new ArrayList<>();
+            HtAmplify.getInstance(context).getAvailableTimeSlots(offerDto.getServerUUID(), ((success, data, exception) -> {
+                Utils.runOnUIThread(() -> {
+                    if (!success) {
+                        if (exception != null) {
+                            Log.e("HtAmplify", "Failed to get time slots for offer with id " + offerDto.getServerUUID(), exception);
+                        }
+                        return;
+                    }
+                    for (TimeSlot timeSlot : ((PaginatedResult<TimeSlot>)(data)).getItems()) {
+                        timeSlots.add(timeSlot);
+                    }
+                    ArrayList<Long> dates = new ArrayList<>();
+                    for(TimeSlot timeSlot : timeSlots){
+                        dates.add(((long) (timeSlot.getStartTime())) * 1000);
+                        dates.add(((long) (timeSlot.getEndTime())) * 1000);
+                    }
+                    offerCell1.setDateSlots(dates);
+                });
+            }));
+            ArrayList<Long> dates = new ArrayList<>();
+            offerCell1.setDateSlots(dates);
             offerCell1.setParent(this);
             // TODO
 //            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));

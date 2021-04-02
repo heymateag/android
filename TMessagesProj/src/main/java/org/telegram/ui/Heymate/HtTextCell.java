@@ -22,7 +22,7 @@ public class HtTextCell extends LinearLayout {
 
     public HtTextCell(Context context) {
         super(context);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_wallet_whiteBackground)));
         titleLabel = new TextView(context);
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
         addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,10,10,10));
@@ -41,17 +41,17 @@ public class HtTextCell extends LinearLayout {
     }
 
     public void select(){
-        int colorFrom = Theme.getColor(Theme.key_dialogTextBlue);
+        int colorFrom = Theme.getColor(Theme.key_wallet_whiteBackground);
         int colorTo = Theme.getColor(Theme.key_dialogTextBlue3);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_wallet_whiteBackground)));
         colorAnimation.start();
     }
 
     public void unSelect(){
         int colorFrom = Theme.getColor(Theme.key_dialogTextBlue3);
-        int colorTo = Theme.getColor(Theme.key_dialogTextBlue);
+        int colorTo = Theme.getColor(Theme.key_wallet_whiteBackground);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
         setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue3)));
