@@ -92,13 +92,13 @@ public class CeloOffer {
                     tradeId,
                     amount,
                     BigInteger.ONE, // fee
-                    BigInteger.valueOf(offer.getExpiry().toDate().getTime()),
+                    BigInteger.valueOf(offer.getExpiry().toDate().getTime() / 1000),
                     BigInteger.valueOf(startTime),
                     initialDeposit,
                     userAddresses,
                     config,
                     Numeric.hexStringToByteArray(offer.getServiceProviderSignature()),
-                    BigInteger.ZERO
+                    amount
             ).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {

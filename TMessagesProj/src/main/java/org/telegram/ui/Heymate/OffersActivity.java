@@ -85,19 +85,16 @@ public class OffersActivity extends BaseFragment {
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setSearchTextColor(0xff4488, true);
         actionBar.setTitle(LocaleController.getString("HtManageOffers", R.string.HtManageOffers));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
                     finishFragment();
-                } else if (id == search_button) {
                 }
             }
         });
 
-        ActionBarMenu menu = actionBar.createMenu();
         fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = (LinearLayout) fragmentView;
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -198,10 +195,6 @@ public class OffersActivity extends BaseFragment {
         scrollView.addView(scrollviewLayout);
         relativeLayout2.addView(scrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.START, 0, 0, 0, 0));
         relativeLayout2.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 20, Gravity.BOTTOM, 0, 20, 0, 20));
-
-
-        LinearLayout viewOffersLayout = new LinearLayout(context);
-        viewOffersLayout.setOrientation(LinearLayout.VERTICAL);
 
         relativeLayout2.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 45, Gravity.BOTTOM, 0, dpHeight - 70 - 55, 0, 0));
 

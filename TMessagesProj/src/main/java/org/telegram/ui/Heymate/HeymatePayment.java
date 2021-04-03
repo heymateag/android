@@ -48,10 +48,17 @@ public class HeymatePayment {
     private static int getStateTries = 3;
 
     public static void initPayment(BaseFragment fragment, String offerId) {
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 2);
+        loadingDialog.setTitle("Some Title");
+        loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
+        loadingDialog.show();
+
         HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
 
         amplify.getOffer(offerId, ((success, offer, exception) -> {
             Utils.runOnUIThread(() -> {
+                loadingDialog.dismiss();
+
                 if (!success) {
                     if (exception != null) {
                         Log.e(TAG, "Failed to get offer with id " + offerId, exception);
@@ -193,13 +200,20 @@ public class HeymatePayment {
     }
 
     private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-        String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
-        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 2);
+        loadingDialog.setTitle("Some Title");
+        loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
+        loadingDialog.show();
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
         wallet.createAcceptedOffer(offer, timeSlot.getStartTime(), (success, errorCause) -> {
+            loadingDialog.dismiss();
+
             if (success) {
+                String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
+                HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
+
                 // TODO
                 new AlertDialog.Builder(fragment.getParentActivity())
                         .setTitle("Offer accepted")

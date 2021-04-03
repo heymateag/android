@@ -36,7 +36,7 @@ public class ExpandableItem extends FrameLayout {
 
         mImageIcon = new ImageView(context);
         mImageIcon.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.SRC_IN);
-        addView(mImageIcon, LayoutHelper.createFrame(24, 24, Gravity.LEFT | Gravity.TOP, 22, 16, 0, 16));
+        addView(mImageIcon, LayoutHelper.createFrame(24, 24, Gravity.LEFT | Gravity.TOP, 24, 16, 0, 16));
 
         mTextTitle = new TextView(context);
         mTextTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
@@ -46,7 +46,7 @@ public class ExpandableItem extends FrameLayout {
         mButtonExpand = new ImageView(context);
         mButtonExpand.setImageResource(R.drawable.arrow_more);
         mButtonExpand.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.SRC_IN);
-        addView(mButtonExpand, LayoutHelper.createFrame(16, 16, Gravity.RIGHT | Gravity.TOP, 0, 16, 32, 16));
+        addView(mButtonExpand, LayoutHelper.createFrame(16, 16, Gravity.RIGHT | Gravity.TOP, 0, 16, 30, 16));
 
         View clickableArea = new View(context);
         addView(clickableArea, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP));

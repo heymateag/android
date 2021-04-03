@@ -262,7 +262,7 @@ public class Wallet {
 
                     Utils.runOnUIThread(() -> callback.onAcceptOfferResult(true, null));
                 } catch (CeloException exception) {
-                    Utils.runOnUIThread(() -> callback.onAcceptOfferResult(false, errorCause));
+                    Utils.runOnUIThread(() -> callback.onAcceptOfferResult(false, exception));
                 } catch (JSONException e) {
                     Utils.runOnUIThread(() -> callback.onAcceptOfferResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }

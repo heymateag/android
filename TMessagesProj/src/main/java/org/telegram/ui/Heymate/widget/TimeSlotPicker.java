@@ -775,8 +775,8 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
                     break;
                 }
 
-                int start = (int) (Math.max(timeSlot.start - mCalendar.getTimeInMillis(), 0) / ONE_HOUR * slotHeight);
-                int end = (int) (Math.min(timeSlot.end - mCalendar.getTimeInMillis(), ONE_DAY) / ONE_HOUR * slotHeight);
+                int start = (int) (Math.max(timeSlot.start - mCalendar.getTimeInMillis(), 0) / (float) ONE_HOUR * slotHeight);
+                int end = (int) (Math.min(timeSlot.end - mCalendar.getTimeInMillis(), ONE_DAY) / (float) ONE_HOUR * slotHeight);
 
                 if (timeSlot.reserved) {
                     if (mReservedDrawable != null) {

@@ -50,8 +50,8 @@ public class TimeSlotSelectionActivity extends BaseFragment {
         mTimeSlotsMap = new Hashtable<>(timeSlots.size());
 
         for (TimeSlot timeSlot: timeSlots) {
-            long start = timeSlot.getStartTime();
-            long end = timeSlot.getEndTime();
+            long start = timeSlot.getStartTime() * 1000L;
+            long end = timeSlot.getEndTime() * 1000L;
             int duration = (int) ((end - start) / 1000L / 60L);
             boolean reserved = timeSlot.getStatus() != HtTimeSlotStatus.AVAILABLE.ordinal();
 
