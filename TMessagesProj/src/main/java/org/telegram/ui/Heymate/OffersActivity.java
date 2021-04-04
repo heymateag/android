@@ -1,11 +1,3 @@
-/*
- * This is the source code of Telegram for Android v. 5.x.x.
- * It is licensed under GNU GPL v. 2 or later.
- * You should have received a copy of the license in this archive (see LICENSE).
- *
- * Copyright Nikolai Kudashov, 2013-2018.
- */
-
 package org.telegram.ui.Heymate;
 
 import android.animation.ObjectAnimator;
@@ -19,6 +11,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 
 import com.amplifyframework.api.graphql.PaginatedResult;
 import com.google.android.exoplayer2.util.Log;
@@ -42,6 +36,7 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
@@ -57,14 +52,19 @@ import works.heymate.core.offer.OfferUtils;
 
 public class OffersActivity extends BaseFragment {
 
+    private static final String ACTIVE_OFFERS_PLACE_HOLDER = "{active_offers}";
+
     private boolean inited = false;
     private OfferController offerController = OfferController.getInstance();
     private LinearLayout offersLayout;
     private Context context;
-    private final static int search_button = 1;
+
     private String categoryFilter = "All";
     private String subCategoryFilter = "All";
     private OfferStatus statusFilter = OfferStatus.ALL;
+
+    private TextView mTextStatus;
+    private ImageView mButtonSchedule;
 
     public OffersActivity(Context context){
         ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
@@ -76,9 +76,6 @@ public class OffersActivity extends BaseFragment {
     public View createView(Context context) {
         DatabaseWatchDog.getInstance().config(currentAccount);
         this.context = context;
-        Configuration configuration = context.getResources().getConfiguration();
-        int dpWidth = configuration.screenWidthDp;
-        int dpHeight = configuration.screenHeightDp;
 
 //        HtAmplify.getInstance(context).signUp(currentAccount);
 //        HtAmplify.getInstance(context).signIn(currentAccount);
@@ -95,112 +92,69 @@ public class OffersActivity extends BaseFragment {
             }
         });
 
-        fragmentView = new LinearLayout(context);
-        LinearLayout linearLayout = (LinearLayout) fragmentView;
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout relativeLayout2 = new LinearLayout(context);
-        relativeLayout2.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout linearLayout2 = new LinearLayout(context);
-        linearLayout2.setOrientation(LinearLayout.VERTICAL);
-        fragmentView.setOnTouchListener((v, event) -> true);
+        fragmentView = LayoutInflater.from(context).inflate(R.layout.activity_offers, null, false);
 
-
-        FrameLayout fieldContainer = new FrameLayout(context);
-        linearLayout2.addView(fieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 24, 24, 20, 0));
-
-        LinearLayout offerCreationLayout = new LinearLayout(context);
-
-        LinearLayout pageTitleLayout = new LinearLayout(context);
-        pageTitleLayout.setOrientation(LinearLayout.VERTICAL);
-
-        TextView myOffersLabel = new TextView(context);
-        myOffersLabel.setText(LocaleController.getString("HtMyOffers", R.string.HtMyOffers));
-        myOffersLabel.setTextSize(18);
-        myOffersLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        myOffersLabel.setTypeface(myOffersLabel.getTypeface(), Typeface.BOLD);
-
-        Drawable myOffersDrawable = context.getResources().getDrawable(R.drawable.offer);
+        TextView textTitle = fragmentView.findViewById(R.id.text_title);
+        textTitle.setTypeface(textTitle.getTypeface(), Typeface.BOLD);
+        textTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        textTitle.setText(Texts.get(Texts.OFFERS));
+        Drawable myOffersDrawable = ContextCompat.getDrawable(context, R.drawable.offer);
         myOffersDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
-        myOffersLabel.setCompoundDrawablePadding(AndroidUtilities.dp(5));
-        myOffersLabel.setCompoundDrawablesWithIntrinsicBounds(null, null, myOffersDrawable, null);
-        pageTitleLayout.addView(myOffersLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 2, 2, 5));
+        textTitle.setCompoundDrawablePadding(AndroidUtilities.dp(5));
+        textTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, myOffersDrawable, null);
 
-        TextView myActiveOffersLabel = new TextView(context);
-        myActiveOffersLabel.setText(LocaleController.getString("HtTotalIncome", R.string.HtTotalIncome) + ": 3744.86$");
-        myActiveOffersLabel.setTextSize(14);
-        myActiveOffersLabel.setTypeface(myOffersLabel.getTypeface(), Typeface.BOLD);
-        myActiveOffersLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
-        pageTitleLayout.addView(myActiveOffersLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 2, 2, 5));
-        offerCreationLayout.addView(pageTitleLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 5, 5, 45, 5));
+        mTextStatus = fragmentView.findViewById(R.id.text_status);
+        mTextStatus.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
 
-        FrameLayout offerCreationButtonFrame = new FrameLayout(context);
-        LinearLayout offerCreationButtonLayout = new LinearLayout(context);
-        ImageView offerCreationDrawableView = new ImageView(context);
-        offerCreationDrawableView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        offerCreationButtonLayout.addView(offerCreationDrawableView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 50, 17, 0, 0));
+        mButtonSchedule = fragmentView.findViewById(R.id.button_schedule);
+        mButtonSchedule.setOnClickListener(v -> {}); // TODO
 
-        TextView offerCreationButton = new TextView(context) {
-            @Override
-            public void setEnabled(boolean enabled) {
-                super.setEnabled(enabled);
-                setAlpha(enabled ? 1.0f : 0.5f);
-            }
+        TextView buttonAdd = fragmentView.findViewById(R.id.button_add);
+        buttonAdd.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
+        buttonAdd.setTypeface(buttonAdd.getTypeface(), Typeface.BOLD);
+        buttonAdd.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, R.color.ht_theme)));
+        buttonAdd.setText(Texts.get(Texts.ADD));
+        buttonAdd.setOnClickListener(v -> presentFragment(new HtCreateOfferActivity()));
 
-            @Override
-            public void setTextColor(int color) {
-                super.setTextColor(color);
-                setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(color));
-            }
-        };
-        offerCreationButton.setText(LocaleController.getString("HtNewOffer", R.string.HtNewOffer));
-        offerCreationButton.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
-        offerCreationButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        offerCreationButton.setTypeface(offerCreationButton.getTypeface(), Typeface.BOLD);
-        offerCreationButton.setEnabled(true);
-        offerCreationButton.setHovered(true);
-        offerCreationButton.setElevation(6.0f);
-        offerCreationButton.setGravity(Gravity.CENTER);
+        HtFiltersCell filters = fragmentView.findViewById(R.id.filters);
+        filters.setBaseFragment(this);
 
-        HtCreateOfferActivity fragment = new HtCreateOfferActivity();
-        offerCreationButton.setOnClickListener((v) -> {
-            presentFragment(fragment);
-            fragment.setActionType(HtCreateOfferActivity.ActionType.CREATE);
-        });
-        offerCreationButtonLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        offerCreationButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
-        offerCreationButtonLayout.setGravity(Gravity.CENTER);
-        offerCreationButtonLayout.addView(offerCreationButton, LayoutHelper.createLinear(80, 50, Gravity.CENTER, -50, 0, 0, 0));
-        offerCreationButtonFrame.addView(offerCreationButtonLayout, LayoutHelper.createLinear(120, 50, Gravity.CENTER, 0, 0, 0, 0));
-        offerCreationLayout.addView(offerCreationButtonFrame, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
-        relativeLayout2.addView(offerCreationLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 20, 0, 0));
-        relativeLayout2.addView(new HtFiltersCell(context, this), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 20, 0, 0));
-
-        ScrollView scrollView = new ScrollView(context);
-        LinearLayout scrollviewLayout = new LinearLayout(context);
-        scrollviewLayout.setOrientation(LinearLayout.VERTICAL);
-//        scrollviewLayout.addView(new OfferFiltersLayout(context), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.START, 0,20, 0, 20));
-//        scrollviewLayout.addView(new HtDividerCell(context));
+        offersLayout = fragmentView.findViewById(R.id.list_offer);
+        offersLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        offersLayout.setOrientation(LinearLayout.VERTICAL);
 
         // ------------ DATABASE DEMO ----------------
         ArrayList<OfferDto> offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
         // --------------------------------------------
 
-
-        offersLayout = new LinearLayout(context);
-        offersLayout.setBackgroundColor(Theme.getColor(Theme.key_graySection));
-        offersLayout.setOrientation(LinearLayout.VERTICAL);
         addOffersToLayout(offers);
-        scrollviewLayout.addView(offersLayout);
 
-        scrollView.addView(scrollviewLayout);
-        relativeLayout2.addView(scrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.START, 0, 0, 0, 0));
-        relativeLayout2.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 20, Gravity.BOTTOM, 0, 20, 0, 20));
+        onActiveOffersUpdated(0);
 
-        relativeLayout2.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 45, Gravity.BOTTOM, 0, dpHeight - 70 - 55, 0, 0));
-
-        linearLayout.addView(relativeLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.END, 0, 0, 0, 0));
         inited = true;
         return fragmentView;
+    }
+
+    private void onActiveOffersUpdated(int activeOffers) {
+        String activeOffersStatus = Texts.get(Texts.OFFERS_ACTIVE_OFFERS).toString().replace(ACTIVE_OFFERS_PLACE_HOLDER, String.valueOf(activeOffers));
+
+        mTextStatus.setText(activeOffersStatus);
+
+        Drawable icon = ContextCompat.getDrawable(getParentActivity(), R.drawable.input_calendar1).mutate();
+        icon.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText), PorterDuff.Mode.SRC_IN);
+
+        if (activeOffers == 0) {
+            mButtonSchedule.setImageDrawable(icon);
+        }
+        else {
+            Drawable notif = ContextCompat.getDrawable(getParentActivity(), R.drawable.input_calendar2).mutate();
+            notif.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteRedText), PorterDuff.Mode.SRC_IN);
+
+            CombinedDrawable drawable = new CombinedDrawable(icon, notif);
+            drawable.setFullsize(true);
+            mButtonSchedule.setImageDrawable(drawable);
+        }
+
     }
 
     public void addOffersToLayout(ArrayList<OfferDto> offers) {
@@ -354,10 +308,6 @@ public class OffersActivity extends BaseFragment {
             }
         }
         addOffersToLayout(offers);
-    }
-
-    public LinearLayout getOffersLayout() {
-        return offersLayout;
     }
 
     @Override

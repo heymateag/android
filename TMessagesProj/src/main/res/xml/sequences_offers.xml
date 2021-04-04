@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="12ph"/>
+        <Span id="text_title" size="wrap"/>
+        <Span size="4ph"/>
+        <Span id="text_status" size="wrap"/>
+        <Span size="12ph"/>
+        <Span id="filters" size="wrap"/>
+        <Span id="scroll_offer" size="1w"/>
+    </Vertical>
+
+<!--    <Vertical start="start@scroll_offer">-->
+<!--        <Span id="shadow" size="12dp"/>-->
+<!--    </Vertical>-->
+
+    <Vertical start="start@text_title" end="end@text_status">
+        <Span size="1w"/>
+        <Span id="button_schedule" size="36dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@button_schedule" end="end@button_schedule">
+        <Span id="button_add" size="100%"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="10.7pw"/>
+        <Span id="text_title" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="button_schedule" size="36dp"/>
+        <Span size="5pw"/>
+        <Span id="button_add" size="60dp"/>
+        <Span size="10pw"/>
+    </Horizontal>
+
+    <Horizontal start="start@text_title">
+        <Span id="text_status" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="filters" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="scroll_offer" size="100%"/>
+    </Horizontal>
+
+<!--    <Horizontal>-->
+<!--        <Span id="shadow" size="100%"/>-->
+<!--    </Horizontal>-->
+
+</Sequences>

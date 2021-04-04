@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,9 +31,20 @@ public class HtFiltersCell extends LinearLayout {
     private int statusSelect = 0;
     private ArrayList<String> subCategories = new ArrayList<String>();
 
-
-    public HtFiltersCell(@NonNull Context context, BaseFragment parent) {
+    public HtFiltersCell(@NonNull Context context) {
         super(context);
+    }
+
+    public HtFiltersCell(@NonNull Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public HtFiltersCell(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public void setBaseFragment(BaseFragment parent) {
+        final Context context = getContext();
         Object[] categories =  DummyCategories.categories.keySet().stream().sorted().toArray();
         for(Object category: categories){
             subCategories.addAll(DummyCategories.categories.get(category.toString()));

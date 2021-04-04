@@ -4,6 +4,7 @@
     <string name="hm_offer_phrase_name">offer_phrase</string>
     <string name="hm_offer_phrase">Heymate Offer\n\n‌{title}\n‌{description}\n\n‌{name} will provide ‌{sub_category} ‌{price}‌{currency} ‌{payment_type}.\n\nAddress: ‌{address}\n\n‌{initial_deposit}% is paid upfront. ‌{delay_percent}% is returned if they delay more than ‌{delay_time} minutes. If you cancel ‌{cancel_hours1} hours before the appointment ‌{cancel_percent1}% is deposited back to you. If you cancel ‌{cancel_hours2} hours before the appointment ‌{cancel_percent2}% is deposited back to you.\n\nLearn more here: ‌{url}‌</string>
 
+    <string name="hm_add">Add</string>
     <string name="hm_secure">Secure</string>
     <string name="hm_later">Later</string>
     <string name="hm_next">Next</string>
@@ -25,6 +26,9 @@
     <string name="hm_thursday_short">Thu</string>
     <string name="hm_friday_short">Fri</string>
     <string name="hm_saturday_short">Sat</string>
+
+    <string name="hm_offers">Offers</string>
+    <string name="hm_offers_active_offers">{active_offers} Active Offer(s)</string>
 
     <string name="hm_authentication">Authentication</string>
     <string name="hm_authentication_description">Authentication is required to perform this action.</string>

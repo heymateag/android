@@ -2508,7 +2508,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPage.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? RecyclerListView.SCROLLBAR_POSITION_LEFT : RecyclerListView.SCROLLBAR_POSITION_RIGHT);
             LinearLayout mainLayout = new LinearLayout(context);
             mainLayout.setOrientation(LinearLayout.VERTICAL);
-            htFiltersCell = new HtFiltersCell(context, this);
+            htFiltersCell = new HtFiltersCell(context);
+            htFiltersCell.setBaseFragment(this);
             htFiltersCell.setVisibility(View.GONE);
             mainLayout.addView(htFiltersCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0,80,0,0));
             mainLayout.addView(viewPage.listView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0, 0, 0, 0));

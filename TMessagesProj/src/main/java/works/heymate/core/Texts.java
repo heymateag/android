@@ -10,6 +10,7 @@ public class Texts {
 
     public static final String OFFER_PHRASE_NAME = "offer_phrase_name";
 
+    public static final String ADD = "add";
     public static final String SECURE = "secure";
     public static final String LATER = "later";
     public static final String NEXT = "next";
@@ -31,6 +32,9 @@ public class Texts {
     public static final String THURSDAY_SHORT = "thursday_short";
     public static final String FRIDAY_SHORT = "friday_short";
     public static final String SATURDAY_SHORT = "saturday_short";
+
+    public static final String OFFERS = "offers";
+    public static final String OFFERS_ACTIVE_OFFERS = "offers_active_offers";
 
     public static final String AUTHENTICATION = "authentication";
     public static final String AUTHENTICATION_DESCRIPTION = "authentication_description";
