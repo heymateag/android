@@ -4740,6 +4740,14 @@ public class Theme {
         return defaultDrawable;
     }
 
+    public static Drawable createBorderRoundRectDrawable(int rad, int defaultColor) {
+        ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
+        defaultDrawable.getPaint().setColor(defaultColor);
+        defaultDrawable.getPaint().setStrokeWidth(AndroidUtilities.dp(1));
+        defaultDrawable.getPaint().setStyle(Paint.Style.STROKE);
+        return defaultDrawable;
+    }
+
     public static Drawable createSimpleSelectorRoundRectDrawable(int rad, int defaultColor, int pressedColor) {
         return createSimpleSelectorRoundRectDrawable(rad, defaultColor, pressedColor, pressedColor);
     }

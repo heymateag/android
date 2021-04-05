@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="8dp"/>
+        <Span id="image_user" size="40dp"/>
+        <Span size="8dp"/>
+    </Vertical>
+
+    <Vertical start="start@image_user">
+        <Span size="8dp"/>
+        <Span id="text_name" size="wrap"/>
+        <Span size="12dp"/>
+        <Span id="text_info" size="wrap"/>
+        <Span size="8dp"/>
+    </Vertical>
+
+    <Vertical start="start@text_name">
+        <Span id="button_left" size="36dp"/>
+    </Vertical>
+
+    <Vertical start="start@text_name">
+        <Span id="button_right" size="36dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="20dp"/>
+        <Span id="image_user" size="40dp"/>
+        <Span size="12dp"/>
+        <Span id="text_name" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="button_left" size="72dp"/>
+        <Span size="4dp"/>
+        <Span id="button_right" size="72dp"/>
+        <Span size="20dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@text_name" end="start@button_left">
+        <Span id="text_into" size="100%"/>
+    </Horizontal>
+
+</Sequences>

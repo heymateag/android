@@ -19,6 +19,11 @@ public class Texts {
     public static final String DAY = "day";
     public static final String SEARCH_ADDRESS = "search_address";
     public static final String CREATE_WALLET = "create_wallet";
+    public static final String TODAY = "today";
+    public static final String YESTERDAY = "yesterday";
+    public static final String DETAILS = "details";
+    public static final String START = "start";
+    public static final String FINISH = "finish";
 
     public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";
     public static final String NETWORK_ERROR = "network_error";
@@ -33,8 +38,21 @@ public class Texts {
     public static final String FRIDAY_SHORT = "friday_short";
     public static final String SATURDAY_SHORT = "saturday_short";
 
+    public static final String TIME_DIFF_HOUR = "time_diff_hour";
+    public static final String TIME_DIFF_MINUTE = "time_diff_minute";
+
     public static final String OFFERS = "offers";
     public static final String OFFERS_ACTIVE_OFFERS = "offers_active_offers";
+
+    public static final String MY_SCHEDULE = "my_schedule";
+    public static final String MY_SCHEDULE_OFFERS = "my_schedule_offers";
+    public static final String MY_SCHEDULE_ORDERS = "my_schedule_orders";
+    public static final String MY_SCHEDULE_ACCEPTED = "my_schedule_accepted";
+    public static final String MY_SCHEDULE_CANCELLED = "my_schedule_cancelled";
+    public static final String MY_SCHEDULE_MARKED_STARTED = "my_schedule_marked_started";
+    public static final String MY_SCHEDULE_STARTED = "my_schedule_started";
+    public static final String MY_SCHEDULE_MARKED_FINISHED = "my_schedule_marked_finished";
+    public static final String MY_SCHEDULE_FINISHED = "my_schedule_finished";
 
     public static final String AUTHENTICATION = "authentication";
     public static final String AUTHENTICATION_DESCRIPTION = "authentication_description";

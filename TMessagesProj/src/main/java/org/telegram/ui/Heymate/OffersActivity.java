@@ -107,7 +107,7 @@ public class OffersActivity extends BaseFragment {
         mTextStatus.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
 
         mButtonSchedule = fragmentView.findViewById(R.id.button_schedule);
-        mButtonSchedule.setOnClickListener(v -> {}); // TODO
+        mButtonSchedule.setOnClickListener(v -> presentFragment(new MyScheduleActivity()));
 
         TextView buttonAdd = fragmentView.findViewById(R.id.button_add);
         buttonAdd.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));

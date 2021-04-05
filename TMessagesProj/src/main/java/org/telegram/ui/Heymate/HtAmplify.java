@@ -19,14 +19,19 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
 
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -45,6 +50,12 @@ public class HtAmplify {
     public interface OfferCallback<T> {
 
         void onOfferQueryResult(boolean success, T data, ApiException exception);
+
+    }
+
+    public interface TimeSlotsCallback {
+
+        void onTimeSlotsQueryResult(boolean success, List<TimeSlot> timeSlots, ApiException exception);
 
     }
 
@@ -250,8 +261,25 @@ public class HtAmplify {
 
     public void cancelTimeSlot(String timeSlotId) {
         Log.i("HtAmplify", "Cancelling a time slot.");
-
         updateTimeSlot(timeSlotId, HtTimeSlotStatus.CANCELLED);
+    }
+
+    public void getMyOrders(String userId, TimeSlotsCallback callback) {
+        Amplify.API.query(ModelQuery.list(TimeSlot.class, TimeSlot.CLIENT_USER_ID.eq(userId)),
+                response -> {
+                    ArrayList<TimeSlot> timeSlots = new ArrayList<>(10);
+
+                    if (response.hasData()) {
+                        for (TimeSlot timeSlot: response.getData()) {
+                            timeSlots.add(timeSlot);
+                        }
+                    }
+
+                    callback.onTimeSlotsQueryResult(true, timeSlots, null);
+                },
+                error -> {
+                    callback.onTimeSlotsQueryResult(false, null, error);
+                });
     }
 
     private void updateTimeSlot(String timeSlotId, HtTimeSlotStatus status) {

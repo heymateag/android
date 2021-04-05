@@ -13,6 +13,11 @@
     <string name="hm_day">Day</string>
     <string name="hm_search_address">Search Address</string>
     <string name="hm_create_wallet">Create Wallet</string>
+    <string name="hm_today">Today</string>
+    <string name="hm_yesterday">Yesterday</string>
+    <string name="hm_details">Details</string>
+    <string name="hm_start">Start</string>
+    <string name="hm_finish">Finish</string>
 
     <string name="hm_network_blockchain_error">Could not transfer data with node.</string>
     <string name="hm_network_error">Could not transfer data with server.</string>
@@ -27,8 +32,21 @@
     <string name="hm_friday_short">Fri</string>
     <string name="hm_saturday_short">Sat</string>
 
+    <string name="hm_time_diff_hour">{time_diff_h}h</string>
+    <string name="hm_time_diff_minute">{time_diff_m}m</string>
+
     <string name="hm_offers">Offers</string>
     <string name="hm_offers_active_offers">{active_offers} Active Offer(s)</string>
+    
+    <string name="hm_my_schedule">My Schedule</string>
+    <string name="hm_my_schedule_offers">My Offers</string>
+    <string name="hm_my_schedule_orders">My Orders</string>
+    <string name="hm_my_schedule_accepted">Accepted {sub_category}. {time_diff}</string>
+    <string name="hm_my_schedule_cancelled">Cancelled {sub_category}. {time_diff}</string>
+    <string name="hm_my_schedule_marked_started">Marked {sub_category} as started. {time_diff}</string>
+    <string name="hm_my_schedule_started">Started {sub_category}. {time_diff}</string>
+    <string name="hm_my_schedule_marked_finished">Marked {sub_category} as finished. {time_diff}</string>
+    <string name="hm_my_schedule_finished">Finished {sub_category}. {time_diff}</string>
 
     <string name="hm_authentication">Authentication</string>
     <string name="hm_authentication_description">Authentication is required to perform this action.</string>
