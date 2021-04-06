@@ -18,6 +18,7 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
@@ -114,6 +115,8 @@ public class HtAmplify {
                 error -> Log.e("HtAmplify", "Create failed", error)
         );
 
+        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+
         ArrayList<Long> times = dto.getDateSlots();
         for (int i = 0; i < times.size(); i += 2) {
 
@@ -123,6 +126,7 @@ public class HtAmplify {
                     .offerId(newOffer.getId())
                     .status(HtTimeSlotStatus.AVAILABLE.ordinal())
                     .clientUserId("0")
+                    .user1Id(fcmToken)
                     .build();
 
             Amplify.API.mutate(ModelMutation.create(timeSlot),
@@ -177,6 +181,9 @@ public class HtAmplify {
                 error -> Log.e("HtAmplify", "Query failure", error)
         );
 
+        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+
+
         ArrayList<Long> times = dto.getDateSlots();
         for (int i = 0; i < times.size(); i += 2) {
 
@@ -186,6 +193,7 @@ public class HtAmplify {
                     .offerId(newOffer.getId())
                     .status(HtTimeSlotStatus.AVAILABLE.ordinal())
                     .clientUserId("0")
+                    .user1Id(fcmToken)
                     .build();
 
             Amplify.API.mutate(ModelMutation.create(timeSlot),
@@ -201,6 +209,7 @@ public class HtAmplify {
 
     public void bookTimeSlot(String timeSlotId, String clientUserId) {
         Log.i("HtAmplify", "Booking a time slot.");
+        String fcmToken = FirebaseInstanceId.getInstance().getToken();
 
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future future = pool.submit(new Callable() {
@@ -214,6 +223,7 @@ public class HtAmplify {
                                     TimeSlot toUpdate = timeSlot.copyOfBuilder()
                                             .clientUserId(clientUserId)
                                             .status(HtTimeSlotStatus.BOOKED.ordinal())
+                                            .user2Id(fcmToken)
                                             .build();
 
                                     Amplify.API.mutate(
