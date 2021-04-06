@@ -49,6 +49,7 @@ import java.util.Date;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.core.wallet.Wallet;
 
 public class OffersActivity extends BaseFragment {
 

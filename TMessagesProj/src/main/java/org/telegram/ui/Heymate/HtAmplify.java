@@ -256,7 +256,7 @@ public class HtAmplify {
     public void endTimeSlot(String timeSlotId) {
         Log.i("HtAmplify", "Ending a time slot.");
 
-        updateTimeSlot(timeSlotId, HtTimeSlotStatus.ENDED);
+        updateTimeSlot(timeSlotId, HtTimeSlotStatus.FINISHED);
     }
 
     public void cancelTimeSlot(String timeSlotId) {
