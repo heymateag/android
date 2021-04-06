@@ -59,6 +59,12 @@ public class HtAmplify {
 
     }
 
+    public interface OffersCallback {
+
+        void onOffersQueryResult(boolean success, List<Offer> offers, ApiException exception);
+
+    }
+
     public static HtAmplify getInstance(Context context) {
         if (instance == null)
             instance = new HtAmplify(context.getApplicationContext());
@@ -314,6 +320,25 @@ public class HtAmplify {
         });
     }
 
+    public void getNonAvailableTimeSlots(String offerId, TimeSlotsCallback callback) {
+        Amplify.API.query(
+                ModelQuery.list(TimeSlot.class, TimeSlot.OFFER_ID.eq(offerId).and(TimeSlot.STATUS.ne(HtTimeSlotStatus.AVAILABLE.ordinal()))),
+                response -> {
+                    List<TimeSlot> timeSlots = new ArrayList<>();
+
+                    if (response.hasData() && response.getData() != null) {
+                        for (TimeSlot timeSlot: response.getData()) {
+                            timeSlots.add(timeSlot);
+                        }
+                    }
+
+                    callback.onTimeSlotsQueryResult(true, timeSlots, null);
+                },
+                error -> {
+                    callback.onTimeSlotsQueryResult(false, null, error);
+                });
+    }
+
     public ArrayList<TimeSlot> getAvailableTimeSlots(String offerId, OfferCallback callback) {
         Log.i("HtAmplify", "Getting time slots");
 
@@ -395,7 +420,7 @@ public class HtAmplify {
         }
     }
 
-    public void getOffer(String offerId, OfferCallback callback) {
+    public void getOffer(String offerId, OfferCallback<Offer> callback) {
         Amplify.API.query(
                 ModelQuery.get(Offer.class, offerId),
                 response -> {
@@ -406,6 +431,30 @@ public class HtAmplify {
                     }
                 },
                 error -> callback.onOfferQueryResult(false, null, error)
+        );
+    }
+
+    public void getOffersWithoutImages(OffersCallback callback) {
+        int currentAccount = UserConfig.selectedAccount;
+        int userId = UserConfig.getInstance(currentAccount).clientUserId;
+
+        Amplify.API.query(
+                ModelQuery.list(Offer.class, Offer.USER_ID.eq("" + userId)),
+                response -> {
+                    ArrayList<Offer> offers = new ArrayList<>();
+
+                    if (response.getData() != null) {
+
+                        for (Offer offer : response.getData()) {
+                            offers.add(offer);
+                        }
+
+                        HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
+                    }
+
+                    callback.onOffersQueryResult(true, offers, null);
+                },
+                error -> callback.onOffersQueryResult(false, null, error)
         );
     }
 

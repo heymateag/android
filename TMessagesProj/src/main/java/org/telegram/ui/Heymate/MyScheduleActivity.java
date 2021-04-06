@@ -3,7 +3,6 @@ package org.telegram.ui.Heymate;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.api.ApiException;
-import com.amplifyframework.core.Amplify;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -45,8 +43,9 @@ import org.telegram.ui.ProfileActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import works.heymate.core.Texts;
 
@@ -122,7 +121,7 @@ public class MyScheduleActivity extends BaseFragment {
     }
 
     private void bindAdapter(RecyclerListView listView, int position) {
-        listView.setAdapter(new ScheduleAdapter()); // TODO
+        listView.setAdapter(new ScheduleAdapter(listView, position == 0));
     }
 
     @Override
@@ -131,19 +130,61 @@ public class MyScheduleActivity extends BaseFragment {
         return super.onBackPressed();
     }
 
-    private class ScheduleAdapter extends RecyclerListView.SectionsAdapter implements HtAmplify.TimeSlotsCallback {
+    private class ScheduleAdapter extends RecyclerListView.SectionsAdapter implements
+            HtAmplify.TimeSlotsCallback, HtAmplify.OffersCallback {
+
+        private final RecyclerListView mListView;
+        private final boolean mIsMyOffers;
 
         private List<TimeSlot> mTimeSlots = null;
         private SparseArray<List<TimeSlot>> mSections = new SparseArray<>();
+        private Map<String, Offer> mOffers = new HashMap<>();
 
-        public ScheduleAdapter() {
-
+        public ScheduleAdapter(RecyclerListView listView, boolean isMyOffers) {
+            mListView = listView;
+            mIsMyOffers = isMyOffers;
         }
 
         public void getData() {
-            int userId = UserConfig.getInstance(currentAccount).clientUserId;
-            HtAmplify.getInstance(getParentActivity()).getMyOrders("" + userId, this);
-            // TODO STUFF
+            if (mIsMyOffers) {
+                HtAmplify.getInstance(getParentActivity()).getOffersWithoutImages(this);
+            }
+            else {
+                int userId = UserConfig.getInstance(currentAccount).clientUserId;
+                HtAmplify.getInstance(getParentActivity()).getMyOrders("" + userId, this);
+            }
+        }
+
+        @Override
+        public void onOffersQueryResult(boolean success, List<Offer> offers, ApiException exception) {
+            if (!success) {
+                return;
+            }
+
+            List<TimeSlot> timeSlots = new ArrayList<>();
+
+            getTimeSlotsForOffer(offers, timeSlots);
+        }
+
+        private void getTimeSlotsForOffer(List<Offer> offers, List<TimeSlot> timeSlots) {
+            if (offers.isEmpty()) {
+                onTimeSlotsQueryResult(true, timeSlots, null);
+                return;
+            }
+
+            Offer offer = offers.remove(0);
+
+            HtAmplify.getInstance(getParentActivity()).getNonAvailableTimeSlots(offer.getId(), (success, offerTimeSlots, exception) -> {
+                if (success) {
+                    timeSlots.addAll(offerTimeSlots);
+
+                    for (TimeSlot timeSlot: offerTimeSlots) {
+                        mOffers.put(timeSlot.getId(), offer);
+                    }
+                }
+
+                getTimeSlotsForOffer(offers, timeSlots);
+            });
         }
 
         @Override
@@ -185,11 +226,30 @@ public class MyScheduleActivity extends BaseFragment {
                 }
 
                 list.add(timeSlot);
+
+                if (!mOffers.containsKey(timeSlot.getId())) {
+                    HtAmplify.getInstance(getParentActivity()).getOffer(timeSlot.getOfferId(), (success1, data, exception1) -> {
+                        if (success1) {
+                            mOffers.put(timeSlot.getId(), data);
+                            updateItem(timeSlot);
+                        }
+                    });
+                }
             }
 
-            // TODO STUFF
-
             notifyDataSetChanged();
+        }
+
+        private void updateItem(TimeSlot timeSlot) {
+            for (int i = 0; i < mListView.getChildCount(); i++) {
+                if (mListView.getChildAt(i) instanceof ScheduleItem) {
+                    ScheduleItem item = (ScheduleItem) mListView.getChildAt(i);
+
+                    if (timeSlot.getId().equals(item.mTimeSlot.getId())) {
+                        item.setOffer(mOffers.get(timeSlot.getId()));
+                    }
+                }
+            }
         }
 
         @Override
@@ -246,6 +306,7 @@ public class MyScheduleActivity extends BaseFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             ScheduleItem view = new ScheduleItem(parent.getContext());
+            view.setIsMyOffer(mIsMyOffers);
 
             return new RecyclerView.ViewHolder(view) { };
         }
@@ -255,8 +316,9 @@ public class MyScheduleActivity extends BaseFragment {
             ScheduleItem item = (ScheduleItem) holder.itemView;
 
             TimeSlot timeSlot = (TimeSlot) getItem(section, position);
-            // TODO STUFF
+
             item.setTimeSlot(timeSlot);
+            item.setOffer(mOffers.get(timeSlot.getId()));
         }
 
         @Override
