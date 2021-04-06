@@ -122,12 +122,12 @@ public class HtOfferDialogCell extends FrameLayout {
             Drawable drawable = context.getResources().getDrawable(R.drawable.offer);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
             avatar.setImage(ImageLocation.getForUser(user, false), "50_50", drawable, null);
-            titleLabel.setText(user.first_name + "'s Shop");
+            titleLabel.setText(user.first_name);
         } else if(chat != null) {
             Drawable drawable = context.getResources().getDrawable(R.drawable.offer);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
             avatar.setImage(ImageLocation.getForChat(chat, false), "50_50", drawable, null);
-            titleLabel.setText(chat.title + " Services");
+            titleLabel.setText(chat.title);
         }
         titleLabel.setTextSize(15);
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);

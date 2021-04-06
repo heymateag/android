@@ -19,10 +19,12 @@ public class HtTextCell extends LinearLayout {
 
     private TextView titleLabel;
     private boolean selected;
+    private Context context;
 
     public HtTextCell(Context context) {
         super(context);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_wallet_whiteBackground)));
+        this.context = context;
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(R.color.ht_green)));
         titleLabel = new TextView(context);
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
         addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,10,10,10));
@@ -41,20 +43,20 @@ public class HtTextCell extends LinearLayout {
     }
 
     public void select(){
-        int colorFrom = Theme.getColor(Theme.key_wallet_whiteBackground);
-        int colorTo = Theme.getColor(Theme.key_dialogTextBlue3);
+        int colorFrom =  context.getResources().getColor(R.color.ht_green);
+        int colorTo = Theme.getColor(Theme.key_avatar_backgroundGreen);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_wallet_whiteBackground)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_avatar_backgroundGreen)));
         colorAnimation.start();
     }
 
     public void unSelect(){
-        int colorFrom = Theme.getColor(Theme.key_dialogTextBlue3);
-        int colorTo = Theme.getColor(Theme.key_wallet_whiteBackground);
+        int colorFrom = Theme.getColor(Theme.key_avatar_backgroundGreen);
+        int colorTo =  context.getResources().getColor(R.color.ht_green);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_dialogTextBlue3)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8),  context.getResources().getColor(R.color.ht_green)));
         colorAnimation.start();
     }
 }

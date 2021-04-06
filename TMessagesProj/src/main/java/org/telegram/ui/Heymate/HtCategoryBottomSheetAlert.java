@@ -59,8 +59,8 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
         LinearLayout mainLayout = new LinearLayout(context);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setMinimumHeight(700);
-        mainLayout.setBackgroundColor(Theme.getColor(Theme.key_wallet_whiteBackground));
-        mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_wallet_whiteBackground)));
+        mainLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+        mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground)));
 
         LinearLayout upperLayout = new LinearLayout(context);
         upperLayout.setGravity(Gravity.RIGHT);
@@ -146,7 +146,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                     updateSubCategories(subCategories[2], subCategoriesBase.get(categoryCell.getText()));
                 }
             });
-            categoryCell.setTextColor(context.getResources().getColor(R.color.ht_green));
+            categoryCell.setTextColor(Theme.getColor(Theme.key_wallet_whiteBackground));
             categoryCell.setText(categoryStore[i].toString());
             categories[2].add(categoryCell);
         }
@@ -195,11 +195,17 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                     previousSelectedSubCategory[0] = subCategoryCell;
                     if(parent instanceof HtCreateOfferActivity){
                         ((HtCreateOfferActivity) parent).setSubCategory(subCategoryCell.getText());
+                        for(String key : DummyCategories.categories.keySet()){
+                            if(DummyCategories.categories.get(key).contains(subCategoryCell.getText()))  {
+                                ((HtCreateOfferActivity) parent).setCategory(key);
+                                break;
+                            }
+                        }
                     }
                     hide();
                 }
             });
-            subCategoryCell.setTextColor(context.getResources().getColor(R.color.ht_green));
+            subCategoryCell.setTextColor(Theme.getColor(Theme.key_wallet_whiteBackground));
             subCategoryCell.setText(subCategoriesStore.get(i));
             subCategories[2].add(subCategoryCell);
         }

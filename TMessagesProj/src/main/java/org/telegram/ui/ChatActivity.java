@@ -20303,7 +20303,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         private void updateRowsInternal() {
-            rowCount = 1;
+            rowCount = 0;
             if (!messages.isEmpty()) {
                 if (!forwardEndReached[0] || mergeDialogId != 0 && !forwardEndReached[1]) {
                     loadingDownRow = rowCount++;
@@ -20341,7 +20341,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override
         public int getItemCount() {
-            return clearingHistory ? 0 : rowCount + 1;
+            return clearingHistory ? 0 : rowCount;
         }
 
         @Override
