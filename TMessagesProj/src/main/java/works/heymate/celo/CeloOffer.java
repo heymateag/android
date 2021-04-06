@@ -1,5 +1,7 @@
 package works.heymate.celo;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.celo.contractkit.ContractKit;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +67,13 @@ public class CeloOffer {
     public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress, long startTime) throws CeloException, JSONException {
         byte[] tradeId = new byte[16];
         new SecureRandom().nextBytes(tradeId);
+
+        try {
+            BigInteger balance = mContractKit.contracts.getStableToken().balanceOf(consumerAddress).send();
+            Log.d("AAA", "Balance is: " + balance);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 

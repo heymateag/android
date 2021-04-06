@@ -48,7 +48,7 @@ public class HeymatePayment {
     private static int getStateTries = 3;
 
     public static void initPayment(BaseFragment fragment, String offerId) {
-        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 2);
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 0);
         loadingDialog.setTitle("Some Title");
         loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
         loadingDialog.show();
@@ -200,7 +200,7 @@ public class HeymatePayment {
     }
 
     private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 2);
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 0);
         loadingDialog.setTitle("Some Title");
         loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
         loadingDialog.show();
