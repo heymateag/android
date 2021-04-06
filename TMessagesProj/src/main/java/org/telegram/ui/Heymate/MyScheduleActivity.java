@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
@@ -46,6 +48,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import works.heymate.core.Texts;
 
@@ -88,6 +91,9 @@ public class MyScheduleActivity extends BaseFragment {
             }
         });
 
+        LinearLayout content = new LinearLayout(context);
+        content.setOrientation(LinearLayout.VERTICAL);
+
         ViewPagerFixed viewPager = new ViewPagerFixed(context);
         viewPager.setAdapter(new ViewPagerFixed.Adapter() {
 
@@ -115,7 +121,12 @@ public class MyScheduleActivity extends BaseFragment {
 
         });
 
-        fragmentView = viewPager;
+        ViewPagerFixed.TabsView tabsView = viewPager.createTabsView();
+
+        content.addView(tabsView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 44));
+        content.addView(viewPager, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+        fragmentView = content;
 
         return fragmentView;
     }
