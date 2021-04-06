@@ -25,12 +25,16 @@ public final class TimeSlot implements Model {
   public static final QueryField OFFER_ID = field("TimeSlot", "offerId");
   public static final QueryField START_TIME = field("TimeSlot", "startTime");
   public static final QueryField STATUS = field("TimeSlot", "status");
+  public static final QueryField USER1_ID = field("TimeSlot", "user1Id");
+  public static final QueryField USER2_ID = field("TimeSlot", "user2Id");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String clientUserId;
   private final @ModelField(targetType="Int") Integer endTime;
   private final @ModelField(targetType="String") String offerId;
   private final @ModelField(targetType="Int") Integer startTime;
   private final @ModelField(targetType="Int") Integer status;
+  private final @ModelField(targetType="String") String user1Id;
+  private final @ModelField(targetType="String") String user2Id;
   public String getId() {
       return id;
   }
@@ -55,13 +59,23 @@ public final class TimeSlot implements Model {
       return status;
   }
   
-  private TimeSlot(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status) {
+  public String getUser1Id() {
+      return user1Id;
+  }
+  
+  public String getUser2Id() {
+      return user2Id;
+  }
+  
+  private TimeSlot(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status, String user1Id, String user2Id) {
     this.id = id;
     this.clientUserId = clientUserId;
     this.endTime = endTime;
     this.offerId = offerId;
     this.startTime = startTime;
     this.status = status;
+    this.user1Id = user1Id;
+    this.user2Id = user2Id;
   }
   
   @Override
@@ -77,7 +91,9 @@ public final class TimeSlot implements Model {
               ObjectsCompat.equals(getEndTime(), timeSlot.getEndTime()) &&
               ObjectsCompat.equals(getOfferId(), timeSlot.getOfferId()) &&
               ObjectsCompat.equals(getStartTime(), timeSlot.getStartTime()) &&
-              ObjectsCompat.equals(getStatus(), timeSlot.getStatus());
+              ObjectsCompat.equals(getStatus(), timeSlot.getStatus()) &&
+              ObjectsCompat.equals(getUser1Id(), timeSlot.getUser1Id()) &&
+              ObjectsCompat.equals(getUser2Id(), timeSlot.getUser2Id());
       }
   }
   
@@ -90,6 +106,8 @@ public final class TimeSlot implements Model {
       .append(getOfferId())
       .append(getStartTime())
       .append(getStatus())
+      .append(getUser1Id())
+      .append(getUser2Id())
       .toString()
       .hashCode();
   }
@@ -103,7 +121,9 @@ public final class TimeSlot implements Model {
       .append("endTime=" + String.valueOf(getEndTime()) + ", ")
       .append("offerId=" + String.valueOf(getOfferId()) + ", ")
       .append("startTime=" + String.valueOf(getStartTime()) + ", ")
-      .append("status=" + String.valueOf(getStatus()))
+      .append("status=" + String.valueOf(getStatus()) + ", ")
+      .append("user1Id=" + String.valueOf(getUser1Id()) + ", ")
+      .append("user2Id=" + String.valueOf(getUser2Id()))
       .append("}")
       .toString();
   }
@@ -137,6 +157,8 @@ public final class TimeSlot implements Model {
       null,
       null,
       null,
+      null,
+      null,
       null
     );
   }
@@ -147,7 +169,9 @@ public final class TimeSlot implements Model {
       endTime,
       offerId,
       startTime,
-      status);
+      status,
+      user1Id,
+      user2Id);
   }
   public interface BuildStep {
     TimeSlot build();
@@ -157,6 +181,8 @@ public final class TimeSlot implements Model {
     BuildStep offerId(String offerId);
     BuildStep startTime(Integer startTime);
     BuildStep status(Integer status);
+    BuildStep user1Id(String user1Id);
+    BuildStep user2Id(String user2Id);
   }
   
 
@@ -167,6 +193,8 @@ public final class TimeSlot implements Model {
     private String offerId;
     private Integer startTime;
     private Integer status;
+    private String user1Id;
+    private String user2Id;
     @Override
      public TimeSlot build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -177,7 +205,9 @@ public final class TimeSlot implements Model {
           endTime,
           offerId,
           startTime,
-          status);
+          status,
+          user1Id,
+          user2Id);
     }
     
     @Override
@@ -210,6 +240,18 @@ public final class TimeSlot implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep user1Id(String user1Id) {
+        this.user1Id = user1Id;
+        return this;
+    }
+    
+    @Override
+     public BuildStep user2Id(String user2Id) {
+        this.user2Id = user2Id;
+        return this;
+    }
+    
     /** 
      * WARNING: Do not set ID when creating a new object. Leave this blank and one will be auto generated for you.
      * This should only be set when referring to an already existing object.
@@ -233,13 +275,15 @@ public final class TimeSlot implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status) {
+    private CopyOfBuilder(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status, String user1Id, String user2Id) {
       super.id(id);
       super.clientUserId(clientUserId)
         .endTime(endTime)
         .offerId(offerId)
         .startTime(startTime)
-        .status(status);
+        .status(status)
+        .user1Id(user1Id)
+        .user2Id(user2Id);
     }
     
     @Override
@@ -265,6 +309,16 @@ public final class TimeSlot implements Model {
     @Override
      public CopyOfBuilder status(Integer status) {
       return (CopyOfBuilder) super.status(status);
+    }
+    
+    @Override
+     public CopyOfBuilder user1Id(String user1Id) {
+      return (CopyOfBuilder) super.user1Id(user1Id);
+    }
+    
+    @Override
+     public CopyOfBuilder user2Id(String user2Id) {
+      return (CopyOfBuilder) super.user2Id(user2Id);
     }
   }
   
