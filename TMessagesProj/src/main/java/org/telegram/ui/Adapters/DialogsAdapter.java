@@ -90,7 +90,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     public DialogsAdapter(Context context, int type, int folder, boolean onlySelect, ArrayList<Long> selected, int account) {
         mContext = context;
         dialogsType = type;
-        if(dialogsType == Integer.MAX_VALUE - 1){
+        if (dialogsType == Integer.MAX_VALUE - 1) {
             isShops = true;
             dialogsType = 0;
         }
@@ -319,7 +319,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         View view;
         switch (viewType) {
             case 0:
-                if(!isShops && dialogsType != Integer.MAX_VALUE - 1){
+                if (!isShops && dialogsType != Integer.MAX_VALUE - 1) {
                     DialogCell dialogCell = new DialogCell(mContext, true, false, currentAccount);
                     dialogCell.setArchivedPullAnimation(pullForegroundDrawable);
                     dialogCell.setPreloader(preloader);
@@ -449,29 +449,19 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int i) {
         switch (holder.getItemViewType()) {
             case 0: {
-                if(holder.itemView instanceof HtOfferDialogCell) {
+                if (holder.itemView instanceof HtOfferDialogCell) {
                     HtOfferDialogCell cell = (HtOfferDialogCell) holder.itemView;
                     TLRPC.Dialog dialog = (TLRPC.Dialog) getItem(i);
                     int lower_id = (int) dialog.id;
                     if (lower_id > 0) {
-                        TLRPC.User chat = MessagesController.getInstance(currentAccount).getUser(lower_id);
-                        if(chat != null && chat.first_name != null && !chat.first_name.contains("Shop")){
-                            cell.removeAllViews();
-                            cell.setVisibility(View.GONE);
-                            cell.setOnClickListener(null);
-                            cell.setMinimumHeight(0);
-                            cell.setEnabled(false);
-                        }
-                        if(chat != null && chat.last_name != null && !chat.last_name.contains("Shop")){
-                            cell.removeAllViews();
-                            cell.setVisibility(View.GONE);
-                            cell.setOnClickListener(null);
-                            cell.setMinimumHeight(0);
-                            cell.setEnabled(false);
-                        }
+                        cell.removeAllViews();
+                        cell.setVisibility(View.GONE);
+                        cell.setOnClickListener(null);
+                        cell.setMinimumHeight(0);
+                        cell.setEnabled(false);
                     } else {
                         TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-lower_id);
-                        if(chat != null && !chat.title.contains("Shop")){
+                        if (chat != null && !shops.contains(-lower_id)) {
                             cell.removeAllViews();
                             cell.setVisibility(View.GONE);
                             cell.setOnClickListener(null);
@@ -693,7 +683,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
         private boolean preloadIsAvilable() {
             return false;
-           // return DownloadController.getInstance(UserConfig.selectedAccount).getCurrentDownloadMask() != 0;
+            // return DownloadController.getInstance(UserConfig.selectedAccount).getCurrentDownloadMask() != 0;
         }
 
         public void updateList() {
