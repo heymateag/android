@@ -31,6 +31,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -660,7 +661,9 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             }
 
             if (v == mButtonLeft) {
-                // TODO Cancel
+                HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
+                disableLeft();
+                disableRight();
                 return;
             }
         }
@@ -694,6 +697,15 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         }
 
         private void showDetails() {
+            HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), MyScheduleActivity.this,  0, mOffer.getId());
+            AlertDialog dialog = detailsPopUp.create();
+            detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            showDialog(dialog);
             // TODO
         }
 
