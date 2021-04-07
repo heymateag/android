@@ -298,23 +298,24 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                 }
             }
             else {
-                if (!verifiedStatus.verified) {
-                    // TODO NEED DESIGN
-                    TextView addressView = new TextView(mLeftButton.getContext());
-                    addressView.setText(mWallet.getAddress() + "\nhttps://celo.org/developers/faucet");
-                    addressView.setAutoLinkMask(Linkify.WEB_URLS);
-                    addressView.setTextIsSelectable(true);
-                    addressView.setMovementMethod(LinkMovementMethod.getInstance());
-                    new AlertDialog.Builder(mLeftButton.getContext())
-                            .setTitle("Go to attestation?")
-                            .setView(addressView)
-                            .setPositiveButton("Go", (dialog, which) -> {
-                                dialog.dismiss();
-                                presentFragment(new AttestationActivity(mFinishTask), true);
-                            })
-                            .show();
-                    return;
-                }
+                // TODO Attestation disabled for now.
+//                if (!verifiedStatus.verified) {
+//                    // TODO NEED DESIGN
+//                    TextView addressView = new TextView(mLeftButton.getContext());
+//                    addressView.setText(mWallet.getAddress() + "\nhttps://celo.org/developers/faucet");
+//                    addressView.setAutoLinkMask(Linkify.WEB_URLS);
+//                    addressView.setTextIsSelectable(true);
+//                    addressView.setMovementMethod(LinkMovementMethod.getInstance());
+//                    new AlertDialog.Builder(mLeftButton.getContext())
+//                            .setTitle("Go to attestation?")
+//                            .setView(addressView)
+//                            .setPositiveButton("Go", (dialog, which) -> {
+//                                dialog.dismiss();
+//                                presentFragment(new AttestationActivity(mFinishTask), true);
+//                            })
+//                            .show();
+//                    return;
+//                }
 
                 mLeftButton.setEnabled(true);
                 mRightButton.setEnabled(true);
