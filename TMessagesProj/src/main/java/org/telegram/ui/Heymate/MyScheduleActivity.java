@@ -53,7 +53,7 @@ import java.util.Random;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 
-public class MyScheduleActivity extends BaseFragment {
+public class MyScheduleActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
     private static final String PLACEHOLDER_SUB_CATEGORY = "{sub_category}";
     private static final String PLACEHOLDER_TIME_DIFF = "{time_diff}";
@@ -64,13 +64,19 @@ public class MyScheduleActivity extends BaseFragment {
     private static final long ONE_HOUR = 60L * ONE_MINUTE;
     private static final long ONE_DAY = 24L * ONE_HOUR;
 
+    private List<ScheduleAdapter> mAdapters = new ArrayList<>(2);
+
     @Override
     public boolean onFragmentCreate() {
+        HeymateEvents.register(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
+
         return super.onFragmentCreate();
     }
 
     @Override
     public void onFragmentDestroy() {
+        HeymateEvents.unregister(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
+
         super.onFragmentDestroy();
     }
 
@@ -133,7 +139,9 @@ public class MyScheduleActivity extends BaseFragment {
     }
 
     private void bindAdapter(RecyclerListView listView, int position) {
-        listView.setAdapter(new ScheduleAdapter(listView, position == 0));
+        ScheduleAdapter adapter = new ScheduleAdapter(listView, position == 0);
+        listView.setAdapter(adapter);
+        mAdapters.add(adapter);
     }
 
     @Override
@@ -142,13 +150,25 @@ public class MyScheduleActivity extends BaseFragment {
         return super.onBackPressed();
     }
 
+    @Override
+    public void onHeymateEvent(int event, Object... args) {
+        String id = (String) args[0];
+
+        HtAmplify.getInstance(getParentActivity()).getTimeSlot(id, (success, result, exception) -> {
+            if (success) {
+                for (ScheduleAdapter adapter: mAdapters) {
+                    adapter.updateTimeSlot(result);
+                }
+            }
+        });
+    }
+
     private class ScheduleAdapter extends RecyclerListView.SectionsAdapter implements
             HtAmplify.TimeSlotsCallback, HtAmplify.OffersCallback {
 
         private final RecyclerListView mListView;
         private final boolean mIsMyOffers;
 
-        private List<TimeSlot> mTimeSlots = null;
         private SparseArray<List<TimeSlot>> mSections = new SparseArray<>();
         private Map<String, Offer> mOffers = new HashMap<>();
 
@@ -205,9 +225,7 @@ public class MyScheduleActivity extends BaseFragment {
                 return;
             }
 
-            mTimeSlots = new ArrayList<>(timeSlots);
-
-            Collections.sort(mTimeSlots, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
+            Collections.sort(timeSlots, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -218,7 +236,7 @@ public class MyScheduleActivity extends BaseFragment {
 
             mSections.clear();
 
-            for (TimeSlot timeSlot: mTimeSlots) {
+            for (TimeSlot timeSlot: timeSlots) {
                 long slotTime = timeSlot.getStartTime() * 1000L;
 
                 int dayDiff;
@@ -261,6 +279,33 @@ public class MyScheduleActivity extends BaseFragment {
                         item.setOffer(mOffers.get(timeSlot.getId()));
                     }
                 }
+            }
+        }
+
+        private void updateTimeSlot(TimeSlot timeSlot) {
+            boolean found = false;
+
+            for (int i = 0; i < mSections.size(); i++) {
+                List<TimeSlot> timeSlots = mSections.get(mSections.keyAt(i));
+
+                if (timeSlots != null) {
+                    for (int index = 0; index < timeSlots.size(); index++) {
+                        if (timeSlot.getId().equals(timeSlots.get(index).getId())) {
+                            found = true;
+
+                            timeSlots.set(index, timeSlot);
+                            break;
+                        }
+                    }
+                }
+
+                if (found) {
+                    break;
+                }
+            }
+
+            if (found) {
+                updateItem(timeSlot);
             }
         }
 
@@ -362,7 +407,7 @@ public class MyScheduleActivity extends BaseFragment {
 
     }
 
-    private class ScheduleItem extends SequenceLayout implements View.OnClickListener, HeymateEvents.HeymateEventObserver {
+    private class ScheduleItem extends SequenceLayout implements View.OnClickListener {
 
         private final ImageView mImageUser;
         private final TextView mTextName;
@@ -434,11 +479,6 @@ public class MyScheduleActivity extends BaseFragment {
             }
 
             updateLayout();
-        }
-
-        @Override
-        public void onHeymateEvent(int event, Object... args) {
-            // TODO
         }
 
         private void updateLayout() {
@@ -636,8 +676,6 @@ public class MyScheduleActivity extends BaseFragment {
             super.onAttachedToWindow();
 
             avatarImage.onAttachedToWindow();
-
-            HeymateEvents.register(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
         }
 
         @Override
@@ -645,8 +683,6 @@ public class MyScheduleActivity extends BaseFragment {
             super.onDetachedFromWindow();
 
             avatarImage.onDetachedFromWindow();
-
-            HeymateEvents.unregister(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
         }
 
     }

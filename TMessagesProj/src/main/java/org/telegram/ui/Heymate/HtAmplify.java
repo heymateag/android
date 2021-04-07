@@ -24,7 +24,9 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.google.android.gms.common.api.Api;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.stripe.android.exception.APIException;
 
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -57,6 +59,12 @@ public class HtAmplify {
     public interface OfferCallback<T> {
 
         void onOfferQueryResult(boolean success, T data, ApiException exception);
+
+    }
+
+    public interface APICallback<T> {
+
+        void onQueryResult(boolean success, T result, ApiException exception);
 
     }
 
@@ -230,6 +238,16 @@ public class HtAmplify {
         }
 
         return newOffer;
+    }
+
+    public void getTimeSlot(String timeSlotId, APICallback<TimeSlot> callback) {
+        Amplify.API.query(ModelQuery.get(TimeSlot.class, timeSlotId),
+                response -> {
+                    callback.onQueryResult(true, response.getData(), null);
+                },
+                error -> {
+                    callback.onQueryResult(false, null, error);
+                });
     }
 
     public void bookTimeSlot(String timeSlotId, String clientUserId) {
