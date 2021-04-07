@@ -816,10 +816,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                ViewGroup parent = (ViewGroup) getParent();
-                int scroll = parent.getScrollX();
-
-                int passedDays = (int) ((scroll + e.getX()) / mSlotWidth);
+                int passedDays = (int) (e.getX() / mSlotWidth);
 
                 mCalendar.setTimeInMillis(mBaseTime);
                 mCalendar.set(Calendar.HOUR_OF_DAY, 0);

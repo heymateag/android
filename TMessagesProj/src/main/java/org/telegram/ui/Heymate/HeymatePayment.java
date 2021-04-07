@@ -48,7 +48,7 @@ public class HeymatePayment {
     private static int getStateTries = 3;
 
     public static void initPayment(BaseFragment fragment, String offerId) {
-        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 0);
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
         loadingDialog.setTitle("Some Title");
         loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
         loadingDialog.show();
@@ -190,7 +190,7 @@ public class HeymatePayment {
         addressView.setTextIsSelectable(true);
         addressView.setMovementMethod(LinkMovementMethod.getInstance());
         new AlertDialog.Builder(context)
-                .setTitle("Go to attestation?")
+                .setTitle("Initiate payment?")
                 .setView(addressView)
                 .setPositiveButton("Go", (dialog, which) -> {
                     dialog.dismiss();
@@ -200,7 +200,7 @@ public class HeymatePayment {
     }
 
     private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 0);
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
         loadingDialog.setTitle("Some Title");
         loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
         loadingDialog.show();
