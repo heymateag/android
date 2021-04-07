@@ -298,7 +298,7 @@ public class HtAmplify {
                 });
     }
 
-    private void updateTimeSlot(String timeSlotId, HtTimeSlotStatus status) {
+    public void updateTimeSlot(String timeSlotId, HtTimeSlotStatus status) {
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future future = pool.submit(new Callable() {
             @Override

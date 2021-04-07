@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 
 public class MyScheduleActivity extends BaseFragment {
@@ -361,7 +362,7 @@ public class MyScheduleActivity extends BaseFragment {
 
     }
 
-    private class ScheduleItem extends SequenceLayout implements View.OnClickListener {
+    private class ScheduleItem extends SequenceLayout implements View.OnClickListener, HeymateEvents.HeymateEventObserver {
 
         private final ImageView mImageUser;
         private final TextView mTextName;
@@ -433,6 +434,11 @@ public class MyScheduleActivity extends BaseFragment {
             }
 
             updateLayout();
+        }
+
+        @Override
+        public void onHeymateEvent(int event, Object... args) {
+            // TODO
         }
 
         private void updateLayout() {
@@ -588,18 +594,22 @@ public class MyScheduleActivity extends BaseFragment {
         }
 
         private void markAsStarted() {
+            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.MARKED_AS_STARTED);
             // TODO
         }
 
         private void confirmStarted() {
+            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
             // TODO
         }
 
         private void markAsFinished() {
+            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.MARKED_AS_FINISHED);
             // TODO
         }
 
         private void confirmFinished() {
+            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
             // TODO
         }
 
@@ -626,6 +636,8 @@ public class MyScheduleActivity extends BaseFragment {
             super.onAttachedToWindow();
 
             avatarImage.onAttachedToWindow();
+
+            HeymateEvents.register(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
         }
 
         @Override
@@ -633,6 +645,8 @@ public class MyScheduleActivity extends BaseFragment {
             super.onDetachedFromWindow();
 
             avatarImage.onDetachedFromWindow();
+
+            HeymateEvents.unregister(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
         }
 
     }

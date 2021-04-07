@@ -217,9 +217,9 @@ public class HeymatePayment {
                 // TODO
                 new AlertDialog.Builder(fragment.getParentActivity())
                         .setTitle("Offer accepted")
-                        .setMessage("YAAAAY")
+                        .setMessage("You can check the state of your offer in offers > my schedule.")
                         .setCancelable(false)
-                        .setPositiveButton("Duh!", (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .show();
             }
             else {

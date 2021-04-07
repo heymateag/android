@@ -15,6 +15,7 @@ public class HeymateEvents {
 
     public static final int WALLET_CREATED = 0; // Wallet
     public static final int PHONE_NUMBER_VERIFIED_STATUS_UPDATED = 1; // Wallet, VerifiedStatus, CeloError
+    public static final int ACCEPTED_OFFER_STATUS_UPDATED = 2; // timeSlotId
 
 
     public interface HeymateEventObserver {
