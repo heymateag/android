@@ -135,6 +135,7 @@ import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.AttestationActivity;
 import org.telegram.ui.Heymate.DatabaseWatchDog;
+import org.telegram.ui.Heymate.FirebaseService;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.OffersActivity;
@@ -216,6 +217,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     protected void onCreate(Bundle savedInstanceState) {
         HtSQLite.setInstance(this);
         DatabaseWatchDog.getInstance().config(currentAccount);
+
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
         currentAccount = UserConfig.selectedAccount;
