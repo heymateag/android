@@ -49,8 +49,7 @@ public class HeymatePayment {
 
     public static void initPayment(BaseFragment fragment, String offerId) {
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
-        loadingDialog.setTitle("Some Title");
-        loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
+        loadingDialog.setCanCacnel(false);
         loadingDialog.show();
 
         HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
@@ -201,8 +200,7 @@ public class HeymatePayment {
 
     private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
-        loadingDialog.setTitle("Some Title");
-        loadingDialog.setNegativeButton("Cancel", (dialog, which) -> {});
+        loadingDialog.setCanCacnel(false);
         loadingDialog.show();
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
