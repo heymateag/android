@@ -107,6 +107,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerManageOffersCell;
+import org.telegram.ui.Cells.DrawerMyScheduleCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
@@ -516,6 +517,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             } else if (view instanceof DrawerManageOffersCell) {
                 presentFragment(new HtOfferHelperActivity());
                 drawerLayoutContainer.closeDrawer(false);
+            } else if (view instanceof DrawerMyScheduleCell) {
+                presentFragment(new MyScheduleActivity());
+                drawerLayoutContainer.closeDrawer(false);
             } else {
                 int id = drawerLayoutAdapter.getId(position);
                 if (id == 2) {
@@ -558,6 +562,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 102) {
                     presentFragment(new HtOfferHelperActivity());
+                    drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 103) {
+                    presentFragment(new MyScheduleActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 }else if (id == 11) {
                     Bundle args = new Bundle();

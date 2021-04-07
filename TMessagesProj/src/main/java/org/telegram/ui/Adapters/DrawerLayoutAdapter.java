@@ -24,6 +24,7 @@ import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerManageOffersCell;
+import org.telegram.ui.Cells.DrawerMyScheduleCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
@@ -133,6 +134,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 break;
             case 102:
                 view = new DrawerManageOffersCell(mContext);
+                break;
+            case 103:
+                view = new DrawerMyScheduleCell(mContext);
                 break;
             case 1:
             default:
@@ -252,6 +256,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int helpIcon;
         int peopleNearbyIcon;
         int manageOffersIcon = R.drawable.offer;
+        int myScheduleIcon = R.drawable.ht_calendar;
         if (eventType == 0) {
             newGroupIcon = R.drawable.menu_groups_ny;
             //newSecretIcon = R.drawable.menu_secret_ny;
@@ -299,6 +304,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         }
         items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
         items.add(new Item(102, "Manage Offers", manageOffersIcon));
+        items.add(new Item(103, "My Schedule", myScheduleIcon));
         //items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
         //items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
         items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));

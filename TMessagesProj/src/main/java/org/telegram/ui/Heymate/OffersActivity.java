@@ -109,6 +109,7 @@ public class OffersActivity extends BaseFragment {
 
         mButtonSchedule = fragmentView.findViewById(R.id.button_schedule);
         mButtonSchedule.setOnClickListener(v -> presentFragment(new MyScheduleActivity()));
+        mButtonSchedule.setVisibility(View.INVISIBLE); // TODO Temporary code
 
         TextView buttonAdd = fragmentView.findViewById(R.id.button_add);
         buttonAdd.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
