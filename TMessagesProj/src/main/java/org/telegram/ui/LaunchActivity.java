@@ -138,6 +138,7 @@ import org.telegram.ui.Heymate.DatabaseWatchDog;
 import org.telegram.ui.Heymate.FirebaseService;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.HtSQLite;
+import org.telegram.ui.Heymate.MyScheduleActivity;
 import org.telegram.ui.Heymate.OffersActivity;
 
 import java.io.File;
@@ -1156,9 +1157,15 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     }
 
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
-        if (intent != null && intent.getData() != null && "celo".equalsIgnoreCase(intent.getData().getScheme())) {
-            presentFragment(new AttestationActivity(intent.getData().toString()));
-            return true;
+        if (intent != null && intent.getData() != null) {
+            if ("celo".equalsIgnoreCase(intent.getData().getScheme())) {
+                presentFragment(new AttestationActivity(intent.getData().toString()));
+                return true;
+            }
+            else if ("heymate".equalsIgnoreCase(intent.getData().getScheme())) {
+                presentFragment(new MyScheduleActivity());
+                return true;
+            }
         }
 
         if (AndroidUtilities.handleProxyIntent(this, intent)) {

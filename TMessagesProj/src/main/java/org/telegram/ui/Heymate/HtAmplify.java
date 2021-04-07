@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.Api;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.stripe.android.exception.APIException;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
@@ -243,10 +244,14 @@ public class HtAmplify {
     public void getTimeSlot(String timeSlotId, APICallback<TimeSlot> callback) {
         Amplify.API.query(ModelQuery.get(TimeSlot.class, timeSlotId),
                 response -> {
-                    callback.onQueryResult(true, response.getData(), null);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        callback.onQueryResult(true, response.getData(), null);
+                    });
                 },
                 error -> {
-                    callback.onQueryResult(false, null, error);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        callback.onQueryResult(false, null, error);
+                    });
                 });
     }
 
@@ -315,11 +320,13 @@ public class HtAmplify {
                         }
                     }
 
-                    callback.onTimeSlotsQueryResult(true, timeSlots, null);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        callback.onTimeSlotsQueryResult(true, timeSlots, null);
+                    });
                 },
-                error -> {
+                error -> AndroidUtilities.runOnUIThread(() -> {
                     callback.onTimeSlotsQueryResult(false, null, error);
-                });
+                }));
     }
 
     public void updateTimeSlot(String timeSlotId, HtTimeSlotStatus status) {
@@ -366,10 +373,14 @@ public class HtAmplify {
                         }
                     }
 
-                    callback.onTimeSlotsQueryResult(true, timeSlots, null);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        callback.onTimeSlotsQueryResult(true, timeSlots, null);
+                    });
                 },
                 error -> {
-                    callback.onTimeSlotsQueryResult(false, null, error);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        callback.onTimeSlotsQueryResult(false, null, error);
+                    });
                 });
     }
 
@@ -458,13 +469,15 @@ public class HtAmplify {
         Amplify.API.query(
                 ModelQuery.get(Offer.class, offerId),
                 response -> {
-                    if (response.hasData()) {
-                        callback.onOfferQueryResult(true, response.getData(), null);
-                    } else {
-                        callback.onOfferQueryResult(false, null, null);
-                    }
+                    AndroidUtilities.runOnUIThread(() -> {
+                        if (response.hasData()) {
+                            callback.onOfferQueryResult(true, response.getData(), null);
+                        } else {
+                            callback.onOfferQueryResult(false, null, null);
+                        }
+                    });
                 },
-                error -> callback.onOfferQueryResult(false, null, error)
+                error -> AndroidUtilities.runOnUIThread(() -> callback.onOfferQueryResult(false, null, error))
         );
     }
 

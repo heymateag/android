@@ -38,6 +38,7 @@ public class Texts {
     public static final String FRIDAY_SHORT = "friday_short";
     public static final String SATURDAY_SHORT = "saturday_short";
 
+    public static final String TIME_DIFF_DAY = "time_diff_day";
     public static final String TIME_DIFF_HOUR = "time_diff_hour";
     public static final String TIME_DIFF_MINUTE = "time_diff_minute";
 

@@ -32,6 +32,7 @@
     <string name="hm_friday_short">Fri</string>
     <string name="hm_saturday_short">Sat</string>
 
+    <string name="hm_time_diff_day">{time_diff_d}d</string>
     <string name="hm_time_diff_hour">{time_diff_h}h</string>
     <string name="hm_time_diff_minute">{time_diff_m}m</string>
 

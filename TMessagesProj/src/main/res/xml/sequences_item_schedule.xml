@@ -3,7 +3,7 @@
 
     <Vertical>
         <Span size="8dp"/>
-        <Span id="image_user" size="40dp"/>
+        <Span id="image_user" size="16.3pw"/>
         <Span size="8dp"/>
     </Vertical>
 
@@ -16,27 +16,27 @@
     </Vertical>
 
     <Vertical start="start@text_name">
-        <Span id="button_left" size="36dp"/>
+        <Span id="button_left" size="12pw"/>
     </Vertical>
 
     <Vertical start="start@text_name">
-        <Span id="button_right" size="36dp"/>
+        <Span id="button_right" size="12pw"/>
     </Vertical>
 
     <Horizontal>
         <Span size="20dp"/>
-        <Span id="image_user" size="40dp"/>
+        <Span id="image_user" size="16.3pw"/>
         <Span size="12dp"/>
-        <Span id="text_name" size="wrap"/>
-        <Span size="1w"/>
-        <Span id="button_left" size="72dp"/>
+        <Span id="text_name" size="1w"/>
+        <Span size="2dp"/>
+        <Span id="button_left" size="21pw"/>
         <Span size="4dp"/>
-        <Span id="button_right" size="72dp"/>
+        <Span id="button_right" size="21pw"/>
         <Span size="20dp"/>
     </Horizontal>
 
     <Horizontal start="start@text_name" end="start@button_left">
-        <Span id="text_into" size="100%"/>
+        <Span id="text_info" size="100%"/>
     </Horizontal>
 
 </Sequences>

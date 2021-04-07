@@ -11,26 +11,26 @@
         android:id="@+id/text_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="17sp"/>
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/text_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"/>
+        android:textSize="12sp"/>
 
     <TextView
         android:id="@+id/button_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="14sp"/>
+        android:textSize="13sp"/>
 
     <TextView
         android:id="@+id/button_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="14sp"/>
+        android:textSize="13sp"/>
 
 </merge>

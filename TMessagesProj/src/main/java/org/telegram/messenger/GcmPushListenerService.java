@@ -8,11 +8,20 @@
 
 package org.telegram.messenger;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -22,22 +31,120 @@ import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Heymate.HtAmplify;
+import org.telegram.ui.Heymate.HtTimeSlotStatus;
+import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
+
+import works.heymate.core.HeymateEvents;
 
 public class GcmPushListenerService extends FirebaseMessagingService {
 
     public static final int NOTIFICATION_ID = 1;
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
+    private void handleHeymateNotification(Map data) {
+        String body = (String) data.get("pinpoint.notification.body");
+
+        if (body != null && body.length() > 4) {
+            String timeSlotId = body.substring(4);
+
+            HeymateEvents.notify(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, timeSlotId);
+
+            AndroidUtilities.runOnUIThread(() -> {
+                HtAmplify.getInstance(getApplicationContext()).getTimeSlot(timeSlotId, (success, result, exception) -> {
+                    if (success) {
+                        try {
+                            String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+                            boolean isConsumer = userId.equals(result.getClientUserId());
+
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+
+                            HtTimeSlotStatus status = HtTimeSlotStatus.values()[result.getStatus()];
+
+                            switch (status) {
+                                case BOOKED:
+                                    builder.setContentText("1 Offer accepted.");
+                                    break;
+                                case CANCELLED:
+                                    builder.setContentText("1 Offer canceled.");
+                                    break;
+                                case MARKED_AS_STARTED:
+                                    if (isConsumer) {
+                                        builder.setContentText("1 Offer is marked as started.");
+                                        break;
+                                    }
+                                    else {
+                                        return;
+                                    }
+                                case STARTED:
+                                    if (isConsumer) {
+                                        return;
+                                    }
+                                    else {
+                                        builder.setContentText("1 Offer officially started.");
+                                        break;
+                                    }
+                                case MARKED_AS_FINISHED:
+                                    if (isConsumer) {
+                                        builder.setContentText("1 Offer is marked as finished.");
+                                    }
+                                    else {
+                                        return;
+                                    }
+                                case FINISHED:
+                                    if (isConsumer) {
+                                        return;
+                                    }
+                                    else {
+                                        builder.setContentText("1 Offer officially finished.");
+                                        break;
+                                    }
+                                default:
+                                    return;
+                            }
+
+                            builder.setContentTitle("Heymate Offers");
+                            builder.setAutoCancel(true);
+                            builder.setColor(ContextCompat.getColor(ApplicationLoader.applicationContext, R.color.ht_theme));
+                            builder.setCategory(NotificationCompat.CATEGORY_EVENT);
+                            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+                            builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+
+                            Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+                            intent.setData(Uri.parse("heymate://myschedule/"));
+                            builder.setContentIntent(PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                            if (Build.VERSION.SDK_INT >= 26) {
+                                NotificationsController.getInstance(UserConfig.selectedAccount).ensureGroupsCreated();
+                                builder.setChannelId("other" + UserConfig.selectedAccount);
+                            }
+
+                            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(new Random().nextInt(213), builder.build());
+                        } catch (Throwable t) { }
+                    }
+                });
+            });
+        }
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage message) {
         String from = message.getFrom();
         final Map data = message.getData();
+
+        if (data.containsKey("pinpoint.notification.title") && "Offer Status Updated.".equals(data.get("pinpoint.notification.title"))) {
+            handleHeymateNotification(data);
+            return;
+        }
+
         final long time = message.getSentTime();
         final long receiveTime = SystemClock.elapsedRealtime();
         if (BuildVars.LOGS_ENABLED) {

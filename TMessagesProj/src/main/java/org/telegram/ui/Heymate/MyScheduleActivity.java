@@ -57,6 +57,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
     private static final String PLACEHOLDER_SUB_CATEGORY = "{sub_category}";
     private static final String PLACEHOLDER_TIME_DIFF = "{time_diff}";
+    private static final String PLACEHOLDER_TIME_DIFF_DAY = "{time_diff_d}";
     private static final String PLACEHOLDER_TIME_DIFF_HOUR = "{time_diff_h}";
     private static final String PLACEHOLDER_TIME_DIFF_MINUTE = "{time_diff_m}";
 
@@ -139,9 +140,13 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
     }
 
     private void bindAdapter(RecyclerListView listView, int position) {
-        ScheduleAdapter adapter = new ScheduleAdapter(listView, position == 0);
-        listView.setAdapter(adapter);
-        mAdapters.add(adapter);
+        if (listView.getAdapter() == null) {
+            ScheduleAdapter adapter = new ScheduleAdapter(listView, position == 0);
+            listView.setAdapter(adapter);
+            mAdapters.add(adapter);
+        }
+
+        ((ScheduleAdapter) listView.getAdapter()).getData();
     }
 
     @Override
@@ -276,6 +281,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                     ScheduleItem item = (ScheduleItem) mListView.getChildAt(i);
 
                     if (timeSlot.getId().equals(item.mTimeSlot.getId())) {
+                        item.setTimeSlot(timeSlot);
                         item.setOffer(mOffers.get(timeSlot.getId()));
                     }
                 }
@@ -429,6 +435,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             super(context);
             setWillNotDraw(false);
 
+            setPageWidth(140);
+            setPageHeight(239.7f);
             LayoutInflater.from(context).inflate(R.layout.item_schedule, this, true);
             addSequences(R.xml.sequences_item_schedule);
 
@@ -437,6 +445,9 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             mTextInfo = findViewById(R.id.text_info);
             mButtonLeft = findViewById(R.id.button_left);
             mButtonRight = findViewById(R.id.button_right);
+
+            mTextName.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            mTextInfo.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
 
             mButtonLeft.setText(Texts.get(Texts.CANCEL));
             mButtonLeft.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
@@ -535,6 +546,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 switch (status) {
                     case BOOKED:
                         mButtonLeft.setVisibility(VISIBLE);
+                        enableLeft();
                         if (mIsMyOffer) {
                             setRightPositive();
                             mButtonRight.setText(Texts.get(Texts.START));
@@ -556,6 +568,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                         }
                         else {
                             mButtonLeft.setVisibility(VISIBLE);
+                            enableLeft();
                             setRightPositive();
                             mButtonRight.setText(Texts.get(Texts.CONFIRM));
                             mButtonRight.setOnClickListener(v -> confirmStarted());
@@ -606,14 +619,33 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
         private void setRightPositive() {
             mButtonRight.setVisibility(VISIBLE);
+            mButtonRight.setEnabled(true);
+            mButtonRight.setAlpha(1);
             mButtonRight.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
             mButtonRight.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(getContext(), R.color.ht_theme)));
         }
 
         private void setRightNeutral() {
             mButtonRight.setVisibility(VISIBLE);
+            mButtonRight.setEnabled(true);
+            mButtonRight.setAlpha(1);
             mButtonRight.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
             mButtonRight.setBackground(Theme.createBorderRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_divider)));
+        }
+
+        private void disableRight() {
+            mButtonRight.setEnabled(false);
+            mButtonRight.setAlpha(0.5f);
+        }
+
+        private void disableLeft() {
+            mButtonLeft.setEnabled(false);
+            mButtonLeft.setAlpha(0.5f);
+        }
+
+        private void enableLeft() {
+            mButtonLeft.setEnabled(true);
+            mButtonLeft.setAlpha(1);
         }
 
         @Override
@@ -635,26 +667,39 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
         private void markAsStarted() {
             HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.MARKED_AS_STARTED);
+            disableLeft();
+            disableRight();
             // TODO
         }
 
         private void confirmStarted() {
             HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
+            disableLeft();
+            disableRight();
             // TODO
         }
 
         private void markAsFinished() {
             HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.MARKED_AS_FINISHED);
+            disableLeft();
+            disableRight();
             // TODO
         }
 
         private void confirmFinished() {
             HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
+            disableLeft();
+            disableRight();
             // TODO
         }
 
         private void showDetails() {
             // TODO
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         }
 
         @Override
@@ -696,8 +741,13 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             diff = 0;
         }
 
-        int hours = (int) (diff / ONE_HOUR);
+        int days = (int) (diff / ONE_DAY);
+        int hours = (int) ((diff % ONE_DAY) / ONE_HOUR);
         int minutes = (int) ((diff % ONE_HOUR) / ONE_MINUTE);
+
+        if (days > 0) {
+            return Texts.get(Texts.TIME_DIFF_DAY).toString().replace(PLACEHOLDER_TIME_DIFF_DAY, String.valueOf(hours));
+        }
 
         return hours > 0 ?
                 Texts.get(Texts.TIME_DIFF_HOUR).toString().replace(PLACEHOLDER_TIME_DIFF_HOUR, String.valueOf(hours)) :
