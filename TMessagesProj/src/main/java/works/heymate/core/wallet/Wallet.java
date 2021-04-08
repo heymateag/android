@@ -29,7 +29,7 @@ public class Wallet {
     private static final String TAG = "Wallet";
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
-    private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? "0x81f78BE17d801fEddF9C314691d17aa6F6C00EF4" : null;
+    private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? "0x2d2F27714F80E1d49A439Cf4A14D6fB6140E70B8" : null;
 
     private static final String PREFERENCES = "heymate_celo_1"; // TODO clear preferences name
     private static final String KEY_PUBLIC_KEY = "public_key";
