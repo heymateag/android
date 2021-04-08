@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.api.ApiException;
+import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -51,10 +53,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import works.heymate.celo.CeloError;
+import works.heymate.celo.CeloException;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
+import works.heymate.core.wallet.Wallet;
 
 public class MyScheduleActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
+
+    private static final String TAG = "MyScheduleActivity";
 
     private static final String PLACEHOLDER_SUB_CATEGORY = "{sub_category}";
     private static final String PLACEHOLDER_TIME_DIFF = "{time_diff}";
@@ -661,11 +668,53 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             }
 
             if (v == mButtonLeft) {
-                HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
-                disableLeft();
-                disableRight();
+                cancel();
                 return;
             }
+        }
+
+        private void cancel() {
+            if (mOffer == null || mTimeSlot == null) {
+                return;
+            }
+
+            AlertDialog loading = new AlertDialog(getContext(), 3);
+            loading.setCanCacnel(false);
+            loading.show();
+
+            Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
+
+            boolean cancelledByConsumer = mTimeSlot.getClientUserId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId));
+
+            wallet.cancelOffer(mOffer, mTimeSlot, cancelledByConsumer, (success, errorCause) -> {
+                loading.dismiss();
+
+                if (success) {
+                    HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
+                }
+                else {
+                    Log.e(TAG, "Failed to start offer", errorCause);
+
+                    if (errorCause != null) {
+                        CeloError coreError = errorCause.getMainCause().getError();
+
+                        if (coreError == CeloError.NETWORK_ERROR) {
+                            Toast.makeText(getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+//            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
+            disableLeft();
+            disableRight();
+            // TODO
         }
 
         private void markAsStarted() {
@@ -676,7 +725,42 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         }
 
         private void confirmStarted() {
-            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
+            if (mOffer == null || mTimeSlot == null) {
+                return;
+            }
+
+            AlertDialog loading = new AlertDialog(getContext(), 3);
+            loading.setCanCacnel(false);
+            loading.show();
+
+            Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
+
+            wallet.startOffer(mOffer, mTimeSlot, (success, errorCause) -> {
+                loading.dismiss();
+
+                if (success) {
+                    HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
+                }
+                else {
+                    Log.e(TAG, "Failed to start offer", errorCause);
+
+                    if (errorCause != null) {
+                        CeloError coreError = errorCause.getMainCause().getError();
+
+                        if (coreError == CeloError.NETWORK_ERROR) {
+                            Toast.makeText(getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+//            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
             disableLeft();
             disableRight();
             // TODO
@@ -690,7 +774,42 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         }
 
         private void confirmFinished() {
-            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
+            if (mOffer == null || mTimeSlot == null) {
+                return;
+            }
+
+            AlertDialog loading = new AlertDialog(getContext(), 3);
+            loading.setCanCacnel(false);
+            loading.show();
+
+            Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
+
+            wallet.finishOffer(mOffer, mTimeSlot, (success, errorCause) -> {
+                loading.dismiss();
+
+                if (success) {
+                    HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
+                }
+                else {
+                    Log.e(TAG, "Failed to start offer", errorCause);
+
+                    if (errorCause != null) {
+                        CeloError coreError = errorCause.getMainCause().getError();
+
+                        if (coreError == CeloError.NETWORK_ERROR) {
+                            Toast.makeText(getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+//            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
             disableLeft();
             disableRight();
             // TODO

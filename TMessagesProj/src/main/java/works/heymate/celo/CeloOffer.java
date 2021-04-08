@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.util.Log;
 import org.celo.contractkit.ContractKit;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 import org.web3j.crypto.Sign;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import works.heymate.celo.contract.Offer;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.core.wallet.Wallet;
 
 public class CeloOffer {
 
@@ -33,7 +35,9 @@ public class CeloOffer {
         mContract = Offer.load(address, contractKit.web3j, contractKit.transactionManager, new DefaultGasProvider());
     }
 
-    public String createOfferSignature(String rate, String termsConfig) throws Exception {
+    public String createOfferSignature(String address, String rate, String termsConfig) throws Exception {
+        byte[] serviceProviderAddress = Numeric.hexStringToByteArray(address);
+
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(rate) * 100));
 
         JSONObject configJSON = new JSONObject(termsConfig);
@@ -41,7 +45,7 @@ public class CeloOffer {
         BigInteger initialDeposit = new BigInteger(configJSON.getString(OfferUtils.INITIAL_DEPOSIT));
         BigInteger[] config = getConfig(configJSON).toArray(new BigInteger[0]);
 
-        Sign.SignatureData signatureData = Sign.signPrefixedMessage(getBytes(amount, initialDeposit, config), mContractKit.transactionManager.getCredentials().getEcKeyPair());
+        Sign.SignatureData signatureData = Sign.signPrefixedMessage(getBytes(serviceProviderAddress, amount, initialDeposit, config), mContractKit.transactionManager.getCredentials().getEcKeyPair());
 
         byte[] signature = getBytes(signatureData.getV(), signatureData.getR(), signatureData.getS());
 
@@ -64,16 +68,16 @@ public class CeloOffer {
     serviceProviderAddress: string
     serviceProviderSignature: string
      */
-    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress, long startTime) throws CeloException, JSONException {
-        byte[] tradeId = new byte[16];
+    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress, TimeSlot timeSlot) throws CeloException, JSONException {
+        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
         new SecureRandom().nextBytes(tradeId);
 
-        try {
-            BigInteger balance = mContractKit.contracts.getStableToken().balanceOf(consumerAddress).send();
-            Log.d("AAA", "Balance is: " + balance);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            BigInteger balance = mContractKit.contracts.getStableToken().balanceOf(consumerAddress).send();
+//            Log.d("AAA", "Balance is: " + balance);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 
@@ -88,6 +92,7 @@ public class CeloOffer {
 
         try {
             mContractKit.contracts.getStableToken().approve(mContract.getContractAddress(), amount).send();
+            mContractKit.contracts.getStableToken().transfer(mContract.getContractAddress(), amount).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(CeloError.INSUFFICIENT_BALANCE, e);
@@ -102,13 +107,68 @@ public class CeloOffer {
                     amount,
                     BigInteger.ONE, // fee
                     BigInteger.valueOf(offer.getExpiry().toDate().getTime() / 1000),
-                    BigInteger.valueOf(startTime),
+                    BigInteger.valueOf(timeSlot.getStartTime()),
                     initialDeposit,
                     userAddresses,
                     config,
-                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature()),
-                    amount
+                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature())
             ).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
+    }
+
+    public void startService(org.telegram.ui.Heymate.AmplifyModels.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
+        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
+
+        try {
+            mContract.startService(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
+    }
+
+    public void finishService(org.telegram.ui.Heymate.AmplifyModels.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
+        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
+
+        try {
+            mContract.release(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE, amount).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
+    }
+
+    public void cancelService(org.telegram.ui.Heymate.AmplifyModels.Offer offer, TimeSlot timeSlot, String consumerAddress, boolean consumerCancelled) throws CeloException {
+        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
+
+        try {
+            if (consumerCancelled) {
+                mContract.consumerCancel(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
+            }
+            else {
+                mContract.serviceProviderCancel(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
+            }
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(null, e);

@@ -199,19 +199,19 @@ public class HeymatePayment {
     }
 
     private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-        String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
-        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
-
-        new AlertDialog.Builder(fragment.getParentActivity())
-                .setTitle("Offer accepted")
-                .setMessage("You can check the state of your offer in My Schedule.")
-                .setCancelable(false)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
-
-        if (fragment != null) {
-            return;
-        }
+//        String uid = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
+//        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), uid);
+//
+//        new AlertDialog.Builder(fragment.getParentActivity())
+//                .setTitle("Offer accepted")
+//                .setMessage("You can check the state of your offer in My Schedule.")
+//                .setCancelable(false)
+//                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+//                .show();
+//
+//        if (fragment != null) {
+//            return;
+//        }
 
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
         loadingDialog.setCanCacnel(false);
@@ -219,17 +219,16 @@ public class HeymatePayment {
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
-        wallet.createAcceptedOffer(offer, timeSlot.getStartTime(), (success, errorCause) -> {
+        wallet.createAcceptedOffer(offer, timeSlot, (success, errorCause) -> {
             loadingDialog.dismiss();
 
             if (success) {
-//                String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
-//                HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
+                String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
+                HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
 
-                // TODO
                 new AlertDialog.Builder(fragment.getParentActivity())
                         .setTitle("Offer accepted")
-                        .setMessage("You can check the state of your offer in offers > my schedule.")
+                        .setMessage("You can check the state of your offer in My Schedule.")
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                         .show();

@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class Wallet {
     private static final String TAG = "Wallet";
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
-    private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? "0x8f505C6909271DDAAA1193831eB475E45Feb1400" : null;
+    private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? "0x81f78BE17d801fEddF9C314691d17aa6F6C00EF4" : null;
 
     private static final String PREFERENCES = "heymate_celo_1"; // TODO clear preferences name
     private static final String KEY_PUBLIC_KEY = "public_key";
@@ -235,7 +236,7 @@ public class Wallet {
                 }
 
                 try {
-                    String signature = mCeloOffer.createOfferSignature(rate, termsConfig);
+                    String signature = mCeloOffer.createOfferSignature(mCeloSDK.getAddress(), rate, termsConfig);
 
                     Utils.runOnUIThread(() -> callback.onSignResult(true, signature, null));
                 } catch (Exception e) {
@@ -248,7 +249,7 @@ public class Wallet {
         });
     }
 
-    public void createAcceptedOffer(Offer offer, long startTime, AcceptOfferCallback callback) {
+    public void createAcceptedOffer(Offer offer, TimeSlot timeSlot, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -258,14 +259,87 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.create(offer, getAddress(), startTime);
+                    mCeloOffer.create(offer, getAddress(), timeSlot);
 
-                    Utils.runOnUIThread(() -> callback.onAcceptOfferResult(true, null));
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
-                    Utils.runOnUIThread(() -> callback.onAcceptOfferResult(false, exception));
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
                 } catch (JSONException e) {
-                    Utils.runOnUIThread(() -> callback.onAcceptOfferResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }
+            }
+        });
+    }
+
+    public void startOffer(Offer offer, TimeSlot timeSlot, OfferOperationCallback callback) {
+        ensureCeloSDK();
+
+        mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
+            if (contractKit != null) {
+                if (mCeloOffer == null) {
+                    mCeloOffer = new CeloOffer(OFFER_ADDRESS, contractKit);
+                }
+
+                try {
+                    mCeloOffer.startService(offer, timeSlot, getAddress());
+
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
+                } catch (CeloException exception) {
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
+                }
+            }
+        });
+    }
+
+    public void finishOffer(Offer offer, TimeSlot timeSlot, OfferOperationCallback callback) {
+        ensureCeloSDK();
+
+        mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
+            if (contractKit != null) {
+                if (mCeloOffer == null) {
+                    mCeloOffer = new CeloOffer(OFFER_ADDRESS, contractKit);
+                }
+
+                try {
+                    mCeloOffer.finishService(offer, timeSlot, getAddress());
+
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
+                } catch (CeloException exception) {
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
+                }
+            }
+        });
+    }
+
+    public void cancelOffer(Offer offer, TimeSlot timeSlot, boolean consumerCancelled, OfferOperationCallback callback) {
+        ensureCeloSDK();
+
+        mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
+            if (contractKit != null) {
+                if (mCeloOffer == null) {
+                    mCeloOffer = new CeloOffer(OFFER_ADDRESS, contractKit);
+                }
+
+                try {
+                    mCeloOffer.cancelService(offer, timeSlot, getAddress(), consumerCancelled);
+
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
+                } catch (CeloException exception) {
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
+                }
+            }
+        });
+    }
+
+    public void getBalance(BalanceCallback callback) {
+        ensureCeloSDK();
+
+        mCeloSDK.getBalance((success, rawCUSD, rawGold, cUSDCents, gold, errorCause) -> {
+            if (success) {
+                callback.onBalanceQueryResult(true, cUSDCents, null);
+            }
+            else {
+                callback.onBalanceQueryResult(false, 0, errorCause);
             }
         });
     }

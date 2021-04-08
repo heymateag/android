@@ -137,6 +137,26 @@ public class OffersActivity extends BaseFragment {
         return fragmentView;
     }
 
+    private void checkBalance() {
+        Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
+
+        if (!wallet.isCreated()) {
+            mTextStatus.setText("Current balance is: [No wallet detected]");
+        }
+        else {
+            mTextStatus.setText("Current balance is:");
+
+            wallet.getBalance((success, cents, errorCause) -> {
+                if (success) {
+                    mTextStatus.setText("Current balance is: $" + (cents / 100f));
+                }
+                else {
+                    mTextStatus.setText("Current balance is: [Connection problem]");
+                }
+            });
+        }
+    }
+
     private void onActiveOffersUpdated(int activeOffers) {
         String activeOffersStatus = Texts.get(Texts.OFFERS_ACTIVE_OFFERS).toString().replace(ACTIVE_OFFERS_PLACE_HOLDER, String.valueOf(activeOffers));
 
@@ -259,6 +279,8 @@ public class OffersActivity extends BaseFragment {
         offersLayout.removeAllViews();
         ArrayList<OfferDto> offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
         addOffersToLayout(offers);
+
+        checkBalance();
     }
 
     public void setStatusFilter(String status) {
