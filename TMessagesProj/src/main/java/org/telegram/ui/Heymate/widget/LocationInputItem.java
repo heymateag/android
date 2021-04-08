@@ -29,7 +29,11 @@ import androidx.core.content.res.ResourcesCompat;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -63,6 +67,8 @@ public class LocationInputItem extends ExpandableItem {
     }
 
     private AppCompatAutoCompleteTextView mInputAddress;
+    private Marker mSelectedLocation = null;
+
     private MapView mMapView;
 
     private GoogleMap mMap;
@@ -81,11 +87,15 @@ public class LocationInputItem extends ExpandableItem {
 
         String address = mInputAddress.getText().toString().trim();
 
-        if (address.length() == 0) {
+        if (address.length() == 0 || mSelectedLocation == null) {
             return null;
         }
 
-        return new LocationInfo(address, mLocation.latitude, mLocation.longitude);
+        return new LocationInfo(
+                address,
+                mSelectedLocation.getPosition().latitude,
+                mSelectedLocation.getPosition().longitude
+        );
     }
 
     public void setLocationInfo(LocationInfo locationInfo) {
@@ -94,7 +104,15 @@ public class LocationInputItem extends ExpandableItem {
 
     public void setLocationInfo(String address, double latitude, double longitude) {
         mInputAddress.setText(address);
+
         mLocation = new LatLng(latitude, longitude);
+
+        if (mSelectedLocation != null) {
+            mSelectedLocation.setPosition(mLocation);
+        }
+        else {
+            putMarker(mLocation);
+        }
 
         if (mMap != null) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 13));
@@ -222,9 +240,9 @@ public class LocationInputItem extends ExpandableItem {
         };
         content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, 20, 48, 20, 18));
 
-        ImageView imagePin = new ImageView(getContext());
-        imagePin.setImageResource(R.drawable.map_pin);
-        content.addView(imagePin, LayoutHelper.createFrame(26, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 98));
+//        ImageView imagePin = new ImageView(getContext());
+//        imagePin.setImageResource(R.drawable.map_pin);
+//        content.addView(imagePin, LayoutHelper.createFrame(26, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 98));
 
         return content;
     }
@@ -268,7 +286,30 @@ public class LocationInputItem extends ExpandableItem {
             }
 
             googleMap.setOnCameraIdleListener(() -> mLocation = mMap.getCameraPosition().target);
+            googleMap.setOnMapClickListener(latLng -> {
+                if (mSelectedLocation != null) {
+                    mSelectedLocation.setPosition(latLng);
+                }
+                else {
+                    putMarker(latLng);
+                }
+
+            });
         });
+    }
+
+    private void putMarker(LatLng latLng) {
+        if (mMap == null) {
+            return;
+        }
+
+        MarkerOptions options = new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin))
+                .anchor(0.5f, 1)
+                .draggable(true);
+
+        mSelectedLocation = mMap.addMarker(options);
     }
 
     @Override
