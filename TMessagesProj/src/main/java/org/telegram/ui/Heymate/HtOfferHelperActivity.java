@@ -94,9 +94,10 @@ public class HtOfferHelperActivity extends BaseFragment {
         mainLayout.addView(text1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,17,15,7));
 
         TextView text2 = new TextView(context);
-        text2.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit,\nsed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        text2.setText("An offer is an intent to sell a service, product or  asset made by a seller to one or more potential customers.");
         text2.setMinLines(2);
         text2.setTextSize(14);
+        text2.setGravity(Gravity.CENTER);
         text2.setTextColor(Theme.getColor(Theme.key_wallet_grayText2));
         mainLayout.addView(text2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 15,17,15,17));
 

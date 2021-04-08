@@ -533,11 +533,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         });
 
         termsInputCell = new HtTermsInputCell(context,this,  LocaleController.getString("HtTermsAndConditions", R.string.HtTermsAndConditions), termsArgs, R.drawable.ht_pplicy, canEdit);
-        termsInputCell.setRes(ARGUMENTS_TERMS, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0);
+        termsInputCell.setRes(ARGUMENTS_TERMS, Texts.get(Texts.CREATE_OFFER_SERVICE_PROVIDER_TERMS), 0);
         mainLayout.addView(termsInputCell);
 
         LinearLayout alertLayout = new LinearLayout(context);

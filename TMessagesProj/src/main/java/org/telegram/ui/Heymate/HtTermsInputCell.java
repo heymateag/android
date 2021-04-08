@@ -24,6 +24,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.HashMap;
 
+import works.heymate.core.Texts;
+
 public class HtTermsInputCell extends LinearLayout {
 
     private String title;
@@ -153,7 +155,7 @@ public class HtTermsInputCell extends LinearLayout {
         selectedTermsLayout.setGravity(Gravity.CENTER);
 
         TextView heymateTerms = new TextView(context);
-        heymateTerms.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        heymateTerms.setText(Texts.get(Texts.CREATE_OFFER_HEYMATE_TERMS));
         heymateTerms.setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
         heymateTerms.setPaintFlags(heymateTerms.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         heymateTerms.setTypeface(heymateTerms.getTypeface(), Typeface.BOLD);

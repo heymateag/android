@@ -45,6 +45,9 @@ public class Texts {
     public static final String OFFERS = "offers";
     public static final String OFFERS_ACTIVE_OFFERS = "offers_active_offers";
 
+    public static final String CREATE_OFFER_HEYMATE_TERMS = "create_offer_heymate_terms";
+    public static final String CREATE_OFFER_SERVICE_PROVIDER_TERMS = "create_offer_service_provider_terms";
+
     public static final String MY_SCHEDULE = "my_schedule";
     public static final String MY_SCHEDULE_OFFERS = "my_schedule_offers";
     public static final String MY_SCHEDULE_ORDERS = "my_schedule_orders";
