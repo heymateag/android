@@ -41,6 +41,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
@@ -169,6 +170,8 @@ import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtFiltersCell;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -267,6 +270,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private float additionalFloatingTranslation;
     private float floatingButtonTranslation;
     private float floatingButtonHideProgress;
+    private Drawable floatingButtonNewMessageBackground;
+    private Drawable floatingButtonNewShopBackground;
 
     private AnimatorSet searchAnimator;
     private Animator tabsAlphaAnimator;
@@ -2856,9 +2861,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         floatingButtonContainer.setVisibility(onlySelect || folderId != 0 ? View.GONE : View.VISIBLE);
         contentView.addView(floatingButtonContainer, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 4 : 0, 0, LocaleController.isRTL ? 0 : 4, 0));
         floatingButtonContainer.setOnClickListener(v -> {
-            Bundle args = new Bundle();
-            args.putBoolean("destroyAfterSelect", true);
-            presentFragment(new ContactsActivity(args));
+            if (floatingButtonIsShop) {
+                // TODO open create shop
+            }
+            else {
+                Bundle args = new Bundle();
+                args.putBoolean("destroyAfterSelect", true);
+                presentFragment(new ContactsActivity(args));
+            }
         });
 
 
@@ -2872,7 +2882,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
         }
-        floatingButton.setBackgroundDrawable(drawable);
+        floatingButtonNewMessageBackground = drawable;
+        drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), ContextCompat.getColor(context, R.color.ht_theme), ContextCompat.getColor(context, R.color.ht_theme));
+        if (Build.VERSION.SDK_INT < 21) {
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
+            combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+            drawable = combinedDrawable;
+        }
+        floatingButtonNewShopBackground = drawable;
+        floatingButton.setBackground(floatingButtonNewMessageBackground);
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
         floatingButton.setAnimation(R.raw.write_contacts_fab_icon, 52, 52);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -3386,15 +3406,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (viewPages[a].selectedType == Integer.MAX_VALUE) {
             viewPages[a].dialogsType = 0;
             viewPages[a].listView.updatePullState();
-
+            convertFloatingButton(false);
         } else if (viewPages[a].selectedType == Integer.MAX_VALUE - 1) {
             htFiltersCell.setVisibility(View.VISIBLE);
             viewPages[a].dialogsType = Integer.MAX_VALUE - 1;
             viewPages[a].listView.updatePullState();
+            convertFloatingButton(true);
         } else {
             if (viewPages[a].selectedType == Integer.MAX_VALUE - 1) {
 
             } else {
+                convertFloatingButton(false);
                 MessagesController.DialogFilter filter = getMessagesController().dialogFilters.get(viewPages[a].selectedType);
                 if (viewPages[a == 0 ? 1 : 0].dialogsType == 7) {
                     viewPages[a].dialogsType = 8;
@@ -5883,6 +5905,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         } else if (dialogsType == 9) {
             return messagesController.dialogsForBlock;
+        } else if (dialogsType == Integer.MAX_VALUE - 1) {
+            // TODO Shops are here
+            final List<Long> shops = Arrays.asList(348289536L, 541980570L);
+            ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(shops.size());
+            for (long id: shops) {
+                TLRPC.Dialog dialog = messagesController.dialogs_dict.get(id);
+
+                if (dialog != null) {
+                    dialogs.add(dialog);
+                }
+            }
+            return dialogs;
         }
         return null;
     }
@@ -5931,6 +5965,45 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         animatorSet.setDuration(300);
         animatorSet.setInterpolator(floatingInterpolator);
         floatingButtonContainer.setClickable(!hide);
+        animatorSet.start();
+    }
+
+    boolean floatingButtonIsShop;
+    float floatingButtonConvertProgress = 0;
+    boolean floatingButtonBackgroundIsShop;
+    private void convertFloatingButton(boolean shop) {
+        if (floatingButtonIsShop == shop) {
+            return;
+        }
+        floatingButtonBackgroundIsShop = floatingButtonIsShop;
+        floatingButtonIsShop = shop;
+        AnimatorSet animatorSet = new AnimatorSet();
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(floatingButtonConvertProgress, shop ? 1f : 0f);
+        valueAnimator.addUpdateListener(animation -> {
+            floatingButtonConvertProgress = (float) animation.getAnimatedValue();
+            if (floatingButtonConvertProgress < 0.5f) {
+                floatingButton.setScaleX(1 - floatingButtonConvertProgress * 2);
+                floatingButton.setScaleY(1 - floatingButtonConvertProgress * 2);
+                if (floatingButtonBackgroundIsShop) {
+                    floatingButtonBackgroundIsShop = false;
+                    floatingButton.setBackground(floatingButtonNewMessageBackground);
+                    floatingButton.setAnimation(R.raw.write_contacts_fab_icon, 52, 52);
+                }
+            }
+            else {
+                floatingButton.setScaleX(floatingButtonConvertProgress * 2 - 1);
+                floatingButton.setScaleY(floatingButtonConvertProgress * 2 - 1);
+                if (!floatingButtonBackgroundIsShop) {
+                    floatingButtonBackgroundIsShop = true;
+                    floatingButton.setBackground(floatingButtonNewShopBackground);
+                    floatingButton.setImageResource(R.drawable.offer);
+                }
+            }
+            updateFloatingButtonOffset();
+        });
+        animatorSet.playTogether(valueAnimator);
+        animatorSet.setDuration(300);
+        animatorSet.setInterpolator(floatingInterpolator);
         animatorSet.start();
     }
 
