@@ -5999,7 +5999,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (!floatingButtonBackgroundIsShop) {
                     floatingButtonBackgroundIsShop = true;
                     floatingButton.setBackground(floatingButtonNewShopBackground);
-                    floatingButton.setImageResource(R.drawable.offer);
+                    floatingButton.setImageResource(R.drawable.ic_addshop);
                 }
             }
             updateFloatingButtonOffset();
