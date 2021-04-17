@@ -177,9 +177,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private boolean canShowFilterTabsView;
     private boolean filterTabsViewIsVisible;
-    private HtFiltersCell htFiltersCell;
 
     private class ViewPage extends FrameLayout {
+        private HtFiltersCell htFiltersCell;
         private DialogsRecyclerView listView;
         private LinearLayoutManager layoutManager;
         private DialogsAdapter dialogsAdapter;
@@ -1471,7 +1471,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                         parentPage.listView.smoothScrollBy(0, -AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78 : 72));
                                     }
                                 }
-                                ArrayList<TLRPC.Dialog> dialogs = getDialogsArray(currentAccount, parentPage.dialogsType == Integer.MAX_VALUE - 1 ? 0 : parentPage.dialogsType, folderId, false);
+                                ArrayList<TLRPC.Dialog> dialogs = getDialogsArray(currentAccount, parentPage.dialogsType, folderId, false);
                                 frozenDialogsList.add(0, dialogs.get(0));
                             } else if (added == 1) {
                                 RecyclerView.ViewHolder holder = parentPage.listView.findViewHolderForAdapterPosition(0);
@@ -2305,7 +2305,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPage.dialogsType = initialDialogsType;
             viewPages[a] = viewPage;
 
-            viewPage.listView = new DialogsRecyclerView(context, viewPage);
+            viewPage.listView = new DialogsRecyclerView(context, viewPage) {
+
+                @Override
+                public void setPadding(int left, int top, int right, int bottom) {
+                    super.setPadding(left, top, right, bottom);
+                    ((ViewGroup.MarginLayoutParams) viewPage.htFiltersCell.getLayoutParams()).topMargin = top;
+                }
+
+            };
             viewPage.listView.setClipToPadding(false);
             viewPage.listView.setPivotY(0);
             viewPage.dialogsItemAnimator = new DialogsItemAnimator() {
@@ -2510,14 +2518,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPage.layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             viewPage.listView.setLayoutManager(viewPage.layoutManager);
             viewPage.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? RecyclerListView.SCROLLBAR_POSITION_LEFT : RecyclerListView.SCROLLBAR_POSITION_RIGHT);
-            LinearLayout mainLayout = new LinearLayout(context);
-            mainLayout.setOrientation(LinearLayout.VERTICAL);
-            htFiltersCell = new HtFiltersCell(context);
-            htFiltersCell.setBaseFragment(this);
-            htFiltersCell.setVisibility(View.GONE);
-            mainLayout.addView(htFiltersCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0,80,0,0));
-            mainLayout.addView(viewPage.listView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0, 0, 0, 0));
-            viewPage.addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            viewPage.addView(viewPage.listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             viewPage.listView.setOnItemClickListener((view, position) -> onItemClick(view, position, viewPage.dialogsAdapter));
             viewPage.listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListenerExtended() {
                 @Override
@@ -2543,6 +2544,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPage.itemTouchhelper = new ItemTouchHelper(viewPage.swipeController);
             viewPage.itemTouchhelper.attachToRecyclerView(viewPage.listView);
 
+            viewPage.htFiltersCell = new HtFiltersCell(context);
+            viewPage.htFiltersCell.setBaseFragment(this);
+            viewPage.htFiltersCell.setVisibility(View.VISIBLE);
+            viewPage.htFiltersCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            viewPage.addView(viewPage.htFiltersCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.TOP));
+
             viewPage.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
                 private boolean wasManualScroll;
@@ -2565,16 +2572,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 updatePullAfterScroll = false;
                             }
                         }
-                        if (viewPages[0].selectedType != Integer.MAX_VALUE - 1) {
-                            if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && viewPages[0].listView == recyclerView) {
-                                int scrollY = (int) -actionBar.getTranslationY();
-                                int actionBarHeight = ActionBar.getCurrentActionBarHeight();
-                                if (scrollY != 0 && scrollY != actionBarHeight) {
-                                    if (scrollY < actionBarHeight / 2) {
-                                        recyclerView.smoothScrollBy(0, -scrollY);
-                                    } else if (viewPages[0].listView.canScrollVertically(1)) {
-                                        recyclerView.smoothScrollBy(0, actionBarHeight - scrollY);
-                                    }
+                        if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && viewPages[0].listView == recyclerView) {
+                            int scrollY = (int) -actionBar.getTranslationY();
+                            int actionBarHeight = ActionBar.getCurrentActionBarHeight();
+                            if (scrollY != 0 && scrollY != actionBarHeight) {
+                                if (scrollY < actionBarHeight / 2) {
+                                    recyclerView.smoothScrollBy(0, -scrollY);
+                                } else if (viewPages[0].listView.canScrollVertically(1)) {
+                                    recyclerView.smoothScrollBy(0, actionBarHeight - scrollY);
                                 }
                             }
                         }
@@ -2612,36 +2617,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             }
                         }
                     }
-                    if (viewPages[0].selectedType != Integer.MAX_VALUE - 1) {
-
-                        if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && recyclerView == viewPages[0].listView && !searching && !actionBar.isActionModeShowed() && !disableActionBarScrolling && filterTabsViewIsVisible) {
-                            if (dy > 0 && hasHiddenArchive() && viewPages[0].dialogsType == 0) {
-                                View child = recyclerView.getChildAt(0);
-                                if (child != null) {
-                                    RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(child);
-                                    if (holder.getAdapterPosition() == 0) {
-                                        int visiblePartAfterScroll = child.getMeasuredHeight() + (child.getTop() - recyclerView.getPaddingTop());
-                                        if (visiblePartAfterScroll + dy > 0) {
-                                            if (visiblePartAfterScroll < 0) {
-                                                dy = -visiblePartAfterScroll;
-                                            } else {
-                                                return;
-                                            }
+                    if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && recyclerView == viewPages[0].listView && !searching && !actionBar.isActionModeShowed() && !disableActionBarScrolling && filterTabsViewIsVisible) {
+                        if (dy > 0 && hasHiddenArchive() && viewPages[0].dialogsType == 0) {
+                            View child = recyclerView.getChildAt(0);
+                            if (child != null) {
+                                RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(child);
+                                if (holder.getAdapterPosition() == 0) {
+                                    int visiblePartAfterScroll = child.getMeasuredHeight() + (child.getTop() - recyclerView.getPaddingTop());
+                                    if (visiblePartAfterScroll + dy > 0) {
+                                        if (visiblePartAfterScroll < 0) {
+                                            dy = -visiblePartAfterScroll;
+                                        } else {
+                                            return;
                                         }
                                     }
                                 }
                             }
+                        }
 
-                            float currentTranslation = actionBar.getTranslationY();
-                            float newTranslation = currentTranslation - dy;
-                            if (newTranslation < -ActionBar.getCurrentActionBarHeight()) {
-                                newTranslation = -ActionBar.getCurrentActionBarHeight();
-                            } else if (newTranslation > 0) {
-                                newTranslation = 0;
-                            }
-                            if (newTranslation != currentTranslation) {
-                                setScrollY(newTranslation);
-                            }
+                        float currentTranslation = actionBar.getTranslationY();
+                        float newTranslation = currentTranslation - dy;
+                        if (newTranslation < -ActionBar.getCurrentActionBarHeight()) {
+                            newTranslation = -ActionBar.getCurrentActionBarHeight();
+                        } else if (newTranslation > 0) {
+                            newTranslation = 0;
+                        }
+                        if (newTranslation != currentTranslation) {
+                            setScrollY(newTranslation);
                         }
                     }
                 }
@@ -3396,7 +3398,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void switchToCurrentSelectedMode(boolean animated) {
-        htFiltersCell.setVisibility(View.GONE);
         for (int a = 0; a < viewPages.length; a++) {
             viewPages[a].listView.stopScroll();
         }
@@ -3404,28 +3405,26 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         RecyclerView.Adapter currentAdapter = viewPages[a].listView.getAdapter();
 
         if (viewPages[a].selectedType == Integer.MAX_VALUE) {
+            viewPages[a].htFiltersCell.setVisibility(View.INVISIBLE);
             viewPages[a].dialogsType = 0;
             viewPages[a].listView.updatePullState();
             convertFloatingButton(false);
         } else if (viewPages[a].selectedType == Integer.MAX_VALUE - 1) {
-            htFiltersCell.setVisibility(View.VISIBLE);
+            viewPages[a].htFiltersCell.setVisibility(View.VISIBLE);
             viewPages[a].dialogsType = Integer.MAX_VALUE - 1;
             viewPages[a].listView.updatePullState();
             convertFloatingButton(true);
         } else {
-            if (viewPages[a].selectedType == Integer.MAX_VALUE - 1) {
-
+            viewPages[a].htFiltersCell.setVisibility(View.INVISIBLE);
+            convertFloatingButton(false);
+            MessagesController.DialogFilter filter = getMessagesController().dialogFilters.get(viewPages[a].selectedType);
+            if (viewPages[a == 0 ? 1 : 0].dialogsType == 7) {
+                viewPages[a].dialogsType = 8;
             } else {
-                convertFloatingButton(false);
-                MessagesController.DialogFilter filter = getMessagesController().dialogFilters.get(viewPages[a].selectedType);
-                if (viewPages[a == 0 ? 1 : 0].dialogsType == 7) {
-                    viewPages[a].dialogsType = 8;
-                } else {
-                    viewPages[a].dialogsType = 7;
-                }
-                viewPages[a].listView.setScrollEnabled(true);
-                getMessagesController().selectDialogFilter(filter, viewPages[a].dialogsType == 8 ? 1 : 0);
+                viewPages[a].dialogsType = 7;
             }
+            viewPages[a].listView.setScrollEnabled(true);
+            getMessagesController().selectDialogFilter(filter, viewPages[a].dialogsType == 8 ? 1 : 0);
         }
         viewPages[a].dialogsAdapter.setDialogsType(viewPages[a].dialogsType);
         viewPages[a].layoutManager.scrollToPositionWithOffset(viewPages[a].dialogsType == 0 && hasHiddenArchive() ? 1 : 0, (int) actionBar.getTranslationY());
@@ -4181,7 +4180,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (viewPage.selectedType >= 0 && viewPage.selectedType < dialogFilters.size()) {
                 MessagesController.DialogFilter filter = getMessagesController().dialogFilters.get(viewPage.selectedType);
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED) == 0) {
-                    if (visibleItemCount > 0 && viewPage.layoutManager.findLastVisibleItemPosition() >= getDialogsArray(currentAccount, viewPage.dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPage.dialogsType, 1, dialogsListFrozen).size() - 10 ||
+                    if (visibleItemCount > 0 && viewPage.layoutManager.findLastVisibleItemPosition() >= getDialogsArray(currentAccount, viewPage.dialogsType, 1, dialogsListFrozen).size() - 10 ||
                             visibleItemCount == 0 && !getMessagesController().isDialogsEndReached(1)) {
                         loadArchivedFromCache = !getMessagesController().isDialogsEndReached(1);
                         if (loadArchivedFromCache || !getMessagesController().isServerDialogsEndReached(1)) {
@@ -4191,7 +4190,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
-        if (visibleItemCount > 0 && viewPage.layoutManager.findLastVisibleItemPosition() >= getDialogsArray(currentAccount, viewPage.dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPage.dialogsType, folderId, dialogsListFrozen).size() - 10 ||
+        if (visibleItemCount > 0 && viewPage.layoutManager.findLastVisibleItemPosition() >= getDialogsArray(currentAccount, viewPage.dialogsType, folderId, dialogsListFrozen).size() - 10 ||
                 visibleItemCount == 0 && (viewPage.dialogsType == 7 || viewPage.dialogsType == 8) && !getMessagesController().isDialogsEndReached(folderId)) {
             loadFromCache = !getMessagesController().isDialogsEndReached(folderId);
             if (loadFromCache || !getMessagesController().isServerDialogsEndReached(folderId)) {
@@ -4442,7 +4441,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return false;
         }
         DialogsAdapter dialogsAdapter = (DialogsAdapter) adapter;
-        ArrayList<TLRPC.Dialog> dialogs = getDialogsArray(currentAccount, dialogsType == Integer.MAX_VALUE - 1 ? 0 : dialogsType, folderId, dialogsListFrozen);
+        ArrayList<TLRPC.Dialog> dialogs = getDialogsArray(currentAccount, dialogsType, folderId, dialogsListFrozen);
         position = dialogsAdapter.fixPosition(position);
         if (position < 0 || position >= dialogs.size()) {
             return false;
@@ -4572,6 +4571,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (scrimView != null) {
             scrimView.getLocationInWindow(scrimViewLocation);
         }
+        int diff = (int) (value - actionBar.getTranslationY());
+
         actionBar.setTranslationY(value);
         if (filterTabsView != null) {
             filterTabsView.setTranslationY(value);
@@ -4580,6 +4581,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (viewPages != null) {
             for (int a = 0; a < viewPages.length; a++) {
                 viewPages[a].listView.setTopGlowOffset(viewPages[a].listView.getPaddingTop() + (int) value);
+                ((ViewGroup.MarginLayoutParams) viewPages[a].htFiltersCell.getLayoutParams()).topMargin += diff;
+                viewPages[a].htFiltersCell.requestLayout();
             }
         }
         fragmentView.invalidate();
@@ -4686,7 +4689,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         int pinnedCount = 0;
         ArrayList<TLRPC.Dialog> dialogs;
         if (viewPages[0].dialogsType == 7 || viewPages[0].dialogsType == 8) {
-            dialogs = getDialogsArray(currentAccount, viewPages[0].dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPages[0].dialogsType, folderId, dialogsListFrozen);
+            dialogs = getDialogsArray(currentAccount, viewPages[0].dialogsType, folderId, dialogsListFrozen);
         } else {
             dialogs = getMessagesController().getDialogs(folderId);
         }
@@ -4830,7 +4833,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     perfromSelectedDialogsAction(action, false);
                     getMessagesController().setDialogsInTransaction(false);
                     getMessagesController().checkIfFolderEmpty(folderId);
-                    if (folderId != 0 && getDialogsArray(currentAccount, viewPages[0].dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPages[0].dialogsType, folderId, false).size() == 0) {
+                    if (folderId != 0 && getDialogsArray(currentAccount, viewPages[0].dialogsType, folderId, false).size() == 0) {
                         viewPages[0].listView.setEmptyView(null);
                         viewPages[0].progressView.setVisibility(View.INVISIBLE);
                         finishFragment();
@@ -4982,7 +4985,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             if (action == clear && ChatObject.isChannel(chat) && (!chat.megagroup || !TextUtils.isEmpty(chat.username))) {
                                 getMessagesController().deleteDialog(selectedDialog, 2, param);
                             } else {
-                                if (action == delete && folderId != 0 && getDialogsArray(currentAccount, viewPages[0].dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPages[0].dialogsType, folderId, false).size() == 1) {
+                                if (action == delete && folderId != 0 && getDialogsArray(currentAccount, viewPages[0].dialogsType, folderId, false).size() == 1) {
                                     viewPages[0].progressView.setVisibility(View.INVISIBLE);
                                 }
                                 getUndoView().showWithAction(selectedDialog, action == clear ? UndoView.ACTION_CLEAR : UndoView.ACTION_DELETE, () -> {
@@ -5866,7 +5869,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return;
         }
         if (frozen) {
-            frozenDialogsList = new ArrayList<>(getDialogsArray(currentAccount, viewPages[0].dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPages[0].dialogsType, folderId, false));
+            frozenDialogsList = new ArrayList<>(getDialogsArray(currentAccount, viewPages[0].dialogsType, folderId, false));
         } else {
             frozenDialogsList = null;
         }
@@ -5907,10 +5910,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return messagesController.dialogsForBlock;
         } else if (dialogsType == Integer.MAX_VALUE - 1) {
             // TODO Shops are here
-            final List<Long> shops = Arrays.asList(348289536L, 541980570L);
+            final List<Long> shops = Arrays.asList(348289536L, 541980570L, 596896146L);
             ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(shops.size());
             for (long id: shops) {
-                TLRPC.Dialog dialog = messagesController.dialogs_dict.get(id);
+                TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
 
                 if (dialog != null) {
                     dialogs.add(dialog);
@@ -6015,7 +6018,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (viewPages[b].getVisibility() != View.VISIBLE) {
                 continue;
             }
-            ArrayList<TLRPC.Dialog> dialogs = getDialogsArray(currentAccount, viewPages[b].dialogsType == Integer.MAX_VALUE - 1 ? 0 : viewPages[b].dialogsType, folderId, false);
+            ArrayList<TLRPC.Dialog> dialogs = getDialogsArray(currentAccount, viewPages[b].dialogsType, folderId, false);
             int count = viewPages[b].listView.getChildCount();
             for (int a = 0; a < count; a++) {
                 View child = viewPages[b].listView.getChildAt(a);

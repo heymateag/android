@@ -44,17 +44,13 @@ public class HtFiltersCell extends LinearLayout {
     }
 
     public void setBaseFragment(BaseFragment parent) {
+        setGravity(Gravity.CENTER_VERTICAL);
         final Context context = getContext();
         Object[] categories =  DummyCategories.categories.keySet().stream().sorted().toArray();
         for(Object category: categories){
             subCategories.addAll(DummyCategories.categories.get(category.toString()));
         }
 
-        LinearLayout mainLayout = new LinearLayout(context);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-        mainLayout.setGravity(Gravity.CENTER);
-
-        LinearLayout upperLayout = new LinearLayout(context);
         if(!(parent instanceof DialogsActivity)){
             Button statusFilter = new Button(context, LocaleController.getString("HtStatus", R.string.HtStatus)) {
                 @Override
@@ -94,7 +90,7 @@ public class HtFiltersCell extends LinearLayout {
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             });
-            upperLayout.addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,10, 5, 0, 5));
+            addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,10, 0, 0, 0));
         }
 
         Button categoryFilter = new Button(context, LocaleController.getString("HtCategory", R.string.HtCategory)) {
@@ -176,8 +172,8 @@ public class HtFiltersCell extends LinearLayout {
             AlertDialog alertDialog = builder.create();
             parent.showDialog(alertDialog);
         });
-        upperLayout.addView(categoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT,0.1f,0, 5, 0, 5));
-        upperLayout.addView(subCategoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,0, 5, 0, 5));
+        addView(categoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT,0.1f,0, 0, 0, 0));
+        addView(subCategoryFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,0, 0, 0, 0));
 
         if(parent instanceof DialogsActivity){
             TextView trendingText = new TextView(context);
@@ -188,11 +184,8 @@ public class HtFiltersCell extends LinearLayout {
             Drawable trendingDrawable = context.getResources().getDrawable(R.drawable.ht_sort);
             trendingDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_redText), PorterDuff.Mode.MULTIPLY));
             trendingText.setCompoundDrawablesWithIntrinsicBounds(trendingDrawable, null,null, null);
-            upperLayout.addView(trendingText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,20, 10, 0, 5));
+            addView(trendingText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,20, 0, 0, 0));
         }
-
-        mainLayout.addView(upperLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
     }
 
     static private class Button extends LinearLayout {
