@@ -14,7 +14,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.SystemClock;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -53,13 +52,11 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.Heymate.HtOfferDialogCell;
+import org.telegram.ui.Heymate.OfferDialogCell;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Random;
 
 public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
@@ -85,7 +82,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     private PullForegroundDrawable pullForegroundDrawable;
 
     private DialogsPreloader preloader;
-
 
     public DialogsAdapter(Context context, int type, int folder, boolean onlySelect, ArrayList<Long> selected, int account) {
         mContext = context;
@@ -327,7 +323,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 view = dialogCell;
                 break;
             case VIEW_TYPE_SHOP:
-                view = new HtOfferDialogCell(mContext);
+                view = new OfferDialogCell(mContext);
                 break;
             case VIEW_TYPE_FILTER_SPACE:
                 view = new View(mContext) {
@@ -483,7 +479,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 break;
             }
             case VIEW_TYPE_SHOP: {
-                HtOfferDialogCell cell = (HtOfferDialogCell) holder.itemView;
+                OfferDialogCell cell = (OfferDialogCell) holder.itemView;
                 TLRPC.Dialog dialog = (TLRPC.Dialog) getItem(i);
                 cell.setDialog(dialog);
                 break;

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span id="guide" size="0dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="12dp"/>
+        <Span id="image_dialog" size="36dp"/>
+        <Span size="12dp"/>
+        <Span id="divider_image" size="2dp"/>
+        <Span size="12dp"/>
+        <Span id="text_name" size="wrap" max="78pw"/>
+        <Span size="4dp"/>
+        <Span id="image_tag" size="14dp"/>
+        <Span size="1w"/>
+        <Span id="text_time" size="wrap"/>
+        <Span size="12dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@text_name" end="start@text_time">
+        <Span id="text_message" size="1w"/>
+        <Span size="36dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="text_unreadcount" size="24dp"/>
+        <Span size="24dp"/>
+    </Horizontal>
+
+    <Vertical start="start@guide" end="end@guide">
+        <Span size="1w"/>
+        <Span id="image_dialog" size="36dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@guide" end="end@guide">
+        <Span size="1w"/>
+        <Span id="divider_image" size="48dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@guide" end="end@guide">
+        <Span size="1w"/>
+        <Span id="text_name" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="text_message" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@guide" end="end@guide">
+        <Span size="1w"/>
+        <Span id="text_time" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="text_unreadcount" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@text_name" end="end@text_name">
+        <Span size="1w"/>
+        <Span id="image_tag" size="14dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+</Sequences>

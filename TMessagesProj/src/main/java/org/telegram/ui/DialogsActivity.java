@@ -171,6 +171,7 @@ import org.telegram.ui.Heymate.HtFiltersCell;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -5919,6 +5920,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     dialogs.add(dialog);
                 }
             }
+            Collections.sort(dialogs, (o1, o2) -> o2.last_message_date - o1.last_message_date);
             return dialogs;
         }
         return null;
