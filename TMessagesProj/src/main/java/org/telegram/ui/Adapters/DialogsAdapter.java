@@ -64,7 +64,7 @@ import java.util.Random;
 public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     // Temporary
-    public static final ArrayList<Integer> shops = new ArrayList<>(Arrays.asList(348289536, 541980570));
+    public static final ArrayList<Integer> shops = new ArrayList<>(Arrays.asList(348289536, 541980570, 596896146));
     private Context mContext;
     private ArchiveHintCell archiveHintCell;
     private ArrayList<TLRPC.TL_contact> onlineContacts;

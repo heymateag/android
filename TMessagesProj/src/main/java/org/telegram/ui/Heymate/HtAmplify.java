@@ -32,6 +32,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.Shop;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.io.File;
@@ -81,6 +82,20 @@ public class HtAmplify {
 
     }
 
+    public interface ShopCallback {
+
+        void onShopQueryResult(boolean success, Shop shop, ApiException exception);
+
+    }
+
+    public interface ShopsCallback {
+
+        void onShopsQueryResult(boolean success, ArrayList<Shop> shop, ApiException exception);
+
+    }
+
+
+
     public static HtAmplify getInstance(Context context) {
         if (instance == null)
             instance = new HtAmplify(context.getApplicationContext());
@@ -111,6 +126,11 @@ public class HtAmplify {
         } catch (AmplifyException error) {
             Log.e("HtAmplify", "Could not initialize Amplify.", error);
         }
+    }
+
+    enum ShopType {
+        Shop,
+        MarketPlace
     }
 
     public Offer createOffer(OfferDto dto, Uri pickedImage, String address, String signature) {
@@ -173,6 +193,59 @@ public class HtAmplify {
 
         return newOffer;
     }
+
+    public Shop createShop(int tgId, String title, ShopType shopType) {
+        Shop newShop = Shop.builder()
+                .tgId(tgId)
+                .title(title)
+                .type(shopType.ordinal())
+                .build();
+
+        Amplify.API.mutate(ModelMutation.create(newShop),
+                response -> {
+                    Log.i("HtAmplify", "Shop Created.");
+                },
+                error -> Log.e("HtAmplify", "Create failed", error)
+        );
+
+        return newShop;
+    }
+
+    public void isShop(int tgId, ShopCallback callback){
+        Amplify.API.query(
+                ModelQuery.list(Shop.class, Shop.TG_ID.eq(tgId)),
+                response -> {
+                    if (response.getData() != null) {
+                        for (Shop shop : response.getData()) {
+                            callback.onShopQueryResult(true, shop, null);
+                        }
+                        if(!response.getData().hasNextResult()){
+                            callback.onShopQueryResult(false, null, null);
+                        }
+                    }
+                },
+                error -> {}
+        );
+    }
+
+    public void getShops(ShopsCallback callback){
+        Amplify.API.query(
+                ModelQuery.list(Shop.class),
+                response -> {
+                    ArrayList<Shop> shops = new ArrayList<>();
+                    if (response.getData() != null) {
+                        for (Shop shop : response.getData()) {
+                            shops.add(shop);
+                        }
+                        callback.onShopsQueryResult(true, shops, null);
+                    }
+                },
+                error -> {
+                    callback.onShopsQueryResult(false, null, error);
+                }
+        );
+    }
+
 
     public Offer updateOffer(OfferDto dto) {
         Offer newOffer = Offer.builder()
