@@ -145,7 +145,7 @@ public final class Offer implements Model {
   public String getUserId() {
       return userID;
   }
-
+  
   private Offer(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
