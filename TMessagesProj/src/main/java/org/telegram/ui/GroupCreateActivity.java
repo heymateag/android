@@ -1054,6 +1054,13 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         Bundle args = new Bundle();
                         args.putIntegerArrayList("result", result);
                         args.putInt("chatType", chatType);
+
+                        Bundle arguments = getArguments();
+                        if (arguments != null) {
+                            args.putCharSequence("title", arguments.getCharSequence("title"));
+                            args.putCharSequence("nameHint", arguments.getCharSequence("nameHint"));
+                            args.putInt("heymateType", arguments.getInt("heymateType"));
+                        }
                         presentFragment(new GroupCreateFinalActivity(args));
                     }
                 }

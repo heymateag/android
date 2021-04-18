@@ -68,12 +68,15 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Heymate.CreateShopActivity;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import works.heymate.core.Texts;
 
 public class GroupCreateFinalActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -107,6 +110,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private String nameToSet;
     private int chatType;
 
+    private int heymateType;
+
     private String currentGroupCreateAddress;
     private Location currentGroupCreateLocation;
 
@@ -128,6 +133,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         avatarDrawable = new AvatarDrawable();
         currentGroupCreateAddress = args.getString("address");
         currentGroupCreateLocation = args.getParcelable("location");
+        heymateType = args.getInt("heymateType", CreateShopActivity.TYPE_NONE);
     }
 
     @Override
@@ -250,7 +256,15 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
+        if (heymateType == CreateShopActivity.TYPE_MARKETPLACE) {
+            actionBar.setTitle(Texts.get(Texts.NEW_MARKETPLACE_TITLE));
+        }
+        else if (heymateType == CreateShopActivity.TYPE_SHOP) {
+            actionBar.setTitle(Texts.get(Texts.NEW_SHOP_TITLE));
+        }
+        else {
+            actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
+        }
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -487,7 +501,15 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         showAvatarProgress(false, false);
 
         editText = new EditTextEmoji(context, sizeNotifierFrameLayout, this, EditTextEmoji.STYLE_FRAGMENT);
-        editText.setHint(chatType == ChatObject.CHAT_TYPE_CHAT || chatType == ChatObject.CHAT_TYPE_MEGAGROUP ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
+        if (heymateType == CreateShopActivity.TYPE_MARKETPLACE) {
+            editText.setHint(Texts.get(Texts.NEW_MARKETPLACE_NAME_HINT));
+        }
+        else if (heymateType == CreateShopActivity.TYPE_SHOP) {
+            editText.setHint(Texts.get(Texts.NEW_SHOP_NAME_HINT));
+        }
+        else {
+            editText.setHint(chatType == ChatObject.CHAT_TYPE_CHAT || chatType == ChatObject.CHAT_TYPE_MEGAGROUP ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
+        }
         if (nameToSet != null) {
             editText.setText(nameToSet);
             nameToSet = null;
@@ -785,6 +807,15 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
             if (inputPhoto != null || inputVideo != null) {
                 MessagesController.getInstance(currentAccount).changeChatAvatar(chat_id, null, inputPhoto, inputVideo, videoTimestamp, inputVideoPath, avatar, avatarBig);
+            }
+            switch (heymateType) {
+                case CreateShopActivity.TYPE_MARKETPLACE:
+                    // TODO
+                    break;
+                case CreateShopActivity.TYPE_SHOP:
+                case CreateShopActivity.TYPE_NONE:
+                    // Nothing to do.
+                    break;
             }
         }
     }

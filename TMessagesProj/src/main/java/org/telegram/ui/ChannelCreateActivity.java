@@ -67,10 +67,15 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Heymate.CreateShopActivity;
 
 import java.util.ArrayList;
 
+import works.heymate.core.Texts;
+
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
+
+    public static final String LINK_GUIDE = "linkGuide";
 
     private View doneButton;
     private EditTextEmoji nameTextView;
@@ -109,6 +114,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private boolean isPrivate;
     private boolean loadingInvite;
     private TLRPC.ExportedChatInvite invite;
+
+    private int shopType;
 
     private boolean loadingAdminedChannels;
     private TextInfoPrivacyCell adminedInfoCell;
@@ -149,6 +156,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
             chatId = args.getInt("chat_id", 0);
         }
+        shopType = args.getInt("heymateType", CreateShopActivity.TYPE_NONE);
     }
 
     @Override
@@ -237,6 +245,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             nameTextView.onDestroy();
         }
 
+        final boolean shop = shopType == CreateShopActivity.TYPE_SHOP;
+
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
 
@@ -282,7 +292,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             if (descriptionTextView.length() == 0) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                                 builder.setTitle(LocaleController.getString("ChannelPublicEmptyUsernameTitle", R.string.ChannelPublicEmptyUsernameTitle));
-                                builder.setMessage(LocaleController.getString("ChannelPublicEmptyUsername", R.string.ChannelPublicEmptyUsername));
+                                if (shop) {
+                                    builder.setMessage(Texts.get(Texts.NEW_SHOP_NO_LINK));
+                                }
+                                else {
+                                    builder.setMessage(LocaleController.getString("ChannelPublicEmptyUsername", R.string.ChannelPublicEmptyUsername));
+                                }
                                 builder.setPositiveButton(LocaleController.getString("Close", R.string.Close), null);
                                 showDialog(builder.create());
                                 return;
@@ -303,6 +318,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         args.putInt("step", 2);
                         args.putInt("chatId", chatId);
                         args.putInt("chatType", ChatObject.CHAT_TYPE_CHANNEL);
+                        args.putInt("heymateType", shopType);
                         presentFragment(new GroupCreateActivity(args), true);
                     }
                 }
@@ -313,7 +329,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         if (currentStep == 0) {
-            actionBar.setTitle(LocaleController.getString("NewChannel", R.string.NewChannel));
+            actionBar.setTitle(shop ? Texts.get(Texts.NEW_SHOP_TITLE) : LocaleController.getString("NewChannel", R.string.NewChannel));
 
             SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
@@ -520,7 +536,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             showAvatarProgress(false, false);
 
             nameTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, this, EditTextEmoji.STYLE_FRAGMENT);
-            nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
+            nameTextView.setHint(shop ? Texts.get(Texts.NEW_SHOP_NAME_HINT) : LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
             if (nameToSet != null) {
                 nameTextView.setText(nameToSet);
                 nameToSet = null;
@@ -575,7 +591,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             helpTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
             helpTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-            helpTextView.setText(LocaleController.getString("DescriptionInfo", R.string.DescriptionInfo));
+            helpTextView.setText(shop ? Texts.get(Texts.NEW_SHOP_DESCRIPTION_GUIDE) : LocaleController.getString("DescriptionInfo", R.string.DescriptionInfo));
             linearLayout.addView(helpTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 24, 10, 24, 20));
         } else if (currentStep == 1) {
             fragmentView = new ScrollView(context);
@@ -585,14 +601,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             scrollView.addView(linearLayout, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            actionBar.setTitle(LocaleController.getString("ChannelSettingsTitle", R.string.ChannelSettingsTitle));
+            actionBar.setTitle(shop ? Texts.get(Texts.NEW_SHOP_SETTINGS) : LocaleController.getString("ChannelSettingsTitle", R.string.ChannelSettingsTitle));
             fragmentView.setTag(Theme.key_windowBackgroundGray);
             fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
             headerCell2 = new HeaderCell(context, 23);
             headerCell2.setHeight(46);
             headerCell2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            headerCell2.setText(LocaleController.getString("ChannelTypeHeader", R.string.ChannelTypeHeader));
+            headerCell2.setText(shop ? Texts.get(Texts.NEW_SHOP_TYPE) : LocaleController.getString("ChannelTypeHeader", R.string.ChannelTypeHeader));
             linearLayout.addView(headerCell2);
 
             linearLayout2 = new LinearLayout(context);
@@ -602,7 +618,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
             radioButtonCell1 = new RadioButtonCell(context);
             radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            radioButtonCell1.setTextAndValue(LocaleController.getString("ChannelPublic", R.string.ChannelPublic), LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo), false, !isPrivate);
+            radioButtonCell1.setTextAndValue(
+                    shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_SHOP).toString() : LocaleController.getString("ChannelPublic", R.string.ChannelPublic),
+                    shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_SHOP_DESCRIPTION).toString() : LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo),
+                    false, !isPrivate);
             linearLayout2.addView(radioButtonCell1, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             radioButtonCell1.setOnClickListener(v -> {
                 if (!isPrivate) {
@@ -614,7 +633,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
             radioButtonCell2 = new RadioButtonCell(context);
             radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            radioButtonCell2.setTextAndValue(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate), LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo), false, isPrivate);
+            radioButtonCell2.setTextAndValue(
+                    shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_SHOP).toString() : LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate),
+                    shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_SHOP_DESCRIPTION).toString() : LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo),
+                    false, isPrivate);
             linearLayout2.addView(radioButtonCell2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             radioButtonCell2.setOnClickListener(v -> {
                 if (isPrivate) {
@@ -772,6 +794,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 adminedInfoCell.setVisibility(View.VISIBLE);
             }
         } else {
+            boolean shop = shopType == CreateShopActivity.TYPE_SHOP;
+
             typeInfoCell.setTag(Theme.key_windowBackgroundWhiteGrayText4);
             typeInfoCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
             sectionCell.setVisibility(View.VISIBLE);
@@ -780,7 +804,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             linkContainer.setVisibility(View.VISIBLE);
             loadingAdminedCell.setVisibility(View.GONE);
-            typeInfoCell.setText(isPrivate ? LocaleController.getString("ChannelPrivateLinkHelp", R.string.ChannelPrivateLinkHelp) : LocaleController.getString("ChannelUsernameHelp", R.string.ChannelUsernameHelp));
+            typeInfoCell.setText(
+                    isPrivate ? (shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_LINK_GUIDE) : LocaleController.getString("ChannelPrivateLinkHelp", R.string.ChannelPrivateLinkHelp)) :
+                            (shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_LINK_GUIDE) : LocaleController.getString("ChannelUsernameHelp", R.string.ChannelUsernameHelp)));
             headerCell.setText(isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", R.string.ChannelLinkTitle));
             publicContainer.setVisibility(isPrivate ? View.GONE : View.VISIBLE);
             privateContainer.setVisibility(isPrivate ? View.VISIBLE : View.GONE);
@@ -968,15 +994,21 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     FileLog.e(e);
                 }
             }
+            boolean shop = shopType == CreateShopActivity.TYPE_SHOP;
             int chat_id = (Integer) args[0];
             Bundle bundle = new Bundle();
             bundle.putInt("step", 1);
             bundle.putInt("chat_id", chat_id);
+            bundle.putInt("heymateType", shopType);
             bundle.putBoolean("canCreatePublic", canCreatePublic);
             if (inputPhoto != null || inputVideo != null) {
                 MessagesController.getInstance(currentAccount).changeChatAvatar(chat_id, null, inputPhoto, inputVideo, videoTimestamp, inputVideoPath, avatar, avatarBig);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
+
+            if (shop) {
+                // TODO
+            }
         }
     }
 

@@ -166,6 +166,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
+import org.telegram.ui.Heymate.CreateShopActivity;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtFiltersCell;
 
@@ -2865,7 +2866,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         contentView.addView(floatingButtonContainer, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (Build.VERSION.SDK_INT >= 21 ? 56 : 60) + 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 4 : 0, 0, LocaleController.isRTL ? 0 : 4, 0));
         floatingButtonContainer.setOnClickListener(v -> {
             if (floatingButtonIsShop) {
-                // TODO open create shop
+                presentFragment(new CreateShopActivity());
             }
             else {
                 Bundle args = new Bundle();

@@ -87,6 +87,29 @@ public class Texts {
 
     public static final String TIMESLOTSSELECTED_TITLE = "timeslotselection_title";
 
+    public static final String CREATE_SHOP_TITLE = "create_shop_title";
+    public static final String CREATE_SHOP_SHOP_TYPE = "create_shop_shop_type";
+    public static final String CREATE_SHOP_MARKETPLACE = "create_shop_marketplace";
+    public static final String CREATE_SHOP_MARKETPLACE_DESCRIPTION = "create_shop_marketplace_description";
+    public static final String CREATE_SHOP_SHOP = "create_shop_shop";
+    public static final String CREATE_SHOP_SHOP_DESCRIPTION = "create_shop_shop_description";
+
+    public static final String NEW_MARKETPLACE_TITLE = "new_marketplace_title";
+    public static final String NEW_MARKETPLACE_NAME_HINT = "new_marketplace_name_hint";
+
+    public static final String NEW_SHOP_NO_LINK = "new_shop_no_link";
+    public static final String NEW_SHOP_TITLE = "new_shop_title";
+    public static final String NEW_SHOP_NAME_HINT = "new_shop_name_hint";
+    public static final String NEW_SHOP_DESCRIPTION_GUIDE = "new_shop_description_guide";
+    public static final String NEW_SHOP_SETTINGS = "new_shop_settings";
+    public static final String NEW_SHOP_TYPE = "new_shop_type";
+    public static final String NEW_SHOP_PUBLIC_SHOP = "new_shop_public_shop";
+    public static final String NEW_SHOP_PUBLIC_SHOP_DESCRIPTION = "new_shop_public_shop_description";
+    public static final String NEW_SHOP_PRIVATE_SHOP = "new_shop_private_shop";
+    public static final String NEW_SHOP_PRIVATE_SHOP_DESCRIPTION = "new_shop_private_shop_description";
+    public static final String NEW_SHOP_PRIVATE_LINK_GUIDE = "new_shop_private_link_guide";
+    public static final String NEW_SHOP_PUBLIC_LINK_GUIDE = "new_shop_public_link_guide";
+
     private static final String STRING_RESOURCE_PREFIX = "hm_";
 
     private static Context mContext;

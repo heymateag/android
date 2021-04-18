@@ -86,4 +86,27 @@ Switzerland
 
     <string name="hm_timeslotselection_title">Time Slots</string>
 
+    <string name="hm_create_shop_title">Create Shop</string>
+    <string name="hm_create_shop_shop_type">Shop type</string>
+    <string name="hm_create_shop_marketplace">Marketplace</string>
+    <string name="hm_create_shop_marketplace_description">A marketplace is a place where everyone can post their offerings.</string>
+    <string name="hm_create_shop_shop">Shop</string>
+    <string name="hm_create_shop_shop_description">Create your own virtual shop in which you can publish your offerings and promotions.</string>
+
+    <string name="hm_new_marketplace_title">New Marketplace</string>
+    <string name="hm_new_marketplace_name_hint">Enter marketplace name</string>
+
+    <string name="hm_new_shop_no_link">Please choose a link for your public shop, so that people can find it in search and share with others.\n\nIf you\'re not interested, we suggest creating a private shop instead.</string>
+    <string name="hm_new_shop_title">New Shop</string>
+    <string name="hm_new_shop_name_hint">Shop name</string>
+    <string name="hm_new_shop_description_guide">You can provide an optional description for your shop.</string>
+    <string name="hm_new_shop_settings">Shop Settings</string>
+    <string name="hm_new_shop_type">Shop type</string>
+    <string name="hm_new_shop_public_shop">Public Shop</string>
+    <string name="hm_new_shop_public_shop_description">Public shops can be found in search, anyone can subscribe to them.</string>
+    <string name="hm_new_shop_private_shop">Private Shop</string>
+    <string name="hm_new_shop_private_shop_description">Private shops can only be joined via an invite link.</string>
+    <string name="hm_new_shop_private_link_guide">People can join your shop by following this link. You can revoke the link any time.</string>
+    <string name="hm_new_shop_public_link_guide">If you set a permanent link, other people will be able to find and join your shop.\n\nYou can use a-z, 0-9 and underscores.\nMinimum length is 5 characters.</string>
+
 </resources>
