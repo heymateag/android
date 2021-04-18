@@ -68,6 +68,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Heymate.CreateShopActivity;
+import org.telegram.ui.Heymate.HtAmplify;
 
 import java.util.ArrayList;
 
@@ -1007,7 +1008,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             presentFragment(new ChannelCreateActivity(bundle), true);
 
             if (shop) {
-                // TODO
+                HtAmplify.getInstance(getParentActivity()).createShop(chat_id, nameTextView.getText().toString(), HtAmplify.ShopType.Shop);
             }
         }
     }

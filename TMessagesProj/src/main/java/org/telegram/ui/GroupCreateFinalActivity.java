@@ -69,6 +69,7 @@ import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Heymate.CreateShopActivity;
+import org.telegram.ui.Heymate.HtAmplify;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -810,9 +811,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
             switch (heymateType) {
                 case CreateShopActivity.TYPE_MARKETPLACE:
-                    // TODO
+                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, editText.getText().toString(), HtAmplify.ShopType.MarketPlace);
                     break;
                 case CreateShopActivity.TYPE_SHOP:
+                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, editText.getText().toString(), HtAmplify.ShopType.Shop);
+                    break;
                 case CreateShopActivity.TYPE_NONE:
                     // Nothing to do.
                     break;

@@ -169,6 +169,7 @@ import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.Heymate.CreateShopActivity;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtFiltersCell;
+import org.telegram.ui.Heymate.Shops;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -3412,6 +3413,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             viewPages[a].listView.updatePullState();
             convertFloatingButton(false);
         } else if (viewPages[a].selectedType == Integer.MAX_VALUE - 1) {
+            Shops.reloadShops(getParentActivity(), getCurrentAccount());
+
             viewPages[a].htFiltersCell.setVisibility(View.VISIBLE);
             viewPages[a].dialogsType = Integer.MAX_VALUE - 1;
             viewPages[a].listView.updatePullState();
@@ -3593,6 +3596,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onResume() {
         super.onResume();
+
+        Shops.reloadShops(getParentActivity(), getCurrentAccount());
+
         if (!parentLayout.isInPreviewMode() && blurredView != null && blurredView.getVisibility() == View.VISIBLE) {
             blurredView.setVisibility(View.GONE);
             blurredView.setBackground(null);
@@ -5911,18 +5917,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (dialogsType == 9) {
             return messagesController.dialogsForBlock;
         } else if (dialogsType == Integer.MAX_VALUE - 1) {
-            // TODO Shops are here
-            final List<Long> shops = Arrays.asList(348289536L, 541980570L, 596896146L);
-            ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>(shops.size());
-            for (long id: shops) {
-                TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
-
-                if (dialog != null) {
-                    dialogs.add(dialog);
-                }
-            }
-            Collections.sort(dialogs, (o1, o2) -> o2.last_message_date - o1.last_message_date);
-            return dialogs;
+            return Shops.dialogs;
         }
         return null;
     }

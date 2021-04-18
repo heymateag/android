@@ -128,7 +128,7 @@ public class HtAmplify {
         }
     }
 
-    enum ShopType {
+    public enum ShopType {
         Shop,
         MarketPlace
     }
