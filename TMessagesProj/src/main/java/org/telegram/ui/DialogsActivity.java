@@ -176,7 +176,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+import works.heymate.core.HeymateEvents;
+
+public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, HeymateEvents.HeymateEventObserver {
 
     private boolean canShowFilterTabsView;
     private boolean filterTabsViewIsVisible;
@@ -1617,6 +1619,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (searchString == null) {
             currentConnectionState = getConnectionsManager().getConnectionState();
 
+            HeymateEvents.register(HeymateEvents.SHOPS_UPDATED, this);
+
             getNotificationCenter().addObserver(this, NotificationCenter.dialogsNeedReload);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
             if (!onlySelect) {
@@ -1671,6 +1675,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+
+        HeymateEvents.unregister(HeymateEvents.SHOPS_UPDATED, this);
+
         if (searchString == null) {
             getNotificationCenter().removeObserver(this, NotificationCenter.dialogsNeedReload);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
@@ -5920,6 +5927,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return Shops.dialogs;
         }
         return null;
+    }
+
+    @Override
+    public void onHeymateEvent(int event, Object... args) {
+        if (viewPages[0].dialogsType == Integer.MAX_VALUE - 1) {
+            viewPages[0].dialogsAdapter.notifyDataSetChanged();
+        }
     }
 
     public void setSideMenu(RecyclerView recyclerView) {
