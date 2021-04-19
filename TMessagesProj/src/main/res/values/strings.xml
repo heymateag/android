@@ -1365,7 +1365,7 @@
     <string name="HtView">View</string>
     <string name="HtCreateOffer">Create Offer</string>
     <string name="HtViewOffer">View Offer</string>
-    <string name="HtAddPhoto"> Add\nPhoto</string>
+    <string name="HtAddPhoto">Add\nPhoto</string>
     <string name="HtSelectImage">Select Image</string>
     <string name="HtDescription">Description</string>
     <string name="HtDetails">Details</string>

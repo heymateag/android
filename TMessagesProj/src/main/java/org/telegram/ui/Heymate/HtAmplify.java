@@ -113,7 +113,6 @@ public class HtAmplify {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(context);
 
-
             amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(
                     "AKIATNEPMKIM2UIPWSPC",
                     "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"

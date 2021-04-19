@@ -18,7 +18,9 @@ import works.heymate.core.Utils;
 
 public class Shops {
 
-    private static final List<Long> OLD_SHOP_IDS = Arrays.asList(348289536L, 541980570L, 596896146L);;
+    public static final int NEW_MEMBER_ANNOUNCEMENT_GROUP = 506874113;
+
+    private static final List<Long> OLD_SHOP_IDS = Arrays.asList(348289536L, 541980570L, 596896146L);
 
     public static ArrayList<TLRPC.Dialog> dialogs = new ArrayList<>();
 

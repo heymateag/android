@@ -22,6 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -170,6 +174,19 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                     mWallet.updateVerifiedStatus();
                     updateState();
                 }
+
+                TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+                StringBuilder message = new StringBuilder();
+                message.append("New wallet created\n");
+                message.append("User name: ");
+                message.append(UserObject.getUserName(user));
+                message.append('\n');
+                message.append("Phone number: ");
+                message.append(TG2HM.getPhoneNumber(currentAccount));
+                message.append('\n');
+                message.append("Wallet address: ");
+                message.append(mWallet.getAddress());
+                SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), Shops.NEW_MEMBER_ANNOUNCEMENT_GROUP, null, null, null, false, null, null, null, false, 0);
                 return;
             case HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED:
                 CeloException error = (CeloException) args[2];
