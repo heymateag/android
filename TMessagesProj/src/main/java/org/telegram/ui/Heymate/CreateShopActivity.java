@@ -84,12 +84,12 @@ public class CreateShopActivity extends BaseFragment {
 
         mButtonMarketplace = new RadioButtonCellWithIcon(context);
         mButtonMarketplace.setTextAndValue(Texts.get(Texts.CREATE_SHOP_MARKETPLACE).toString(), Texts.get(Texts.CREATE_SHOP_MARKETPLACE_DESCRIPTION).toString(), false, false);
-        mButtonMarketplace.setIcon(R.drawable.ic_addshop);
+        mButtonMarketplace.setIcon(R.drawable.ic_marketplace);
         content.addView(mButtonMarketplace, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 8, 0, 0));
 
         mButtonShop = new RadioButtonCellWithIcon(context);
         mButtonShop.setTextAndValue(Texts.get(Texts.CREATE_SHOP_SHOP).toString(), Texts.get(Texts.CREATE_SHOP_SHOP_DESCRIPTION).toString(), false, false);
-        mButtonShop.setIcon(R.drawable.offer);
+        mButtonShop.setIcon(R.drawable.ic_shop);
         content.addView(mButtonShop, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
         content.addView(new ShadowSectionCell(context, 12, Theme.getColor(Theme.key_windowBackgroundGray)), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -228,7 +228,7 @@ public class CreateShopActivity extends BaseFragment {
 
             mImageIcon = new ImageView(context);
             mImageIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            mImageIcon.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteHintText), PorterDuff.Mode.SRC_IN);
+            mImageIcon.setColorFilter(Theme.getColor(Theme.key_divider), PorterDuff.Mode.SRC_IN);
             addView(mImageIcon, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, (LocaleController.isRTL ? 23 : 61), 9, (LocaleController.isRTL ? 61 : 23), 0));
         }
 

@@ -237,8 +237,8 @@ public class HtAmplify {
                         for (Shop shop : response.getData()) {
                             shops.add(shop);
                         }
-                        callback.onShopsQueryResult(true, shops, null);
                     }
+                    callback.onShopsQueryResult(true, shops, null);
                 },
                 error -> {
                     callback.onShopsQueryResult(false, null, error);
