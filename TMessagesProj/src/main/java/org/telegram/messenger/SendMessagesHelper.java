@@ -5200,7 +5200,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         return delayedMessages.get(location);
     }
 
-    protected long getNextRandomId() {
+    public long getNextRandomId() {
         long val = 0;
         while (val == 0) {
             val = Utilities.random.nextLong();

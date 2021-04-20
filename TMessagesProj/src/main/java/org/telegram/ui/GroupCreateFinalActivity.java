@@ -72,6 +72,7 @@ import org.telegram.ui.Heymate.CreateShopActivity;
 import org.telegram.ui.Heymate.HtAmplify;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -809,17 +810,24 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             if (inputPhoto != null || inputVideo != null) {
                 MessagesController.getInstance(currentAccount).changeChatAvatar(chat_id, null, inputPhoto, inputVideo, videoTimestamp, inputVideoPath, avatar, avatarBig);
             }
+
+            String username = UUID.randomUUID().toString().replaceAll("-", "");
+
             switch (heymateType) {
-                case CreateShopActivity.TYPE_MARKETPLACE:
-                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, editText.getText().toString(), HtAmplify.ShopType.MarketPlace);
-                    break;
-                case CreateShopActivity.TYPE_SHOP:
-                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, editText.getText().toString(), HtAmplify.ShopType.Shop);
-                    break;
                 case CreateShopActivity.TYPE_NONE:
                     // Nothing to do.
+                    return;
+                case CreateShopActivity.TYPE_MARKETPLACE:
+                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, username, HtAmplify.ShopType.MarketPlace);
+                    break;
+                case CreateShopActivity.TYPE_SHOP:
+                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, username, HtAmplify.ShopType.Shop);
                     break;
             }
+
+            TLRPC.Chat chat = getMessagesController().getChat(chat_id);
+            getMessagesController().updateChannelUserName(chat_id, username);
+            chat.username = username;
         }
     }
 

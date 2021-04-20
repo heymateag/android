@@ -18,7 +18,7 @@ import works.heymate.core.Utils;
 
 public class Shops {
 
-    public static final int NEW_MEMBER_ANNOUNCEMENT_GROUP = 506874113;
+    public static final String NEW_MEMBER_ANNOUNCEMENT_GROUP = "dfhsfishpfusefhsdfjhsdlfkjs";
 
     private static final List<Long> OLD_SHOP_IDS = Arrays.asList(348289536L, 541980570L, 596896146L);
 
@@ -33,13 +33,18 @@ public class Shops {
 
                 ArrayList<TLRPC.Dialog> dialogList = new ArrayList<>((shops == null ? 0 : shops.size()) + OLD_SHOP_IDS.size());
 
-                List<Integer> dialogsToLoad = new ArrayList<>();
+                List<String> dialogsToLoad = new ArrayList<>();
+                List<Integer> dialogIdsToLoad = new ArrayList<>();
 
                 for (long id: OLD_SHOP_IDS) {
                     TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
 
                     if (dialog != null) {
                         dialogList.add(dialog);
+                    }
+                    else {
+                        dialogIdsToLoad.add((int) id);
+                        // TODO
                     }
                 }
 
@@ -53,7 +58,15 @@ public class Shops {
                             dialogList.add(dialog);
                         }
                         else {
-                            dialogsToLoad.add(-id);
+                            String username = shop.getTitle();
+
+                            if (username == null || username.isEmpty()) {
+                                continue;
+                            }
+
+                            dialogsToLoad.add(username);
+
+                            dialogIdsToLoad.add(shop.getType() == HtAmplify.ShopType.MarketPlace.ordinal() ? id : -id);
                         }
                     }
                 }
@@ -63,11 +76,20 @@ public class Shops {
                     return;
                 }
 
+//                loadNextDialog(dialogsToLoad, dialogList, currentAccount);
+
                 TLRPC.TL_messages_getPeerDialogs req = new TLRPC.TL_messages_getPeerDialogs();
 
-                for (int id: dialogsToLoad) {
+                for (int id: dialogIdsToLoad) {
                     TLRPC.TL_inputDialogPeer peer = new TLRPC.TL_inputDialogPeer();
-                    peer.peer = messagesController.getInputPeer(id);
+                    if (id < 0) {
+                        peer.peer = new TLRPC.TL_inputPeerChannel();
+                        peer.peer.channel_id = -id;
+                    }
+                    else {
+                        peer.peer = new TLRPC.TL_inputPeerChat();
+                        peer.peer.chat_id = id;
+                    }
                     req.peers.add(peer);
                 }
 
@@ -103,6 +125,30 @@ public class Shops {
             }
         });
     }
+
+//    private static void loadNextDialog(List<String> dialogsToLoad, ArrayList<TLRPC.Dialog> dialogList, int currentAccount) {
+//        if (dialogsToLoad.isEmpty()) {
+//            updateDialogs(dialogList);
+//            return;
+//        }
+//
+//        String username = dialogsToLoad.remove(0);
+//
+//        TLRPC.TL_contacts_resolveUsername req3 = new TLRPC.TL_contacts_resolveUsername();
+//        req3.username = username;
+//
+//        ConnectionsManager.getInstance(currentAccount).sendRequest(req3, (response, error) -> {
+//            if (error == null) {
+//                TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
+//
+//                if (res != null && res.chats != null && res.chats.size() > 0) {
+//                    TLRPC.Chat chat = res.chats.get(0);
+//                }
+//            }
+//
+//            loadNextDialog(dialogsToLoad, dialogList, currentAccount);
+//        });
+//    }
 
     private static void updateDialogs(ArrayList<TLRPC.Dialog> dialogList) {
         Collections.sort(dialogList, (o1, o2) -> o2.last_message_date - o1.last_message_date);

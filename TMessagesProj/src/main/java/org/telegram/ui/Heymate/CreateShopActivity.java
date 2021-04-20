@@ -16,10 +16,16 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -31,7 +37,10 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
 import org.telegram.ui.GroupCreateActivity;
 
+import java.util.ArrayList;
+
 import works.heymate.core.Texts;
+import works.heymate.core.Utils;
 import works.heymate.core.wallet.Security;
 
 public class CreateShopActivity extends BaseFragment {
