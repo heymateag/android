@@ -61,6 +61,7 @@ public class HeymatePayment {
                 if (!success) {
                     if (exception != null) {
                         Log.e(TAG, "Failed to get offer with id " + offerId, exception);
+                        LogToGroup.log("Failed to get offer with id " + offerId, exception, fragment);
                     }
 
                     Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
@@ -171,7 +172,8 @@ public class HeymatePayment {
                 Texts.get(Texts.AUTHENTICATION),
                 Texts.get(Texts.AUTHENTICATION_DESCRIPTION),
                 new IntentLauncherFragment(fragment),
-                () -> blah(fragment, offer, timeSlot));
+                () -> initPreparedPayment(fragment, offer, timeSlot));
+//                () -> blah(fragment, offer, timeSlot));
 
         if (needsSecuritySettings) {
             fragment.presentFragment(new SecureWalletActivity(() -> initPayment(fragment, offer, timeSlot)));
@@ -235,6 +237,7 @@ public class HeymatePayment {
             }
             else {
                 Log.e(TAG, "Failed to create offer on blockchain", errorCause);
+                LogToGroup.log("Failed to create offer on blockchain", errorCause, fragment);
 
                 if (errorCause instanceof CeloException) {
                     CeloError coreError = errorCause.getMainCause().getError();
@@ -255,6 +258,8 @@ public class HeymatePayment {
             }
         });
     }
+
+
 
     private static class IntentLauncherFragment extends BaseFragment implements Security.IntentLauncher {
 

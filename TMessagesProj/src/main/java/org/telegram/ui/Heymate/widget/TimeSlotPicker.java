@@ -307,6 +307,8 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
     @Override
     public void onNewTimeSlots(List<TimeSlotPickerAdapter.TimeSlot> timeSlots) {
+        Collections.sort(timeSlots);
+
         int indexInNewTimeSlots = 0;
         int indexInExistingTimeSlots = 0;
 

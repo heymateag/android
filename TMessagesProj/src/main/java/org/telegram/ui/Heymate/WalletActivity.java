@@ -224,7 +224,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
                         message.append(TG2HM.getPhoneNumber(currentAccount));
                         message.append('\n');
                         message.append("Wallet address: ");
-                        message.append("TESTING");
+                        message.append(mWallet.getAddress());
 
                         TLRPC.TL_message newMsg = new TLRPC.TL_message();
                         newMsg.media = new TLRPC.TL_messageMediaEmpty();

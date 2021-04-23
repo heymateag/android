@@ -19,7 +19,7 @@ public interface TimeSlotPickerAdapter {
 
     }
 
-    class TimeSlot {
+    class TimeSlot implements Comparable<TimeSlot> {
 
         public final long startTime;
         public final int duration; // minutes
@@ -29,6 +29,11 @@ public interface TimeSlotPickerAdapter {
             this.startTime = startTime;
             this.duration = duration;
             this.reserved = reserved;
+        }
+
+        @Override
+        public int compareTo(TimeSlot o) {
+            return (int) (startTime - o.startTime);
         }
 
     }

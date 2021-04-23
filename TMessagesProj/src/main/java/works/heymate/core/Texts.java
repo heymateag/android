@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class Texts {
 
+    public static final String HEYMATE = "heymate";
+    public static final String LOGO_URL = "logo_url";
     public static final String OFFER_PHRASE_NAME = "offer_phrase_name";
 
     public static final String ADD = "add";

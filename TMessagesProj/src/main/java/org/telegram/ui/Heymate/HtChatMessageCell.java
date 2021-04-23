@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -49,6 +51,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+
+import works.heymate.core.offer.OfferUtils;
 
 public class HtChatMessageCell extends FrameLayout {
 
@@ -499,8 +503,24 @@ public class HtChatMessageCell extends FrameLayout {
             try{
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message != null ? message.messageText.toString() : messageText);
-                parent.getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
+
+                TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
+                String name;
+
+                if (user.username != null) {
+                    name = "@" + user.username;
+                }
+                else {
+                    name = user.first_name;
+
+                    if (!TextUtils.isEmpty(user.last_name)) {
+                        name = name + " " + user.last_name;
+                    }
+                }
+                String message = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                share.putExtra(Intent.EXTRA_TEXT, message);
+                context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
+
             } catch (Exception e){
 
             }

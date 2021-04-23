@@ -18,6 +18,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -36,16 +37,21 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.ProfileActivity;
 
-public class OfferCell<T> extends FrameLayout {
+import works.heymate.core.offer.OfferUtils;
+
+public class OfferCell extends FrameLayout {
 
     private Context context;
     private int place;
-    private T parentFragment;
+    private BaseFragment parentFragment;
     private OfferDto dto;
     private LinearLayout holderLayout;
     private LinearLayout mainLayout;
@@ -69,7 +75,7 @@ public class OfferCell<T> extends FrameLayout {
         }
     }
 
-    public OfferCell(Context context, T parentFragment) {
+    public OfferCell(Context context, BaseFragment parentFragment) {
         super(context);
         this.place = place;
         this.context = context;
@@ -307,7 +313,22 @@ public class OfferCell<T> extends FrameLayout {
 
                         Intent share = new Intent(Intent.ACTION_SEND);
                         share.setType("text/plain");
-                        share.putExtra(Intent.EXTRA_TEXT, "##:HtOffer##:"+dto.getTitle()+"##:"+dto.getRate()+"##:"+dto.getRateType()+"##:"+dto.getCurrency()+"##:"+dto.getLocation()+"##:"+dto.getTime()+"##:"+dto.getCategory()+"##:"+dto.getSubCategory());
+
+                        TLRPC.User user = UserConfig.getInstance(parentFragment.getCurrentAccount()).getCurrentUser();
+                        String name;
+
+                        if (user.username != null) {
+                            name = "@" + user.username;
+                        }
+                        else {
+                            name = user.first_name;
+
+                            if (!TextUtils.isEmpty(user.last_name)) {
+                                name = name + " " + user.last_name;
+                            }
+                        }
+                        String message = OfferUtils.serializeBeautiful(dto.asOffer(), name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                        share.putExtra(Intent.EXTRA_TEXT, message);
                         context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
 
                         anim5.addListener(new Animator.AnimatorListener() {

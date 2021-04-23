@@ -693,7 +693,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                     HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
                 }
                 else {
-                    Log.e(TAG, "Failed to start offer", errorCause);
+                    Log.e(TAG, "Failed to cancel offer", errorCause);
+                    LogToGroup.log("Failed to cancel offer", errorCause, MyScheduleActivity.this);
 
                     if (errorCause != null) {
                         CeloError coreError = errorCause.getMainCause().getError();
@@ -742,7 +743,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                     HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
                 }
                 else {
-                    Log.e(TAG, "Failed to start offer", errorCause);
+                    Log.e(TAG, "Failed to confirm started offer", errorCause);
+                    LogToGroup.log("Failed to confirm started offer", errorCause, MyScheduleActivity.this);
 
                     if (errorCause != null) {
                         CeloError coreError = errorCause.getMainCause().getError();
@@ -791,7 +793,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                     HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
                 }
                 else {
-                    Log.e(TAG, "Failed to start offer", errorCause);
+                    Log.e(TAG, "Failed to confirm finished offer", errorCause);
+                    LogToGroup.log("Failed to confirm finished offer", errorCause, MyScheduleActivity.this);
 
                     if (errorCause != null) {
                         CeloError coreError = errorCause.getMainCause().getError();
