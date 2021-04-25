@@ -163,6 +163,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="celo" android:host="wallet" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="heymate-ramp" android:host="result" />
+            </intent-filter>
 
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />

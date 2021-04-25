@@ -137,6 +137,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.AttestationActivity;
 import org.telegram.ui.Heymate.DatabaseWatchDog;
 import org.telegram.ui.Heymate.FirebaseService;
+import org.telegram.ui.Heymate.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.MyScheduleActivity;
@@ -1171,6 +1172,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             }
             else if ("heymate".equalsIgnoreCase(intent.getData().getScheme())) {
                 presentFragment(new MyScheduleActivity());
+                return true;
+            }
+            if (HeymatePayment.RAMP_SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {
                 return true;
             }
         }

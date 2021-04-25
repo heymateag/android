@@ -32,20 +32,28 @@ import java.util.TimeZone;
 
 import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
+import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.wallet.Security;
 import works.heymate.core.wallet.VerifiedStatus;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.ramp.Ramp;
 
 public class HeymatePayment {
 
     private static final String TAG = "HeymatePayment";
 
+    public static final String RAMP_SCHEME = "heymate-ramp";
+    private static final String RAMP_RETURN_URL = RAMP_SCHEME + "://result/";
+
     private static final KeeperObserver sObserver = new KeeperObserver();
 
     private static int getStateTries = 3;
+
+    private static Offer savedOffer = null;
+    private static TimeSlot savedTimeSlot = null;
 
     public static void initPayment(BaseFragment fragment, String offerId) {
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
@@ -200,21 +208,80 @@ public class HeymatePayment {
                 .show();
     }
 
-    private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-//        String uid = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
-//        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), uid);
-//
-//        new AlertDialog.Builder(fragment.getParentActivity())
-//                .setTitle("Offer accepted")
-//                .setMessage("You can check the state of your offer in My Schedule.")
-//                .setCancelable(false)
-//                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-//                .show();
-//
-//        if (fragment != null) {
-//            return;
-//        }
+    private static void checkBalanceBeforePayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
+        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
+        loadingDialog.setCanCacnel(false);
+        loadingDialog.show();
 
+        Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
+
+        wallet.getBalance((success, cents, errorCause) -> {
+            loadingDialog.dismiss();
+
+            if (success) {
+                long amount = (long) (Double.parseDouble(offer.getRate()) * 100D);
+
+                if (cents >= amount) {
+                    initPreparedPayment(fragment, offer, timeSlot);
+                }
+                else {
+                    long missingCents = amount - cents + 100;
+
+                    new AlertDialog.Builder(fragment.getParentActivity())
+                            .setTitle("Top up required")
+                            .setMessage("You need to top up " + (missingCents / 100f) + " US Dollars to reserve this offer.")
+                            .setCancelable(false)
+                            .setPositiveButton("Top up", (dialog, which) -> {
+                                dialog.dismiss();
+
+                                // TODO Save offer info
+                                savedOffer = offer;
+                                savedTimeSlot = timeSlot;
+
+                                String topUpAmount = CurrencyUtil.centsToBlockChainValue(missingCents).toString();
+                                Intent intent = Ramp.getTopUpIntent(wallet.getAddress(), topUpAmount, RAMP_RETURN_URL);
+                                intent = intent.createChooser(intent, "Top Up using");
+                                fragment.getParentActivity().startActivity(intent);
+                            })
+                            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .show();
+                }
+            }
+            else {
+                Log.e(TAG, "Failed to check balance", errorCause);
+                LogToGroup.log("Failed to check balance", errorCause, fragment);
+
+                if (errorCause instanceof CeloException) {
+                    CeloError coreError = errorCause.getMainCause().getError();
+
+                    if (coreError == CeloError.INSUFFICIENT_BALANCE) {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
+                    }
+                    else if (coreError == CeloError.NETWORK_ERROR) {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public static boolean resumePayment(BaseFragment fragment) {
+        if (savedOffer != null && savedTimeSlot != null) {
+            checkBalanceBeforePayment(fragment, savedOffer, savedTimeSlot);
+            savedOffer = null;
+            savedTimeSlot = null;
+            return true;
+        }
+        return false;
+    }
+
+    private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
         loadingDialog.setCanCacnel(false);
         loadingDialog.show();
