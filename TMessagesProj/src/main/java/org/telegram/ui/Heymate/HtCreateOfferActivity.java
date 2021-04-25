@@ -565,7 +565,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
-            UndoView undoView = new UndoView(context, true);
+            UndoView undoView = new UndoView(context, this);
             undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
             alertLayout.removeAllViews();
             String errors = "";
@@ -695,7 +695,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
-            UndoView undoView = new UndoView(context, true);
+            UndoView undoView = new UndoView(context, this);
             undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
             alertLayout.removeAllViews();
             StringBuilder errors = new StringBuilder();

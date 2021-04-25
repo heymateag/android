@@ -18,8 +18,8 @@ public class BuildVars {
     public static boolean LOGS_ENABLED = false;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = true;
-    public static int BUILD_VERSION = 2206;
-    public static String BUILD_VERSION_STRING = "7.3.0";
+    public static int BUILD_VERSION = 2293;
+    public static String BUILD_VERSION_STRING = "7.7.0";
     public static int APP_ID = 23167;
     public static String APP_HASH = "86f8ef5614337213cac8e2bcfafa7261";
     public static String APPCENTER_HASH = "a5b5c4f5-51da-dedc-9918-d9766a22ca7c";

@@ -158,7 +158,7 @@ public class OfferDialogCell extends SequenceLayout {
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 avatarImage.setImage(null, null, avatarDrawable, null, user, 0);
             } else {
-                ImageLocation imageLocation = ImageLocation.getForUser(user, false);
+                ImageLocation imageLocation = ImageLocation.getForUser(user, ImageLocation.TYPE_SMALL);
                 mHasImage = imageLocation != null;
                 avatarImage.setImage(imageLocation, "50_50", avatarDrawable, null, user, 0);
             }
@@ -166,7 +166,7 @@ public class OfferDialogCell extends SequenceLayout {
             mTextName.setText(chat.title);
 
             avatarDrawable.setInfo(chat);
-            ImageLocation imageLocation = ImageLocation.getForChat(chat, false);
+            ImageLocation imageLocation = ImageLocation.getForChat(chat, ImageLocation.TYPE_SMALL);
             mHasImage = imageLocation != null;
             avatarImage.setImage(imageLocation, "50_50", avatarDrawable, null, chat, 0);
         }

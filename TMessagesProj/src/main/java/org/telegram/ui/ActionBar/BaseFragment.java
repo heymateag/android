@@ -8,6 +8,7 @@
 
 package org.telegram.ui.ActionBar;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Dialog;
@@ -47,7 +48,7 @@ import org.telegram.ui.Heymate.HeymatePayment;
 
 import java.util.ArrayList;
 
-public class BaseFragment {
+public abstract class BaseFragment {
 
     private boolean isFinished;
     private boolean finishing;
@@ -329,6 +330,10 @@ public class BaseFragment {
 
     }
 
+    public boolean isLastFragment() {
+        return parentLayout != null && !parentLayout.fragmentsStack.isEmpty() && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 1) == this;
+    }
+
     public ActionBarLayout getParentLayout() {
         return parentLayout;
     }
@@ -411,6 +416,10 @@ public class BaseFragment {
         if (actionBar != null) {
             actionBar.onPause();
         }
+    }
+
+    protected void onSlideProgress(boolean isOpen, float progress) {
+
     }
 
     protected void onTransitionAnimationProgress(boolean isOpen, float progress) {
@@ -597,6 +606,18 @@ public class BaseFragment {
     }
 
     public void saveKeyboardPositionBeforeTransition() {
+
+    }
+
+    protected Animator getCustomSlideTransition(boolean topFragment, boolean backAnimation, float distanceToMove) {
+        return null;
+    }
+
+    protected void prepareFragmentToSlide(boolean topFragment, boolean beginSlide) {
+
+    }
+
+    public void setProgressToDrawerOpened(float v) {
 
     }
 }

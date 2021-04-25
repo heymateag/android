@@ -12,6 +12,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,8 +55,10 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.AnimationProperties;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 
@@ -105,6 +108,8 @@ public class BottomSheet extends Dialog {
     private boolean allowCustomAnimation = true;
     private boolean showWithoutAnimation;
 
+    protected int statusBarHeight = AndroidUtilities.statusBarHeight;
+
     protected boolean calcMandatoryInsets;
 
     private int touchSlop;
@@ -143,9 +148,14 @@ public class BottomSheet extends Dialog {
     protected String navBarColorKey = Theme.key_windowBackgroundGray;
     protected int navBarColor;
 
+    private OnDismissListener onHideListener;
+
     public void setDisableScroll(boolean b) {
         disableScroll = b;
     }
+
+    private ValueAnimator keyboardContentAnimator;
+    protected boolean smoothKeyboardAnimationEnabled;
 
     protected class ContainerView extends FrameLayout implements NestedScrollingParent {
 
@@ -160,6 +170,7 @@ public class BottomSheet extends Dialog {
         private Rect rect = new Rect();
         private int keyboardHeight;
         private Paint backgroundPaint = new Paint();
+        private boolean keyboardChanged;
 
         public ContainerView(Context context) {
             super(context);
@@ -316,7 +327,7 @@ public class BottomSheet extends Dialog {
                     containerView.setTranslationY(translationY);
                     startedTrackingY = (int) ev.getY();
                 }
-            } else if (ev == null || ev != null && ev.getPointerId(0) == startedTrackingPointerId && (ev.getAction() == MotionEvent.ACTION_CANCEL || ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_POINTER_UP)) {
+            } else if (ev == null || ev.getPointerId(0) == startedTrackingPointerId && (ev.getAction() == MotionEvent.ACTION_CANCEL || ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_POINTER_UP)) {
                 if (velocityTracker == null) {
                     velocityTracker = VelocityTracker.obtain();
                 }
@@ -350,6 +361,7 @@ public class BottomSheet extends Dialog {
             int containerHeight = height;
             View rootView = getRootView();
             getWindowVisibleDisplayFrame(rect);
+            int oldKeyboardHeight = keyboardHeight;
             if (rect.bottom != 0 && rect.top != 0) {
                 int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? AndroidUtilities.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
                 keyboardHeight = Math.max(0, usableViewHeight - (rect.bottom - rect.top));
@@ -359,6 +371,9 @@ public class BottomSheet extends Dialog {
                 bottomInset -= keyboardHeight;
             } else {
                 keyboardHeight = 0;
+            }
+            if (oldKeyboardHeight != keyboardHeight) {
+                keyboardChanged = true;
             }
             keyboardVisible = keyboardHeight > AndroidUtilities.dp(20);
             if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
@@ -432,6 +447,29 @@ public class BottomSheet extends Dialog {
                 if (lastInsets != null && Build.VERSION.SDK_INT >= 21) {
                     l += lastInsets.getSystemWindowInsetLeft();
                 }
+                if (smoothKeyboardAnimationEnabled && startAnimationRunnable == null && keyboardChanged && !dismissed && containerView.getTop() != t) {
+                    containerView.setTranslationY(containerView.getTop() - t);
+                    if (keyboardContentAnimator != null) {
+                        keyboardContentAnimator.cancel();
+                    }
+                    keyboardContentAnimator = ValueAnimator.ofFloat(containerView.getTranslationY(), 0);
+                    keyboardContentAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            containerView.setTranslationY((Float) valueAnimator.getAnimatedValue());
+                            invalidate();
+                        }
+                    });
+                    keyboardContentAnimator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            containerView.setTranslationY(0);
+                            invalidate();
+                        }
+                    });
+                    keyboardContentAnimator.setDuration(AdjustPanLayoutHelper.keyboardDuration).setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+                    keyboardContentAnimator.start();
+                }
                 containerView.layout(l, t, l + containerView.getMeasuredWidth(), t + containerView.getMeasuredHeight());
             }
 
@@ -491,6 +529,7 @@ public class BottomSheet extends Dialog {
                 startAnimationRunnable.run();
                 startAnimationRunnable = null;
             }
+            keyboardChanged = false;
         }
 
         @Override
@@ -534,6 +573,11 @@ public class BottomSheet extends Dialog {
                 }
                 int navBarHeight = drawNavigationBar ? bottomInset : 0;
                 canvas.drawRect(containerView.getLeft() + backgroundPaddingLeft, getMeasuredHeight() - navBarHeight + translation - currentPanTranslationY, containerView.getRight() - backgroundPaddingLeft, getMeasuredHeight() + translation, backgroundPaint);
+            }
+
+            if (containerView.getTranslationY() < 0) {
+                backgroundPaint.setColor(behindKeyboardColorKey != null ? Theme.getColor(behindKeyboardColorKey) : behindKeyboardColor);
+                canvas.drawRect(containerView.getLeft() + backgroundPaddingLeft, containerView.getY() + containerView.getMeasuredHeight(), containerView.getRight() - backgroundPaddingLeft, getMeasuredHeight(), backgroundPaint);
             }
         }
 
@@ -694,7 +738,9 @@ public class BottomSheet extends Dialog {
     public BottomSheet(Context context, boolean needFocus) {
         super(context, R.style.TransparentDialog);
 
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 30) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        } else if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
         ViewConfiguration vc = ViewConfiguration.get(context);
@@ -723,11 +769,23 @@ public class BottomSheet extends Dialog {
         if (Build.VERSION.SDK_INT >= 21) {
             container.setFitsSystemWindows(true);
             container.setOnApplyWindowInsetsListener((v, insets) -> {
+                int newTopInset = insets.getSystemWindowInsetTop();
+                if ((newTopInset != 0 || AndroidUtilities.isInMultiwindow) && statusBarHeight != 0 && statusBarHeight != newTopInset) {
+                    statusBarHeight = newTopInset;
+                }
                 lastInsets = insets;
                 v.requestLayout();
-                return insets.consumeSystemWindowInsets();
+                if (Build.VERSION.SDK_INT >= 30) {
+                    return WindowInsets.CONSUMED;
+                } else {
+                    return insets.consumeSystemWindowInsets();
+                }
             });
-            container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            if (Build.VERSION.SDK_INT >= 30) {
+                container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |  View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            } else {
+                container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            }
         }
 
         backDrawable.setAlpha(0);
@@ -738,6 +796,9 @@ public class BottomSheet extends Dialog {
         super.onCreate(savedInstanceState);
 
         Window window = getWindow();
+        /*if (Build.VERSION.SDK_INT >= 30) {
+            window.setDecorFitsSystemWindows(true);
+        }*/
         window.setWindowAnimations(R.style.DialogNoAnimation);
         setContentView(container, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -998,6 +1059,10 @@ public class BottomSheet extends Dialog {
         }
     }
 
+    public void setOnHideListener(OnDismissListener listener) {
+        onHideListener = listener;
+    }
+
     private void startOpenAnimation() {
         if (dismissed) {
             return;
@@ -1173,7 +1238,11 @@ public class BottomSheet extends Dialog {
             return;
         }
         dismissed = true;
+        if (onHideListener != null) {
+            onHideListener.onDismiss(this);
+        }
         cancelSheetAnimation();
+        long duration = 0;
         if (!allowCustomAnimation || !onCustomCloseAnimation()) {
             currentSheetAnimationType = 2;
             currentSheetAnimation = new AnimatorSet();
@@ -1183,10 +1252,11 @@ public class BottomSheet extends Dialog {
             );
             if (useFastDismiss) {
                 int height = containerView.getMeasuredHeight();
-                currentSheetAnimation.setDuration(Math.max(60, (int) (250 * (height - containerView.getTranslationY()) / (float) height)));
+                duration = Math.max(60, (int) (250 * (height - containerView.getTranslationY()) / (float) height));
+                currentSheetAnimation.setDuration(duration);
                 useFastDismiss = false;
             } else {
-                currentSheetAnimation.setDuration(250);
+                currentSheetAnimation.setDuration(duration = 250);
             }
             currentSheetAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
             currentSheetAnimation.addListener(new AnimatorListenerAdapter() {
@@ -1216,6 +1286,15 @@ public class BottomSheet extends Dialog {
             });
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
             currentSheetAnimation.start();
+        }
+
+        Bulletin bulletin = Bulletin.getVisibleBulletin();
+        if (bulletin != null && bulletin.isShowing()) {
+            if (duration > 0) {
+                bulletin.hide((long) (duration * 0.6f));
+            } else {
+                bulletin.hide();
+            }
         }
     }
 

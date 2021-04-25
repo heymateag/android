@@ -124,7 +124,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
     private int searchIndex;
 
-    ArrayList<TLObject> localTipChats = new ArrayList<>();
+    ArrayList<Object> localTipChats = new ArrayList<>();
     ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
 
     Runnable clearCurrentResultsRunnable = new Runnable() {
@@ -510,7 +510,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         AndroidUtilities.runOnUIThread(searchRunnable = () -> {
             TLObject request;
 
-            ArrayList<TLObject> resultArray = null;
+            ArrayList<Object> resultArray = null;
             if (dialogId != 0) {
                 final TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
                 req.q = query;
@@ -574,7 +574,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             lastMessagesSearchString = query;
             lastSearchFilterQueryString = currentSearchFilterQueryString;
 
-            ArrayList<TLObject> finalResultArray = resultArray;
+            ArrayList<Object> finalResultArray = resultArray;
             final ArrayList<FiltersView.DateData> dateData = new ArrayList<>();
             FiltersView.fillTipDates(lastMessagesSearchString, dateData);
             ConnectionsManager.getInstance(currentAccount).sendRequest(request, (response, error) -> {
@@ -1025,10 +1025,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 } else if (!cell.isLoading()) {
                     MessageObject messageObject = cell.getMessage();
                     AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, messageObject, 0, 0);
-                    cell.updateFileExistIcon();
+                    cell.updateFileExistIcon(true);
                 } else {
                     AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);
-                    cell.updateFileExistIcon();
+                    cell.updateFileExistIcon(true);
                 }
             }
         } else if (currentSearchFilter.filterType == FiltersView.FILTER_TYPE_LINKS) {
@@ -1518,7 +1518,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             View view;
             switch (viewType) {
                 case 0:
-                    view = new DialogCell(parent.getContext(), true, false);
+                    view = new DialogCell(null, parent.getContext(), true, false);
                     break;
                 case 3:
                     FlickerLoadingView flickerLoadingView = new FlickerLoadingView(parent.getContext());
@@ -1623,7 +1623,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     }
 
     public interface Delegate {
-        void updateFiltersView(boolean showMediaFilters, ArrayList<TLObject> users, ArrayList<FiltersView.DateData> dates);
+        void updateFiltersView(boolean showMediaFilters, ArrayList<Object> users, ArrayList<FiltersView.DateData> dates);
     }
 
     public interface UiCallback {
@@ -1738,7 +1738,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, null, null, Theme.key_chats_unreadCounterText));
         arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_lockDrawable}, null, Theme.key_chats_secretIcon));
         arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, null, Theme.key_chats_nameIcon));
-        arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_scamDrawable}, null, Theme.key_chats_draft));
+        arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Drawable[]{Theme.dialogs_scamDrawable, Theme.dialogs_fakeDrawable}, null, Theme.key_chats_draft));
         arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class}, null, new Drawable[]{Theme.dialogs_pinnedDrawable, Theme.dialogs_reorderDrawable}, null, Theme.key_chats_pinnedIcon));
         arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_namePaint[0], Theme.dialogs_namePaint[1], Theme.dialogs_searchNamePaint}, null, null, Theme.key_chats_name));
         arrayList.add(new ThemeDescription(recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, null, new Paint[]{Theme.dialogs_nameEncryptedPaint[0], Theme.dialogs_nameEncryptedPaint[1], Theme.dialogs_searchNameEncryptedPaint}, null, null, Theme.key_chats_secretName));

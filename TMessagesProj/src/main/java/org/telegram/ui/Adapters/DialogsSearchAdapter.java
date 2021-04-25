@@ -62,7 +62,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     private Context mContext;
     private Runnable searchRunnable;
     private Runnable searchRunnable2;
-    private ArrayList<TLObject> searchResult = new ArrayList<>();
+    private ArrayList<Object> searchResult = new ArrayList<>();
     private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
     private ArrayList<MessageObject> searchResultMessages = new ArrayList<>();
     private ArrayList<String> searchResultHashtags = new ArrayList<>();
@@ -93,6 +93,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     private ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
     private FilteredSearchView.Delegate filtersDelegate;
     private int folderId;
+    private int currentItemCount;
 
     public boolean isSearching() {
         return waitingResponseCount > 0;
@@ -358,11 +359,11 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public boolean hasRecentSearch() {
-        return dialogsType != 2 && dialogsType != 4 && dialogsType != 5 && dialogsType != 6 && (!recentSearchObjects.isEmpty() || !MediaDataController.getInstance(currentAccount).hints.isEmpty());
+        return dialogsType != 2 && dialogsType != 4 && dialogsType != 5 && dialogsType != 6 && dialogsType != 11 && (!recentSearchObjects.isEmpty() || !MediaDataController.getInstance(currentAccount).hints.isEmpty());
     }
 
     public boolean isRecentSearchDisplayed() {
-        return needMessagesSearch != 2 && !searchWas && (!recentSearchObjects.isEmpty() || !MediaDataController.getInstance(currentAccount).hints.isEmpty()) && dialogsType != 2 && dialogsType != 4 && dialogsType != 5 && dialogsType != 6;
+        return needMessagesSearch != 2 && !searchWas && (!recentSearchObjects.isEmpty() || !MediaDataController.getInstance(currentAccount).hints.isEmpty()) && dialogsType != 2 && dialogsType != 4 && dialogsType != 5 && dialogsType != 6 && dialogsType != 11;
     }
 
     public void loadRecentSearch() {
@@ -555,7 +556,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             return;
         }
         MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
-            ArrayList<TLObject> resultArray = new ArrayList<>();
+            ArrayList<Object> resultArray = new ArrayList<>();
             ArrayList<CharSequence> resultArrayNames = new ArrayList<>();
             ArrayList<TLRPC.User> encUsers = new ArrayList<>();
             MessagesStorage.getInstance(currentAccount).localSearch(dialogsType, q, resultArray, resultArrayNames, encUsers, -1);
@@ -570,7 +571,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
 
-    private void updateSearchResults(final ArrayList<TLObject> result, final ArrayList<CharSequence> names, final ArrayList<TLRPC.User> encUsers, final int searchId) {
+    private void updateSearchResults(final ArrayList<Object> result, final ArrayList<CharSequence> names, final ArrayList<TLRPC.User> encUsers, final int searchId) {
         AndroidUtilities.runOnUIThread(() -> {
             waitingResponseCount--;
             if (searchId != lastSearchId) {
@@ -585,7 +586,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
             searchWas = true;
             for (int a = 0; a < result.size(); a++) {
-                TLObject obj = result.get(a);
+                Object obj = result.get(a);
                 if (obj instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) obj;
                     MessagesController.getInstance(currentAccount).putUser(user, true);
@@ -646,7 +647,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             searchResultNames.clear();
             searchResultHashtags.clear();
             searchAdapterHelper.mergeResults(null);
-            searchAdapterHelper.queryServerSearch(null, true, true, true, true, dialogsType == 2, 0, dialogsType == 0, 0, 0);
+            searchAdapterHelper.queryServerSearch(null, true, true, dialogsType != 11, dialogsType != 11, dialogsType == 2 || dialogsType == 11, 0, dialogsType == 0, 0, 0);
             searchWas = false;
             lastSearchId = 0;
             waitingResponseCount = 0;
@@ -695,7 +696,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                         return;
                     }
                     if (needMessagesSearch != 2) {
-                        searchAdapterHelper.queryServerSearch(query, true, dialogsType != 4, true, dialogsType != 4, dialogsType == 2, 0, dialogsType == 0, 0, searchId);
+                        searchAdapterHelper.queryServerSearch(query, true, dialogsType != 4, true, dialogsType != 4 && dialogsType != 11, dialogsType == 2 || dialogsType == 1, 0, dialogsType == 0, 0, searchId);
                     } else {
                         waitingResponseCount -= 2;
                     }
@@ -737,7 +738,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         if (messagesCount != 0) {
             count += messagesCount + 1 + (messagesSearchEndReached ? 0 : 1);
         }
-        return count;
+        return currentItemCount = count;
     }
 
     public Object getItem(int i) {
@@ -865,7 +866,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 view = new GraySectionCell(mContext);
                 break;
             case 2:
-                view = new DialogCell(mContext, false, true);
+                view = new DialogCell(null, mContext, false, true);
                 break;
             case 3:
                 FlickerLoadingView flickerLoadingView = new FlickerLoadingView(mContext);
@@ -981,7 +982,6 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                         String foundUserName = searchAdapterHelper.getLastFoundUsername();
                         if (!TextUtils.isEmpty(foundUserName)) {
                             String nameSearch = null;
-                            String nameSearchLower = null;
                             int index;
                             if (user != null) {
                                 nameSearch = ContactsController.formatName(user.first_name, user.last_name);
@@ -1180,5 +1180,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         if (filtersDelegate != null && update) {
             filtersDelegate.updateFiltersView(false, null, localTipDates);
         }
+    }
+
+    public int getCurrentItemCount() {
+        return currentItemCount;
     }
 }

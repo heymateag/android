@@ -113,6 +113,8 @@ public class NotificationCenter {
     public static final int newSuggestionsAvailable = totalEvents++;
     public static final int didLoadChatInviter = totalEvents++;
     public static final int didLoadChatAdmins = totalEvents++;
+    public static final int historyImportProgressChanged = totalEvents++;
+    public static final int dialogDeleted = totalEvents++;
 
     public static final int walletPendingTransactionsChanged = totalEvents++;
     public static final int walletSyncProgressChanged = totalEvents++;
@@ -152,6 +154,7 @@ public class NotificationCenter {
 
     public static final int didStartedCall = totalEvents++;
     public static final int groupCallUpdated = totalEvents++;
+    public static final int applyGroupCallVisibleParticipants = totalEvents++;
     public static final int groupCallTypingsUpdated = totalEvents++;
     public static final int didEndCall = totalEvents++;
     public static final int closeInCallActivity = totalEvents++;
@@ -209,6 +212,7 @@ public class NotificationCenter {
     public static final int voipServiceCreated = totalEvents++;
     public static final int webRtcMicAmplitudeEvent = totalEvents++;
     public static final int webRtcSpeakerAmplitudeEvent = totalEvents++;
+    public static final int showBulletin = totalEvents++;
 
     private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
@@ -396,8 +400,12 @@ public class NotificationCenter {
         return currentHeavyOperationFlags;
     }
 
+    public ArrayList<NotificationCenterDelegate> getObservers(int id) {
+        return observers.get(id);
+    }
+
     public void postNotificationName(int id, Object... args) {
-        boolean allowDuringAnimation = id == startAllHeavyOperations || id == stopAllHeavyOperations || id == didReplacedPhotoInMemCache;
+        boolean allowDuringAnimation = id == startAllHeavyOperations || id == stopAllHeavyOperations || id == didReplacedPhotoInMemCache || id == closeChats;
         ArrayList<Integer> expiredIndices = null;
         if (!allowDuringAnimation && !allowedNotifications.isEmpty()) {
             int size = allowedNotifications.size();

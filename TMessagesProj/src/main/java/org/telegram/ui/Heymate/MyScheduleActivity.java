@@ -616,7 +616,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             mTextName.setText(user == null ? "" : UserObject.getUserName(user));
 
             avatarDrawable.setInfo(user);
-            avatarImage.setImage(ImageLocation.getForUser(user, false), "50_50", avatarDrawable, null, user, 0);
+            avatarImage.setImage(ImageLocation.getForUser(user, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, null, user, 0);
         }
 
         private void setRightAsDetails() {

@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,12 +19,14 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
@@ -34,6 +35,7 @@ public class VoIPToggleButton extends FrameLayout {
 
     Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private boolean drawBackground = true;
+    private boolean animateBackground;
     Drawable[] icon = new Drawable[2];
     TextView[] textView = new TextView[2];
 
@@ -63,6 +65,7 @@ public class VoIPToggleButton extends FrameLayout {
 
     private Paint bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+    private boolean checkableForAccessibility;
     private boolean checkable;
     private boolean checked;
     private float checkedProgress;
@@ -114,7 +117,7 @@ public class VoIPToggleButton extends FrameLayout {
     @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
-        if (replaceProgress != 0) {
+        if (animateBackground && replaceProgress != 0) {
             circlePaint.setColor(ColorUtils.blendARGB(backgroundColor, animateToBackgroundColor, replaceProgress));
         } else {
             circlePaint.setColor(backgroundColor);
@@ -229,6 +232,16 @@ public class VoIPToggleButton extends FrameLayout {
         setData(iconRes, iconColor, backgroundColor, 1.0f, true, text, cross, animated);
     }
 
+    public void setEnabled(boolean enabled, boolean animated) {
+        super.setEnabled(enabled);
+        if (animated) {
+            animate().alpha(enabled ? 1.0f : 0.5f).setDuration(180).start();
+        } else {
+            clearAnimation();
+            setAlpha(enabled ? 1.0f : 0.5f);
+        }
+    }
+
     public void setData(int iconRes, int iconColor, int backgroundColor, float selectorAlpha, boolean recreateRipple, String text, boolean cross, boolean animated) {
         if (getVisibility() != View.VISIBLE) {
             animated = false;
@@ -252,6 +265,7 @@ public class VoIPToggleButton extends FrameLayout {
         if (replaceAnimator != null) {
             replaceAnimator.cancel();
         }
+        animateBackground = currentBackgroundColor != backgroundColor;
 
         iconChangeColor = currentIconRes == iconRes;
         if (iconChangeColor) {
@@ -361,13 +375,20 @@ public class VoIPToggleButton extends FrameLayout {
         }
     }
 
+    public void setCheckableForAccessibility(boolean checkableForAccessibility) {
+        this.checkableForAccessibility = checkableForAccessibility;
+    }
+
     //animate background if true
     public void setCheckable(boolean checkable) {
         this.checkable = checkable;
     }
 
-    public void setChecked(boolean checked, boolean animated) {
-        this.checked = checked;
+    public void setChecked(boolean value, boolean animated) {
+        if (checked == value) {
+            return;
+        }
+        checked = value;
         if (checkable) {
             if (animated) {
                 if (checkAnimator != null) {
@@ -403,10 +424,12 @@ public class VoIPToggleButton extends FrameLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setText(currentText);
-        info.setClassName(Button.class.getName());
-        if (checkable) {
+        if (checkable || checkableForAccessibility) {
+            info.setClassName(ToggleButton.class.getName());
             info.setCheckable(true);
             info.setChecked(checked);
+        } else {
+            info.setClassName(Button.class.getName());
         }
     }
 
