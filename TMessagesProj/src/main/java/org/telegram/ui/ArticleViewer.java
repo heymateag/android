@@ -111,7 +111,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -1179,7 +1179,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity);
         builder.setTitle(urlFinal);
-        builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+        builder.setItems(new CharSequence[]{LocaleController.getString("Open", works.heymate.beta.R.string.Open), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialog, which) -> {
             if (parentActivity == null) {
                 return;
             }
@@ -1233,7 +1233,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             popupRect = new android.graphics.Rect();
             popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity);
             popupLayout.setPadding(AndroidUtilities.dp(1), AndroidUtilities.dp(1), AndroidUtilities.dp(1), AndroidUtilities.dp(1));
-            popupLayout.setBackgroundDrawable(parentActivity.getResources().getDrawable(R.drawable.menu_copy));
+            popupLayout.setBackgroundDrawable(parentActivity.getResources().getDrawable(works.heymate.beta.R.drawable.menu_copy));
             popupLayout.setAnimationEnabled(false);
             popupLayout.setOnTouchListener((v, event) -> {
                 if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -1259,11 +1259,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             deleteView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
             deleteView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             deleteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            deleteView.setText(LocaleController.getString("Copy", R.string.Copy).toUpperCase());
+            deleteView.setText(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy).toUpperCase());
             deleteView.setOnClickListener(v -> {
                 if (pressedLinkOwnerLayout != null) {
                     AndroidUtilities.addToClipboard(pressedLinkOwnerLayout.getText());
-                    Toast.makeText(parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(parentActivity, LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied), Toast.LENGTH_SHORT).show();
                 }
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss(true);
@@ -1273,7 +1273,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
             popupWindow.setAnimationEnabled(false);
-            popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
+            popupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation);
             popupWindow.setOutsideTouchable(true);
             popupWindow.setClippingEnabled(true);
             popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -1660,7 +1660,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 };
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setText(LocaleController.getString("InstantViewReference", R.string.InstantViewReference));
+                textView.setText(LocaleController.getString("InstantViewReference", works.heymate.beta.R.string.InstantViewReference));
                 textView.setGravity((adapter[0].isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
                 textView.setTextColor(getTextColor());
                 textView.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
@@ -2984,9 +2984,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         createPaint(false);
         backgroundPaint = new Paint();
 
-        layerShadowDrawable = activity.getResources().getDrawable(R.drawable.layer_shadow);
-        slideDotDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_small);
-        slideDotBigDrawable = activity.getResources().getDrawable(R.drawable.slide_dot_big);
+        layerShadowDrawable = activity.getResources().getDrawable(works.heymate.beta.R.drawable.layer_shadow);
+        slideDotDrawable = activity.getResources().getDrawable(works.heymate.beta.R.drawable.slide_dot_small);
+        slideDotBigDrawable = activity.getResources().getDrawable(works.heymate.beta.R.drawable.slide_dot_big);
         scrimPaint = new Paint();
 
         windowView = new WindowView(activity);
@@ -3319,7 +3319,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         headerView.addView(menuContainer, LayoutHelper.createFrame(48, 56, Gravity.TOP | Gravity.RIGHT));
 
         searchShadow = new View(activity);
-        searchShadow.setBackgroundResource(R.drawable.header_shadow);
+        searchShadow.setBackgroundResource(works.heymate.beta.R.drawable.header_shadow);
         searchShadow.setAlpha(0.0f);
         containerView.addView(searchShadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 3, Gravity.LEFT | Gravity.TOP, 0, 56, 0, 0));
 
@@ -3349,7 +3349,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         searchField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         searchField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         searchField.setSingleLine(true);
-        searchField.setHint(LocaleController.getString("Search", R.string.Search));
+        searchField.setHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
         searchField.setBackgroundResource(0);
         searchField.setPadding(0, 0, 0, 0);
         int inputType = searchField.getInputType() | EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
@@ -3469,7 +3469,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             searchField.requestFocus();
             AndroidUtilities.showKeyboard(searchField);
         });
-        clearButton.setContentDescription(LocaleController.getString("ClearButton", R.string.ClearButton));
+        clearButton.setContentDescription(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton));
         searchContainer.addView(clearButton, LayoutHelper.createFrame(48, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT));
 
         backButton = new ImageView(activity);
@@ -3494,7 +3494,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 close(true, true);
             }
         });
-        backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
+        backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", works.heymate.beta.R.string.AccDescrGoBack));
 
         menuButton = new ActionBarMenuItem(parentActivity, null, Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, 0xffb3b3b3) {
             @Override
@@ -3507,13 +3507,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         menuButton.setLayoutInScreen(true);
         menuButton.setDuplicateParentStateEnabled(false);
         menuButton.setClickable(true);
-        menuButton.setIcon(R.drawable.ic_ab_other);
-        menuButton.addSubItem(search_item, R.drawable.msg_search, LocaleController.getString("Search", R.string.Search));
-        menuButton.addSubItem(share_item, R.drawable.msg_share, LocaleController.getString("ShareFile", R.string.ShareFile));
-        menuButton.addSubItem(open_item, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
-        menuButton.addSubItem(settings_item, R.drawable.menu_settings, LocaleController.getString("Settings", R.string.Settings));
+        menuButton.setIcon(works.heymate.beta.R.drawable.ic_ab_other);
+        menuButton.addSubItem(search_item, works.heymate.beta.R.drawable.msg_search, LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        menuButton.addSubItem(share_item, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
+        menuButton.addSubItem(open_item, works.heymate.beta.R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", works.heymate.beta.R.string.OpenInExternalApp));
+        menuButton.addSubItem(settings_item, works.heymate.beta.R.drawable.menu_settings, LocaleController.getString("Settings", works.heymate.beta.R.string.Settings));
         menuButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-        menuButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        menuButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
         menuContainer.addView(menuButton, LayoutHelper.createFrame(48, 56));
         progressView = new ContextProgressView(activity, 2);
         progressView.setVisibility(View.GONE);
@@ -3544,21 +3544,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 settingsContainer.setOrientation(LinearLayout.VERTICAL);
 
                 HeaderCell headerCell = new HeaderCell(parentActivity);
-                headerCell.setText(LocaleController.getString("FontSize", R.string.FontSize));
+                headerCell.setText(LocaleController.getString("FontSize", works.heymate.beta.R.string.FontSize));
                 settingsContainer.addView(headerCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 3, 1, 3, 0));
 
                 TextSizeCell sizeCell = new TextSizeCell(parentActivity);
                 settingsContainer.addView(sizeCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 3, 0, 3, 0));
 
                 headerCell = new HeaderCell(parentActivity);
-                headerCell.setText(LocaleController.getString("FontType", R.string.FontType));
+                headerCell.setText(LocaleController.getString("FontType", works.heymate.beta.R.string.FontType));
                 settingsContainer.addView(headerCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 3, 4, 3, 2));
 
                 for (int a = 0; a < 2; a++) {
                     fontCells[a] = new FontCell(parentActivity);
                     switch (a) {
                         case 0:
-                            fontCells[a].setTextAndTypeface(LocaleController.getString("Default", R.string.Default), Typeface.DEFAULT);
+                            fontCells[a].setTextAndTypeface(LocaleController.getString("Default", works.heymate.beta.R.string.Default), Typeface.DEFAULT);
                             break;
                         case 1:
                             fontCells[a].setTextAndTypeface("Serif", Typeface.SERIF);
@@ -3605,21 +3605,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         searchUpButton = new ImageView(parentActivity);
         searchUpButton.setScaleType(ImageView.ScaleType.CENTER);
-        searchUpButton.setImageResource(R.drawable.msg_go_up);
+        searchUpButton.setImageResource(works.heymate.beta.R.drawable.msg_go_up);
         searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
         searchUpButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchPanel.addView(searchUpButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 48, 0));
         searchUpButton.setOnClickListener(view -> scrollToSearchIndex(currentSearchIndex - 1));
-        searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", R.string.AccDescrSearchNext));
+        searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", works.heymate.beta.R.string.AccDescrSearchNext));
 
         searchDownButton = new ImageView(parentActivity);
         searchDownButton.setScaleType(ImageView.ScaleType.CENTER);
-        searchDownButton.setImageResource(R.drawable.msg_go_down);
+        searchDownButton.setImageResource(works.heymate.beta.R.drawable.msg_go_down);
         searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
         searchDownButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchPanel.addView(searchDownButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 0, 0));
         searchDownButton.setOnClickListener(view -> scrollToSearchIndex(currentSearchIndex + 1));
-        searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", R.string.AccDescrSearchPrev));
+        searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", works.heymate.beta.R.string.AccDescrSearchPrev));
 
         searchCountText = new SimpleTextView(parentActivity);
         searchCountText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -3658,7 +3658,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             @Override
             public void onTextCopied() {
-                BulletinFactory.of(containerView).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                BulletinFactory.of(containerView).createCopyBulletin(LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied)).show();
             }
         });
         containerView.addView(textSelectionHelper.getOverlayView(activity));
@@ -3805,9 +3805,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (count < 0) {
             searchCountText.setText("");
         } else if (count == 0) {
-            searchCountText.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            searchCountText.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
         } else if (count == 1) {
-            searchCountText.setText(LocaleController.getString("OneResult", R.string.OneResult));
+            searchCountText.setText(LocaleController.getString("OneResult", works.heymate.beta.R.string.OneResult));
         } else {
             searchCountText.setText(String.format(LocaleController.getPluralString("CountOfResults", count), currentSearchIndex + 1, count));
         }
@@ -6306,7 +6306,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachVideo", R.string.AttachVideo));
+            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo));
             if (captionLayout != null) {
                 sb.append(", ");
                 sb.append(captionLayout.getText());
@@ -9162,7 +9162,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public BlockRelatedArticlesShadowCell(Context context) {
             super(context);
 
-            Drawable drawable = Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, 0xff000000);
+            Drawable drawable = Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, 0xff000000);
             shadowDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
             shadowDrawable.setFullsize(true);
             setBackgroundDrawable(shadowDrawable);
@@ -9326,9 +9326,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             String description;
             if (item.published_date != 0 && !TextUtils.isEmpty(item.author)) {
-                description = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format((long) item.published_date * 1000), item.author);
+                description = LocaleController.formatString("ArticleDateByAuthor", works.heymate.beta.R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format((long) item.published_date * 1000), item.author);
             } else if (!TextUtils.isEmpty(item.author)) {
-                description = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, item.author);
+                description = LocaleController.formatString("ArticleByAuthor", works.heymate.beta.R.string.ArticleByAuthor, item.author);
             } else if (item.published_date != 0) {
                 description = LocaleController.getInstance().chatFullDate.format((long) item.published_date * 1000);
             } else if (!TextUtils.isEmpty(item.description)) {
@@ -9452,7 +9452,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             info.setEnabled(true);
             if (textLayout == null)
                 return;
-            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", R.string.AccDescrIVHeading));
+            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", works.heymate.beta.R.string.AccDescrIVHeading));
         }
 
         @Override
@@ -9550,7 +9550,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (textLayout == null) {
                 return;
             }
-            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", R.string.AccDescrIVHeading));
+            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", works.heymate.beta.R.string.AccDescrIVHeading));
         }
 
         @Override
@@ -9828,7 +9828,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             isFirst = first;
             channelCell.setVisibility(INVISIBLE);
             if (!TextUtils.isEmpty(currentBlock.url)) {
-                linkDrawable = getResources().getDrawable(R.drawable.instant_link);
+                linkDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.instant_link);
             }
             if (currentBlock != null) {
                 TLRPC.Photo photo = parentAdapter.getPhotoWithId(currentBlock.photo_id);
@@ -10154,7 +10154,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
+            StringBuilder sb = new StringBuilder(LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto));
             if (captionLayout != null) {
                 sb.append(", ");
                 sb.append(captionLayout.getText());
@@ -10353,7 +10353,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             info.setEnabled(true);
-            StringBuilder sb = new StringBuilder(LocaleController.getString("Map", R.string.Map));
+            StringBuilder sb = new StringBuilder(LocaleController.getString("Map", works.heymate.beta.R.string.Map));
             if (captionLayout != null) {
                 sb.append(", ");
                 sb.append(captionLayout.getText());
@@ -10402,7 +10402,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             textView = new TextView(context);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setText(LocaleController.getString("ChannelJoin", R.string.ChannelJoin));
+            textView.setText(LocaleController.getString("ChannelJoin", works.heymate.beta.R.string.ChannelJoin));
             textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
             addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 39, Gravity.RIGHT | Gravity.TOP));
             textView.setOnClickListener(v -> {
@@ -10414,7 +10414,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             });
 
             imageView = new ImageView(context);
-            imageView.setImageResource(R.drawable.list_check);
+            imageView.setImageResource(works.heymate.beta.R.drawable.list_check);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             addView(imageView, LayoutHelper.createFrame(39, 39, Gravity.RIGHT | Gravity.TOP));
 
@@ -10601,9 +10601,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     spans = null;
                 }
                 if (currentBlock.published_date != 0 && !TextUtils.isEmpty(author)) {
-                    text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000), author);
+                    text = LocaleController.formatString("ArticleDateByAuthor", works.heymate.beta.R.string.ArticleDateByAuthor, LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000), author);
                 } else if (!TextUtils.isEmpty(author)) {
-                    text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, author);
+                    text = LocaleController.formatString("ArticleByAuthor", works.heymate.beta.R.string.ArticleByAuthor, author);
                 } else {
                     text = LocaleController.getInstance().chatFullDate.format((long) currentBlock.published_date * 1000);
                 }
@@ -10741,7 +10741,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             info.setEnabled(true);
             if (textLayout == null)
                 return;
-            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVTitle", R.string.AccDescrIVTitle));
+            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVTitle", works.heymate.beta.R.string.AccDescrIVTitle));
         }
 
         @Override
@@ -11096,7 +11096,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (textLayout == null) {
                 return;
             }
-            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", R.string.AccDescrIVHeading));
+            info.setText(textLayout.getText() + ", " + LocaleController.getString("AccDescrIVHeading", works.heymate.beta.R.string.AccDescrIVHeading));
         }
 
         @Override
@@ -11118,7 +11118,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             setTag(90);
 
             textView = new TextView(context);
-            textView.setText(LocaleController.getString("PreviewFeedback2", R.string.PreviewFeedback2));
+            textView.setText(LocaleController.getString("PreviewFeedback2", works.heymate.beta.R.string.PreviewFeedback2));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             textView.setGravity(Gravity.CENTER);
             textView.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);

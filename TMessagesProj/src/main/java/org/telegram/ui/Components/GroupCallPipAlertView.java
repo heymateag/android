@@ -26,7 +26,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.ActionBar.Theme;
@@ -76,7 +76,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(info);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("VoipGroupOpenVoiceChat", R.string.VoipGroupOpenVoiceChat)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("VoipGroupOpenVoiceChat", works.heymate.beta.R.string.VoipGroupOpenVoiceChat)));
                 }
             }
         };
@@ -148,7 +148,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
 
         leaveButton = new VoIPToggleButton(context, 44f);
         leaveButton.setTextSize(12);
-        leaveButton.setData(R.drawable.calls_decline, 0xffffffff, 0xFFCE4A4A, 0.3f, false, LocaleController.getString("VoipGroupLeave", R.string.VoipGroupLeave), false, false);
+        leaveButton.setData(works.heymate.beta.R.drawable.calls_decline, 0xffffffff, 0xFFCE4A4A, 0.3f, false, LocaleController.getString("VoipGroupLeave", works.heymate.beta.R.string.VoipGroupLeave), false, false);
         leaveButton.setOnClickListener(v -> GroupCallActivity.onLeaveClick(getContext(), () -> GroupCallPip.updateVisibility(context), Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context)));
 
         VoIPButtonsLayout buttonsContainer = new VoIPButtonsLayout(context);
@@ -322,7 +322,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         if (service != null && service.groupCall != null) {
             int currentCallState = service.getCallState();
             if (!service.isSwitchingStream() && (currentCallState == VoIPService.STATE_WAIT_INIT || currentCallState == VoIPService.STATE_WAIT_INIT_ACK || currentCallState == VoIPService.STATE_CREATING || currentCallState == VoIPService.STATE_RECONNECTING)) {
-                subtitleView.setText(LocaleController.getString("VoipGroupConnecting", R.string. VoipGroupConnecting));
+                subtitleView.setText(LocaleController.getString("VoipGroupConnecting", works.heymate.beta.R.string. VoipGroupConnecting));
             } else {
                 subtitleView.setText(LocaleController.formatPluralString("Participants", service.groupCall.call.participants_count));
             }
@@ -343,21 +343,21 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         soundButton.setChecked(checked, animated);
 
         if (bluetooth) {
-            soundButton.setData(R.drawable.calls_bluetooth, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), false, animated);
+            soundButton.setData(works.heymate.beta.R.drawable.calls_bluetooth, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingBluetooth", works.heymate.beta.R.string.VoipAudioRoutingBluetooth), false, animated);
         } else if (checked) {
-            soundButton.setData(R.drawable.calls_speaker, Color.WHITE, 0, 0.3f, true, LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker), false, animated);
+            soundButton.setData(works.heymate.beta.R.drawable.calls_speaker, Color.WHITE, 0, 0.3f, true, LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker), false, animated);
         } else {
             if (service.isHeadsetPlugged()) {
-                soundButton.setData(R.drawable.calls_headphones, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingHeadset", R.string.VoipAudioRoutingHeadset), false, animated);
+                soundButton.setData(works.heymate.beta.R.drawable.calls_headphones, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingHeadset", works.heymate.beta.R.string.VoipAudioRoutingHeadset), false, animated);
             } else {
-                soundButton.setData(R.drawable.calls_speaker, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker), false, animated);
+                soundButton.setData(works.heymate.beta.R.drawable.calls_speaker, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker), false, animated);
             }
         }
 
         if (service.mutedByAdmin()) {
-            muteButton.setData(R.drawable.calls_unmute, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.3f)), 0.1f, true, LocaleController.getString("VoipMutedByAdminShort", R.string.VoipMutedByAdminShort), true, animated);
+            muteButton.setData(works.heymate.beta.R.drawable.calls_unmute, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.3f)), 0.1f, true, LocaleController.getString("VoipMutedByAdminShort", works.heymate.beta.R.string.VoipMutedByAdminShort), true, animated);
         } else {
-            muteButton.setData(R.drawable.calls_unmute, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * (service.isMicMute() ? 0.3f : 0.15f))), 0.1f, true, service.isMicMute() ? LocaleController.getString("VoipUnmute", R.string.VoipUnmute) : LocaleController.getString("VoipMute", R.string.VoipMute), service.isMicMute(), animated);
+            muteButton.setData(works.heymate.beta.R.drawable.calls_unmute, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * (service.isMicMute() ? 0.3f : 0.15f))), 0.1f, true, service.isMicMute() ? LocaleController.getString("VoipUnmute", works.heymate.beta.R.string.VoipUnmute) : LocaleController.getString("VoipMute", works.heymate.beta.R.string.VoipMute), service.isMicMute(), animated);
         }
         invalidate();
     }

@@ -33,7 +33,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -74,8 +74,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         ApplicationLoader.postInitApplication();
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setTheme(R.style.Theme_TMessages);
-        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
+        setTheme(works.heymate.beta.R.style.Theme_TMessages);
+        getWindow().setBackgroundDrawableResource(works.heymate.beta.R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
@@ -111,7 +111,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             launchLayout.setLayoutParams(layoutParams1);
 
             backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(works.heymate.beta.R.drawable.catstile);
             drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -154,7 +154,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             layersActionBarLayout.setBackgroundView(shadowTablet);
             layersActionBarLayout.setUseAlphaAnimations(true);
-            layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
+            layersActionBarLayout.setBackgroundResource(works.heymate.beta.R.drawable.boxshadow);
             launchLayout.addView(layersActionBarLayout, LayoutHelper.createRelative(530, (AndroidUtilities.isSmallTablet() ? 528 : 700)));
             layersActionBarLayout.init(layerFragmentsStack);
             layersActionBarLayout.setDelegate(this);
@@ -164,7 +164,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(works.heymate.beta.R.drawable.catstile);
             drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -276,9 +276,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                     }
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(ExternalActionActivity.this);
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.getString("PleaseLoginPassport", R.string.PleaseLoginPassport));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setMessage(LocaleController.getString("PleaseLoginPassport", works.heymate.beta.R.string.PleaseLoginPassport));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     builder.show();
 
                     return true;
@@ -352,7 +352,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                         try {
                             progressDialog.dismiss();
                             if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                                AlertDialog dialog = AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                AlertDialog dialog = AlertsCreator.showUpdateAppAlert(ExternalActionActivity.this, LocaleController.getString("UpdateAppAlert", works.heymate.beta.R.string.UpdateAppAlert), true);
                                 if (dialog != null) {
                                     dialog.setOnDismissListener(dialog1 -> {
                                         setResult(RESULT_FIRST_USER, new Intent().putExtra("error", error.text));

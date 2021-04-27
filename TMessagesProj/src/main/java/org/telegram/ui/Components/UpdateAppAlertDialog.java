@@ -14,7 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -39,15 +39,15 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
         parentActivity = activity;
 
-        setTopImage(R.drawable.update, Theme.getColor(Theme.key_dialogTopBackground));
+        setTopImage(works.heymate.beta.R.drawable.update, Theme.getColor(Theme.key_dialogTopBackground));
         setTopHeight(175);
         setMessage(appUpdate.text);
         if (appUpdate.document instanceof TLRPC.TL_document) {
             setSecondTitle(AndroidUtilities.formatFileSize(appUpdate.document.size));
         }
         setDismissDialogByButtons(false);
-        setTitle(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
-        setPositiveButton(LocaleController.getString("UpdateNow", R.string.UpdateNow), (dialog, which) -> {
+        setTitle(LocaleController.getString("UpdateTelegram", works.heymate.beta.R.string.UpdateTelegram));
+        setPositiveButton(LocaleController.getString("UpdateNow", works.heymate.beta.R.string.UpdateNow), (dialog, which) -> {
             if (!BlockingUpdateView.checkApkInstallPermissions(getContext())) {
                 return;
             }
@@ -61,7 +61,7 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
                 dialog.dismiss();
             }
         });
-        setNeutralButton(LocaleController.getString("Later", R.string.Later), (dialog, which) -> {
+        setNeutralButton(LocaleController.getString("Later", works.heymate.beta.R.string.Later), (dialog, which) -> {
             if (appUpdate.document instanceof TLRPC.TL_document) {
                 FileLoader.getInstance(accountNum).cancelLoadFile(appUpdate.document);
             }

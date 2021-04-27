@@ -71,7 +71,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -1433,15 +1433,15 @@ public class Theme {
 
         public String getName() {
             if ("Blue".equals(name)) {
-                return LocaleController.getString("ThemeClassic", R.string.ThemeClassic);
+                return LocaleController.getString("ThemeClassic", works.heymate.beta.R.string.ThemeClassic);
             } else if ("Dark Blue".equals(name)) {
-                return LocaleController.getString("ThemeDark", R.string.ThemeDark);
+                return LocaleController.getString("ThemeDark", works.heymate.beta.R.string.ThemeDark);
             } else if ("Arctic Blue".equals(name)) {
-                return LocaleController.getString("ThemeArcticBlue", R.string.ThemeArcticBlue);
+                return LocaleController.getString("ThemeArcticBlue", works.heymate.beta.R.string.ThemeArcticBlue);
             } else if ("Day".equals(name)) {
-                return LocaleController.getString("ThemeDay", R.string.ThemeDay);
+                return LocaleController.getString("ThemeDay", works.heymate.beta.R.string.ThemeDay);
             } else if ("Night".equals(name)) {
-                return LocaleController.getString("ThemeNight", R.string.ThemeNight);
+                return LocaleController.getString("ThemeNight", works.heymate.beta.R.string.ThemeNight);
             }
             return info != null ? info.title : name;
         }
@@ -4538,9 +4538,9 @@ public class Theme {
 
     public static Drawable createEditTextDrawable(Context context, boolean alert) {
         Resources resources = context.getResources();
-        Drawable defaultDrawable = resources.getDrawable(R.drawable.search_dark).mutate();
+        Drawable defaultDrawable = resources.getDrawable(works.heymate.beta.R.drawable.search_dark).mutate();
         defaultDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputField : key_windowBackgroundWhiteInputField), PorterDuff.Mode.MULTIPLY));
-        Drawable pressedDrawable = resources.getDrawable(R.drawable.search_dark_activated).mutate();
+        Drawable pressedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.search_dark_activated).mutate();
         pressedDrawable.setColorFilter(new PorterDuffColorFilter(getColor(alert ? key_dialogInputFieldActivated : key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
         StateListDrawable stateListDrawable = new StateListDrawable() {
             @Override
@@ -4607,7 +4607,7 @@ public class Theme {
             }
             if (dialogs_holidayDrawable == null) {
                 if (monthOfYear == 11 && dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
-                    dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);
+                    dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -AndroidUtilities.dp(3);
                     dialogs_holidayDrawableOffsetY = -AndroidUtilities.dp(1);
                 }
@@ -6472,13 +6472,13 @@ public class Theme {
             Integer serviceColor = colors.get(key_chat_serviceBackground);
             Integer gradientToColor = colors.get(key_chat_wallpaper_gradient_to);
 
-            Drawable backDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_back).mutate();
+            Drawable backDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_back).mutate();
             setDrawableColor(backDrawable, actionBarIconColor);
-            Drawable otherDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_dots).mutate();
+            Drawable otherDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_dots).mutate();
             setDrawableColor(otherDrawable, actionBarIconColor);
-            Drawable emojiDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_smile).mutate();
+            Drawable emojiDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_smile).mutate();
             setDrawableColor(emojiDrawable, messageFieldIconColor);
-            Drawable micDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_mic).mutate();
+            Drawable micDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_mic).mutate();
             setDrawableColor(micDrawable, messageFieldIconColor);
 
             MessageDrawable[] msgDrawable = new MessageDrawable[2];
@@ -6610,7 +6610,7 @@ public class Theme {
                 }
             }
             if (!hasBackground) {
-                BitmapDrawable catsDrawable = (BitmapDrawable) ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.catstile).mutate();
+                BitmapDrawable catsDrawable = (BitmapDrawable) ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.catstile).mutate();
                 if (serviceColor == null) {
                     serviceColor = AndroidUtilities.calcDrawableColor(catsDrawable)[0];
                 }
@@ -6782,18 +6782,18 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            avatarDrawables[0] = resources.getDrawable(R.drawable.chats_saved);
-            avatarDrawables[1] = resources.getDrawable(R.drawable.ghost);
-            avatarDrawables[2] = resources.getDrawable(R.drawable.folders_private);
-            avatarDrawables[3] = resources.getDrawable(R.drawable.folders_requests);
-            avatarDrawables[4] = resources.getDrawable(R.drawable.folders_group);
-            avatarDrawables[5] = resources.getDrawable(R.drawable.folders_channel);
-            avatarDrawables[6] = resources.getDrawable(R.drawable.folders_bot);
-            avatarDrawables[7] = resources.getDrawable(R.drawable.folders_mute);
-            avatarDrawables[8] = resources.getDrawable(R.drawable.folders_read);
-            avatarDrawables[9] = resources.getDrawable(R.drawable.folders_archive);
-            avatarDrawables[10] = resources.getDrawable(R.drawable.folders_private);
-            avatarDrawables[11] = resources.getDrawable(R.drawable.chats_replies);
+            avatarDrawables[0] = resources.getDrawable(works.heymate.beta.R.drawable.chats_saved);
+            avatarDrawables[1] = resources.getDrawable(works.heymate.beta.R.drawable.ghost);
+            avatarDrawables[2] = resources.getDrawable(works.heymate.beta.R.drawable.folders_private);
+            avatarDrawables[3] = resources.getDrawable(works.heymate.beta.R.drawable.folders_requests);
+            avatarDrawables[4] = resources.getDrawable(works.heymate.beta.R.drawable.folders_group);
+            avatarDrawables[5] = resources.getDrawable(works.heymate.beta.R.drawable.folders_channel);
+            avatarDrawables[6] = resources.getDrawable(works.heymate.beta.R.drawable.folders_bot);
+            avatarDrawables[7] = resources.getDrawable(works.heymate.beta.R.drawable.folders_mute);
+            avatarDrawables[8] = resources.getDrawable(works.heymate.beta.R.drawable.folders_read);
+            avatarDrawables[9] = resources.getDrawable(works.heymate.beta.R.drawable.folders_archive);
+            avatarDrawables[10] = resources.getDrawable(works.heymate.beta.R.drawable.folders_private);
+            avatarDrawables[11] = resources.getDrawable(works.heymate.beta.R.drawable.chats_replies);
 
 
             if (dialogs_archiveAvatarDrawable != null) {
@@ -6815,21 +6815,21 @@ public class Theme {
             if (dialogs_hidePsaDrawable != null) {
                 dialogs_hidePsaDrawable.recycle();
             }
-            dialogs_archiveAvatarDrawable = new RLottieDrawable(R.raw.chats_archiveavatar, "chats_archiveavatar", AndroidUtilities.dp(36), AndroidUtilities.dp(36), false, null);
-            dialogs_archiveDrawable = new RLottieDrawable(R.raw.chats_archive, "chats_archive", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_unarchiveDrawable = new RLottieDrawable(R.raw.chats_unarchive, "chats_unarchive", AndroidUtilities.dp(AndroidUtilities.dp(36)), AndroidUtilities.dp(36));
-            dialogs_pinArchiveDrawable = new RLottieDrawable(R.raw.chats_hide, "chats_hide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_unpinArchiveDrawable = new RLottieDrawable(R.raw.chats_unhide, "chats_unhide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_hidePsaDrawable = new RLottieDrawable(R.raw.chat_audio_record_delete, "chats_psahide", AndroidUtilities.dp(30), AndroidUtilities.dp(30));
+            dialogs_archiveAvatarDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_archiveavatar, "chats_archiveavatar", AndroidUtilities.dp(36), AndroidUtilities.dp(36), false, null);
+            dialogs_archiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_archive, "chats_archive", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_unarchiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_unarchive, "chats_unarchive", AndroidUtilities.dp(AndroidUtilities.dp(36)), AndroidUtilities.dp(36));
+            dialogs_pinArchiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_hide, "chats_hide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_unpinArchiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_unhide, "chats_unhide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_hidePsaDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chat_audio_record_delete, "chats_psahide", AndroidUtilities.dp(30), AndroidUtilities.dp(30));
 
-            dialogs_swipeMuteDrawable = new RLottieDrawable(R.raw.swipe_mute, "swipe_mute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeUnmuteDrawable = new RLottieDrawable(R.raw.swipe_unmute, "swipe_unmute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeMuteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_mute, "swipe_mute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeUnmuteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_unmute, "swipe_unmute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
 
-            dialogs_swipeReadDrawable = new RLottieDrawable(R.raw.swipe_read, "swipe_read", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeUnreadDrawable = new RLottieDrawable(R.raw.swipe_unread, "swipe_unread", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeDeleteDrawable = new RLottieDrawable(R.raw.swipe_delete, "swipe_delete", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeUnpinDrawable = new RLottieDrawable(R.raw.swipe_unpin, "swipe_unpin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipePinDrawable = new RLottieDrawable(R.raw.swipe_pin, "swipe_pin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeReadDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_read, "swipe_read", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeUnreadDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_unread, "swipe_unread", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeDeleteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_delete, "swipe_delete", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeUnpinDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_unpin, "swipe_unpin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipePinDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_pin, "swipe_pin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
 
             applyCommonTheme();
         }
@@ -6930,25 +6930,25 @@ public class Theme {
             dialogs_errorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_actionMessagePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-            dialogs_lockDrawable = resources.getDrawable(R.drawable.list_secret);
-            dialogs_checkDrawable = resources.getDrawable(R.drawable.list_check).mutate();
-            dialogs_playDrawable = resources.getDrawable(R.drawable.minithumb_play).mutate();
-            dialogs_checkReadDrawable = resources.getDrawable(R.drawable.list_check).mutate();
-            dialogs_halfCheckDrawable = resources.getDrawable(R.drawable.list_halfcheck);
+            dialogs_lockDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_secret);
+            dialogs_checkDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_check).mutate();
+            dialogs_playDrawable = resources.getDrawable(works.heymate.beta.R.drawable.minithumb_play).mutate();
+            dialogs_checkReadDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_check).mutate();
+            dialogs_halfCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_halfcheck);
             dialogs_clockDrawable = new MsgClockDrawable();
-            dialogs_errorDrawable = resources.getDrawable(R.drawable.list_warning_sign);
-            dialogs_reorderDrawable = resources.getDrawable(R.drawable.list_reorder).mutate();
-            dialogs_groupDrawable = resources.getDrawable(R.drawable.list_group);
-            dialogs_broadcastDrawable = resources.getDrawable(R.drawable.list_broadcast);
-            dialogs_muteDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
-            dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
+            dialogs_errorDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_warning_sign);
+            dialogs_reorderDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_reorder).mutate();
+            dialogs_groupDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_group);
+            dialogs_broadcastDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_broadcast);
+            dialogs_muteDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_mute).mutate();
+            dialogs_verifiedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_area).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
             dialogs_fakeDrawable = new ScamDrawable(11, 1);
-            dialogs_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
-            dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
-            dialogs_botDrawable = resources.getDrawable(R.drawable.list_bot);
-            dialogs_pinnedDrawable = resources.getDrawable(R.drawable.list_pin);
-            moveUpDrawable = resources.getDrawable(R.drawable.preview_open);
+            dialogs_verifiedCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_check).mutate();
+            dialogs_mentionDrawable = resources.getDrawable(works.heymate.beta.R.drawable.mentionchatslist);
+            dialogs_botDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_bot);
+            dialogs_pinnedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_pin);
+            moveUpDrawable = resources.getDrawable(works.heymate.beta.R.drawable.preview_open);
 
             applyDialogsTheme();
         }
@@ -7116,7 +7116,7 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            chat_msgNoSoundDrawable = resources.getDrawable(R.drawable.video_muted);
+            chat_msgNoSoundDrawable = resources.getDrawable(works.heymate.beta.R.drawable.video_muted);
 
             chat_msgInDrawable = new MessageDrawable(MessageDrawable.TYPE_TEXT, false, false);
             chat_msgInSelectedDrawable = new MessageDrawable(MessageDrawable.TYPE_TEXT, false, true);
@@ -7136,128 +7136,128 @@ public class Theme {
             playPauseAnimator.addSvgKeyFrame("M 47.641 17.125 C 50.641 18.207 51.09 19.935 51.078 22.653 C 51.07 24.191 51.062 21.23 51.088 23.063 C 51.109 24.886 49.587 27 47.377 27 L 5 27.009 C 2.79 27.009 1 25.219 1 23.009 L 0.983 11.459 C 0.983 8.908 3.414 7.522 5.476 7.838 C 7.138 8.486 47.641 17.125 47.641 17.125 Z", 300);
             playPauseAnimator.addSvgKeyFrame("M 48 7 C 50.21 7 52 8.79 52 11 C 52 19 52 19 52 19 C 52 21.21 50.21 23 48 23 L 4 23 C 1.79 23 0 21.21 0 19 L 0 11 C 0 8.79 1.79 7 4 7 C 48 7 48 7 48 7 Z", 383);
 
-            chat_msgOutCheckDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
-            chat_msgOutCheckSelectedDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
-            chat_msgOutCheckReadDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
-            chat_msgOutCheckReadSelectedDrawable = resources.getDrawable(R.drawable.msg_check).mutate();
-            chat_msgMediaCheckDrawable = resources.getDrawable(R.drawable.msg_check_s).mutate();
-            chat_msgStickerCheckDrawable = resources.getDrawable(R.drawable.msg_check_s).mutate();
-            chat_msgOutHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
-            chat_msgOutHalfCheckSelectedDrawable = resources.getDrawable(R.drawable.msg_halfcheck).mutate();
-            chat_msgMediaHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck_s).mutate();
-            chat_msgStickerHalfCheckDrawable = resources.getDrawable(R.drawable.msg_halfcheck_s).mutate();
+            chat_msgOutCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_check).mutate();
+            chat_msgOutCheckSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_check).mutate();
+            chat_msgOutCheckReadDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_check).mutate();
+            chat_msgOutCheckReadSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_check).mutate();
+            chat_msgMediaCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_check_s).mutate();
+            chat_msgStickerCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_check_s).mutate();
+            chat_msgOutHalfCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_halfcheck).mutate();
+            chat_msgOutHalfCheckSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_halfcheck).mutate();
+            chat_msgMediaHalfCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_halfcheck_s).mutate();
+            chat_msgStickerHalfCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_halfcheck_s).mutate();
             chat_msgOutClockDrawable = new MsgClockDrawable();
             chat_msgOutSelectedClockDrawable = new MsgClockDrawable();
             chat_msgInClockDrawable = new MsgClockDrawable();
             chat_msgInSelectedClockDrawable = new MsgClockDrawable();
             chat_msgMediaClockDrawable = new MsgClockDrawable();
             chat_msgStickerClockDrawable = new MsgClockDrawable();
-            chat_msgInViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
-            chat_msgInViewsSelectedDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
-            chat_msgOutViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
-            chat_msgOutViewsSelectedDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
-            chat_msgInRepliesDrawable = resources.getDrawable(R.drawable.msg_reply_small).mutate();
-            chat_msgInRepliesSelectedDrawable = resources.getDrawable(R.drawable.msg_reply_small).mutate();
-            chat_msgOutRepliesDrawable = resources.getDrawable(R.drawable.msg_reply_small).mutate();
-            chat_msgOutRepliesSelectedDrawable = resources.getDrawable(R.drawable.msg_reply_small).mutate();
-            chat_msgInPinnedDrawable = resources.getDrawable(R.drawable.msg_pin_mini).mutate();
-            chat_msgInPinnedSelectedDrawable = resources.getDrawable(R.drawable.msg_pin_mini).mutate();
-            chat_msgOutPinnedDrawable = resources.getDrawable(R.drawable.msg_pin_mini).mutate();
-            chat_msgOutPinnedSelectedDrawable = resources.getDrawable(R.drawable.msg_pin_mini).mutate();
-            chat_msgMediaPinnedDrawable = resources.getDrawable(R.drawable.msg_pin_mini).mutate();
-            chat_msgStickerPinnedDrawable = resources.getDrawable(R.drawable.msg_pin_mini).mutate();
-            chat_msgMediaViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
-            chat_msgMediaRepliesDrawable = resources.getDrawable(R.drawable.msg_reply_small).mutate();
-            chat_msgStickerViewsDrawable = resources.getDrawable(R.drawable.msg_views).mutate();
-            chat_msgStickerRepliesDrawable = resources.getDrawable(R.drawable.msg_reply_small).mutate();
-            chat_msgInMenuDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
-            chat_msgInMenuSelectedDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
-            chat_msgOutMenuDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
-            chat_msgOutMenuSelectedDrawable = resources.getDrawable(R.drawable.msg_actions).mutate();
-            chat_msgMediaMenuDrawable = resources.getDrawable(R.drawable.video_actions);
-            chat_msgInInstantDrawable = resources.getDrawable(R.drawable.msg_instant).mutate();
-            chat_msgOutInstantDrawable = resources.getDrawable(R.drawable.msg_instant).mutate();
-            chat_msgErrorDrawable = resources.getDrawable(R.drawable.msg_warning);
-            chat_muteIconDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
-            chat_lockIconDrawable = resources.getDrawable(R.drawable.ic_lock_header);
-            chat_msgBroadcastDrawable = resources.getDrawable(R.drawable.broadcast3).mutate();
-            chat_msgBroadcastMediaDrawable = resources.getDrawable(R.drawable.broadcast3).mutate();
-            chat_msgInCallDrawable[0] = resources.getDrawable(R.drawable.chat_calls_voice).mutate();
-            chat_msgInCallSelectedDrawable[0] = resources.getDrawable(R.drawable.chat_calls_voice).mutate();
-            chat_msgOutCallDrawable[0] = resources.getDrawable(R.drawable.chat_calls_voice).mutate();
-            chat_msgOutCallSelectedDrawable[0] = resources.getDrawable(R.drawable.chat_calls_voice).mutate();
-            chat_msgInCallDrawable[1] = resources.getDrawable(R.drawable.chat_calls_video).mutate();
-            chat_msgInCallSelectedDrawable[1] = resources.getDrawable(R.drawable.chat_calls_video).mutate();
-            chat_msgOutCallDrawable[1] = resources.getDrawable(R.drawable.chat_calls_video).mutate();
-            chat_msgOutCallSelectedDrawable[1] = resources.getDrawable(R.drawable.chat_calls_video).mutate();
-            chat_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.chat_calls_outgoing).mutate();
-            chat_msgCallDownRedDrawable = resources.getDrawable(R.drawable.chat_calls_incoming).mutate();
-            chat_msgCallDownGreenDrawable = resources.getDrawable(R.drawable.chat_calls_incoming).mutate();
+            chat_msgInViewsDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_views).mutate();
+            chat_msgInViewsSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_views).mutate();
+            chat_msgOutViewsDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_views).mutate();
+            chat_msgOutViewsSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_views).mutate();
+            chat_msgInRepliesDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_reply_small).mutate();
+            chat_msgInRepliesSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_reply_small).mutate();
+            chat_msgOutRepliesDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_reply_small).mutate();
+            chat_msgOutRepliesSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_reply_small).mutate();
+            chat_msgInPinnedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_pin_mini).mutate();
+            chat_msgInPinnedSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_pin_mini).mutate();
+            chat_msgOutPinnedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_pin_mini).mutate();
+            chat_msgOutPinnedSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_pin_mini).mutate();
+            chat_msgMediaPinnedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_pin_mini).mutate();
+            chat_msgStickerPinnedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_pin_mini).mutate();
+            chat_msgMediaViewsDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_views).mutate();
+            chat_msgMediaRepliesDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_reply_small).mutate();
+            chat_msgStickerViewsDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_views).mutate();
+            chat_msgStickerRepliesDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_reply_small).mutate();
+            chat_msgInMenuDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_actions).mutate();
+            chat_msgInMenuSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_actions).mutate();
+            chat_msgOutMenuDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_actions).mutate();
+            chat_msgOutMenuSelectedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_actions).mutate();
+            chat_msgMediaMenuDrawable = resources.getDrawable(works.heymate.beta.R.drawable.video_actions);
+            chat_msgInInstantDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_instant).mutate();
+            chat_msgOutInstantDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_instant).mutate();
+            chat_msgErrorDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_warning);
+            chat_muteIconDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_mute).mutate();
+            chat_lockIconDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_lock_header);
+            chat_msgBroadcastDrawable = resources.getDrawable(works.heymate.beta.R.drawable.broadcast3).mutate();
+            chat_msgBroadcastMediaDrawable = resources.getDrawable(works.heymate.beta.R.drawable.broadcast3).mutate();
+            chat_msgInCallDrawable[0] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_voice).mutate();
+            chat_msgInCallSelectedDrawable[0] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_voice).mutate();
+            chat_msgOutCallDrawable[0] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_voice).mutate();
+            chat_msgOutCallSelectedDrawable[0] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_voice).mutate();
+            chat_msgInCallDrawable[1] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_video).mutate();
+            chat_msgInCallSelectedDrawable[1] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_video).mutate();
+            chat_msgOutCallDrawable[1] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_video).mutate();
+            chat_msgOutCallSelectedDrawable[1] = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_video).mutate();
+            chat_msgCallUpGreenDrawable = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_outgoing).mutate();
+            chat_msgCallDownRedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_incoming).mutate();
+            chat_msgCallDownGreenDrawable = resources.getDrawable(works.heymate.beta.R.drawable.chat_calls_incoming).mutate();
             for (int a = 0; a < 2; a++) {
-                chat_pollCheckDrawable[a] = resources.getDrawable(R.drawable.poll_right).mutate();
-                chat_pollCrossDrawable[a] = resources.getDrawable(R.drawable.poll_wrong).mutate();
-                chat_pollHintDrawable[a] = resources.getDrawable(R.drawable.smiles_panel_objects).mutate();
-                chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
+                chat_pollCheckDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.poll_right).mutate();
+                chat_pollCrossDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.poll_wrong).mutate();
+                chat_pollHintDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.smiles_panel_objects).mutate();
+                chat_psaHelpDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.msg_psa).mutate();
             }
 
-            calllog_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
-            calllog_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
-            calllog_msgCallDownRedDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
-            calllog_msgCallDownGreenDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
-            chat_msgAvatarLiveLocationDrawable = resources.getDrawable(R.drawable.livepin).mutate();
+            calllog_msgCallUpRedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_made_green_18dp).mutate();
+            calllog_msgCallUpGreenDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_made_green_18dp).mutate();
+            calllog_msgCallDownRedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_received_green_18dp).mutate();
+            calllog_msgCallDownGreenDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_received_green_18dp).mutate();
+            chat_msgAvatarLiveLocationDrawable = resources.getDrawable(works.heymate.beta.R.drawable.livepin).mutate();
 
-            chat_inlineResultFile = resources.getDrawable(R.drawable.bot_file);
-            chat_inlineResultAudio = resources.getDrawable(R.drawable.bot_music);
-            chat_inlineResultLocation = resources.getDrawable(R.drawable.bot_location);
-            chat_redLocationIcon = resources.getDrawable(R.drawable.map_pin).mutate();
+            chat_inlineResultFile = resources.getDrawable(works.heymate.beta.R.drawable.bot_file);
+            chat_inlineResultAudio = resources.getDrawable(works.heymate.beta.R.drawable.bot_music);
+            chat_inlineResultLocation = resources.getDrawable(works.heymate.beta.R.drawable.bot_location);
+            chat_redLocationIcon = resources.getDrawable(works.heymate.beta.R.drawable.map_pin).mutate();
 
-            chat_botLinkDrawalbe = resources.getDrawable(R.drawable.bot_link);
-            chat_botInlineDrawable = resources.getDrawable(R.drawable.bot_lines);
-            chat_botCardDrawalbe = resources.getDrawable(R.drawable.bot_card);
+            chat_botLinkDrawalbe = resources.getDrawable(works.heymate.beta.R.drawable.bot_link);
+            chat_botInlineDrawable = resources.getDrawable(works.heymate.beta.R.drawable.bot_lines);
+            chat_botCardDrawalbe = resources.getDrawable(works.heymate.beta.R.drawable.bot_card);
 
-            chat_commentDrawable = resources.getDrawable(R.drawable.msg_msgbubble);
-            chat_commentStickerDrawable = resources.getDrawable(R.drawable.msg_msgbubble2);
-            chat_commentArrowDrawable = resources.getDrawable(R.drawable.msg_arrowright);
+            chat_commentDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_msgbubble);
+            chat_commentStickerDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_msgbubble2);
+            chat_commentArrowDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_arrowright);
 
-            chat_systemDrawable = resources.getDrawable(R.drawable.system);
+            chat_systemDrawable = resources.getDrawable(works.heymate.beta.R.drawable.system);
 
-            chat_contextResult_shadowUnderSwitchDrawable = resources.getDrawable(R.drawable.header_shadow).mutate();
+            chat_contextResult_shadowUnderSwitchDrawable = resources.getDrawable(works.heymate.beta.R.drawable.header_shadow).mutate();
 
-            chat_attachButtonDrawables[0] = new RLottieDrawable(R.raw.attach_gallery, "attach_gallery", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[1] = new RLottieDrawable(R.raw.attach_music, "attach_music", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[2] = new RLottieDrawable(R.raw.attach_file, "attach_file", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[3] = new RLottieDrawable(R.raw.attach_contact, "attach_contact", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[4] = new RLottieDrawable(R.raw.attach_location, "attach_location", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[5] = new RLottieDrawable(R.raw.attach_poll, "attach_poll", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachEmptyDrawable = resources.getDrawable(R.drawable.nophotos3);
+            chat_attachButtonDrawables[0] = new RLottieDrawable(works.heymate.beta.R.raw.attach_gallery, "attach_gallery", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[1] = new RLottieDrawable(works.heymate.beta.R.raw.attach_music, "attach_music", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[2] = new RLottieDrawable(works.heymate.beta.R.raw.attach_file, "attach_file", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[3] = new RLottieDrawable(works.heymate.beta.R.raw.attach_contact, "attach_contact", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[4] = new RLottieDrawable(works.heymate.beta.R.raw.attach_location, "attach_location", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[5] = new RLottieDrawable(works.heymate.beta.R.raw.attach_poll, "attach_poll", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachEmptyDrawable = resources.getDrawable(works.heymate.beta.R.drawable.nophotos3);
 
-            chat_cornerOuter[0] = resources.getDrawable(R.drawable.corner_out_tl);
-            chat_cornerOuter[1] = resources.getDrawable(R.drawable.corner_out_tr);
-            chat_cornerOuter[2] = resources.getDrawable(R.drawable.corner_out_br);
-            chat_cornerOuter[3] = resources.getDrawable(R.drawable.corner_out_bl);
+            chat_cornerOuter[0] = resources.getDrawable(works.heymate.beta.R.drawable.corner_out_tl);
+            chat_cornerOuter[1] = resources.getDrawable(works.heymate.beta.R.drawable.corner_out_tr);
+            chat_cornerOuter[2] = resources.getDrawable(works.heymate.beta.R.drawable.corner_out_br);
+            chat_cornerOuter[3] = resources.getDrawable(works.heymate.beta.R.drawable.corner_out_bl);
 
-            chat_cornerInner[0] = resources.getDrawable(R.drawable.corner_in_tr);
-            chat_cornerInner[1] = resources.getDrawable(R.drawable.corner_in_tl);
-            chat_cornerInner[2] = resources.getDrawable(R.drawable.corner_in_br);
-            chat_cornerInner[3] = resources.getDrawable(R.drawable.corner_in_bl);
+            chat_cornerInner[0] = resources.getDrawable(works.heymate.beta.R.drawable.corner_in_tr);
+            chat_cornerInner[1] = resources.getDrawable(works.heymate.beta.R.drawable.corner_in_tl);
+            chat_cornerInner[2] = resources.getDrawable(works.heymate.beta.R.drawable.corner_in_br);
+            chat_cornerInner[3] = resources.getDrawable(works.heymate.beta.R.drawable.corner_in_bl);
 
             chat_shareDrawable = createRoundRectDrawable(AndroidUtilities.dp(16), 0xffffffff);
-            chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow).mutate();
-            chat_replyIconDrawable = resources.getDrawable(R.drawable.fast_reply);
-            chat_goIconDrawable = resources.getDrawable(R.drawable.message_arrow);
+            chat_shareIconDrawable = resources.getDrawable(works.heymate.beta.R.drawable.share_arrow).mutate();
+            chat_replyIconDrawable = resources.getDrawable(works.heymate.beta.R.drawable.fast_reply);
+            chat_goIconDrawable = resources.getDrawable(works.heymate.beta.R.drawable.message_arrow);
 
-            chat_fileMiniStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_cancel);
-            chat_fileMiniStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_cancel);
-            chat_fileMiniStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_arrow);
-            chat_fileMiniStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_cancel);
-            chat_fileMiniStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.audio_mini_cancel);
-            chat_fileMiniStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_arrow);
-            chat_fileMiniStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_arrow);
-            chat_fileMiniStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_cancel);
-            chat_fileMiniStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), R.drawable.video_mini_cancel);
+            chat_fileMiniStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_arrow);
+            chat_fileMiniStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.audio_mini_cancel);
+            chat_fileMiniStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.video_mini_arrow);
+            chat_fileMiniStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.video_mini_arrow);
+            chat_fileMiniStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.video_mini_cancel);
+            chat_fileMiniStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(22), works.heymate.beta.R.drawable.video_mini_cancel);
 
             int rad = AndroidUtilities.dp(2);
             RectF rect = new RectF();
@@ -7282,63 +7282,63 @@ public class Theme {
             chat_filePath[1].lineTo(AndroidUtilities.dp(14), AndroidUtilities.dp(10));
             chat_filePath[1].close();
 
-            chat_flameIcon = resources.getDrawable(R.drawable.burn).mutate();
-            chat_gifIcon = resources.getDrawable(R.drawable.msg_round_gif_m).mutate();
+            chat_flameIcon = resources.getDrawable(works.heymate.beta.R.drawable.burn).mutate();
+            chat_gifIcon = resources.getDrawable(works.heymate.beta.R.drawable.msg_round_gif_m).mutate();
 
-            chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_play_m);
-            chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_play_m);
-            chat_fileStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_pause_m);
-            chat_fileStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_pause_m);
-            chat_fileStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_load_m);
-            chat_fileStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_load_m);
-            chat_fileStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_file_s);
-            chat_fileStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_file_s);
-            chat_fileStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_cancel_m);
-            chat_fileStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_cancel_m);
-            chat_fileStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_play_m);
-            chat_fileStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_play_m);
-            chat_fileStatesDrawable[6][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_pause_m);
-            chat_fileStatesDrawable[6][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_pause_m);
-            chat_fileStatesDrawable[7][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_load_m);
-            chat_fileStatesDrawable[7][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_load_m);
-            chat_fileStatesDrawable[8][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_file_s);
-            chat_fileStatesDrawable[8][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_file_s);
-            chat_fileStatesDrawable[9][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_cancel_m);
-            chat_fileStatesDrawable[9][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_round_cancel_m);
+            chat_fileStatesDrawable[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_play_m);
+            chat_fileStatesDrawable[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_play_m);
+            chat_fileStatesDrawable[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_pause_m);
+            chat_fileStatesDrawable[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_pause_m);
+            chat_fileStatesDrawable[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_fileStatesDrawable[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_fileStatesDrawable[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_file_s);
+            chat_fileStatesDrawable[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_file_s);
+            chat_fileStatesDrawable[4][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_fileStatesDrawable[4][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_fileStatesDrawable[5][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_play_m);
+            chat_fileStatesDrawable[5][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_play_m);
+            chat_fileStatesDrawable[6][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_pause_m);
+            chat_fileStatesDrawable[6][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_pause_m);
+            chat_fileStatesDrawable[7][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_fileStatesDrawable[7][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_fileStatesDrawable[8][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_file_s);
+            chat_fileStatesDrawable[8][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_file_s);
+            chat_fileStatesDrawable[9][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_fileStatesDrawable[9][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_round_cancel_m);
 
-            chat_photoStatesDrawables[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_load_m);
-            chat_photoStatesDrawables[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_load_m);
-            chat_photoStatesDrawables[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_cancel_m);
-            chat_photoStatesDrawables[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_cancel_m);
-            chat_photoStatesDrawables[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_gif_m);
-            chat_photoStatesDrawables[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_gif_m);
-            chat_photoStatesDrawables[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_play_m);
-            chat_photoStatesDrawables[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_play_m);
+            chat_photoStatesDrawables[0][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_photoStatesDrawables[0][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_photoStatesDrawables[1][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_photoStatesDrawables[1][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_photoStatesDrawables[2][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_gif_m);
+            chat_photoStatesDrawables[2][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_gif_m);
+            chat_photoStatesDrawables[3][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_play_m);
+            chat_photoStatesDrawables[3][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_play_m);
 
-            chat_photoStatesDrawables[4][0] = chat_photoStatesDrawables[4][1] = resources.getDrawable(R.drawable.burn);
-            chat_photoStatesDrawables[5][0] = chat_photoStatesDrawables[5][1] = resources.getDrawable(R.drawable.circle);
-            chat_photoStatesDrawables[6][0] = chat_photoStatesDrawables[6][1] = resources.getDrawable(R.drawable.photocheck);
+            chat_photoStatesDrawables[4][0] = chat_photoStatesDrawables[4][1] = resources.getDrawable(works.heymate.beta.R.drawable.burn);
+            chat_photoStatesDrawables[5][0] = chat_photoStatesDrawables[5][1] = resources.getDrawable(works.heymate.beta.R.drawable.circle);
+            chat_photoStatesDrawables[6][0] = chat_photoStatesDrawables[6][1] = resources.getDrawable(works.heymate.beta.R.drawable.photocheck);
 
-            chat_photoStatesDrawables[7][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_load_m);
-            chat_photoStatesDrawables[7][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_load_m);
-            chat_photoStatesDrawables[8][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_cancel_m);
-            chat_photoStatesDrawables[8][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_cancel_m);
-            chat_photoStatesDrawables[9][0] = resources.getDrawable(R.drawable.doc_big).mutate();
-            chat_photoStatesDrawables[9][1] = resources.getDrawable(R.drawable.doc_big).mutate();
-            chat_photoStatesDrawables[10][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_load_m);
-            chat_photoStatesDrawables[10][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_load_m);
-            chat_photoStatesDrawables[11][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_cancel_m);
-            chat_photoStatesDrawables[11][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), R.drawable.msg_round_cancel_m);
-            chat_photoStatesDrawables[12][0] = resources.getDrawable(R.drawable.doc_big).mutate();
-            chat_photoStatesDrawables[12][1] = resources.getDrawable(R.drawable.doc_big).mutate();
+            chat_photoStatesDrawables[7][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_photoStatesDrawables[7][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_photoStatesDrawables[8][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_photoStatesDrawables[8][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_photoStatesDrawables[9][0] = resources.getDrawable(works.heymate.beta.R.drawable.doc_big).mutate();
+            chat_photoStatesDrawables[9][1] = resources.getDrawable(works.heymate.beta.R.drawable.doc_big).mutate();
+            chat_photoStatesDrawables[10][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_photoStatesDrawables[10][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_load_m);
+            chat_photoStatesDrawables[11][0] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_photoStatesDrawables[11][1] = createCircleDrawableWithIcon(AndroidUtilities.dp(48), works.heymate.beta.R.drawable.msg_round_cancel_m);
+            chat_photoStatesDrawables[12][0] = resources.getDrawable(works.heymate.beta.R.drawable.doc_big).mutate();
+            chat_photoStatesDrawables[12][1] = resources.getDrawable(works.heymate.beta.R.drawable.doc_big).mutate();
 
-            chat_contactDrawable[0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_contact);
-            chat_contactDrawable[1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), R.drawable.msg_contact);
+            chat_contactDrawable[0] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_contact);
+            chat_contactDrawable[1] = createCircleDrawableWithIcon(AndroidUtilities.dp(44), works.heymate.beta.R.drawable.msg_contact);
 
-            chat_locationDrawable[0] = resources.getDrawable(R.drawable.msg_location).mutate();
-            chat_locationDrawable[1] = resources.getDrawable(R.drawable.msg_location).mutate();
+            chat_locationDrawable[0] = resources.getDrawable(works.heymate.beta.R.drawable.msg_location).mutate();
+            chat_locationDrawable[1] = resources.getDrawable(works.heymate.beta.R.drawable.msg_location).mutate();
 
-            chat_composeShadowDrawable = context.getResources().getDrawable(R.drawable.compose_panel_shadow);
+            chat_composeShadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.compose_panel_shadow);
 
             try {
                 int bitmapSize = AndroidUtilities.roundMessageSize + AndroidUtilities.dp(6);
@@ -7685,8 +7685,8 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            profile_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
-            profile_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
+            profile_verifiedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_area).mutate();
+            profile_verifiedCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_check).mutate();
 
             applyProfileTheme();
         }
@@ -8159,7 +8159,7 @@ public class Theme {
                     int selectedColor = overrideWallpaper != null ? overrideWallpaper.color : 0;
                     try {
                         if (overrideWallpaper == null || overrideWallpaper.isDefault()) {
-                            wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.background_hd);
+                            wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.background_hd);
                             isCustomTheme = false;
                         } else if (!overrideWallpaper.isColor() || overrideWallpaper.gradientColor != 0) {
                             if (selectedColor != 0 && !isPatternWallpaper) {
@@ -8192,7 +8192,7 @@ public class Theme {
                                     }
                                 }
                                 if (wallpaper == null) {
-                                    wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.background_hd);
+                                    wallpaper = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.background_hd);
                                     isCustomTheme = false;
                                 }
                             }

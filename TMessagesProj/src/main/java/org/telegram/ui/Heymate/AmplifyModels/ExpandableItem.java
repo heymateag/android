@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -44,7 +44,7 @@ public class ExpandableItem extends FrameLayout {
         addView(mTextTitle, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 92, 16, 0, 16));
 
         mButtonExpand = new ImageView(context);
-        mButtonExpand.setImageResource(R.drawable.arrow_more);
+        mButtonExpand.setImageResource(works.heymate.beta.R.drawable.arrow_more);
         mButtonExpand.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.SRC_IN);
         addView(mButtonExpand, LayoutHelper.createFrame(16, 16, Gravity.RIGHT | Gravity.TOP, 0, 16, 30, 16));
 

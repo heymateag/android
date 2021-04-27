@@ -5685,58 +5685,58 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     if (pu.action instanceof TLRPC.TL_sendMessageRecordAudioAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsRecordingAudio", R.string.IsRecordingAudio, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsRecordingAudio", works.heymate.beta.R.string.IsRecordingAudio, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("RecordingAudio", R.string.RecordingAudio));
+                            newPrintingStrings.put(threadId, LocaleController.getString("RecordingAudio", works.heymate.beta.R.string.RecordingAudio));
                         }
                         newPrintingStringsTypes.put(threadId, 1);
                     } else if (pu.action instanceof TLRPC.TL_sendMessageRecordRoundAction || pu.action instanceof TLRPC.TL_sendMessageUploadRoundAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsRecordingRound", R.string.IsRecordingRound, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsRecordingRound", works.heymate.beta.R.string.IsRecordingRound, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("RecordingRound", R.string.RecordingRound));
+                            newPrintingStrings.put(threadId, LocaleController.getString("RecordingRound", works.heymate.beta.R.string.RecordingRound));
                         }
                         newPrintingStringsTypes.put(threadId, 4);
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadAudioAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingAudio", R.string.IsSendingAudio, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingAudio", works.heymate.beta.R.string.IsSendingAudio, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("SendingAudio", R.string.SendingAudio));
+                            newPrintingStrings.put(threadId, LocaleController.getString("SendingAudio", works.heymate.beta.R.string.SendingAudio));
                         }
                         newPrintingStringsTypes.put(threadId, 2);
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadVideoAction || pu.action instanceof TLRPC.TL_sendMessageRecordVideoAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingVideo", R.string.IsSendingVideo, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingVideo", works.heymate.beta.R.string.IsSendingVideo, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("SendingVideoStatus", R.string.SendingVideoStatus));
+                            newPrintingStrings.put(threadId, LocaleController.getString("SendingVideoStatus", works.heymate.beta.R.string.SendingVideoStatus));
                         }
                         newPrintingStringsTypes.put(threadId, 2);
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadDocumentAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingFile", R.string.IsSendingFile, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingFile", works.heymate.beta.R.string.IsSendingFile, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("SendingFile", R.string.SendingFile));
+                            newPrintingStrings.put(threadId, LocaleController.getString("SendingFile", works.heymate.beta.R.string.SendingFile));
                         }
                         newPrintingStringsTypes.put(threadId, 2);
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadPhotoAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingPhoto", R.string.IsSendingPhoto, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingPhoto", works.heymate.beta.R.string.IsSendingPhoto, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("SendingPhoto", R.string.SendingPhoto));
+                            newPrintingStrings.put(threadId, LocaleController.getString("SendingPhoto", works.heymate.beta.R.string.SendingPhoto));
                         }
                         newPrintingStringsTypes.put(threadId, 2);
                     } else if (pu.action instanceof TLRPC.TL_sendMessageGamePlayAction) {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingGame", R.string.IsSendingGame, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsSendingGame", works.heymate.beta.R.string.IsSendingGame, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("SendingGame", R.string.SendingGame));
+                            newPrintingStrings.put(threadId, LocaleController.getString("SendingGame", works.heymate.beta.R.string.SendingGame));
                         }
                         newPrintingStringsTypes.put(threadId, 3);
                     } else {
                         if (lower_id < 0) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, getUserNameForTyping(user)));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsTypingGroup", works.heymate.beta.R.string.IsTypingGroup, getUserNameForTyping(user)));
                         } else {
-                            newPrintingStrings.put(threadId, LocaleController.getString("Typing", R.string.Typing));
+                            newPrintingStrings.put(threadId, LocaleController.getString("Typing", works.heymate.beta.R.string.Typing));
                         }
                         newPrintingStringsTypes.put(threadId, 0);
                     }
@@ -5758,7 +5758,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     if (label.length() != 0) {
                         if (count == 1) {
-                            newPrintingStrings.put(threadId, LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, label.toString()));
+                            newPrintingStrings.put(threadId, LocaleController.formatString("IsTypingGroup", works.heymate.beta.R.string.IsTypingGroup, label.toString()));
                         } else {
                             if (arr.size() > 2) {
                                 String plural = LocaleController.getPluralString("AndMoreTypingGroup", arr.size() - 2);
@@ -5768,7 +5768,7 @@ public class MessagesController extends BaseController implements NotificationCe
                                     newPrintingStrings.put(threadId, "LOC_ERR: AndMoreTypingGroup");
                                 }
                             } else {
-                                newPrintingStrings.put(threadId, LocaleController.formatString("AreTypingGroup", R.string.AreTypingGroup, label.toString()));
+                                newPrintingStrings.put(threadId, LocaleController.formatString("AreTypingGroup", works.heymate.beta.R.string.AreTypingGroup, label.toString()));
                             }
                         }
                         newPrintingStringsTypes.put(threadId, 0);
@@ -6392,7 +6392,7 @@ public class MessagesController extends BaseController implements NotificationCe
         dialogFolder.peer = new TLRPC.TL_peerUser();
         dialogFolder.folder = new TLRPC.TL_folder();
         dialogFolder.folder.id = folderId;
-        dialogFolder.folder.title = LocaleController.getString("ArchivedChats", R.string.ArchivedChats);
+        dialogFolder.folder.title = LocaleController.getString("ArchivedChats", works.heymate.beta.R.string.ArchivedChats);
         dialogFolder.pinned = true;
 
         int maxPinnedNum = 0;
@@ -14012,8 +14012,8 @@ public class MessagesController extends BaseController implements NotificationCe
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         builder.setMessage(reason);
         fragment.showDialog(builder.create());
     }
@@ -14180,7 +14180,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else {
                     if (fragment.getParentActivity() != null) {
                         try {
-                            BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound)).show();
+                            BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString("NoUsernameFound", works.heymate.beta.R.string.NoUsernameFound)).show();
                         } catch (Exception e) {
                             FileLog.e(e);
                         }

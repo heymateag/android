@@ -56,7 +56,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -366,7 +366,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(lower_id);
                 if (user != null) {
                     if (user.self) {
-                        actionBar.setTitle(LocaleController.getString("SavedMessages", R.string.SavedMessages));
+                        actionBar.setTitle(LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages));
                     } else {
                         actionBar.setTitle(ContactsController.formatName(user.first_name, user.last_name));
                     }
@@ -387,7 +387,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             }
         }
         if (TextUtils.isEmpty(actionBar.getTitle())) {
-            actionBar.setTitle(LocaleController.getString("SharedContentTitle", R.string.SharedContentTitle));
+            actionBar.setTitle(LocaleController.getString("SharedContentTitle", works.heymate.beta.R.string.SharedContentTitle));
         }
         actionBar.setExtraHeight(AndroidUtilities.dp(44));
         actionBar.setAllowOverlayTitle(false);
@@ -511,7 +511,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             }
         });
 
-        pinnedHeaderShadowDrawable = context.getResources().getDrawable(R.drawable.photos_header_shadow);
+        pinnedHeaderShadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.photos_header_shadow);
         pinnedHeaderShadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundGrayShadow), PorterDuff.Mode.MULTIPLY));
 
         if (scrollSlidingTextTabStrip != null) {
@@ -574,7 +574,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         actionModeViews.clear();
 
         final ActionBarMenu menu = actionBar.createMenu();
-        searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -624,8 +624,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 }
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
-        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
         searchItem.setVisibility(View.INVISIBLE);
         searchItemState = 0;
         hasOwnBackground = true;
@@ -648,10 +648,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         actionMode.addView(selectedMessagesCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
         if ((int) dialog_id != 0) {
-            actionModeViews.add(gotoItem = actionMode.addItemWithWidth(gotochat, R.drawable.msg_message, AndroidUtilities.dp(54), LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage)));
-            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
+            actionModeViews.add(gotoItem = actionMode.addItemWithWidth(gotochat, works.heymate.beta.R.drawable.msg_message, AndroidUtilities.dp(54), LocaleController.getString("AccDescrGoToMessage", works.heymate.beta.R.string.AccDescrGoToMessage)));
+            actionModeViews.add(actionMode.addItemWithWidth(forward, works.heymate.beta.R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", works.heymate.beta.R.string.Forward)));
         }
-        actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+        actionModeViews.add(actionMode.addItemWithWidth(delete, works.heymate.beta.R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)));
 
         photoVideoAdapter = new SharedPhotoVideoAdapter(context);
         documentsAdapter = new SharedDocumentsAdapter(context, 1);
@@ -1231,8 +1231,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             mediaPages[a].addView(mediaPages[a].emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             mediaPages[a].emptyView.setOnTouchListener((v, event) -> true);
             mediaPages[a].emptyView.showProgress(true, false);
-            mediaPages[a].emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
-            mediaPages[a].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
+            mediaPages[a].emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+            mediaPages[a].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", works.heymate.beta.R.string.SearchEmptyViewFilteredSubtitle2));
             mediaPages[a].emptyView.addView(mediaPages[a].progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             mediaPages[a].listView.setEmptyView(mediaPages[a].emptyView);
@@ -1658,23 +1658,23 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             scrollSlidingTextTabStrip.removeTabs();
             if (hasMedia[0] != 0 || hasMedia[1] == 0 && hasMedia[2] == 0 && hasMedia[3] == 0 && hasMedia[4] == 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(0)) {
-                    scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", R.string.SharedMediaTab2));
+                    scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", works.heymate.beta.R.string.SharedMediaTab2));
                 }
             }
             if (hasMedia[1] != 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(1)) {
-                    scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", R.string.SharedFilesTab2));
+                    scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", works.heymate.beta.R.string.SharedFilesTab2));
                 }
             }
             if ((int) dialog_id != 0) {
                 if (hasMedia[3] != 0) {
                     if (!scrollSlidingTextTabStrip.hasTab(3)) {
-                        scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", R.string.SharedLinksTab2));
+                        scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", works.heymate.beta.R.string.SharedLinksTab2));
                     }
                 }
                 if (hasMedia[4] != 0) {
                     if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2));
+                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", works.heymate.beta.R.string.SharedMusicTab2));
                     }
                 }
             } else {
@@ -1682,14 +1682,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 if (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 46) {
                     if (hasMedia[4] != 0) {
                         if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2));
+                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", works.heymate.beta.R.string.SharedMusicTab2));
                         }
                     }
                 }
             }
             if (hasMedia[2] != 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(2)) {
-                    scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", R.string.SharedVoiceTab2));
+                    scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", works.heymate.beta.R.string.SharedVoiceTab2));
                 }
             }
         }
@@ -2067,7 +2067,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (longPress) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
                 builder.setTitle(urlFinal);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", works.heymate.beta.R.string.Open), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialog, which) -> {
                     if (which == 0) {
                         openUrl(urlFinal);
                     } else if (which == 1) {

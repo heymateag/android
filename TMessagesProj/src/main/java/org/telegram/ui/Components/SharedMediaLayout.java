@@ -57,7 +57,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
@@ -772,7 +772,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         searching = false;
         searchWas = false;
 
-        pinnedHeaderShadowDrawable = context.getResources().getDrawable(R.drawable.photos_header_shadow);
+        pinnedHeaderShadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.photos_header_shadow);
         pinnedHeaderShadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundGrayShadow), PorterDuff.Mode.MULTIPLY));
 
         if (scrollSlidingTextTabStrip != null) {
@@ -787,7 +787,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         actionModeViews.clear();
 
         final ActionBarMenu menu = actionBar.createMenu();
-        searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -849,8 +849,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
         });
         searchItem.setTranslationY(AndroidUtilities.dp(10));
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
-        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
         searchItem.setVisibility(View.INVISIBLE);
         EditTextBoldCursor editText = searchItem.getSearchField();
         editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -869,7 +869,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         closeButton.setImageDrawable(backDrawable = new BackDrawable(true));
         backDrawable.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         closeButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
-        closeButton.setContentDescription(LocaleController.getString("Close", R.string.Close));
+        closeButton.setContentDescription(LocaleController.getString("Close", works.heymate.beta.R.string.Close));
         actionModeLayout.addView(closeButton, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
         actionModeViews.add(closeButton);
         closeButton.setOnClickListener(v -> closeActionMode());
@@ -883,24 +883,24 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         if ((int) dialog_id != 0) {
             gotoItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            gotoItem.setIcon(R.drawable.msg_message);
-            gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
+            gotoItem.setIcon(works.heymate.beta.R.drawable.msg_message);
+            gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", works.heymate.beta.R.string.AccDescrGoToMessage));
             gotoItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(gotoItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
             actionModeViews.add(gotoItem);
             gotoItem.setOnClickListener(v -> onActionBarItemClick(gotochat));
 
             forwardItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardItem.setIcon(R.drawable.msg_forward);
-            forwardItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
+            forwardItem.setIcon(works.heymate.beta.R.drawable.msg_forward);
+            forwardItem.setContentDescription(LocaleController.getString("Forward", works.heymate.beta.R.string.Forward));
             forwardItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
             actionModeViews.add(forwardItem);
             forwardItem.setOnClickListener(v -> onActionBarItemClick(forward));
         }
         deleteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-        deleteItem.setIcon(R.drawable.msg_delete);
-        deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
+        deleteItem.setIcon(works.heymate.beta.R.drawable.msg_delete);
+        deleteItem.setContentDescription(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
         deleteItem.setDuplicateParentStateEnabled(false);
         actionModeLayout.addView(deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
         actionModeViews.add(deleteItem);
@@ -1256,8 +1256,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             mediaPages[a].addView(mediaPages[a].emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             mediaPages[a].emptyView.setOnTouchListener((v, event) -> true);
             mediaPages[a].emptyView.showProgress(true, false);
-            mediaPages[a].emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
-            mediaPages[a].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
+            mediaPages[a].emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+            mediaPages[a].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", works.heymate.beta.R.string.SearchEmptyViewFilteredSubtitle2));
             mediaPages[a].emptyView.addView(mediaPages[a].progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             mediaPages[a].listView.setEmptyView(mediaPages[a].emptyView);
@@ -2576,32 +2576,32 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
             if (chatUsersAdapter.chatInfo != null) {
                 if (!scrollSlidingTextTabStrip.hasTab(7)) {
-                    scrollSlidingTextTabStrip.addTextTab(7, LocaleController.getString("GroupMembers", R.string.GroupMembers), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(7, LocaleController.getString("GroupMembers", works.heymate.beta.R.string.GroupMembers), idToView);
                 }
             }
             if (hasMedia[0] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(0)) {
                     if (hasMedia[1] == 0 && hasMedia[2] == 0 && hasMedia[3] == 0 && hasMedia[4] == 0 && hasMedia[5] == 0 && hasMedia[6] == 0 && chatUsersAdapter.chatInfo == null) {
-                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTabFull2", R.string.SharedMediaTabFull2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTabFull2", works.heymate.beta.R.string.SharedMediaTabFull2), idToView);
                     } else {
-                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", R.string.SharedMediaTab2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", works.heymate.beta.R.string.SharedMediaTab2), idToView);
                     }
                 }
             }
             if (hasMedia[1] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(1)) {
-                    scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", R.string.SharedFilesTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", works.heymate.beta.R.string.SharedFilesTab2), idToView);
                 }
             }
             if ((int) dialog_id != 0) {
                 if (hasMedia[3] > 0) {
                     if (!scrollSlidingTextTabStrip.hasTab(3)) {
-                        scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", R.string.SharedLinksTab2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", works.heymate.beta.R.string.SharedLinksTab2), idToView);
                     }
                 }
                 if (hasMedia[4] > 0) {
                     if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", works.heymate.beta.R.string.SharedMusicTab2), idToView);
                     }
                 }
             } else {
@@ -2609,24 +2609,24 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 if (currentEncryptedChat != null && AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 46) {
                     if (hasMedia[4] > 0) {
                         if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
+                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", works.heymate.beta.R.string.SharedMusicTab2), idToView);
                         }
                     }
                 }
             }
             if (hasMedia[2] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(2)) {
-                    scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", R.string.SharedVoiceTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", works.heymate.beta.R.string.SharedVoiceTab2), idToView);
                 }
             }
             if (hasMedia[5] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(5)) {
-                    scrollSlidingTextTabStrip.addTextTab(5, LocaleController.getString("SharedGIFsTab2", R.string.SharedGIFsTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(5, LocaleController.getString("SharedGIFsTab2", works.heymate.beta.R.string.SharedGIFsTab2), idToView);
                 }
             }
             if (hasMedia[6] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(6)) {
-                    scrollSlidingTextTabStrip.addTextTab(6, LocaleController.getString("SharedGroupsTab2", R.string.SharedGroupsTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(6, LocaleController.getString("SharedGroupsTab2", works.heymate.beta.R.string.SharedGroupsTab2), idToView);
                 }
             }
         }
@@ -3054,7 +3054,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (longPress) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(profileActivity.getParentActivity());
                 builder.setTitle(urlFinal);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", works.heymate.beta.R.string.Open), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialog, which) -> {
                     if (which == 0) {
                         openUrl(urlFinal);
                     } else if (which == 1) {
@@ -3409,50 +3409,50 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     public static View createEmptyStubView(Context context, int currentType, long dialog_id) {
         EmptyStubView emptyStubView = new EmptyStubView(context);
         if (currentType == 0) {
-            emptyStubView.emptyImageView.setImageResource(R.drawable.tip1);
+            emptyStubView.emptyImageView.setImageResource(works.heymate.beta.R.drawable.tip1);
             if ((int) dialog_id == 0) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMediaSecret", R.string.NoMediaSecret));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMediaSecret", works.heymate.beta.R.string.NoMediaSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMedia", R.string.NoMedia));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMedia", works.heymate.beta.R.string.NoMedia));
             }
         } else if (currentType == 1) {
-            emptyStubView.emptyImageView.setImageResource(R.drawable.tip2);
+            emptyStubView.emptyImageView.setImageResource(works.heymate.beta.R.drawable.tip2);
             if ((int) dialog_id == 0) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", R.string.NoSharedFilesSecret));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", works.heymate.beta.R.string.NoSharedFilesSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFiles", R.string.NoSharedFiles));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFiles", works.heymate.beta.R.string.NoSharedFiles));
             }
         } else if (currentType == 2) {
-            emptyStubView.emptyImageView.setImageResource(R.drawable.tip5);
+            emptyStubView.emptyImageView.setImageResource(works.heymate.beta.R.drawable.tip5);
             if ((int) dialog_id == 0) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoiceSecret", R.string.NoSharedVoiceSecret));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoiceSecret", works.heymate.beta.R.string.NoSharedVoiceSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoice", R.string.NoSharedVoice));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoice", works.heymate.beta.R.string.NoSharedVoice));
             }
         } else if (currentType == 3) {
-            emptyStubView.emptyImageView.setImageResource(R.drawable.tip3);
+            emptyStubView.emptyImageView.setImageResource(works.heymate.beta.R.drawable.tip3);
             if ((int) dialog_id == 0) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", R.string.NoSharedLinksSecret));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", works.heymate.beta.R.string.NoSharedLinksSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinks", R.string.NoSharedLinks));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinks", works.heymate.beta.R.string.NoSharedLinks));
             }
         } else if (currentType == 4) {
-            emptyStubView.emptyImageView.setImageResource(R.drawable.tip4);
+            emptyStubView.emptyImageView.setImageResource(works.heymate.beta.R.drawable.tip4);
             if ((int) dialog_id == 0) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", R.string.NoSharedAudioSecret));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", works.heymate.beta.R.string.NoSharedAudioSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudio", R.string.NoSharedAudio));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudio", works.heymate.beta.R.string.NoSharedAudio));
             }
         } else if (currentType == 5) {
-            emptyStubView.emptyImageView.setImageResource(R.drawable.tip1);
+            emptyStubView.emptyImageView.setImageResource(works.heymate.beta.R.drawable.tip1);
             if ((int) dialog_id == 0) {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedGifSecret", R.string.NoSharedGifSecret));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedGifSecret", works.heymate.beta.R.string.NoSharedGifSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoGIFs", R.string.NoGIFs));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoGIFs", works.heymate.beta.R.string.NoGIFs));
             }
         } else if (currentType == 6) {
             emptyStubView.emptyImageView.setImageDrawable(null);
-            emptyStubView.emptyTextView.setText(LocaleController.getString("NoGroupsInCommon", R.string.NoGroupsInCommon));
+            emptyStubView.emptyTextView.setText(LocaleController.getString("NoGroupsInCommon", works.heymate.beta.R.string.NoGroupsInCommon));
         } else if (currentType == 7) {
             emptyStubView.emptyImageView.setImageDrawable(null);
             emptyStubView.emptyTextView.setText("");
@@ -4226,18 +4226,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         role = channelParticipant.rank;
                     } else {
                         if (channelParticipant instanceof TLRPC.TL_channelParticipantCreator) {
-                            role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
+                            role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
                         } else if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin) {
-                            role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
+                            role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
                         } else {
                             role = null;
                         }
                     }
                 } else {
                     if (part instanceof TLRPC.TL_chatParticipantCreator) {
-                        role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
+                        role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
                     } else if (part instanceof TLRPC.TL_chatParticipantAdmin) {
-                        role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
+                        role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
                     } else {
                         role = null;
                     }

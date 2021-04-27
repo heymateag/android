@@ -29,7 +29,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -111,7 +111,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         if (canAddRemove) {
             addButton = new ProgressButton(context);
             addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
-            addButton.setText(LocaleController.getString("Add", R.string.Add));
+            addButton.setText(LocaleController.getString("Add", works.heymate.beta.R.string.Add));
             if (supportRtl) {
                 lp = LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, 28, Gravity.TOP | Gravity.END, 0, 16, 14, 0);
             } else {
@@ -124,7 +124,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             delButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_removeButtonText));
             delButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            delButton.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
+            delButton.setText(LocaleController.getString("StickersRemove", works.heymate.beta.R.string.StickersRemove));
             if (supportRtl) {
                 lp = LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, 28, Gravity.TOP | Gravity.END, 0, 16, 14, 0);
             } else {

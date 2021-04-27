@@ -28,7 +28,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -247,9 +247,9 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         searching = false;
         searchWas = false;
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("Discussion", R.string.Discussion));
+        actionBar.setTitle(LocaleController.getString("Discussion", works.heymate.beta.R.string.Discussion));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -260,7 +260,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        searchItem = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -303,7 +303,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 searchAdapter.searchDialogs(text);
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
         searchAdapter = new SearchAdapter(context);
 
         fragmentView = new FrameLayout(context);
@@ -313,7 +313,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
         emptyView = new EmptyTextProgressView(context);
         emptyView.showProgress();
-        emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        emptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         listView = new RecyclerListView(context);
@@ -380,15 +380,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     String title;
                     String message;
                     if (isChannel) {
-                        title = LocaleController.getString("DiscussionUnlinkGroup", R.string.DiscussionUnlinkGroup);
-                        message = LocaleController.formatString("DiscussionUnlinkChannelAlert", R.string.DiscussionUnlinkChannelAlert, c.title);
+                        title = LocaleController.getString("DiscussionUnlinkGroup", works.heymate.beta.R.string.DiscussionUnlinkGroup);
+                        message = LocaleController.formatString("DiscussionUnlinkChannelAlert", works.heymate.beta.R.string.DiscussionUnlinkChannelAlert, c.title);
                     } else {
-                        title = LocaleController.getString("DiscussionUnlink", R.string.DiscussionUnlinkChannel);
-                        message = LocaleController.formatString("DiscussionUnlinkGroupAlert", R.string.DiscussionUnlinkGroupAlert, c.title);
+                        title = LocaleController.getString("DiscussionUnlink", works.heymate.beta.R.string.DiscussionUnlinkChannel);
+                        message = LocaleController.formatString("DiscussionUnlinkGroupAlert", works.heymate.beta.R.string.DiscussionUnlinkGroupAlert, c.title);
                     }
                     builder.setTitle(title);
                     builder.setMessage(AndroidUtilities.replaceTags(message));
-                    builder.setPositiveButton(LocaleController.getString("DiscussionUnlink", R.string.DiscussionUnlink), (dialogInterface, i) -> {
+                    builder.setPositiveButton(LocaleController.getString("DiscussionUnlink", works.heymate.beta.R.string.DiscussionUnlink), (dialogInterface, i) -> {
                         if (!isChannel || info.linked_chat_id != 0) {
                             final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(getParentActivity(), 3)};
                             TLRPC.TL_channels_setDiscussionGroup req = new TLRPC.TL_channels_setDiscussionGroup();
@@ -422,7 +422,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                             }, 500);
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog dialog = builder.create();
                     showDialog(dialog);
                     TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -462,16 +462,16 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         String message;
         if (TextUtils.isEmpty(chat.username)) {
-            message = LocaleController.formatString("DiscussionLinkGroupPublicPrivateAlert", R.string.DiscussionLinkGroupPublicPrivateAlert, chat.title, currentChat.title);
+            message = LocaleController.formatString("DiscussionLinkGroupPublicPrivateAlert", works.heymate.beta.R.string.DiscussionLinkGroupPublicPrivateAlert, chat.title, currentChat.title);
         } else {
             if (TextUtils.isEmpty(currentChat.username)) {
-                message = LocaleController.formatString("DiscussionLinkGroupPrivateAlert", R.string.DiscussionLinkGroupPrivateAlert, chat.title, currentChat.title);
+                message = LocaleController.formatString("DiscussionLinkGroupPrivateAlert", works.heymate.beta.R.string.DiscussionLinkGroupPrivateAlert, chat.title, currentChat.title);
             } else {
-                message = LocaleController.formatString("DiscussionLinkGroupPublicAlert", R.string.DiscussionLinkGroupPublicAlert, chat.title, currentChat.title);
+                message = LocaleController.formatString("DiscussionLinkGroupPublicAlert", works.heymate.beta.R.string.DiscussionLinkGroupPublicAlert, chat.title, currentChat.title);
             }
         }
         if (chatFull.hidden_prehistory) {
-            message += "\n\n" + LocaleController.getString("DiscussionLinkGroupAlertHistory", R.string.DiscussionLinkGroupAlertHistory);
+            message += "\n\n" + LocaleController.getString("DiscussionLinkGroupAlertHistory", works.heymate.beta.R.string.DiscussionLinkGroupAlertHistory);
         }
         messageTextView.setText(AndroidUtilities.replaceTags(message));
 
@@ -500,13 +500,13 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         frameLayout2.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 57, 24, 9));
         avatarDrawable.setInfo(chat);
         imageView.setForUserOrChat(chat, avatarDrawable);
-        builder.setPositiveButton(LocaleController.getString("DiscussionLinkGroup", R.string.DiscussionLinkGroup), (dialogInterface, i) -> {
+        builder.setPositiveButton(LocaleController.getString("DiscussionLinkGroup", works.heymate.beta.R.string.DiscussionLinkGroup), (dialogInterface, i) -> {
             if (chatFull.hidden_prehistory) {
                 MessagesController.getInstance(currentAccount).toogleChannelInvitesHistory(chat.id, false);
             }
             linkChat(chat, null);
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -615,15 +615,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 if (info != null && info.linked_chat_id != 0) {
                     TLRPC.Chat chat = getMessagesController().getChat(info.linked_chat_id);
                     if (chat != null) {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionChannelGroupSetHelp2", R.string.DiscussionChannelGroupSetHelp2, chat.title)));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionChannelGroupSetHelp2", works.heymate.beta.R.string.DiscussionChannelGroupSetHelp2, chat.title)));
                     }
                 } else {
-                    messageTextView.setText(LocaleController.getString("DiscussionChannelHelp3", R.string.DiscussionChannelHelp3));
+                    messageTextView.setText(LocaleController.getString("DiscussionChannelHelp3", works.heymate.beta.R.string.DiscussionChannelHelp3));
                 }
             } else {
                 TLRPC.Chat chat = getMessagesController().getChat(info.linked_chat_id);
                 if (chat != null) {
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionGroupHelp", R.string.DiscussionGroupHelp, chat.title)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionGroupHelp", works.heymate.beta.R.string.DiscussionGroupHelp, chat.title)));
                 }
             }
 
@@ -822,7 +822,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new ManageChatTextCell(mContext);
@@ -849,9 +849,9 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == detailRow) {
                         if (isChannel) {
-                            privacyCell.setText(LocaleController.getString("DiscussionChannelHelp2", R.string.DiscussionChannelHelp2));
+                            privacyCell.setText(LocaleController.getString("DiscussionChannelHelp2", works.heymate.beta.R.string.DiscussionChannelHelp2));
                         } else {
-                            privacyCell.setText(LocaleController.getString("DiscussionGroupHelp2", R.string.DiscussionGroupHelp2));
+                            privacyCell.setText(LocaleController.getString("DiscussionGroupHelp2", works.heymate.beta.R.string.DiscussionGroupHelp2));
                         }
                     }
                     break;
@@ -860,14 +860,14 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     if (isChannel) {
                         if (info.linked_chat_id != 0) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteRedText5, Theme.key_windowBackgroundWhiteRedText5);
-                            actionCell.setText(LocaleController.getString("DiscussionUnlinkGroup", R.string.DiscussionUnlinkGroup), null, R.drawable.actions_remove_user, false);
+                            actionCell.setText(LocaleController.getString("DiscussionUnlinkGroup", works.heymate.beta.R.string.DiscussionUnlinkGroup), null, works.heymate.beta.R.drawable.actions_remove_user, false);
                         } else {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                            actionCell.setText(LocaleController.getString("DiscussionCreateGroup", R.string.DiscussionCreateGroup), null, R.drawable.menu_groups, true);
+                            actionCell.setText(LocaleController.getString("DiscussionCreateGroup", works.heymate.beta.R.string.DiscussionCreateGroup), null, works.heymate.beta.R.drawable.menu_groups, true);
                         }
                     } else {
                         actionCell.setColors(Theme.key_windowBackgroundWhiteRedText5, Theme.key_windowBackgroundWhiteRedText5);
-                        actionCell.setText(LocaleController.getString("DiscussionUnlinkChannel", R.string.DiscussionUnlinkChannel), null, R.drawable.actions_remove_user, false);
+                        actionCell.setText(LocaleController.getString("DiscussionUnlinkChannel", works.heymate.beta.R.string.DiscussionUnlinkChannel), null, works.heymate.beta.R.drawable.actions_remove_user, false);
                     }
                     break;
             }

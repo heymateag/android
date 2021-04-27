@@ -88,7 +88,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -276,7 +276,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        Theme.applyTheme(Theme.getCurrentNightTheme());
-        setTheme(R.style.Theme_TMessages);
+        setTheme(works.heymate.beta.R.style.Theme_TMessages);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | 0xff000000));
@@ -289,7 +289,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
 
             }
         }
-        getWindow().setBackgroundDrawableResource(R.drawable.transparent);
+        getWindow().setBackgroundDrawableResource(works.heymate.beta.R.drawable.transparent);
         if (SharedConfig.passcodeHash.length() > 0 && !SharedConfig.allowScreenCapture) {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
@@ -414,7 +414,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             backgroundTablet = new View(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(works.heymate.beta.R.drawable.catstile);
             drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             backgroundTablet.setBackgroundDrawable(drawable);
             launchLayout.addView(backgroundTablet, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -467,7 +467,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             layersActionBarLayout.setRemoveActionBarExtraHeight(true);
             layersActionBarLayout.setBackgroundView(shadowTablet);
             layersActionBarLayout.setUseAlphaAnimations(true);
-            layersActionBarLayout.setBackgroundResource(R.drawable.boxshadow);
+            layersActionBarLayout.setBackgroundResource(works.heymate.beta.R.drawable.boxshadow);
             layersActionBarLayout.init(layerFragmentsStack);
             layersActionBarLayout.setDelegate(this);
             layersActionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
@@ -571,7 +571,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 } else if (id == 8) {
                     openSettings(false);
                 } else if (id == 9) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
+                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFaqUrl", works.heymate.beta.R.string.TelegramFaqUrl));
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 10) {
                     presentFragment(new CallLogActivity());
@@ -614,7 +614,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     }
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 13) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFeaturesUrl", R.string.TelegramFeaturesUrl));
+                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFeaturesUrl", works.heymate.beta.R.string.TelegramFeaturesUrl));
                     drawerLayoutContainer.closeDrawer(false);
                 }
             }
@@ -2293,7 +2293,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                         } catch (Exception ignore) {
                         }
                         if (!(response instanceof TLRPC.TL_authorization)) {
-                            AndroidUtilities.runOnUIThread(() -> AlertsCreator.showSimpleAlert(fragment, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text));
+                            AndroidUtilities.runOnUIThread(() -> AlertsCreator.showSimpleAlert(fragment, LocaleController.getString("AuthAnotherClient", works.heymate.beta.R.string.AuthAnotherClient), LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text));
                         }
                     }));
                 });
@@ -2335,9 +2335,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     final String finalNewContactName = newContactName;
                     final String finalNewContactPhone = NewContactActivity.getPhoneNumber(this, UserConfig.getInstance(currentAccount).getCurrentUser(), newContactPhone, false);
                     final AlertDialog newContactAlertDialog = new AlertDialog.Builder(lastFragment.getParentActivity())
-                            .setTitle(LocaleController.getString("NewContactAlertTitle", R.string.NewContactAlertTitle))
-                            .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("NewContactAlertMessage", R.string.NewContactAlertMessage, PhoneFormat.getInstance().format(finalNewContactPhone))))
-                            .setPositiveButton(LocaleController.getString("NewContactAlertButton", R.string.NewContactAlertButton), (d, i) -> {
+                            .setTitle(LocaleController.getString("NewContactAlertTitle", works.heymate.beta.R.string.NewContactAlertTitle))
+                            .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("NewContactAlertMessage", works.heymate.beta.R.string.NewContactAlertMessage, PhoneFormat.getInstance().format(finalNewContactPhone))))
+                            .setPositiveButton(LocaleController.getString("NewContactAlertButton", works.heymate.beta.R.string.NewContactAlertButton), (d, i) -> {
                                 final NewContactActivity fragment = new NewContactActivity();
                                 fragment.setInitialPhoneNumber(finalNewContactPhone, false);
                                 if (finalNewContactName != null) {
@@ -2346,7 +2346,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                                 }
                                 lastFragment.presentFragment(fragment);
                             })
-                            .setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+                            .setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null)
                             .create();
                     lastFragment.showDialog(newContactAlertDialog);
                     pushOpened = true;
@@ -2424,12 +2424,12 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
         args.putBoolean("allowSwitchAccount", true);
         if (contactsToSend != null) {
             if (contactsToSend.size() != 1) {
-                args.putString("selectAlertString", LocaleController.getString("SendContactToText", R.string.SendMessagesToText));
-                args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", R.string.SendContactToGroupText));
+                args.putString("selectAlertString", LocaleController.getString("SendContactToText", works.heymate.beta.R.string.SendMessagesToText));
+                args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", works.heymate.beta.R.string.SendContactToGroupText));
             }
         } else {
-            args.putString("selectAlertString", LocaleController.getString("SendMessagesToText", R.string.SendMessagesToText));
-            args.putString("selectAlertStringGroup", LocaleController.getString("SendMessagesToGroupText", R.string.SendMessagesToGroupText));
+            args.putString("selectAlertString", LocaleController.getString("SendMessagesToText", works.heymate.beta.R.string.SendMessagesToText));
+            args.putString("selectAlertStringGroup", LocaleController.getString("SendMessagesToGroupText", works.heymate.beta.R.string.SendMessagesToGroupText));
         }
         DialogsActivity fragment = new DialogsActivity(args);
         fragment.setDelegate(this);
@@ -2497,7 +2497,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             if (!chatOpened) {
                 try {
                     if (!mainFragmentsStack.isEmpty()) {
-                        BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString("ChannelPostDeleted", R.string.ChannelPostDeleted)).show();
+                        BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString("ChannelPostDeleted", works.heymate.beta.R.string.ChannelPostDeleted)).show();
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -2679,17 +2679,17 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didReceiveSmsCode, code);
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("OtherLoginCode", R.string.OtherLoginCode, code)));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("OtherLoginCode", works.heymate.beta.R.string.OtherLoginCode, code)));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 showAlertDialog(builder);
             }
             return;
         } else if (loginToken != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-            builder.setTitle(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient));
-            builder.setMessage(LocaleController.getString("AuthAnotherClientUrl", R.string.AuthAnotherClientUrl));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setTitle(LocaleController.getString("AuthAnotherClient", works.heymate.beta.R.string.AuthAnotherClient));
+            builder.setMessage(LocaleController.getString("AuthAnotherClientUrl", works.heymate.beta.R.string.AuthAnotherClientUrl));
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
             showAlertDialog(builder);
             return;
         }
@@ -2718,8 +2718,8 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                             args.putBoolean("onlySelect", true);
                             args.putBoolean("cantSendToChannels", true);
                             args.putInt("dialogsType", 1);
-                            args.putString("selectAlertString", LocaleController.getString("SendGameToText", R.string.SendGameToText));
-                            args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroupText", R.string.SendGameToGroupText));
+                            args.putString("selectAlertString", LocaleController.getString("SendGameToText", works.heymate.beta.R.string.SendGameToText));
+                            args.putString("selectAlertStringGroup", LocaleController.getString("SendGameToGroupText", works.heymate.beta.R.string.SendGameToGroupText));
                             DialogsActivity fragment = new DialogsActivity(args);
                             fragment.setDelegate((fragment1, dids, message1, param) -> {
                                 long did = dids.get(0);
@@ -2776,7 +2776,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                             if (user == null || user.bot && user.bot_nochats) {
                                 try {
                                     if (!mainFragmentsStack.isEmpty()) {
-                                        BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups)).show();
+                                        BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", works.heymate.beta.R.string.BotCantJoinGroups)).show();
                                     }
                                 } catch (Exception e) {
                                     FileLog.e(e);
@@ -2786,7 +2786,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                             Bundle args = new Bundle();
                             args.putBoolean("onlySelect", true);
                             args.putInt("dialogsType", 2);
-                            args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupAlertText", R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
+                            args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupAlertText", works.heymate.beta.R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
                             DialogsActivity fragment = new DialogsActivity(args);
                             fragment.setDelegate((fragment12, dids, message1, param) -> {
                                 long did = dids.get(0);
@@ -2844,7 +2844,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                                         public void onError() {
                                             if (!LaunchActivity.this.isFinishing()) {
                                                 BaseFragment fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
-                                                AlertsCreator.showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                                                AlertsCreator.showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", works.heymate.beta.R.string.JoinToGroupErrorNotExist));
                                             }
                                             try {
                                                 progressDialog.dismiss();
@@ -2862,9 +2862,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                             if (!mainFragmentsStack.isEmpty()) {
                                 BaseFragment fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
                                 if (error != null && error.text != null && error.text.startsWith("FLOOD_WAIT")) {
-                                    BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString("FloodWait", R.string.FloodWait)).show();
+                                    BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait)).show();
                                 } else {
-                                    BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString("NoUsernameFound", R.string.NoUsernameFound)).show();
+                                    BulletinFactory.of(fragment).createErrorBulletin(LocaleController.getString("NoUsernameFound", works.heymate.beta.R.string.NoUsernameFound)).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -2923,7 +2923,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                                         public void onError() {
                                             if (!LaunchActivity.this.isFinishing()) {
                                                 BaseFragment fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
-                                                AlertsCreator.showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                                                AlertsCreator.showSimpleAlert(fragment, LocaleController.getString("JoinToGroupErrorNotExist", works.heymate.beta.R.string.JoinToGroupErrorNotExist));
                                             }
                                             try {
                                                 progressDialog.dismiss();
@@ -2940,16 +2940,16 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                             }
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
                             if (error.text.startsWith("FLOOD_WAIT")) {
-                                builder.setMessage(LocaleController.getString("FloodWait", R.string.FloodWait));
+                                builder.setMessage(LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait));
                             } else if (error.text.startsWith("INVITE_HASH_EXPIRED")) {
-                                builder.setTitle(LocaleController.getString("ExpiredLink", R.string.ExpiredLink));
-                                builder.setMessage(LocaleController.getString("InviteExpired", R.string.InviteExpired));
+                                builder.setTitle(LocaleController.getString("ExpiredLink", works.heymate.beta.R.string.ExpiredLink));
+                                builder.setMessage(LocaleController.getString("InviteExpired", works.heymate.beta.R.string.InviteExpired));
                             } else {
-                                builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                                builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", works.heymate.beta.R.string.JoinToGroupErrorNotExist));
                             }
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                             showAlertDialog(builder);
                         }
 
@@ -2997,15 +2997,15 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                                 }
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
                                 if (error.text.startsWith("FLOOD_WAIT")) {
-                                    builder.setMessage(LocaleController.getString("FloodWait", R.string.FloodWait));
+                                    builder.setMessage(LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait));
                                 } else if (error.text.equals("USERS_TOO_MUCH")) {
-                                    builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", R.string.JoinToGroupErrorFull));
+                                    builder.setMessage(LocaleController.getString("JoinToGroupErrorFull", works.heymate.beta.R.string.JoinToGroupErrorFull));
                                 } else {
-                                    builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", R.string.JoinToGroupErrorNotExist));
+                                    builder.setMessage(LocaleController.getString("JoinToGroupErrorNotExist", works.heymate.beta.R.string.JoinToGroupErrorNotExist));
                                 }
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                                 showAlertDialog(builder);
                             }
                         }
@@ -3089,9 +3089,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                         try {
                             progressDialog.dismiss();
                             if ("APP_VERSION_OUTDATED".equals(error.text)) {
-                                AlertsCreator.showUpdateAppAlert(LaunchActivity.this, LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                AlertsCreator.showUpdateAppAlert(LaunchActivity.this, LocaleController.getString("UpdateAppAlert", works.heymate.beta.R.string.UpdateAppAlert), true);
                             } else {
-                                showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text));
+                                showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text));
                             }
                         } catch (Exception e) {
                             FileLog.e(e);
@@ -3129,9 +3129,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     showAlertDialog(AlertsCreator.createLanguageAlert(LaunchActivity.this, res));
                 } else if (error != null) {
                     if ("LANG_CODE_NOT_SUPPORTED".equals(error.text)) {
-                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LanguageUnsupportedError", R.string.LanguageUnsupportedError)));
+                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LanguageUnsupportedError", works.heymate.beta.R.string.LanguageUnsupportedError)));
                     } else {
-                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text));
+                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text));
                     }
                 }
             }));
@@ -3172,7 +3172,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                         wallpaperActivity.setInitialModes(wallPaper.settings.blur, wallPaper.settings.motion);
                         presentFragment(wallpaperActivity);
                     } else {
-                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text));
+                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text));
                     }
                 }));
             }
@@ -3245,9 +3245,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                         FileLog.e(e);
                     }
                     if (notFound == 1) {
-                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("ThemeNotSupported", R.string.ThemeNotSupported)));
+                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("ThemeNotSupported", works.heymate.beta.R.string.ThemeNotSupported)));
                     } else {
-                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("ThemeNotFound", R.string.ThemeNotFound)));
+                        showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("ThemeNotFound", works.heymate.beta.R.string.ThemeNotFound)));
                     }
                 }
             }));
@@ -3277,7 +3277,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                             } catch (Exception e) {
                                 FileLog.e(e);
                             }
-                            showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LinkNotFound", R.string.LinkNotFound)));
+                            showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LinkNotFound", works.heymate.beta.R.string.LinkNotFound)));
                         }
                     }));
                 }
@@ -3312,7 +3312,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                                     }
                                 }
                                 if (notFound) {
-                                    showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LinkNotFound", R.string.LinkNotFound)));
+                                    showAlertDialog(AlertsCreator.createSimpleAlert(LaunchActivity.this, LocaleController.getString("LinkNotFound", works.heymate.beta.R.string.LinkNotFound)));
                                 }
                             }));
                         }
@@ -3385,9 +3385,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                                 names[1] = null;
                             }
                             if (UserObject.isReplyUser(user)) {
-                                names[2] = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
+                                names[2] = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle).toLowerCase();
                             } else if (user.self) {
-                                names[2] = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
+                                names[2] = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages).toLowerCase();
                             }
 
                             boolean found = false;
@@ -3479,7 +3479,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     if (visibleDialog == localeDialog) {
                         try {
                             String shorname = LocaleController.getInstance().getCurrentLocaleInfo().shortName;
-                            Toast.makeText(LaunchActivity.this, getStringForLanguageAlert(shorname.equals("en") ? englishLocaleStrings : systemLocaleStrings, "ChangeLanguageLater", R.string.ChangeLanguageLater), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LaunchActivity.this, getStringForLanguageAlert(shorname.equals("en") ? englishLocaleStrings : systemLocaleStrings, "ChangeLanguageLater", works.heymate.beta.R.string.ChangeLanguageLater), Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -3821,13 +3821,13 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
 
         if (requestCode == 4) {
             if (!granted) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionStorage", R.string.PermissionStorage));
+                showPermissionErrorAlert(LocaleController.getString("PermissionStorage", works.heymate.beta.R.string.PermissionStorage));
             } else {
                 ImageLoader.getInstance().checkMediaPaths();
             }
         } else if (requestCode == 5) {
             if (!granted) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionContacts", R.string.PermissionContacts));
+                showPermissionErrorAlert(LocaleController.getString("PermissionContacts", works.heymate.beta.R.string.PermissionContacts));
                 return;
             } else {
                 ContactsController.getInstance(currentAccount).forceImportContacts();
@@ -3843,9 +3843,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 }
             }
             if (!audioGranted) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
+                showPermissionErrorAlert(LocaleController.getString("PermissionNoAudio", works.heymate.beta.R.string.PermissionNoAudio));
             } else if (!cameraGranted) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", R.string.PermissionNoCamera));
+                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", works.heymate.beta.R.string.PermissionNoCamera));
             } else {
                 if (SharedConfig.inappCamera) {
                     CameraController.getInstance().initCamera(null);
@@ -3854,7 +3854,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             }
         } else if (requestCode == 18 || requestCode == 19 || requestCode == 20 || requestCode == 22) {
             if (!granted) {
-                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", R.string.PermissionNoCamera));
+                showPermissionErrorAlert(LocaleController.getString("PermissionNoCamera", works.heymate.beta.R.string.PermissionNoCamera));
             }
         } else if (requestCode == 2) {
             if (granted) {
@@ -3881,9 +3881,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
 
     private void showPermissionErrorAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
         builder.setMessage(message);
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
             try {
                 Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -3892,7 +3892,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 FileLog.e(e);
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         builder.show();
     }
 
@@ -4121,36 +4121,36 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
             if (reason != 2 && reason != 3 && reason != 6) {
-                builder.setNegativeButton(LocaleController.getString("MoreInfo", R.string.MoreInfo), (dialogInterface, i) -> {
+                builder.setNegativeButton(LocaleController.getString("MoreInfo", works.heymate.beta.R.string.MoreInfo), (dialogInterface, i) -> {
                     if (!mainFragmentsStack.isEmpty()) {
                         MessagesController.getInstance(account).openByUserName("spambot", mainFragmentsStack.get(mainFragmentsStack.size() - 1), 1);
                     }
                 });
             }
             if (reason == 5) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam3", R.string.NobodyLikesSpam3));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam3", works.heymate.beta.R.string.NobodyLikesSpam3));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
             } else if (reason == 0) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", R.string.NobodyLikesSpam1));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam1", works.heymate.beta.R.string.NobodyLikesSpam1));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
             } else if (reason == 1) {
-                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", R.string.NobodyLikesSpam2));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setMessage(LocaleController.getString("NobodyLikesSpam2", works.heymate.beta.R.string.NobodyLikesSpam2));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
             } else if (reason == 2) {
                 builder.setMessage((String) args[1]);
                 String type = (String) args[2];
                 if (type.startsWith("AUTH_KEY_DROP_")) {
-                    builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setNegativeButton(LocaleController.getString("LogOut", R.string.LogOut), (dialog, which) -> MessagesController.getInstance(currentAccount).performLogout(2));
+                    builder.setPositiveButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("LogOut", works.heymate.beta.R.string.LogOut), (dialog, which) -> MessagesController.getInstance(currentAccount).performLogout(2));
                 } else {
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 }
             } else if (reason == 3) {
-                builder.setTitle(LocaleController.getString("Proxy", R.string.Proxy));
-                builder.setMessage(LocaleController.getString("UseProxyTelegramError", R.string.UseProxyTelegramError));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setTitle(LocaleController.getString("Proxy", works.heymate.beta.R.string.Proxy));
+                builder.setMessage(LocaleController.getString("UseProxyTelegramError", works.heymate.beta.R.string.UseProxyTelegramError));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 proxyErrorDialog = showAlertDialog(builder);
                 return;
             }
@@ -4160,9 +4160,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
         } else if (id == NotificationCenter.wasUnableToFindCurrentLocation) {
             final HashMap<String, MessageObject> waitingForLocation = (HashMap<String, MessageObject>) args[0];
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", R.string.ShareYouLocationUnableManually), (dialogInterface, i) -> {
+            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+            builder.setNegativeButton(LocaleController.getString("ShareYouLocationUnableManually", works.heymate.beta.R.string.ShareYouLocationUnableManually), (dialogInterface, i) -> {
                 if (mainFragmentsStack.isEmpty()) {
                     return;
                 }
@@ -4179,7 +4179,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 });
                 presentFragment(fragment);
             });
-            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", R.string.ShareYouLocationUnable));
+            builder.setMessage(LocaleController.getString("ShareYouLocationUnable", works.heymate.beta.R.string.ShareYouLocationUnable));
             if (!mainFragmentsStack.isEmpty()) {
                 mainFragmentsStack.get(mainFragmentsStack.size() - 1).showDialog(builder.create());
             }
@@ -4232,10 +4232,10 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             BaseFragment fragment = actionBarLayout.fragmentsStack.get(actionBarLayout.fragmentsStack.size() - 1);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-            builder.setTitle(LocaleController.getString("UpdateContactsTitle", R.string.UpdateContactsTitle));
-            builder.setMessage(LocaleController.getString("UpdateContactsMessage", R.string.UpdateContactsMessage));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> ContactsController.getInstance(account).syncPhoneBookByAlert(contactHashMap, first, schedule, false));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialog, which) -> ContactsController.getInstance(account).syncPhoneBookByAlert(contactHashMap, first, schedule, true));
+            builder.setTitle(LocaleController.getString("UpdateContactsTitle", works.heymate.beta.R.string.UpdateContactsTitle));
+            builder.setMessage(LocaleController.getString("UpdateContactsMessage", works.heymate.beta.R.string.UpdateContactsMessage));
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> ContactsController.getInstance(account).syncPhoneBookByAlert(contactHashMap, first, schedule, false));
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialog, which) -> ContactsController.getInstance(account).syncPhoneBookByAlert(contactHashMap, first, schedule, true));
             builder.setOnBackButtonListener((dialogInterface, i) -> ContactsController.getInstance(account).syncPhoneBookByAlert(contactHashMap, first, schedule, true));
             AlertDialog dialog = builder.create();
             fragment.showDialog(dialog);
@@ -4451,11 +4451,11 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
 
                 if (type == Bulletin.TYPE_NAME_CHANGED) {
                     int peerId = (int) args[1];
-                    String text = peerId > 0 ? LocaleController.getString("YourNameChanged", R.string.YourNameChanged) : LocaleController.getString("CannelTitleChanged", R.string.ChannelTitleChanged);
+                    String text = peerId > 0 ? LocaleController.getString("YourNameChanged", works.heymate.beta.R.string.YourNameChanged) : LocaleController.getString("CannelTitleChanged", works.heymate.beta.R.string.ChannelTitleChanged);
                     (container != null ? BulletinFactory.of(container) : BulletinFactory.of(fragment)).createErrorBulletin(text).show();
                 } else if (type == Bulletin.TYPE_BIO_CHANGED) {
                     int peerId = (int) args[1];
-                    String text = peerId > 0 ? LocaleController.getString("YourBioChanged", R.string.YourBioChanged) : LocaleController.getString("CannelDescriptionChanged", R.string.ChannelDescriptionChanged);
+                    String text = peerId > 0 ? LocaleController.getString("YourBioChanged", works.heymate.beta.R.string.YourBioChanged) : LocaleController.getString("CannelDescriptionChanged", works.heymate.beta.R.string.ChannelDescriptionChanged);
                     (container != null ? BulletinFactory.of(container) : BulletinFactory.of(fragment)).createErrorBulletin(text).show();
                 } else if (type == Bulletin.TYPE_STICKER) {
                     TLRPC.Document sticker = (TLRPC.Document) args[1];
@@ -4625,14 +4625,14 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             loadingLocaleDialog = false;
             boolean firstSystem = systemInfo.builtIn || LocaleController.getInstance().isCurrentLocalLocale();
             AlertDialog.Builder builder = new AlertDialog.Builder(LaunchActivity.this);
-            builder.setTitle(getStringForLanguageAlert(systemLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
-            builder.setSubtitle(getStringForLanguageAlert(englishLocaleStrings, "ChooseYourLanguage", R.string.ChooseYourLanguage));
+            builder.setTitle(getStringForLanguageAlert(systemLocaleStrings, "ChooseYourLanguage", works.heymate.beta.R.string.ChooseYourLanguage));
+            builder.setSubtitle(getStringForLanguageAlert(englishLocaleStrings, "ChooseYourLanguage", works.heymate.beta.R.string.ChooseYourLanguage));
             LinearLayout linearLayout = new LinearLayout(LaunchActivity.this);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             final LanguageCell[] cells = new LanguageCell[2];
             final LocaleController.LocaleInfo[] selectedLanguage = new LocaleController.LocaleInfo[1];
             final LocaleController.LocaleInfo[] locales = new LocaleController.LocaleInfo[2];
-            final String englishName = getStringForLanguageAlert(systemLocaleStrings, "English", R.string.English);
+            final String englishName = getStringForLanguageAlert(systemLocaleStrings, "English", works.heymate.beta.R.string.English);
             locales[0] = firstSystem ? systemInfo : englishInfo;
             locales[1] = firstSystem ? englishInfo : systemInfo;
             selectedLanguage[0] = firstSystem ? systemInfo : englishInfo;
@@ -4653,7 +4653,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 });
             }
             LanguageCell cell = new LanguageCell(LaunchActivity.this, true);
-            cell.setValue(getStringForLanguageAlert(systemLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther), getStringForLanguageAlert(englishLocaleStrings, "ChooseYourLanguageOther", R.string.ChooseYourLanguageOther));
+            cell.setValue(getStringForLanguageAlert(systemLocaleStrings, "ChooseYourLanguageOther", works.heymate.beta.R.string.ChooseYourLanguageOther), getStringForLanguageAlert(englishLocaleStrings, "ChooseYourLanguageOther", works.heymate.beta.R.string.ChooseYourLanguageOther));
             cell.setOnClickListener(v -> {
                 localeDialog = null;
                 drawerLayoutContainer.closeDrawer(true);
@@ -4665,7 +4665,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             });
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
             builder.setView(linearLayout);
-            builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
+            builder.setNegativeButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> {
                 LocaleController.getInstance().applyLanguage(selectedLanguage[0], true, false, currentAccount);
                 rebuildAllFragments(true);
             });
@@ -4852,16 +4852,16 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
         currentConnectionState = ConnectionsManager.getInstance(currentAccount).getConnectionState();
         if (currentConnectionState == ConnectionsManager.ConnectionStateWaitingForNetwork) {
             title = "WaitingForNetwork";
-            titleId = R.string.WaitingForNetwork;
+            titleId = works.heymate.beta.R.string.WaitingForNetwork;
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
             title = "Updating";
-            titleId = R.string.Updating;
+            titleId = works.heymate.beta.R.string.Updating;
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnectingToProxy) {
             title = "ConnectingToProxy";
-            titleId = R.string.ConnectingToProxy;
+            titleId = works.heymate.beta.R.string.ConnectingToProxy;
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnecting) {
             title = "Connecting";
-            titleId = R.string.Connecting;
+            titleId = works.heymate.beta.R.string.Connecting;
         }
         if (currentConnectionState == ConnectionsManager.ConnectionStateConnecting || currentConnectionState == ConnectionsManager.ConnectionStateConnectingToProxy) {
             action = () -> {

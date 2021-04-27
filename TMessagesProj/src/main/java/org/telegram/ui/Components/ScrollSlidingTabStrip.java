@@ -38,7 +38,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -222,7 +222,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageDrawable(drawable);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
             tab.addView(imageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             textView = new TextView(getContext());
@@ -235,7 +235,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             textView.setPadding(AndroidUtilities.dp(5), 0, AndroidUtilities.dp(5), AndroidUtilities.dp(1));
             tab.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 18, Gravity.TOP | Gravity.LEFT, 26, 6, 0, 0));
         }
-        tab.setTag(R.id.index_tag, position);
+        tab.setTag(works.heymate.beta.R.id.index_tag, position);
         tab.setSelected(position == currentPosition);
 
         tabTypes.put(key, tab);
@@ -254,10 +254,10 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             tab.setFocusable(true);
             tab.setImageDrawable(drawable);
             tab.setScaleType(ImageView.ScaleType.CENTER);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
             tabsContainer.addView(tab, position);
         }
-        tab.setTag(R.id.index_tag, position);
+        tab.setTag(works.heymate.beta.R.id.index_tag, position);
         tab.setSelected(position == currentPosition);
 
         tabTypes.put(key, tab);
@@ -274,7 +274,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         } else {
             tab = new FrameLayout(getContext());
             tab.setFocusable(true);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
             tabsContainer.addView(tab, position);
 
             AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -288,7 +288,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             imageView.setAspectFit(true);
             tab.addView(imageView, LayoutHelper.createFrame(30, 30, Gravity.CENTER));
         }
-        tab.setTag(R.id.index_tag, position);
+        tab.setTag(works.heymate.beta.R.id.index_tag, position);
         tab.setSelected(position == currentPosition);
 
         tabTypes.put(key, tab);
@@ -304,7 +304,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         } else {
             tab = new FrameLayout(getContext());
             tab.setFocusable(true);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
             tabsContainer.addView(tab, position);
 
             BackupImageView imageView = new BackupImageView(getContext());
@@ -313,10 +313,10 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             tab.addView(imageView, LayoutHelper.createFrame(30, 30, Gravity.CENTER));
         }
         tab.setTag(thumb);
-        tab.setTag(R.id.index_tag, position);
-        tab.setTag(R.id.parent_tag, parentObject);
-        tab.setTag(R.id.object_tag, sticker);
-        tab.setTag(R.id.svg_tag, svgThumb);
+        tab.setTag(works.heymate.beta.R.id.index_tag, position);
+        tab.setTag(works.heymate.beta.R.id.parent_tag, parentObject);
+        tab.setTag(works.heymate.beta.R.id.object_tag, sticker);
+        tab.setTag(works.heymate.beta.R.id.svg_tag, svgThumb);
         tab.setSelected(position == currentPosition);
 
         tabTypes.put(key, tab);
@@ -368,9 +368,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         for (int a = start; a < end; a++) {
             View child = tabsContainer.getChildAt(a);
             Object object = child.getTag();
-            Object parentObject = child.getTag(R.id.parent_tag);
-            SvgHelper.SvgDrawable svgThumb = (SvgHelper.SvgDrawable) child.getTag(R.id.svg_tag);
-            TLRPC.Document sticker = (TLRPC.Document) child.getTag(R.id.object_tag);
+            Object parentObject = child.getTag(works.heymate.beta.R.id.parent_tag);
+            SvgHelper.SvgDrawable svgThumb = (SvgHelper.SvgDrawable) child.getTag(works.heymate.beta.R.id.svg_tag);
+            TLRPC.Document sticker = (TLRPC.Document) child.getTag(works.heymate.beta.R.id.object_tag);
             ImageLocation imageLocation;
 
             if (object instanceof TLRPC.Document) {
@@ -418,8 +418,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 continue;
             }
             Object object = child.getTag();
-            Object parentObject = child.getTag(R.id.parent_tag);
-            TLRPC.Document sticker = (TLRPC.Document) child.getTag(R.id.object_tag);
+            Object parentObject = child.getTag(works.heymate.beta.R.id.parent_tag);
+            TLRPC.Document sticker = (TLRPC.Document) child.getTag(works.heymate.beta.R.id.object_tag);
             ImageLocation imageLocation;
             if (object instanceof TLRPC.Document) {
                 TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(sticker.thumbs, 90);

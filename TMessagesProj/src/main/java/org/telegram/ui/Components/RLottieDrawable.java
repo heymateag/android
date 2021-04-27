@@ -26,7 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DispatchQueuePool;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.Utilities;
 
 import java.io.File;
@@ -386,10 +386,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         isDice = 1;
         String jsonString;
         if ("\uD83C\uDFB2".equals(diceEmoji)) {
-            jsonString = readRes(null, R.raw.diceloop);
+            jsonString = readRes(null, works.heymate.beta.R.raw.diceloop);
             diceSwitchFramesCount = 60;
         } else if ("\uD83C\uDFAF".equals(diceEmoji)) {
-            jsonString = readRes(null, R.raw.dartloop);
+            jsonString = readRes(null, works.heymate.beta.R.raw.dartloop);
         } else {
             jsonString = null;
         }

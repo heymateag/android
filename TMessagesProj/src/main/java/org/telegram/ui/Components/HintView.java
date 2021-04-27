@@ -19,7 +19,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -91,17 +91,17 @@ public class HintView extends FrameLayout {
         }
 
         if (type == 0) {
-            textView.setText(LocaleController.getString("AutoplayVideoInfo", R.string.AutoplayVideoInfo));
+            textView.setText(LocaleController.getString("AutoplayVideoInfo", works.heymate.beta.R.string.AutoplayVideoInfo));
 
             imageView = new ImageView(context);
-            imageView.setImageResource(R.drawable.tooltip_sound);
+            imageView.setImageResource(works.heymate.beta.R.drawable.tooltip_sound);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_gifSaveHintText), PorterDuff.Mode.MULTIPLY));
             addView(imageView, LayoutHelper.createFrame(38, 34, Gravity.LEFT | Gravity.TOP, 7, 7, 0, 0));
         }
 
         arrowImageView = new ImageView(context);
-        arrowImageView.setImageResource(topArrow ? R.drawable.tooltip_arrow_up : R.drawable.tooltip_arrow);
+        arrowImageView.setImageResource(topArrow ? works.heymate.beta.R.drawable.tooltip_arrow_up : works.heymate.beta.R.drawable.tooltip_arrow);
         arrowImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_gifSaveHintBackground), PorterDuff.Mode.MULTIPLY));
         addView(arrowImageView, LayoutHelper.createFrame(14, 6, Gravity.LEFT | (topArrow ? Gravity.TOP : Gravity.BOTTOM), 0, 0, 0, 0));
     }
@@ -168,17 +168,17 @@ public class HintView extends FrameLayout {
             top += y;
             shownY = y;
             if (count == -1) {
-                textView.setText(LocaleController.getString("PollSelectOption", R.string.PollSelectOption));
+                textView.setText(LocaleController.getString("PollSelectOption", works.heymate.beta.R.string.PollSelectOption));
             } else {
                 if (cell.getMessageObject().isQuiz()) {
                     if (count == 0) {
-                        textView.setText(LocaleController.getString("NoVotesQuiz", R.string.NoVotesQuiz));
+                        textView.setText(LocaleController.getString("NoVotesQuiz", works.heymate.beta.R.string.NoVotesQuiz));
                     } else {
                         textView.setText(LocaleController.formatPluralString("Answer", count));
                     }
                 } else {
                     if (count == 0) {
-                        textView.setText(LocaleController.getString("NoVotes", R.string.NoVotes));
+                        textView.setText(LocaleController.getString("NoVotes", works.heymate.beta.R.string.NoVotes));
                     } else {
                         textView.setText(LocaleController.formatPluralString("Vote", count));
                     }
@@ -188,7 +188,7 @@ public class HintView extends FrameLayout {
         } else {
             MessageObject messageObject = cell.getMessageObject();
             if (overrideText == null) {
-                textView.setText(LocaleController.getString("HidAccount", R.string.HidAccount));
+                textView.setText(LocaleController.getString("HidAccount", works.heymate.beta.R.string.HidAccount));
             } else {
                 textView.setText(overrideText);
             }

@@ -27,7 +27,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -88,7 +88,7 @@ public class BotHelpCell extends View {
         }
         String[] lines = text.split("\n");
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-        String help = LocaleController.getString("BotInfoTitle", R.string.BotInfoTitle);
+        String help = LocaleController.getString("BotInfoTitle", works.heymate.beta.R.string.BotInfoTitle);
         if (bot) {
             stringBuilder.append(help);
             stringBuilder.append("\n\n");

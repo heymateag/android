@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class EmptyTextProgressView extends FrameLayout {
@@ -50,7 +50,7 @@ public class EmptyTextProgressView extends FrameLayout {
         textView.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
         textView.setGravity(Gravity.CENTER);
         textView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
-        textView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        textView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
         progressView.setAlpha(0f);

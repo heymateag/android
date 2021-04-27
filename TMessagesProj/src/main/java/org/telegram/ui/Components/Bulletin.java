@@ -41,7 +41,7 @@ import androidx.dynamicanimation.animation.SpringForce;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -1124,14 +1124,14 @@ public final class Bulletin {
                 undoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 undoTextView.setTextColor(undoCancelColor);
-                undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
+                undoTextView.setText(LocaleController.getString("Undo", works.heymate.beta.R.string.Undo));
                 undoTextView.setGravity(Gravity.CENTER_VERTICAL);
                 ViewHelper.setPaddingRelative(undoTextView, 16, 0, 16, 0);
                 addView(undoTextView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, 48, Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
             } else {
                 final ImageView undoImageView = new ImageView(getContext());
                 undoImageView.setOnClickListener(v -> undo());
-                undoImageView.setImageResource(R.drawable.chats_undo);
+                undoImageView.setImageResource(works.heymate.beta.R.drawable.chats_undo);
                 undoImageView.setColorFilter(new PorterDuffColorFilter(undoCancelColor, PorterDuff.Mode.MULTIPLY));
                 undoImageView.setBackground(Theme.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000));
                 ViewHelper.setPaddingRelative(undoImageView, 0, 12, 0, 12);

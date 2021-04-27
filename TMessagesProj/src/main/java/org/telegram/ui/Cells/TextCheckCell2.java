@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
@@ -153,6 +153,6 @@ public class TextCheckCell2 extends FrameLayout {
         info.setClassName("android.widget.Switch");
         info.setCheckable(true);
         info.setChecked(checkBox.isChecked());
-        info.setContentDescription(checkBox.isChecked() ? LocaleController.getString("NotificationsOn", R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", R.string.NotificationsOff));
+        info.setContentDescription(checkBox.isChecked() ? LocaleController.getString("NotificationsOn", works.heymate.beta.R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", works.heymate.beta.R.string.NotificationsOff));
     }
 }

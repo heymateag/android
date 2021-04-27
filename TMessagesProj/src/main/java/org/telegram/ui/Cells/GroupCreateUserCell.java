@@ -23,7 +23,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -265,7 +265,7 @@ public class GroupCreateUserCell extends FrameLayout {
             if (currentObject instanceof TLRPC.User) {
                 TLRPC.User currentUser = (TLRPC.User) currentObject;
                 if (showSelfAsSaved && UserObject.isUserSelf(currentUser)) {
-                    nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages), true);
+                    nameTextView.setText(LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages), true);
                     statusTextView.setText(null);
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                     avatarImageView.setImage(null, "50_50", avatarDrawable, currentUser);
@@ -316,12 +316,12 @@ public class GroupCreateUserCell extends FrameLayout {
                     if (currentUser.bot) {
                         statusTextView.setTag(Theme.key_windowBackgroundWhiteGrayText);
                         statusTextView.setTextColor(Theme.getColor(forceDarkTheme ? Theme.key_voipgroup_lastSeenText : Theme.key_windowBackgroundWhiteGrayText));
-                        statusTextView.setText(LocaleController.getString("Bot", R.string.Bot));
+                        statusTextView.setText(LocaleController.getString("Bot", works.heymate.beta.R.string.Bot));
                     } else {
                         if (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
                             statusTextView.setTag(Theme.key_windowBackgroundWhiteBlueText);
                             statusTextView.setTextColor(Theme.getColor(forceDarkTheme ? Theme.key_voipgroup_listeningText : Theme.key_windowBackgroundWhiteBlueText));
-                            statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                            statusTextView.setText(LocaleController.getString("Online", works.heymate.beta.R.string.Online));
                         } else {
                             statusTextView.setTag(Theme.key_windowBackgroundWhiteGrayText);
                             statusTextView.setTextColor(Theme.getColor(forceDarkTheme ? Theme.key_voipgroup_lastSeenText : Theme.key_windowBackgroundWhiteGrayText));
@@ -374,18 +374,18 @@ public class GroupCreateUserCell extends FrameLayout {
                             statusTextView.setText(LocaleController.formatPluralString("Members", currentChat.participants_count));
                         }
                     } else if (currentChat.has_geo) {
-                        statusTextView.setText(LocaleController.getString("MegaLocation", R.string.MegaLocation));
+                        statusTextView.setText(LocaleController.getString("MegaLocation", works.heymate.beta.R.string.MegaLocation));
                     } else if (TextUtils.isEmpty(currentChat.username)) {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                            statusTextView.setText(LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate));
+                            statusTextView.setText(LocaleController.getString("ChannelPrivate", works.heymate.beta.R.string.ChannelPrivate));
                         } else {
-                            statusTextView.setText(LocaleController.getString("MegaPrivate", R.string.MegaPrivate));
+                            statusTextView.setText(LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate));
                         }
                     } else {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                            statusTextView.setText(LocaleController.getString("ChannelPublic", R.string.ChannelPublic));
+                            statusTextView.setText(LocaleController.getString("ChannelPublic", works.heymate.beta.R.string.ChannelPublic));
                         } else {
-                            statusTextView.setText(LocaleController.getString("MegaPublic", R.string.MegaPublic));
+                            statusTextView.setText(LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic));
                         }
                     }
                 }

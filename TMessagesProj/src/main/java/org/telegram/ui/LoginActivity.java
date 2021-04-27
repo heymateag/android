@@ -78,7 +78,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SRPHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -249,7 +249,7 @@ public class LoginActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        actionBar.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -269,7 +269,7 @@ public class LoginActivity extends BaseFragment {
 
         ActionBarMenu menu = actionBar.createMenu();
         actionBar.setAllowOverlayTitle(true);
-        doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        doneItem = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56));
         doneProgressView = new ContextProgressView(context, 1);
         doneProgressView.setAlpha(0.0f);
         doneProgressView.setScaleX(0.1f);
@@ -279,7 +279,7 @@ public class LoginActivity extends BaseFragment {
         doneItem.setScaleX(0.1f);
         doneItem.setScaleY(0.1f);
         doneItem.addView(doneProgressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        doneItem.setContentDescription(LocaleController.getString("Done", R.string.Done));
+        doneItem.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
         doneItem.setVisibility(doneButtonVisible[DONE_TYPE_ACTION] ? View.VISIBLE : View.GONE);
 
         FrameLayout container = new FrameLayout(context) {
@@ -359,7 +359,7 @@ public class LoginActivity extends BaseFragment {
         floatingButtonContainer.setVisibility(doneButtonVisible[DONE_TYPE_FLOATING] ? View.VISIBLE : View.GONE);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -386,8 +386,8 @@ public class LoginActivity extends BaseFragment {
         floatingButtonIcon = new ImageView(context);
         floatingButtonIcon.setScaleType(ImageView.ScaleType.CENTER);
         floatingButtonIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-        floatingButtonIcon.setImageResource(R.drawable.actionbtn_next);
-        floatingButtonContainer.setContentDescription(LocaleController.getString("Done", R.string.Done));
+        floatingButtonIcon.setImageResource(works.heymate.beta.R.drawable.actionbtn_next);
+        floatingButtonContainer.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
         floatingButtonContainer.addView(floatingButtonIcon, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60));
 
         floatingProgressView = new RadialProgressView(context);
@@ -413,7 +413,7 @@ public class LoginActivity extends BaseFragment {
                 }
             }
             if (currentViewNum == a) {
-                actionBar.setBackButtonImage(views[a].needBackButton() || newAccount ? R.drawable.ic_ab_back : 0);
+                actionBar.setBackButtonImage(views[a].needBackButton() || newAccount ? works.heymate.beta.R.drawable.ic_ab_back : 0);
                 views[a].setVisibility(View.VISIBLE);
                 views[a].onShow();
                 currentDoneType = DONE_TYPE_FLOATING;
@@ -614,7 +614,7 @@ public class LoginActivity extends BaseFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(title);
         builder.setMessage(text);
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         showDialog(builder.create());
     }
 
@@ -635,13 +635,13 @@ public class LoginActivity extends BaseFragment {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
         if (banned) {
-            builder.setMessage(LocaleController.getString("BannedPhoneNumber", R.string.BannedPhoneNumber));
+            builder.setMessage(LocaleController.getString("BannedPhoneNumber", works.heymate.beta.R.string.BannedPhoneNumber));
         } else {
-            builder.setMessage(LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+            builder.setMessage(LocaleController.getString("InvalidPhoneNumber", works.heymate.beta.R.string.InvalidPhoneNumber));
         }
-        builder.setNeutralButton(LocaleController.getString("BotHelp", R.string.BotHelp), (dialog, which) -> {
+        builder.setNeutralButton(LocaleController.getString("BotHelp", works.heymate.beta.R.string.BotHelp), (dialog, which) -> {
             try {
                 PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
                 String version = String.format(Locale.US, "%s (%d)", pInfo.versionName, pInfo.versionCode);
@@ -659,13 +659,13 @@ public class LoginActivity extends BaseFragment {
                 fragment.getParentActivity().startActivity(Intent.createChooser(mailer, "Send email..."));
             } catch (Exception e) {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(fragment.getParentActivity());
-                builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder2.setMessage(LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
-                builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder2.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder2.setMessage(LocaleController.getString("NoMailInstalled", works.heymate.beta.R.string.NoMailInstalled));
+                builder2.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 fragment.showDialog(builder2.create());
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         fragment.showDialog(builder.create());
     }
 
@@ -773,10 +773,10 @@ public class LoginActivity extends BaseFragment {
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("StopLoading", R.string.StopLoading));
-            builder.setPositiveButton(LocaleController.getString("WaitMore", R.string.WaitMore), null);
-            builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
+            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+            builder.setMessage(LocaleController.getString("StopLoading", works.heymate.beta.R.string.StopLoading));
+            builder.setPositiveButton(LocaleController.getString("WaitMore", works.heymate.beta.R.string.WaitMore), null);
+            builder.setNegativeButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
                 views[currentViewNum].onCancelPressed();
                 needHideProgress(true);
             });
@@ -963,7 +963,7 @@ public class LoginActivity extends BaseFragment {
             final SlideView outView = views[currentViewNum];
             final SlideView newView = views[page];
             currentViewNum = page;
-            actionBar.setBackButtonImage(newView.needBackButton() || newAccount ? R.drawable.ic_ab_back : 0);
+            actionBar.setBackButtonImage(newView.needBackButton() || newAccount ? works.heymate.beta.R.drawable.ic_ab_back : 0);
 
             newView.setParams(params, false);
             actionBar.setTitle(newView.getHeaderName());
@@ -990,7 +990,7 @@ public class LoginActivity extends BaseFragment {
             pagesAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
             pagesAnimation.start();
         } else {
-            actionBar.setBackButtonImage(views[page].needBackButton() || newAccount ? R.drawable.ic_ab_back : 0);
+            actionBar.setBackButtonImage(views[page].needBackButton() || newAccount ? works.heymate.beta.R.drawable.ic_ab_back : 0);
             views[currentViewNum].setVisibility(View.GONE);
             currentViewNum = page;
             views[page].setParams(params, false);
@@ -1198,7 +1198,7 @@ public class LoginActivity extends BaseFragment {
                     String text = PhoneFormat.stripExceptNumbers(codeField.getText().toString());
                     codeField.setText(text);
                     if (text.length() == 0) {
-                        countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                        countryButton.setText(LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
                         phoneField.setHintText(null);
                         countryState = 1;
                     } else {
@@ -1231,12 +1231,12 @@ public class LoginActivity extends BaseFragment {
                                 phoneField.setHintText(hint != null ? hint.replace('X', '–') : null);
                                 countryState = 0;
                             } else {
-                                countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                                countryButton.setText(LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
                                 phoneField.setHintText(null);
                                 countryState = 2;
                             }
                         } else {
-                            countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                            countryButton.setText(LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
                             phoneField.setHintText(null);
                             countryState = 2;
                         }
@@ -1378,7 +1378,7 @@ public class LoginActivity extends BaseFragment {
             });
 
             textView2 = new TextView(context);
-            textView2.setText(LocaleController.getString("StartText", R.string.StartText));
+            textView2.setText(LocaleController.getString("StartText", works.heymate.beta.R.string.StartText));
             textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             textView2.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
@@ -1387,7 +1387,7 @@ public class LoginActivity extends BaseFragment {
 
             if (newAccount) {
                 checkBoxCell = new CheckBoxCell(context, 2);
-                checkBoxCell.setText(LocaleController.getString("SyncContacts", R.string.SyncContacts), "", syncContacts, false);
+                checkBoxCell.setText(LocaleController.getString("SyncContacts", works.heymate.beta.R.string.SyncContacts), "", syncContacts, false);
                 addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
                 checkBoxCell.setOnClickListener(new OnClickListener() {
 
@@ -1409,9 +1409,9 @@ public class LoginActivity extends BaseFragment {
                             FileLog.e(e);
                         }
                         if (syncContacts) {
-                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn)).show();
+                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(works.heymate.beta.R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", works.heymate.beta.R.string.SyncContactsOn)).show();
                         } else {
-                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(R.raw.contacts_sync_off, LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff)).show();
+                            BulletinFactory.of((FrameLayout) fragmentView).createSimpleBulletin(works.heymate.beta.R.raw.contacts_sync_off, LocaleController.getString("SyncContactsOff", works.heymate.beta.R.string.SyncContactsOff)).show();
                         }
                     }
                 });
@@ -1464,7 +1464,7 @@ public class LoginActivity extends BaseFragment {
                 }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
             }
             if (codeField.length() == 0) {
-                countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                countryButton.setText(LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
                 phoneField.setHintText(null);
                 countryState = 1;
             }
@@ -1559,14 +1559,14 @@ public class LoginActivity extends BaseFragment {
                         if (preferences.getBoolean("firstlogin", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_CALL_LOG)) {
                             preferences.edit().putBoolean("firstlogin", false).commit();
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                             if (!allowCall && (!allowCancelCall || !allowReadCallLog)) {
-                                builder.setMessage(LocaleController.getString("AllowReadCallAndLog", R.string.AllowReadCallAndLog));
+                                builder.setMessage(LocaleController.getString("AllowReadCallAndLog", works.heymate.beta.R.string.AllowReadCallAndLog));
                             } else if (!allowCancelCall || !allowReadCallLog) {
-                                builder.setMessage(LocaleController.getString("AllowReadCallLog", R.string.AllowReadCallLog));
+                                builder.setMessage(LocaleController.getString("AllowReadCallLog", works.heymate.beta.R.string.AllowReadCallLog));
                             } else {
-                                builder.setMessage(LocaleController.getString("AllowReadCall", R.string.AllowReadCall));
+                                builder.setMessage(LocaleController.getString("AllowReadCall", works.heymate.beta.R.string.AllowReadCall));
                             }
                             permissionsDialog = showDialog(builder.create());
                         } else {
@@ -1584,14 +1584,14 @@ public class LoginActivity extends BaseFragment {
             }
 
             if (countryState == 1) {
-                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
+                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
                 return;
             } else if (countryState == 2 && !BuildVars.DEBUG_VERSION) {
-                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("WrongCountry", R.string.WrongCountry));
+                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
                 return;
             }
             if (codeField.length() == 0) {
-                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidPhoneNumber", works.heymate.beta.R.string.InvalidPhoneNumber));
                 return;
             }
             if (phoneField.length() == 0) {
@@ -1609,15 +1609,15 @@ public class LoginActivity extends BaseFragment {
                     if (PhoneNumberUtils.compare(phone, userPhone)) {
                         final int num = a;
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", R.string.AccountAlreadyLoggedIn));
-                        builder.setPositiveButton(LocaleController.getString("AccountSwitch", R.string.AccountSwitch), (dialog, which) -> {
+                        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                        builder.setMessage(LocaleController.getString("AccountAlreadyLoggedIn", works.heymate.beta.R.string.AccountAlreadyLoggedIn));
+                        builder.setPositiveButton(LocaleController.getString("AccountSwitch", works.heymate.beta.R.string.AccountSwitch), (dialog, which) -> {
                             if (UserConfig.selectedAccount != num) {
                                 ((LaunchActivity) getParentActivity()).switchToAccount(num, false);
                             }
                             finishFragment();
                         });
-                        builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setNegativeButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                         showDialog(builder.create());
                         return;
                     }
@@ -1677,19 +1677,19 @@ public class LoginActivity extends BaseFragment {
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
                             needShowInvalidAlert(LoginActivity.this, req.phone_number, false);
                         } else if (error.text.contains("PHONE_PASSWORD_FLOOD")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait));
                         } else if (error.text.contains("PHONE_NUMBER_FLOOD")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("PhoneNumberFlood", works.heymate.beta.R.string.PhoneNumberFlood));
                         } else if (error.text.contains("PHONE_NUMBER_BANNED")) {
                             needShowInvalidAlert(LoginActivity.this, req.phone_number, true);
                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidCode", works.heymate.beta.R.string.InvalidCode));
                         } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("CodeExpired", works.heymate.beta.R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait));
                         } else if (error.code != -1000) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                         }
                     }
                 }
@@ -1715,9 +1715,9 @@ public class LoginActivity extends BaseFragment {
                                 if (preferences.getBoolean("firstloginshow", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
                                     preferences.edit().putBoolean("firstloginshow", false).commit();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                                    builder.setMessage(LocaleController.getString("AllowFillNumber", R.string.AllowFillNumber));
+                                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                                    builder.setMessage(LocaleController.getString("AllowFillNumber", works.heymate.beta.R.string.AllowFillNumber));
                                     permissionsShowDialog = showDialog(builder.create());
                                     needRequestPermissions = true;
                                 } else {
@@ -1789,7 +1789,7 @@ public class LoginActivity extends BaseFragment {
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("YourPhone", R.string.YourPhone);
+            return LocaleController.getString("YourPhone", works.heymate.beta.R.string.YourPhone);
         }
 
         @Override
@@ -1879,7 +1879,7 @@ public class LoginActivity extends BaseFragment {
                 addView(frameLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
 
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(R.drawable.phone_activate);
+                imageView.setImageResource(works.heymate.beta.R.drawable.phone_activate);
                 if (LocaleController.isRTL) {
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76, Gravity.LEFT | Gravity.CENTER_VERTICAL, 2, 2, 0, 0));
                     frameLayout.addView(confirmTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 64 + 18, 0, 0, 0));
@@ -1895,24 +1895,24 @@ public class LoginActivity extends BaseFragment {
 
                 if (currentType == 1) {
                     blackImageView = new ImageView(context);
-                    blackImageView.setImageResource(R.drawable.sms_devices);
+                    blackImageView.setImageResource(works.heymate.beta.R.drawable.sms_devices);
                     blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(blackImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
                     blueImageView = new RLottieImageView(context);
-                    blueImageView.setImageResource(R.drawable.sms_bubble);
+                    blueImageView.setImageResource(works.heymate.beta.R.drawable.sms_bubble);
                     blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
-                    titleTextView.setText(LocaleController.getString("SentAppCodeTitle", R.string.SentAppCodeTitle));
+                    titleTextView.setText(LocaleController.getString("SentAppCodeTitle", works.heymate.beta.R.string.SentAppCodeTitle));
                 } else {
                     blueImageView = new RLottieImageView(context);
-                    hintDrawable = new RLottieDrawable(R.raw.sms_incoming_info, "" + R.raw.sms_incoming_info, AndroidUtilities.dp(64), AndroidUtilities.dp(64), true, null);
+                    hintDrawable = new RLottieDrawable(works.heymate.beta.R.raw.sms_incoming_info, "" + works.heymate.beta.R.raw.sms_incoming_info, AndroidUtilities.dp(64), AndroidUtilities.dp(64), true, null);
                     hintDrawable.setLayerColor("Bubble.**", Theme.getColor(Theme.key_chats_actionBackground));
                     hintDrawable.setLayerColor("Phone.**", Theme.getColor(Theme.key_chats_actionBackground));
                     blueImageView.setAnimation(hintDrawable);
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(64, 64, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
-                    titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", R.string.SentSmsCodeTitle));
+                    titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", works.heymate.beta.R.string.SentSmsCodeTitle));
                 }
                 addView(titleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 18, 0, 0));
                 addView(confirmTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 17, 0, 0));
@@ -1959,9 +1959,9 @@ public class LoginActivity extends BaseFragment {
             problemText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             problemText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
             if (currentType == 1) {
-                problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", R.string.DidNotGetTheCodeSms));
+                problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", works.heymate.beta.R.string.DidNotGetTheCodeSms));
             } else {
-                problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
+                problemText.setText(LocaleController.getString("DidNotGetTheCode", works.heymate.beta.R.string.DidNotGetTheCode));
             }
             addView(problemText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
             problemText.setOnClickListener(v -> {
@@ -1986,7 +1986,7 @@ public class LoginActivity extends BaseFragment {
                         mailer.putExtra(Intent.EXTRA_TEXT, "Phone: " + requestPhone + "\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + lastError);
                         getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                     } catch (Exception e) {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("NoMailInstalled", works.heymate.beta.R.string.NoMailInstalled));
                     }
                 }
             });
@@ -2057,17 +2057,17 @@ public class LoginActivity extends BaseFragment {
                 } else {
                     if (error.text != null) {
                         if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidPhoneNumber", works.heymate.beta.R.string.InvalidPhoneNumber));
                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidCode", works.heymate.beta.R.string.InvalidCode));
                         } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
                             onBackPressed(true);
                             setPage(0, true, null, true);
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("CodeExpired", works.heymate.beta.R.string.CodeExpired));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait));
                         } else if (error.code != -1000) {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text);
                         }
                     }
                 }
@@ -2081,7 +2081,7 @@ public class LoginActivity extends BaseFragment {
             if (currentType == 1) {
                 return phone;
             } else {
-                return LocaleController.getString("YourCode", R.string.YourCode);
+                return LocaleController.getString("YourCode", works.heymate.beta.R.string.YourCode);
             }
         }
 
@@ -2128,7 +2128,7 @@ public class LoginActivity extends BaseFragment {
                     codeField[a].setCursorSize(AndroidUtilities.dp(20));
                     codeField[a].setCursorWidth(1.5f);
 
-                    Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
+                    Drawable pressedDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.search_dark_activated).mutate();
                     pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
 
                     codeField[a].setBackgroundDrawable(pressedDrawable);
@@ -2222,13 +2222,13 @@ public class LoginActivity extends BaseFragment {
             String number = PhoneFormat.getInstance().format(phone);
             CharSequence str = "";
             if (currentType == 1) {
-                str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", R.string.SentAppCode));
+                str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", works.heymate.beta.R.string.SentAppCode));
             } else if (currentType == 2) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", R.string.SentSmsCode, LocaleController.addNbsp(number)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", works.heymate.beta.R.string.SentSmsCode, LocaleController.addNbsp(number)));
             } else if (currentType == 3) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", R.string.SentCallCode, LocaleController.addNbsp(number)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", works.heymate.beta.R.string.SentCallCode, LocaleController.addNbsp(number)));
             } else if (currentType == 4) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", R.string.SentCallOnly, LocaleController.addNbsp(number)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", works.heymate.beta.R.string.SentCallOnly, LocaleController.addNbsp(number)));
             }
             confirmTextView.setText(str);
 
@@ -2250,9 +2250,9 @@ public class LoginActivity extends BaseFragment {
                 problemText.setVisibility(GONE);
                 timeText.setVisibility(VISIBLE);
                 if (nextType == 4) {
-                    timeText.setText(LocaleController.formatString("CallText", R.string.CallText, 1, 0));
+                    timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, 1, 0));
                 } else if (nextType == 2) {
-                    timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 1, 0));
+                    timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, 1, 0));
                 }
                 String callLogNumber = restore ? AndroidUtilities.obtainLoginPhoneCall(pattern) : null;
                 if (callLogNumber != null) {
@@ -2269,7 +2269,7 @@ public class LoginActivity extends BaseFragment {
                     createTimer();
                 }
             } else if (currentType == 2 && (nextType == 4 || nextType == 3)) {
-                timeText.setText(LocaleController.formatString("CallText", R.string.CallText, 2, 0));
+                timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
 
@@ -2291,7 +2291,7 @@ public class LoginActivity extends BaseFragment {
                     createTimer();
                 }
             } else if (currentType == 4 && nextType == 2) {
-                timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 2, 0));
+                timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
                 createTimer();
@@ -2363,9 +2363,9 @@ public class LoginActivity extends BaseFragment {
                             int minutes = time / 1000 / 60;
                             int seconds = time / 1000 - minutes * 60;
                             if (nextType == 4 || nextType == 3) {
-                                timeText.setText(LocaleController.formatString("CallText", R.string.CallText, minutes, seconds));
+                                timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, minutes, seconds));
                             } else if (nextType == 2) {
-                                timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, minutes, seconds));
+                                timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, minutes, seconds));
                             }
                             if (progressView != null && !progressView.isProgressAnimationRunning()) {
                                 progressView.startProgressAnimation(time - 1000L);
@@ -2381,9 +2381,9 @@ public class LoginActivity extends BaseFragment {
                             } else if (currentType == 2 || currentType == 4) {
                                 if (nextType == 4 || nextType == 2) {
                                     if (nextType == 4) {
-                                        timeText.setText(LocaleController.getString("Calling", R.string.Calling));
+                                        timeText.setText(LocaleController.getString("Calling", works.heymate.beta.R.string.Calling));
                                     } else {
-                                        timeText.setText(LocaleController.getString("SendingSms", R.string.SendingSms));
+                                        timeText.setText(LocaleController.getString("SendingSms", works.heymate.beta.R.string.SendingSms));
                                     }
                                     createCodeTimer();
                                     TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
@@ -2489,7 +2489,7 @@ public class LoginActivity extends BaseFragment {
                             if (error1 == null) {
                                 TLRPC.TL_account_password password = (TLRPC.TL_account_password) response1;
                                 if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
-                                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", works.heymate.beta.R.string.UpdateAppAlert), true);
                                     return;
                                 }
                                 Bundle bundle = new Bundle();
@@ -2511,7 +2511,7 @@ public class LoginActivity extends BaseFragment {
                                 bundle.putInt("has_recovery", password.has_recovery ? 1 : 0);
                                 setPage(6, true, bundle, false);
                             } else {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), error1.text);
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error1.text);
                             }
                         }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
                         destroyTimer();
@@ -2532,9 +2532,9 @@ public class LoginActivity extends BaseFragment {
                         waitingForEvent = true;
                         if (currentType != 3) {
                             if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidPhoneNumber", works.heymate.beta.R.string.InvalidPhoneNumber));
                             } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidCode", works.heymate.beta.R.string.InvalidCode));
                                 for (int a = 0; a < codeField.length; a++) {
                                     codeField[a].setText("");
                                 }
@@ -2542,11 +2542,11 @@ public class LoginActivity extends BaseFragment {
                             } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
                                 onBackPressed(true);
                                 setPage(0, true, null, true);
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("CodeExpired", works.heymate.beta.R.string.CodeExpired));
                             } else if (error.text.startsWith("FLOOD_WAIT")) {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("FloodWait", works.heymate.beta.R.string.FloodWait));
                             } else {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text);
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text);
                             }
                         }
                     }
@@ -2565,10 +2565,10 @@ public class LoginActivity extends BaseFragment {
         public boolean onBackPressed(boolean force) {
             if (!force) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("StopVerification", R.string.StopVerification));
-                builder.setPositiveButton(LocaleController.getString("Continue", R.string.Continue), null);
-                builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("StopVerification", works.heymate.beta.R.string.StopVerification));
+                builder.setPositiveButton(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue), null);
+                builder.setNegativeButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
                     onBackPressed(true);
                     setPage(0, true, null, true);
                 });
@@ -2740,7 +2740,7 @@ public class LoginActivity extends BaseFragment {
             confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             confirmTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             confirmTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
-            confirmTextView.setText(LocaleController.getString("LoginPasswordText", R.string.LoginPasswordText));
+            confirmTextView.setText(LocaleController.getString("LoginPasswordText", works.heymate.beta.R.string.LoginPasswordText));
             addView(confirmTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
 
             codeField = new EditTextBoldCursor(context);
@@ -2750,7 +2750,7 @@ public class LoginActivity extends BaseFragment {
             codeField.setCursorWidth(1.5f);
             codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-            codeField.setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
+            codeField.setHint(LocaleController.getString("LoginPassword", works.heymate.beta.R.string.LoginPassword));
             codeField.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
             codeField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             codeField.setMaxLines(1);
@@ -2771,7 +2771,7 @@ public class LoginActivity extends BaseFragment {
             cancelButton = new TextView(context);
             cancelButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             cancelButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
-            cancelButton.setText(LocaleController.getString("ForgotPassword", R.string.ForgotPassword));
+            cancelButton.setText(LocaleController.getString("ForgotPassword", works.heymate.beta.R.string.ForgotPassword));
             cancelButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             cancelButton.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             cancelButton.setPadding(0, AndroidUtilities.dp(14), 0, 0);
@@ -2788,9 +2788,9 @@ public class LoginActivity extends BaseFragment {
                         if (error == null) {
                             final TLRPC.TL_auth_passwordRecovery res = (TLRPC.TL_auth_passwordRecovery) response;
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setMessage(LocaleController.formatString("RestoreEmailSent", R.string.RestoreEmailSent, res.email_pattern));
-                            builder.setTitle(LocaleController.getString("RestoreEmailSentTitle", R.string.RestoreEmailSentTitle));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                            builder.setMessage(LocaleController.formatString("RestoreEmailSent", works.heymate.beta.R.string.RestoreEmailSent, res.email_pattern));
+                            builder.setTitle(LocaleController.getString("RestoreEmailSentTitle", works.heymate.beta.R.string.RestoreEmailSentTitle));
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("email_unconfirmed_pattern", res.email_pattern);
                                 setPage(7, true, bundle, false);
@@ -2809,9 +2809,9 @@ public class LoginActivity extends BaseFragment {
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.formatString("FloodWaitTime", works.heymate.beta.R.string.FloodWaitTime, timeString));
                             } else {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -2819,7 +2819,7 @@ public class LoginActivity extends BaseFragment {
                     resetAccountText.setVisibility(VISIBLE);
                     resetAccountButton.setVisibility(VISIBLE);
                     AndroidUtilities.hideKeyboard(codeField);
-                    needShowAlert(LocaleController.getString("RestorePasswordNoEitle", R.string.RestorePasswordNoEmailTitle), LocaleController.getString("RestorePasswordNoEmailText", R.string.RestorePasswordNoEmailText));
+                    needShowAlert(LocaleController.getString("RestorePasswordNoEitle", works.heymate.beta.R.string.RestorePasswordNoEmailTitle), LocaleController.getString("RestorePasswordNoEmailText", works.heymate.beta.R.string.RestorePasswordNoEmailText));
                 }
             });
 
@@ -2827,7 +2827,7 @@ public class LoginActivity extends BaseFragment {
             resetAccountButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             resetAccountButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText6));
             resetAccountButton.setVisibility(GONE);
-            resetAccountButton.setText(LocaleController.getString("ResetMyAccount", R.string.ResetMyAccount));
+            resetAccountButton.setText(LocaleController.getString("ResetMyAccount", works.heymate.beta.R.string.ResetMyAccount));
             resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             resetAccountButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             resetAccountButton.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
@@ -2838,9 +2838,9 @@ public class LoginActivity extends BaseFragment {
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("ResetMyAccountWarningText", R.string.ResetMyAccountWarningText));
-                builder.setTitle(LocaleController.getString("ResetMyAccountWarning", R.string.ResetMyAccountWarning));
-                builder.setPositiveButton(LocaleController.getString("ResetMyAccountWarningReset", R.string.ResetMyAccountWarningReset), (dialogInterface, i) -> {
+                builder.setMessage(LocaleController.getString("ResetMyAccountWarningText", works.heymate.beta.R.string.ResetMyAccountWarningText));
+                builder.setTitle(LocaleController.getString("ResetMyAccountWarning", works.heymate.beta.R.string.ResetMyAccountWarning));
+                builder.setPositiveButton(LocaleController.getString("ResetMyAccountWarningReset", works.heymate.beta.R.string.ResetMyAccountWarningReset), (dialogInterface, i) -> {
                     needShowProgress(0);
                     TLRPC.TL_account_deleteAccount req = new TLRPC.TL_account_deleteAccount();
                     req.reason = "Forgot password";
@@ -2854,7 +2854,7 @@ public class LoginActivity extends BaseFragment {
                             setPage(5, true, params, false);
                         } else {
                             if (error.text.equals("2FA_RECENT_CONFIRM")) {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ResetAccountCancelledAlert", R.string.ResetAccountCancelledAlert));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("ResetAccountCancelledAlert", works.heymate.beta.R.string.ResetAccountCancelledAlert));
                             } else if (error.text.startsWith("2FA_CONFIRM_WAIT_")) {
                                 Bundle params = new Bundle();
                                 params.putString("phoneFormated", requestPhone);
@@ -2864,12 +2864,12 @@ public class LoginActivity extends BaseFragment {
                                 params.putInt("waitTime", Utilities.parseInt(error.text.replace("2FA_CONFIRM_WAIT_", "")));
                                 setPage(8, true, params, false);
                             } else {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
             });
 
@@ -2877,7 +2877,7 @@ public class LoginActivity extends BaseFragment {
             resetAccountText.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             resetAccountText.setVisibility(GONE);
             resetAccountText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
-            resetAccountText.setText(LocaleController.getString("ResetMyAccountText", R.string.ResetMyAccountText));
+            resetAccountText.setText(LocaleController.getString("ResetMyAccountText", works.heymate.beta.R.string.ResetMyAccountText));
             resetAccountText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             resetAccountText.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             addView(resetAccountText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 0, 7, 0, 14));
@@ -2885,7 +2885,7 @@ public class LoginActivity extends BaseFragment {
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("LoginPassword", R.string.LoginPassword);
+            return LocaleController.getString("LoginPassword", works.heymate.beta.R.string.LoginPassword);
         }
 
         @Override
@@ -2924,7 +2924,7 @@ public class LoginActivity extends BaseFragment {
             if (hint != null && hint.length() > 0) {
                 codeField.setHint(hint);
             } else {
-                codeField.setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
+                codeField.setHint(LocaleController.getString("LoginPassword", works.heymate.beta.R.string.LoginPassword));
             }
         }
 
@@ -3012,9 +3012,9 @@ public class LoginActivity extends BaseFragment {
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.formatString("FloodWaitTime", works.heymate.beta.R.string.FloodWaitTime, timeString));
                         } else {
-                            needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                            needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                         }
                     }
                 });
@@ -3117,7 +3117,7 @@ public class LoginActivity extends BaseFragment {
             resetAccountText = new TextView(context);
             resetAccountText.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             resetAccountText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
-            resetAccountText.setText(LocaleController.getString("ResetAccountStatus", R.string.ResetAccountStatus));
+            resetAccountText.setText(LocaleController.getString("ResetAccountStatus", works.heymate.beta.R.string.ResetAccountStatus));
             resetAccountText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             resetAccountText.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
             addView(resetAccountText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 0, 24, 0, 0));
@@ -3131,7 +3131,7 @@ public class LoginActivity extends BaseFragment {
 
             resetAccountButton = new TextView(context);
             resetAccountButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-            resetAccountButton.setText(LocaleController.getString("ResetAccountButton", R.string.ResetAccountButton));
+            resetAccountButton.setText(LocaleController.getString("ResetAccountButton", works.heymate.beta.R.string.ResetAccountButton));
             resetAccountButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             resetAccountButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             resetAccountButton.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
@@ -3145,9 +3145,9 @@ public class LoginActivity extends BaseFragment {
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("ResetMyAccountWarningText", R.string.ResetMyAccountWarningText));
-                builder.setTitle(LocaleController.getString("ResetMyAccountWarning", R.string.ResetMyAccountWarning));
-                builder.setPositiveButton(LocaleController.getString("ResetMyAccountWarningReset", R.string.ResetMyAccountWarningReset), (dialogInterface, i) -> {
+                builder.setMessage(LocaleController.getString("ResetMyAccountWarningText", works.heymate.beta.R.string.ResetMyAccountWarningText));
+                builder.setTitle(LocaleController.getString("ResetMyAccountWarning", works.heymate.beta.R.string.ResetMyAccountWarning));
+                builder.setPositiveButton(LocaleController.getString("ResetMyAccountWarningReset", works.heymate.beta.R.string.ResetMyAccountWarningReset), (dialogInterface, i) -> {
                     needShowProgress(0);
                     TLRPC.TL_account_deleteAccount req = new TLRPC.TL_account_deleteAccount();
                     req.reason = "Forgot password";
@@ -3161,21 +3161,21 @@ public class LoginActivity extends BaseFragment {
                             setPage(5, true, params, false);
                         } else {
                             if (error.text.equals("2FA_RECENT_CONFIRM")) {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("ResetAccountCancelledAlert", R.string.ResetAccountCancelledAlert));
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("ResetAccountCancelledAlert", works.heymate.beta.R.string.ResetAccountCancelledAlert));
                             } else {
-                                needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                                needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
             });
         }
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("ResetAccount", R.string.ResetAccount);
+            return LocaleController.getString("ResetAccount", works.heymate.beta.R.string.ResetAccount);
         }
 
         private void updateTimeText() {
@@ -3209,7 +3209,7 @@ public class LoginActivity extends BaseFragment {
             phoneCode = params.getString("code");
             startTime = params.getInt("startTime");
             waitTime = params.getInt("waitTime");
-            confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ResetAccountInfo", R.string.ResetAccountInfo, LocaleController.addNbsp(PhoneFormat.getInstance().format("+" + requestPhone)))));
+            confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ResetAccountInfo", works.heymate.beta.R.string.ResetAccountInfo, LocaleController.addNbsp(PhoneFormat.getInstance().format("+" + requestPhone)))));
             updateTimeText();
             timeRunnable = new Runnable() {
                 @Override
@@ -3273,7 +3273,7 @@ public class LoginActivity extends BaseFragment {
             confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             confirmTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
             confirmTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
-            confirmTextView.setText(LocaleController.getString("RestoreEmailSentInfo", R.string.RestoreEmailSentInfo));
+            confirmTextView.setText(LocaleController.getString("RestoreEmailSentInfo", works.heymate.beta.R.string.RestoreEmailSentInfo));
             addView(confirmTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
             codeField = new EditTextBoldCursor(context);
@@ -3283,7 +3283,7 @@ public class LoginActivity extends BaseFragment {
             codeField.setCursorWidth(1.5f);
             codeField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             codeField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-            codeField.setHint(LocaleController.getString("PasswordCode", R.string.PasswordCode));
+            codeField.setHint(LocaleController.getString("PasswordCode", works.heymate.beta.R.string.PasswordCode));
             codeField.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
             codeField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             codeField.setMaxLines(1);
@@ -3310,9 +3310,9 @@ public class LoginActivity extends BaseFragment {
             addView(cancelButton, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 0, 0, 0, 14));
             cancelButton.setOnClickListener(view -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("RestoreEmailTroubleText", R.string.RestoreEmailTroubleText));
-                builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", R.string.RestorePasswordNoEmailTitle));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> setPage(6, true, new Bundle(), true));
+                builder.setMessage(LocaleController.getString("RestoreEmailTroubleText", works.heymate.beta.R.string.RestoreEmailTroubleText));
+                builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", works.heymate.beta.R.string.RestorePasswordNoEmailTitle));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> setPage(6, true, new Bundle(), true));
                 Dialog dialog = showDialog(builder.create());
                 if (dialog != null) {
                     dialog.setCanceledOnTouchOutside(false);
@@ -3333,7 +3333,7 @@ public class LoginActivity extends BaseFragment {
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("LoginPassword", R.string.LoginPassword);
+            return LocaleController.getString("LoginPassword", works.heymate.beta.R.string.LoginPassword);
         }
 
         @Override
@@ -3344,7 +3344,7 @@ public class LoginActivity extends BaseFragment {
             codeField.setText("");
             currentParams = params;
             String email_unconfirmed_pattern = currentParams.getString("email_unconfirmed_pattern");
-            cancelButton.setText(LocaleController.formatString("RestoreEmailTrouble", R.string.RestoreEmailTrouble, email_unconfirmed_pattern));
+            cancelButton.setText(LocaleController.formatString("RestoreEmailTrouble", works.heymate.beta.R.string.RestoreEmailTrouble, email_unconfirmed_pattern));
 
             AndroidUtilities.showKeyboard(codeField);
             codeField.requestFocus();
@@ -3390,9 +3390,9 @@ public class LoginActivity extends BaseFragment {
                 nextPressed = false;
                 if (response instanceof TLRPC.TL_auth_authorization) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> onAuthSuccess((TLRPC.TL_auth_authorization) response));
-                    builder.setMessage(LocaleController.getString("PasswordReset", R.string.PasswordReset));
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> onAuthSuccess((TLRPC.TL_auth_authorization) response));
+                    builder.setMessage(LocaleController.getString("PasswordReset", works.heymate.beta.R.string.PasswordReset));
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
                     Dialog dialog = showDialog(builder.create());
                     if (dialog != null) {
                         dialog.setCanceledOnTouchOutside(false);
@@ -3409,9 +3409,9 @@ public class LoginActivity extends BaseFragment {
                         } else {
                             timeString = LocaleController.formatPluralString("Minutes", time / 60);
                         }
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.formatString("FloodWaitTime", works.heymate.beta.R.string.FloodWaitTime, timeString));
                     } else {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                     }
                 }
             }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -3505,29 +3505,29 @@ public class LoginActivity extends BaseFragment {
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
+            builder.setTitle(LocaleController.getString("TermsOfService", works.heymate.beta.R.string.TermsOfService));
 
             if (needAccept) {
-                builder.setPositiveButton(LocaleController.getString("Accept", R.string.Accept), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("Accept", works.heymate.beta.R.string.Accept), (dialog, which) -> {
                     currentTermsOfService.popup = false;
                     onNextPressed();
                 });
-                builder.setNegativeButton(LocaleController.getString("Decline", R.string.Decline), (dialog, which) -> {
+                builder.setNegativeButton(LocaleController.getString("Decline", works.heymate.beta.R.string.Decline), (dialog, which) -> {
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                    builder1.setTitle(LocaleController.getString("TermsOfService", R.string.TermsOfService));
-                    builder1.setMessage(LocaleController.getString("TosDecline", R.string.TosDecline));
-                    builder1.setPositiveButton(LocaleController.getString("SignUp", R.string.SignUp), (dialog1, which1) -> {
+                    builder1.setTitle(LocaleController.getString("TermsOfService", works.heymate.beta.R.string.TermsOfService));
+                    builder1.setMessage(LocaleController.getString("TosDecline", works.heymate.beta.R.string.TosDecline));
+                    builder1.setPositiveButton(LocaleController.getString("SignUp", works.heymate.beta.R.string.SignUp), (dialog1, which1) -> {
                         currentTermsOfService.popup = false;
                         onNextPressed();
                     });
-                    builder1.setNegativeButton(LocaleController.getString("Decline", R.string.Decline), (dialog12, which12) -> {
+                    builder1.setNegativeButton(LocaleController.getString("Decline", works.heymate.beta.R.string.Decline), (dialog12, which12) -> {
                         onBackPressed(true);
                         setPage(0, true, null, true);
                     });
                     showDialog(builder1.create());
                 });
             } else {
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
             }
 
             SpannableStringBuilder text = new SpannableStringBuilder(currentTermsOfService.text);
@@ -3550,7 +3550,7 @@ public class LoginActivity extends BaseFragment {
             imageUpdater.setDelegate(this);
 
             textView = new TextView(context);
-            textView.setText(LocaleController.getString("RegisterText2", R.string.RegisterText2));
+            textView.setText(LocaleController.getString("RegisterText2", works.heymate.beta.R.string.RegisterText2));
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -3602,7 +3602,7 @@ public class LoginActivity extends BaseFragment {
                     avatarBig = null;
                     showAvatarProgress(false, true);
                     avatarImage.setImage(null, null, avatarDrawable, null);
-                    avatarEditor.setImageResource(R.drawable.actions_setphoto);
+                    avatarEditor.setImageResource(works.heymate.beta.R.drawable.actions_setphoto);
                     avatarEditor.setAnimation(cameraDrawable);
                     cameraDrawable.setCurrentFrame(0);
                 }, dialog -> {
@@ -3614,7 +3614,7 @@ public class LoginActivity extends BaseFragment {
                 avatarEditor.playAnimation();
             });
 
-            cameraDrawable = new RLottieDrawable(R.raw.camera, "" + R.raw.camera, AndroidUtilities.dp(60), AndroidUtilities.dp(60), false, null);
+            cameraDrawable = new RLottieDrawable(works.heymate.beta.R.raw.camera, "" + works.heymate.beta.R.raw.camera, AndroidUtilities.dp(60), AndroidUtilities.dp(60), false, null);
 
             avatarEditor = new RLottieImageView(context) {
                 @Override
@@ -3656,7 +3656,7 @@ public class LoginActivity extends BaseFragment {
             firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             firstNameField.setCursorSize(AndroidUtilities.dp(20));
             firstNameField.setCursorWidth(1.5f);
-            firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
+            firstNameField.setHint(LocaleController.getString("FirstName", works.heymate.beta.R.string.FirstName));
             firstNameField.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
             firstNameField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
             firstNameField.setMaxLines(1);
@@ -3671,7 +3671,7 @@ public class LoginActivity extends BaseFragment {
             });
 
             lastNameField = new EditTextBoldCursor(context);
-            lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
+            lastNameField.setHint(LocaleController.getString("LastName", works.heymate.beta.R.string.LastName));
             lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
             lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             lastNameField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
@@ -3692,7 +3692,7 @@ public class LoginActivity extends BaseFragment {
             });
 
             wrongNumber = new TextView(context);
-            wrongNumber.setText(LocaleController.getString("CancelRegistration", R.string.CancelRegistration));
+            wrongNumber.setText(LocaleController.getString("CancelRegistration", works.heymate.beta.R.string.CancelRegistration));
             wrongNumber.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_HORIZONTAL);
             wrongNumber.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
             wrongNumber.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -3721,7 +3721,7 @@ public class LoginActivity extends BaseFragment {
             VerticalPositionAutoAnimator.attach(privacyView);
             privacyLayout.addView(privacyView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM));
 
-            String str = LocaleController.getString("TermsOfServiceLogin", R.string.TermsOfServiceLogin);
+            String str = LocaleController.getString("TermsOfServiceLogin", works.heymate.beta.R.string.TermsOfServiceLogin);
             SpannableStringBuilder text = new SpannableStringBuilder(str);
             int index1 = str.indexOf('*');
             int index2 = str.lastIndexOf('*');
@@ -3803,14 +3803,14 @@ public class LoginActivity extends BaseFragment {
         public boolean onBackPressed(boolean force) {
             if (!force) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("AreYouSureRegistration", R.string.AreYouSureRegistration));
-                builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("AreYouSureRegistration", works.heymate.beta.R.string.AreYouSureRegistration));
+                builder.setNegativeButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
                     onBackPressed(true);
                     setPage(0, true, null, true);
                     hidePrivacyView();
                 });
-                builder.setPositiveButton(LocaleController.getString("Continue", R.string.Continue), null);
+                builder.setPositiveButton(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue), null);
                 showDialog(builder.create());
                 return false;
             }
@@ -3822,7 +3822,7 @@ public class LoginActivity extends BaseFragment {
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("YourName", R.string.YourName);
+            return LocaleController.getString("YourName", works.heymate.beta.R.string.YourName);
         }
 
         @Override
@@ -3906,17 +3906,17 @@ public class LoginActivity extends BaseFragment {
                 } else {
                     needHideProgress(false);
                     if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidPhoneNumber", works.heymate.beta.R.string.InvalidPhoneNumber));
                     } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidCode", works.heymate.beta.R.string.InvalidCode));
                     } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("CodeExpired", works.heymate.beta.R.string.CodeExpired));
                     } else if (error.text.contains("FIRSTNAME_INVALID")) {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidFirstName", R.string.InvalidFirstName));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidFirstName", works.heymate.beta.R.string.InvalidFirstName));
                     } else if (error.text.contains("LASTNAME_INVALID")) {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("InvalidLastName", R.string.InvalidLastName));
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("InvalidLastName", works.heymate.beta.R.string.InvalidLastName));
                     } else {
-                        needShowAlert(LocaleController.getString("AppName", R.string.AppName), error.text);
+                        needShowAlert(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                     }
                 }
             }), ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);

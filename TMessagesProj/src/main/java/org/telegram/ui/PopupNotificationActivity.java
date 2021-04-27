@@ -54,7 +54,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.WebFile;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -434,7 +434,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
         actionBar = new ActionBar(this);
         actionBar.setOccupyStatusBar(false);
-        actionBar.setBackButtonImage(R.drawable.ic_close_white);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_close_white);
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSelector), false);
         popupContainer.addView(actionBar);
@@ -547,9 +547,9 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setMessage(LocaleController.getString("PermissionNoAudio", R.string.PermissionNoAudio));
-            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+            builder.setMessage(LocaleController.getString("PermissionNoAudio", works.heymate.beta.R.string.PermissionNoAudio));
+            builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
                 try {
                     Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                     intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -558,7 +558,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                     FileLog.e(e);
                 }
             });
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
             builder.show();
         }
     }
@@ -1310,7 +1310,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         } else if (currentUser != null) {
             nameTextView.setText(UserObject.getUserName(currentUser));
             if ((int) dialog_id == 0) {
-                nameTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white, 0, 0, 0);
+                nameTextView.setCompoundDrawablesWithIntrinsicBounds(works.heymate.beta.R.drawable.ic_lock_white, 0, 0, 0);
                 nameTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4));
             } else {
                 nameTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -1341,7 +1341,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             nameTextView.setText(UserObject.getUserName(currentUser));
         }
         if (currentUser != null && currentUser.id == 777000) {
-            onlineTextView.setText(LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications));
+            onlineTextView.setText(LocaleController.getString("ServiceNotifications", works.heymate.beta.R.string.ServiceNotifications));
         } else {
             CharSequence printString = MessagesController.getInstance(currentMessageObject.currentAccount).getPrintingString(currentMessageObject.getDialogId(), 0, false);
             if (printString == null || printString.length() == 0) {

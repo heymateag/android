@@ -31,7 +31,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -211,10 +211,10 @@ public final class QRCodeWriter {
       }
     }
 
-    String svg = RLottieDrawable.readRes(null, R.raw.qr_logo);
+    String svg = RLottieDrawable.readRes(null, works.heymate.beta.R.raw.qr_logo);
     Bitmap icon = SvgHelper.getBitmap(svg, imageSize, imageSize, false);
 
-//    Drawable drawable = context.getResources().getDrawable(R.drawable.ic_launcher_dr).mutate();
+//    Drawable drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_launcher_dr).mutate();
 //    drawable.setBounds(imageX, imageX, imageX + imageSize, imageX + imageSize);
 //    drawable.draw(canvas);
     canvas.drawBitmap(icon, imageX, imageX, null);

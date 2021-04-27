@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -52,7 +52,7 @@ public class HtFiltersCell extends LinearLayout {
         }
 
         if(!(parent instanceof DialogsActivity)){
-            Button statusFilter = new Button(context, LocaleController.getString("HtStatus", R.string.HtStatus)) {
+            Button statusFilter = new Button(context, LocaleController.getString("HtStatus", works.heymate.beta.R.string.HtStatus)) {
                 @Override
                 public void setEnabled(boolean enabled) {
                     super.setEnabled(enabled);
@@ -65,7 +65,7 @@ public class HtFiltersCell extends LinearLayout {
                 String[] items = new String[5];
                 int[] icons = new int[5];
                 for (int i = 0; i < 5; i++) {
-                    icons[i] = R.drawable.msg_arrowright;
+                    icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
                 }
                 items[0] = "All";
                 items[1] = "Active";
@@ -81,7 +81,7 @@ public class HtFiltersCell extends LinearLayout {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         statusFilter.titleLabel.setText(items[which]);
-                        statusFilter.titleLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+                        statusFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                         if(parent instanceof OffersActivity) {
                             ((OffersActivity) parent).setStatusFilter(items[which]);
                         }
@@ -93,14 +93,14 @@ public class HtFiltersCell extends LinearLayout {
             addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,10, 0, 0, 0));
         }
 
-        Button categoryFilter = new Button(context, LocaleController.getString("HtCategory", R.string.HtCategory)) {
+        Button categoryFilter = new Button(context, LocaleController.getString("HtCategory", works.heymate.beta.R.string.HtCategory)) {
             @Override
             public void setEnabled(boolean enabled) {
                 super.setEnabled(enabled);
                 setAlpha(enabled ? 1.0f : 0.5f);
             }
         };
-        Button subCategoryFilter = new Button(context, LocaleController.getString("HtSubCategory", R.string.HtSubCategory)) {
+        Button subCategoryFilter = new Button(context, LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory)) {
             @Override
             public void setEnabled(boolean enabled) {
                 super.setEnabled(enabled);
@@ -110,15 +110,15 @@ public class HtFiltersCell extends LinearLayout {
         categoryFilter.setEnabled(true);
         categoryFilter.setOnClickListener((v) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("HtChooseCategory", R.string.HtChooseCategory));
+            builder.setTitle(LocaleController.getString("HtChooseCategory", works.heymate.beta.R.string.HtChooseCategory));
             String[] items = new String[categories.length];
             items[0] = "All";
             int[] icons = new int[categories.length];
             for (int i = 1; i < categories.length; i++) {
                 items[i] = categories[i - 1].toString();
-                icons[i] = R.drawable.msg_arrowright;
+                icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
             }
-            builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }
@@ -127,7 +127,7 @@ public class HtFiltersCell extends LinearLayout {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     categoryFilter.setText(items[which]);
-                    categoryFilter.titleLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+                    categoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                     if(parent instanceof OffersActivity){
                         ((OffersActivity) parent).setCategoryFilter(items[which]);
                     }
@@ -145,15 +145,15 @@ public class HtFiltersCell extends LinearLayout {
             if(subCategories.size() == 0)
                 return;
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("HtChooseCategory", R.string.HtChooseCategorySub));
+            builder.setTitle(LocaleController.getString("HtChooseCategory", works.heymate.beta.R.string.HtChooseCategorySub));
             String[] items = new String[subCategories.size()];
             items[0] = "All";
             int[] icons = new int[subCategories.size()];
             for (int i = 1; i < subCategories.size(); i++) {
                 items[i] = subCategories.get(i - 1);
-                icons[i] = R.drawable.msg_arrowright;
+                icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
             }
-            builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                 }
@@ -162,7 +162,7 @@ public class HtFiltersCell extends LinearLayout {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     subCategoryFilter.setText(items[which]);
-                    subCategoryFilter.titleLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+                    subCategoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                     if(parent instanceof OffersActivity){
                         ((OffersActivity) parent).setSubCategoryFilter(items[which]);
                     }
@@ -181,7 +181,7 @@ public class HtFiltersCell extends LinearLayout {
             trendingText.setTextSize(13);
             trendingText.setTextColor(Theme.getColor(Theme.key_wallet_redText));
             trendingText.setCompoundDrawablePadding(AndroidUtilities.dp(6));
-            Drawable trendingDrawable = context.getResources().getDrawable(R.drawable.ht_sort);
+            Drawable trendingDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ht_sort);
             trendingDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_redText), PorterDuff.Mode.MULTIPLY));
             trendingText.setCompoundDrawablesWithIntrinsicBounds(trendingDrawable, null,null, null);
             addView(trendingText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,20, 0, 0, 0));
@@ -198,7 +198,7 @@ public class HtFiltersCell extends LinearLayout {
             titleLabel.setTextSize(13);
             titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
             titleLabel.setCompoundDrawablePadding(AndroidUtilities.dp(6));
-            Drawable titleDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+            Drawable titleDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
             titleDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
             titleLabel.setCompoundDrawablesWithIntrinsicBounds(null, null, titleDrawable, null);
             addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 0, 5, 0, 5));

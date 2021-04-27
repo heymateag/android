@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -66,8 +66,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 
 	@Override
 	public View createView(Context context) {
-		actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-		actionBar.setTitle(LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies));
+		actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+		actionBar.setTitle(LocaleController.getString("VoipQuickReplies", works.heymate.beta.R.string.VoipQuickReplies));
 		if (AndroidUtilities.isTablet()) {
 			actionBar.setOccupyStatusBar(false);
 		}
@@ -139,8 +139,8 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 			switch (holder.getItemViewType()) {
 				case 0: {
 					TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
-					cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-					cell.setText(LocaleController.getString("VoipQuickRepliesExplain", R.string.VoipQuickRepliesExplain));
+					cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+					cell.setText(LocaleController.getString("VoipQuickRepliesExplain", works.heymate.beta.R.string.VoipQuickRepliesExplain));
 					break;
 				}
 				case 1: {
@@ -156,16 +156,16 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 					String defValue = null;
 					if (position == reply1Row) {
 						settingsKey = "quick_reply_msg1";
-						defValue = LocaleController.getString("QuickReplyDefault1", R.string.QuickReplyDefault1);
+						defValue = LocaleController.getString("QuickReplyDefault1", works.heymate.beta.R.string.QuickReplyDefault1);
 					} else if (position == reply2Row) {
 						settingsKey = "quick_reply_msg2";
-						defValue = LocaleController.getString("QuickReplyDefault2", R.string.QuickReplyDefault2);
+						defValue = LocaleController.getString("QuickReplyDefault2", works.heymate.beta.R.string.QuickReplyDefault2);
 					} else if (position == reply3Row) {
 						settingsKey = "quick_reply_msg3";
-						defValue = LocaleController.getString("QuickReplyDefault3", R.string.QuickReplyDefault3);
+						defValue = LocaleController.getString("QuickReplyDefault3", works.heymate.beta.R.string.QuickReplyDefault3);
 					} else if (position == reply4Row) {
 						settingsKey = "quick_reply_msg4";
-						defValue = LocaleController.getString("QuickReplyDefault4", R.string.QuickReplyDefault4);
+						defValue = LocaleController.getString("QuickReplyDefault4", works.heymate.beta.R.string.QuickReplyDefault4);
 					}
 					textCell.setTextAndHint(getParentActivity().getSharedPreferences("mainconfig", Context.MODE_PRIVATE).getString(settingsKey, ""), defValue, position != reply4Row);
 
@@ -173,7 +173,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
 				}
 				case 4: {
 					TextCheckCell cell = (TextCheckCell) holder.itemView;
-					cell.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", R.string.AllowCustomQuickReply), getParentActivity().getSharedPreferences("mainconfig", Context.MODE_PRIVATE).getBoolean("quick_reply_allow_custom", true), false);
+					cell.setTextAndCheck(LocaleController.getString("AllowCustomQuickReply", works.heymate.beta.R.string.AllowCustomQuickReply), getParentActivity().getSharedPreferences("mainconfig", Context.MODE_PRIVATE).getBoolean("quick_reply_allow_custom", true), false);
 				}
 			}
 		}

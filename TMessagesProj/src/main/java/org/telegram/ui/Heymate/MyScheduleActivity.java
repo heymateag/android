@@ -27,7 +27,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.time.FastDateFormat;
@@ -339,7 +339,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             if (view == null) {
                 textView = new TextView(getParentActivity());
-                textView.setTextColor(ContextCompat.getColor(getParentActivity(), R.color.ht_theme));
+                textView.setTextColor(ContextCompat.getColor(getParentActivity(), works.heymate.beta.R.color.ht_theme));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
                 textView.setGravity(Gravity.CENTER_VERTICAL);
                 textView.setPadding(
@@ -445,14 +445,14 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             setPageWidth(140);
             setPageHeight(239.7f);
-            LayoutInflater.from(context).inflate(R.layout.item_schedule, this, true);
-            addSequences(R.xml.sequences_item_schedule);
+            LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.item_schedule, this, true);
+            addSequences(works.heymate.beta.R.xml.sequences_item_schedule);
 
-            mImageUser = findViewById(R.id.image_user);
-            mTextName = findViewById(R.id.text_name);
-            mTextInfo = findViewById(R.id.text_info);
-            mButtonLeft = findViewById(R.id.button_left);
-            mButtonRight = findViewById(R.id.button_right);
+            mImageUser = findViewById(works.heymate.beta.R.id.image_user);
+            mTextName = findViewById(works.heymate.beta.R.id.text_name);
+            mTextInfo = findViewById(works.heymate.beta.R.id.text_info);
+            mButtonLeft = findViewById(works.heymate.beta.R.id.button_left);
+            mButtonRight = findViewById(works.heymate.beta.R.id.button_right);
 
             mTextName.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             mTextInfo.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
@@ -630,7 +630,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             mButtonRight.setEnabled(true);
             mButtonRight.setAlpha(1);
             mButtonRight.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
-            mButtonRight.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(getContext(), R.color.ht_theme)));
+            mButtonRight.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(getContext(), works.heymate.beta.R.color.ht_theme)));
         }
 
         private void setRightNeutral() {

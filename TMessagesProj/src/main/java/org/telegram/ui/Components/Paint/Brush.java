@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 
 public interface Brush {
 
@@ -46,7 +46,7 @@ public interface Brush {
         public Bitmap getStamp() {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), R.drawable.paint_radial_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), works.heymate.beta.R.drawable.paint_radial_brush, options);
         }
     }
 
@@ -81,7 +81,7 @@ public interface Brush {
         public Bitmap getStamp() {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), R.drawable.paint_elliptical_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), works.heymate.beta.R.drawable.paint_elliptical_brush, options);
         }
     }
 
@@ -116,7 +116,7 @@ public interface Brush {
         public Bitmap getStamp() {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), R.drawable.paint_neon_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), works.heymate.beta.R.drawable.paint_neon_brush, options);
         }
     }
 
@@ -151,7 +151,7 @@ public interface Brush {
         public Bitmap getStamp() {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inScaled = false;
-            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), R.drawable.paint_radial_brush, options);
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), works.heymate.beta.R.drawable.paint_radial_brush, options);
         }
     }
 }

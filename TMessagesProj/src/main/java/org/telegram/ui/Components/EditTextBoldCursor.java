@@ -49,7 +49,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 
@@ -240,7 +240,7 @@ public class EditTextBoldCursor extends EditText {
                 mCursorDrawableResField.setAccessible(true);
             }
             if (mCursorDrawableResField != null) {
-                mCursorDrawableResField.set(this, R.drawable.field_carret_empty);
+                mCursorDrawableResField.set(this, works.heymate.beta.R.drawable.field_carret_empty);
             }
         } catch (Throwable ignore) {
 

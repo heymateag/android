@@ -14,7 +14,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -43,7 +43,7 @@ public class OfferGalleryActivity extends BaseFragment {
         int dpWidth = configuration.screenWidthDp;
         int dpHeight = configuration.screenHeightDp;
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setSearchTextColor(0xff4488, true);
         actionBar.setTitle(dto.getTitle());

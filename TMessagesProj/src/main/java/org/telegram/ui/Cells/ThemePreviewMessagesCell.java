@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarLayout;
@@ -43,14 +43,14 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
         setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(11));
 
-        shadowDrawable = Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
+        shadowDrawable = Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
 
         int date = (int) (System.currentTimeMillis() / 1000) - 60 * 60;
         TLRPC.Message message = new TLRPC.TL_message();
         if (type == 0) {
-            message.message = LocaleController.getString("FontSizePreviewReply", R.string.FontSizePreviewReply);
+            message.message = LocaleController.getString("FontSizePreviewReply", works.heymate.beta.R.string.FontSizePreviewReply);
         } else {
-            message.message = LocaleController.getString("NewThemePreviewReply", R.string.NewThemePreviewReply);
+            message.message = LocaleController.getString("NewThemePreviewReply", works.heymate.beta.R.string.NewThemePreviewReply);
         }
         message.date = date + 60;
         message.dialog_id = 1;
@@ -66,9 +66,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
         message = new TLRPC.TL_message();
         if (type == 0) {
-            message.message = LocaleController.getString("FontSizePreviewLine2", R.string.FontSizePreviewLine2);
+            message.message = LocaleController.getString("FontSizePreviewLine2", works.heymate.beta.R.string.FontSizePreviewLine2);
         } else {
-            String text = LocaleController.getString("NewThemePreviewLine3", R.string.NewThemePreviewLine3);
+            String text = LocaleController.getString("NewThemePreviewLine3", works.heymate.beta.R.string.NewThemePreviewLine3);
             StringBuilder builder = new StringBuilder(text);
             int index1 = text.indexOf('*');
             int index2 = text.lastIndexOf('*');
@@ -99,9 +99,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
         message = new TLRPC.TL_message();
         if (type == 0) {
-            message.message = LocaleController.getString("FontSizePreviewLine1", R.string.FontSizePreviewLine1);
+            message.message = LocaleController.getString("FontSizePreviewLine1", works.heymate.beta.R.string.FontSizePreviewLine1);
         } else {
-            message.message = LocaleController.getString("NewThemePreviewLine1", R.string.NewThemePreviewLine1);
+            message.message = LocaleController.getString("NewThemePreviewLine1", works.heymate.beta.R.string.NewThemePreviewLine1);
         }
         message.date = date + 60;
         message.dialog_id = 1;
@@ -116,9 +116,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         message.peer_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
         MessageObject message2 = new MessageObject(UserConfig.selectedAccount, message, true, false);
         if (type == 0) {
-            message2.customReplyName = LocaleController.getString("FontSizePreviewName", R.string.FontSizePreviewName);
+            message2.customReplyName = LocaleController.getString("FontSizePreviewName", works.heymate.beta.R.string.FontSizePreviewName);
         } else {
-            message2.customReplyName = LocaleController.getString("NewThemePreviewName", R.string.NewThemePreviewName);
+            message2.customReplyName = LocaleController.getString("NewThemePreviewName", works.heymate.beta.R.string.NewThemePreviewName);
         }
         message2.eventId = 1;
         message2.resetLayout();

@@ -48,7 +48,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.XiaomiUtilities;
@@ -361,12 +361,12 @@ public class VoIPService extends VoIPBaseService {
 		if (callIShouldHavePutIntoIntent != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			NotificationsController.checkOtherNotificationsChannel();
 			Notification.Builder bldr = new Notification.Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL)
-					.setContentTitle(LocaleController.getString("VoipOutgoingCall", R.string.VoipOutgoingCall))
+					.setContentTitle(LocaleController.getString("VoipOutgoingCall", works.heymate.beta.R.string.VoipOutgoingCall))
 					.setShowWhen(false);
 			if (groupCall != null) {
-				bldr.setSmallIcon(isMicMute() ? R.drawable.voicechat_muted : R.drawable.voicechat_active);
+				bldr.setSmallIcon(isMicMute() ? works.heymate.beta.R.drawable.voicechat_muted : works.heymate.beta.R.drawable.voicechat_active);
 			} else {
-				bldr.setSmallIcon(R.drawable.notification);
+				bldr.setSmallIcon(works.heymate.beta.R.drawable.notification);
 			}
 			startForeground(ID_ONGOING_CALL_NOTIFICATION, bldr.build());
 		}

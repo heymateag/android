@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 
 public class ZoomControlView extends View {
 
@@ -69,12 +69,12 @@ public class ZoomControlView extends View {
     public ZoomControlView(Context context) {
         super(context);
 
-        minusDrawable = context.getResources().getDrawable(R.drawable.zoom_minus);
-        plusDrawable = context.getResources().getDrawable(R.drawable.zoom_plus);
-        progressDrawable = context.getResources().getDrawable(R.drawable.zoom_slide);
-        filledProgressDrawable = context.getResources().getDrawable(R.drawable.zoom_slide_a);
-        knobDrawable = context.getResources().getDrawable(R.drawable.zoom_round);
-        pressedKnobDrawable = context.getResources().getDrawable(R.drawable.zoom_round_b);
+        minusDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.zoom_minus);
+        plusDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.zoom_plus);
+        progressDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.zoom_slide);
+        filledProgressDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.zoom_slide_a);
+        knobDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.zoom_round);
+        pressedKnobDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.zoom_round_b);
     }
 
     public float getZoom() {

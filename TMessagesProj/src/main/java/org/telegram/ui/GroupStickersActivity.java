@@ -41,7 +41,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -134,9 +134,9 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("GroupStickers", R.string.GroupStickers));
+        actionBar.setTitle(LocaleController.getString("GroupStickers", works.heymate.beta.R.string.GroupStickers));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -157,7 +157,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneItem = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
         progressView = new ContextProgressView(context, 1);
         progressView.setAlpha(0.0f);
         progressView.setScaleX(0.1f);
@@ -216,7 +216,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         usernameTextView.setGravity(Gravity.CENTER_VERTICAL);
         usernameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         usernameTextView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", R.string.ChooseStickerSetPlaceholder));
+        usernameTextView.setHint(LocaleController.getString("ChooseStickerSetPlaceholder", works.heymate.beta.R.string.ChooseStickerSetPlaceholder));
         usernameTextView.addTextChangedListener(new TextWatcher() {
 
             boolean ignoreTextChange;
@@ -265,7 +265,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
         eraseImageView = new ImageView(context);
         eraseImageView.setScaleType(ImageView.ScaleType.CENTER);
-        eraseImageView.setImageResource(R.drawable.ic_close_white);
+        eraseImageView.setImageResource(works.heymate.beta.R.drawable.ic_close_white);
         eraseImageView.setPadding(AndroidUtilities.dp(16), 0, 0, 0);
         eraseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), PorterDuff.Mode.MULTIPLY));
         eraseImageView.setVisibility(View.INVISIBLE);
@@ -451,7 +451,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         donePressed = false;
                         showEditDoneProgress(false);
                         if (getParentActivity() != null) {
-                            Toast.makeText(getParentActivity(), LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getParentActivity(), LocaleController.getString("AddStickersNotFound", works.heymate.beta.R.string.AddStickersNotFound), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -505,7 +505,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, info, 0, true, false);
                 finishFragment();
             } else {
-                Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text, Toast.LENGTH_SHORT).show();
                 donePressed = false;
                 showEditDoneProgress(false);
             }
@@ -644,7 +644,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 }
                 case 1: {
                     if (position == infoRow) {
-                        String text = LocaleController.getString("ChooseStickerSetMy", R.string.ChooseStickerSetMy);
+                        String text = LocaleController.getString("ChooseStickerSetMy", works.heymate.beta.R.string.ChooseStickerSetMy);
                         String botName = "@stickers";
                         int index = text.indexOf(botName);
                         if (index != -1) {
@@ -669,7 +669,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     break;
                 }
                 case 4: {
-                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("ChooseFromYourStickers", R.string.ChooseFromYourStickers));
+                    ((HeaderCell) holder.itemView).setText(LocaleController.getString("ChooseFromYourStickers", works.heymate.beta.R.string.ChooseFromYourStickers));
                     break;
                 }
                 case 5: {
@@ -678,9 +678,9 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                         cell.setStickersSet(selectedStickerSet, false);
                     } else {
                         if (searching) {
-                            cell.setText(LocaleController.getString("Loading", R.string.Loading), null, 0, false);
+                            cell.setText(LocaleController.getString("Loading", works.heymate.beta.R.string.Loading), null, 0, false);
                         } else {
-                            cell.setText(LocaleController.getString("ChooseStickerSetNotFound", R.string.ChooseStickerSetNotFound), LocaleController.getString("ChooseStickerSetNotFoundInfo", R.string.ChooseStickerSetNotFoundInfo), R.drawable.ic_smiles2_sad, false);
+                            cell.setText(LocaleController.getString("ChooseStickerSetNotFound", works.heymate.beta.R.string.ChooseStickerSetNotFound), LocaleController.getString("ChooseStickerSetNotFoundInfo", works.heymate.beta.R.string.ChooseStickerSetNotFoundInfo), works.heymate.beta.R.drawable.ic_smiles2_sad, false);
                         }
                     }
                     break;
@@ -705,14 +705,14 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = nameContainer;
                     break;
                 case 3:
                     view = new ShadowSectionCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 4:
                     view = new HeaderCell(mContext);

@@ -31,7 +31,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BubbleActivity;
 import org.telegram.ui.Cells.PhotoEditRadioCell;
@@ -421,7 +421,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         cancelTextView.setGravity(Gravity.CENTER);
         cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         cancelTextView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
-        cancelTextView.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+        cancelTextView.setText(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase());
         cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(cancelTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
@@ -431,7 +431,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         doneTextView.setGravity(Gravity.CENTER);
         doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         doneTextView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
-        doneTextView.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
+        doneTextView.setText(LocaleController.getString("Done", works.heymate.beta.R.string.Done).toUpperCase());
         doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(doneTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
 
@@ -440,7 +440,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
 
         tuneItem = new ImageView(context);
         tuneItem.setScaleType(ImageView.ScaleType.CENTER);
-        tuneItem.setImageResource(R.drawable.photo_tools);
+        tuneItem.setImageResource(works.heymate.beta.R.drawable.photo_tools);
         tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
         tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(tuneItem, LayoutHelper.createLinear(56, 48));
@@ -454,7 +454,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
 
         blurItem = new ImageView(context);
         blurItem.setScaleType(ImageView.ScaleType.CENTER);
-        blurItem.setImageResource(R.drawable.tool_blur);
+        blurItem.setImageResource(works.heymate.beta.R.drawable.tool_blur);
         blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(blurItem, LayoutHelper.createLinear(56, 48));
         blurItem.setOnClickListener(v -> {
@@ -470,7 +470,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
 
         curveItem = new ImageView(context);
         curveItem.setScaleType(ImageView.ScaleType.CENTER);
-        curveItem.setImageResource(R.drawable.tool_curve);
+        curveItem.setImageResource(works.heymate.beta.R.drawable.tool_curve);
         curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         linearLayout.addView(curveItem, LayoutHelper.createLinear(56, 48));
         curveItem.setOnClickListener(v -> {
@@ -510,22 +510,22 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             curveTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             curveTextView.setGravity(Gravity.CENTER_VERTICAL);
             if (a == 0) {
-                String str = LocaleController.getString("CurvesAll", R.string.CurvesAll);
+                String str = LocaleController.getString("CurvesAll", works.heymate.beta.R.string.CurvesAll);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(0xffffffff);
                 curveRadioButton[a].setColor(0xffffffff, 0xffffffff);
             } else if (a == 1) {
-                String str = LocaleController.getString("CurvesRed", R.string.CurvesRed);
+                String str = LocaleController.getString("CurvesRed", works.heymate.beta.R.string.CurvesRed);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(0xffe64d4d);
                 curveRadioButton[a].setColor(0xffe64d4d, 0xffe64d4d);
             } else if (a == 2) {
-                String str = LocaleController.getString("CurvesGreen", R.string.CurvesGreen);
+                String str = LocaleController.getString("CurvesGreen", works.heymate.beta.R.string.CurvesGreen);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(0xff5abb5f);
                 curveRadioButton[a].setColor(0xff5abb5f, 0xff5abb5f);
             } else if (a == 3) {
-                String str = LocaleController.getString("CurvesBlue", R.string.CurvesBlue);
+                String str = LocaleController.getString("CurvesBlue", works.heymate.beta.R.string.CurvesBlue);
                 curveTextView.setText(str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase());
                 curveTextView.setTextColor(0xff3dadee);
                 curveRadioButton[a].setColor(0xff3dadee, 0xff3dadee);
@@ -551,7 +551,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         blurOffButton.setCompoundDrawablePadding(AndroidUtilities.dp(2));
         blurOffButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         blurOffButton.setGravity(Gravity.CENTER_HORIZONTAL);
-        blurOffButton.setText(LocaleController.getString("BlurOff", R.string.BlurOff));
+        blurOffButton.setText(LocaleController.getString("BlurOff", works.heymate.beta.R.string.BlurOff));
         blurLayout.addView(blurOffButton, LayoutHelper.createFrame(80, 60));
         blurOffButton.setOnClickListener(v -> {
             blurType = 0;
@@ -566,7 +566,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         blurRadialButton.setCompoundDrawablePadding(AndroidUtilities.dp(2));
         blurRadialButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         blurRadialButton.setGravity(Gravity.CENTER_HORIZONTAL);
-        blurRadialButton.setText(LocaleController.getString("BlurRadial", R.string.BlurRadial));
+        blurRadialButton.setText(LocaleController.getString("BlurRadial", works.heymate.beta.R.string.BlurRadial));
         blurLayout.addView(blurRadialButton, LayoutHelper.createFrame(80, 80, Gravity.LEFT | Gravity.TOP, 100, 0, 0, 0));
         blurRadialButton.setOnClickListener(v -> {
             blurType = 1;
@@ -582,7 +582,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         blurLinearButton.setCompoundDrawablePadding(AndroidUtilities.dp(2));
         blurLinearButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         blurLinearButton.setGravity(Gravity.CENTER_HORIZONTAL);
-        blurLinearButton.setText(LocaleController.getString("BlurLinear", R.string.BlurLinear));
+        blurLinearButton.setText(LocaleController.getString("BlurLinear", works.heymate.beta.R.string.BlurLinear));
         blurLayout.addView(blurLinearButton, LayoutHelper.createFrame(80, 80, Gravity.LEFT | Gravity.TOP, 200, 0, 0, 0));
         blurLinearButton.setOnClickListener(v -> {
             blurType = 2;
@@ -622,35 +622,35 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
 
     private void updateSelectedBlurType() {
         if (blurType == 0) {
-            Drawable drawable = blurOffButton.getContext().getResources().getDrawable(R.drawable.blur_off).mutate();
+            Drawable drawable = blurOffButton.getContext().getResources().getDrawable(works.heymate.beta.R.drawable.blur_off).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
             blurOffButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             blurOffButton.setTextColor(Theme.getColor(Theme.key_dialogFloatingButton));
 
-            blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial, 0, 0);
+            blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, works.heymate.beta.R.drawable.blur_radial, 0, 0);
             blurRadialButton.setTextColor(0xffffffff);
 
-            blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_linear, 0, 0);
+            blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, works.heymate.beta.R.drawable.blur_linear, 0, 0);
             blurLinearButton.setTextColor(0xffffffff);
         } else if (blurType == 1) {
-            blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_off, 0, 0);
+            blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, works.heymate.beta.R.drawable.blur_off, 0, 0);
             blurOffButton.setTextColor(0xffffffff);
 
-            Drawable drawable = blurOffButton.getContext().getResources().getDrawable(R.drawable.blur_radial).mutate();
+            Drawable drawable = blurOffButton.getContext().getResources().getDrawable(works.heymate.beta.R.drawable.blur_radial).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
             blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             blurRadialButton.setTextColor(Theme.getColor(Theme.key_dialogFloatingButton));
 
-            blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_linear, 0, 0);
+            blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(0, works.heymate.beta.R.drawable.blur_linear, 0, 0);
             blurLinearButton.setTextColor(0xffffffff);
         } else if (blurType == 2) {
-            blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_off, 0, 0);
+            blurOffButton.setCompoundDrawablesWithIntrinsicBounds(0, works.heymate.beta.R.drawable.blur_off, 0, 0);
             blurOffButton.setTextColor(0xffffffff);
 
-            blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.blur_radial, 0, 0);
+            blurRadialButton.setCompoundDrawablesWithIntrinsicBounds(0, works.heymate.beta.R.drawable.blur_radial, 0, 0);
             blurRadialButton.setTextColor(0xffffffff);
 
-            Drawable drawable = blurOffButton.getContext().getResources().getDrawable(R.drawable.blur_linear).mutate();
+            Drawable drawable = blurOffButton.getContext().getResources().getDrawable(works.heymate.beta.R.drawable.blur_linear).mutate();
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingButton), PorterDuff.Mode.MULTIPLY));
             blurLinearButton.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             blurLinearButton.setTextColor(Theme.getColor(Theme.key_dialogFloatingButton));
@@ -1103,29 +1103,29 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                     PhotoEditToolCell cell = (PhotoEditToolCell) holder.itemView;
                     cell.setTag(i);
                     if (i == enhanceTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", R.string.Enhance), enhanceValue, 0, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Enhance", works.heymate.beta.R.string.Enhance), enhanceValue, 0, 100);
                     } else if (i == highlightsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", R.string.Highlights), highlightsValue, -100, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Highlights", works.heymate.beta.R.string.Highlights), highlightsValue, -100, 100);
                     } else if (i == contrastTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", R.string.Contrast), contrastValue, -100, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Contrast", works.heymate.beta.R.string.Contrast), contrastValue, -100, 100);
                     } else if (i == exposureTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", R.string.Exposure), exposureValue, -100, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Exposure", works.heymate.beta.R.string.Exposure), exposureValue, -100, 100);
                     } else if (i == warmthTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", R.string.Warmth), warmthValue, -100, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Warmth", works.heymate.beta.R.string.Warmth), warmthValue, -100, 100);
                     } else if (i == saturationTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", R.string.Saturation), saturationValue, -100, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Saturation", works.heymate.beta.R.string.Saturation), saturationValue, -100, 100);
                     } else if (i == vignetteTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", R.string.Vignette), vignetteValue, 0, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Vignette", works.heymate.beta.R.string.Vignette), vignetteValue, 0, 100);
                     } else if (i == shadowsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", R.string.Shadows), shadowsValue, -100, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Shadows", works.heymate.beta.R.string.Shadows), shadowsValue, -100, 100);
                     } else if (i == grainTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", R.string.Grain), grainValue, 0, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Grain", works.heymate.beta.R.string.Grain), grainValue, 0, 100);
                     } else if (i == sharpenTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", R.string.Sharpen), sharpenValue, 0, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Sharpen", works.heymate.beta.R.string.Sharpen), sharpenValue, 0, 100);
                     } else if (i == fadeTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", R.string.Fade), fadeValue, 0, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("Fade", works.heymate.beta.R.string.Fade), fadeValue, 0, 100);
                     } else if (i == softenSkinTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("SoftenSkin", R.string.SoftenSkin), softenSkinValue, 0, 100);
+                        cell.setIconAndTextAndValue(LocaleController.getString("SoftenSkin", works.heymate.beta.R.string.SoftenSkin), softenSkinValue, 0, 100);
                     }
                     break;
                 }
@@ -1133,9 +1133,9 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                     PhotoEditRadioCell cell = (PhotoEditRadioCell) holder.itemView;
                     cell.setTag(i);
                     if (i == tintShadowsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("TintShadows", R.string.TintShadows), 0, tintShadowsColor);
+                        cell.setIconAndTextAndValue(LocaleController.getString("TintShadows", works.heymate.beta.R.string.TintShadows), 0, tintShadowsColor);
                     } else if (i == tintHighlightsTool) {
-                        cell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", R.string.TintHighlights), 0, tintHighlightsColor);
+                        cell.setIconAndTextAndValue(LocaleController.getString("TintHighlights", works.heymate.beta.R.string.TintHighlights), 0, tintHighlightsColor);
                     }
                     break;
                 }

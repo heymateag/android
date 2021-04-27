@@ -66,7 +66,7 @@ import android.widget.RemoteViews;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
+import works.heymate.beta.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -77,7 +77,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
@@ -483,13 +483,13 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 	public void toggleSpeakerphoneOrShowRouteSheet(Context context, boolean fromOverlayWindow) {
 		if (isBluetoothHeadsetConnected() && hasEarpiece()) {
 			BottomSheet.Builder builder = new BottomSheet.Builder(context)
-					.setTitle(LocaleController.getString("VoipOutputDevices", R.string.VoipOutputDevices), true)
+					.setTitle(LocaleController.getString("VoipOutputDevices", works.heymate.beta.R.string.VoipOutputDevices), true)
 					.setItems(new CharSequence[]{
-									LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker),
-									isHeadsetPlugged ? LocaleController.getString("VoipAudioRoutingHeadset", R.string.VoipAudioRoutingHeadset) : LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece),
-									currentBluetoothDeviceName != null ? currentBluetoothDeviceName : LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth)},
+									LocaleController.getString("VoipAudioRoutingSpeaker", works.heymate.beta.R.string.VoipAudioRoutingSpeaker),
+									isHeadsetPlugged ? LocaleController.getString("VoipAudioRoutingHeadset", works.heymate.beta.R.string.VoipAudioRoutingHeadset) : LocaleController.getString("VoipAudioRoutingEarpiece", works.heymate.beta.R.string.VoipAudioRoutingEarpiece),
+									currentBluetoothDeviceName != null ? currentBluetoothDeviceName : LocaleController.getString("VoipAudioRoutingBluetooth", works.heymate.beta.R.string.VoipAudioRoutingBluetooth)},
 							new int[]{R.drawable.calls_menu_speaker,
-									isHeadsetPlugged ? R.drawable.calls_menu_headset : R.drawable.calls_menu_phone,
+									isHeadsetPlugged ? works.heymate.beta.R.drawable.calls_menu_headset : works.heymate.beta.R.drawable.calls_menu_phone,
 									R.drawable.calls_menu_bluetooth}, (dialog, which) -> {
 								if (getSharedInstance() == null) {
 									return;
@@ -670,18 +670,18 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 			intent.putExtra("currentAccount", currentAccount);
 		}
 		Notification.Builder builder = new Notification.Builder(this)
-				.setContentTitle(groupCall != null ? LocaleController.getString("VoipVoiceChat", R.string.VoipVoiceChat) : LocaleController.getString("VoipOutgoingCall", R.string.VoipOutgoingCall))
+				.setContentTitle(groupCall != null ? LocaleController.getString("VoipVoiceChat", works.heymate.beta.R.string.VoipVoiceChat) : LocaleController.getString("VoipOutgoingCall", works.heymate.beta.R.string.VoipOutgoingCall))
 				.setContentText(name)
 				.setContentIntent(PendingIntent.getActivity(this, 50, intent, 0));
 		if (groupCall != null) {
-			builder.setSmallIcon(isMicMute() ? R.drawable.voicechat_muted : R.drawable.voicechat_active);
+			builder.setSmallIcon(isMicMute() ? works.heymate.beta.R.drawable.voicechat_muted : works.heymate.beta.R.drawable.voicechat_active);
 		} else {
-			builder.setSmallIcon(R.drawable.notification);
+			builder.setSmallIcon(works.heymate.beta.R.drawable.notification);
 		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
 			endIntent.setAction(getPackageName() + ".END_CALL");
-			builder.addAction(R.drawable.ic_call_end_white_24dp, groupCall != null ? LocaleController.getString("VoipGroupLeaveAlertTitle", R.string.VoipGroupLeaveAlertTitle) : LocaleController.getString("VoipEndCall", R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+			builder.addAction(works.heymate.beta.R.drawable.ic_call_end_white_24dp, groupCall != null ? LocaleController.getString("VoipGroupLeaveAlertTitle", works.heymate.beta.R.string.VoipGroupLeaveAlertTitle) : LocaleController.getString("VoipEndCall", works.heymate.beta.R.string.VoipEndCall), PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 			builder.setPriority(Notification.PRIORITY_MAX);
 		}
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -980,16 +980,16 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 		WebRtcAudioTrack.setAudioStreamType(currentStreamType);
 		Utilities.globalQueue.postRunnable(() -> {
 			soundPool = new SoundPool(1, currentStreamType, 0);
-			spConnectingId = soundPool.load(this, R.raw.voip_connecting, 1);
-			spRingbackID = soundPool.load(this, R.raw.voip_ringback, 1);
-			spFailedID = soundPool.load(this, R.raw.voip_failed, 1);
-			spEndId = soundPool.load(this, R.raw.voip_end, 1);
-			spBusyId = soundPool.load(this, R.raw.voip_busy, 1);
-			spVoiceChatEndId = soundPool.load(this, R.raw.voicechat_leave, 1);
-			spVoiceChatStartId = soundPool.load(this, R.raw.voicechat_join, 1);
-			spVoiceChatConnecting = soundPool.load(this, R.raw.voicechat_connecting, 1);
-			spAllowTalkId = soundPool.load(this, R.raw.voip_onallowtalk, 1);
-			spStartRecordId = soundPool.load(this, R.raw.voip_recordstart, 1);
+			spConnectingId = soundPool.load(this, works.heymate.beta.R.raw.voip_connecting, 1);
+			spRingbackID = soundPool.load(this, works.heymate.beta.R.raw.voip_ringback, 1);
+			spFailedID = soundPool.load(this, works.heymate.beta.R.raw.voip_failed, 1);
+			spEndId = soundPool.load(this, works.heymate.beta.R.raw.voip_end, 1);
+			spBusyId = soundPool.load(this, works.heymate.beta.R.raw.voip_busy, 1);
+			spVoiceChatEndId = soundPool.load(this, works.heymate.beta.R.raw.voicechat_leave, 1);
+			spVoiceChatStartId = soundPool.load(this, works.heymate.beta.R.raw.voicechat_join, 1);
+			spVoiceChatConnecting = soundPool.load(this, works.heymate.beta.R.raw.voicechat_connecting, 1);
+			spAllowTalkId = soundPool.load(this, works.heymate.beta.R.raw.voip_onallowtalk, 1);
+			spStartRecordId = soundPool.load(this, works.heymate.beta.R.raw.voip_recordstart, 1);
 		});
 	}
 
@@ -1346,9 +1346,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 		Intent intent = new Intent(this, LaunchActivity.class);
 		intent.setAction("voip");
 		Notification.Builder builder = new Notification.Builder(this)
-				.setContentTitle(video ? LocaleController.getString("VoipInVideoCallBranding", R.string.VoipInVideoCallBranding) : LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding))
+				.setContentTitle(video ? LocaleController.getString("VoipInVideoCallBranding", works.heymate.beta.R.string.VoipInVideoCallBranding) : LocaleController.getString("VoipInCallBranding", works.heymate.beta.R.string.VoipInCallBranding))
 				.setContentText(name)
-				.setSmallIcon(R.drawable.notification)
+				.setSmallIcon(works.heymate.beta.R.drawable.notification)
 				.setSubText(subText)
 				.setContentIntent(PendingIntent.getActivity(this, 0, intent, 0));
 		Uri soundProviderUri = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".call_sound_provider/start_ringing");
@@ -1380,7 +1380,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 						.setLegacyStreamType(AudioManager.STREAM_RING)
 						.setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
 						.build();
-				NotificationChannel chan = new NotificationChannel("incoming_calls3" + chanIndex, LocaleController.getString("IncomingCalls", R.string.IncomingCalls), NotificationManager.IMPORTANCE_HIGH);
+				NotificationChannel chan = new NotificationChannel("incoming_calls3" + chanIndex, LocaleController.getString("IncomingCalls", works.heymate.beta.R.string.IncomingCalls), NotificationManager.IMPORTANCE_HIGH);
 				chan.setSound(soundProviderUri, attrs);
 				chan.enableVibration(false);
 				chan.enableLights(false);
@@ -1400,23 +1400,23 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 		Intent endIntent = new Intent(this, VoIPActionsReceiver.class);
 		endIntent.setAction(getPackageName() + ".DECLINE_CALL");
 		endIntent.putExtra("call_id", getCallID());
-		CharSequence endTitle = LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall);
+		CharSequence endTitle = LocaleController.getString("VoipDeclineCall", works.heymate.beta.R.string.VoipDeclineCall);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			endTitle = new SpannableString(endTitle);
 			((SpannableString) endTitle).setSpan(new ForegroundColorSpan(0xFFF44336), 0, endTitle.length(), 0);
 		}
 		PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-		builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, endPendingIntent);
+		builder.addAction(works.heymate.beta.R.drawable.ic_call_end_white_24dp, endTitle, endPendingIntent);
 		Intent answerIntent = new Intent(this, VoIPActionsReceiver.class);
 		answerIntent.setAction(getPackageName() + ".ANSWER_CALL");
 		answerIntent.putExtra("call_id", getCallID());
-		CharSequence answerTitle = LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall);
+		CharSequence answerTitle = LocaleController.getString("VoipAnswerCall", works.heymate.beta.R.string.VoipAnswerCall);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			answerTitle = new SpannableString(answerTitle);
 			((SpannableString) answerTitle).setSpan(new ForegroundColorSpan(0xFF00AA00), 0, answerTitle.length(), 0);
 		}
 		PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-		builder.addAction(R.drawable.ic_call, answerTitle, answerPendingIntent);
+		builder.addAction(works.heymate.beta.R.drawable.ic_call, answerTitle, answerPendingIntent);
 		builder.setPriority(Notification.PRIORITY_MAX);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 			builder.setShowWhen(false);
@@ -1435,32 +1435,32 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 		}
 		Notification incomingNotification = builder.getNotification();
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			RemoteViews customView = new RemoteViews(getPackageName(), LocaleController.isRTL ? R.layout.call_notification_rtl : R.layout.call_notification);
-			customView.setTextViewText(R.id.name, name);
+			RemoteViews customView = new RemoteViews(getPackageName(), LocaleController.isRTL ? works.heymate.beta.R.layout.call_notification_rtl : works.heymate.beta.R.layout.call_notification);
+			customView.setTextViewText(works.heymate.beta.R.id.name, name);
 			boolean subtitleVisible = true;
 			if (TextUtils.isEmpty(subText)) {
-				customView.setViewVisibility(R.id.subtitle, View.GONE);
+				customView.setViewVisibility(works.heymate.beta.R.id.subtitle, View.GONE);
 				if (UserConfig.getActivatedAccountsCount() > 1) {
 					TLRPC.User self = UserConfig.getInstance(currentAccount).getCurrentUser();
-					customView.setTextViewText(R.id.title, video ? LocaleController.formatString("VoipInVideoCallBrandingWithName", R.string.VoipInVideoCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)) : LocaleController.formatString("VoipInCallBrandingWithName", R.string.VoipInCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)));
+					customView.setTextViewText(works.heymate.beta.R.id.title, video ? LocaleController.formatString("VoipInVideoCallBrandingWithName", works.heymate.beta.R.string.VoipInVideoCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)) : LocaleController.formatString("VoipInCallBrandingWithName", works.heymate.beta.R.string.VoipInCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)));
 				} else {
-					customView.setTextViewText(R.id.title, video ? LocaleController.getString("VoipInVideoCallBranding", R.string.VoipInVideoCallBranding) : LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
+					customView.setTextViewText(works.heymate.beta.R.id.title, video ? LocaleController.getString("VoipInVideoCallBranding", works.heymate.beta.R.string.VoipInVideoCallBranding) : LocaleController.getString("VoipInCallBranding", works.heymate.beta.R.string.VoipInCallBranding));
 				}
 			} else {
 				if (UserConfig.getActivatedAccountsCount() > 1) {
 					TLRPC.User self = UserConfig.getInstance(currentAccount).getCurrentUser();
-					customView.setTextViewText(R.id.subtitle, LocaleController.formatString("VoipAnsweringAsAccount", R.string.VoipAnsweringAsAccount, ContactsController.formatName(self.first_name, self.last_name)));
+					customView.setTextViewText(works.heymate.beta.R.id.subtitle, LocaleController.formatString("VoipAnsweringAsAccount", works.heymate.beta.R.string.VoipAnsweringAsAccount, ContactsController.formatName(self.first_name, self.last_name)));
 				} else {
-					customView.setViewVisibility(R.id.subtitle, View.GONE);
+					customView.setViewVisibility(works.heymate.beta.R.id.subtitle, View.GONE);
 				}
-				customView.setTextViewText(R.id.title, subText);
+				customView.setTextViewText(works.heymate.beta.R.id.title, subText);
 			}
 			Bitmap avatar = getRoundAvatarBitmap(userOrChat);
-			customView.setTextViewText(R.id.answer_text, LocaleController.getString("VoipAnswerCall", R.string.VoipAnswerCall));
-			customView.setTextViewText(R.id.decline_text, LocaleController.getString("VoipDeclineCall", R.string.VoipDeclineCall));
-			customView.setImageViewBitmap(R.id.photo, avatar);
-			customView.setOnClickPendingIntent(R.id.answer_btn, answerPendingIntent);
-			customView.setOnClickPendingIntent(R.id.decline_btn, endPendingIntent);
+			customView.setTextViewText(works.heymate.beta.R.id.answer_text, LocaleController.getString("VoipAnswerCall", works.heymate.beta.R.string.VoipAnswerCall));
+			customView.setTextViewText(works.heymate.beta.R.id.decline_text, LocaleController.getString("VoipDeclineCall", works.heymate.beta.R.string.VoipDeclineCall));
+			customView.setImageViewBitmap(works.heymate.beta.R.id.photo, avatar);
+			customView.setOnClickPendingIntent(works.heymate.beta.R.id.answer_btn, answerPendingIntent);
+			customView.setOnClickPendingIntent(works.heymate.beta.R.id.decline_btn, endPendingIntent);
 			builder.setLargeIcon(avatar);
 
 			incomingNotification.headsUpContentView = incomingNotification.bigContentView = customView;
@@ -1759,7 +1759,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 		PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), "" + self.id);
 		PhoneAccount account = new PhoneAccount.Builder(handle, ContactsController.formatName(self.first_name, self.last_name))
 				.setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
-				.setIcon(Icon.createWithResource(this, R.drawable.ic_launcher_dr))
+				.setIcon(Icon.createWithResource(this, works.heymate.beta.R.drawable.ic_launcher_dr))
 				.setHighlightColor(0xff2ca5e0)
 				.addSupportedUriScheme("sip")
 				.build();

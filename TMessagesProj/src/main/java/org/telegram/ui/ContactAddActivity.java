@@ -31,7 +31,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.Theme;
@@ -93,12 +93,12 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (addContact) {
-            actionBar.setTitle(LocaleController.getString("NewContact", R.string.NewContact));
+            actionBar.setTitle(LocaleController.getString("NewContact", works.heymate.beta.R.string.NewContact));
         } else {
-            actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
+            actionBar.setTitle(LocaleController.getString("EditName", works.heymate.beta.R.string.EditName));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -125,7 +125,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItem(done_button, LocaleController.getString("Done", R.string.Done).toUpperCase());
+        doneButton = menu.addItem(done_button, LocaleController.getString("Done", works.heymate.beta.R.string.Done).toUpperCase());
 
         fragmentView = new ScrollView(context);
 
@@ -173,7 +173,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         firstNameField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         firstNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         firstNameField.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
+        firstNameField.setHint(LocaleController.getString("FirstName", works.heymate.beta.R.string.FirstName));
         firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         firstNameField.setCursorSize(AndroidUtilities.dp(20));
         firstNameField.setCursorWidth(1.5f);
@@ -208,7 +208,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         lastNameField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         lastNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         lastNameField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
+        lastNameField.setHint(LocaleController.getString("LastName", works.heymate.beta.R.string.LastName));
         lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         lastNameField.setCursorSize(AndroidUtilities.dp(20));
         lastNameField.setCursorWidth(1.5f);
@@ -245,7 +245,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             if (needAddException) {
                 checkBoxCell = new CheckBoxCell(getParentActivity(), 0);
                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", R.string.SharePhoneNumberWith, UserObject.getFirstName(user)), "", true, false);
+                checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", works.heymate.beta.R.string.SharePhoneNumberWith, UserObject.getFirstName(user)), "", true, false);
                 checkBoxCell.setPadding(AndroidUtilities.dp(7), 0, AndroidUtilities.dp(7), 0);
                 checkBoxCell.setOnClickListener(v -> checkBoxCell.setChecked(!checkBoxCell.isChecked(), true));
                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 10, 0, 0));
@@ -268,12 +268,12 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             return;
         }
         if (TextUtils.isEmpty(user.phone)) {
-            nameTextView.setText(LocaleController.getString("MobileHidden", R.string.MobileHidden));
-            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", R.string.MobileHiddenExceptionInfo, UserObject.getFirstName(user))));
+            nameTextView.setText(LocaleController.getString("MobileHidden", works.heymate.beta.R.string.MobileHidden));
+            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileHiddenExceptionInfo", works.heymate.beta.R.string.MobileHiddenExceptionInfo, UserObject.getFirstName(user))));
         } else {
             nameTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
             if (needAddException) {
-                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileVisibleInfo", R.string.MobileVisibleInfo, UserObject.getFirstName(user))));
+                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileVisibleInfo", works.heymate.beta.R.string.MobileVisibleInfo, UserObject.getFirstName(user))));
             }
         }
         onlineTextView.setText(LocaleController.formatUserStatus(currentAccount, user));

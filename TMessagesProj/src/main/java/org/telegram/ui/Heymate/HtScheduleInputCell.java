@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -64,7 +64,7 @@ public class HtScheduleInputCell extends LinearLayout {
         titleLayout3.addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 1f, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 0, 15));
 
         ImageView expandIcon = new ImageView(context);
-        Drawable expandDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+        Drawable expandDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
         expandDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         expandIcon.setImageDrawable(expandDrawable);
         titleLayout3.addView(expandIcon, LayoutHelper.createLinear(15, 15, AndroidUtilities.dp(20), AndroidUtilities.dp(4), 30, 15));
@@ -96,7 +96,7 @@ public class HtScheduleInputCell extends LinearLayout {
             parametersLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
             parametersLayout.setGravity(Gravity.CENTER);
             ImageView mapImage = new ImageView(context);
-            Drawable mapDrawable = context.getResources().getDrawable(R.drawable.google_maps_logo);
+            Drawable mapDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.google_maps_logo);
             mapImage.setImageDrawable(mapDrawable);
             parametersLayout.addView(mapImage, LayoutHelper.createLinear(200, 120, 10,5,10,5));
             if(canEdit) {

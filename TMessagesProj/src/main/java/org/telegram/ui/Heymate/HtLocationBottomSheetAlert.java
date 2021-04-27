@@ -30,7 +30,7 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -76,7 +76,7 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
         mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_wallet_whiteBackground)));
 
         ImageView closeImage = new ImageView(context);
-        Drawable closeDrawable = context.getResources().getDrawable(R.drawable.close_bottom);
+        Drawable closeDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.close_bottom);
         closeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextRed), PorterDuff.Mode.MULTIPLY));
         closeImage.setImageDrawable(closeDrawable);
         closeImage.setEnabled(true);
@@ -104,7 +104,7 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
         descriptionTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         descriptionTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
         descriptionTextField.setMinHeight(AndroidUtilities.dp(36));
-        descriptionTextField.setHint(LocaleController.getString("HtLocation", R.string.HtLocation));
+        descriptionTextField.setHint(LocaleController.getString("HtLocation", works.heymate.beta.R.string.HtLocation));
         descriptionTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         descriptionTextField.setCursorSize(AndroidUtilities.dp(15));
         descriptionTextField.setCursorWidth(1.5f);
@@ -121,7 +121,7 @@ public class HtLocationBottomSheetAlert extends BottomSheet implements Notificat
         mainLayout2.addView(descriptionTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
 
         ImageView locationImage = new ImageView(context);
-        Drawable locationDrawable = context.getResources().getDrawable(R.drawable.google_maps_logo);
+        Drawable locationDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.google_maps_logo);
         locationImage.setImageDrawable(locationDrawable);
         mainLayout2.addView(locationImage, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         locationImage.setEnabled(true);

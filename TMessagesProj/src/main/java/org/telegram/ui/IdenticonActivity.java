@@ -42,7 +42,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -102,9 +102,9 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("EncryptionKey", R.string.EncryptionKey));
+        actionBar.setTitle(LocaleController.getString("EncryptionKey", works.heymate.beta.R.string.EncryptionKey));
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -216,11 +216,11 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             }
             codeTextView.setText(hash.toString());
             hash.clear();
-            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
+            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", works.heymate.beta.R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
             final String url = "telegram.org";
             int index = hash.toString().indexOf(url);
             if (index != -1) {
-                hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", R.string.EncryptionKeyLink)), index, index + url.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                hash.setSpan(new URLSpanReplacement(LocaleController.getString("EncryptionKeyLink", works.heymate.beta.R.string.EncryptionKeyLink)), index, index + url.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             textView.setText(hash);
         }

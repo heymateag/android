@@ -82,7 +82,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -1432,7 +1432,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         selectorDrawable[0].setState(StateSet.NOTHING);
                     }
                     if (currentMessageObject.scheduled) {
-                        Toast.makeText(getContext(), LocaleController.getString("MessageScheduledVote", R.string.MessageScheduledVote), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), LocaleController.getString("MessageScheduledVote", works.heymate.beta.R.string.MessageScheduledVote), Toast.LENGTH_LONG).show();
                     } else {
                         PollButton button = pollButtons.get(pressedVoteButton);
                         TLRPC.TL_pollAnswer answer = button.answer;
@@ -1501,7 +1501,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (delegate != null) {
                     if (lastPoll != null) {
                         if (currentMessageObject.scheduled) {
-                            Toast.makeText(getContext(), LocaleController.getString("MessageScheduledVoteResults", R.string.MessageScheduledVoteResults), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), LocaleController.getString("MessageScheduledVoteResults", works.heymate.beta.R.string.MessageScheduledVoteResults), Toast.LENGTH_LONG).show();
                         } else {
                             if (pollVoted || pollClosed) {
                                 delegate.didPressInstantButton(this, drawInstantViewType);
@@ -1902,7 +1902,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (pressedBotButton != -1) {
                     playSoundEffect(SoundEffectConstants.CLICK);
                     if (currentMessageObject.scheduled) {
-                        Toast.makeText(getContext(), LocaleController.getString("MessageScheduledBotAction", R.string.MessageScheduledBotAction), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), LocaleController.getString("MessageScheduledBotAction", works.heymate.beta.R.string.MessageScheduledBotAction), Toast.LENGTH_LONG).show();
                     } else {
                         BotButton button = botButtons.get(pressedBotButton);
                         if (button.button != null) {
@@ -3141,12 +3141,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         commentProgress = new InfiniteProgress(AndroidUtilities.dp(7));
                     }
                     if (isRepliesChat) {
-                        comment = LocaleController.getString("ViewInChat", R.string.ViewInChat);
+                        comment = LocaleController.getString("ViewInChat", works.heymate.beta.R.string.ViewInChat);
                     } else {
                         if (LocaleController.isRTL) {
-                            comment = commentCount == 0 ? LocaleController.getString("LeaveAComment", R.string.LeaveAComment) : LocaleController.formatPluralString("CommentsCount", commentCount);
+                            comment = commentCount == 0 ? LocaleController.getString("LeaveAComment", works.heymate.beta.R.string.LeaveAComment) : LocaleController.formatPluralString("CommentsCount", commentCount);
                         } else {
-                            comment = commentCount == 0 ? LocaleController.getString("LeaveAComment", R.string.LeaveAComment) : LocaleController.getPluralString("CommentsNoNumber", commentCount);
+                            comment = commentCount == 0 ? LocaleController.getString("LeaveAComment", works.heymate.beta.R.string.LeaveAComment) : LocaleController.getPluralString("CommentsNoNumber", commentCount);
                         }
                         ArrayList<TLRPC.Peer> recentRepliers = getRecentRepliers();
                         if (commentCount != 0 && recentRepliers != null && !recentRepliers.isEmpty()) {
@@ -3365,7 +3365,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 count = b.items.size();
                             }
                         }
-                        String str = LocaleController.formatString("Of", R.string.Of, 1, count);
+                        String str = LocaleController.formatString("Of", works.heymate.beta.R.string.Of, 1, count);
                         photosCountWidth = (int) Math.ceil(Theme.chat_durationPaint.measureText(str));
                         photosCountLayout = new StaticLayout(str, Theme.chat_durationPaint, photosCountWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     }
@@ -3490,12 +3490,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         smallImage = false;
                     }
                     if (drawInstantViewType == 9) {
-                        site_name = LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat);
+                        site_name = LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat);
                         TLRPC.TL_webPage webPage = (TLRPC.TL_webPage) messageObject.messageOwner.media.webpage;
                     } else if (drawInstantViewType == 6) {
-                        site_name = LocaleController.getString("ChatBackground", R.string.ChatBackground);
+                        site_name = LocaleController.getString("ChatBackground", works.heymate.beta.R.string.ChatBackground);
                     } else if ("telegram_theme".equals(webpageType)) {
-                        site_name = LocaleController.getString("ColorTheme", R.string.ColorTheme);
+                        site_name = LocaleController.getString("ColorTheme", works.heymate.beta.R.string.ColorTheme);
                     }
 
                     int additinalWidth = hasInvoicePreview ? 0 : AndroidUtilities.dp(10);
@@ -4090,7 +4090,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 durationWidth = (int) Math.ceil(Theme.chat_durationPaint.measureText(str));
                                 videoInfoLayout = new StaticLayout(str, Theme.chat_durationPaint, durationWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             } else if (hasGamePreview) {
-                                String str = LocaleController.getString("AttachGame", R.string.AttachGame).toUpperCase();
+                                String str = LocaleController.getString("AttachGame", works.heymate.beta.R.string.AttachGame).toUpperCase();
                                 durationWidth = (int) Math.ceil(Theme.chat_gamePaint.measureText(str));
                                 videoInfoLayout = new StaticLayout(str, Theme.chat_gamePaint, durationWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             }
@@ -4102,12 +4102,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         if (hasInvoicePreview) {
                             CharSequence str;
                             if ((messageObject.messageOwner.media.flags & 4) != 0) {
-                                str = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt).toUpperCase();
+                                str = LocaleController.getString("PaymentReceipt", works.heymate.beta.R.string.PaymentReceipt).toUpperCase();
                             } else {
                                 if (messageObject.messageOwner.media.test) {
-                                    str = LocaleController.getString("PaymentTestInvoice", R.string.PaymentTestInvoice).toUpperCase();
+                                    str = LocaleController.getString("PaymentTestInvoice", works.heymate.beta.R.string.PaymentTestInvoice).toUpperCase();
                                 } else {
-                                    str = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice).toUpperCase();
+                                    str = LocaleController.getString("PaymentInvoice", works.heymate.beta.R.string.PaymentInvoice).toUpperCase();
                                 }
                             }
                             String price = LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency);
@@ -4161,35 +4161,35 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (messageObject.isOutOwner()) {
                     if (isMissed) {
                         if (call.video) {
-                            text = LocaleController.getString("CallMessageVideoOutgoingMissed", R.string.CallMessageVideoOutgoingMissed);
+                            text = LocaleController.getString("CallMessageVideoOutgoingMissed", works.heymate.beta.R.string.CallMessageVideoOutgoingMissed);
                         } else {
-                            text = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);
+                            text = LocaleController.getString("CallMessageOutgoingMissed", works.heymate.beta.R.string.CallMessageOutgoingMissed);
                         }
                     } else {
                         if (call.video) {
-                            text = LocaleController.getString("CallMessageVideoOutgoing", R.string.CallMessageVideoOutgoing);
+                            text = LocaleController.getString("CallMessageVideoOutgoing", works.heymate.beta.R.string.CallMessageVideoOutgoing);
                         } else {
-                            text = LocaleController.getString("CallMessageOutgoing", R.string.CallMessageOutgoing);
+                            text = LocaleController.getString("CallMessageOutgoing", works.heymate.beta.R.string.CallMessageOutgoing);
                         }
                     }
                 } else {
                     if (isMissed) {
                         if (call.video) {
-                            text = LocaleController.getString("CallMessageVideoIncomingMissed", R.string.CallMessageVideoIncomingMissed);
+                            text = LocaleController.getString("CallMessageVideoIncomingMissed", works.heymate.beta.R.string.CallMessageVideoIncomingMissed);
                         } else {
-                            text = LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                            text = LocaleController.getString("CallMessageIncomingMissed", works.heymate.beta.R.string.CallMessageIncomingMissed);
                         }
                     } else if (call.reason instanceof TLRPC.TL_phoneCallDiscardReasonBusy) {
                         if (call.video) {
-                            text = LocaleController.getString("CallMessageVideoIncomingDeclined", R.string.CallMessageVideoIncomingDeclined);
+                            text = LocaleController.getString("CallMessageVideoIncomingDeclined", works.heymate.beta.R.string.CallMessageVideoIncomingDeclined);
                         } else {
-                            text = LocaleController.getString("CallMessageIncomingDeclined", R.string.CallMessageIncomingDeclined);
+                            text = LocaleController.getString("CallMessageIncomingDeclined", works.heymate.beta.R.string.CallMessageIncomingDeclined);
                         }
                     } else {
                         if (call.video) {
-                            text = LocaleController.getString("CallMessageVideoIncoming", R.string.CallMessageVideoIncoming);
+                            text = LocaleController.getString("CallMessageVideoIncoming", works.heymate.beta.R.string.CallMessageVideoIncoming);
                         } else {
-                            text = LocaleController.getString("CallMessageIncoming", R.string.CallMessageIncoming);
+                            text = LocaleController.getString("CallMessageIncoming", works.heymate.beta.R.string.CallMessageIncoming);
                         }
                     }
                 }
@@ -4251,7 +4251,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         if (!TextUtils.isEmpty(phone)) {
                             phone = PhoneFormat.getInstance().format((String) phone);
                         } else {
-                            phone = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
+                            phone = LocaleController.getString("NumberUnknown", works.heymate.beta.R.string.NumberUnknown);
                         }
                     }
                 }
@@ -4360,18 +4360,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 String title;
                 if (pollClosed) {
-                    title = LocaleController.getString("FinalResults", R.string.FinalResults);
+                    title = LocaleController.getString("FinalResults", works.heymate.beta.R.string.FinalResults);
                 } else {
                     if (media.poll.quiz) {
                         if (media.poll.public_voters) {
-                            title = LocaleController.getString("QuizPoll", R.string.QuizPoll);
+                            title = LocaleController.getString("QuizPoll", works.heymate.beta.R.string.QuizPoll);
                         } else {
-                            title = LocaleController.getString("AnonymousQuizPoll", R.string.AnonymousQuizPoll);
+                            title = LocaleController.getString("AnonymousQuizPoll", works.heymate.beta.R.string.AnonymousQuizPoll);
                         }
                     } else if (media.poll.public_voters) {
-                        title = LocaleController.getString("PublicPoll", R.string.PublicPoll);
+                        title = LocaleController.getString("PublicPoll", works.heymate.beta.R.string.PublicPoll);
                     } else {
-                        title = LocaleController.getString("AnonymousPoll", R.string.AnonymousPoll);
+                        title = LocaleController.getString("AnonymousPoll", works.heymate.beta.R.string.AnonymousPoll);
                     }
                 }
                 docTitleLayout = new StaticLayout(TextUtils.ellipsize(title, Theme.chat_timePaint, maxWidth, TextUtils.TruncateAt.END), Theme.chat_timePaint, maxWidth + AndroidUtilities.dp(2) - getExtraTextX() * 2, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -4390,9 +4390,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     TextPaint textPaint = !media.poll.public_voters && !media.poll.multiple_choice ? Theme.chat_livePaint : Theme.chat_locationAddressPaint;
                     CharSequence votes;
                     if (media.poll.quiz) {
-                        votes = TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotesQuiz", R.string.NoVotesQuiz) : LocaleController.formatPluralString("Answer", media.results.total_voters), textPaint, w, TextUtils.TruncateAt.END);
+                        votes = TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotesQuiz", works.heymate.beta.R.string.NoVotesQuiz) : LocaleController.formatPluralString("Answer", media.results.total_voters), textPaint, w, TextUtils.TruncateAt.END);
                     } else {
-                        votes = TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotes", R.string.NoVotes) : LocaleController.formatPluralString("Vote", media.results.total_voters), textPaint, w, TextUtils.TruncateAt.END);
+                        votes = TextUtils.ellipsize(media.results.total_voters == 0 ? LocaleController.getString("NoVotes", works.heymate.beta.R.string.NoVotes) : LocaleController.formatPluralString("Vote", media.results.total_voters), textPaint, w, TextUtils.TruncateAt.END);
                     }
                     infoLayout = new StaticLayout(votes, textPaint, w, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (infoLayout != null) {
@@ -4584,11 +4584,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     for (int a = 0; a < 3; a++) {
                         String str;
                         if (a == 0) {
-                            str = LocaleController.getString("PollViewResults", R.string.PollViewResults);
+                            str = LocaleController.getString("PollViewResults", works.heymate.beta.R.string.PollViewResults);
                         } else if (a == 1) {
-                            str = LocaleController.getString("PollSubmitVotes", R.string.PollSubmitVotes);
+                            str = LocaleController.getString("PollSubmitVotes", works.heymate.beta.R.string.PollSubmitVotes);
                         } else {
-                            str = LocaleController.getString("NoVotes", R.string.NoVotes);
+                            str = LocaleController.getString("NoVotes", works.heymate.beta.R.string.NoVotes);
                         }
                         instantTextWidth = Math.max(instantTextWidth, (int) Math.ceil(Theme.chat_instantViewPaint.measureText(str)));
                     }
@@ -4757,7 +4757,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         } else {
                             backgroundWidth -= AndroidUtilities.dp(9);
                         }
-                        docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, maxWidth, TextUtils.TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, maxWidth, TextUtils.TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
                         updateCurrentUserAndChat();
                         if (currentUser != null) {
@@ -5378,7 +5378,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     } else if (messageObject.type == MessageObject.TYPE_PHOTO) {
                         if (messageObject.useCustomPhoto) {
-                            photoImage.setImageBitmap(getResources().getDrawable(R.drawable.theme_preview_image));
+                            photoImage.setImageBitmap(getResources().getDrawable(works.heymate.beta.R.drawable.theme_preview_image));
                         } else {
                             if (currentPhotoObject != null) {
                                 boolean photoExist = true;
@@ -5688,7 +5688,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             botButton.height = AndroidUtilities.dp(44);
                             CharSequence buttonText;
                             if (botButton.button instanceof TLRPC.TL_keyboardButtonBuy && (messageObject.messageOwner.media.flags & 4) != 0) {
-                                buttonText = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt);
+                                buttonText = LocaleController.getString("PaymentReceipt", works.heymate.beta.R.string.PaymentReceipt);
                             } else {
                                 buttonText = Emoji.replaceEmoji(botButton.button.text, Theme.chat_botButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
                                 buttonText = TextUtils.ellipsize(buttonText, Theme.chat_botButtonPaint, buttonWidth - AndroidUtilities.dp(10), TextUtils.TruncateAt.END);
@@ -6233,7 +6233,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             documentAttachType = DOCUMENT_ATTACH_TYPE_GIF;
             if (!messageObject.needDrawBluredPreview()) {
 
-                String str = LocaleController.getString("AttachGif", R.string.AttachGif);
+                String str = LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif);
                 infoWidth = (int) Math.ceil(Theme.chat_infoPaint.measureText(str));
                 infoLayout = new StaticLayout(str, Theme.chat_infoPaint, infoWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
@@ -6250,7 +6250,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             documentAttachType = DOCUMENT_ATTACH_TYPE_DOCUMENT;
             String name = FileLoader.getDocumentFileName(documentAttach);
             if (name.length() == 0) {
-                name = LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                name = LocaleController.getString("AttachDocument", works.heymate.beta.R.string.AttachDocument);
             }
             docTitleLayout = StaticLayoutEx.createStaticLayout(name, Theme.chat_docNamePaint, maxWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.MIDDLE, maxWidth, 2, false);
             docTitleOffsetX = Integer.MIN_VALUE;
@@ -6439,7 +6439,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 AndroidUtilities.runOnUIThread(invalidateRunnable, 1000);
                 scheduledInvalidate = true;
                 int maxWidth = backgroundWidth - AndroidUtilities.dp(37 + 54);
-                docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, maxWidth, TextUtils.TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                docTitleLayout = new StaticLayout(TextUtils.ellipsize(LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation), Theme.chat_locationTitlePaint, maxWidth, TextUtils.TruncateAt.END), Theme.chat_locationTitlePaint, maxWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             } else {
                 MessageObject messageObject = currentMessageObject;
                 currentMessageObject = null;
@@ -6562,32 +6562,32 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             String str;
             instantWidth = AndroidUtilities.dp(12 + 9 + 12);
             if (drawInstantViewType == 1) {
-                str = LocaleController.getString("OpenChannel", R.string.OpenChannel);
+                str = LocaleController.getString("OpenChannel", works.heymate.beta.R.string.OpenChannel);
             } else if (drawInstantViewType == 2) {
-                str = LocaleController.getString("OpenGroup", R.string.OpenGroup);
+                str = LocaleController.getString("OpenGroup", works.heymate.beta.R.string.OpenGroup);
             } else if (drawInstantViewType == 3) {
-                str = LocaleController.getString("OpenMessage", R.string.OpenMessage);
+                str = LocaleController.getString("OpenMessage", works.heymate.beta.R.string.OpenMessage);
             } else if (drawInstantViewType == 5) {
-                str = LocaleController.getString("ViewContact", R.string.ViewContact);
+                str = LocaleController.getString("ViewContact", works.heymate.beta.R.string.ViewContact);
             } else if (drawInstantViewType == 6) {
-                str = LocaleController.getString("OpenBackground", R.string.OpenBackground);
+                str = LocaleController.getString("OpenBackground", works.heymate.beta.R.string.OpenBackground);
             } else if (drawInstantViewType == 7) {
-                str = LocaleController.getString("OpenTheme", R.string.OpenTheme);
+                str = LocaleController.getString("OpenTheme", works.heymate.beta.R.string.OpenTheme);
             } else if (drawInstantViewType == 8) {
                 if (pollVoted || pollClosed) {
-                    str = LocaleController.getString("PollViewResults", R.string.PollViewResults);
+                    str = LocaleController.getString("PollViewResults", works.heymate.beta.R.string.PollViewResults);
                 } else {
-                    str = LocaleController.getString("PollSubmitVotes", R.string.PollSubmitVotes);
+                    str = LocaleController.getString("PollSubmitVotes", works.heymate.beta.R.string.PollSubmitVotes);
                 }
             } else if (drawInstantViewType == 9) {
                 TLRPC.TL_webPage webPage = (TLRPC.TL_webPage) currentMessageObject.messageOwner.media.webpage;
                 if (webPage != null && webPage.url.contains("voicechat=")) {
-                    str = LocaleController.getString("VoipGroupJoinAsSpeaker", R.string.VoipGroupJoinAsSpeaker);
+                    str = LocaleController.getString("VoipGroupJoinAsSpeaker", works.heymate.beta.R.string.VoipGroupJoinAsSpeaker);
                 } else {
-                    str = LocaleController.getString("VoipGroupJoinAsLinstener", R.string.VoipGroupJoinAsLinstener);
+                    str = LocaleController.getString("VoipGroupJoinAsLinstener", works.heymate.beta.R.string.VoipGroupJoinAsLinstener);
                 }
             } else {
-                str = LocaleController.getString("InstantView", R.string.InstantView);
+                str = LocaleController.getString("InstantView", works.heymate.beta.R.string.InstantView);
             }
             int mWidth = backgroundWidth - AndroidUtilities.dp(10 + 24 + 10 + 31);
             instantViewLayout = new StaticLayout(TextUtils.ellipsize(str, Theme.chat_instantViewPaint, mWidth, TextUtils.TruncateAt.END), Theme.chat_instantViewPaint, mWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -9008,9 +9008,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             signString = messageObject.messageOwner.fwd_from.post_author.replace("\n", "");
         } else if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.imported) {
             if (messageObject.messageOwner.fwd_from.date == messageObject.messageOwner.date) {
-                signString = LocaleController.getString("ImportedMessage", R.string.ImportedMessage);
+                signString = LocaleController.getString("ImportedMessage", works.heymate.beta.R.string.ImportedMessage);
             } else {
-                signString = LocaleController.formatImportedDate(messageObject.messageOwner.fwd_from.date) + " " + LocaleController.getString("ImportedMessage", R.string.ImportedMessage);
+                signString = LocaleController.formatImportedDate(messageObject.messageOwner.fwd_from.date) + " " + LocaleController.getString("ImportedMessage", works.heymate.beta.R.string.ImportedMessage);
             }
         } else if (!messageObject.isOutOwner() && fromId > 0 && messageObject.messageOwner.post) {
             TLRPC.User signUser = MessagesController.getInstance(currentAccount).getUser(fromId);
@@ -9046,7 +9046,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (currentMessageObject.scheduled && currentMessageObject.messageOwner.date == 0x7FFFFFFE) {
             timeString = "";
         } else if (edited) {
-            timeString = LocaleController.getString("EditedMessage", R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
+            timeString = LocaleController.getString("EditedMessage", works.heymate.beta.R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         } else {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         }
@@ -9227,13 +9227,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             TLRPC.User botUser = MessagesController.getInstance(currentAccount).getUser(messageObject.messageOwner.via_bot_id);
             if (botUser != null && !TextUtils.isEmpty(botUser.username)) {
                 viaUsername = "@" + botUser.username;
-                viaString = AndroidUtilities.replaceTags(String.format(" %s <b>%s</b>", LocaleController.getString("ViaBot", R.string.ViaBot), viaUsername));
+                viaString = AndroidUtilities.replaceTags(String.format(" %s <b>%s</b>", LocaleController.getString("ViaBot", works.heymate.beta.R.string.ViaBot), viaUsername));
                 viaWidth = (int) Math.ceil(Theme.chat_replyNamePaint.measureText(viaString, 0, viaString.length()));
                 currentViaBotUser = botUser;
             }
         } else if (!TextUtils.isEmpty(messageObject.messageOwner.via_bot_name)) {
             viaUsername = "@" + messageObject.messageOwner.via_bot_name;
-            viaString = AndroidUtilities.replaceTags(String.format(" %s <b>%s</b>", LocaleController.getString("ViaBot", R.string.ViaBot), viaUsername));
+            viaString = AndroidUtilities.replaceTags(String.format(" %s <b>%s</b>", LocaleController.getString("ViaBot", works.heymate.beta.R.string.ViaBot), viaUsername));
             viaWidth = (int) Math.ceil(Theme.chat_replyNamePaint.measureText(viaString, 0, viaString.length()));
         }
 
@@ -9249,7 +9249,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             String adminString;
             String adminLabel;
             if (isMegagroup && currentChat != null && currentMessageObject.isForwardedChannelPost()) {
-                adminString = LocaleController.getString("DiscussChannel", R.string.DiscussChannel);
+                adminString = LocaleController.getString("DiscussChannel", works.heymate.beta.R.string.DiscussChannel);
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;
             } else if (isMegagroup && currentChat != null && messageObject.messageOwner.post_author != null && currentChat.id == -currentMessageObject.getFromChatId()) {
@@ -9258,7 +9258,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 nameWidth -= adminWidth;
             } else if (currentUser != null && !currentMessageObject.isOutOwner() && !currentMessageObject.isAnyKindOfSticker() && currentMessageObject.type != 5 && delegate != null && (adminLabel = delegate.getAdminRank(currentUser.id)) != null) {
                 if (adminLabel.length() == 0) {
-                    adminLabel = LocaleController.getString("ChatAdmin", R.string.ChatAdmin);
+                    adminLabel = LocaleController.getString("ChatAdmin", works.heymate.beta.R.string.ChatAdmin);
                 }
                 adminString = adminLabel;
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
@@ -9285,7 +9285,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else {
                     color = Theme.getColor(currentMessageObject.isOutOwner() ? Theme.key_chat_outViaBotNameText : Theme.key_chat_inViaBotNameText);
                 }
-                String viaBotString = LocaleController.getString("ViaBot", R.string.ViaBot);
+                String viaBotString = LocaleController.getString("ViaBot", works.heymate.beta.R.string.ViaBot);
                 if (currentNameString.length() > 0) {
                     SpannableStringBuilder stringBuilder = new SpannableStringBuilder(String.format("%s %s %s", nameStringFinal, viaBotString, viaUsername));
                     stringBuilder.setSpan(viaSpan1 = new TypefaceSpan(Typeface.DEFAULT, 0, color), nameStringFinal.length() + 1, nameStringFinal.length() + 1 + viaBotString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -9368,8 +9368,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (hasPsaHint) {
                     forwardedNameWidth -= AndroidUtilities.dp(36);
                 }
-                String from = LocaleController.getString("From", R.string.From);
-                String fromFormattedString = LocaleController.getString("FromFormatted", R.string.FromFormatted);
+                String from = LocaleController.getString("From", works.heymate.beta.R.string.From);
+                String fromFormattedString = LocaleController.getString("FromFormatted", works.heymate.beta.R.string.FromFormatted);
                 int idx = fromFormattedString.indexOf("%1$s");
                 int fromWidth = (int) Math.ceil(Theme.chat_forwardNamePaint.measureText(from + " "));
                 CharSequence name = TextUtils.ellipsize(currentForwardNameString.replace('\n', ' '), Theme.chat_replyNamePaint, forwardedNameWidth - fromWidth - viaWidth, TextUtils.TruncateAt.END);
@@ -9382,7 +9382,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 CharSequence lastLine;
                 SpannableStringBuilder stringBuilder;
                 if (viaString != null) {
-                    stringBuilder = new SpannableStringBuilder(String.format("%s %s %s", fromString, LocaleController.getString("ViaBot", R.string.ViaBot), viaUsername));
+                    stringBuilder = new SpannableStringBuilder(String.format("%s %s %s", fromString, LocaleController.getString("ViaBot", works.heymate.beta.R.string.ViaBot), viaUsername));
                     viaNameWidth = (int) Math.ceil(Theme.chat_forwardNamePaint.measureText(fromString));
                     stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), stringBuilder.length() - viaUsername.length() - 1, stringBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
@@ -9493,7 +9493,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
 
                     if (name == null) {
-                        name = LocaleController.getString("Loading", R.string.Loading);
+                        name = LocaleController.getString("Loading", works.heymate.beta.R.string.Loading);
                     }
                     if (messageObject.replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                         stringFinalText = Emoji.replaceEmoji(messageObject.replyMessageObject.messageOwner.media.game.title, Theme.chat_replyTextPaint.getFontMetricsInt(), AndroidUtilities.dp(14), false);
@@ -9546,8 +9546,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             currentForwardNameString = currentForwardName;
                         }
                         name = getForwardedMessageText(messageObject);
-                        String from = LocaleController.getString("From", R.string.From);
-                        String fromFormattedString = LocaleController.getString("FromFormatted", R.string.FromFormatted);
+                        String from = LocaleController.getString("From", works.heymate.beta.R.string.From);
+                        String fromFormattedString = LocaleController.getString("FromFormatted", works.heymate.beta.R.string.FromFormatted);
                         int idx = fromFormattedString.indexOf("%1$s");
                         int fromWidth = (int) Math.ceil(Theme.chat_replyNamePaint.measureText(from + " "));
                         CharSequence n = TextUtils.ellipsize(currentForwardNameString == null ? "" : currentForwardNameString.replace('\n', ' '), Theme.chat_replyNamePaint, maxWidth - fromWidth, TextUtils.TruncateAt.END);
@@ -9603,7 +9603,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     maxWidth += AndroidUtilities.dp(13);
                 }
 
-                replyNameLayout = new StaticLayout(LocaleController.getString("Loading", R.string.Loading), Theme.chat_replyNamePaint, maxWidth + AndroidUtilities.dp(6), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                replyNameLayout = new StaticLayout(LocaleController.getString("Loading", works.heymate.beta.R.string.Loading), Theme.chat_replyNamePaint, maxWidth + AndroidUtilities.dp(6), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (replyNameLayout.getLineCount() > 0) {
                     replyNameWidth += (int) Math.ceil(replyNameLayout.getLineWidth(0)) + AndroidUtilities.dp(8);
                     replyNameOffset = (int) replyNameLayout.getLineLeft(0);
@@ -9632,11 +9632,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (hasPsaHint) {
             String forwardedString = LocaleController.getString("PsaMessage_" + messageObject.messageOwner.fwd_from.psa_type);
             if (forwardedString == null) {
-                forwardedString = LocaleController.getString("PsaMessageDefault", R.string.PsaMessageDefault);
+                forwardedString = LocaleController.getString("PsaMessageDefault", works.heymate.beta.R.string.PsaMessageDefault);
             }
             return forwardedString;
         } else {
-            return LocaleController.getString("ForwardedMessage", R.string.ForwardedMessage);
+            return LocaleController.getString("ForwardedMessage", works.heymate.beta.R.string.ForwardedMessage);
         }
     }
 
@@ -12712,9 +12712,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 didClickedImage();
             }
             return true;
-        } else if (action == R.id.acc_action_small_button) {
+        } else if (action == works.heymate.beta.R.id.acc_action_small_button) {
             didPressMiniButton(true);
-        } else if (action == R.id.acc_action_msg_options) {
+        } else if (action == works.heymate.beta.R.id.acc_action_msg_options) {
             if (delegate != null) {
                 if (currentMessageObject.type == 16) {
                     delegate.didLongPress(this, 0, 0);
@@ -13014,7 +13014,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         sb.append("\n");
                         final boolean sending = currentMessageObject.isSending();
                         final String key = sending ? "AccDescrUploadProgress" : "AccDescrDownloadProgress";
-                        final int resId = sending ? R.string.AccDescrUploadProgress : R.string.AccDescrDownloadProgress;
+                        final int resId = sending ? works.heymate.beta.R.string.AccDescrUploadProgress : works.heymate.beta.R.string.AccDescrDownloadProgress;
                         sb.append(LocaleController.formatString(key, resId, AndroidUtilities.formatFileSize(currentMessageObject.loadedFileSize), AndroidUtilities.formatFileSize(lastLoadingSizeTotal)));
                     } else if (buttonState == 0 || documentAttachType == DOCUMENT_ATTACH_TYPE_DOCUMENT) {
                         sb.append(", ");
@@ -13023,13 +13023,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 if (currentMessageObject.isMusic()) {
                     sb.append("\n");
-                    sb.append(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, currentMessageObject.getMusicAuthor(), currentMessageObject.getMusicTitle()));
+                    sb.append(LocaleController.formatString("AccDescrMusicInfo", works.heymate.beta.R.string.AccDescrMusicInfo, currentMessageObject.getMusicAuthor(), currentMessageObject.getMusicTitle()));
                 } else if (currentMessageObject.isVoice() || currentMessageObject.isRoundVideo()){
                     sb.append(", ");
                     sb.append(LocaleController.formatDuration(currentMessageObject.getDuration()));
                     if (currentMessageObject.isContentUnread()) {
                         sb.append(", ");
-                        sb.append(LocaleController.getString("AccDescrMsgNotPlayed", R.string.AccDescrMsgNotPlayed));
+                        sb.append(LocaleController.getString("AccDescrMsgNotPlayed", works.heymate.beta.R.string.AccDescrMsgNotPlayed));
                     }
                 }
                 if (lastPoll != null) {
@@ -13038,18 +13038,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     sb.append(", ");
                     String title;
                     if (pollClosed) {
-                        title = LocaleController.getString("FinalResults", R.string.FinalResults);
+                        title = LocaleController.getString("FinalResults", works.heymate.beta.R.string.FinalResults);
                     } else {
                         if (lastPoll.quiz) {
                             if (lastPoll.public_voters) {
-                                title = LocaleController.getString("QuizPoll", R.string.QuizPoll);
+                                title = LocaleController.getString("QuizPoll", works.heymate.beta.R.string.QuizPoll);
                             } else {
-                                title = LocaleController.getString("AnonymousQuizPoll", R.string.AnonymousQuizPoll);
+                                title = LocaleController.getString("AnonymousQuizPoll", works.heymate.beta.R.string.AnonymousQuizPoll);
                             }
                         } else if (lastPoll.public_voters) {
-                            title = LocaleController.getString("PublicPoll", R.string.PublicPoll);
+                            title = LocaleController.getString("PublicPoll", works.heymate.beta.R.string.PublicPoll);
                         } else {
-                            title = LocaleController.getString("AnonymousPoll", R.string.AnonymousPoll);
+                            title = LocaleController.getString("AnonymousPoll", works.heymate.beta.R.string.AnonymousPoll);
                         }
                     }
                     sb.append(title);
@@ -13062,26 +13062,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     if (currentMessageObject.isSent()) {
                         sb.append("\n");
                         if (currentMessageObject.scheduled) {
-                            sb.append(LocaleController.formatString("AccDescrScheduledDate", R.string.AccDescrScheduledDate, currentTimeString));
+                            sb.append(LocaleController.formatString("AccDescrScheduledDate", works.heymate.beta.R.string.AccDescrScheduledDate, currentTimeString));
                         } else {
-                            sb.append(LocaleController.formatString("AccDescrSentDate", R.string.AccDescrSentDate, LocaleController.getString("TodayAt", R.string.TodayAt) + " " + currentTimeString));
+                            sb.append(LocaleController.formatString("AccDescrSentDate", works.heymate.beta.R.string.AccDescrSentDate, LocaleController.getString("TodayAt", works.heymate.beta.R.string.TodayAt) + " " + currentTimeString));
                             sb.append(", ");
-                            sb.append(currentMessageObject.isUnread() ? LocaleController.getString("AccDescrMsgUnread", R.string.AccDescrMsgUnread) : LocaleController.getString("AccDescrMsgRead", R.string.AccDescrMsgRead));
+                            sb.append(currentMessageObject.isUnread() ? LocaleController.getString("AccDescrMsgUnread", works.heymate.beta.R.string.AccDescrMsgUnread) : LocaleController.getString("AccDescrMsgRead", works.heymate.beta.R.string.AccDescrMsgRead));
                         }
                     } else if (currentMessageObject.isSending()) {
                         sb.append("\n");
-                        sb.append(LocaleController.getString("AccDescrMsgSending", R.string.AccDescrMsgSending));
+                        sb.append(LocaleController.getString("AccDescrMsgSending", works.heymate.beta.R.string.AccDescrMsgSending));
                         final float sendingProgress = radialProgress.getProgress();
                         if (sendingProgress > 0f) {
                             sb.append(", ").append(Math.round(sendingProgress * 100)).append("%");
                         }
                     } else if (currentMessageObject.isSendError()) {
                         sb.append("\n");
-                        sb.append(LocaleController.getString("AccDescrMsgSendingError", R.string.AccDescrMsgSendingError));
+                        sb.append(LocaleController.getString("AccDescrMsgSendingError", works.heymate.beta.R.string.AccDescrMsgSendingError));
                     }
                 } else {
                     sb.append("\n");
-                    sb.append(LocaleController.formatString("AccDescrReceivedDate", R.string.AccDescrReceivedDate, LocaleController.getString("TodayAt", R.string.TodayAt) + " " + currentTimeString));
+                    sb.append(LocaleController.formatString("AccDescrReceivedDate", works.heymate.beta.R.string.AccDescrReceivedDate, LocaleController.getString("TodayAt", works.heymate.beta.R.string.TodayAt) + " " + currentTimeString));
                 }
                 if ((currentMessageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0) {
                     sb.append("\n");
@@ -13097,35 +13097,35 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.acc_action_msg_options, LocaleController.getString("AccActionMessageOptions", R.string.AccActionMessageOptions)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(works.heymate.beta.R.id.acc_action_msg_options, LocaleController.getString("AccActionMessageOptions", works.heymate.beta.R.string.AccActionMessageOptions)));
                     int icon = getIconForCurrentState();
                     CharSequence actionLabel = null;
                     switch (icon) {
                         case MediaActionDrawable.ICON_PLAY:
-                            actionLabel = LocaleController.getString("AccActionPlay", R.string.AccActionPlay);
+                            actionLabel = LocaleController.getString("AccActionPlay", works.heymate.beta.R.string.AccActionPlay);
                             break;
                         case MediaActionDrawable.ICON_PAUSE:
-                            actionLabel = LocaleController.getString("AccActionPause", R.string.AccActionPause);
+                            actionLabel = LocaleController.getString("AccActionPause", works.heymate.beta.R.string.AccActionPause);
                             break;
                         case MediaActionDrawable.ICON_FILE:
-                            actionLabel = LocaleController.getString("AccActionOpenFile", R.string.AccActionOpenFile);
+                            actionLabel = LocaleController.getString("AccActionOpenFile", works.heymate.beta.R.string.AccActionOpenFile);
                             break;
                         case MediaActionDrawable.ICON_DOWNLOAD:
-                            actionLabel = LocaleController.getString("AccActionDownload", R.string.AccActionDownload);
+                            actionLabel = LocaleController.getString("AccActionDownload", works.heymate.beta.R.string.AccActionDownload);
                             break;
                         case MediaActionDrawable.ICON_CANCEL:
-                            actionLabel = LocaleController.getString("AccActionCancelDownload", R.string.AccActionCancelDownload);
+                            actionLabel = LocaleController.getString("AccActionCancelDownload", works.heymate.beta.R.string.AccActionCancelDownload);
                             break;
                         default:
                             if (currentMessageObject.type == 16) {
-                                actionLabel = LocaleController.getString("CallAgain", R.string.CallAgain);
+                                actionLabel = LocaleController.getString("CallAgain", works.heymate.beta.R.string.CallAgain);
                             }
                     }
                     info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, actionLabel));
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccActionEnterSelectionMode", R.string.AccActionEnterSelectionMode)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccActionEnterSelectionMode", works.heymate.beta.R.string.AccActionEnterSelectionMode)));
                     int smallIcon = getMiniIconForCurrentState();
                     if (smallIcon == MediaActionDrawable.ICON_DOWNLOAD) {
-                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.acc_action_small_button, LocaleController.getString("AccActionDownload", R.string.AccActionDownload)));
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(works.heymate.beta.R.id.acc_action_small_button, LocaleController.getString("AccActionDownload", works.heymate.beta.R.string.AccActionDownload)));
                     }
                 } else {
                     info.addAction(AccessibilityNodeInfo.ACTION_CLICK);
@@ -13255,7 +13255,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         info.setSelected(button.chosen);
                         sb.append(", ").append(button.percent).append("%");
                         if (lastPoll != null && lastPoll.quiz && button.correct) {
-                            sb.append(", ").append(LocaleController.getString("AccDescrQuizCorrectAnswer", R.string.AccDescrQuizCorrectAnswer));
+                            sb.append(", ").append(LocaleController.getString("AccDescrQuizCorrectAnswer", works.heymate.beta.R.string.AccDescrQuizCorrectAnswer));
                         }
                     }
                     info.setText(sb);
@@ -13276,7 +13276,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (virtualViewId == POLL_HINT) {
                     info.setClassName("android.widget.Button");
                     info.setEnabled(true);
-                    info.setText(LocaleController.getString("AccDescrQuizExplanation", R.string.AccDescrQuizExplanation));
+                    info.setText(LocaleController.getString("AccDescrQuizExplanation", works.heymate.beta.R.string.AccDescrQuizExplanation));
                     info.addAction(AccessibilityNodeInfo.ACTION_CLICK);
                     rect.set(pollHintX - AndroidUtilities.dp(8), pollHintY - AndroidUtilities.dp(8), pollHintX + AndroidUtilities.dp(32), pollHintY + AndroidUtilities.dp(32));
                     info.setBoundsInParent(rect);
@@ -13305,9 +13305,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     info.setClassName("android.widget.ImageButton");
                     info.setEnabled(true);
                     if (isOpenChatByShare(currentMessageObject)) {
-                        info.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
+                        info.setContentDescription(LocaleController.getString("AccDescrOpenChat", works.heymate.beta.R.string.AccDescrOpenChat));
                     } else {
-                        info.setContentDescription(LocaleController.getString("ShareFile", R.string.ShareFile));
+                        info.setContentDescription(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                     }
                     info.addAction(AccessibilityNodeInfo.ACTION_CLICK);
                     // } else if (drawShareButton && x >= shareStartX && x <= shareStartX + AndroidUtilities.dp(40) && y >= shareStartY && y <= shareStartY + AndroidUtilities.dp(32)) {
@@ -13322,7 +13322,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (virtualViewId == REPLY) {
                     info.setEnabled(true);
                     StringBuilder sb = new StringBuilder();
-                    sb.append(LocaleController.getString("Reply", R.string.Reply));
+                    sb.append(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
                     sb.append(", ");
                     if (replyNameLayout != null) {
                         sb.append(replyNameLayout.getText());
@@ -13708,7 +13708,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
             if (edited && !lastDrawingEdited && timeLayout != null) {
-                String editedStr = LocaleController.getString("EditedMessage", R.string.EditedMessage);
+                String editedStr = LocaleController.getString("EditedMessage", works.heymate.beta.R.string.EditedMessage);
                 String text = timeLayout.getText().toString();
                 int i = text.indexOf(editedStr);
                 if (i >= 0) {

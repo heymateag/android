@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -115,7 +115,7 @@ public class SettingsSearchCell extends FrameLayout {
             for (int a = 0; a < value.length; a++) {
                 if (a != 0) {
                     builder.append(" > ");
-                    Drawable drawable = getContext().getResources().getDrawable(R.drawable.settings_arrow).mutate();
+                    Drawable drawable = getContext().getResources().getDrawable(works.heymate.beta.R.drawable.settings_arrow).mutate();
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), PorterDuff.Mode.MULTIPLY));
                     builder.setSpan(new VerticalImageSpan(drawable), builder.length() - 2, builder.length() - 1, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -152,7 +152,7 @@ public class SettingsSearchCell extends FrameLayout {
             for (int a = 0; a < value.length; a++) {
                 if (a != 0) {
                     builder.append(" > ");
-                    Drawable drawable = getContext().getResources().getDrawable(R.drawable.settings_arrow).mutate();
+                    Drawable drawable = getContext().getResources().getDrawable(works.heymate.beta.R.drawable.settings_arrow).mutate();
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                     drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
                     builder.setSpan(new VerticalImageSpan(drawable), builder.length() - 2, builder.length() - 1, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -169,7 +169,7 @@ public class SettingsSearchCell extends FrameLayout {
                 for (int a = 0; a < value.length; a++) {
                     if (a != 0) {
                         builder.append(" > ");
-                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.settings_arrow).mutate();
+                        Drawable drawable = getContext().getResources().getDrawable(works.heymate.beta.R.drawable.settings_arrow).mutate();
                         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), PorterDuff.Mode.MULTIPLY));
                         builder.setSpan(new VerticalImageSpan(drawable), builder.length() - 2, builder.length() - 1, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);

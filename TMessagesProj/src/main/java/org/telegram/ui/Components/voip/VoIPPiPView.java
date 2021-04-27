@@ -35,7 +35,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.voip.Instance;
 import org.telegram.messenger.voip.VideoCameraCapturer;
 import org.telegram.messenger.voip.VoIPBaseService;
@@ -278,7 +278,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         yOffset = (int) (parentHeight * SCALE_EXPANDED * 1.05f - parentHeight * SCALE_EXPANDED) / 2;
         xOffset = (int) (parentWidth * SCALE_EXPANDED * 1.05f - parentWidth * SCALE_EXPANDED) / 2;
 
-        Drawable outerDrawable = ContextCompat.getDrawable(context, R.drawable.calls_pip_outershadow);
+        Drawable outerDrawable = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.calls_pip_outershadow);
         windowView = new FrameLayout(context) {
             @Override
             protected void onDraw(Canvas canvas) {
@@ -318,15 +318,15 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
             floatingView.addView(topShadow, FrameLayout.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(60));
 
             closeIcon = new ImageView(context);
-            closeIcon.setImageResource(R.drawable.pip_close);
+            closeIcon.setImageResource(works.heymate.beta.R.drawable.pip_close);
             closeIcon.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
-            closeIcon.setContentDescription(LocaleController.getString("Close", R.string.Close));
+            closeIcon.setContentDescription(LocaleController.getString("Close", works.heymate.beta.R.string.Close));
             floatingView.addView(closeIcon, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 4, 4, 4, 0));
 
             enlargeIcon = new ImageView(context);
-            enlargeIcon.setImageResource(R.drawable.pip_enlarge);
+            enlargeIcon.setImageResource(works.heymate.beta.R.drawable.pip_enlarge);
             enlargeIcon.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
-            enlargeIcon.setContentDescription(LocaleController.getString("Open", R.string.Open));
+            enlargeIcon.setContentDescription(LocaleController.getString("Open", works.heymate.beta.R.string.Open));
             floatingView.addView(enlargeIcon, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.LEFT, 4, 4, 4, 0));
 
             closeIcon.setOnClickListener((v) -> {

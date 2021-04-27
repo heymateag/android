@@ -77,7 +77,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPBaseService;
@@ -323,7 +323,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 scheduleTimeTextView.setText(AndroidUtilities.formatFullDuration(Math.abs(diff)));
                 if (diff < 0 && scheduleStartInTextView.getTag() == null) {
                     scheduleStartInTextView.setTag(1);
-                    scheduleStartInTextView.setText(LocaleController.getString("VoipChatLateBy", R.string.VoipChatLateBy));
+                    scheduleStartInTextView.setText(LocaleController.getString("VoipChatLateBy", works.heymate.beta.R.string.VoipChatLateBy));
                 }
             }
             scheduleStartAtTextView.setText(LocaleController.formatStartsTime(time, 3));
@@ -566,7 +566,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
             setPadding(AndroidUtilities.dp(12), 0, AndroidUtilities.dp(12), 0);
 
-            speakerDrawable = new RLottieDrawable(R.raw.speaker, "" + R.raw.speaker, AndroidUtilities.dp(24), AndroidUtilities.dp(24), true, null);
+            speakerDrawable = new RLottieDrawable(works.heymate.beta.R.raw.speaker, "" + works.heymate.beta.R.raw.speaker, AndroidUtilities.dp(24), AndroidUtilities.dp(24), true, null);
 
             imageView = new RLottieImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -1084,14 +1084,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 String text = (String) args[1];
                 String error;
                 if ("GROUPCALL_PARTICIPANTS_TOO_MUCH".equals(text)) {
-                    error = LocaleController.getString("VoipGroupTooMuch", R.string.VoipGroupTooMuch);
+                    error = LocaleController.getString("VoipGroupTooMuch", works.heymate.beta.R.string.VoipGroupTooMuch);
                 } else if ("ANONYMOUS_CALLS_DISABLED".equals(text) || "GROUPCALL_ANONYMOUS_FORBIDDEN".equals(text)) {
-                    error = LocaleController.getString("VoipGroupJoinAnonymousAdmin", R.string.VoipGroupJoinAnonymousAdmin);
+                    error = LocaleController.getString("VoipGroupJoinAnonymousAdmin", works.heymate.beta.R.string.VoipGroupJoinAnonymousAdmin);
                 } else {
-                    error = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + text;
+                    error = LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + text;
                 }
 
-                AlertDialog.Builder builder = AlertsCreator.createSimpleAlert(getContext(), LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat), error);
+                AlertDialog.Builder builder = AlertsCreator.createSimpleAlert(getContext(), LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat), error);
                 builder.setOnDismissListener(dialog -> dismiss());
                 try {
                     builder.show();
@@ -1122,8 +1122,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             View child = currentOptionsLayout.getChildAt(i);
                             if (child instanceof ActionBarMenuSubItem && child.getTag() != null && (Integer) child.getTag() == 10) {
                                 ((ActionBarMenuSubItem) child).setTextAndIcon(
-                                        TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddDescription", R.string.VoipAddDescription) : LocaleController.getString("VoipEditDescription", R.string.VoipEditDescription),
-                                        TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_bio
+                                        TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddDescription", works.heymate.beta.R.string.VoipAddDescription) : LocaleController.getString("VoipEditDescription", works.heymate.beta.R.string.VoipEditDescription),
+                                        TextUtils.isEmpty(participant.about) ? works.heymate.beta.R.drawable.msg_addbio : works.heymate.beta.R.drawable.msg_bio
                                 );
                             }
                         }
@@ -1162,8 +1162,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         View child = currentOptionsLayout.getChildAt(i);
                         if (child instanceof ActionBarMenuSubItem && child.getTag() != null && (Integer) child.getTag() == 10) {
                             ((ActionBarMenuSubItem) child).setTextAndIcon(
-                                    TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddBio", R.string.VoipAddBio) : LocaleController.getString("VoipEditBio", R.string.VoipEditBio),
-                                    TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_bio
+                                    TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddBio", works.heymate.beta.R.string.VoipAddBio) : LocaleController.getString("VoipEditBio", works.heymate.beta.R.string.VoipEditBio),
+                                    TextUtils.isEmpty(participant.about) ? works.heymate.beta.R.drawable.msg_addbio : works.heymate.beta.R.drawable.msg_bio
                             );
                         }
                     }
@@ -1288,13 +1288,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         AndroidUtilities.runOnUIThread(updateCallRecordRunnable, 1000);
                     }, 1000);
                 }
-                recordItem.setText(LocaleController.getString("VoipGroupStopRecordCall", R.string.VoipGroupStopRecordCall));
+                recordItem.setText(LocaleController.getString("VoipGroupStopRecordCall", works.heymate.beta.R.string.VoipGroupStopRecordCall));
             } else {
                 if (updateCallRecordRunnable != null) {
                     AndroidUtilities.cancelRunOnUIThread(updateCallRecordRunnable);
                     updateCallRecordRunnable = null;
                 }
-                recordItem.setText(LocaleController.getString("VoipGroupRecordCall", R.string.VoipGroupRecordCall));
+                recordItem.setText(LocaleController.getString("VoipGroupRecordCall", works.heymate.beta.R.string.VoipGroupRecordCall));
             }
             updateRecordCallText();
         } else {
@@ -1488,7 +1488,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 containerView.invalidate();
             }
         };
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setOccupyStatusBar(false);
         actionBar.setAllowOverlayTitle(false);
         actionBar.setItemsColor(Theme.getColor(Theme.key_voipgroup_actionBarItems), false);
@@ -1511,11 +1511,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 } else if (id == leave_item) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    builder.setTitle(LocaleController.getString("VoipGroupEndAlertTitle", R.string.VoipGroupEndAlertTitle));
-                    builder.setMessage(LocaleController.getString("VoipGroupEndAlertText", R.string.VoipGroupEndAlertText));
+                    builder.setTitle(LocaleController.getString("VoipGroupEndAlertTitle", works.heymate.beta.R.string.VoipGroupEndAlertTitle));
+                    builder.setMessage(LocaleController.getString("VoipGroupEndAlertText", works.heymate.beta.R.string.VoipGroupEndAlertText));
                     builder.setDialogButtonColorKey(Theme.key_voipgroup_listeningText);
 
-                    builder.setPositiveButton(LocaleController.getString("VoipGroupEnd", R.string.VoipGroupEnd), (dialogInterface, i) -> {
+                    builder.setPositiveButton(LocaleController.getString("VoipGroupEnd", works.heymate.beta.R.string.VoipGroupEnd), (dialogInterface, i) -> {
                         if (call.isScheduled()) {
                             TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(currentChat.id);
                             if (chatFull != null) {
@@ -1537,7 +1537,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         dismiss();
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall);
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog dialog = builder.create();
 
                     dialog.setBackgroundColor(Theme.getColor(Theme.key_voipgroup_dialogBackground));
@@ -1552,13 +1552,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     builder.setDialogButtonColorKey(Theme.key_voipgroup_listeningText);
                     EditTextBoldCursor editText;
                     if (call.recording) {
-                        builder.setTitle(LocaleController.getString("VoipGroupStopRecordingTitle", R.string.VoipGroupStopRecordingTitle));
-                        builder.setMessage(LocaleController.getString("VoipGroupStopRecordingText", R.string.VoipGroupStopRecordingText));
+                        builder.setTitle(LocaleController.getString("VoipGroupStopRecordingTitle", works.heymate.beta.R.string.VoipGroupStopRecordingTitle));
+                        builder.setMessage(LocaleController.getString("VoipGroupStopRecordingText", works.heymate.beta.R.string.VoipGroupStopRecordingText));
                         editText = null;
                     } else {
                         enterEventSent = false;
-                        builder.setTitle(LocaleController.getString("VoipGroupStartRecordingTitle", R.string.VoipGroupStartRecordingTitle));
-                        builder.setMessage(LocaleController.getString("VoipGroupStartRecordingText", R.string.VoipGroupStartRecordingText));
+                        builder.setTitle(LocaleController.getString("VoipGroupStartRecordingTitle", works.heymate.beta.R.string.VoipGroupStartRecordingTitle));
+                        builder.setMessage(LocaleController.getString("VoipGroupStartRecordingText", works.heymate.beta.R.string.VoipGroupStartRecordingText));
                         builder.setCheckFocusable(false);
 
                         editText = new EditTextBoldCursor(getContext());
@@ -1575,7 +1575,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                         editText.setGravity(Gravity.LEFT | Gravity.TOP);
                         editText.setSingleLine(true);
-                        editText.setHint(LocaleController.getString("VoipGroupSaveFileHint", R.string.VoipGroupSaveFileHint));
+                        editText.setHint(LocaleController.getString("VoipGroupSaveFileHint", works.heymate.beta.R.string.VoipGroupSaveFileHint));
                         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
                         editText.setHintTextColor(Theme.getColor(Theme.key_voipgroup_lastSeenText));
                         editText.setCursorColor(Theme.getColor(Theme.key_voipgroup_nameText));
@@ -1595,7 +1595,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         alertDialog.setOnDismissListener(dialog -> AndroidUtilities.hideKeyboard(editText));
                     }
 
-                    builder.setPositiveButton(call.recording ? LocaleController.getString("Stop", R.string.Stop) : LocaleController.getString("Start", R.string.Start), (dialogInterface, i) -> {
+                    builder.setPositiveButton(call.recording ? LocaleController.getString("Stop", works.heymate.beta.R.string.Stop) : LocaleController.getString("Start", works.heymate.beta.R.string.Start), (dialogInterface, i) -> {
                         if (editText == null) {
                             call.toggleRecord(null);
                             getUndoView().showWithAction(0, UndoView.ACTION_VOIP_RECORDING_FINISHED, null);
@@ -1608,7 +1608,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             }
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialog, which) -> AndroidUtilities.hideKeyboard(editText));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialog, which) -> AndroidUtilities.hideKeyboard(editText));
                     AlertDialog dialog = builder.create();
                     dialog.setBackgroundColor(Theme.getColor(Theme.key_voipgroup_dialogBackground));
                     dialog.show();
@@ -1636,9 +1636,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setDialogButtonColorKey(Theme.key_voipgroup_listeningText);
-                    builder.setTitle(LocaleController.getString("VoipGroupTitle", R.string.VoipGroupTitle));
+                    builder.setTitle(LocaleController.getString("VoipGroupTitle", works.heymate.beta.R.string.VoipGroupTitle));
                     builder.setCheckFocusable(false);
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialog, which) -> AndroidUtilities.hideKeyboard(editText));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialog, which) -> AndroidUtilities.hideKeyboard(editText));
 
                     LinearLayout linearLayout = new LinearLayout(getContext());
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -1696,7 +1696,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         editText.setText(call.call.title);
                         editText.setSelection(editText.length());
                     }
-                    builder.setPositiveButton(LocaleController.getString("Save", R.string.Save), (dialog, which) -> {
+                    builder.setPositiveButton(LocaleController.getString("Save", works.heymate.beta.R.string.Save), (dialog, which) -> {
                         AndroidUtilities.hideKeyboard(editText);
                         call.setTitle(editText.getText().toString());
                         builder.getDismissRunnable().run();
@@ -1766,10 +1766,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.webRtcMicAmplitudeEvent);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didEndCall);
 
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
 
-        bigMicDrawable = new RLottieDrawable(R.raw.voip_filled, "" + R.raw.voip_filled, AndroidUtilities.dp(72), AndroidUtilities.dp(72), true, null);
-        handDrawables = new RLottieDrawable(R.raw.hand_2, "" + R.raw.hand_2, AndroidUtilities.dp(72), AndroidUtilities.dp(72), true, null);
+        bigMicDrawable = new RLottieDrawable(works.heymate.beta.R.raw.voip_filled, "" + works.heymate.beta.R.raw.voip_filled, AndroidUtilities.dp(72), AndroidUtilities.dp(72), true, null);
+        handDrawables = new RLottieDrawable(works.heymate.beta.R.raw.hand_2, "" + works.heymate.beta.R.raw.hand_2, AndroidUtilities.dp(72), AndroidUtilities.dp(72), true, null);
 
         containerView = new FrameLayout(context) {
 
@@ -2057,7 +2057,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             scheduleStartInTextView.setTextColor(0xffffffff);
             scheduleStartInTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             scheduleStartInTextView.setTextSize(18);
-            scheduleStartInTextView.setText(LocaleController.getString("VoipChatStartsIn", R.string.VoipChatStartsIn));
+            scheduleStartInTextView.setText(LocaleController.getString("VoipChatStartsIn", works.heymate.beta.R.string.VoipChatStartsIn));
             containerView.addView(scheduleStartInTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 21, 0, 21, 231 + 80)); //-80
 
             scheduleTimeTextView = new SimpleTextView(context) {
@@ -2713,7 +2713,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     }
                 });
                 scheduleAnimator.start();
-                titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat), true);
+                titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat), true);
                 Calendar calendar = Calendar.getInstance();
                 boolean setSeconds = AlertsCreator.checkScheduleDate(null, null, 7 * 24 * 60 * 60, 3, dayPicker, hourPicker, minutePicker);
                 calendar.setTimeInMillis(System.currentTimeMillis() + (long) dayPicker.getValue() * 24 * 3600 * 1000);
@@ -2807,7 +2807,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             dayPicker.setWrapSelectorWheel(false);
             dayPicker.setFormatter(value -> {
                 if (value == 0) {
-                    return LocaleController.getString("MessageScheduleToday", R.string.MessageScheduleToday);
+                    return LocaleController.getString("MessageScheduleToday", works.heymate.beta.R.string.MessageScheduleToday);
                 } else {
                     long date = currentTime + (long) value * 86400000L;
                     calendar.setTimeInMillis(date);
@@ -2897,7 +2897,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         leaveButton = new VoIPToggleButton(context);
         leaveButton.setDrawBackground(false);
         leaveButton.setTextSize(12);
-        leaveButton.setData(R.drawable.calls_decline, 0xffffffff, Theme.getColor(Theme.key_voipgroup_leaveButton), 0.3f, false, LocaleController.getString("VoipGroupLeave", R.string.VoipGroupLeave), false, false);
+        leaveButton.setData(works.heymate.beta.R.drawable.calls_decline, 0xffffffff, Theme.getColor(Theme.key_voipgroup_leaveButton), 0.3f, false, LocaleController.getString("VoipGroupLeave", works.heymate.beta.R.string.VoipGroupLeave), false, false);
         buttonsContainer.addView(leaveButton, LayoutHelper.createFrame(68, 80));
         leaveButton.setOnClickListener(v -> {
             if (call == null || call.isScheduled()) {
@@ -2944,7 +2944,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 info.setEnabled(muteButtonState == MUTE_BUTTON_STATE_UNMUTE || muteButtonState == MUTE_BUTTON_STATE_MUTE);
 
                 if (muteButtonState == MUTE_BUTTON_STATE_MUTE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("VoipMute", R.string.VoipMute)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("VoipMute", works.heymate.beta.R.string.VoipMute)));
                 }
             }
         };
@@ -3145,8 +3145,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
         otherItem = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_voipgroup_actionBarItems));
         otherItem.setLongClickEnabled(false);
-        otherItem.setIcon(R.drawable.ic_ab_other);
-        otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        otherItem.setIcon(works.heymate.beta.R.drawable.ic_ab_other);
+        otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
         otherItem.setSubMenuOpenSide(2);
         otherItem.setDelegate(id -> actionBar.getActionBarMenuOnItemClick().onItemClick(id));
         otherItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_voipgroup_actionBarItemsSelector), 6));
@@ -3176,8 +3176,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
         pipItem = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_voipgroup_actionBarItems));
         pipItem.setLongClickEnabled(false);
-        pipItem.setIcon(R.drawable.msg_voice_pip);
-        pipItem.setContentDescription(LocaleController.getString("AccDescrPipMode", R.string.AccDescrPipMode));
+        pipItem.setIcon(works.heymate.beta.R.drawable.msg_voice_pip);
+        pipItem.setContentDescription(LocaleController.getString("AccDescrPipMode", works.heymate.beta.R.string.AccDescrPipMode));
         pipItem.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_voipgroup_actionBarItemsSelector), 6));
         pipItem.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(parentActivity)) {
@@ -3241,13 +3241,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
 
         accountSelectCell = new AccountSelectCell(context, true);
-        accountSelectCell.setTag(R.id.width_tag, 240);
+        accountSelectCell.setTag(works.heymate.beta.R.id.width_tag, 240);
         otherItem.addSubItem(user_item, accountSelectCell, LayoutHelper.WRAP_CONTENT, AndroidUtilities.dp(48));
         accountSelectCell.setBackground(Theme.createRadSelectorDrawable(Theme.getColor(Theme.key_voipgroup_listSelector), 6, 6));
         accountGap = otherItem.addGap(user_item_gap);
-        everyoneItem = otherItem.addSubItem(eveyone_can_speak_item, 0, LocaleController.getString("VoipGroupAllCanSpeak", R.string.VoipGroupAllCanSpeak), true);
+        everyoneItem = otherItem.addSubItem(eveyone_can_speak_item, 0, LocaleController.getString("VoipGroupAllCanSpeak", works.heymate.beta.R.string.VoipGroupAllCanSpeak), true);
         everyoneItem.updateSelectorBackground(true, false);
-        adminItem = otherItem.addSubItem(admin_can_speak_item, 0, LocaleController.getString("VoipGroupOnlyAdminsCanSpeak", R.string.VoipGroupOnlyAdminsCanSpeak), true);
+        adminItem = otherItem.addSubItem(admin_can_speak_item, 0, LocaleController.getString("VoipGroupOnlyAdminsCanSpeak", works.heymate.beta.R.string.VoipGroupOnlyAdminsCanSpeak), true);
         adminItem.updateSelectorBackground(false, true);
 
         everyoneItem.setCheckColor(Theme.getColor(Theme.key_voipgroup_checkMenu));
@@ -3255,13 +3255,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         adminItem.setCheckColor(Theme.getColor(Theme.key_voipgroup_checkMenu));
         adminItem.setColors(Theme.getColor(Theme.key_voipgroup_checkMenu), Theme.getColor(Theme.key_voipgroup_checkMenu));
 
-        editTitleItem = otherItem.addSubItem(edit_item, R.drawable.msg_edit, recordCallDrawable, LocaleController.getString("VoipGroupEditTitle", R.string.VoipGroupEditTitle), true, false);
-        permissionItem = otherItem.addSubItem(permission_item, R.drawable.msg_permissions, recordCallDrawable, LocaleController.getString("VoipGroupEditPermissions", R.string.VoipGroupEditPermissions), false, false);
-        inviteItem = otherItem.addSubItem(share_invite_link_item, R.drawable.msg_link, LocaleController.getString("VoipGroupShareInviteLink", R.string.VoipGroupShareInviteLink));
+        editTitleItem = otherItem.addSubItem(edit_item, works.heymate.beta.R.drawable.msg_edit, recordCallDrawable, LocaleController.getString("VoipGroupEditTitle", works.heymate.beta.R.string.VoipGroupEditTitle), true, false);
+        permissionItem = otherItem.addSubItem(permission_item, works.heymate.beta.R.drawable.msg_permissions, recordCallDrawable, LocaleController.getString("VoipGroupEditPermissions", works.heymate.beta.R.string.VoipGroupEditPermissions), false, false);
+        inviteItem = otherItem.addSubItem(share_invite_link_item, works.heymate.beta.R.drawable.msg_link, LocaleController.getString("VoipGroupShareInviteLink", works.heymate.beta.R.string.VoipGroupShareInviteLink));
         recordCallDrawable = new RecordCallDrawable();
-        recordItem = otherItem.addSubItem(start_record_item, 0, recordCallDrawable, LocaleController.getString("VoipGroupRecordCall", R.string.VoipGroupRecordCall), true, false);
+        recordItem = otherItem.addSubItem(start_record_item, 0, recordCallDrawable, LocaleController.getString("VoipGroupRecordCall", works.heymate.beta.R.string.VoipGroupRecordCall), true, false);
         recordCallDrawable.setParentView(recordItem.getImageView());
-        leaveItem = otherItem.addSubItem(leave_item, R.drawable.msg_endcall, LocaleController.getString("VoipGroupEndChat", R.string.VoipGroupEndChat));
+        leaveItem = otherItem.addSubItem(leave_item, works.heymate.beta.R.drawable.msg_endcall, LocaleController.getString("VoipGroupEndChat", works.heymate.beta.R.string.VoipGroupEndChat));
         otherItem.setPopupItemsSelectorColor(Theme.getColor(Theme.key_voipgroup_listSelector));
         otherItem.getPopupLayout().setFitItems(true);
 
@@ -3462,7 +3462,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             } else {
                 listView.setVisibility(View.VISIBLE);
             }
-            leaveItem.setText(LocaleController.getString("VoipGroupCancelChat", R.string.VoipGroupCancelChat));
+            leaveItem.setText(LocaleController.getString("VoipGroupCancelChat", works.heymate.beta.R.string.VoipGroupCancelChat));
         }
         float scheduleButtonsScale2;
         float alpha;
@@ -3527,9 +3527,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         call.saveActiveDates();
         VoIPService.getSharedInstance().registerStateListener(this);
         if (scheduleTimeTextView != null && scheduleTimeTextView.getVisibility() == View.VISIBLE) {
-            leaveButton.setData(R.drawable.calls_decline, 0xffffffff, Theme.getColor(Theme.key_voipgroup_leaveButton), 0.3f, false, LocaleController.getString("VoipGroupLeave", R.string.VoipGroupLeave), false, true);
+            leaveButton.setData(works.heymate.beta.R.drawable.calls_decline, 0xffffffff, Theme.getColor(Theme.key_voipgroup_leaveButton), 0.3f, false, LocaleController.getString("VoipGroupLeave", works.heymate.beta.R.string.VoipGroupLeave), false, true);
             updateSpeakerPhoneIcon(true);
-            leaveItem.setText(LocaleController.getString("VoipGroupEndChat", R.string.VoipGroupEndChat));
+            leaveItem.setText(LocaleController.getString("VoipGroupEndChat", works.heymate.beta.R.string.VoipGroupEndChat));
             listView.setVisibility(View.VISIBLE);
             pipItem.setVisibility(View.VISIBLE);
             AnimatorSet animatorSet = new AnimatorSet();
@@ -3608,7 +3608,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     private void updateTitle(boolean animated) {
         if (call == null) {
-            titleTextView.setText(LocaleController.getString("VoipGroupScheduleVoiceChat", R.string.VoipGroupScheduleVoiceChat), animated);
+            titleTextView.setText(LocaleController.getString("VoipGroupScheduleVoiceChat", works.heymate.beta.R.string.VoipGroupScheduleVoiceChat), animated);
             return;
         }
         if (!TextUtils.isEmpty(call.call.title)) {
@@ -3637,7 +3637,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 } else {
                     actionBar.setTitle(currentChat.title);
                 }
-                titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat), animated);
+                titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat), animated);
             }
         }
         SimpleTextView textView = actionBar.getTitleTextView();
@@ -3782,7 +3782,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
             String message;
             if (urlMuted == null && withMessage) {
-                message = LocaleController.formatString("VoipGroupInviteText", R.string.VoipGroupInviteText, urlUnmuted);
+                message = LocaleController.formatString("VoipGroupInviteText", works.heymate.beta.R.string.VoipGroupInviteText, urlUnmuted);
             } else {
                 message = urlUnmuted;
             }
@@ -3989,7 +3989,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 state = call.call.schedule_start_subscribed ? MUTE_BUTTON_STATE_CANCEL_REMINDER : MUTE_BUTTON_STATE_SET_REMINDER;
             }
             updateMuteButton(state, animated);
-            leaveButton.setData(R.drawable.calls_decline, 0xffffffff, Theme.getColor(Theme.key_voipgroup_leaveButton), 0.3f, false, LocaleController.getString("Close", R.string.Close), false, false);
+            leaveButton.setData(works.heymate.beta.R.drawable.calls_decline, 0xffffffff, Theme.getColor(Theme.key_voipgroup_leaveButton), 0.3f, false, LocaleController.getString("Close", works.heymate.beta.R.string.Close), false, false);
             updateScheduleUI(false);
             return;
         }
@@ -4047,7 +4047,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
         VoIPService service = VoIPService.getSharedInstance();
         if (service == null) {
-            soundButton.setData(R.drawable.msg_voiceshare, Color.WHITE, 0, 0.3f, true, LocaleController.getString("VoipChatShare", R.string.VoipChatShare), false, animated);
+            soundButton.setData(works.heymate.beta.R.drawable.msg_voiceshare, Color.WHITE, 0, 0.3f, true, LocaleController.getString("VoipChatShare", works.heymate.beta.R.string.VoipChatShare), false, animated);
             soundButton.setEnabled(!TextUtils.isEmpty(currentChat.username) || ChatObject.hasAdminRights(currentChat) && ChatObject.canAddUsers(currentChat), false);
             soundButton.setChecked(true, false);
             return;
@@ -4059,14 +4059,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         boolean checked = !bluetooth && service.isSpeakerphoneOn();
 
         if (bluetooth) {
-            soundButton.setData(R.drawable.calls_bluetooth, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), false, animated);
+            soundButton.setData(works.heymate.beta.R.drawable.calls_bluetooth, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingBluetooth", works.heymate.beta.R.string.VoipAudioRoutingBluetooth), false, animated);
         } else if (checked) {
-            soundButton.setData(R.drawable.calls_speaker, Color.WHITE, 0, 0.3f, true, LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker), false, animated);
+            soundButton.setData(works.heymate.beta.R.drawable.calls_speaker, Color.WHITE, 0, 0.3f, true, LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker), false, animated);
         } else {
             if (service.isHeadsetPlugged()) {
-                soundButton.setData(R.drawable.calls_headphones, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingHeadset", R.string.VoipAudioRoutingHeadset), false, animated);
+                soundButton.setData(works.heymate.beta.R.drawable.calls_headphones, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingHeadset", works.heymate.beta.R.string.VoipAudioRoutingHeadset), false, animated);
             } else {
-                soundButton.setData(R.drawable.calls_speaker, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker), false, animated);
+                soundButton.setData(works.heymate.beta.R.drawable.calls_speaker, Color.WHITE, 0, 0.1f, true, LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker), false, animated);
             }
         }
         soundButton.setChecked(checked, animated);
@@ -4087,20 +4087,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         boolean changed;
         boolean mutedByAdmin = false;
         if (state == MUTE_BUTTON_STATE_CANCEL_REMINDER) {
-            newText = LocaleController.getString("VoipGroupCancelReminder", R.string.VoipGroupCancelReminder);
+            newText = LocaleController.getString("VoipGroupCancelReminder", works.heymate.beta.R.string.VoipGroupCancelReminder);
             newSubtext = "";
             changed = bigMicDrawable.setCustomEndFrame(202);
         } else if (state == MUTE_BUTTON_STATE_SET_REMINDER) {
-            newText = LocaleController.getString("VoipGroupSetReminder", R.string.VoipGroupSetReminder);
+            newText = LocaleController.getString("VoipGroupSetReminder", works.heymate.beta.R.string.VoipGroupSetReminder);
             newSubtext = "";
             changed = bigMicDrawable.setCustomEndFrame(344);
         } else if (state == MUTE_BUTTON_STATE_START_NOW) {
-            newText = LocaleController.getString("VoipGroupStartNow", R.string.VoipGroupStartNow);
+            newText = LocaleController.getString("VoipGroupStartNow", works.heymate.beta.R.string.VoipGroupStartNow);
             newSubtext = "";
             changed = bigMicDrawable.setCustomEndFrame(377);
         } else if (state == MUTE_BUTTON_STATE_UNMUTE) {
-            newText = LocaleController.getString("VoipGroupUnmute", R.string.VoipGroupUnmute);
-            newSubtext = LocaleController.getString("VoipHoldAndTalk", R.string.VoipHoldAndTalk);
+            newText = LocaleController.getString("VoipGroupUnmute", works.heymate.beta.R.string.VoipGroupUnmute);
+            newSubtext = LocaleController.getString("VoipHoldAndTalk", works.heymate.beta.R.string.VoipHoldAndTalk);
             if (muteButtonState == MUTE_BUTTON_STATE_CONNECTING) {
                 int endFrame = bigMicDrawable.getCustomEndFrame();
                 if (endFrame == 136 || endFrame == 173 || endFrame == 274 || endFrame == 311) {
@@ -4120,12 +4120,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 changed = bigMicDrawable.setCustomEndFrame(99);
             }
         } else if (state == MUTE_BUTTON_STATE_MUTE) {
-            newText = LocaleController.getString("VoipTapToMute", R.string.VoipTapToMute);
+            newText = LocaleController.getString("VoipTapToMute", works.heymate.beta.R.string.VoipTapToMute);
             newSubtext = "";
             changed = bigMicDrawable.setCustomEndFrame(muteButtonState == MUTE_BUTTON_STATE_RAISED_HAND ? 99 : 69);
         } else if (state == MUTE_BUTTON_STATE_RAISED_HAND) {
-            newText = LocaleController.getString("VoipMutedTapedForSpeak", R.string.VoipMutedTapedForSpeak);
-            newSubtext = LocaleController.getString("VoipMutedTapedForSpeakInfo", R.string.VoipMutedTapedForSpeakInfo);
+            newText = LocaleController.getString("VoipMutedTapedForSpeak", works.heymate.beta.R.string.VoipMutedTapedForSpeak);
+            newSubtext = LocaleController.getString("VoipMutedTapedForSpeakInfo", works.heymate.beta.R.string.VoipMutedTapedForSpeakInfo);
             changed = bigMicDrawable.setCustomEndFrame(136);
         } else {
             TLRPC.TL_groupCallParticipant participant = call.participants.get(MessageObject.getPeerId(selfPeer));
@@ -4153,11 +4153,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
             }
             if (state == MUTE_BUTTON_STATE_CONNECTING) {
-                newText = LocaleController.getString("Connecting", R.string.Connecting);
+                newText = LocaleController.getString("Connecting", works.heymate.beta.R.string.Connecting);
                 newSubtext = "";
             } else {
-                newText = LocaleController.getString("VoipMutedByAdmin", R.string.VoipMutedByAdmin);
-                newSubtext = LocaleController.getString("VoipMutedTapForSpeak", R.string.VoipMutedTapForSpeak);
+                newText = LocaleController.getString("VoipMutedByAdmin", works.heymate.beta.R.string.VoipMutedByAdmin);
+                newSubtext = LocaleController.getString("VoipMutedTapForSpeak", works.heymate.beta.R.string.VoipMutedTapForSpeak);
             }
         }
 
@@ -4298,7 +4298,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             recordHintView.setVisibility(View.INVISIBLE);
             recordHintView.setShowingDuration(3000);
             containerView.addView(recordHintView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 19, 0, 19, 0));
-            recordHintView.setText(LocaleController.getString("VoipGroupRecording", R.string.VoipGroupRecording));
+            recordHintView.setText(LocaleController.getString("VoipGroupRecording", works.heymate.beta.R.string.VoipGroupRecording));
             recordHintView.setBackgroundColor(0xea272f38, 0xffffffff);
         }
         recordHintView.setExtraTranslationY(-AndroidUtilities.statusBarHeight);
@@ -4317,7 +4317,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             reminderHintView.setVisibility(View.INVISIBLE);
             reminderHintView.setShowingDuration(4000);
             containerView.addView(reminderHintView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 19, 0, 19, 0));
-            reminderHintView.setText(LocaleController.getString("VoipChatReminderHint", R.string.VoipChatReminderHint));
+            reminderHintView.setText(LocaleController.getString("VoipChatReminderHint", works.heymate.beta.R.string.VoipChatReminderHint));
             reminderHintView.setBackgroundColor(0xea272f38, 0xffffffff);
         }
         reminderHintView.setExtraTranslationY(-AndroidUtilities.statusBarHeight);
@@ -4399,8 +4399,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle(LocaleController.getString("VoipGroupLeaveAlertTitle", R.string.VoipGroupLeaveAlertTitle));
-        builder.setMessage(LocaleController.getString("VoipGroupLeaveAlertText", R.string.VoipGroupLeaveAlertText));
+        builder.setTitle(LocaleController.getString("VoipGroupLeaveAlertTitle", works.heymate.beta.R.string.VoipGroupLeaveAlertTitle));
+        builder.setMessage(LocaleController.getString("VoipGroupLeaveAlertText", works.heymate.beta.R.string.VoipGroupLeaveAlertText));
 
         int currentAccount = service.getAccount();
 
@@ -4419,7 +4419,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             checkBox.setColors(Theme.key_voipgroup_mutedIcon, Theme.key_voipgroup_listeningText, Theme.key_voipgroup_nameText);
         }
         cells[0].setTag(0);
-        cells[0].setText(LocaleController.getString("VoipGroupLeaveAlertEndChat", R.string.VoipGroupLeaveAlertEndChat), "", false, false);
+        cells[0].setText(LocaleController.getString("VoipGroupLeaveAlertEndChat", works.heymate.beta.R.string.VoipGroupLeaveAlertEndChat), "", false, false);
 
         cells[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
         linearLayout.addView(cells[0], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -4431,8 +4431,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         builder.setCustomViewOffset(12);
         builder.setView(linearLayout);
         builder.setDialogButtonColorKey(Theme.key_voipgroup_listeningText);
-        builder.setPositiveButton(LocaleController.getString("VoipGroupLeave", R.string.VoipGroupLeave), (dialogInterface, position) -> processOnLeave(call, cells[0].isChecked(), selfId, onLeave));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("VoipGroupLeave", works.heymate.beta.R.string.VoipGroupLeave), (dialogInterface, position) -> processOnLeave(call, cells[0].isChecked(), selfId, onLeave));
+        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
         if (fromOverlayWindow) {
             builder.setDimEnabled(false);
         }
@@ -4525,18 +4525,18 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
             if (option == 2) {
-                textView.setText(LocaleController.getString("VoipGroupRemoveMemberAlertTitle2", R.string.VoipGroupRemoveMemberAlertTitle2));
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupRemoveMemberAlertText2", R.string.VoipGroupRemoveMemberAlertText2, name, currentChat.title)));
+                textView.setText(LocaleController.getString("VoipGroupRemoveMemberAlertTitle2", works.heymate.beta.R.string.VoipGroupRemoveMemberAlertTitle2));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupRemoveMemberAlertText2", works.heymate.beta.R.string.VoipGroupRemoveMemberAlertText2, name, currentChat.title)));
             } else {
-                textView.setText(LocaleController.getString("VoipGroupAddMemberTitle", R.string.VoipGroupAddMemberTitle));
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupAddMemberText", R.string.VoipGroupAddMemberText, name, currentChat.title)));
+                textView.setText(LocaleController.getString("VoipGroupAddMemberTitle", works.heymate.beta.R.string.VoipGroupAddMemberTitle));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupAddMemberText", works.heymate.beta.R.string.VoipGroupAddMemberText, name, currentChat.title)));
             }
 
             frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 21 : 76), 11, (LocaleController.isRTL ? 76 : 21), 0));
             frameLayout.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 57, 24, 9));
 
             if (option == 2) {
-                builder.setPositiveButton(LocaleController.getString("VoipGroupUserRemove", R.string.VoipGroupUserRemove), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("VoipGroupUserRemove", works.heymate.beta.R.string.VoipGroupUserRemove), (dialogInterface, i) -> {
                     if (object instanceof TLRPC.User) {
                         TLRPC.User user = (TLRPC.User) object;
                         accountInstance.getMessagesController().deleteParticipantFromChat(currentChat.id, user, null);
@@ -4549,12 +4549,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 });
             } else if (object instanceof TLRPC.User) {
                 TLRPC.User user = (TLRPC.User) object;
-                builder.setPositiveButton(LocaleController.getString("VoipGroupAdd", R.string.VoipGroupAdd), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("VoipGroupAdd", works.heymate.beta.R.string.VoipGroupAdd), (dialogInterface, i) -> {
                     BaseFragment fragment = parentActivity.getActionBarLayout().fragmentsStack.get(parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
                     accountInstance.getMessagesController().addUserToChat(currentChat.id, user, 0, null, fragment, () -> inviteUserToCall(peerId, false));
                 });
             }
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             AlertDialog dialog = builder.create();
             dialog.setBackgroundColor(Theme.getColor(Theme.key_voipgroup_dialogBackground));
             dialog.show();
@@ -4703,7 +4703,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
         int color = AndroidUtilities.getOffsetColor(Theme.getColor(Theme.key_voipgroup_listViewBackgroundUnscrolled), Theme.getColor(Theme.key_voipgroup_listViewBackground), colorProgress, 1.0f);
         if (volumeLayout != null && !view.isSelfUser() && !participant.muted_by_you && (!participant.muted || participant.can_self_unmute)) {
-            Drawable shadowDrawable = getContext().getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
+            Drawable shadowDrawable = getContext().getResources().getDrawable(works.heymate.beta.R.drawable.popup_fixed_alert).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
             volumeLayout.setBackgroundDrawable(shadowDrawable);
             linearLayout.addView(volumeLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 0));
@@ -4714,14 +4714,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
         buttonsLayout.setMinimumWidth(AndroidUtilities.dp(240));
         buttonsLayout.setOrientation(LinearLayout.VERTICAL);
-        Drawable shadowDrawable = getContext().getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
+        Drawable shadowDrawable = getContext().getResources().getDrawable(works.heymate.beta.R.drawable.popup_fixed_alert).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         buttonsLayout.setBackgroundDrawable(shadowDrawable);
         linearLayout.addView(buttonsLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, volumeSlider != null ? -8 : 0, 0, 0));
 
         ScrollView scrollView;
         if (Build.VERSION.SDK_INT >= 21) {
-            scrollView = new ScrollView(getContext(), null, 0, R.style.scrollbarShapeStyle) {
+            scrollView = new ScrollView(getContext(), null, 0, works.heymate.beta.R.style.scrollbarShapeStyle) {
                 @Override
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -4761,73 +4761,73 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
         if (view.isSelfUser()) {
             if (view.isHandRaised()) {
-                items.add(LocaleController.getString("VoipGroupCancelRaiseHand", R.string.VoipGroupCancelRaiseHand));
-                icons.add(R.drawable.msg_handdown);
+                items.add(LocaleController.getString("VoipGroupCancelRaiseHand", works.heymate.beta.R.string.VoipGroupCancelRaiseHand));
+                icons.add(works.heymate.beta.R.drawable.msg_handdown);
                 options.add(7);
             }
 
-            items.add(view.hasAvatarSet() ? LocaleController.getString("VoipAddPhoto", R.string.VoipAddPhoto) : LocaleController.getString("VoipSetNewPhoto", R.string.VoipSetNewPhoto));
-            icons.add(R.drawable.msg_addphoto);
+            items.add(view.hasAvatarSet() ? LocaleController.getString("VoipAddPhoto", works.heymate.beta.R.string.VoipAddPhoto) : LocaleController.getString("VoipSetNewPhoto", works.heymate.beta.R.string.VoipSetNewPhoto));
+            icons.add(works.heymate.beta.R.drawable.msg_addphoto);
             options.add(9);
 
             if (peerId > 0) {
-                items.add(TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddBio", R.string.VoipAddBio) : LocaleController.getString("VoipEditBio", R.string.VoipEditBio));
+                items.add(TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddBio", works.heymate.beta.R.string.VoipAddBio) : LocaleController.getString("VoipEditBio", works.heymate.beta.R.string.VoipEditBio));
             } else {
-                items.add(TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddDescription", R.string.VoipAddDescription) : LocaleController.getString("VoipEditDescription", R.string.VoipEditDescription));
+                items.add(TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddDescription", works.heymate.beta.R.string.VoipAddDescription) : LocaleController.getString("VoipEditDescription", works.heymate.beta.R.string.VoipEditDescription));
             }
-            icons.add(TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_bio);
+            icons.add(TextUtils.isEmpty(participant.about) ? works.heymate.beta.R.drawable.msg_addbio : works.heymate.beta.R.drawable.msg_bio);
             options.add(10);
 
-            items.add(peerId > 0 ? LocaleController.getString("VoipEditName", R.string.VoipEditName) : LocaleController.getString("VoipEditTitle", R.string.VoipEditTitle));
-            icons.add(R.drawable.msg_edit);
+            items.add(peerId > 0 ? LocaleController.getString("VoipEditName", works.heymate.beta.R.string.VoipEditName) : LocaleController.getString("VoipEditTitle", works.heymate.beta.R.string.VoipEditTitle));
+            icons.add(works.heymate.beta.R.drawable.msg_edit);
             options.add(11);
         } else if (ChatObject.canManageCalls(currentChat)) {
             if (!isAdmin || !participant.muted) {
                 if (!participant.muted || participant.can_self_unmute) {
-                    items.add(LocaleController.getString("VoipGroupMute", R.string.VoipGroupMute));
-                    icons.add(R.drawable.msg_voice_muted);
+                    items.add(LocaleController.getString("VoipGroupMute", works.heymate.beta.R.string.VoipGroupMute));
+                    icons.add(works.heymate.beta.R.drawable.msg_voice_muted);
                     options.add(0);
                 } else {
-                    items.add(LocaleController.getString("VoipGroupAllowToSpeak", R.string.VoipGroupAllowToSpeak));
+                    items.add(LocaleController.getString("VoipGroupAllowToSpeak", works.heymate.beta.R.string.VoipGroupAllowToSpeak));
                     if (participant.raise_hand_rating != 0) {
-                        icons.add(R.drawable.msg_allowspeak);
+                        icons.add(works.heymate.beta.R.drawable.msg_allowspeak);
                     } else {
-                        icons.add(R.drawable.msg_voice_unmuted);
+                        icons.add(works.heymate.beta.R.drawable.msg_voice_unmuted);
                     }
                     options.add(1);
                 }
             }
             if (participant.peer.channel_id != 0 && !ChatObject.isMegagroup(currentAccount, participant.peer.channel_id)) {
-                items.add(LocaleController.getString("VoipGroupOpenChannel", R.string.VoipGroupOpenChannel));
-                icons.add(R.drawable.msg_channel);
+                items.add(LocaleController.getString("VoipGroupOpenChannel", works.heymate.beta.R.string.VoipGroupOpenChannel));
+                icons.add(works.heymate.beta.R.drawable.msg_channel);
                 options.add(8);
             } else {
-                items.add(LocaleController.getString("VoipGroupOpenProfile", R.string.VoipGroupOpenProfile));
-                icons.add(R.drawable.msg_openprofile);
+                items.add(LocaleController.getString("VoipGroupOpenProfile", works.heymate.beta.R.string.VoipGroupOpenProfile));
+                icons.add(works.heymate.beta.R.drawable.msg_openprofile);
                 options.add(6);
             }
             if (!isAdmin && ChatObject.canBlockUsers(currentChat)) {
-                items.add(LocaleController.getString("VoipGroupUserRemove", R.string.VoipGroupUserRemove));
-                icons.add(R.drawable.msg_block2);
+                items.add(LocaleController.getString("VoipGroupUserRemove", works.heymate.beta.R.string.VoipGroupUserRemove));
+                icons.add(works.heymate.beta.R.drawable.msg_block2);
                 options.add(2);
             }
         } else {
             if (participant.muted_by_you) {
-                items.add(LocaleController.getString("VoipGroupUnmuteForMe", R.string.VoipGroupUnmuteForMe));
-                icons.add(R.drawable.msg_voice_unmuted);
+                items.add(LocaleController.getString("VoipGroupUnmuteForMe", works.heymate.beta.R.string.VoipGroupUnmuteForMe));
+                icons.add(works.heymate.beta.R.drawable.msg_voice_unmuted);
                 options.add(4);
             } else {
-                items.add(LocaleController.getString("VoipGroupMuteForMe", R.string.VoipGroupMuteForMe));
-                icons.add(R.drawable.msg_voice_muted);
+                items.add(LocaleController.getString("VoipGroupMuteForMe", works.heymate.beta.R.string.VoipGroupMuteForMe));
+                icons.add(works.heymate.beta.R.drawable.msg_voice_muted);
                 options.add(5);
             }
             if (participant.peer.channel_id != 0 && !ChatObject.isMegagroup(currentAccount, participant.peer.channel_id)) {
-                items.add(LocaleController.getString("VoipGroupOpenChannel", R.string.VoipGroupOpenChannel));
-                icons.add(R.drawable.msg_msgbubble3);
+                items.add(LocaleController.getString("VoipGroupOpenChannel", works.heymate.beta.R.string.VoipGroupOpenChannel));
+                icons.add(works.heymate.beta.R.drawable.msg_msgbubble3);
                 options.add(8);
             } else {
-                items.add(LocaleController.getString("VoipGroupOpenChat", R.string.VoipGroupOpenChat));
-                icons.add(R.drawable.msg_msgbubble3);
+                items.add(LocaleController.getString("VoipGroupOpenChat", works.heymate.beta.R.string.VoipGroupOpenChat));
+                icons.add(works.heymate.beta.R.drawable.msg_msgbubble3);
                 options.add(6);
             }
         }
@@ -4964,7 +4964,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             scrimPopupWindow.setDismissAnimationDuration(220);
             scrimPopupWindow.setOutsideTouchable(true);
             scrimPopupWindow.setClippingEnabled(true);
-            scrimPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
+            scrimPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation);
             scrimPopupWindow.setFocusable(true);
             popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
             scrimPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -5237,9 +5237,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     int color = AndroidUtilities.getOffsetColor(Theme.getColor(Theme.key_voipgroup_lastSeenTextUnscrolled), Theme.getColor(Theme.key_voipgroup_lastSeenText), actionBar.getTag() != null ? 1.0f : 0.0f, 1.0f);
                     textCell.setColors(color, color);
                     if (ChatObject.isChannel(currentChat) && !currentChat.megagroup && !TextUtils.isEmpty(currentChat.username)) {
-                        textCell.setTextAndIcon(LocaleController.getString("VoipGroupShareLink", R.string.VoipGroupShareLink), R.drawable.msg_link, true);
+                        textCell.setTextAndIcon(LocaleController.getString("VoipGroupShareLink", works.heymate.beta.R.string.VoipGroupShareLink), works.heymate.beta.R.drawable.msg_link, true);
                     } else {
-                        textCell.setTextAndIcon(LocaleController.getString("VoipGroupInviteMember", R.string.VoipGroupInviteMember), R.drawable.actions_addmember2, true);
+                        textCell.setTextAndIcon(LocaleController.getString("VoipGroupInviteMember", works.heymate.beta.R.string.VoipGroupInviteMember), works.heymate.beta.R.drawable.actions_addmember2, true);
                     }
                     break;
                 case 1: {

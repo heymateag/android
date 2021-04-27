@@ -46,7 +46,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
@@ -143,10 +143,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 openKeyboardInternal();
             }
         });
-        emojiButton.setContentDescription(LocaleController.getString("Emoji", R.string.Emoji));
+        emojiButton.setContentDescription(LocaleController.getString("Emoji", works.heymate.beta.R.string.Emoji));
         emojiButton.setImageDrawable(emojiIconDrawable = new ReplaceableIconDrawable(context));
         emojiIconDrawable.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY));
-        emojiIconDrawable.setIcon(R.drawable.input_smile, false);
+        emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_smile, false);
 
         lengthTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
         lengthTextPaint.setTextSize(AndroidUtilities.dp(13));
@@ -198,7 +198,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         };
 
         messageEditText.setWindowView(windowView);
-        messageEditText.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
+        messageEditText.setHint(LocaleController.getString("AddCaption", works.heymate.beta.R.string.AddCaption));
         messageEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         messageEditText.setLinkTextColor(0xff76c2f1);
         messageEditText.setInputType(messageEditText.getInputType() | EditorInfo.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -329,7 +329,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         });
 
         doneDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16), 0xff66bffa);
-        checkDrawable = context.getResources().getDrawable(R.drawable.input_done).mutate();
+        checkDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_done).mutate();
         CombinedDrawable combinedDrawable = new CombinedDrawable(doneDrawable, checkDrawable, 0, AndroidUtilities.dp(1));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32), AndroidUtilities.dp(32));
 
@@ -348,7 +348,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
             delegate.onCaptionEnter();
         });
-        doneButton.setContentDescription(LocaleController.getString("Done", R.string.Done));
+        doneButton.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
 
         captionLimitView = new NumberTextView(context);
         captionLimitView.setVisibility(View.GONE);
@@ -652,12 +652,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
+                emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
             }
         } else {
             if (emojiButton != null) {
-                emojiIconDrawable.setIcon(R.drawable.input_smile, true);
+                emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_smile, true);
             }
             if (sizeNotifierLayout != null) {
                 if (animated && SharedConfig.smoothKeyboard && show == 0 && emojiView != null) {

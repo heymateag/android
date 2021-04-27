@@ -47,7 +47,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -203,18 +203,18 @@ public class WallpapersListActivity extends BaseFragment implements Notification
     };
 
     private static final int[] searchColorsNamesR = new int[]{
-            R.string.Blue,
-            R.string.Red,
-            R.string.Orange,
-            R.string.Yellow,
-            R.string.Green,
-            R.string.Teal,
-            R.string.Purple,
-            R.string.Pink,
-            R.string.Brown,
-            R.string.Black,
-            R.string.Gray,
-            R.string.White
+            works.heymate.beta.R.string.Blue,
+            works.heymate.beta.R.string.Red,
+            works.heymate.beta.R.string.Orange,
+            works.heymate.beta.R.string.Yellow,
+            works.heymate.beta.R.string.Green,
+            works.heymate.beta.R.string.Teal,
+            works.heymate.beta.R.string.Purple,
+            works.heymate.beta.R.string.Pink,
+            works.heymate.beta.R.string.Brown,
+            works.heymate.beta.R.string.Black,
+            works.heymate.beta.R.string.Gray,
+            works.heymate.beta.R.string.White
     };
 
     public final static int TYPE_ALL = 0;
@@ -358,12 +358,12 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         });
 
         hasOwnBackground = true;
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (currentType == TYPE_ALL) {
-            actionBar.setTitle(LocaleController.getString("ChatBackground", R.string.ChatBackground));
+            actionBar.setTitle(LocaleController.getString("ChatBackground", works.heymate.beta.R.string.ChatBackground));
         } else if (currentType == TYPE_COLOR) {
-            actionBar.setTitle(LocaleController.getString("SelectColorTitle", R.string.SelectColorTitle));
+            actionBar.setTitle(LocaleController.getString("SelectColorTitle", works.heymate.beta.R.string.SelectColorTitle));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -382,8 +382,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     builder.setTitle(LocaleController.formatPluralString("DeleteBackground", selectedWallPapers.size()));
-                    builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", R.string.DeleteChatBackgroundsAlert));
-                    builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
+                    builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", works.heymate.beta.R.string.DeleteChatBackgroundsAlert));
+                    builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
                         progressDialog = new AlertDialog(getParentActivity(), 3);
                         progressDialog.setCanCacnel(false);
                         progressDialog.show();
@@ -419,7 +419,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         actionBar.hideActionMode();
                         actionBar.closeSearchField();
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -491,7 +491,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
         if (currentType == TYPE_ALL) {
             ActionBarMenu menu = actionBar.createMenu();
-            searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+            searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
                 @Override
                 public void onSearchExpand() {
                     listView.setAdapter(searchAdapter);
@@ -515,10 +515,10 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 @Override
                 public void onCaptionCleared() {
                     searchAdapter.clearColor();
-                    searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", R.string.SearchBackgrounds));
+                    searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", works.heymate.beta.R.string.SearchBackgrounds));
                 }
             });
-            searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", R.string.SearchBackgrounds));
+            searchItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", works.heymate.beta.R.string.SearchBackgrounds));
 
             final ActionBarMenu actionMode = actionBar.createActionMode(false, null);
             actionMode.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
@@ -532,8 +532,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
             actionMode.addView(selectedMessagesCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 65, 0, 0, 0));
 
-            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
-            actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+            actionModeViews.add(actionMode.addItemWithWidth(forward, works.heymate.beta.R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", works.heymate.beta.R.string.Forward)));
+            actionModeViews.add(actionMode.addItemWithWidth(delete, works.heymate.beta.R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)));
 
             selectedWallPapers.clear();
         }
@@ -605,9 +605,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 presentFragment(activity);
             } else if (position == resetRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("ResetChatBackgroundsAlertTitle", R.string.ResetChatBackgroundsAlertTitle));
-                builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", R.string.ResetChatBackgroundsAlert));
-                builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("ResetChatBackgroundsAlertTitle", works.heymate.beta.R.string.ResetChatBackgroundsAlertTitle));
+                builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", works.heymate.beta.R.string.ResetChatBackgroundsAlert));
+                builder.setPositiveButton(LocaleController.getString("Reset", works.heymate.beta.R.string.Reset), (dialogInterface, i) -> {
                     if (actionBar.isActionModeShowed()) {
                         selectedWallPapers.clear();
                         actionBar.hideActionMode();
@@ -619,7 +619,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     TLRPC.TL_account_resetWallPapers req = new TLRPC.TL_account_resetWallPapers();
                     ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(this::loadWallpapers));
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 AlertDialog dialog = builder.create();
                 showDialog(dialog);
                 TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -657,7 +657,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         searchEmptyView.setVisibility(View.GONE);
         searchEmptyView.setShowAtCenter(true);
         searchEmptyView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        searchEmptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
         listView.setEmptyView(searchEmptyView);
         frameLayout.addView(searchEmptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
@@ -903,7 +903,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             addedFileWallpaper = null;
         }
         if (catsWallpaper == null) {
-            catsWallpaper = new FileWallpaper(Theme.DEFAULT_BACKGROUND_SLUG, R.drawable.background_hd, R.drawable.catstile);
+            catsWallpaper = new FileWallpaper(Theme.DEFAULT_BACKGROUND_SLUG, works.heymate.beta.R.drawable.background_hd, works.heymate.beta.R.drawable.catstile);
         } else {
             wallPapers.remove(catsWallpaper);
         }
@@ -1378,7 +1378,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     horizontalListView.setLayoutManager(layoutManager);
                     horizontalListView.setAdapter(new CategoryAdapterRecycler());
                     horizontalListView.setOnItemClickListener((view1, position) -> {
-                        String color = LocaleController.getString("BackgroundSearchColor", R.string.BackgroundSearchColor);
+                        String color = LocaleController.getString("BackgroundSearchColor", works.heymate.beta.R.string.BackgroundSearchColor);
                         Spannable spannable = new SpannableString(color + " " + LocaleController.getString(searchColorsNames[position], searchColorsNamesR[position]));
                         spannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_actionBarDefaultSubtitle)), color.length(), spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         searchItem.setSearchFieldCaption(spannable);
@@ -1419,7 +1419,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 }
                 case 2: {
                     GraySectionCell cell = (GraySectionCell) holder.itemView;
-                    cell.setText(LocaleController.getString("SearchByColor", R.string.SearchByColor));
+                    cell.setText(LocaleController.getString("SearchByColor", works.heymate.beta.R.string.SearchByColor));
                     break;
                 }
             }
@@ -1466,7 +1466,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 }
                 case 1: {
                     view = new ShadowSectionCell(mContext);
-                    Drawable drawable = Theme.getThemedDrawable(mContext, wallPaperStartRow == -1 ? R.drawable.greydivider_bottom : R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+                    Drawable drawable = Theme.getThemedDrawable(mContext, wallPaperStartRow == -1 ? works.heymate.beta.R.drawable.greydivider_bottom : works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
                     CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
@@ -1474,7 +1474,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 }
                 case 3: {
                     view = new TextInfoPrivacyCell(mContext);
-                    Drawable drawable = Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
+                    Drawable drawable = Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
                     CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
@@ -1505,18 +1505,18 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 case 0: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == uploadImageRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), R.drawable.profile_photos, true);
+                        textCell.setTextAndIcon(LocaleController.getString("SelectFromGallery", works.heymate.beta.R.string.SelectFromGallery), works.heymate.beta.R.drawable.profile_photos, true);
                     } else if (position == setColorRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("SetColor", R.string.SetColor), R.drawable.menu_palette, false);
+                        textCell.setTextAndIcon(LocaleController.getString("SetColor", works.heymate.beta.R.string.SetColor), works.heymate.beta.R.drawable.menu_palette, false);
                     } else if (position == resetRow) {
-                        textCell.setText(LocaleController.getString("ResetChatBackgrounds", R.string.ResetChatBackgrounds), false);
+                        textCell.setText(LocaleController.getString("ResetChatBackgrounds", works.heymate.beta.R.string.ResetChatBackgrounds), false);
                     }
                     break;
                 }
                 case 3: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == resetInfoRow) {
-                        cell.setText(LocaleController.getString("ResetChatBackgroundsInfo", R.string.ResetChatBackgroundsInfo));
+                        cell.setText(LocaleController.getString("ResetChatBackgroundsInfo", works.heymate.beta.R.string.ResetChatBackgroundsInfo));
                     }
                     break;
                 }

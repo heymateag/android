@@ -100,7 +100,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -634,7 +634,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         public RecordDot(Context context) {
             super(context);
-            int resId = R.raw.chat_audio_record_delete;
+            int resId = works.heymate.beta.R.raw.chat_audio_record_delete;
             drawable = new RLottieDrawable(resId, "" + resId, AndroidUtilities.dp(28), AndroidUtilities.dp(28), false, null);
             drawable.setCurrentParentView(this);
             drawable.setInvalidateOnProgressSet(true);
@@ -796,19 +796,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         public RecordCircle(Context context) {
             super(context);
-            micDrawable = getResources().getDrawable(R.drawable.input_mic_pressed).mutate();
+            micDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.input_mic_pressed).mutate();
             micDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoicePressed), PorterDuff.Mode.MULTIPLY));
 
-            cameraDrawable = getResources().getDrawable(R.drawable.input_video_pressed).mutate();
+            cameraDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.input_video_pressed).mutate();
             cameraDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoicePressed), PorterDuff.Mode.MULTIPLY));
 
-            sendDrawable = getResources().getDrawable(R.drawable.attach_send).mutate();
+            sendDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.attach_send).mutate();
             sendDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoicePressed), PorterDuff.Mode.MULTIPLY));
 
-            micOutline = getResources().getDrawable(R.drawable.input_mic).mutate();
+            micOutline = getResources().getDrawable(works.heymate.beta.R.drawable.input_mic).mutate();
             micOutline.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
 
-            cameraOutline = getResources().getDrawable(R.drawable.input_video).mutate();
+            cameraOutline = getResources().getDrawable(works.heymate.beta.R.drawable.input_video).mutate();
             cameraOutline.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
 
             virtualViewHelper = new VirtualViewHelper(this);
@@ -827,13 +827,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             lockOutlinePaint.setStrokeCap(Paint.Cap.ROUND);
             lockOutlinePaint.setStrokeWidth(AndroidUtilities.dpf2(1.7f));
 
-            lockShadowDrawable = getResources().getDrawable(R.drawable.lock_round_shadow);
+            lockShadowDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.lock_round_shadow);
             lockShadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoiceLockShadow), PorterDuff.Mode.MULTIPLY));
             tooltipBackground = Theme.createRoundRectDrawable(AndroidUtilities.dp(5), Theme.getColor(Theme.key_chat_gifSaveHintBackground));
 
             tooltipPaint.setTextSize(AndroidUtilities.dp(14));
-            tooltipBackgroundArrow = ContextCompat.getDrawable(context, R.drawable.tooltip_arrow);
-            tooltipMessage = LocaleController.getString("SlideUpToLock", R.string.SlideUpToLock);
+            tooltipBackgroundArrow = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.tooltip_arrow);
+            tooltipMessage = LocaleController.getString("SlideUpToLock", works.heymate.beta.R.string.SlideUpToLock);
             iconScale = 1f;
 
             final ViewConfiguration vc = ViewConfiguration.get(context);
@@ -1581,11 +1581,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             protected void onPopulateNodeForVirtualView(int id, @NonNull AccessibilityNodeInfoCompat info) {
                 if (id == 1) {
                     info.setBoundsInParent(sendRect);
-                    info.setText(LocaleController.getString("Send", R.string.Send));
+                    info.setText(LocaleController.getString("Send", works.heymate.beta.R.string.Send));
                 } else if (id == 2) {
                     rect.set((int) pauseRect.left, (int) pauseRect.top, (int) pauseRect.right, (int) pauseRect.bottom);
                     info.setBoundsInParent(rect);
-                    info.setText(LocaleController.getString("Stop", R.string.Stop));
+                    info.setText(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop));
                 }
             }
 
@@ -1711,7 +1711,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
             });
-            emojiButton[a].setContentDescription(LocaleController.getString("AccDescrEmojiButton", R.string.AccDescrEmojiButton));
+            emojiButton[a].setContentDescription(LocaleController.getString("AccDescrEmojiButton", works.heymate.beta.R.string.AccDescrEmojiButton));
             if (a == 1) {
                 emojiButton[a].setVisibility(INVISIBLE);
                 emojiButton[a].setAlpha(0.0f);
@@ -2050,8 +2050,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         if (isChat) {
             if (parentFragment != null) {
-                Drawable drawable1 = context.getResources().getDrawable(R.drawable.input_calendar1).mutate();
-                Drawable drawable2 = context.getResources().getDrawable(R.drawable.input_calendar2).mutate();
+                Drawable drawable1 = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_calendar1).mutate();
+                Drawable drawable2 = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_calendar2).mutate();
                 drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
                 drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_recordedVoiceDot), PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
@@ -2059,7 +2059,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 scheduledButton = new ImageView(context);
                 scheduledButton.setImageDrawable(combinedDrawable);
                 scheduledButton.setVisibility(GONE);
-                scheduledButton.setContentDescription(LocaleController.getString("ScheduledMessages", R.string.ScheduledMessages));
+                scheduledButton.setContentDescription(LocaleController.getString("ScheduledMessages", works.heymate.beta.R.string.ScheduledMessages));
                 scheduledButton.setScaleType(ImageView.ScaleType.CENTER);
                 if (Build.VERSION.SDK_INT >= 21) {
                     scheduledButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
@@ -2082,7 +2082,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             botButton = new ImageView(context);
             botButton.setImageDrawable(botButtonDrawablel = new ReplaceableIconDrawable(context));
             botButtonDrawablel.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
-            botButtonDrawablel.setIcon(R.drawable.input_bot2, false);
+            botButtonDrawablel.setIcon(works.heymate.beta.R.drawable.input_bot2, false);
             botButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
                 botButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
@@ -2118,10 +2118,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             });
 
             notifyButton = new ImageView(context);
-            notifySilentDrawable = new CrossOutDrawable(context, R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
+            notifySilentDrawable = new CrossOutDrawable(context, works.heymate.beta.R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
             notifyButton.setImageDrawable(notifySilentDrawable);
             notifySilentDrawable.setCrossOut(silent, false);
-            notifyButton.setContentDescription(silent ? LocaleController.getString("AccDescrChanSilentOn", R.string.AccDescrChanSilentOn) : LocaleController.getString("AccDescrChanSilentOff", R.string.AccDescrChanSilentOff));
+            notifyButton.setContentDescription(silent ? LocaleController.getString("AccDescrChanSilentOn", works.heymate.beta.R.string.AccDescrChanSilentOn) : LocaleController.getString("AccDescrChanSilentOff", works.heymate.beta.R.string.AccDescrChanSilentOff));
             notifyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
             notifyButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
@@ -2137,7 +2137,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 public void onClick(View v) {
                     silent = !silent;
                     if (notifySilentDrawable == null) {
-                        notifySilentDrawable = new CrossOutDrawable(context, R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
+                        notifySilentDrawable = new CrossOutDrawable(context, works.heymate.beta.R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
                     }
                     notifySilentDrawable.setCrossOut(silent, true);
                     notifyButton.setImageDrawable(notifySilentDrawable);
@@ -2151,14 +2151,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         FileLog.e(e);
                     }
                     fragment.getUndoView().showWithAction(0, !silent ? UndoView.ACTION_NOTIFY_ON : UndoView.ACTION_NOTIFY_OFF, null);
-                    notifyButton.setContentDescription(silent ? LocaleController.getString("AccDescrChanSilentOn", R.string.AccDescrChanSilentOn) : LocaleController.getString("AccDescrChanSilentOff", R.string.AccDescrChanSilentOff));
+                    notifyButton.setContentDescription(silent ? LocaleController.getString("AccDescrChanSilentOn", works.heymate.beta.R.string.AccDescrChanSilentOn) : LocaleController.getString("AccDescrChanSilentOff", works.heymate.beta.R.string.AccDescrChanSilentOff));
                     updateFieldHint(true);
                 }
             });
 
             attachButton = new ImageView(context);
             attachButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
-            attachButton.setImageResource(R.drawable.input_attach);
+            attachButton.setImageResource(works.heymate.beta.R.drawable.input_attach);
             attachButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
                 attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
@@ -2170,7 +2170,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 delegate.didPressAttachButton();
             });
-            attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
+            attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", works.heymate.beta.R.string.AccDescrAttachButton));
         }
 
         recordedAudioPanel = new FrameLayout(context);
@@ -2182,11 +2182,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         recordDeleteImageView = new RLottieImageView(context);
         recordDeleteImageView.setScaleType(ImageView.ScaleType.CENTER);
-        recordDeleteImageView.setAnimation(R.raw.chat_audio_record_delete_2, 28, 28);
+        recordDeleteImageView.setAnimation(works.heymate.beta.R.raw.chat_audio_record_delete_2, 28, 28);
         recordDeleteImageView.getAnimatedDrawable().setInvalidateOnProgressSet(true);
         updateRecordedDeleteIconColors();
 
-        recordDeleteImageView.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
+        recordDeleteImageView.setContentDescription(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
         if (Build.VERSION.SDK_INT >= 21) {
             recordDeleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
         }
@@ -2264,7 +2264,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         recordedAudioPlayButton.setImageMatrix(matrix);
         recordedAudioPlayButton.setImageDrawable(playPauseDrawable);
         recordedAudioPlayButton.setScaleType(ImageView.ScaleType.MATRIX);
-        recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", R.string.AccActionPlay));
+        recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", works.heymate.beta.R.string.AccActionPlay));
         recordedAudioPanel.addView(recordedAudioPlayButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.BOTTOM, 48, 0, 13, 0));
         recordedAudioPlayButton.setOnClickListener(v -> {
             if (audioToSend == null) {
@@ -2273,11 +2273,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (MediaController.getInstance().isPlayingMessage(audioToSendMessageObject) && !MediaController.getInstance().isMessagePaused()) {
                 MediaController.getInstance().pauseMessage(audioToSendMessageObject);
                 playPauseDrawable.setIcon(MediaActionDrawable.ICON_PLAY, true);
-                recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", R.string.AccActionPlay));
+                recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", works.heymate.beta.R.string.AccActionPlay));
             } else {
                 playPauseDrawable.setIcon(MediaActionDrawable.ICON_PAUSE, true);
                 MediaController.getInstance().playMessage(audioToSendMessageObject);
-                recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPause", R.string.AccActionPause));
+                recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPause", works.heymate.beta.R.string.AccActionPause));
             }
         });
 
@@ -2470,9 +2470,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         audioSendButton = new ImageView(context);
         audioSendButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         audioSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
-        audioSendButton.setImageResource(R.drawable.input_mic);
+        audioSendButton.setImageResource(works.heymate.beta.R.drawable.input_mic);
         audioSendButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
-        audioSendButton.setContentDescription(LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage));
+        audioSendButton.setContentDescription(LocaleController.getString("AccDescrVoiceMessage", works.heymate.beta.R.string.AccDescrVoiceMessage));
         audioSendButton.setFocusable(true);
         audioSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
         audioVideoButtonContainer.addView(audioSendButton, LayoutHelper.createFrame(48, 48));
@@ -2481,9 +2481,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             videoSendButton = new ImageView(context);
             videoSendButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             videoSendButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
-            videoSendButton.setImageResource(R.drawable.input_video);
+            videoSendButton.setImageResource(works.heymate.beta.R.drawable.input_video);
             videoSendButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
-            videoSendButton.setContentDescription(LocaleController.getString("AccDescrVideoMessage", R.string.AccDescrVideoMessage));
+            videoSendButton.setContentDescription(LocaleController.getString("AccDescrVideoMessage", works.heymate.beta.R.string.AccDescrVideoMessage));
             videoSendButton.setFocusable(true);
             videoSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
             audioVideoButtonContainer.addView(videoSendButton, LayoutHelper.createFrame(48, 48));
@@ -2497,7 +2497,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         cancelBotButton.setVisibility(INVISIBLE);
         cancelBotButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         cancelBotButton.setImageDrawable(progressDrawable = new CloseProgressDrawable2());
-        cancelBotButton.setContentDescription(LocaleController.getString("Cancel", R.string.Cancel));
+        cancelBotButton.setContentDescription(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel));
         progressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelCancelInlineBot), PorterDuff.Mode.MULTIPLY));
         cancelBotButton.setSoundEffectsEnabled(false);
         cancelBotButton.setScaleX(0.1f);
@@ -2518,13 +2518,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         });
 
         if (isInScheduleMode()) {
-            sendButtonDrawable = context.getResources().getDrawable(R.drawable.input_schedule).mutate();
-            sendButtonInverseDrawable = context.getResources().getDrawable(R.drawable.input_schedule).mutate();
-            inactinveSendButtonDrawable = context.getResources().getDrawable(R.drawable.input_schedule).mutate();
+            sendButtonDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_schedule).mutate();
+            sendButtonInverseDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_schedule).mutate();
+            inactinveSendButtonDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_schedule).mutate();
         } else {
-            sendButtonDrawable = context.getResources().getDrawable(R.drawable.ic_send).mutate();
-            sendButtonInverseDrawable = context.getResources().getDrawable(R.drawable.ic_send).mutate();
-            inactinveSendButtonDrawable = context.getResources().getDrawable(R.drawable.ic_send).mutate();
+            sendButtonDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_send).mutate();
+            sendButtonInverseDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_send).mutate();
+            inactinveSendButtonDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_send).mutate();
         }
         sendButton = new View(context) {
 
@@ -2634,7 +2634,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         };
         sendButton.setVisibility(INVISIBLE);
         int color = Theme.getColor(Theme.key_chat_messagePanelSend);
-        sendButton.setContentDescription(LocaleController.getString("Send", R.string.Send));
+        sendButton.setContentDescription(LocaleController.getString("Send", works.heymate.beta.R.string.Send));
         sendButton.setSoundEffectsEnabled(false);
         sendButton.setScaleX(0.1f);
         sendButton.setScaleY(0.1f);
@@ -2717,7 +2717,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 setStickersExpanded(!stickersExpanded, true, false);
             }
         });
-        expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", R.string.AccDescrExpandPanel));
+        expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", works.heymate.beta.R.string.AccDescrExpandPanel));
 
         doneButtonContainer = new FrameLayout(context);
         doneButtonContainer.setVisibility(GONE);
@@ -2725,7 +2725,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         doneButtonContainer.setOnClickListener(view -> doneEditingMessage());
 
         Drawable doneCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16), Theme.getColor(Theme.key_chat_messagePanelSend));
-        doneCheckDrawable = context.getResources().getDrawable(R.drawable.input_done).mutate();
+        doneCheckDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_done).mutate();
         doneCheckDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelVoicePressed), PorterDuff.Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(doneCircleDrawable, doneCheckDrawable, 0, AndroidUtilities.dp(1));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32), AndroidUtilities.dp(32));
@@ -2733,7 +2733,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         doneButtonImage = new ImageView(context);
         doneButtonImage.setScaleType(ImageView.ScaleType.CENTER);
         doneButtonImage.setImageDrawable(combinedDrawable);
-        doneButtonImage.setContentDescription(LocaleController.getString("Done", R.string.Done));
+        doneButtonImage.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
         doneButtonContainer.addView(doneButtonImage, LayoutHelper.createFrame(48, 48));
 
         doneButtonProgress = new ContextProgressView(context, 0);
@@ -2866,12 +2866,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), a == 0, a == 1);
                 if (num == 0) {
                     if (UserObject.isUserSelf(user)) {
-                        cell.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
+                        cell.setTextAndIcon(LocaleController.getString("SetReminder", works.heymate.beta.R.string.SetReminder), works.heymate.beta.R.drawable.msg_schedule);
                     } else {
-                        cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
+                        cell.setTextAndIcon(LocaleController.getString("ScheduleMessage", works.heymate.beta.R.string.ScheduleMessage), works.heymate.beta.R.drawable.msg_schedule);
                     }
                 } else {
-                    cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+                    cell.setTextAndIcon(LocaleController.getString("SendWithoutSound", works.heymate.beta.R.string.SendWithoutSound), works.heymate.beta.R.drawable.input_notify_off);
                 }
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
                 sendPopupLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
@@ -2896,7 +2896,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
             };
             sendPopupWindow.setAnimationEnabled(false);
-            sendPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
+            sendPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation2);
             sendPopupWindow.setOutsideTouchable(true);
             sendPopupWindow.setClippingEnabled(true);
             sendPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -3589,7 +3589,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void updateFieldHint(boolean animated) {
         if (editingMessageObject != null) {
-            messageEditText.setHintText(editingCaption ? LocaleController.getString("Caption", R.string.Caption) : LocaleController.getString("TypeMessage", R.string.TypeMessage));
+            messageEditText.setHintText(editingCaption ? LocaleController.getString("Caption", works.heymate.beta.R.string.Caption) : LocaleController.getString("TypeMessage", works.heymate.beta.R.string.TypeMessage));
         } else {
             boolean isChannel = false;
             boolean anonymously = false;
@@ -3599,22 +3599,22 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 anonymously = ChatObject.shouldSendAnonymously(chat);
             }
             if (anonymously) {
-                messageEditText.setHintText(LocaleController.getString("SendAnonymously", R.string.SendAnonymously));
+                messageEditText.setHintText(LocaleController.getString("SendAnonymously", works.heymate.beta.R.string.SendAnonymously));
             } else {
                 if (parentFragment != null && parentFragment.isThreadChat()) {
                     if (parentFragment.isReplyChatComment()) {
-                        messageEditText.setHintText(LocaleController.getString("Comment", R.string.Comment));
+                        messageEditText.setHintText(LocaleController.getString("Comment", works.heymate.beta.R.string.Comment));
                     } else {
-                        messageEditText.setHintText(LocaleController.getString("Reply", R.string.Reply));
+                        messageEditText.setHintText(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
                     }
                 } else if (isChannel) {
                     if (silent) {
-                        messageEditText.setHintText(LocaleController.getString("ChannelSilentBroadcast", R.string.ChannelSilentBroadcast), animated);
+                        messageEditText.setHintText(LocaleController.getString("ChannelSilentBroadcast", works.heymate.beta.R.string.ChannelSilentBroadcast), animated);
                     } else {
-                        messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", R.string.ChannelBroadcast), animated);
+                        messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", works.heymate.beta.R.string.ChannelBroadcast), animated);
                     }
                 } else {
-                    messageEditText.setHintText(LocaleController.getString("TypeMessage", R.string.TypeMessage));
+                    messageEditText.setHintText(LocaleController.getString("TypeMessage", works.heymate.beta.R.string.TypeMessage));
                 }
             }
         }
@@ -3866,10 +3866,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             TLRPC.Chat chat = parentFragment.getCurrentChat();
             if (chat != null && chat.slowmode_enabled && !ChatObject.hasAdminRights(chat)) {
                 if (message.length() > accountInstance.getMessagesController().maxMessageLength) {
-                    AlertsCreator.showSimpleAlert(parentFragment, LocaleController.getString("Slowmode", R.string.Slowmode), LocaleController.getString("SlowmodeSendErrorTooLong", R.string.SlowmodeSendErrorTooLong));
+                    AlertsCreator.showSimpleAlert(parentFragment, LocaleController.getString("Slowmode", works.heymate.beta.R.string.Slowmode), LocaleController.getString("SlowmodeSendErrorTooLong", works.heymate.beta.R.string.SlowmodeSendErrorTooLong));
                     return;
                 } else if (forceShowSendButton && message.length() > 0) {
-                    AlertsCreator.showSimpleAlert(parentFragment, LocaleController.getString("Slowmode", R.string.Slowmode), LocaleController.getString("SlowmodeSendError", R.string.SlowmodeSendError));
+                    AlertsCreator.showSimpleAlert(parentFragment, LocaleController.getString("Slowmode", works.heymate.beta.R.string.Slowmode), LocaleController.getString("SlowmodeSendError", works.heymate.beta.R.string.SlowmodeSendError));
                     return;
                 }
             }
@@ -5770,7 +5770,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (notifyButton != null) {
                 notifyVisible = canWriteToChannel;
                 if (notifySilentDrawable == null) {
-                    notifySilentDrawable = new CrossOutDrawable(getContext(), R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
+                    notifySilentDrawable = new CrossOutDrawable(getContext(), works.heymate.beta.R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
                 }
                 notifySilentDrawable.setCrossOut(silent, false);
                 notifyButton.setImageDrawable(notifySilentDrawable);
@@ -5846,15 +5846,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             if (botReplyMarkup != null) {
                 if (isPopupShowing() && currentPopupContentType == 1) {
-                    botButtonDrawablel.setIcon(R.drawable.input_keyboard, true);
-                    botButton.setContentDescription(LocaleController.getString("AccDescrShowKeyboard", R.string.AccDescrShowKeyboard));
+                    botButtonDrawablel.setIcon(works.heymate.beta.R.drawable.input_keyboard, true);
+                    botButton.setContentDescription(LocaleController.getString("AccDescrShowKeyboard", works.heymate.beta.R.string.AccDescrShowKeyboard));
                 } else {
-                    botButtonDrawablel.setIcon(R.drawable.input_bot2, true);
-                    botButton.setContentDescription(LocaleController.getString("AccDescrBotKeyboard", R.string.AccDescrBotKeyboard));
+                    botButtonDrawablel.setIcon(works.heymate.beta.R.drawable.input_bot2, true);
+                    botButton.setContentDescription(LocaleController.getString("AccDescrBotKeyboard", works.heymate.beta.R.string.AccDescrBotKeyboard));
                 }
             } else {
-                botButtonDrawablel.setIcon(R.drawable.input_bot1, true);
-                botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", R.string.AccDescrBotCommands));
+                botButtonDrawablel.setIcon(works.heymate.beta.R.drawable.input_bot1, true);
+                botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", works.heymate.beta.R.string.AccDescrBotCommands));
             }
         } else {
             botButton.setVisibility(GONE);
@@ -5971,9 +5971,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             return false;
         } else if (button instanceof TLRPC.TL_keyboardButtonRequestGeoLocation) {
             AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-            builder.setTitle(LocaleController.getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
-            builder.setMessage(LocaleController.getString("ShareYouLocationInfo", R.string.ShareYouLocationInfo));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            builder.setTitle(LocaleController.getString("ShareYouLocationTitle", works.heymate.beta.R.string.ShareYouLocationTitle));
+            builder.setMessage(LocaleController.getString("ShareYouLocationInfo", works.heymate.beta.R.string.ShareYouLocationInfo));
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                 if (Build.VERSION.SDK_INT >= 23 && parentActivity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     parentActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
                     pendingMessageObject = messageObject;
@@ -5982,7 +5982,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 SendMessagesHelper.getInstance(currentAccount).sendCurrentLocation(messageObject, button);
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             parentFragment.showDialog(builder.create());
         } else if (button instanceof TLRPC.TL_keyboardButtonCallback || button instanceof TLRPC.TL_keyboardButtonGame || button instanceof TLRPC.TL_keyboardButtonBuy || button instanceof TLRPC.TL_keyboardButtonUrlAuth) {
             SendMessagesHelper.getInstance(currentAccount).sendCallback(true, messageObject, button, parentFragment);
@@ -6202,10 +6202,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> emojiView.clearRecentEmoji());
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("ClearRecentEmoji", works.heymate.beta.R.string.ClearRecentEmoji));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> emojiView.clearRecentEmoji());
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 parentFragment.showDialog(builder.create());
             }
 
@@ -6690,13 +6690,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             emojiButtonAnimation = null;
         }
         if (nextIcon == 0) {
-            emojiButton[animated ? 1 : 0].setImageResource(R.drawable.input_keyboard);
+            emojiButton[animated ? 1 : 0].setImageResource(works.heymate.beta.R.drawable.input_keyboard);
         } else if (nextIcon == 1) {
-            emojiButton[animated ? 1 : 0].setImageResource(R.drawable.input_smile);
+            emojiButton[animated ? 1 : 0].setImageResource(works.heymate.beta.R.drawable.input_smile);
         } else if (nextIcon == 2) {
-            emojiButton[animated ? 1 : 0].setImageResource(R.drawable.input_sticker);
+            emojiButton[animated ? 1 : 0].setImageResource(works.heymate.beta.R.drawable.input_sticker);
         } else if (nextIcon == 3) {
-            emojiButton[animated ? 1 : 0].setImageResource(R.drawable.input_gif);
+            emojiButton[animated ? 1 : 0].setImageResource(works.heymate.beta.R.drawable.input_gif);
         }
         emojiButton[animated ? 1 : 0].setTag(nextIcon == 2 ? 1 : null);
         currentEmojiIcon = nextIcon;
@@ -7123,7 +7123,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         } else if (id == NotificationCenter.messagePlayingDidReset) {
             if (audioToSendMessageObject != null && !MediaController.getInstance().isPlayingMessage(audioToSendMessageObject)) {
                 playPauseDrawable.setIcon(MediaActionDrawable.ICON_PLAY, true);
-                recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", R.string.AccActionPlay));
+                recordedAudioPlayButton.setContentDescription(LocaleController.getString("AccActionPlay", works.heymate.beta.R.string.AccActionPlay));
                 recordedAudioSeekBar.setProgress(0);
             }
         } else if (id == NotificationCenter.messagePlayingProgressDidChanged) {
@@ -7362,9 +7362,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
         }
         if (expanded) {
-            expandStickersButton.setContentDescription(LocaleController.getString("AccDescrCollapsePanel", R.string.AccDescrCollapsePanel));
+            expandStickersButton.setContentDescription(LocaleController.getString("AccDescrCollapsePanel", works.heymate.beta.R.string.AccDescrCollapsePanel));
         } else {
-            expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", R.string.AccDescrExpandPanel));
+            expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", works.heymate.beta.R.string.AccDescrExpandPanel));
         }
     }
 
@@ -7541,10 +7541,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             arrowPaint.setStrokeCap(Paint.Cap.ROUND);
             arrowPaint.setStrokeJoin(Paint.Join.ROUND);
 
-            slideToCancelString = LocaleController.getString("SlideToCancel", R.string.SlideToCancel);
+            slideToCancelString = LocaleController.getString("SlideToCancel", works.heymate.beta.R.string.SlideToCancel);
             slideToCancelString = slideToCancelString.charAt(0) + slideToCancelString.substring(1).toLowerCase();
 
-            cancelString = LocaleController.getString("Cancel", R.string.Cancel).toUpperCase();
+            cancelString = LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase();
 
             cancelCharOffset = slideToCancelString.indexOf(cancelString);
 

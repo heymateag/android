@@ -99,7 +99,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
+import works.heymate.beta.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -116,7 +116,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
@@ -641,7 +641,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 ramainingStr = LocaleController.formatPluralString("Days", Math.round(remaining / (24 * 60 * 60.0f)));
             }
-            menuDeleteItem.setSubtext(LocaleController.formatString("AutoDeleteIn", R.string.AutoDeleteIn, ramainingStr));
+            menuDeleteItem.setSubtext(LocaleController.formatString("AutoDeleteIn", works.heymate.beta.R.string.AutoDeleteIn, ramainingStr));
             AndroidUtilities.runOnUIThread(updateDeleteItemRunnable, 1000);
         }
     };
@@ -1149,7 +1149,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             scheduledOrNoSoundHint.setShowingDuration(5000);
             scheduledOrNoSoundHint.setAlpha(0);
             scheduledOrNoSoundHint.setVisibility(View.INVISIBLE);
-            scheduledOrNoSoundHint.setText(LocaleController.getString("ScheduledOrNoSoundHint", R.string.ScheduledOrNoSoundHint));
+            scheduledOrNoSoundHint.setText(LocaleController.getString("ScheduledOrNoSoundHint", works.heymate.beta.R.string.ScheduledOrNoSoundHint));
             contentView.addView(scheduledOrNoSoundHint, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
         }
         scheduledOrNoSoundHint.showForView(chatActivityEnterView.getSendButton(), true);
@@ -1491,18 +1491,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 chatInviteRunnable = null;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", R.string.JoinByPeekChannelText));
-                    builder.setTitle(LocaleController.getString("JoinByPeekChannelTitle", R.string.JoinByPeekChannelTitle));
+                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", works.heymate.beta.R.string.JoinByPeekChannelText));
+                    builder.setTitle(LocaleController.getString("JoinByPeekChannelTitle", works.heymate.beta.R.string.JoinByPeekChannelTitle));
                 } else {
-                    builder.setMessage(LocaleController.getString("JoinByPeekGroupText", R.string.JoinByPeekGroupText));
-                    builder.setTitle(LocaleController.getString("JoinByPeekGroupTitle", R.string.JoinByPeekGroupTitle));
+                    builder.setMessage(LocaleController.getString("JoinByPeekGroupText", works.heymate.beta.R.string.JoinByPeekGroupText));
+                    builder.setTitle(LocaleController.getString("JoinByPeekGroupTitle", works.heymate.beta.R.string.JoinByPeekGroupTitle));
                 }
-                builder.setPositiveButton(LocaleController.getString("JoinByPeekJoin", R.string.JoinByPeekJoin), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("JoinByPeekJoin", works.heymate.beta.R.string.JoinByPeekJoin), (dialogInterface, i) -> {
                     if (bottomOverlayChatText != null) {
                         bottomOverlayChatText.callOnClick();
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialogInterface, i) -> finishFragment());
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialogInterface, i) -> finishFragment());
                 showDialog(builder.create());
             }, timeout * 1000);
         }
@@ -2011,15 +2011,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (reportType >= 0) {
             if (reportType == 0) {
-                actionBar.setTitle(LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam));
+                actionBar.setTitle(LocaleController.getString("ReportChatSpam", works.heymate.beta.R.string.ReportChatSpam));
             } else if (reportType == 2) {
-                actionBar.setTitle(LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence));
+                actionBar.setTitle(LocaleController.getString("ReportChatViolence", works.heymate.beta.R.string.ReportChatViolence));
             } else if (reportType == 3) {
-                actionBar.setTitle(LocaleController.getString("ReportChatChild", R.string.ReportChatChild));
+                actionBar.setTitle(LocaleController.getString("ReportChatChild", works.heymate.beta.R.string.ReportChatChild));
             } else if (reportType == 4) {
-                actionBar.setTitle(LocaleController.getString("ReportChatPornography", R.string.ReportChatPornography));
+                actionBar.setTitle(LocaleController.getString("ReportChatPornography", works.heymate.beta.R.string.ReportChatPornography));
             }
-            actionBar.setSubtitle(LocaleController.getString("ReportSelectMessages", R.string.ReportSelectMessages));
+            actionBar.setSubtitle(LocaleController.getString("ReportSelectMessages", works.heymate.beta.R.string.ReportSelectMessages));
         } else {
             actionBar.addView(avatarContainer, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, !inPreviewMode ? 56 : (chatMode == MODE_PINNED ? 10 : 0), 0, 40, 0));
         }
@@ -2027,7 +2027,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         ActionBarMenu menu = actionBar.createMenu();
 
         if (currentEncryptedChat == null && chatMode == 0 && reportType < 0) {
-            searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+            searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
 
                 boolean searchWas;
 
@@ -2054,7 +2054,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     mentionsAdapter.setSearchingMentions(false);
                     searchingUserMessages = null;
                     searchingChatMessages = null;
-                    searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+                    searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
                     searchItem.setSearchFieldCaption(null);
                     AndroidUtilities.updateViewVisibilityAnimated(avatarContainer, true, 0.95f, true);
                     if (editTextItem != null && editTextItem.getTag() != null) {
@@ -2132,7 +2132,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     showMessagesSearchListView(false);
                     if (searchingForUser) {
                         mentionsAdapter.searchUsernameOrHashtag("@" + editText.getText().toString(), 0, messages, true, true);
-                    } else if (searchingUserMessages == null && searchingChatMessages == null && searchUserButton != null && TextUtils.equals(editText.getText(), LocaleController.getString("SearchFrom", R.string.SearchFrom))) {
+                    } else if (searchingUserMessages == null && searchingChatMessages == null && searchUserButton != null && TextUtils.equals(editText.getText(), LocaleController.getString("SearchFrom", works.heymate.beta.R.string.SearchFrom))) {
                         searchUserButton.callOnClick();
                     }
                 }
@@ -2147,7 +2147,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             searchingForUser = false;
                             searchItem.setSearchFieldText("", true);
                         }
-                        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+                        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
                         searchCalendarButton.setVisibility(View.VISIBLE);
                         searchUserButton.setVisibility(View.VISIBLE);
                         searchingUserMessages = null;
@@ -2160,7 +2160,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return searchingForUser;
                 }
             });
-            searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+            searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
             if (threadMessageId == 0 && !UserObject.isReplyUser(currentUser) || threadMessageObject != null && threadMessageObject.getRepliesCount() == 0) {
                 searchItem.setVisibility(View.GONE);
             }
@@ -2168,12 +2168,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (chatMode == 0 && threadMessageId == 0 && !UserObject.isReplyUser(currentUser) && reportType < 0) {
-            headerItem = menu.addItem(0, R.drawable.ic_ab_other);
-            headerItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+            headerItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
+            headerItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
             if (currentUser != null) {
-                headerItem.addSubItem(call, R.drawable.msg_callback, LocaleController.getString("Call", R.string.Call));
+                headerItem.addSubItem(call, works.heymate.beta.R.drawable.msg_callback, LocaleController.getString("Call", works.heymate.beta.R.string.Call));
                 if (Build.VERSION.SDK_INT >= 18) {
-                    headerItem.addSubItem(video_call, R.drawable.msg_videocall, LocaleController.getString("VideoCall", R.string.VideoCall));
+                    headerItem.addSubItem(video_call, works.heymate.beta.R.drawable.msg_videocall, LocaleController.getString("VideoCall", works.heymate.beta.R.string.VideoCall));
                 }
                 TLRPC.UserFull userFull = getMessagesController().getUserFull(currentUser.id);
                 if (userFull != null && userFull.phone_calls_available) {
@@ -2189,76 +2189,76 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
 
-            editTextItem = menu.addItem(0, R.drawable.ic_ab_other);
-            editTextItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+            editTextItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
+            editTextItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
             editTextItem.setTag(null);
             editTextItem.setVisibility(View.GONE);
 
-            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
+            SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", works.heymate.beta.R.string.Bold));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             editTextItem.addSubItem(text_bold, stringBuilder);
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", works.heymate.beta.R.string.Italic));
             stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             editTextItem.addSubItem(text_italic, stringBuilder);
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", works.heymate.beta.R.string.Mono));
             stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             editTextItem.addSubItem(text_mono, stringBuilder);
             if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
-                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", works.heymate.beta.R.string.Strike));
                 TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
                 run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
                 stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editTextItem.addSubItem(text_strike, stringBuilder);
-                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
+                stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", works.heymate.beta.R.string.Underline));
                 run = new TextStyleSpan.TextStyleRun();
                 run.flags |= TextStyleSpan.FLAG_STYLE_UNDERLINE;
                 stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 editTextItem.addSubItem(text_underline, stringBuilder);
             }
-            editTextItem.addSubItem(text_link, LocaleController.getString("CreateLink", R.string.CreateLink));
-            editTextItem.addSubItem(text_regular, LocaleController.getString("Regular", R.string.Regular));
+            editTextItem.addSubItem(text_link, LocaleController.getString("CreateLink", works.heymate.beta.R.string.CreateLink));
+            editTextItem.addSubItem(text_regular, LocaleController.getString("Regular", works.heymate.beta.R.string.Regular));
 
             if (searchItem != null) {
-                headerItem.addSubItem(search, R.drawable.msg_search, LocaleController.getString("Search", R.string.Search));
+                headerItem.addSubItem(search, works.heymate.beta.R.drawable.msg_search, LocaleController.getString("Search", works.heymate.beta.R.string.Search));
             }
             if (currentChat != null && !currentChat.creator && !ChatObject.hasAdminRights(currentChat)) {
-                headerItem.addSubItem(report, R.drawable.msg_report, LocaleController.getString("ReportChat", R.string.ReportChat));
+                headerItem.addSubItem(report, works.heymate.beta.R.drawable.msg_report, LocaleController.getString("ReportChat", works.heymate.beta.R.string.ReportChat));
             }
             if (currentUser != null) {
-                addContactItem = headerItem.addSubItem(share_contact, R.drawable.msg_addcontact, "");
+                addContactItem = headerItem.addSubItem(share_contact, works.heymate.beta.R.drawable.msg_addcontact, "");
             }
             if (currentEncryptedChat != null) {
-                timeItem2 = headerItem.addSubItem(chat_enc_timer, R.drawable.msg_timer, LocaleController.getString("SetTimer", R.string.SetTimer));
+                timeItem2 = headerItem.addSubItem(chat_enc_timer, works.heymate.beta.R.drawable.msg_timer, LocaleController.getString("SetTimer", works.heymate.beta.R.string.SetTimer));
             }
             if (!ChatObject.isChannel(currentChat) || currentChat.megagroup && TextUtils.isEmpty(currentChat.username)) {
-                headerItem.addSubItem(clear_history, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory));
+                headerItem.addSubItem(clear_history, works.heymate.beta.R.drawable.msg_clear, LocaleController.getString("ClearHistory", works.heymate.beta.R.string.ClearHistory));
             } else if (ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
-                headerItem.addSubItem(auto_delete_timer, R.drawable.msg_timer, LocaleController.getString("AutoDeleteSetTimer", R.string.AutoDeleteSetTimer));
+                headerItem.addSubItem(auto_delete_timer, works.heymate.beta.R.drawable.msg_timer, LocaleController.getString("AutoDeleteSetTimer", works.heymate.beta.R.string.AutoDeleteSetTimer));
             }
             if (currentUser == null || !currentUser.self) {
-                muteItem = headerItem.addSubItem(mute, R.drawable.msg_mute, null);
+                muteItem = headerItem.addSubItem(mute, works.heymate.beta.R.drawable.msg_mute, null);
             }
             if (ChatObject.isChannel(currentChat) && !currentChat.creator) {
                 if (!ChatObject.isNotInChat(currentChat)) {
                     if (currentChat.megagroup) {
-                        headerItem.addSubItem(delete_chat, R.drawable.msg_leave, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu));
+                        headerItem.addSubItem(delete_chat, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("LeaveMegaMenu", works.heymate.beta.R.string.LeaveMegaMenu));
                     } else {
-                        headerItem.addSubItem(delete_chat, R.drawable.msg_leave, LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu));
+                        headerItem.addSubItem(delete_chat, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("LeaveChannelMenu", works.heymate.beta.R.string.LeaveChannelMenu));
                     }
                 }
             } else if (!ChatObject.isChannel(currentChat)) {
                 if (currentChat != null) {
-                    headerItem.addSubItem(delete_chat, R.drawable.msg_leave, LocaleController.getString("DeleteAndExit", R.string.DeleteAndExit));
+                    headerItem.addSubItem(delete_chat, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("DeleteAndExit", works.heymate.beta.R.string.DeleteAndExit));
                 } else {
-                    headerItem.addSubItem(delete_chat, R.drawable.msg_delete, LocaleController.getString("DeleteChatUser", R.string.DeleteChatUser));
+                    headerItem.addSubItem(delete_chat, works.heymate.beta.R.drawable.msg_delete, LocaleController.getString("DeleteChatUser", works.heymate.beta.R.string.DeleteChatUser));
                 }
             }
             if (currentUser != null && currentUser.self) {
-                headerItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString("AddShortcut", R.string.AddShortcut));
+                headerItem.addSubItem(add_shortcut, works.heymate.beta.R.drawable.msg_home, LocaleController.getString("AddShortcut", works.heymate.beta.R.string.AddShortcut));
             }
             if (currentUser != null && currentEncryptedChat == null && currentUser.bot) {
-                headerItem.addSubItem(bot_settings, R.drawable.menu_settings, LocaleController.getString("BotSettings", R.string.BotSettings));
-                headerItem.addSubItem(bot_help, R.drawable.menu_help, LocaleController.getString("BotHelp", R.string.BotHelp));
+                headerItem.addSubItem(bot_settings, works.heymate.beta.R.drawable.menu_settings, LocaleController.getString("BotSettings", works.heymate.beta.R.string.BotSettings));
+                headerItem.addSubItem(bot_help, works.heymate.beta.R.drawable.menu_help, LocaleController.getString("BotHelp", works.heymate.beta.R.string.BotHelp));
                 updateBotButtons();
             }
         }
@@ -2269,8 +2269,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         updateTitleIcons();
 
         if (chatMode == 0 && !isThreadChat() && reportType < 0) {
-            attachItem = menu.addItem(chat_menu_attach, R.drawable.ic_ab_other).setOverrideMenuClick(true).setAllowCloseAnimation(false);
-            attachItem.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
+            attachItem = menu.addItem(chat_menu_attach, works.heymate.beta.R.drawable.ic_ab_other).setOverrideMenuClick(true).setAllowCloseAnimation(false);
+            attachItem.setContentDescription(LocaleController.getString("AccDescrAttachButton", works.heymate.beta.R.string.AccDescrAttachButton));
             attachItem.setVisibility(View.GONE);
         }
 
@@ -2295,17 +2295,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
 
         if (currentEncryptedChat == null) {
-            actionModeViews.add(actionMode.addItemWithWidth(save_to, R.drawable.msg_download, AndroidUtilities.dp(54), LocaleController.getString("SaveToMusic", R.string.SaveToMusic)));
-            actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
-            actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.msg_fave, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
-            actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
-            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
-            actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+            actionModeViews.add(actionMode.addItemWithWidth(save_to, works.heymate.beta.R.drawable.msg_download, AndroidUtilities.dp(54), LocaleController.getString("SaveToMusic", works.heymate.beta.R.string.SaveToMusic)));
+            actionModeViews.add(actionMode.addItemWithWidth(edit, works.heymate.beta.R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", works.heymate.beta.R.string.Edit)));
+            actionModeViews.add(actionMode.addItemWithWidth(star, works.heymate.beta.R.drawable.msg_fave, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", works.heymate.beta.R.string.AddToFavorites)));
+            actionModeViews.add(actionMode.addItemWithWidth(copy, works.heymate.beta.R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)));
+            actionModeViews.add(actionMode.addItemWithWidth(forward, works.heymate.beta.R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", works.heymate.beta.R.string.Forward)));
+            actionModeViews.add(actionMode.addItemWithWidth(delete, works.heymate.beta.R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)));
         } else {
-            actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
-            actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.msg_fave, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
-            actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
-            actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
+            actionModeViews.add(actionMode.addItemWithWidth(edit, works.heymate.beta.R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", works.heymate.beta.R.string.Edit)));
+            actionModeViews.add(actionMode.addItemWithWidth(star, works.heymate.beta.R.drawable.msg_fave, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", works.heymate.beta.R.string.AddToFavorites)));
+            actionModeViews.add(actionMode.addItemWithWidth(copy, works.heymate.beta.R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)));
+            actionModeViews.add(actionMode.addItemWithWidth(delete, works.heymate.beta.R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)));
         }
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(copy).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
@@ -3103,22 +3103,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 bigEmptyView = new ChatBigEmptyView(context, currentChat != null ? ChatBigEmptyView.EMPTY_VIEW_TYPE_GROUP : ChatBigEmptyView.EMPTY_VIEW_TYPE_SAVED);
                 emptyViewContainer.addView(bigEmptyView, new FrameLayout.LayoutParams(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
                 if (currentChat != null) {
-                    bigEmptyView.setStatusText(AndroidUtilities.replaceTags(LocaleController.getString("GroupEmptyTitle1", R.string.GroupEmptyTitle1)));
+                    bigEmptyView.setStatusText(AndroidUtilities.replaceTags(LocaleController.getString("GroupEmptyTitle1", works.heymate.beta.R.string.GroupEmptyTitle1)));
                 }
             } else {
                 String emptyMessage = null;
                 if (isThreadChat()) {
                     if (isComments) {
-                        emptyMessage = LocaleController.getString("NoComments", R.string.NoComments);
+                        emptyMessage = LocaleController.getString("NoComments", works.heymate.beta.R.string.NoComments);
                     } else {
-                        emptyMessage = LocaleController.getString("NoReplies", R.string.NoReplies);
+                        emptyMessage = LocaleController.getString("NoReplies", works.heymate.beta.R.string.NoReplies);
                     }
                 } else if (chatMode == MODE_SCHEDULED) {
-                    emptyMessage = LocaleController.getString("NoScheduledMessages", R.string.NoScheduledMessages);
+                    emptyMessage = LocaleController.getString("NoScheduledMessages", works.heymate.beta.R.string.NoScheduledMessages);
                 } else if (currentUser != null && currentUser.id != 777000 && currentUser.id != 429000 && currentUser.id != 4244000 && MessagesController.isSupportUser(currentUser)) {
-                    emptyMessage = LocaleController.getString("GotAQuestion", R.string.GotAQuestion);
+                    emptyMessage = LocaleController.getString("GotAQuestion", works.heymate.beta.R.string.GotAQuestion);
                 } else if (currentUser == null || currentUser.self || currentUser.deleted || userBlocked) {
-                    emptyMessage = LocaleController.getString("NoMessages", R.string.NoMessages);
+                    emptyMessage = LocaleController.getString("NoMessages", works.heymate.beta.R.string.NoMessages);
                 }
                 if (emptyMessage == null) {
                     greetingsViewContainer = new ChatGreetingsView(context, currentUser, distance, currentAccount, preloadedGreetingsSticker);
@@ -3133,7 +3133,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     emptyView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     emptyView.setGravity(Gravity.CENTER);
                     emptyView.setTextColor(Theme.getColor(Theme.key_chat_serviceText));
-                    emptyView.setBackgroundResource(R.drawable.system);
+                    emptyView.setBackgroundResource(works.heymate.beta.R.drawable.system);
                     emptyView.getBackground().setColorFilter(Theme.colorFilter);
                     emptyView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                     emptyView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(2), AndroidUtilities.dp(10), AndroidUtilities.dp(3));
@@ -3143,9 +3143,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             bigEmptyView = new ChatBigEmptyView(context, ChatBigEmptyView.EMPTY_VIEW_TYPE_SECRET);
             if (currentEncryptedChat.admin_id == getUserConfig().getClientUserId()) {
-                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleOutgoing", R.string.EncryptedPlaceholderTitleOutgoing, UserObject.getFirstName(currentUser)));
+                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleOutgoing", works.heymate.beta.R.string.EncryptedPlaceholderTitleOutgoing, UserObject.getFirstName(currentUser)));
             } else {
-                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleIncoming", R.string.EncryptedPlaceholderTitleIncoming, UserObject.getFirstName(currentUser)));
+                bigEmptyView.setStatusText(LocaleController.formatString("EncryptedPlaceholderTitleIncoming", works.heymate.beta.R.string.EncryptedPlaceholderTitleIncoming, UserObject.getFirstName(currentUser)));
             }
             emptyViewContainer.addView(bigEmptyView, new FrameLayout.LayoutParams(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
         }
@@ -4612,7 +4612,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         contentView.addView(progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
         progressView2 = new View(context);
-        progressView2.setBackgroundResource(R.drawable.system_loader);
+        progressView2.setBackgroundResource(works.heymate.beta.R.drawable.system_loader);
         progressView2.getBackground().setColorFilter(Theme.colorFilter);
         progressView.addView(progressView2, LayoutHelper.createFrame(36, 36, Gravity.CENTER));
 
@@ -4753,7 +4753,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedMessageView.setTag(1);
             pinnedMessageEnterOffset = -AndroidUtilities.dp(50);
             pinnedMessageView.setVisibility(View.GONE);
-            pinnedMessageView.setBackgroundResource(R.drawable.blockpanel);
+            pinnedMessageView.setBackgroundResource(works.heymate.beta.R.drawable.blockpanel);
             pinnedMessageView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
             contentView.addView(pinnedMessageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.TOP | Gravity.LEFT));
             pinnedMessageView.setOnClickListener(v -> {
@@ -4843,10 +4843,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             pinnedListButton = new ImageView(context);
-            pinnedListButton.setImageResource(R.drawable.menu_pinnedlist);
+            pinnedListButton.setImageResource(works.heymate.beta.R.drawable.menu_pinnedlist);
             pinnedListButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.MULTIPLY));
             pinnedListButton.setScaleType(ImageView.ScaleType.CENTER);
-            pinnedListButton.setContentDescription(LocaleController.getString("AccPinnedMessagesList", R.string.AccPinnedMessagesList));
+            pinnedListButton.setContentDescription(LocaleController.getString("AccPinnedMessagesList", works.heymate.beta.R.string.AccPinnedMessagesList));
             pinnedListButton.setVisibility(View.INVISIBLE);
             pinnedListButton.setAlpha(0.0f);
             pinnedListButton.setScaleX(0.4f);
@@ -4858,10 +4858,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedListButton.setOnClickListener(v -> openPinnedMessagesList(false));
 
             closePinned = new ImageView(context);
-            closePinned.setImageResource(R.drawable.miniplayer_close);
+            closePinned.setImageResource(works.heymate.beta.R.drawable.miniplayer_close);
             closePinned.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose), PorterDuff.Mode.MULTIPLY));
             closePinned.setScaleType(ImageView.ScaleType.CENTER);
-            closePinned.setContentDescription(LocaleController.getString("Close", R.string.Close));
+            closePinned.setContentDescription(LocaleController.getString("Close", works.heymate.beta.R.string.Close));
 
             pinnedProgress = new RadialProgressView(context);
             pinnedProgress.setVisibility(View.GONE);
@@ -4895,16 +4895,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 if (allowPin) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("UnpinMessageAlertTitle", R.string.UnpinMessageAlertTitle));
-                    builder.setMessage(LocaleController.getString("UnpinMessageAlert", R.string.UnpinMessageAlert));
-                    builder.setPositiveButton(LocaleController.getString("UnpinMessage", R.string.UnpinMessage), (dialogInterface, i) -> {
+                    builder.setTitle(LocaleController.getString("UnpinMessageAlertTitle", works.heymate.beta.R.string.UnpinMessageAlertTitle));
+                    builder.setMessage(LocaleController.getString("UnpinMessageAlert", works.heymate.beta.R.string.UnpinMessageAlert));
+                    builder.setPositiveButton(LocaleController.getString("UnpinMessage", works.heymate.beta.R.string.UnpinMessage), (dialogInterface, i) -> {
                         MessageObject messageObject = pinnedMessageObjects.get(currentPinnedMessageId);
                         if (messageObject == null) {
                             messageObject = messagesDict[0].get(currentPinnedMessageId);
                         }
                         unpinMessage(messageObject);
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     showDialog(builder.create());
                 } else if (!pinnedMessageIds.isEmpty()) {
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
@@ -4964,7 +4964,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         topChatPanelViewOffset = -AndroidUtilities.dp(50);
         invalidateChatListViewTopPadding();
         topChatPanelView.setVisibility(View.GONE);
-        topChatPanelView.setBackgroundResource(R.drawable.blockpanel);
+        topChatPanelView.setBackgroundResource(works.heymate.beta.R.drawable.blockpanel);
         topChatPanelView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
         contentView.addView(topChatPanelView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.TOP | Gravity.LEFT));
 
@@ -4980,7 +4980,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         reportSpamButton.setMaxLines(1);
         reportSpamButton.setGravity(Gravity.CENTER);
         topChatPanelView.addView(reportSpamButton, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 1));
-        reportSpamButton.setOnClickListener(v2 -> AlertsCreator.showBlockReportSpamAlert(ChatActivity.this, dialog_id, currentUser, currentChat, currentEncryptedChat, reportSpamButton.getTag(R.id.object_tag) != null, chatInfo, param -> {
+        reportSpamButton.setOnClickListener(v2 -> AlertsCreator.showBlockReportSpamAlert(ChatActivity.this, dialog_id, currentUser, currentChat, currentEncryptedChat, reportSpamButton.getTag(works.heymate.beta.R.id.object_tag) != null, chatInfo, param -> {
             if (param == 0) {
                 updateTopPanel(true);
             } else {
@@ -5045,8 +5045,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         });
 
         closeReportSpam = new ImageView(context);
-        closeReportSpam.setImageResource(R.drawable.miniplayer_close);
-        closeReportSpam.setContentDescription(LocaleController.getString("Close", R.string.Close));
+        closeReportSpam.setImageResource(works.heymate.beta.R.drawable.miniplayer_close);
+        closeReportSpam.setContentDescription(LocaleController.getString("Close", works.heymate.beta.R.string.Close));
         if (Build.VERSION.SDK_INT >= 21) {
             closeReportSpam.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_chat_topPanelClose) & 0x19ffffff));
         }
@@ -5066,7 +5066,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         alertView = new FrameLayout(context);
         alertView.setTag(1);
         alertView.setVisibility(View.GONE);
-        alertView.setBackgroundResource(R.drawable.blockpanel);
+        alertView.setBackgroundResource(works.heymate.beta.R.drawable.blockpanel);
         alertView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
         contentView.addView(alertView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.TOP | Gravity.LEFT));
 
@@ -5455,9 +5455,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                             if (!preferences.getBoolean("secretbot", false)) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setMessage(LocaleController.getString("SecretChatContextBotAlert", R.string.SecretChatContextBotAlert));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                                builder.setMessage(LocaleController.getString("SecretChatContextBotAlert", works.heymate.beta.R.string.SecretChatContextBotAlert));
+                                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                                 showDialog(builder.create());
                                 preferences.edit().putBoolean("secretbot", true).commit();
                             }
@@ -5625,13 +5625,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     if (error != 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("SendMessageTitle", R.string.SendMessageTitle));
+                        builder.setTitle(LocaleController.getString("SendMessageTitle", works.heymate.beta.R.string.SendMessageTitle));
                         if (error == 1) {
-                            builder.setMessage(LocaleController.getString("GameCantSendSecretChat", R.string.GameCantSendSecretChat));
+                            builder.setMessage(LocaleController.getString("GameCantSendSecretChat", works.heymate.beta.R.string.GameCantSendSecretChat));
                         } else {
-                            builder.setMessage(LocaleController.getString("InvoiceCantSendSecretChat", R.string.InvoiceCantSendSecretChat));
+                            builder.setMessage(LocaleController.getString("InvoiceCantSendSecretChat", works.heymate.beta.R.string.InvoiceCantSendSecretChat));
                         }
-                        builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setNegativeButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                         showDialog(builder.create());
                         return;
                     }
@@ -5673,10 +5673,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return false;
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                    builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> mentionsAdapter.clearRecentHashtags());
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setMessage(LocaleController.getString("ClearSearch", works.heymate.beta.R.string.ClearSearch));
+                    builder.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> mentionsAdapter.clearRecentHashtags());
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     showDialog(builder.create());
                     return true;
                 }
@@ -5708,7 +5708,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         });
 
         pagedownButtonImage = new ImageView(context);
-        pagedownButtonImage.setImageResource(R.drawable.pagedown);
+        pagedownButtonImage.setImageResource(works.heymate.beta.R.drawable.pagedown);
         pagedownButtonImage.setScaleType(ImageView.ScaleType.CENTER);
         pagedownButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonIcon), PorterDuff.Mode.MULTIPLY));
         pagedownButtonImage.setPadding(0, AndroidUtilities.dp(2), 0, 0);
@@ -5724,7 +5724,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             drawable = Theme.createCircleDrawable(AndroidUtilities.dp(42), Theme.getColor(Theme.key_chat_goDownButton));
         }
-        Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.pagedown_shadow).mutate();
+        Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.pagedown_shadow).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonShadow), PorterDuff.Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
         combinedDrawable.setIconSize(AndroidUtilities.dp(42), AndroidUtilities.dp(42));
@@ -5732,14 +5732,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         pagedownButtonImage.setBackgroundDrawable(drawable);
 
         pagedownButton.addView(pagedownButtonImage, LayoutHelper.createFrame(46, 46, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));
-        pagedownButton.setContentDescription(LocaleController.getString("AccDescrPageDown", R.string.AccDescrPageDown));
+        pagedownButton.setContentDescription(LocaleController.getString("AccDescrPageDown", works.heymate.beta.R.string.AccDescrPageDown));
 
         pagedownButtonCounter = new CounterView(context);
         pagedownButtonCounter.setReverse(true);
         pagedownButton.addView(pagedownButtonCounter, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 28, Gravity.TOP | Gravity.LEFT));
 
         mentiondownButtonImage = new ImageView(context);
-        mentiondownButtonImage.setImageResource(R.drawable.mentionbutton);
+        mentiondownButtonImage.setImageResource(works.heymate.beta.R.drawable.mentionbutton);
         mentiondownButtonImage.setScaleType(ImageView.ScaleType.CENTER);
         mentiondownButtonImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonIcon), PorterDuff.Mode.MULTIPLY));
         mentiondownButtonImage.setPadding(0, AndroidUtilities.dp(2), 0, 0);
@@ -5754,7 +5754,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             drawable = Theme.createCircleDrawable(AndroidUtilities.dp(42), Theme.getColor(Theme.key_chat_goDownButton));
         }
-        shadowDrawable = context.getResources().getDrawable(R.drawable.pagedown_shadow).mutate();
+        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.pagedown_shadow).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_goDownButtonShadow), PorterDuff.Mode.MULTIPLY));
         combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
         combinedDrawable.setIconSize(AndroidUtilities.dp(42), AndroidUtilities.dp(42));
@@ -5773,7 +5773,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         mentiondownButtonCounter.setMinWidth(AndroidUtilities.dp(23));
         mentiondownButtonCounter.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(1), AndroidUtilities.dp(8), 0);
         mentiondownButton.addView(mentiondownButtonCounter, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 23, Gravity.TOP | Gravity.CENTER_HORIZONTAL));
-        mentiondownButton.setContentDescription(LocaleController.getString("AccDescrMentionDown", R.string.AccDescrMentionDown));
+        mentiondownButton.setContentDescription(LocaleController.getString("AccDescrMentionDown", works.heymate.beta.R.string.AccDescrMentionDown));
 
         contentView.addView(fragmentLocationContextView = new FragmentContextView(context, this, true), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.TOP | Gravity.LEFT, 0, -36, 0, 0));
         contentView.addView(fragmentContextView = new FragmentContextView(context, this, false) {
@@ -6481,7 +6481,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         replyCloseImageView = new ImageView(context);
         replyCloseImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_replyPanelClose), PorterDuff.Mode.MULTIPLY));
-        replyCloseImageView.setImageResource(R.drawable.input_clear);
+        replyCloseImageView.setImageResource(works.heymate.beta.R.drawable.input_clear);
         replyCloseImageView.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             replyCloseImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_inappPlayerClose) & 0x19ffffff, 1, AndroidUtilities.dp(18)));
@@ -6493,15 +6493,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setButtonsVertical(true);
-                builder.setTitle(LocaleController.getString("CancelForward", R.string.CancelForward));
-                builder.setMessage(LocaleController.getString("CancelForwardMessage", R.string.CancelForwardMessage));
-                builder.setPositiveButton(LocaleController.getString("CancelForwarding", R.string.CancelForwarding), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("CancelForward", works.heymate.beta.R.string.CancelForward));
+                builder.setMessage(LocaleController.getString("CancelForwardMessage", works.heymate.beta.R.string.CancelForwardMessage));
+                builder.setPositiveButton(LocaleController.getString("CancelForwarding", works.heymate.beta.R.string.CancelForwarding), (dialogInterface, i) -> {
                     if (forwardingMessages != null) {
                         forwardingMessages.clear();
                     }
                     showFieldPanel(false, null, null, null, foundWebPage, true, 0, true, true);
                 });
-                builder.setNegativeButton(LocaleController.getString("SelectOtherChat", R.string.SelectOtherChat), (dialogInterface, i) -> {
+                builder.setNegativeButton(LocaleController.getString("SelectOtherChat", works.heymate.beta.R.string.SelectOtherChat), (dialogInterface, i) -> {
                     if (forwardingMessages != null && !forwardingMessages.isEmpty()) {
                         int hasPoll = 0;
                         boolean hasInvoice = false;
@@ -6586,7 +6586,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             final ImageView imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setImageResource(firstButton ? R.drawable.msg_photoeditor : R.drawable.msg_replace);
+            imageView.setImageResource(firstButton ? works.heymate.beta.R.drawable.msg_photoeditor : works.heymate.beta.R.drawable.msg_replace);
             button.addImageView(imageView, LayoutHelper.createLinear(24, LayoutHelper.MATCH_PARENT));
 
             button.addView(new Space(context), LayoutHelper.createLinear(10, LayoutHelper.MATCH_PARENT));
@@ -6672,7 +6672,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         initStickers();
 
         stickersPanelArrow = new ImageView(context);
-        stickersPanelArrow.setImageResource(R.drawable.stickers_back_arrow);
+        stickersPanelArrow.setImageResource(works.heymate.beta.R.drawable.stickers_back_arrow);
         stickersPanelArrow.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_stickersHintPanel), PorterDuff.Mode.MULTIPLY));
         stickersPanel.addView(stickersPanelArrow, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 53, 0, 53, 0));
 
@@ -6728,7 +6728,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         searchUpButton = new ImageView(context);
         searchUpButton.setScaleType(ImageView.ScaleType.CENTER);
-        searchUpButton.setImageResource(R.drawable.msg_go_up);
+        searchUpButton.setImageResource(works.heymate.beta.R.drawable.msg_go_up);
         searchUpButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.MULTIPLY));
         searchUpButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchContainer.addView(searchUpButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 48, 0));
@@ -6741,11 +6741,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 SharedConfig.increaseSearchAsListHintShows();
             }
         });
-        searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", R.string.AccDescrSearchNext));
+        searchUpButton.setContentDescription(LocaleController.getString("AccDescrSearchNext", works.heymate.beta.R.string.AccDescrSearchNext));
 
         searchDownButton = new ImageView(context);
         searchDownButton.setScaleType(ImageView.ScaleType.CENTER);
-        searchDownButton.setImageResource(R.drawable.msg_go_down);
+        searchDownButton.setImageResource(works.heymate.beta.R.drawable.msg_go_down);
         searchDownButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.MULTIPLY));
         searchDownButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchContainer.addView(searchDownButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 0, 0, 0));
@@ -6753,12 +6753,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             getMediaDataController().searchMessagesInChat(null, dialog_id, mergeDialogId, classGuid, 2, threadMessageId, searchingUserMessages, searchingChatMessages);
             showMessagesSearchListView(false);
         });
-        searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", R.string.AccDescrSearchPrev));
+        searchDownButton.setContentDescription(LocaleController.getString("AccDescrSearchPrev", works.heymate.beta.R.string.AccDescrSearchPrev));
 
         if (currentChat != null && (!ChatObject.isChannel(currentChat) || currentChat.megagroup)) {
             searchUserButton = new ImageView(context);
             searchUserButton.setScaleType(ImageView.ScaleType.CENTER);
-            searchUserButton.setImageResource(R.drawable.msg_usersearch);
+            searchUserButton.setImageResource(works.heymate.beta.R.drawable.msg_usersearch);
             searchUserButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.MULTIPLY));
             searchUserButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
             searchContainer.addView(searchUserButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP, 48, 0, 0, 0));
@@ -6770,17 +6770,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 searchingForUser = true;
                 searchingUserMessages = null;
                 searchingChatMessages = null;
-                searchItem.setSearchFieldHint(LocaleController.getString("SearchMembers", R.string.SearchMembers));
-                searchItem.setSearchFieldCaption(LocaleController.getString("SearchFrom", R.string.SearchFrom));
+                searchItem.setSearchFieldHint(LocaleController.getString("SearchMembers", works.heymate.beta.R.string.SearchMembers));
+                searchItem.setSearchFieldCaption(LocaleController.getString("SearchFrom", works.heymate.beta.R.string.SearchFrom));
                 AndroidUtilities.showKeyboard(searchItem.getSearchField());
                 searchItem.clearSearchText();
             });
-            searchUserButton.setContentDescription(LocaleController.getString("AccDescrSearchByUser", R.string.AccDescrSearchByUser));
+            searchUserButton.setContentDescription(LocaleController.getString("AccDescrSearchByUser", works.heymate.beta.R.string.AccDescrSearchByUser));
         }
 
         searchCalendarButton = new ImageView(context);
         searchCalendarButton.setScaleType(ImageView.ScaleType.CENTER);
-        searchCalendarButton.setImageResource(R.drawable.msg_calendar);
+        searchCalendarButton.setImageResource(works.heymate.beta.R.drawable.msg_calendar);
         searchCalendarButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_searchPanelIcons), PorterDuff.Mode.MULTIPLY));
         searchCalendarButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
         searchContainer.addView(searchCalendarButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
@@ -6791,7 +6791,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             AndroidUtilities.hideKeyboard(searchItem.getSearchField());
             showDialog(AlertsCreator.createCalendarPickerDialog(getParentActivity(), 1375315200000L, this::jumpToDate).create());
         });
-        searchCalendarButton.setContentDescription(LocaleController.getString("JumpToDate", R.string.JumpToDate));
+        searchCalendarButton.setContentDescription(LocaleController.getString("JumpToDate", works.heymate.beta.R.string.JumpToDate));
 
         searchCountText = new SearchCounterView(context);
 //        searchCountText.setTextColor(Theme.getColor(Theme.key_chat_searchPanelText));
@@ -6884,10 +6884,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", R.string.AreYouSureUnblockContact));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> getMessagesController().unblockPeer(currentUser.id));
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setMessage(LocaleController.getString("AreYouSureUnblockContact", works.heymate.beta.R.string.AreYouSureUnblockContact));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> getMessagesController().unblockPeer(currentUser.id));
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     showDialog(builder.create());
                 }
             } else if (UserObject.isReplyUser(currentUser)) {
@@ -6911,7 +6911,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         getMessagesController().addUserToChat(currentChat.id, getUserConfig().getCurrentUser(), 0, null, ChatActivity.this, null);
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeSearchByActiveAction);
 
-                        if (hasReportSpam() && reportSpamButton.getTag(R.id.object_tag) != null) {
+                        if (hasReportSpam() && reportSpamButton.getTag(works.heymate.beta.R.id.object_tag) != null) {
                             SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                             preferences.edit().putInt("dialog_bar_vis3" + dialog_id, 3).commit();
                             getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialog_id);
@@ -6941,18 +6941,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         bottomOverlayImage = new ImageView(context);
         int color = Theme.getColor(Theme.key_chat_fieldOverlayText);
-        bottomOverlayImage.setImageResource(R.drawable.log_info);
+        bottomOverlayImage.setImageResource(works.heymate.beta.R.drawable.log_info);
         bottomOverlayImage.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
         bottomOverlayImage.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             bottomOverlayImage.setBackgroundDrawable(Theme.createSelectorDrawable(Color.argb(24, Color.red(color), Color.green(color), Color.blue(color)), 1));
         }
         bottomOverlayChat.addView(bottomOverlayImage, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 3, 1.5f, 0, 0));
-        bottomOverlayImage.setContentDescription(LocaleController.getString("SettingsHelp", R.string.SettingsHelp));
-        bottomOverlayImage.setOnClickListener(v -> undoView.showWithAction(dialog_id, UndoView.ACTION_TEXT_INFO, LocaleController.getString("BroadcastGroupInfo", R.string.BroadcastGroupInfo)));
+        bottomOverlayImage.setContentDescription(LocaleController.getString("SettingsHelp", works.heymate.beta.R.string.SettingsHelp));
+        bottomOverlayImage.setOnClickListener(v -> undoView.showWithAction(dialog_id, UndoView.ACTION_TEXT_INFO, LocaleController.getString("BroadcastGroupInfo", works.heymate.beta.R.string.BroadcastGroupInfo)));
 
         replyButton = new TextView(context);
-        replyButton.setText(LocaleController.getString("Reply", R.string.Reply));
+        replyButton.setText(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
         replyButton.setGravity(Gravity.CENTER_VERTICAL);
         replyButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         replyButton.setPadding(AndroidUtilities.dp(14), 0, AndroidUtilities.dp(21), 0);
@@ -6960,7 +6960,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         replyButton.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         replyButton.setCompoundDrawablePadding(AndroidUtilities.dp(7));
         replyButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        Drawable image = context.getResources().getDrawable(R.drawable.input_reply).mutate();
+        Drawable image = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_reply).mutate();
         image.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon), PorterDuff.Mode.MULTIPLY));
         replyButton.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         replyButton.setOnClickListener(v -> {
@@ -6983,7 +6983,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         bottomMessagesActionContainer.addView(replyButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
 
         forwardButton = new TextView(context);
-        forwardButton.setText(LocaleController.getString("Forward", R.string.Forward));
+        forwardButton.setText(LocaleController.getString("Forward", works.heymate.beta.R.string.Forward));
         forwardButton.setGravity(Gravity.CENTER_VERTICAL);
         forwardButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         forwardButton.setPadding(AndroidUtilities.dp(21), 0, AndroidUtilities.dp(21), 0);
@@ -6991,7 +6991,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         forwardButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 3));
         forwardButton.setTextColor(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon));
         forwardButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        image = context.getResources().getDrawable(R.drawable.input_forward).mutate();
+        image = context.getResources().getDrawable(works.heymate.beta.R.drawable.input_forward).mutate();
         image.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarActionModeDefaultIcon), PorterDuff.Mode.MULTIPLY));
         forwardButton.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         forwardButton.setOnClickListener(v -> openForward());
@@ -7229,7 +7229,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             name = name.substring(0, 10);
         }
         searchingForUser = false;
-        String from = LocaleController.getString("SearchFrom", R.string.SearchFrom);
+        String from = LocaleController.getString("SearchFrom", works.heymate.beta.R.string.SearchFrom);
         Spannable spannable = new SpannableString(from + " " + name);
         spannable.setSpan(new ForegroundColorSpan(Theme.getColor(Theme.key_actionBarDefaultSubtitle)), from.length() + 1, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         searchItem.setSearchFieldCaption(spannable);
@@ -7251,7 +7251,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         CharSequence text = null;
         View.OnClickListener onClickListener = null;
         if (distanceToPeer >= 0 && currentUser != null) {
-            text = LocaleController.formatString("ChatDistanceToPeer", R.string.ChatDistanceToPeer, currentUser.first_name, LocaleController.formatDistance(distanceToPeer, 0));
+            text = LocaleController.formatString("ChatDistanceToPeer", works.heymate.beta.R.string.ChatDistanceToPeer, currentUser.first_name, LocaleController.formatDistance(distanceToPeer, 0));
             onClickListener = v -> presentFragment(new PeopleNearbyActivity());
         } else if (currentChat != null && chatInviterId != 0) {
             boolean show = preferences.getInt("dialog_bar_vis3" + dialog_id, 0) == 2;
@@ -7260,7 +7260,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (show && (showReport || showBlock)) {
                 TLRPC.User user = getMessagesController().getUser(chatInviterId);
                 if (user != null) {
-                    text = ChatObject.isChannel(currentChat) && !currentChat.megagroup ? LocaleController.getString("ActionUserInvitedToChannel", R.string.ActionUserInvitedToChannel) : LocaleController.getString("ActionUserInvitedToGroup", R.string.ActionUserInvitedToGroup);
+                    text = ChatObject.isChannel(currentChat) && !currentChat.megagroup ? LocaleController.getString("ActionUserInvitedToChannel", works.heymate.beta.R.string.ActionUserInvitedToChannel) : LocaleController.getString("ActionUserInvitedToGroup", works.heymate.beta.R.string.ActionUserInvitedToGroup);
                     text = MessageObject.replaceWithLink(text, "un1", user);
                     onClickListener = (v) -> {
                         Bundle args = new Bundle();
@@ -7684,7 +7684,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(R.id.parent_tag);
+                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(works.heymate.beta.R.id.parent_tag);
                         if (imageReceiver != null) {
                             int[] rad = imageReceiver.getRoundRadius();
                             int maxRad = 0;
@@ -7707,7 +7707,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
                         super.onSizeChanged(w, h, oldw, oldh);
                         aspectPath.reset();
-                        ImageReceiver imageReceiver = (ImageReceiver) getTag(R.id.parent_tag);
+                        ImageReceiver imageReceiver = (ImageReceiver) getTag(works.heymate.beta.R.id.parent_tag);
                         if (imageReceiver != null) {
                             int[] rad = imageReceiver.getRoundRadius();
                             int maxRad = 0;
@@ -8415,17 +8415,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public void shareMyContact(int type, MessageObject messageObject) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("ShareYouPhoneNumberTitle", R.string.ShareYouPhoneNumberTitle));
+        builder.setTitle(LocaleController.getString("ShareYouPhoneNumberTitle", works.heymate.beta.R.string.ShareYouPhoneNumberTitle));
         if (currentUser != null) {
             if (currentUser.bot) {
-                builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", R.string.AreYouSureShareMyContactInfoBot));
+                builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfoBot", works.heymate.beta.R.string.AreYouSureShareMyContactInfoBot));
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + getUserConfig().getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", works.heymate.beta.R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + getUserConfig().getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
             }
         } else {
-            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfo", R.string.AreYouSureShareMyContactInfo));
+            builder.setMessage(LocaleController.getString("AreYouSureShareMyContactInfo", works.heymate.beta.R.string.AreYouSureShareMyContactInfo));
         }
-        builder.setPositiveButton(LocaleController.getString("ShareContact", R.string.ShareContact), (dialogInterface, i) -> {
+        builder.setPositiveButton(LocaleController.getString("ShareContact", works.heymate.beta.R.string.ShareContact), (dialogInterface, i) -> {
             if (type == 1) {
                 TLRPC.TL_contacts_acceptContact req = new TLRPC.TL_contacts_acceptContact();
                 req.id = getMessagesController().getInputUser(currentUser);
@@ -8443,7 +8443,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 hideFieldPanel(false);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
         showDialog(builder.create());
     }
 
@@ -8466,9 +8466,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (chatActivityEnterView.hasRecordVideo()) {
-            voiceHintTextView.setText(video ? LocaleController.getString("HoldToVideo", R.string.HoldToVideo) : LocaleController.getString("HoldToAudio", R.string.HoldToAudio));
+            voiceHintTextView.setText(video ? LocaleController.getString("HoldToVideo", works.heymate.beta.R.string.HoldToVideo) : LocaleController.getString("HoldToAudio", works.heymate.beta.R.string.HoldToAudio));
         } else {
-            voiceHintTextView.setText(LocaleController.getString("HoldToAudioOnly", R.string.HoldToAudioOnly));
+            voiceHintTextView.setText(LocaleController.getString("HoldToAudioOnly", works.heymate.beta.R.string.HoldToAudioOnly));
         }
 
         voiceHintTextView.showForView(chatActivityEnterView.getAudioVideoButtonContainer(), true);
@@ -8516,7 +8516,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (getParentActivity() == null || fragmentView == null || !show && (slowModeHint == null || slowModeHint.getVisibility() != View.VISIBLE)) {
             return;
         }
-        slowModeHint.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SlowModeHint", R.string.SlowModeHint, time)));
+        slowModeHint.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SlowModeHint", works.heymate.beta.R.string.SlowModeHint, time)));
         if (show) {
             slowModeHint.showForView(view, true);
         }
@@ -8543,7 +8543,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             time = LocaleController.formatPluralString("Seconds", chatInfo.ttl_period);
         }
-        timerHintView.setText(LocaleController.formatString("AutoDeleteSetInfo", R.string.AutoDeleteSetInfo, time));
+        timerHintView.setText(LocaleController.formatString("AutoDeleteSetInfo", works.heymate.beta.R.string.AutoDeleteSetInfo, time));
         timerHintView.showForView(avatarContainer.getTimeItem(), true);
     }
 
@@ -8555,7 +8555,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             searchAsListHint = new HintView(getParentActivity(), HintView.TYPE_SEARCH_AS_LIST);
             searchAsListHint.setAlpha(0.0f);
             searchAsListHint.setVisibility(View.INVISIBLE);
-            searchAsListHint.setText(LocaleController.getString("TapToViewAsList", R.string.TapToViewAsList));
+            searchAsListHint.setText(LocaleController.getString("TapToViewAsList", works.heymate.beta.R.string.TapToViewAsList));
             contentView.addView(searchAsListHint, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 19, 0, 19, 0));
         }
         searchAsListHint.showForView(searchCountText, true);
@@ -8592,15 +8592,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (ChatObject.isActionBannedByDefault(currentChat, ChatObject.ACTION_SEND_MEDIA)) {
-            mediaBanTooltip.setText(LocaleController.getString("GlobalAttachMediaRestricted", R.string.GlobalAttachMediaRestricted));
+            mediaBanTooltip.setText(LocaleController.getString("GlobalAttachMediaRestricted", works.heymate.beta.R.string.GlobalAttachMediaRestricted));
         } else {
             if (currentChat.banned_rights == null) {
                 return;
             }
             if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
-                mediaBanTooltip.setText(LocaleController.getString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever));
+                mediaBanTooltip.setText(LocaleController.getString("AttachMediaRestrictedForever", works.heymate.beta.R.string.AttachMediaRestrictedForever));
             } else {
-                mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
+                mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", works.heymate.beta.R.string.AttachMediaRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
             }
         }
 
@@ -8813,7 +8813,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         chatActivityEnterView.setOpenGifsTabFirst();
         emojiButtonRed = new View(getParentActivity());
-        emojiButtonRed.setBackgroundResource(R.drawable.redcircle);
+        emojiButtonRed.setBackgroundResource(works.heymate.beta.R.drawable.redcircle);
         frameLayout.addView(emojiButtonRed, index + 1, LayoutHelper.createFrame(10, 10, Gravity.BOTTOM | Gravity.LEFT, 30, 0, 0, 27));
 
         gifHintTextView = new TextView(getParentActivity());
@@ -8821,7 +8821,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         gifHintTextView.setTextColor(Theme.getColor(Theme.key_chat_gifSaveHintText));
         gifHintTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         gifHintTextView.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(7), AndroidUtilities.dp(8), AndroidUtilities.dp(7));
-        gifHintTextView.setText(LocaleController.getString("TapHereGifs", R.string.TapHereGifs));
+        gifHintTextView.setText(LocaleController.getString("TapHereGifs", works.heymate.beta.R.string.TapHereGifs));
         gifHintTextView.setGravity(Gravity.CENTER_VERTICAL);
         frameLayout.addView(gifHintTextView, index + 1, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM, 5, 0, 5, 3));
 
@@ -9460,15 +9460,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentEncryptedChat != null && messagesController.secretWebpagePreview == 2) {
                 AndroidUtilities.runOnUIThread(() -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> {
                         messagesController.secretWebpagePreview = 1;
                         MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", getMessagesController().secretWebpagePreview).commit();
                         foundUrls = null;
                         searchLinks(charSequence, force);
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    builder.setMessage(LocaleController.getString("SecretLinkPreviewAlert", R.string.SecretLinkPreviewAlert));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setMessage(LocaleController.getString("SecretLinkPreviewAlert", works.heymate.beta.R.string.SecretLinkPreviewAlert));
                     showDialog(builder.create());
 
                     messagesController.secretWebpagePreview = 0;
@@ -9627,38 +9627,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     String editButtonText = null;
                     String replaceButtonText;
                     if (messageObjectToEdit.isPhoto()) {
-                        editButtonText = LocaleController.getString("EditMessageEditPhoto", R.string.EditMessageEditPhoto);
-                        replaceButtonText = LocaleController.getString("EditMessageReplacePhoto", R.string.EditMessageReplacePhoto);
+                        editButtonText = LocaleController.getString("EditMessageEditPhoto", works.heymate.beta.R.string.EditMessageEditPhoto);
+                        replaceButtonText = LocaleController.getString("EditMessageReplacePhoto", works.heymate.beta.R.string.EditMessageReplacePhoto);
                     } else if (messageObjectToEdit.isVideo()) {
-                        editButtonText = LocaleController.getString("EditMessageEditVideo", R.string.EditMessageEditVideo);
-                        replaceButtonText = LocaleController.getString("EditMessageReplaceVideo", R.string.EditMessageReplaceVideo);
+                        editButtonText = LocaleController.getString("EditMessageEditVideo", works.heymate.beta.R.string.EditMessageEditVideo);
+                        replaceButtonText = LocaleController.getString("EditMessageReplaceVideo", works.heymate.beta.R.string.EditMessageReplaceVideo);
                     } else if (messageObjectToEdit.isGif()) {
-                        replaceButtonText = LocaleController.getString("EditMessageReplaceGif", R.string.EditMessageReplaceGif);
+                        replaceButtonText = LocaleController.getString("EditMessageReplaceGif", works.heymate.beta.R.string.EditMessageReplaceGif);
                     } else if (messageObjectToEdit.isMusic()) {
-                        replaceButtonText = LocaleController.getString("EditMessageReplaceAudio", R.string.EditMessageReplaceAudio);
+                        replaceButtonText = LocaleController.getString("EditMessageReplaceAudio", works.heymate.beta.R.string.EditMessageReplaceAudio);
                     } else {
-                        replaceButtonText = LocaleController.getString("EditMessageReplaceFile", R.string.EditMessageReplaceFile);
+                        replaceButtonText = LocaleController.getString("EditMessageReplaceFile", works.heymate.beta.R.string.EditMessageReplaceFile);
                     }
                     final ChatActivityEnterTopView.EditViewButton[] buttons = chatActivityEnterTopView.getEditView().getButtons();
                     buttons[0].setEditButton(editButtonText != null);
                     buttons[0].getTextView().setText(editButtonText != null ? editButtonText : replaceButtonText);
-                    buttons[0].getImageView().setImageResource(editButtonText != null ? R.drawable.msg_photoeditor : R.drawable.msg_replace);
+                    buttons[0].getImageView().setImageResource(editButtonText != null ? works.heymate.beta.R.drawable.msg_photoeditor : works.heymate.beta.R.drawable.msg_replace);
                     buttons[1].setVisibility(editButtonText != null ? View.VISIBLE : View.GONE);
                     if (editButtonText != null) {
                         buttons[1].getTextView().setText(replaceButtonText);
                     }
                     chatActivityEnterTopView.setEditMode(true);
                 } else {
-                    replyIconImageView.setImageResource(R.drawable.group_edit);
-                    replyIconImageView.setContentDescription(LocaleController.getString("AccDescrEditing", R.string.AccDescrEditing));
-                    replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelEdit", R.string.AccDescrCancelEdit));
+                    replyIconImageView.setImageResource(works.heymate.beta.R.drawable.group_edit);
+                    replyIconImageView.setContentDescription(LocaleController.getString("AccDescrEditing", works.heymate.beta.R.string.AccDescrEditing));
+                    replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelEdit", works.heymate.beta.R.string.AccDescrCancelEdit));
                     if (mediaEmpty) {
-                        replyNameTextView.setText(LocaleController.getString("EditMessage", R.string.EditMessage));
+                        replyNameTextView.setText(LocaleController.getString("EditMessage", works.heymate.beta.R.string.EditMessage));
                     } else {
-                        replyNameTextView.setText(LocaleController.getString("EditCaption", R.string.EditCaption));
+                        replyNameTextView.setText(LocaleController.getString("EditCaption", works.heymate.beta.R.string.EditCaption));
                     }
                     if (canEditMedia) {
-                        replyObjectTextView.setText(LocaleController.getString("EditMessageMedia", R.string.EditMessageMedia));
+                        replyObjectTextView.setText(LocaleController.getString("EditMessageMedia", works.heymate.beta.R.string.EditMessageMedia));
                     } else if (messageObjectToEdit.messageText != null || messageObjectToEdit.caption != null) {
                         String mess = messageObjectToEdit.caption != null ? messageObjectToEdit.caption.toString() : messageObjectToEdit.messageText.toString();
                         if (mess.length() > 150) {
@@ -9706,10 +9706,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     name = chat.title;
                 }
-                replyIconImageView.setImageResource(R.drawable.msg_panel_reply);
+                replyIconImageView.setImageResource(works.heymate.beta.R.drawable.msg_panel_reply);
                 replyNameTextView.setText(name);
-                replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", R.string.AccDescrReplying));
-                replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", R.string.AccDescrCancelReply));
+                replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", works.heymate.beta.R.string.AccDescrReplying));
+                replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", works.heymate.beta.R.string.AccDescrCancelReply));
 
                 if (!TextUtils.isEmpty(restrictionReason)) {
                     replyObjectTextView.setText(restrictionReason);
@@ -9739,9 +9739,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 chatActivityEnterView.setForceShowSendButton(true, false);
                 ArrayList<Integer> uids = new ArrayList<>();
-                replyIconImageView.setImageResource(R.drawable.msg_panel_forward);
-                replyIconImageView.setContentDescription(LocaleController.getString("AccDescrForwarding", R.string.AccDescrForwarding));
-                replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelForward", R.string.AccDescrCancelForward));
+                replyIconImageView.setImageResource(works.heymate.beta.R.drawable.msg_panel_forward);
+                replyIconImageView.setContentDescription(LocaleController.getString("AccDescrForwarding", works.heymate.beta.R.string.AccDescrForwarding));
+                replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelForward", works.heymate.beta.R.string.AccDescrCancelForward));
                 MessageObject object = messageObjectsToForward.get(0);
                 if (object.isFromUser()) {
                     uids.add(object.messageOwner.from_id.user_id);
@@ -9860,7 +9860,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else if (type == 8 || type == 9) {
                         if (messageObjectsToForward.size() == 1) {
                             if (type == 8) {
-                                replyObjectTextView.setText(LocaleController.getString("AttachGif", R.string.AttachGif));
+                                replyObjectTextView.setText(LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif));
                             } else {
                                 String name;
                                 if ((name = FileLoader.getDocumentFileName(messageObjectsToForward.get(0).getDocument())).length() != 0) {
@@ -9874,9 +9874,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
             } else {
-                replyIconImageView.setImageResource(R.drawable.msg_link);
+                replyIconImageView.setImageResource(works.heymate.beta.R.drawable.msg_link);
                 if (webPage instanceof TLRPC.TL_webPagePending) {
-                    replyNameTextView.setText(LocaleController.getString("GettingLinkInfo", R.string.GettingLinkInfo));
+                    replyNameTextView.setText(LocaleController.getString("GettingLinkInfo", works.heymate.beta.R.string.GettingLinkInfo));
                     replyObjectTextView.setText(pendingLinkSearchString);
                 } else {
                     if (webPage.site_name != null) {
@@ -9884,7 +9884,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else if (webPage.title != null) {
                         replyNameTextView.setText(webPage.title);
                     } else {
-                        replyNameTextView.setText(LocaleController.getString("LinkPreview", R.string.LinkPreview));
+                        replyNameTextView.setText(LocaleController.getString("LinkPreview", works.heymate.beta.R.string.LinkPreview));
                     }
                     if (webPage.title != null) {
                         replyObjectTextView.setText(webPage.title);
@@ -10130,7 +10130,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     videoPlayerContainer.setTranslationY(translationY);
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) videoPlayerContainer.getLayoutParams();
                     if (messageObject.isRoundVideo()) {
-                        videoPlayerContainer.setTag(R.id.parent_tag, null);
+                        videoPlayerContainer.setTag(works.heymate.beta.R.id.parent_tag, null);
                         if (layoutParams.width != AndroidUtilities.roundMessageSize || layoutParams.height != AndroidUtilities.roundMessageSize) {
                             layoutParams.width = layoutParams.height = AndroidUtilities.roundMessageSize;
                             aspectRatioFrameLayout.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
@@ -10140,7 +10140,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         videoTextureView.setScaleX(scale);
                         videoTextureView.setScaleY(scale);
                     } else {
-                        videoPlayerContainer.setTag(R.id.parent_tag, imageReceiver);
+                        videoPlayerContainer.setTag(works.heymate.beta.R.id.parent_tag, imageReceiver);
                         if (layoutParams.width != imageReceiver.getImageWidth() || layoutParams.height != imageReceiver.getImageHeight()) {
                             aspectRatioFrameLayout.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
                             layoutParams.width = (int) imageReceiver.getImageWidth();
@@ -11028,11 +11028,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         boolean hideKeyboard = false;
         if (currentChat != null && !ChatObject.canSendMessages(currentChat) && !currentChat.gigagroup && (!ChatObject.isChannel(currentChat) || currentChat.megagroup)) {
             if (currentChat.default_banned_rights != null && currentChat.default_banned_rights.send_messages) {
-                bottomOverlayText.setText(LocaleController.getString("GlobalSendMessageRestricted", R.string.GlobalSendMessageRestricted));
+                bottomOverlayText.setText(LocaleController.getString("GlobalSendMessageRestricted", works.heymate.beta.R.string.GlobalSendMessageRestricted));
             } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
-                bottomOverlayText.setText(LocaleController.getString("SendMessageRestrictedForever", R.string.SendMessageRestrictedForever));
+                bottomOverlayText.setText(LocaleController.getString("SendMessageRestrictedForever", works.heymate.beta.R.string.SendMessageRestrictedForever));
             } else {
-                bottomOverlayText.setText(LocaleController.formatString("SendMessageRestricted", R.string.SendMessageRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
+                bottomOverlayText.setText(LocaleController.formatString("SendMessageRestricted", works.heymate.beta.R.string.SendMessageRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
             }
             bottomOverlay.setVisibility(View.VISIBLE);
             if (mentionListAnimation != null) {
@@ -11055,15 +11055,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return;
             }
             if (currentEncryptedChat instanceof TLRPC.TL_encryptedChatRequested) {
-                bottomOverlayText.setText(LocaleController.getString("EncryptionProcessing", R.string.EncryptionProcessing));
+                bottomOverlayText.setText(LocaleController.getString("EncryptionProcessing", works.heymate.beta.R.string.EncryptionProcessing));
                 bottomOverlay.setVisibility(View.VISIBLE);
                 hideKeyboard = true;
             } else if (currentEncryptedChat instanceof TLRPC.TL_encryptedChatWaiting) {
-                bottomOverlayText.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, "<b>" + currentUser.first_name + "</b>")));
+                bottomOverlayText.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AwaitingEncryption", works.heymate.beta.R.string.AwaitingEncryption, "<b>" + currentUser.first_name + "</b>")));
                 bottomOverlay.setVisibility(View.VISIBLE);
                 hideKeyboard = true;
             } else if (currentEncryptedChat instanceof TLRPC.TL_encryptedChatDiscarded) {
-                bottomOverlayText.setText(LocaleController.getString("EncryptionRejected", R.string.EncryptionRejected));
+                bottomOverlayText.setText(LocaleController.getString("EncryptionRejected", works.heymate.beta.R.string.EncryptionRejected));
                 bottomOverlay.setVisibility(View.VISIBLE);
                 chatActivityEnterView.setFieldText("");
                 getMediaDataController().cleanDraft(dialog_id, threadMessageId, false);
@@ -11105,9 +11105,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (grantResults != null && grantResults.length != 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", R.string.PermissionNoAudioVideo));
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", works.heymate.beta.R.string.PermissionNoAudioVideo));
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
                     try {
                         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -11116,7 +11116,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         FileLog.e(e);
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 builder.show();
             }
         } else if (requestCode == 19 && grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -11470,7 +11470,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 if (saveItem != null) {
                     saveItem.setVisibility(((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0 ? View.VISIBLE : View.GONE);
-                    saveItem.setContentDescription(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                    saveItem.setContentDescription(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", works.heymate.beta.R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                 }
 
                 int copyVisible = copyItem.getVisibility();
@@ -11493,7 +11493,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         break;
                     }
                 }
-                starItem.setIcon(hasUnfavedSelected ? R.drawable.msg_fave : R.drawable.msg_unfave);
+                starItem.setIcon(hasUnfavedSelected ? works.heymate.beta.R.drawable.msg_fave : works.heymate.beta.R.drawable.msg_unfave);
                 final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 ? View.VISIBLE : View.GONE;
                 if (replyButton != null) {
                     boolean allowChatActions = true;
@@ -11661,11 +11661,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             int size = selectedMessagesIds[0].size() + selectedMessagesIds[1].size();
             if (size == 0) {
-                bottomOverlayChatText.setText(LocaleController.getString("ReportMessages", R.string.ReportMessages));
+                bottomOverlayChatText.setText(LocaleController.getString("ReportMessages", works.heymate.beta.R.string.ReportMessages));
                 bottomOverlayChatText.setAlpha(0.5f);
                 bottomOverlayChatText.setEnabled(false);
             } else {
-                bottomOverlayChatText.setText(LocaleController.formatString("ReportMessagesCount", R.string.ReportMessagesCount, LocaleController.formatPluralString("messages", size)).toUpperCase());
+                bottomOverlayChatText.setText(LocaleController.formatString("ReportMessagesCount", works.heymate.beta.R.string.ReportMessagesCount, LocaleController.formatPluralString("messages", size)).toUpperCase());
                 bottomOverlayChatText.setAlpha(1.0f);
                 bottomOverlayChatText.setEnabled(true);
             }
@@ -11681,18 +11681,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (threadMessageObject.hasReplies()) {
                     avatarContainer.setTitle(LocaleController.formatPluralString("Comments", threadMessageObject.getRepliesCount()));
                 } else {
-                    avatarContainer.setTitle(LocaleController.getString("CommentsTitle", R.string.CommentsTitle));
+                    avatarContainer.setTitle(LocaleController.getString("CommentsTitle", works.heymate.beta.R.string.CommentsTitle));
                 }
             } else {
                 avatarContainer.setTitle(LocaleController.formatPluralString("Replies", threadMessageObject.getRepliesCount()));
             }
         } else if (UserObject.isReplyUser(currentUser)) {
-            avatarContainer.setTitle(LocaleController.getString("RepliesTitle", R.string.RepliesTitle));
+            avatarContainer.setTitle(LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle));
         } else if (chatMode == MODE_SCHEDULED) {
             if (UserObject.isUserSelf(currentUser)) {
-                avatarContainer.setTitle(LocaleController.getString("Reminders", R.string.Reminders));
+                avatarContainer.setTitle(LocaleController.getString("Reminders", works.heymate.beta.R.string.Reminders));
             } else {
-                avatarContainer.setTitle(LocaleController.getString("ScheduledMessages", R.string.ScheduledMessages));
+                avatarContainer.setTitle(LocaleController.getString("ScheduledMessages", works.heymate.beta.R.string.ScheduledMessages));
             }
         } else if (chatMode == MODE_PINNED) {
             avatarContainer.setTitle(LocaleController.formatPluralString("PinnedMessagesCount", getPinnedMessagesCount()));
@@ -11700,7 +11700,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             avatarContainer.setTitle(currentChat.title, currentChat.scam, currentChat.fake);
         } else if (currentUser != null) {
             if (currentUser.self) {
-                avatarContainer.setTitle(LocaleController.getString("SavedMessages", R.string.SavedMessages));
+                avatarContainer.setTitle(LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages));
             } else if (!MessagesController.isSupportUser(currentUser) && getContactsController().contactsDict.get(currentUser.id) == null && (getContactsController().contactsDict.size() != 0 || !getContactsController().isLoadingContacts())) {
                 if (!TextUtils.isEmpty(currentUser.phone)) {
                     avatarContainer.setTitle(PhoneFormat.getInstance().format("+" + currentUser.phone));
@@ -11760,9 +11760,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         avatarContainer.setTitleIcons(currentEncryptedChat != null ? Theme.chat_lockIconDrawable : null, !UserObject.isReplyUser(currentUser) && !isThreadChat() ? rightIcon : null);
         if (muteItem != null) {
             if (rightIcon != null) {
-                muteItem.setTextAndIcon(LocaleController.getString("UnmuteNotifications", R.string.UnmuteNotifications), R.drawable.msg_unmute);
+                muteItem.setTextAndIcon(LocaleController.getString("UnmuteNotifications", works.heymate.beta.R.string.UnmuteNotifications), works.heymate.beta.R.drawable.msg_unmute);
             } else {
-                muteItem.setTextAndIcon(LocaleController.getString("MuteNotifications", R.string.MuteNotifications), R.drawable.msg_mute);
+                muteItem.setTextAndIcon(LocaleController.getString("MuteNotifications", works.heymate.beta.R.string.MuteNotifications), works.heymate.beta.R.drawable.msg_mute);
             }
         }
     }
@@ -11958,7 +11958,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (getParentActivity() == null) {
             return;
         }
-        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment)).show();
+        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("UnsupportedAttachment", works.heymate.beta.R.string.UnsupportedAttachment)).show();
     }
 
     private void fillEditingMediaWithCaption(CharSequence caption, ArrayList<TLRPC.MessageEntity> entities) {
@@ -12278,7 +12278,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     bundle.putInt("message_id", postponedScrollMessageId);
                                     presentFragment(new ChatActivity(bundle), true);
                                 } else {
-                                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("MessageNotFound", R.string.MessageNotFound)).show();
+                                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("MessageNotFound", works.heymate.beta.R.string.MessageNotFound)).show();
                                 }
                                 return;
                             }
@@ -12440,12 +12440,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     TLRPC.Message msg = new TLRPC.TL_message();
                     if (threadMessageObject.getRepliesCount() == 0) {
                         if (isComments) {
-                            msg.message = LocaleController.getString("NoComments", R.string.NoComments);
+                            msg.message = LocaleController.getString("NoComments", works.heymate.beta.R.string.NoComments);
                         } else {
-                            msg.message = LocaleController.getString("NoReplies", R.string.NoReplies);
+                            msg.message = LocaleController.getString("NoReplies", works.heymate.beta.R.string.NoReplies);
                         }
                     } else {
-                        msg.message = LocaleController.getString("DiscussionStarted", R.string.DiscussionStarted);
+                        msg.message = LocaleController.getString("DiscussionStarted", works.heymate.beta.R.string.DiscussionStarted);
                     }
                     msg.id = 0;
                     msg.date = threadMessageObject.messageOwner.date;
@@ -12578,9 +12578,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         TLRPC.Message dateMsg = new TLRPC.TL_message();
                         if (chatMode == MODE_SCHEDULED) {
                             if (obj.messageOwner.date == 0x7ffffffe) {
-                                dateMsg.message = LocaleController.getString("MessageScheduledUntilOnline", R.string.MessageScheduledUntilOnline);
+                                dateMsg.message = LocaleController.getString("MessageScheduledUntilOnline", works.heymate.beta.R.string.MessageScheduledUntilOnline);
                             } else {
-                                dateMsg.message = LocaleController.formatString("MessageScheduledOn", R.string.MessageScheduledOn, LocaleController.formatDateChat(obj.messageOwner.date, true));
+                                dateMsg.message = LocaleController.formatString("MessageScheduledOn", works.heymate.beta.R.string.MessageScheduledOn, LocaleController.formatDateChat(obj.messageOwner.date, true));
                             }
                         } else {
                             dateMsg.message = LocaleController.formatDateChat(obj.messageOwner.date);
@@ -12710,7 +12710,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             highlightMessageId = messageId;
                         }
                         if (showScrollToMessageError && messageId != startLoadFromMessageId) {
-                            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("MessageNotFound", R.string.MessageNotFound)).show();
+                            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("MessageNotFound", works.heymate.beta.R.string.MessageNotFound)).show();
                         }
                         scrollToMessage = obj;
                         if (postponedScroll) {
@@ -13689,21 +13689,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
                 if (reason == 0) {
                     if (currentChat.has_link) {
-                        builder.setMessage(LocaleController.getString("ChannelCantOpenBannedByAdmin", R.string.ChannelCantOpenBannedByAdmin));
+                        builder.setMessage(LocaleController.getString("ChannelCantOpenBannedByAdmin", works.heymate.beta.R.string.ChannelCantOpenBannedByAdmin));
                     } else {
-                        builder.setMessage(LocaleController.getString("ChannelCantOpenPrivate", R.string.ChannelCantOpenPrivate));
+                        builder.setMessage(LocaleController.getString("ChannelCantOpenPrivate", works.heymate.beta.R.string.ChannelCantOpenPrivate));
                     }
                 } else if (reason == 1) {
-                    builder.setMessage(LocaleController.getString("ChannelCantOpenNa", R.string.ChannelCantOpenNa));
+                    builder.setMessage(LocaleController.getString("ChannelCantOpenNa", works.heymate.beta.R.string.ChannelCantOpenNa));
                 } else if (reason == 2) {
-                    builder.setMessage(LocaleController.getString("ChannelCantOpenBanned", R.string.ChannelCantOpenBanned));
+                    builder.setMessage(LocaleController.getString("ChannelCantOpenBanned", works.heymate.beta.R.string.ChannelCantOpenBanned));
                 } else if (reason == 3) {
-                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", R.string.JoinByPeekChannelText));
+                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", works.heymate.beta.R.string.JoinByPeekChannelText));
                 }
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 if (showDialog(closeChatDialog = builder.create()) == null) {
                     showCloseChatDialogLater = true;
                 }
@@ -14745,7 +14745,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private void checkGroupCallJoin(boolean fromServer) {
         if (groupCall == null || voiceChatHash == null || !openAnimationEnded) {
             if (voiceChatHash != null && fromServer && chatInfo != null && chatInfo.call == null && fragmentView != null && getParentActivity() != null) {
-                BulletinFactory.of(this).createSimpleBulletin(R.raw.linkbroken, LocaleController.getString("LinkHashExpired", R.string.LinkHashExpired)).show();
+                BulletinFactory.of(this).createSimpleBulletin(works.heymate.beta.R.raw.linkbroken, LocaleController.getString("LinkHashExpired", works.heymate.beta.R.string.LinkHashExpired)).show();
                 voiceChatHash = null;
             }
             lastCallCheckFromServer = !openAnimationEnded;
@@ -15365,9 +15365,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     TLRPC.Message dateMsg = new TLRPC.TL_message();
                     if (chatMode == MODE_SCHEDULED) {
                         if (obj.messageOwner.date == 0x7ffffffe) {
-                            dateMsg.message = LocaleController.getString("MessageScheduledUntilOnline", R.string.MessageScheduledUntilOnline);
+                            dateMsg.message = LocaleController.getString("MessageScheduledUntilOnline", works.heymate.beta.R.string.MessageScheduledUntilOnline);
                         } else {
-                            dateMsg.message = LocaleController.formatString("MessageScheduledOn", R.string.MessageScheduledOn, LocaleController.formatDateChat(obj.messageOwner.date, true));
+                            dateMsg.message = LocaleController.formatString("MessageScheduledOn", works.heymate.beta.R.string.MessageScheduledOn, LocaleController.formatDateChat(obj.messageOwner.date, true));
                         }
                     } else {
                         dateMsg.message = LocaleController.formatDateChat(obj.messageOwner.date);
@@ -16059,9 +16059,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (count < 0) {
                 searchCountText.setCount("", 0, false);
             } else if (count == 0) {
-                searchCountText.setCount(LocaleController.getString("NoResult", R.string.NoResult), 0, false);
+                searchCountText.setCount(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult), 0, false);
             } else {
-                searchCountText.setCount(LocaleController.formatString("OfCounted", R.string.OfCounted, num + 1, count), num + 1, true);
+                searchCountText.setCount(LocaleController.formatString("OfCounted", works.heymate.beta.R.string.OfCounted, num + 1, count), num + 1, true);
             }
         }
     }
@@ -16228,7 +16228,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     boolean check;
                     if (type == MessagesController.PROMO_TYPE_PROXY) {
                         if (preferences.getLong("proxychannel", 0) != dialog_id) {
-                            message = LocaleController.getString("UseProxySponsorInfo", R.string.UseProxySponsorInfo);
+                            message = LocaleController.getString("UseProxySponsorInfo", works.heymate.beta.R.string.UseProxySponsorInfo);
                         } else {
                             message = null;
                         }
@@ -16237,7 +16237,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (!preferences.getBoolean(psaType + "_shown", false)) {
                             message = LocaleController.getString("PsaInfo_" + psaType);
                             if (TextUtils.isEmpty(message)) {
-                                message = LocaleController.getString("PsaInfoDefault", R.string.PsaInfoDefault);
+                                message = LocaleController.getString("PsaInfoDefault", works.heymate.beta.R.string.PsaInfoDefault);
                             }
                         } else {
                             message = null;
@@ -16296,35 +16296,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     public void fillActionModeMenu(Menu menu) {
-        if (menu.findItem(R.id.menu_bold) != null) {
+        if (menu.findItem(works.heymate.beta.R.id.menu_bold) != null) {
             return;
         }
         if (Build.VERSION.SDK_INT >= 23) {
             menu.removeItem(android.R.id.shareText);
         }
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", R.string.Bold));
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("Bold", works.heymate.beta.R.string.Bold));
         stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_bold, 6, stringBuilder);
-        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
+        menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_bold, 6, stringBuilder);
+        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", works.heymate.beta.R.string.Italic));
         stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_italic, 7, stringBuilder);
-        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
+        menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_italic, 7, stringBuilder);
+        stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", works.heymate.beta.R.string.Mono));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, 8, stringBuilder);
+        menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_mono, 8, stringBuilder);
         if (currentEncryptedChat == null || AndroidUtilities.getPeerLayerVersion(currentEncryptedChat.layer) >= 101) {
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", R.string.Strike));
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Strike", works.heymate.beta.R.string.Strike));
             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
             run.flags |= TextStyleSpan.FLAG_STYLE_STRIKE;
             stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            menu.add(R.id.menu_groupbolditalic, R.id.menu_strike, 9, stringBuilder);
-            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", R.string.Underline));
+            menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_strike, 9, stringBuilder);
+            stringBuilder = new SpannableStringBuilder(LocaleController.getString("Underline", works.heymate.beta.R.string.Underline));
             run = new TextStyleSpan.TextStyleRun();
             run.flags |= TextStyleSpan.FLAG_STYLE_UNDERLINE;
             stringBuilder.setSpan(new TextStyleSpan(run), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            menu.add(R.id.menu_groupbolditalic, R.id.menu_underline, 10, stringBuilder);
+            menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_underline, 10, stringBuilder);
         }
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_link, 11, LocaleController.getString("CreateLink", R.string.CreateLink));
-        menu.add(R.id.menu_groupbolditalic, R.id.menu_regular, 12, LocaleController.getString("Regular", R.string.Regular));
+        menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_link, 11, LocaleController.getString("CreateLink", works.heymate.beta.R.string.CreateLink));
+        menu.add(works.heymate.beta.R.id.menu_groupbolditalic, works.heymate.beta.R.id.menu_regular, 12, LocaleController.getString("Regular", works.heymate.beta.R.string.Regular));
     }
 
     private void updateScheduledInterface(boolean animated) {
@@ -16352,10 +16352,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (allowPin) {
                 bottomOverlayChatText.setTag(1);
-                bottomOverlayChatText.setText(LocaleController.getString("UnpinAllMessages", R.string.UnpinAllMessages));
+                bottomOverlayChatText.setText(LocaleController.getString("UnpinAllMessages", works.heymate.beta.R.string.UnpinAllMessages));
             } else {
                 bottomOverlayChatText.setTag(null);
-                bottomOverlayChatText.setText(LocaleController.getString("HidePinnedMessages", R.string.HidePinnedMessages));
+                bottomOverlayChatText.setText(LocaleController.getString("HidePinnedMessages", works.heymate.beta.R.string.HidePinnedMessages));
             }
             showBottomOverlayProgress(false, false);
         } else if (currentChat != null) {
@@ -16365,28 +16365,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (getMessagesController().isJoiningChannel(currentChat.id)) {
                             showBottomOverlayProgress(true, false);
                         } else {
-                            bottomOverlayChatText.setText(LocaleController.getString("ChannelJoin", R.string.ChannelJoin));
+                            bottomOverlayChatText.setText(LocaleController.getString("ChannelJoin", works.heymate.beta.R.string.ChannelJoin));
                             showBottomOverlayProgress(false, false);
                         }
                     } else {
                         if (!getMessagesController().isDialogMuted(dialog_id)) {
-                            bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", R.string.ChannelMute), false);
+                            bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", works.heymate.beta.R.string.ChannelMute), false);
                         } else {
-                            bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", R.string.ChannelUnmute), true);
+                            bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", works.heymate.beta.R.string.ChannelUnmute), true);
                         }
                         showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
                     }
                 } else {
-                    bottomOverlayChatText.setText(LocaleController.getString("DeleteThisGroup", R.string.DeleteThisGroup));
+                    bottomOverlayChatText.setText(LocaleController.getString("DeleteThisGroup", works.heymate.beta.R.string.DeleteThisGroup));
                 }
             }
         } else {
             showBottomOverlayProgress(false, false);
             if (userBlocked) {
                 if (currentUser.bot) {
-                    bottomOverlayChatText.setText(LocaleController.getString("BotUnblock", R.string.BotUnblock));
+                    bottomOverlayChatText.setText(LocaleController.getString("BotUnblock", works.heymate.beta.R.string.BotUnblock));
                 } else {
-                    bottomOverlayChatText.setText(LocaleController.getString("Unblock", R.string.Unblock));
+                    bottomOverlayChatText.setText(LocaleController.getString("Unblock", works.heymate.beta.R.string.Unblock));
                 }
                 if (botButtons != null) {
                     botButtons = null;
@@ -16400,19 +16400,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             } else if (UserObject.isReplyUser(currentUser)) {
                 if (!getMessagesController().isDialogMuted(dialog_id)) {
-                    bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", R.string.ChannelMute), false);
+                    bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", works.heymate.beta.R.string.ChannelMute), false);
                 } else {
-                    bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", R.string.ChannelUnmute), true);
+                    bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", works.heymate.beta.R.string.ChannelUnmute), true);
                 }
                 showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
             } else if (botUser != null && currentUser.bot) {
-                bottomOverlayChatText.setText(LocaleController.getString("BotStart", R.string.BotStart));
+                bottomOverlayChatText.setText(LocaleController.getString("BotStart", works.heymate.beta.R.string.BotStart));
                 chatActivityEnterView.hidePopup(false);
                 if (getParentActivity() != null) {
                     AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
                 }
             } else {
-                bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", R.string.DeleteThisChat));
+                bottomOverlayChatText.setText(LocaleController.getString("DeleteThisChat", works.heymate.beta.R.string.DeleteThisChat));
             }
         }
 
@@ -16520,7 +16520,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (threadMessageObject.hasReplies()) {
                     avatarContainer.setTitle(LocaleController.formatPluralString("Comments", threadMessageObject.getRepliesCount()));
                 } else {
-                    avatarContainer.setTitle(LocaleController.getString("CommentsTitle", R.string.CommentsTitle));
+                    avatarContainer.setTitle(LocaleController.getString("CommentsTitle", works.heymate.beta.R.string.CommentsTitle));
                 }
             } else {
                 avatarContainer.setTitle(LocaleController.formatPluralString("Replies", threadMessageObject.getRepliesCount()));
@@ -16532,12 +16532,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         String text;
         if (threadMessageObject.getRepliesCount() == 0) {
             if (isComments) {
-                text = LocaleController.getString("NoComments", R.string.NoComments);
+                text = LocaleController.getString("NoComments", works.heymate.beta.R.string.NoComments);
             } else {
-                text = LocaleController.getString("NoReplies", R.string.NoReplies);
+                text = LocaleController.getString("NoReplies", works.heymate.beta.R.string.NoReplies);
             }
         } else {
-            text = LocaleController.getString("DiscussionStarted", R.string.DiscussionStarted);
+            text = LocaleController.getString("DiscussionStarted", works.heymate.beta.R.string.DiscussionStarted);
         }
         replyMessageHeaderObject.messageText = replyMessageHeaderObject.messageOwner.message = text;
         if (notify) {
@@ -16968,9 +16968,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 } else {
                     if (currentPinnedMessageIndex[0] == 0 || loadedPinnedMessagesCount != 2) {
-                        nameTextView.setText(LocaleController.getString("PinnedMessage", R.string.PinnedMessage));
+                        nameTextView.setText(LocaleController.getString("PinnedMessage", works.heymate.beta.R.string.PinnedMessage));
                     } else {
-                        nameTextView.setText(LocaleController.getString("PreviousPinnedMessage", R.string.PreviousPinnedMessage));
+                        nameTextView.setText(LocaleController.getString("PreviousPinnedMessage", works.heymate.beta.R.string.PreviousPinnedMessage));
                     }
                     if (currentPinnedMessageIndex[0] != 0) {
                         int total = getPinnedMessagesCount();
@@ -17327,7 +17327,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         addToContactsButtonArchive = false;
         TLRPC.User user = currentUser != null ? getMessagesController().getUser(currentUser.id) : null;
         if (showAddMembersToGroup) {
-            String str = LocaleController.getString("GroupAddMembers", R.string.GroupAddMembers);
+            String str = LocaleController.getString("GroupAddMembers", works.heymate.beta.R.string.GroupAddMembers);
             if (str != null) {
                 str = str.toUpperCase();
             }
@@ -17344,17 +17344,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 addToContactsButton.setVisibility(View.GONE);
             } else if (!user.contact && !user.self && showAdd) {
                 addContactItem.setVisibility(View.VISIBLE);
-                addContactItem.setText(LocaleController.getString("AddToContacts", R.string.AddToContacts));
+                addContactItem.setText(LocaleController.getString("AddToContacts", works.heymate.beta.R.string.AddToContacts));
                 addToContactsButton.setVisibility(View.VISIBLE);
                 if (showArchive) {
                     addToContactsButtonArchive = true;
-                    addToContactsButton.setText(LocaleController.getString("Unarchive", R.string.Unarchive).toUpperCase());
+                    addToContactsButton.setText(LocaleController.getString("Unarchive", works.heymate.beta.R.string.Unarchive).toUpperCase());
                     addToContactsButton.setTag(3);
                 } else {
                     if (reportSpamButton.getVisibility() == View.VISIBLE) {
-                        addToContactsButton.setText(LocaleController.getString("AddContactChat", R.string.AddContactChat));
+                        addToContactsButton.setText(LocaleController.getString("AddContactChat", works.heymate.beta.R.string.AddContactChat));
                     } else {
-                        addToContactsButton.setText(LocaleController.formatString("AddContactFullChat", R.string.AddContactFullChat, UserObject.getFirstName(user)).toUpperCase());
+                        addToContactsButton.setText(LocaleController.formatString("AddContactFullChat", works.heymate.beta.R.string.AddContactFullChat, UserObject.getFirstName(user)).toUpperCase());
                     }
                 }
                 addToContactsButton.setTag(null);
@@ -17362,25 +17362,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (showShare && !user.self) {
                 addContactItem.setVisibility(View.VISIBLE);
                 addToContactsButton.setVisibility(View.VISIBLE);
-                addContactItem.setText(LocaleController.getString("ShareMyContactInfo", R.string.ShareMyContactInfo));
-                addToContactsButton.setText(LocaleController.getString("ShareMyPhone", R.string.ShareMyPhone).toUpperCase());
+                addContactItem.setText(LocaleController.getString("ShareMyContactInfo", works.heymate.beta.R.string.ShareMyContactInfo));
+                addToContactsButton.setText(LocaleController.getString("ShareMyPhone", works.heymate.beta.R.string.ShareMyPhone).toUpperCase());
                 addToContactsButton.setTag(1);
                 addToContactsButton.setVisibility(View.VISIBLE);
             } else {
                 if (!user.contact && !user.self && !show) {
                     addContactItem.setVisibility(View.VISIBLE);
-                    addContactItem.setText(LocaleController.getString("ShareMyContactInfo", R.string.ShareMyContactInfo));
+                    addContactItem.setText(LocaleController.getString("ShareMyContactInfo", works.heymate.beta.R.string.ShareMyContactInfo));
                     addToContactsButton.setTag(2);
                 } else {
                     addContactItem.setVisibility(View.GONE);
                 }
                 addToContactsButton.setVisibility(View.GONE);
             }
-            reportSpamButton.setText(LocaleController.getString("ReportSpamUser", R.string.ReportSpamUser));
+            reportSpamButton.setText(LocaleController.getString("ReportSpamUser", works.heymate.beta.R.string.ReportSpamUser));
         } else {
             if (showGeo) {
-                reportSpamButton.setText(LocaleController.getString("ReportSpamLocation", R.string.ReportSpamLocation));
-                reportSpamButton.setTag(R.id.object_tag, 1);
+                reportSpamButton.setText(LocaleController.getString("ReportSpamLocation", works.heymate.beta.R.string.ReportSpamLocation));
+                reportSpamButton.setTag(works.heymate.beta.R.id.object_tag, 1);
                 reportSpamButton.setTextColor(Theme.getColor(Theme.key_chat_addContact));
                 if (Build.VERSION.SDK_INT >= 21) {
                     Theme.setSelectorDrawableColor(reportSpamButton.getBackground(), Theme.getColor(Theme.key_chat_addContact) & 0x19ffffff, true);
@@ -17389,15 +17389,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 if (showArchive) {
                     addToContactsButtonArchive = true;
-                    addToContactsButton.setText(LocaleController.getString("Unarchive", R.string.Unarchive).toUpperCase());
+                    addToContactsButton.setText(LocaleController.getString("Unarchive", works.heymate.beta.R.string.Unarchive).toUpperCase());
                     addToContactsButton.setTag(3);
                     addToContactsButton.setVisibility(View.VISIBLE);
-                    reportSpamButton.setText(LocaleController.getString("ReportSpam", R.string.ReportSpam));
+                    reportSpamButton.setText(LocaleController.getString("ReportSpam", works.heymate.beta.R.string.ReportSpam));
                 } else {
                     addToContactsButton.setVisibility(View.GONE);
-                    reportSpamButton.setText(LocaleController.getString("ReportSpamAndLeave", R.string.ReportSpamAndLeave));
+                    reportSpamButton.setText(LocaleController.getString("ReportSpamAndLeave", works.heymate.beta.R.string.ReportSpamAndLeave));
                 }
-                reportSpamButton.setTag(R.id.object_tag, null);
+                reportSpamButton.setTag(works.heymate.beta.R.id.object_tag, null);
                 reportSpamButton.setTextColor(Theme.getColor(Theme.key_chat_reportSpam));
                 if (Build.VERSION.SDK_INT >= 21) {
                     Theme.setSelectorDrawableColor(reportSpamButton.getBackground(), Theme.getColor(Theme.key_chat_reportSpam) & 0x19ffffff, true);
@@ -18263,7 +18263,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (message.getReplyMsgId() != 0) {
                     scrollToMessageId(message.getReplyMsgId(), message.messageOwner.id, true, message.getDialogId() == mergeDialogId ? 1 : 0, false, 0);
                 } else {
-                    Toast.makeText(getParentActivity(), LocaleController.getString("MessageNotFound", R.string.MessageNotFound), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getParentActivity(), LocaleController.getString("MessageNotFound", works.heymate.beta.R.string.MessageNotFound), Toast.LENGTH_SHORT).show();
                 }
                 return;
             } else if (message.messageOwner.action instanceof TLRPC.TL_messageActionSetMessagesTTL) {
@@ -18396,395 +18396,395 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 if (type == -1) {
                     if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
-                        items.add(LocaleController.getString("Copy", R.string.Copy));
+                        items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
                         options.add(3);
-                        icons.add(R.drawable.msg_copy);
+                        icons.add(works.heymate.beta.R.drawable.msg_copy);
                     }
-                    items.add(LocaleController.getString("CancelSending", R.string.CancelSending));
+                    items.add(LocaleController.getString("CancelSending", works.heymate.beta.R.string.CancelSending));
                     options.add(24);
-                    icons.add(R.drawable.msg_delete);
+                    icons.add(works.heymate.beta.R.drawable.msg_delete);
                 } else if (type == 0) {
-                    items.add(LocaleController.getString("Retry", R.string.Retry));
+                    items.add(LocaleController.getString("Retry", works.heymate.beta.R.string.Retry));
                     options.add(0);
-                    icons.add(R.drawable.msg_retry);
-                    items.add(LocaleController.getString("Delete", R.string.Delete));
+                    icons.add(works.heymate.beta.R.drawable.msg_retry);
+                    items.add(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
                     options.add(1);
-                    icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                    icons.add(selectedObject.messageOwner.ttl_period != 0 ? works.heymate.beta.R.drawable.msg_delete_auto : works.heymate.beta.R.drawable.msg_delete);
                 } else if (type == 1) {
                     if (currentChat != null) {
                         /*if (selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionGroupCall) {
-                            items.add(LocaleController.getString("VoipGroupJoinCall", R.string.VoipGroupJoinCall));
+                            items.add(LocaleController.getString("VoipGroupJoinCall", works.heymate.beta.R.string.VoipGroupJoinCall));
                             options.add(29);
-                            icons.add(R.drawable.msg_callback);
+                            icons.add(works.heymate.beta.R.drawable.msg_callback);
                         }*/
                         if (allowChatActions) {
-                            items.add(LocaleController.getString("Reply", R.string.Reply));
+                            items.add(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
                             options.add(8);
-                            icons.add(R.drawable.msg_reply);
+                            icons.add(works.heymate.beta.R.drawable.msg_reply);
                         }
                         if (!isThreadChat() && chatMode != MODE_SCHEDULED && message.hasReplies() && currentChat.megagroup && message.canViewThread()) {
                             items.add(LocaleController.formatPluralString("ViewReplies", message.getRepliesCount()));
                             options.add(27);
-                            icons.add(R.drawable.msg_viewreplies);
+                            icons.add(works.heymate.beta.R.drawable.msg_viewreplies);
                         }
                         if (allowUnpin) {
-                            items.add(LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
+                            items.add(LocaleController.getString("UnpinMessage", works.heymate.beta.R.string.UnpinMessage));
                             options.add(14);
-                            icons.add(R.drawable.msg_unpin);
+                            icons.add(works.heymate.beta.R.drawable.msg_unpin);
                         } else if (allowPin) {
-                            items.add(LocaleController.getString("PinMessage", R.string.PinMessage));
+                            items.add(LocaleController.getString("PinMessage", works.heymate.beta.R.string.PinMessage));
                             options.add(13);
-                            icons.add(R.drawable.msg_pin);
+                            icons.add(works.heymate.beta.R.drawable.msg_pin);
                         }
                         if (message.canEditMessage(currentChat)) {
-                            items.add(LocaleController.getString("Edit", R.string.Edit));
+                            items.add(LocaleController.getString("Edit", works.heymate.beta.R.string.Edit));
                             options.add(12);
-                            icons.add(R.drawable.msg_edit);
+                            icons.add(works.heymate.beta.R.drawable.msg_edit);
                         }
                         if (selectedObject.contentType == 0 && !selectedObject.isMediaEmptyWebpage() && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
-                            items.add(LocaleController.getString("ReportChat", R.string.ReportChat));
+                            items.add(LocaleController.getString("ReportChat", works.heymate.beta.R.string.ReportChat));
                             options.add(23);
-                            icons.add(R.drawable.msg_report);
+                            icons.add(works.heymate.beta.R.drawable.msg_report);
                         }
                     } else {
                         if (selectedObject.getId() > 0 && allowChatActions) {
-                            items.add(LocaleController.getString("Reply", R.string.Reply));
+                            items.add(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
                             options.add(8);
-                            icons.add(R.drawable.msg_reply);
+                            icons.add(works.heymate.beta.R.drawable.msg_reply);
                         }
                     }
                     if (message.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat) && (threadMessageObjects == null || !threadMessageObjects.contains(message))) {
-                        items.add(LocaleController.getString("Delete", R.string.Delete));
+                        items.add(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
                         options.add(1);
-                        icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                        icons.add(selectedObject.messageOwner.ttl_period != 0 ? works.heymate.beta.R.drawable.msg_delete_auto : works.heymate.beta.R.drawable.msg_delete);
                     }
                 } else if (type == 20) {
-                    items.add(LocaleController.getString("Retry", R.string.Retry));
+                    items.add(LocaleController.getString("Retry", works.heymate.beta.R.string.Retry));
                     options.add(0);
-                    icons.add(R.drawable.msg_retry);
-                    items.add(LocaleController.getString("Copy", R.string.Copy));
+                    icons.add(works.heymate.beta.R.drawable.msg_retry);
+                    items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
                     options.add(3);
-                    icons.add(R.drawable.msg_copy);
-                    items.add(LocaleController.getString("Delete", R.string.Delete));
+                    icons.add(works.heymate.beta.R.drawable.msg_copy);
+                    items.add(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
                     options.add(1);
-                    icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                    icons.add(selectedObject.messageOwner.ttl_period != 0 ? works.heymate.beta.R.drawable.msg_delete_auto : works.heymate.beta.R.drawable.msg_delete);
                 } else {
                     if (currentEncryptedChat == null) {
                         if (chatMode == MODE_SCHEDULED) {
-                            items.add(LocaleController.getString("MessageScheduleSend", R.string.MessageScheduleSend));
+                            items.add(LocaleController.getString("MessageScheduleSend", works.heymate.beta.R.string.MessageScheduleSend));
                             options.add(100);
-                            icons.add(R.drawable.outline_send);
+                            icons.add(works.heymate.beta.R.drawable.outline_send);
                         }
                         if (selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall) {
                             TLRPC.TL_messageActionPhoneCall call = (TLRPC.TL_messageActionPhoneCall) message.messageOwner.action;
-                            items.add((call.reason instanceof TLRPC.TL_phoneCallDiscardReasonMissed || call.reason instanceof TLRPC.TL_phoneCallDiscardReasonBusy) && !message.isOutOwner() ? LocaleController.getString("CallBack", R.string.CallBack) : LocaleController.getString("CallAgain", R.string.CallAgain));
+                            items.add((call.reason instanceof TLRPC.TL_phoneCallDiscardReasonMissed || call.reason instanceof TLRPC.TL_phoneCallDiscardReasonBusy) && !message.isOutOwner() ? LocaleController.getString("CallBack", works.heymate.beta.R.string.CallBack) : LocaleController.getString("CallAgain", works.heymate.beta.R.string.CallAgain));
                             options.add(18);
-                            icons.add(R.drawable.msg_callback);
+                            icons.add(works.heymate.beta.R.drawable.msg_callback);
                             if (VoIPHelper.canRateCall(call)) {
-                                items.add(LocaleController.getString("CallMessageReportProblem", R.string.CallMessageReportProblem));
+                                items.add(LocaleController.getString("CallMessageReportProblem", works.heymate.beta.R.string.CallMessageReportProblem));
                                 options.add(19);
-                                icons.add(R.drawable.msg_fave);
+                                icons.add(works.heymate.beta.R.drawable.msg_fave);
                             }
                         }
                         if (allowChatActions) {
-                            items.add(LocaleController.getString("Reply", R.string.Reply));
+                            items.add(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
                             options.add(8);
-                            icons.add(R.drawable.msg_reply);
+                            icons.add(works.heymate.beta.R.drawable.msg_reply);
                         }
                         if (selectedObject.type == 0 || selectedObject.isDice() || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
-                            items.add(LocaleController.getString("Copy", R.string.Copy));
+                            items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
                             options.add(3);
-                            icons.add(R.drawable.msg_copy);
+                            icons.add(works.heymate.beta.R.drawable.msg_copy);
                         }
                         if (!isThreadChat() && chatMode != MODE_SCHEDULED && currentChat != null && (currentChat.has_link || message.hasReplies()) && currentChat.megagroup && message.canViewThread()) {
                             if (message.hasReplies()) {
                                 items.add(LocaleController.formatPluralString("ViewReplies", message.getRepliesCount()));
                             } else {
-                                items.add(LocaleController.getString("ViewThread", R.string.ViewThread));
+                                items.add(LocaleController.getString("ViewThread", works.heymate.beta.R.string.ViewThread));
                             }
                             options.add(27);
-                            icons.add(R.drawable.msg_viewreplies);
+                            icons.add(works.heymate.beta.R.drawable.msg_viewreplies);
                         }
                         if (chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
-                            items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
+                            items.add(LocaleController.getString("CopyLink", works.heymate.beta.R.string.CopyLink));
                             options.add(22);
-                            icons.add(R.drawable.msg_link);
+                            icons.add(works.heymate.beta.R.drawable.msg_link);
                         }
                         if (type == 2) {
                             if (chatMode != MODE_SCHEDULED) {
                                 if (selectedObject.type == MessageObject.TYPE_POLL && !message.isPollClosed()) {
                                     if (message.canUnvote()) {
-                                        items.add(LocaleController.getString("Unvote", R.string.Unvote));
+                                        items.add(LocaleController.getString("Unvote", works.heymate.beta.R.string.Unvote));
                                         options.add(25);
-                                        icons.add(R.drawable.msg_unvote);
+                                        icons.add(works.heymate.beta.R.drawable.msg_unvote);
                                     }
                                     if (!message.isForwarded() && (
                                             message.isOut() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) ||
                                                     ChatObject.isChannel(currentChat) && !currentChat.megagroup && (currentChat.creator || currentChat.admin_rights != null && currentChat.admin_rights.edit_messages))) {
                                         if (message.isQuiz()) {
-                                            items.add(LocaleController.getString("StopQuiz", R.string.StopQuiz));
+                                            items.add(LocaleController.getString("StopQuiz", works.heymate.beta.R.string.StopQuiz));
                                         } else {
-                                            items.add(LocaleController.getString("StopPoll", R.string.StopPoll));
+                                            items.add(LocaleController.getString("StopPoll", works.heymate.beta.R.string.StopPoll));
                                         }
                                         options.add(26);
-                                        icons.add(R.drawable.msg_pollstop);
+                                        icons.add(works.heymate.beta.R.drawable.msg_pollstop);
                                     }
                                 } else if (selectedObject.isMusic()) {
-                                    items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
+                                    items.add(LocaleController.getString("SaveToMusic", works.heymate.beta.R.string.SaveToMusic));
                                     options.add(10);
-                                    icons.add(R.drawable.msg_download);
+                                    icons.add(works.heymate.beta.R.drawable.msg_download);
                                 } else if (selectedObject.isDocument()) {
-                                    items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                                    items.add(LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                                     options.add(10);
-                                    icons.add(R.drawable.msg_download);
+                                    icons.add(works.heymate.beta.R.drawable.msg_download);
                                 }
                             }
                         } else if (type == 3) {
                             if (selectedObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && MessageObject.isNewGifDocument(selectedObject.messageOwner.media.webpage.document)) {
-                                items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
+                                items.add(LocaleController.getString("SaveToGIFs", works.heymate.beta.R.string.SaveToGIFs));
                                 options.add(11);
-                                icons.add(R.drawable.msg_gif);
+                                icons.add(works.heymate.beta.R.drawable.msg_gif);
                             }
                         } else if (type == 4) {
                             if (selectedObject.isVideo()) {
                                 if (!selectedObject.needDrawBluredPreview()) {
-                                    items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                                    items.add(LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
                                     options.add(4);
-                                    icons.add(R.drawable.msg_gallery);
-                                    items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                    icons.add(works.heymate.beta.R.drawable.msg_gallery);
+                                    items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                                     options.add(6);
-                                    icons.add(R.drawable.msg_shareout);
+                                    icons.add(works.heymate.beta.R.drawable.msg_shareout);
                                 }
                             } else if (selectedObject.isMusic()) {
-                                items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
+                                items.add(LocaleController.getString("SaveToMusic", works.heymate.beta.R.string.SaveToMusic));
                                 options.add(10);
-                                icons.add(R.drawable.msg_download);
-                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                icons.add(works.heymate.beta.R.drawable.msg_download);
+                                items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                                 options.add(6);
-                                icons.add(R.drawable.msg_shareout);
+                                icons.add(works.heymate.beta.R.drawable.msg_shareout);
                             } else if (selectedObject.getDocument() != null) {
                                 if (MessageObject.isNewGifDocument(selectedObject.getDocument())) {
-                                    items.add(LocaleController.getString("SaveToGIFs", R.string.SaveToGIFs));
+                                    items.add(LocaleController.getString("SaveToGIFs", works.heymate.beta.R.string.SaveToGIFs));
                                     options.add(11);
-                                    icons.add(R.drawable.msg_gif);
+                                    icons.add(works.heymate.beta.R.drawable.msg_gif);
                                 }
-                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                                items.add(LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                                 options.add(10);
-                                icons.add(R.drawable.msg_download);
-                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                icons.add(works.heymate.beta.R.drawable.msg_download);
+                                items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                                 options.add(6);
-                                icons.add(R.drawable.msg_shareout);
+                                icons.add(works.heymate.beta.R.drawable.msg_shareout);
                             } else {
                                 if (!selectedObject.needDrawBluredPreview()) {
-                                    items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                                    items.add(LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
                                     options.add(4);
-                                    icons.add(R.drawable.msg_gallery);
+                                    icons.add(works.heymate.beta.R.drawable.msg_gallery);
                                 }
                             }
                         } else if (type == 5) {
-                            items.add(LocaleController.getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
+                            items.add(LocaleController.getString("ApplyLocalizationFile", works.heymate.beta.R.string.ApplyLocalizationFile));
                             options.add(5);
-                            icons.add(R.drawable.msg_language);
-                            items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                            icons.add(works.heymate.beta.R.drawable.msg_language);
+                            items.add(LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                             options.add(10);
-                            icons.add(R.drawable.msg_download);
-                            items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                            icons.add(works.heymate.beta.R.drawable.msg_download);
+                            items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                             options.add(6);
-                            icons.add(R.drawable.msg_shareout);
+                            icons.add(works.heymate.beta.R.drawable.msg_shareout);
                         } else if (type == 10) {
-                            items.add(LocaleController.getString("ApplyThemeFile", R.string.ApplyThemeFile));
+                            items.add(LocaleController.getString("ApplyThemeFile", works.heymate.beta.R.string.ApplyThemeFile));
                             options.add(5);
-                            icons.add(R.drawable.msg_theme);
-                            items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                            icons.add(works.heymate.beta.R.drawable.msg_theme);
+                            items.add(LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                             options.add(10);
-                            icons.add(R.drawable.msg_download);
-                            items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                            icons.add(works.heymate.beta.R.drawable.msg_download);
+                            items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                             options.add(6);
-                            icons.add(R.drawable.msg_shareout);
+                            icons.add(works.heymate.beta.R.drawable.msg_shareout);
                         } else if (type == 6) {
-                            items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                            items.add(LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
                             options.add(7);
-                            icons.add(R.drawable.msg_gallery);
-                            items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                            icons.add(works.heymate.beta.R.drawable.msg_gallery);
+                            items.add(LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                             options.add(10);
-                            icons.add(R.drawable.msg_download);
-                            items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                            icons.add(works.heymate.beta.R.drawable.msg_download);
+                            items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                             options.add(6);
-                            icons.add(R.drawable.msg_shareout);
+                            icons.add(works.heymate.beta.R.drawable.msg_shareout);
                         } else if (type == 7) {
                             if (selectedObject.isMask()) {
-                                items.add(LocaleController.getString("AddToMasks", R.string.AddToMasks));
+                                items.add(LocaleController.getString("AddToMasks", works.heymate.beta.R.string.AddToMasks));
                                 options.add(9);
-                                icons.add(R.drawable.msg_sticker);
+                                icons.add(works.heymate.beta.R.drawable.msg_sticker);
                             } else {
-                                items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
+                                items.add(LocaleController.getString("AddToStickers", works.heymate.beta.R.string.AddToStickers));
                                 options.add(9);
-                                icons.add(R.drawable.msg_sticker);
+                                icons.add(works.heymate.beta.R.drawable.msg_sticker);
                                 TLRPC.Document document = selectedObject.getDocument();
                                 if (!getMediaDataController().isStickerInFavorites(document)) {
                                     if (getMediaDataController().canAddStickerToFavorites() && MessageObject.isStickerHasSet(document)) {
-                                        items.add(LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+                                        items.add(LocaleController.getString("AddToFavorites", works.heymate.beta.R.string.AddToFavorites));
                                         options.add(20);
-                                        icons.add(R.drawable.msg_fave);
+                                        icons.add(works.heymate.beta.R.drawable.msg_fave);
                                     }
                                 } else {
-                                    items.add(LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites));
+                                    items.add(LocaleController.getString("DeleteFromFavorites", works.heymate.beta.R.string.DeleteFromFavorites));
                                     options.add(21);
-                                    icons.add(R.drawable.msg_unfave);
+                                    icons.add(works.heymate.beta.R.drawable.msg_unfave);
                                 }
                             }
                         } else if (type == 8) {
                             TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.media.user_id);
                             if (user != null && user.id != getUserConfig().getClientUserId() && getContactsController().contactsDict.get(user.id) == null) {
-                                items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+                                items.add(LocaleController.getString("AddContactTitle", works.heymate.beta.R.string.AddContactTitle));
                                 options.add(15);
-                                icons.add(R.drawable.msg_addcontact);
+                                icons.add(works.heymate.beta.R.drawable.msg_addcontact);
                             }
                             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
-                                items.add(LocaleController.getString("Copy", R.string.Copy));
+                                items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
                                 options.add(16);
-                                icons.add(R.drawable.msg_copy);
-                                items.add(LocaleController.getString("Call", R.string.Call));
+                                icons.add(works.heymate.beta.R.drawable.msg_copy);
+                                items.add(LocaleController.getString("Call", works.heymate.beta.R.string.Call));
                                 options.add(17);
-                                icons.add(R.drawable.msg_callback);
+                                icons.add(works.heymate.beta.R.drawable.msg_callback);
                             }
                         } else if (type == 9) {
                             TLRPC.Document document = selectedObject.getDocument();
                             if (!getMediaDataController().isStickerInFavorites(document)) {
                                 if (MessageObject.isStickerHasSet(document)) {
-                                    items.add(LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+                                    items.add(LocaleController.getString("AddToFavorites", works.heymate.beta.R.string.AddToFavorites));
                                     options.add(20);
-                                    icons.add(R.drawable.msg_fave);
+                                    icons.add(works.heymate.beta.R.drawable.msg_fave);
                                 }
                             } else {
-                                items.add(LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites));
+                                items.add(LocaleController.getString("DeleteFromFavorites", works.heymate.beta.R.string.DeleteFromFavorites));
                                 options.add(21);
-                                icons.add(R.drawable.msg_unfave);
+                                icons.add(works.heymate.beta.R.drawable.msg_unfave);
                             }
                         }
                         if (chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
-                            items.add(LocaleController.getString("Forward", R.string.Forward));
+                            items.add(LocaleController.getString("Forward", works.heymate.beta.R.string.Forward));
                             options.add(2);
-                            icons.add(R.drawable.msg_forward);
+                            icons.add(works.heymate.beta.R.drawable.msg_forward);
                         }
 //                        if (message.messageOwner.forwards > 0 && (BuildVars.DEBUG_PRIVATE_VERSION || ChatObject.hasAdminRights(getCurrentChat()))) {
-//                            items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
+//                            items.add(LocaleController.getString("ViewStats", works.heymate.beta.R.string.ViewStats));
 //                            options.add(28);
-//                            icons.add(R.drawable.msg_stats);
+//                            icons.add(works.heymate.beta.R.drawable.msg_stats);
 //                        }
                         if (allowUnpin) {
-                            items.add(LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
+                            items.add(LocaleController.getString("UnpinMessage", works.heymate.beta.R.string.UnpinMessage));
                             options.add(14);
-                            icons.add(R.drawable.msg_unpin);
+                            icons.add(works.heymate.beta.R.drawable.msg_unpin);
                         } else if (allowPin) {
-                            items.add(LocaleController.getString("PinMessage", R.string.PinMessage));
+                            items.add(LocaleController.getString("PinMessage", works.heymate.beta.R.string.PinMessage));
                             options.add(13);
-                            icons.add(R.drawable.msg_pin);
+                            icons.add(works.heymate.beta.R.drawable.msg_pin);
                         }
                         if (allowEdit) {
-                            items.add(LocaleController.getString("Edit", R.string.Edit));
+                            items.add(LocaleController.getString("Edit", works.heymate.beta.R.string.Edit));
                             options.add(12);
-                            icons.add(R.drawable.msg_edit);
+                            icons.add(works.heymate.beta.R.drawable.msg_edit);
                         }
                         if (chatMode == MODE_SCHEDULED && selectedObject.canEditMessageScheduleTime(currentChat)) {
-                            items.add(LocaleController.getString("MessageScheduleEditTime", R.string.MessageScheduleEditTime));
+                            items.add(LocaleController.getString("MessageScheduleEditTime", works.heymate.beta.R.string.MessageScheduleEditTime));
                             options.add(102);
-                            icons.add(R.drawable.msg_schedule);
+                            icons.add(works.heymate.beta.R.drawable.msg_schedule);
                         }
                         if (chatMode != MODE_SCHEDULED && selectedObject.contentType == 0 && selectedObject.getId() > 0 && !selectedObject.isOut() && (currentChat != null || currentUser != null && currentUser.bot)) {
                             if (UserObject.isReplyUser(currentUser)) {
-                                items.add(LocaleController.getString("BlockContact", R.string.BlockContact));
+                                items.add(LocaleController.getString("BlockContact", works.heymate.beta.R.string.BlockContact));
                                 options.add(23);
-                                icons.add(R.drawable.msg_block2);
+                                icons.add(works.heymate.beta.R.drawable.msg_block2);
                             } else {
-                                items.add(LocaleController.getString("ReportChat", R.string.ReportChat));
+                                items.add(LocaleController.getString("ReportChat", works.heymate.beta.R.string.ReportChat));
                                 options.add(23);
-                                icons.add(R.drawable.msg_report);
+                                icons.add(works.heymate.beta.R.drawable.msg_report);
                             }
                         }
                         if (message.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat) && (threadMessageObjects == null || !threadMessageObjects.contains(message))) {
-                            items.add(LocaleController.getString("Delete", R.string.Delete));
+                            items.add(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
                             options.add(1);
-                            icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                            icons.add(selectedObject.messageOwner.ttl_period != 0 ? works.heymate.beta.R.drawable.msg_delete_auto : works.heymate.beta.R.drawable.msg_delete);
                         }
                     } else {
                         if (allowChatActions) {
-                            items.add(LocaleController.getString("Reply", R.string.Reply));
+                            items.add(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply));
                             options.add(8);
-                            icons.add(R.drawable.msg_reply);
+                            icons.add(works.heymate.beta.R.drawable.msg_reply);
                         }
                         if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
-                            items.add(LocaleController.getString("Copy", R.string.Copy));
+                            items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
                             options.add(3);
-                            icons.add(R.drawable.msg_copy);
+                            icons.add(works.heymate.beta.R.drawable.msg_copy);
                         }
                         if (!isThreadChat() && chatMode != MODE_SCHEDULED && currentChat != null && (currentChat.has_link || message.hasReplies()) && currentChat.megagroup && message.canViewThread()) {
                             if (message.hasReplies()) {
                                 items.add(LocaleController.formatPluralString("ViewReplies", message.getRepliesCount()));
                             } else {
-                                items.add(LocaleController.getString("ViewThread", R.string.ViewThread));
+                                items.add(LocaleController.getString("ViewThread", works.heymate.beta.R.string.ViewThread));
                             }
                             options.add(27);
-                            icons.add(R.drawable.msg_viewreplies);
+                            icons.add(works.heymate.beta.R.drawable.msg_viewreplies);
                         }
                         if (type == 4) {
                             if (selectedObject.isVideo()) {
-                                items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                                items.add(LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
                                 options.add(4);
-                                icons.add(R.drawable.msg_gallery);
-                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                icons.add(works.heymate.beta.R.drawable.msg_gallery);
+                                items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                                 options.add(6);
-                                icons.add(R.drawable.msg_shareout);
+                                icons.add(works.heymate.beta.R.drawable.msg_shareout);
                             } else if (selectedObject.isMusic()) {
-                                items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
+                                items.add(LocaleController.getString("SaveToMusic", works.heymate.beta.R.string.SaveToMusic));
                                 options.add(10);
-                                icons.add(R.drawable.msg_download);
-                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                icons.add(works.heymate.beta.R.drawable.msg_download);
+                                items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                                 options.add(6);
-                                icons.add(R.drawable.msg_shareout);
+                                icons.add(works.heymate.beta.R.drawable.msg_shareout);
                             } else if (!selectedObject.isVideo() && selectedObject.getDocument() != null) {
-                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                                items.add(LocaleController.getString("SaveToDownloads", works.heymate.beta.R.string.SaveToDownloads));
                                 options.add(10);
-                                icons.add(R.drawable.msg_download);
-                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                icons.add(works.heymate.beta.R.drawable.msg_download);
+                                items.add(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile));
                                 options.add(6);
-                                icons.add(R.drawable.msg_shareout);
+                                icons.add(works.heymate.beta.R.drawable.msg_shareout);
                             } else {
-                                items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                                items.add(LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
                                 options.add(4);
-                                icons.add(R.drawable.msg_gallery);
+                                icons.add(works.heymate.beta.R.drawable.msg_gallery);
                             }
                         } else if (type == 5) {
-                            items.add(LocaleController.getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
+                            items.add(LocaleController.getString("ApplyLocalizationFile", works.heymate.beta.R.string.ApplyLocalizationFile));
                             options.add(5);
-                            icons.add(R.drawable.msg_language);
+                            icons.add(works.heymate.beta.R.drawable.msg_language);
                         } else if (type == 10) {
-                            items.add(LocaleController.getString("ApplyThemeFile", R.string.ApplyThemeFile));
+                            items.add(LocaleController.getString("ApplyThemeFile", works.heymate.beta.R.string.ApplyThemeFile));
                             options.add(5);
-                            icons.add(R.drawable.msg_theme);
+                            icons.add(works.heymate.beta.R.drawable.msg_theme);
                         } else if (type == 7) {
-                            items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
+                            items.add(LocaleController.getString("AddToStickers", works.heymate.beta.R.string.AddToStickers));
                             options.add(9);
-                            icons.add(R.drawable.msg_sticker);
+                            icons.add(works.heymate.beta.R.drawable.msg_sticker);
                         } else if (type == 8) {
                             TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.media.user_id);
                             if (user != null && user.id != getUserConfig().getClientUserId() && getContactsController().contactsDict.get(user.id) == null) {
-                                items.add(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+                                items.add(LocaleController.getString("AddContactTitle", works.heymate.beta.R.string.AddContactTitle));
                                 options.add(15);
-                                icons.add(R.drawable.msg_addcontact);
+                                icons.add(works.heymate.beta.R.drawable.msg_addcontact);
                             }
                             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
-                                items.add(LocaleController.getString("Copy", R.string.Copy));
+                                items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
                                 options.add(16);
-                                icons.add(R.drawable.msg_copy);
-                                items.add(LocaleController.getString("Call", R.string.Call));
+                                icons.add(works.heymate.beta.R.drawable.msg_copy);
+                                items.add(LocaleController.getString("Call", works.heymate.beta.R.string.Call));
                                 options.add(17);
-                                icons.add(R.drawable.msg_callback);
+                                icons.add(works.heymate.beta.R.drawable.msg_callback);
                             }
                         }
-                        items.add(LocaleController.getString("Delete", R.string.Delete));
+                        items.add(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
                         options.add(1);
-                        icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
+                        icons.add(selectedObject.messageOwner.ttl_period != 0 ? works.heymate.beta.R.drawable.msg_delete_auto : works.heymate.beta.R.drawable.msg_delete);
                     }
                 }
             }
@@ -18832,7 +18832,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             });
             Rect backgroundPaddings = new Rect();
-            Drawable shadowDrawable = getParentActivity().getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
+            Drawable shadowDrawable = getParentActivity().getResources().getDrawable(works.heymate.beta.R.drawable.popup_fixed_alert).mutate();
             shadowDrawable.getPadding(backgroundPaddings);
             popupLayout.setBackgroundDrawable(shadowDrawable);
             popupLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
@@ -18840,7 +18840,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             LinearLayout linearLayout = new LinearLayout(getParentActivity());
             ScrollView scrollView;
             if (Build.VERSION.SDK_INT >= 21) {
-                scrollView = new ScrollView(getParentActivity(), null, 0, R.style.scrollbarShapeStyle) {
+                scrollView = new ScrollView(getParentActivity(), null, 0, works.heymate.beta.R.style.scrollbarShapeStyle) {
                     @Override
                     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -18930,7 +18930,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             scrimPopupWindow.setDismissAnimationDuration(220);
             scrimPopupWindow.setOutsideTouchable(true);
             scrimPopupWindow.setClippingEnabled(true);
-            scrimPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
+            scrimPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation);
             scrimPopupWindow.setFocusable(true);
             popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
             scrimPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -19096,9 +19096,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.getString("EditMessageError", R.string.EditMessageError));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setMessage(LocaleController.getString("EditMessageError", works.heymate.beta.R.string.EditMessageError));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     showDialog(builder.create());
 
                     if (chatActivityEnterView != null) {
@@ -19367,9 +19367,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 return;
                             }
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                            builder.setMessage(LocaleController.getString("IncorrectTheme", works.heymate.beta.R.string.IncorrectTheme));
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                             showDialog(builder.create());
                         }
                     } else {
@@ -19383,9 +19383,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 return;
                             }
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                            builder.setMessage(LocaleController.getString("IncorrectLocalization", R.string.IncorrectLocalization));
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                            builder.setMessage(LocaleController.getString("IncorrectLocalization", works.heymate.beta.R.string.IncorrectLocalization));
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                             showDialog(builder.create());
                         }
                     }
@@ -19417,7 +19417,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
                 }
                 try {
-                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile)), 500);
                 } catch (Throwable ignore) {
 
                 }
@@ -19544,21 +19544,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     mid = selectedObject.getId();
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("PinMessageAlertTitle", R.string.PinMessageAlertTitle));
+                builder.setTitle(LocaleController.getString("PinMessageAlertTitle", works.heymate.beta.R.string.PinMessageAlertTitle));
 
                 final boolean[] checks;
                 if (currentUser != null) {
                     if (currentPinnedMessageId != 0 && mid < currentPinnedMessageId) {
-                        builder.setMessage(LocaleController.getString("PinOldMessageAlert", R.string.PinOldMessageAlert));
+                        builder.setMessage(LocaleController.getString("PinOldMessageAlert", works.heymate.beta.R.string.PinOldMessageAlert));
                     } else {
-                        builder.setMessage(LocaleController.getString("PinMessageAlertChat", R.string.PinMessageAlertChat));
+                        builder.setMessage(LocaleController.getString("PinMessageAlertChat", works.heymate.beta.R.string.PinMessageAlertChat));
                     }
                     checks = new boolean[]{false, false};
                     if (!UserObject.isUserSelf(currentUser)) {
                         FrameLayout frameLayout = new FrameLayout(getParentActivity());
                         CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        cell.setText(LocaleController.formatString("PinAlsoFor", R.string.PinAlsoFor, UserObject.getFirstName(currentUser)), "", false, false);
+                        cell.setText(LocaleController.formatString("PinAlsoFor", works.heymate.beta.R.string.PinAlsoFor, UserObject.getFirstName(currentUser)), "", false, false);
                         cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(8) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(8), 0);
                         frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 8, 0, 8, 0));
                         cell.setOnClickListener(v -> {
@@ -19570,15 +19570,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 } else if (ChatObject.isChannel(currentChat) && currentChat.megagroup || currentChat != null && !ChatObject.isChannel(currentChat)) {
                     if (!pinnedMessageIds.isEmpty() && mid < pinnedMessageIds.get(0)) {
-                        builder.setMessage(LocaleController.getString("PinOldMessageAlert", R.string.PinOldMessageAlert));
+                        builder.setMessage(LocaleController.getString("PinOldMessageAlert", works.heymate.beta.R.string.PinOldMessageAlert));
                         checks = new boolean[]{false, true};
                     } else {
-                        builder.setMessage(LocaleController.getString("PinMessageAlert", R.string.PinMessageAlert));
+                        builder.setMessage(LocaleController.getString("PinMessageAlert", works.heymate.beta.R.string.PinMessageAlert));
                         checks = new boolean[]{true, true};
                         FrameLayout frameLayout = new FrameLayout(getParentActivity());
                         CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        cell.setText(LocaleController.getString("PinNotify", R.string.PinNotify), "", true, false);
+                        cell.setText(LocaleController.getString("PinNotify", works.heymate.beta.R.string.PinNotify), "", true, false);
                         cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(8) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(8), 0);
                         frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 8, 0, 8, 0));
                         cell.setOnClickListener(v -> {
@@ -19590,17 +19590,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 } else {
                     if (currentPinnedMessageId != 0 && mid < currentPinnedMessageId) {
-                        builder.setMessage(LocaleController.getString("PinOldMessageAlert", R.string.PinOldMessageAlert));
+                        builder.setMessage(LocaleController.getString("PinOldMessageAlert", works.heymate.beta.R.string.PinOldMessageAlert));
                     } else {
-                        builder.setMessage(LocaleController.getString("PinMessageAlertChannel", R.string.PinMessageAlertChannel));
+                        builder.setMessage(LocaleController.getString("PinMessageAlertChannel", works.heymate.beta.R.string.PinMessageAlertChannel));
                     }
                     checks = new boolean[]{false, true};
                 }
-                builder.setPositiveButton(LocaleController.getString("PinMessage", R.string.PinMessage), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("PinMessage", works.heymate.beta.R.string.PinMessage), (dialogInterface, i) -> {
                     getMessagesController().pinMessage(currentChat, currentUser, mid, false, !checks[1], checks[0]);
                     BulletinFactory.createPinMessageBulletin(this).show();
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
                 break;
             }
@@ -19734,13 +19734,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 MessageObject object = selectedObject;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 if (object.isQuiz()) {
-                    builder.setTitle(LocaleController.getString("StopQuizAlertTitle", R.string.StopQuizAlertTitle));
-                    builder.setMessage(LocaleController.getString("StopQuizAlertText", R.string.StopQuizAlertText));
+                    builder.setTitle(LocaleController.getString("StopQuizAlertTitle", works.heymate.beta.R.string.StopQuizAlertTitle));
+                    builder.setMessage(LocaleController.getString("StopQuizAlertText", works.heymate.beta.R.string.StopQuizAlertText));
                 } else {
-                    builder.setTitle(LocaleController.getString("StopPollAlertTitle", R.string.StopPollAlertTitle));
-                    builder.setMessage(LocaleController.getString("StopPollAlertText", R.string.StopPollAlertText));
+                    builder.setTitle(LocaleController.getString("StopPollAlertTitle", works.heymate.beta.R.string.StopPollAlertTitle));
+                    builder.setMessage(LocaleController.getString("StopPollAlertText", works.heymate.beta.R.string.StopPollAlertText));
                 }
-                builder.setPositiveButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
                     final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(getParentActivity(), 3)};
                     TLRPC.TL_messages_editMessage req = new TLRPC.TL_messages_editMessage();
                     TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
@@ -19777,7 +19777,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         showDialog(progressDialog[0]);
                     }, 500);
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
                 break;
             }
@@ -19811,9 +19811,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else if (error.text != null) {
                             AndroidUtilities.runOnUIThread(() -> {
                                 if (error.text.startsWith("SLOWMODE_WAIT_")) {
-                                    AlertsCreator.showSimpleToast(ChatActivity.this, LocaleController.getString("SlowmodeSendError", R.string.SlowmodeSendError));
+                                    AlertsCreator.showSimpleToast(ChatActivity.this, LocaleController.getString("SlowmodeSendError", works.heymate.beta.R.string.SlowmodeSendError));
                                 } else if (error.text.equals("CHAT_SEND_MEDIA_FORBIDDEN")) {
-                                    AlertsCreator.showSimpleToast(ChatActivity.this, LocaleController.getString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever));
+                                    AlertsCreator.showSimpleToast(ChatActivity.this, LocaleController.getString("AttachMediaRestrictedForever", works.heymate.beta.R.string.AttachMediaRestrictedForever));
                                 } else {
                                     AlertsCreator.showSimpleToast(ChatActivity.this, error.text);
                                 }
@@ -19940,13 +19940,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (chatActivityEnterView != null && chatActivityEnterView.isRecordLocked()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             if (chatActivityEnterView.isInVideoMode()) {
-                builder.setTitle(LocaleController.getString("DiscardVideoMessageTitle", R.string.DiscardVideoMessageTitle));
-                builder.setMessage(LocaleController.getString("DiscardVideoMessageDescription", R.string.DiscardVideoMessageDescription));
+                builder.setTitle(LocaleController.getString("DiscardVideoMessageTitle", works.heymate.beta.R.string.DiscardVideoMessageTitle));
+                builder.setMessage(LocaleController.getString("DiscardVideoMessageDescription", works.heymate.beta.R.string.DiscardVideoMessageDescription));
             } else {
-                builder.setTitle(LocaleController.getString("DiscardVoiceMessageTitle", R.string.DiscardVoiceMessageTitle));
-                builder.setMessage(LocaleController.getString("DiscardVoiceMessageDescription", R.string.DiscardVoiceMessageDescription));
+                builder.setTitle(LocaleController.getString("DiscardVoiceMessageTitle", works.heymate.beta.R.string.DiscardVoiceMessageTitle));
+                builder.setMessage(LocaleController.getString("DiscardVoiceMessageDescription", works.heymate.beta.R.string.DiscardVoiceMessageDescription));
             }
-            builder.setPositiveButton(LocaleController.getString("DiscardVoiceMessageAction", R.string.DiscardVoiceMessageAction), (dialog, which) -> {
+            builder.setPositiveButton(LocaleController.getString("DiscardVoiceMessageAction", works.heymate.beta.R.string.DiscardVoiceMessageAction), (dialog, which) -> {
                 if (chatActivityEnterView != null) {
                     if (forceCloseOnDiscard) {
                         finishFragment();
@@ -19955,7 +19955,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Continue", R.string.Continue), null);
+            builder.setNegativeButton(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue), null);
             showDialog(builder.create());
             return true;
         }
@@ -20117,12 +20117,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int dt = messageObject.canEditMessageAnytime(currentChat) ? 6 * 60 : getMessagesController().maxEditTime + 5 * 60 - Math.abs(getConnectionsManager().getCurrentTime() - messageObject.messageOwner.date);
         if (dt > 0) {
             if (dt <= 5 * 60) {
-                replyObjectTextView.setText(LocaleController.formatString("TimeToEdit", R.string.TimeToEdit, AndroidUtilities.formatShortDuration(dt)));
+                replyObjectTextView.setText(LocaleController.formatString("TimeToEdit", works.heymate.beta.R.string.TimeToEdit, AndroidUtilities.formatShortDuration(dt)));
             }
             AndroidUtilities.runOnUIThread(this::checkEditTimer, 1000);
         } else {
             chatActivityEnterView.onEditTimeExpired();
-            replyObjectTextView.setText(LocaleController.formatString("TimeToEditExpired", R.string.TimeToEditExpired));
+            replyObjectTextView.setText(LocaleController.formatString("TimeToEditExpired", works.heymate.beta.R.string.TimeToEditExpired));
         }
     }
 
@@ -20154,12 +20154,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         if (message.type == 3) {
-            builder.setMessage(LocaleController.getString("NoPlayerInstalled", R.string.NoPlayerInstalled));
+            builder.setMessage(LocaleController.getString("NoPlayerInstalled", works.heymate.beta.R.string.NoPlayerInstalled));
         } else {
-            builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+            builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", works.heymate.beta.R.string.NoHandleAppInstalled, message.getDocument().mime_type));
         }
         showDialog(builder.create());
     }
@@ -20319,19 +20319,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         TLRPC.User user = getMessagesController().getUser(uid);
         if (ask) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
             String name;
             if (user != null) {
                 name = ContactsController.formatName(user.first_name, user.last_name);
             } else {
                 name = "";
             }
-            builder.setMessage(LocaleController.formatString("BotPermissionGameAlert", R.string.BotPermissionGameAlert, name));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            builder.setMessage(LocaleController.formatString("BotPermissionGameAlert", works.heymate.beta.R.string.BotPermissionGameAlert, name));
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                 showOpenGameAlert(game, messageObject, urlStr, false, uid);
                 MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("askgame_" + uid, false).commit();
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             showDialog(builder.create());
         } else {
             if (Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet() && WebviewActivity.supportWebview()) {
@@ -20428,7 +20428,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 openOriginalReplyChat(fallbackMessage);
             } else {
                 if (getParentActivity() != null) {
-                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("ChannelPostDeleted", R.string.ChannelPostDeleted)).show();
+                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("ChannelPostDeleted", works.heymate.beta.R.string.ChannelPostDeleted)).show();
                 }
             }
         }
@@ -20497,9 +20497,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if ("CHANNEL_PRIVATE".equals(error.text)) {
                                 if (getParentActivity() != null) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", R.string.JoinByPeekChannelText));
-                                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", works.heymate.beta.R.string.JoinByPeekChannelText));
+                                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                                     AlertDialog alertDialog = builder.create();
                                     showDialog(builder.create());
                                 }
@@ -20567,8 +20567,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle));
-        String format = LocaleController.getString("OpenUrlAlert2", R.string.OpenUrlAlert2);
+        builder.setTitle(LocaleController.getString("OpenUrlTitle", works.heymate.beta.R.string.OpenUrlTitle));
+        String format = LocaleController.getString("OpenUrlAlert2", works.heymate.beta.R.string.OpenUrlAlert2);
         int index = format.indexOf("%");
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(String.format(format, url));
         if (index >= 0) {
@@ -20576,7 +20576,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         builder.setMessage(stringBuilder);
         builder.setMessageTextViewClickable(false);
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
 
         CheckBoxCell[] cells = new CheckBoxCell[2];
         LinearLayout linearLayout = new LinearLayout(getParentActivity());
@@ -20588,14 +20588,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             cells[a].setMultiline(true);
             cells[a].setTag(a);
             if (a == 0) {
-                stringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("OpenUrlOption1", R.string.OpenUrlOption1, request.domain, ContactsController.formatName(selfUser.first_name, selfUser.last_name)));
+                stringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("OpenUrlOption1", works.heymate.beta.R.string.OpenUrlOption1, request.domain, ContactsController.formatName(selfUser.first_name, selfUser.last_name)));
                 index = TextUtils.indexOf(stringBuilder, request.domain);
                 if (index >= 0) {
                     stringBuilder.setSpan(new URLSpan(""), index, index + request.domain.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 cells[a].setText(stringBuilder, "", true, false);
             } else {
-                cells[a].setText(AndroidUtilities.replaceTags(LocaleController.formatString("OpenUrlOption2", R.string.OpenUrlOption2, UserObject.getFirstName(request.bot))), "", true, false);
+                cells[a].setText(AndroidUtilities.replaceTags(LocaleController.formatString("OpenUrlOption2", works.heymate.beta.R.string.OpenUrlOption2, UserObject.getFirstName(request.bot))), "", true, false);
             }
             cells[a].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
             linearLayout.addView(cells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -20617,7 +20617,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         builder.setCustomViewOffset(12);
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Open", R.string.Open), (dialogInterface, i) -> {
+        builder.setPositiveButton(LocaleController.getString("Open", works.heymate.beta.R.string.Open), (dialogInterface, i) -> {
             if (!cells[0].isChecked()) {
                 Browser.openUrl(getParentActivity(), url, false);
             } else {
@@ -20782,7 +20782,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (url instanceof URLSpanMono) {
             ((URLSpanMono) url).copyToClipboard();
-            Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied), Toast.LENGTH_SHORT).show();
         } else if (url instanceof URLSpanUserMention) {
             TLRPC.User user = getMessagesController().getUser(Utilities.parseInt(((URLSpanUserMention) url).getURL()));
             if (user != null) {
@@ -20861,14 +20861,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         for (int a = 0, N = data.open_urls.size(); a < N; a++) {
                             arrayList.add(data.open_urls.get(a).name);
                         }
-                        arrayList.add(LocaleController.getString("CopyCardNumber", R.string.CopyCardNumber));
+                        arrayList.add(LocaleController.getString("CopyCardNumber", works.heymate.beta.R.string.CopyCardNumber));
                         builder.setTitle(data.title);
                         builder.setItems(arrayList.toArray(new CharSequence[0]), (dialog, which) -> {
                             if (which < data.open_urls.size()) {
                                 Browser.openUrl(getParentActivity(), data.open_urls.get(which).url, inlineReturn == 0, false);
                             } else {
                                 AndroidUtilities.addToClipboard(number);
-                                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("CardNumberCopied", R.string.CardNumberCopied), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("CardNumberCopied", works.heymate.beta.R.string.CardNumberCopied), Toast.LENGTH_SHORT).show();
                             }
                         });
                         showDialog(builder.create());
@@ -20885,7 +20885,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (longPress) {
                     BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
                     builder.setTitle(str);
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                    builder.setItems(new CharSequence[]{LocaleController.getString("Open", works.heymate.beta.R.string.Open), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialog, which) -> {
                         if (which == 0) {
                             openClickableLink(str);
                         } else if (which == 1) {
@@ -20910,7 +20910,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (longPress) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
                 builder.setTitle(urlFinal);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", works.heymate.beta.R.string.Open), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialog, which) -> {
                     if (which == 0) {
                         processExternalUrl(1, urlFinal, false);
                     } else if (which == 1) {
@@ -21151,7 +21151,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             CharSequence text = LocaleController.getString("PsaMessageInfo_" + messageObject.messageOwner.fwd_from.psa_type);
                             if (TextUtils.isEmpty(text)) {
-                                text = LocaleController.getString("PsaMessageInfoDefault", R.string.PsaMessageInfoDefault);
+                                text = LocaleController.getString("PsaMessageInfoDefault", works.heymate.beta.R.string.PsaMessageInfoDefault);
                             }
                             SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
                             MessageObject.addLinks(false, stringBuilder);
@@ -21875,7 +21875,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (position == botInfoRow) {
                 BotHelpCell helpView = (BotHelpCell) holder.itemView;
                 if (UserObject.isReplyUser(currentUser)) {
-                    helpView.setText(false, LocaleController.getString("RepliesChatInfo", R.string.RepliesChatInfo));
+                    helpView.setText(false, LocaleController.getString("RepliesChatInfo", works.heymate.beta.R.string.RepliesChatInfo));
                 } else {
                     helpView.setText(true, botInfo.size() != 0 ? botInfo.get(currentUser.id).description : null);
                 }
@@ -22187,7 +22187,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     actionCell.setAlpha(1.0f);
                 } else if (view instanceof ChatUnreadCell) {
                     ChatUnreadCell unreadCell = (ChatUnreadCell) view;
-                    unreadCell.setText(LocaleController.getString("UnreadMessages", R.string.UnreadMessages));
+                    unreadCell.setText(LocaleController.getString("UnreadMessages", works.heymate.beta.R.string.UnreadMessages));
                     if (createUnreadMessageAfterId != 0) {
                         createUnreadMessageAfterId = 0;
                     }

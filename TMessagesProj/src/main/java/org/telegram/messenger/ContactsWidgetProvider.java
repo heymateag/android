@@ -87,20 +87,20 @@ public class ContactsWidgetProvider extends AppWidgetProvider {
             int count = (int) Math.ceil(selectedDialogs.size() / 2.0f);
 
             if (rows == 1 || count <= 1) {
-                id = R.layout.contacts_widget_layout_1;
+                id = works.heymate.beta.R.layout.contacts_widget_layout_1;
             } else if (rows == 2 || count <= 2) {
-                id = R.layout.contacts_widget_layout_2;
+                id = works.heymate.beta.R.layout.contacts_widget_layout_2;
             } else if (rows == 3 || count <= 3) {
-                id = R.layout.contacts_widget_layout_3;
+                id = works.heymate.beta.R.layout.contacts_widget_layout_3;
             } else {
-                id = R.layout.contacts_widget_layout_4;
+                id = works.heymate.beta.R.layout.contacts_widget_layout_4;
             }
         } else {
-            id = R.layout.contacts_widget_layout_1;
+            id = works.heymate.beta.R.layout.contacts_widget_layout_1;
         }
         RemoteViews rv = new RemoteViews(context.getPackageName(), id);
-        rv.setRemoteAdapter(appWidgetId, R.id.list_view, intent2);
-        rv.setEmptyView(R.id.list_view, R.id.empty_view);
+        rv.setRemoteAdapter(appWidgetId, works.heymate.beta.R.id.list_view, intent2);
+        rv.setEmptyView(works.heymate.beta.R.id.list_view, works.heymate.beta.R.id.empty_view);
 
         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
         intent.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
@@ -108,11 +108,11 @@ public class ContactsWidgetProvider extends AppWidgetProvider {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        rv.setPendingIntentTemplate(R.id.list_view, contentIntent);
+        rv.setPendingIntentTemplate(works.heymate.beta.R.id.list_view, contentIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, rv);
         if (edit) {
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_view);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, works.heymate.beta.R.id.list_view);
         }
     }
 }

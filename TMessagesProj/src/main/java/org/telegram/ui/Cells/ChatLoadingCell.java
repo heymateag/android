@@ -13,7 +13,7 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgressView;
@@ -27,7 +27,7 @@ public class ChatLoadingCell extends FrameLayout {
         super(context);
 
         frameLayout = new FrameLayout(context);
-        frameLayout.setBackgroundResource(R.drawable.system_loader);
+        frameLayout.setBackgroundResource(works.heymate.beta.R.drawable.system_loader);
         frameLayout.getBackground().setColorFilter(Theme.colorFilter);
         addView(frameLayout, LayoutHelper.createFrame(36, 36, Gravity.CENTER));
 

@@ -43,7 +43,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.Utilities;
 
 public class DrawerLayoutContainer extends FrameLayout {
@@ -128,7 +128,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
-        shadowLeft = getResources().getDrawable(R.drawable.menu_shadow);
+        shadowLeft = getResources().getDrawable(works.heymate.beta.R.drawable.menu_shadow);
     }
 
     @SuppressLint("NewApi")

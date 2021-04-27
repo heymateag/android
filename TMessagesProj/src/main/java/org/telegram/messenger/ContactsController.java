@@ -301,12 +301,12 @@ public class ContactsController extends BaseController {
     public String getInviteText(int contacts) {
         String link = inviteLink == null ? "https://telegram.org/dl" : inviteLink;
         if (contacts <= 1) {
-            return LocaleController.formatString("InviteText2", R.string.InviteText2, link);
+            return LocaleController.formatString("InviteText2", works.heymate.beta.R.string.InviteText2, link);
         } else {
             try {
                 return String.format(LocaleController.getPluralString("InviteTextNum", contacts), contacts, link);
             } catch (Exception e) {
-                return LocaleController.formatString("InviteText2", R.string.InviteText2, link);
+                return LocaleController.formatString("InviteText2", works.heymate.beta.R.string.InviteText2, link);
             }
         }
     }
@@ -662,17 +662,17 @@ public class ContactsController extends BaseController {
 
                         if (type == ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM) {
                             String custom = pCur.getString(3);
-                            contact.phoneTypes.add(custom != null ? custom : LocaleController.getString("PhoneMobile", R.string.PhoneMobile));
+                            contact.phoneTypes.add(custom != null ? custom : LocaleController.getString("PhoneMobile", works.heymate.beta.R.string.PhoneMobile));
                         } else if (type == ContactsContract.CommonDataKinds.Phone.TYPE_HOME) {
-                            contact.phoneTypes.add(LocaleController.getString("PhoneHome", R.string.PhoneHome));
+                            contact.phoneTypes.add(LocaleController.getString("PhoneHome", works.heymate.beta.R.string.PhoneHome));
                         } else if (type == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
-                            contact.phoneTypes.add(LocaleController.getString("PhoneMobile", R.string.PhoneMobile));
+                            contact.phoneTypes.add(LocaleController.getString("PhoneMobile", works.heymate.beta.R.string.PhoneMobile));
                         } else if (type == ContactsContract.CommonDataKinds.Phone.TYPE_WORK) {
-                            contact.phoneTypes.add(LocaleController.getString("PhoneWork", R.string.PhoneWork));
+                            contact.phoneTypes.add(LocaleController.getString("PhoneWork", works.heymate.beta.R.string.PhoneWork));
                         } else if (type == ContactsContract.CommonDataKinds.Phone.TYPE_MAIN) {
-                            contact.phoneTypes.add(LocaleController.getString("PhoneMain", R.string.PhoneMain));
+                            contact.phoneTypes.add(LocaleController.getString("PhoneMain", works.heymate.beta.R.string.PhoneMain));
                         } else {
-                            contact.phoneTypes.add(LocaleController.getString("PhoneOther", R.string.PhoneOther));
+                            contact.phoneTypes.add(LocaleController.getString("PhoneOther", works.heymate.beta.R.string.PhoneOther));
                         }
                         shortContacts.put(shortNumber, contact);
                     }
@@ -2068,7 +2068,7 @@ public class ContactsController extends BaseController {
         builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile");
         builder.withValue(ContactsContract.Data.DATA1, user.id);
         builder.withValue(ContactsContract.Data.DATA2, "Telegram Profile");
-        builder.withValue(ContactsContract.Data.DATA3, LocaleController.formatString("ContactShortcutMessage", R.string.ContactShortcutMessage, phoneOrName));
+        builder.withValue(ContactsContract.Data.DATA3, LocaleController.formatString("ContactShortcutMessage", works.heymate.beta.R.string.ContactShortcutMessage, phoneOrName));
         builder.withValue(ContactsContract.Data.DATA4, user.id);
         query.add(builder.build());
 
@@ -2077,7 +2077,7 @@ public class ContactsController extends BaseController {
         builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call");
         builder.withValue(ContactsContract.Data.DATA1, user.id);
         builder.withValue(ContactsContract.Data.DATA2, "Telegram Voice Call");
-        builder.withValue(ContactsContract.Data.DATA3, LocaleController.formatString("ContactShortcutVoiceCall", R.string.ContactShortcutVoiceCall, phoneOrName));
+        builder.withValue(ContactsContract.Data.DATA3, LocaleController.formatString("ContactShortcutVoiceCall", works.heymate.beta.R.string.ContactShortcutVoiceCall, phoneOrName));
         builder.withValue(ContactsContract.Data.DATA4, user.id);
         query.add(builder.build());
 
@@ -2086,7 +2086,7 @@ public class ContactsController extends BaseController {
         builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video");
         builder.withValue(ContactsContract.Data.DATA1, user.id);
         builder.withValue(ContactsContract.Data.DATA2, "Telegram Video Call");
-        builder.withValue(ContactsContract.Data.DATA3, LocaleController.formatString("ContactShortcutVideoCall", R.string.ContactShortcutVideoCall, phoneOrName));
+        builder.withValue(ContactsContract.Data.DATA3, LocaleController.formatString("ContactShortcutVideoCall", works.heymate.beta.R.string.ContactShortcutVideoCall, phoneOrName));
         builder.withValue(ContactsContract.Data.DATA4, user.id);
         query.add(builder.build());
 
@@ -2266,7 +2266,7 @@ public class ContactsController extends BaseController {
                 getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_NAME);
                 getNotificationCenter().postNotificationName(NotificationCenter.contactsDidLoad);
                 if (showBulletin) {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.formatString("DeletedFromYourContacts", R.string.DeletedFromYourContacts, userName));
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.formatString("DeletedFromYourContacts", works.heymate.beta.R.string.DeletedFromYourContacts, userName));
                 }
             });
         });
@@ -2636,7 +2636,7 @@ public class ContactsController extends BaseController {
 
     public static String formatName(String firstName, String lastName, int maxLength) {
         /*if ((firstName == null || firstName.length() == 0) && (lastName == null || lastName.length() == 0)) {
-            return LocaleController.getString("HiddenName", R.string.HiddenName);
+            return LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
         }*/
         if (firstName != null) {
             firstName = firstName.trim();

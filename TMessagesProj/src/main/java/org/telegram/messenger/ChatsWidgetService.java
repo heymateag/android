@@ -80,19 +80,19 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     public RemoteViews getViewAt(int position) {
         if (deleted) {
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_deleted);
-            rv.setTextViewText(R.id.widget_deleted_text, LocaleController.getString("WidgetLoggedOff", R.string.WidgetLoggedOff));
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.widget_deleted);
+            rv.setTextViewText(works.heymate.beta.R.id.widget_deleted_text, LocaleController.getString("WidgetLoggedOff", works.heymate.beta.R.string.WidgetLoggedOff));
             return rv;
         } else if (position >= dids.size()) {
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_edititem);
-            rv.setTextViewText(R.id.widget_edititem_text, LocaleController.getString("TapToEditWidget", R.string.TapToEditWidget));
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.widget_edititem);
+            rv.setTextViewText(works.heymate.beta.R.id.widget_edititem_text, LocaleController.getString("TapToEditWidget", works.heymate.beta.R.string.TapToEditWidget));
             Bundle extras = new Bundle();
             extras.putInt("appWidgetId", appWidgetId);
             extras.putInt("appWidgetType", EditWidgetActivity.TYPE_CHATS);
             extras.putInt("currentAccount", accountInstance.getCurrentAccount());
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
-            rv.setOnClickFillInIntent(R.id.widget_edititem, fillInIntent);
+            rv.setOnClickFillInIntent(works.heymate.beta.R.id.widget_edititem, fillInIntent);
             return rv;
         }
         Long id = dids.get(position);
@@ -105,11 +105,11 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             user = accountInstance.getMessagesController().getUser((int) (long) id);
             if (user != null) {
                 if (UserObject.isUserSelf(user)) {
-                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
                 } else if (UserObject.isReplyUser(user)) {
-                    name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
+                    name = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
                 } else if (UserObject.isDeleted(user)) {
-                    name = LocaleController.getString("HiddenName", R.string.HiddenName);
+                    name = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
                 } else {
                     name = ContactsController.formatName(user.first_name, user.last_name);
                 }
@@ -126,8 +126,8 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 }
             }
         }
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.shortcut_widget_item);
-        rv.setTextViewText(R.id.shortcut_widget_item_text, name);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.shortcut_widget_item);
+        rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_text, name);
 
         try {
             Bitmap bitmap = null;
@@ -169,7 +169,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 canvas.restore();
             }
             canvas.setBitmap(null);
-            rv.setImageViewBitmap(R.id.shortcut_widget_item_avatar, result);
+            rv.setImageViewBitmap(works.heymate.beta.R.id.shortcut_widget_item_avatar, result);
         } catch (Throwable e) {
             FileLog.e(e);
         }
@@ -187,7 +187,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             }
             CharSequence messageString;
             CharSequence messageNameString;
-            int textColor = mContext.getResources().getColor(R.color.widget_text);
+            int textColor = mContext.getResources().getColor(works.heymate.beta.R.color.widget_text);
             if (message.messageOwner instanceof TLRPC.TL_messageService) {
                 if (ChatObject.isChannel(chat) && (message.messageOwner.action instanceof TLRPC.TL_messageActionHistoryClear ||
                         message.messageOwner.action instanceof TLRPC.TL_messageActionChannelMigrateFrom)) {
@@ -195,12 +195,12 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 } else {
                     messageString = message.messageText;
                 }
-                textColor = mContext.getResources().getColor(R.color.widget_action_text);
+                textColor = mContext.getResources().getColor(works.heymate.beta.R.color.widget_action_text);
             } else {
                 boolean needEmoji = true;
                 if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                     if (message.isOutOwner()) {
-                        messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
+                        messageNameString = LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou);
                     } else if (fromUser != null) {
                         messageNameString = UserObject.getFirstName(fromUser).replace("\n", "");
                     } else {
@@ -227,7 +227,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                         }
                         stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, emoji + mess.replace('\n', ' '), messageNameString));
                     } else if (message.messageOwner.media != null && !message.isMediaEmpty()) {
-                        textColor = mContext.getResources().getColor(R.color.widget_action_text);
+                        textColor = mContext.getResources().getColor(works.heymate.beta.R.color.widget_action_text);
                         String innerMessage;
                         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                             TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) message.messageOwner.media;
@@ -276,9 +276,9 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                     messageString = stringBuilder;
                 } else {
                     if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto && message.messageOwner.media.photo instanceof TLRPC.TL_photoEmpty && message.messageOwner.media.ttl_seconds != 0) {
-                        messageString = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                        messageString = LocaleController.getString("AttachPhotoExpired", works.heymate.beta.R.string.AttachPhotoExpired);
                     } else if (message.messageOwner.media instanceof TLRPC.TL_messageMediaDocument && message.messageOwner.media.document instanceof TLRPC.TL_documentEmpty && message.messageOwner.media.ttl_seconds != 0) {
-                        messageString = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+                        messageString = LocaleController.getString("AttachVideoExpired", works.heymate.beta.R.string.AttachVideoExpired);
                     } else if (message.caption != null) {
                         String emoji;
                         if (message.isVideo()) {
@@ -306,33 +306,33 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                             AndroidUtilities.highlightText(messageString, message.highlightedWords);
                         }
                         if (message.messageOwner.media != null && !message.isMediaEmpty()) {
-                            textColor = mContext.getResources().getColor(R.color.widget_action_text);
+                            textColor = mContext.getResources().getColor(works.heymate.beta.R.color.widget_action_text);
                         }
                     }
                 }
             }
 
-            rv.setTextViewText(R.id.shortcut_widget_item_time, LocaleController.stringForMessageListDate(message.messageOwner.date));
-            rv.setTextViewText(R.id.shortcut_widget_item_message, messageString.toString());
-            rv.setTextColor(R.id.shortcut_widget_item_message, textColor);
+            rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_time, LocaleController.stringForMessageListDate(message.messageOwner.date));
+            rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_message, messageString.toString());
+            rv.setTextColor(works.heymate.beta.R.id.shortcut_widget_item_message, textColor);
         } else {
             if (dialog != null && dialog.last_message_date != 0) {
-                rv.setTextViewText(R.id.shortcut_widget_item_time, LocaleController.stringForMessageListDate(dialog.last_message_date));
+                rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_time, LocaleController.stringForMessageListDate(dialog.last_message_date));
             } else {
-                rv.setTextViewText(R.id.shortcut_widget_item_time, "");
+                rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_time, "");
             }
-            rv.setTextViewText(R.id.shortcut_widget_item_message, "");
+            rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_message, "");
         }
         if (dialog != null && dialog.unread_count > 0) {
-            rv.setTextViewText(R.id.shortcut_widget_item_badge, String.format("%d", dialog.unread_count));
-            rv.setViewVisibility(R.id.shortcut_widget_item_badge, View.VISIBLE);
+            rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_badge, String.format("%d", dialog.unread_count));
+            rv.setViewVisibility(works.heymate.beta.R.id.shortcut_widget_item_badge, View.VISIBLE);
             if (accountInstance.getMessagesController().isDialogMuted(dialog.id)) {
-                rv.setInt(R.id.shortcut_widget_item_badge, "setBackgroundResource", R.drawable.widget_counter_muted);
+                rv.setInt(works.heymate.beta.R.id.shortcut_widget_item_badge, "setBackgroundResource", works.heymate.beta.R.drawable.widget_counter_muted);
             } else {
-                rv.setInt(R.id.shortcut_widget_item_badge, "setBackgroundResource", R.drawable.widget_counter);
+                rv.setInt(works.heymate.beta.R.id.shortcut_widget_item_badge, "setBackgroundResource", works.heymate.beta.R.drawable.widget_counter);
             }
         } else {
-            rv.setViewVisibility(R.id.shortcut_widget_item_badge, View.GONE);
+            rv.setViewVisibility(works.heymate.beta.R.id.shortcut_widget_item_badge, View.GONE);
         }
 
         Bundle extras = new Bundle();
@@ -346,9 +346,9 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
-        rv.setOnClickFillInIntent(R.id.shortcut_widget_item, fillInIntent);
+        rv.setOnClickFillInIntent(works.heymate.beta.R.id.shortcut_widget_item, fillInIntent);
 
-        rv.setViewVisibility(R.id.shortcut_widget_item_divider, position == getCount() ? View.GONE : View.VISIBLE);
+        rv.setViewVisibility(works.heymate.beta.R.id.shortcut_widget_item_divider, position == getCount() ? View.GONE : View.VISIBLE);
 
         return rv;
     }

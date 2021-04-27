@@ -49,7 +49,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
@@ -399,12 +399,12 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         selectedContacts.clear();
         currentDeletingSpan = null;
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (isInclude) {
-            actionBar.setTitle(LocaleController.getString("FilterAlwaysShow", R.string.FilterAlwaysShow));
+            actionBar.setTitle(LocaleController.getString("FilterAlwaysShow", works.heymate.beta.R.string.FilterAlwaysShow));
         } else {
-            actionBar.setTitle(LocaleController.getString("FilterNeverShow", R.string.FilterNeverShow));
+            actionBar.setTitle(LocaleController.getString("FilterNeverShow", works.heymate.beta.R.string.FilterNeverShow));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -519,7 +519,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         editText.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         spansContainer.addView(editText);
-        editText.setHintText(LocaleController.getString("SearchForPeopleAndGroups", R.string.SearchForPeopleAndGroups));
+        editText.setHintText(LocaleController.getString("SearchForPeopleAndGroups", works.heymate.beta.R.string.SearchForPeopleAndGroups));
 
         editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -596,7 +596,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                         adapter.setSearching(true);
                         listView.setFastScrollVisible(false);
                         listView.setVerticalScrollBarEnabled(true);
-                        emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                        emptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
                         emptyView.showProgress();
                     }
                     adapter.searchDialogs(editText.getText().toString());
@@ -613,7 +613,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             emptyView.showTextView();
         }
         emptyView.setShowAtCenter(true);
-        emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        emptyView.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
         frameLayout.addView(emptyView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -721,7 +721,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
 
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -729,7 +729,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         }
         floatingButton.setBackgroundDrawable(drawable);
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-        floatingButton.setImageResource(R.drawable.floating_check);
+        floatingButton.setImageResource(works.heymate.beta.R.drawable.floating_check);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(floatingButton, View.TRANSLATION_Z, AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
@@ -749,7 +749,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         floatingButton.setScaleX(0.0f);
         floatingButton.setScaleY(0.0f);
         floatingButton.setAlpha(0.0f);*/
-        floatingButton.setContentDescription(LocaleController.getString("Next", R.string.Next));
+        floatingButton.setContentDescription(LocaleController.getString("Next", works.heymate.beta.R.string.Next));
 
         for (int position = 1, N = (isInclude ? 5 : 3); position <= N; position++) {
             int id;
@@ -939,12 +939,12 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         adapter.searchDialogs(null);
         listView.setFastScrollVisible(true);
         listView.setVerticalScrollBarEnabled(false);
-        emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        emptyView.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
     }
 
     private void updateHint() {
         if (selectedCount == 0) {
-            actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", R.string.MembersCountZero, LocaleController.formatPluralString("Chats", 100)));
+            actionBar.setSubtitle(LocaleController.formatString("MembersCountZero", works.heymate.beta.R.string.MembersCountZero, LocaleController.formatPluralString("Chats", 100)));
         } else {
             actionBar.setSubtitle(String.format(LocaleController.getPluralString("MembersCountSelected", selectedCount), selectedCount, 100));
         }
@@ -1121,37 +1121,37 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                             int flag;
                             if (isInclude) {
                                 if (position == 1) {
-                                    name = LocaleController.getString("FilterContacts", R.string.FilterContacts);
+                                    name = LocaleController.getString("FilterContacts", works.heymate.beta.R.string.FilterContacts);
                                     object = "contacts";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_CONTACTS;
                                 } else if (position == 2) {
-                                    name = LocaleController.getString("FilterNonContacts", R.string.FilterNonContacts);
+                                    name = LocaleController.getString("FilterNonContacts", works.heymate.beta.R.string.FilterNonContacts);
                                     object = "non_contacts";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS;
                                 } else if (position == 3) {
-                                    name = LocaleController.getString("FilterGroups", R.string.FilterGroups);
+                                    name = LocaleController.getString("FilterGroups", works.heymate.beta.R.string.FilterGroups);
                                     object = "groups";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_GROUPS;
                                 } else if (position == 4) {
-                                    name = LocaleController.getString("FilterChannels", R.string.FilterChannels);
+                                    name = LocaleController.getString("FilterChannels", works.heymate.beta.R.string.FilterChannels);
                                     object = "channels";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_CHANNELS;
                                 } else {
-                                    name = LocaleController.getString("FilterBots", R.string.FilterBots);
+                                    name = LocaleController.getString("FilterBots", works.heymate.beta.R.string.FilterBots);
                                     object = "bots";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_BOTS;
                                 }
                             } else {
                                 if (position == 1) {
-                                    name = LocaleController.getString("FilterMuted", R.string.FilterMuted);
+                                    name = LocaleController.getString("FilterMuted", works.heymate.beta.R.string.FilterMuted);
                                     object = "muted";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                                 } else if (position == 2) {
-                                    name = LocaleController.getString("FilterRead", R.string.FilterRead);
+                                    name = LocaleController.getString("FilterRead", works.heymate.beta.R.string.FilterRead);
                                     object = "read";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ;
                                 } else {
-                                    name = LocaleController.getString("FilterArchived", R.string.FilterArchived);
+                                    name = LocaleController.getString("FilterArchived", works.heymate.beta.R.string.FilterArchived);
                                     object = "archived";
                                     flag = MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED;
                                 }
@@ -1195,9 +1195,9 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 case 2: {
                     GraySectionCell cell = (GraySectionCell) holder.itemView;
                     if (position == 0) {
-                        cell.setText(LocaleController.getString("FilterChatTypes", R.string.FilterChatTypes));
+                        cell.setText(LocaleController.getString("FilterChatTypes", works.heymate.beta.R.string.FilterChatTypes));
                     } else {
-                        cell.setText(LocaleController.getString("FilterChats", R.string.FilterChats));
+                        cell.setText(LocaleController.getString("FilterChats", works.heymate.beta.R.string.FilterChats));
                     }
                     break;
                 }
@@ -1283,9 +1283,9 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                                 names[0] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                                 username = user.username;
                                 if (UserObject.isReplyUser(user)) {
-                                    names[2] = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
+                                    names[2] = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle).toLowerCase();
                                 } else if (user.self) {
-                                    names[2] = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
+                                    names[2] = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages).toLowerCase();
                                 }
                             } else {
                                 TLRPC.Chat chat = (TLRPC.Chat) object;

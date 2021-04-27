@@ -28,7 +28,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.ShareBroadcastReceiver;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -314,11 +314,11 @@ public class Browser {
                     PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
-                    builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
+                    builder.addMenuItem(LocaleController.getString("CopyLink", works.heymate.beta.R.string.CopyLink), copy);
 
                     builder.setToolbarColor(Theme.getColor(Theme.key_actionBarBrowser));
                     builder.setShowTitle(true);
-                    builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), true);
+                    builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), works.heymate.beta.R.drawable.abc_ic_menu_share_mtrl_alpha), LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, 0), true);
                     CustomTabsIntent intent = builder.build();
                     intent.setUseNewTask();
                     intent.launchUrl(context, uri);

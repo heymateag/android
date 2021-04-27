@@ -33,7 +33,7 @@ import androidx.annotation.NonNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
@@ -149,7 +149,7 @@ public class HtChatMessageCell extends FrameLayout {
         statusLayout = new LinearLayout(context);
         LinearLayout titleLayout = new LinearLayout(context);
         titleLayout.setOrientation(LinearLayout.VERTICAL);
-        statusLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        statusLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         topLayer.addView(statusLayout, LayoutHelper.createFrame(2, LayoutHelper.MATCH_PARENT, Gravity.LEFT, 0, 0, 20, 0));
 
         titleLabel = new TextView(context);
@@ -170,7 +170,7 @@ public class HtChatMessageCell extends FrameLayout {
         editIcon = new ImageView(context);
         editIcon.setVisibility(GONE);
 
-        Drawable editDrawable = context.getResources().getDrawable(R.drawable.msg_edit);
+        Drawable editDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_edit);
         editDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_statisticChartLine_lightblue), PorterDuff.Mode.MULTIPLY));
         editIcon.setImageDrawable(editDrawable);
         editIcon.setOnClickListener(new OnClickListener() {
@@ -198,8 +198,8 @@ public class HtChatMessageCell extends FrameLayout {
         topLayer.addView(editIcon, LayoutHelper.createFrame(25, 25, Gravity.RIGHT, 0, 0, 20, 0));
 
         archiveIcon = new ImageView(context);
-        archiveDrawable = context.getResources().getDrawable(R.drawable.chats_archive);
-        archiveDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        archiveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.chats_archive);
+        archiveDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         archiveIcon.setImageDrawable(archiveDrawable);
         archiveIcon.setOnClickListener(new OnClickListener() {
             @Override
@@ -218,7 +218,7 @@ public class HtChatMessageCell extends FrameLayout {
         image = new BackupImageView(context);
         Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
         if(imageBitmap == null){
-            image.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+            image.setImageDrawable(context.getResources().getDrawable(works.heymate.beta.R.drawable.np));
         } else {
             image.setImageBitmap(imageBitmap);
         }
@@ -237,7 +237,7 @@ public class HtChatMessageCell extends FrameLayout {
         LinearLayout showPropsLayout = new LinearLayout(context);
         showPropsLayout.setGravity(Gravity.CENTER);
         ImageView showPropsIcon = new ImageView(context);
-        Drawable showPropsDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+        Drawable showPropsDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
         showPropsDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
         showPropsIcon.setImageDrawable(showPropsDrawable);
 
@@ -253,8 +253,8 @@ public class HtChatMessageCell extends FrameLayout {
         viewDetailsFrame.setGravity(Gravity.CENTER);
 
         TextView viewDetailsLabel = new TextView(context);
-        viewDetailsLabel.setText(LocaleController.getString("HtViewDetails", R.string.HtViewDetails));
-        viewDetailsLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+        viewDetailsLabel.setText(LocaleController.getString("HtViewDetails", works.heymate.beta.R.string.HtViewDetails));
+        viewDetailsLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         viewDetailsLabel.setTextSize(15);
         viewDetailsLabel.setTypeface(viewDetailsLabel.getTypeface(), Typeface.BOLD);
         viewDetailsFrame.addView(showPropsIcon, LayoutHelper.createFrame(20, 20, Gravity.LEFT, 20, 20, 20, 20));
@@ -278,8 +278,8 @@ public class HtChatMessageCell extends FrameLayout {
         addressLabel.setMaxLines(5);
         addressLabel.setTypeface(addressLabel.getTypeface(), Typeface.BOLD);
         addressLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        Drawable addressDrawable = context.getResources().getDrawable(R.drawable.msg_location);
-        addressDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable addressDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_location);
+        addressDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         addressLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         addressLabel.setCompoundDrawablesWithIntrinsicBounds(addressDrawable, null, null, null);
         expandableDetailsLayout.addView(addressLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 20, 20));
@@ -291,8 +291,8 @@ public class HtChatMessageCell extends FrameLayout {
         expireLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
         expireLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
 
-        Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
-        timeDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable timeDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_timer);
+        timeDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         expireLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         expireLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);
         midLayer.addView(expireLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 30, 20, 0, 20));
@@ -302,8 +302,8 @@ public class HtChatMessageCell extends FrameLayout {
         rateLabel.setTextSize(14);
         rateLabel.setTypeface(expireLabel.getTypeface(), Typeface.BOLD);
         rateLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        Drawable rateDrawable = context.getResources().getDrawable(R.drawable.offer);
-        rateDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable rateDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.offer);
+        rateDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         rateLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         rateLabel.setCompoundDrawablesWithIntrinsicBounds(rateDrawable, null, null, null);
         midLayer.addView(rateLabel, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 0));
@@ -319,7 +319,7 @@ public class HtChatMessageCell extends FrameLayout {
 
         TextView termsLinkText = new TextView(context);
         termsLinkText.setTextSize(14);
-        termsLinkText.setTextColor(context.getResources().getColor(R.color.ht_green));
+        termsLinkText.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         termsLinkText.setText("Terms And Conditions Link");
         termsLinkText.setPaintFlags(termsLinkText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         expandableDetailsLayout.addView(termsLinkText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 20, 0, 20));
@@ -339,7 +339,7 @@ public class HtChatMessageCell extends FrameLayout {
                 TextView termsTitleText = new TextView(context);
                 termsTitleText.setId(1);
                 termsTitleText.setTextSize(18);
-                termsTitleText.setTextColor(context.getResources().getColor(R.color.ht_green));
+                termsTitleText.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                 termsTitleText.setText("Terms and Conditions");
                 termsTitleText.setTypeface(termsTitleText.getTypeface(), Typeface.BOLD);
                 RelativeLayout.LayoutParams termsTitleTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -446,14 +446,14 @@ public class HtChatMessageCell extends FrameLayout {
         buyLayout.setGravity(Gravity.CENTER);
 
         TextView buyLabel = new TextView(context);
-        buyLabel.setText(LocaleController.getString("HtBuy", R.string.HtBuy));
+        buyLabel.setText(LocaleController.getString("HtBuy", works.heymate.beta.R.string.HtBuy));
         buyLabel.setTextSize(16);
-        buyLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        buyLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         ShapeDrawable defaultDrawable3 = new ShapeDrawable(new RoundRectShape(new float[]{AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0, 0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4)}, null, null));
-        defaultDrawable3.getPaint().setColor(context.getResources().getColor(R.color.ht_green));
+        defaultDrawable3.getPaint().setColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         buyLayout.setBackground(defaultDrawable3);
         buyLabel.setTypeface(buyLabel.getTypeface(), Typeface.BOLD);
-        Drawable buyDrawable = context.getResources().getDrawable(R.drawable.pay);
+        Drawable buyDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.pay);
         buyLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         buyDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         buyLabel.setCompoundDrawablesWithIntrinsicBounds(buyDrawable, null, null, null);
@@ -477,14 +477,14 @@ public class HtChatMessageCell extends FrameLayout {
 
         promoteLayout.setGravity(Gravity.CENTER);
         TextView promoteLabel = new TextView(context);
-        promoteLabel.setText(LocaleController.getString("HtPromote", R.string.HtPromote));
+        promoteLabel.setText(LocaleController.getString("HtPromote", works.heymate.beta.R.string.HtPromote));
         promoteLabel.setTextSize(16);
-        promoteLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        promoteLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0, 0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4)}, null, null));
-        defaultDrawable.getPaint().setColor(context.getResources().getColor(R.color.ht_green));
+        defaultDrawable.getPaint().setColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         promoteLayout.setBackground(defaultDrawable);
         promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
-        Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.share);
+        Drawable promoteDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.share);
         promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         promoteDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         promoteLabel.setCompoundDrawablesWithIntrinsicBounds(promoteDrawable, null, null, null);
@@ -519,7 +519,7 @@ public class HtChatMessageCell extends FrameLayout {
                 }
                 String message = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
+                context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
 
             } catch (Exception e){
 
@@ -535,7 +535,7 @@ public class HtChatMessageCell extends FrameLayout {
         };
         viewLayout.setGravity(Gravity.CENTER);
         TextView viewLabel = new TextView(context);
-        viewLabel.setText(LocaleController.getString("HtView", R.string.HtView));
+        viewLabel.setText(LocaleController.getString("HtView", works.heymate.beta.R.string.HtView));
         viewLabel.setTextSize(16);
         viewLayout.setBackgroundColor(Theme.getColor(Theme.key_statisticChartLine_blue));
         ShapeDrawable defaultDrawable2 = new ShapeDrawable(new RoundRectShape(new float[]{0, 0, AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), 0, 0}, null, null));
@@ -543,7 +543,7 @@ public class HtChatMessageCell extends FrameLayout {
         viewLayout.setBackground(defaultDrawable2);
         viewLabel.setTypeface(viewLabel.getTypeface(), Typeface.BOLD);
 
-        Drawable viewDrawable = context.getResources().getDrawable(R.drawable.msg_views);
+        Drawable viewDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_views);
         viewLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         viewDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         viewLabel.setCompoundDrawablesWithIntrinsicBounds(viewDrawable, null, null, null);
@@ -576,8 +576,8 @@ public class HtChatMessageCell extends FrameLayout {
         LinearLayout forwardLayout = new LinearLayout(context);
         forwardLayout.setGravity(Gravity.CENTER);
         ImageView forwardImage = new ImageView(context);
-        Drawable forwardDrawable = context.getResources().getDrawable(R.drawable.msg_forward);
-        forwardDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable forwardDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_forward);
+        forwardDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         forwardImage.setImageDrawable(forwardDrawable);
         forwardLayout.addView(forwardImage);
         forwardLayout.setOnClickListener(new OnClickListener() {
@@ -665,7 +665,7 @@ public class HtChatMessageCell extends FrameLayout {
         this.offerUUID = offerUUID;
         Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
         if(imageBitmap == null){
-            image.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+            image.setImageDrawable(context.getResources().getDrawable(works.heymate.beta.R.drawable.np));
         } else {
             image.setImageBitmap(imageBitmap);
         }

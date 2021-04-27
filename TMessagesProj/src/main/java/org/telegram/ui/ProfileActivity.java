@@ -83,7 +83,7 @@ import androidx.viewpager.widget.ViewPager;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
+import works.heymate.beta.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -99,7 +99,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -1506,15 +1506,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 });
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("BlockUser", R.string.BlockUser));
-                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", R.string.AreYouSureBlockContact2, ContactsController.formatName(user.first_name, user.last_name))));
-                                builder.setPositiveButton(LocaleController.getString("BlockContact", R.string.BlockContact), (dialogInterface, i) -> {
+                                builder.setTitle(LocaleController.getString("BlockUser", works.heymate.beta.R.string.BlockUser));
+                                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", works.heymate.beta.R.string.AreYouSureBlockContact2, ContactsController.formatName(user.first_name, user.last_name))));
+                                builder.setPositiveButton(LocaleController.getString("BlockContact", works.heymate.beta.R.string.BlockContact), (dialogInterface, i) -> {
                                     getMessagesController().blockPeer(user_id);
                                     if (BulletinFactory.canShowBulletin(ProfileActivity.this)) {
                                         BulletinFactory.createBanBulletin(ProfileActivity.this, true).show();
                                     }
                                 });
-                                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                                 AlertDialog dialog = builder.create();
                                 showDialog(dialog);
                                 TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -1542,8 +1542,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
-                    args.putString("selectAlertString", LocaleController.getString("SendContactToText", R.string.SendContactToText));
-                    args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", R.string.SendContactToGroupText));
+                    args.putString("selectAlertString", LocaleController.getString("SendContactToText", works.heymate.beta.R.string.SendContactToText));
+                    args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", works.heymate.beta.R.string.SendContactToGroupText));
                     DialogsActivity fragment = new DialogsActivity(args);
                     fragment.setDelegate(ProfileActivity.this);
                     presentFragment(fragment);
@@ -1557,14 +1557,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("DeleteContact", R.string.DeleteContact));
-                    builder.setMessage(LocaleController.getString("AreYouSureDeleteContact", R.string.AreYouSureDeleteContact));
-                    builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
+                    builder.setTitle(LocaleController.getString("DeleteContact", works.heymate.beta.R.string.DeleteContact));
+                    builder.setMessage(LocaleController.getString("AreYouSureDeleteContact", works.heymate.beta.R.string.AreYouSureDeleteContact));
+                    builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
                         ArrayList<TLRPC.User> arrayList = new ArrayList<>();
                         arrayList.add(user);
                         getContactsController().deleteContact(arrayList, true);
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog dialog = builder.create();
                     showDialog(dialog);
                     TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -1587,7 +1587,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 2);
-                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupAlertText", R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
+                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupAlertText", works.heymate.beta.R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
                     DialogsActivity fragment = new DialogsActivity(args);
                     fragment.setDelegate((fragment1, dids, message, param) -> {
                         long did = dids.get(0);
@@ -1635,7 +1635,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/plain");
                         intent.putExtra(Intent.EXTRA_TEXT, text);
-                        startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
+                        startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", works.heymate.beta.R.string.BotShare)), 500);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -1690,13 +1690,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     openDiscussion();
                 } else if (id == start_secret_chat) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AreYouSureSecretChatTitle", R.string.AreYouSureSecretChatTitle));
-                    builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
-                    builder.setPositiveButton(LocaleController.getString("Start", R.string.Start), (dialogInterface, i) -> {
+                    builder.setTitle(LocaleController.getString("AreYouSureSecretChatTitle", works.heymate.beta.R.string.AreYouSureSecretChatTitle));
+                    builder.setMessage(LocaleController.getString("AreYouSureSecretChat", works.heymate.beta.R.string.AreYouSureSecretChat));
+                    builder.setPositiveButton(LocaleController.getString("Start", works.heymate.beta.R.string.Start), (dialogInterface, i) -> {
                         creatingChat = true;
                         getSecretChatHelper().startSecretChat(getParentActivity(), getMessagesController().getUser(user_id));
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     showDialog(builder.create());
                 } else if (id == gallery_menu_save) {
                     if (getParentActivity() == null) {
@@ -1793,13 +1793,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return;
                     }
                     if (location.imageType == FileLoader.IMAGE_TYPE_ANIMATION) {
-                        builder.setTitle(LocaleController.getString("AreYouSureDeleteVideoTitle", R.string.AreYouSureDeleteVideoTitle));
-                        builder.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", R.string.AreYouSureDeleteVideo));
+                        builder.setTitle(LocaleController.getString("AreYouSureDeleteVideoTitle", works.heymate.beta.R.string.AreYouSureDeleteVideoTitle));
+                        builder.setMessage(LocaleController.formatString("AreYouSureDeleteVideo", works.heymate.beta.R.string.AreYouSureDeleteVideo));
                     } else {
-                        builder.setTitle(LocaleController.getString("AreYouSureDeletePhotoTitle", R.string.AreYouSureDeletePhotoTitle));
-                        builder.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", R.string.AreYouSureDeletePhoto));
+                        builder.setTitle(LocaleController.getString("AreYouSureDeletePhotoTitle", works.heymate.beta.R.string.AreYouSureDeletePhotoTitle));
+                        builder.setMessage(LocaleController.formatString("AreYouSureDeletePhoto", works.heymate.beta.R.string.AreYouSureDeletePhoto));
                     }
-                    builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
+                    builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
                         int position = avatarsViewPager.getRealPosition();
                         TLRPC.Photo photo = avatarsViewPager.getPhoto(position);
                         if (avatarsViewPager.getRealCount() == 1) {
@@ -1829,7 +1829,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -1891,7 +1891,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         ActionBarMenu menu = actionBar.createMenu();
 
         if (imageUpdater != null) {
-            searchItem = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+            searchItem = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
 
                 @Override
                 public Animator getCustomToggleTransition() {
@@ -1910,27 +1910,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     searchAdapter.search(editText.getText().toString().toLowerCase());
                 }
             });
-            searchItem.setContentDescription(LocaleController.getString("SearchInSettings", R.string.SearchInSettings));
-            searchItem.setSearchFieldHint(LocaleController.getString("SearchInSettings", R.string.SearchInSettings));
+            searchItem.setContentDescription(LocaleController.getString("SearchInSettings", works.heymate.beta.R.string.SearchInSettings));
+            searchItem.setSearchFieldHint(LocaleController.getString("SearchInSettings", works.heymate.beta.R.string.SearchInSettings));
             sharedMediaLayout.getSearchItem().setVisibility(View.GONE);
             if (expandPhoto) {
                 searchItem.setVisibility(View.GONE);
             }
         }
 
-        videoCallItem = menu.addItem(video_call_item, R.drawable.profile_video);
-        videoCallItem.setContentDescription(LocaleController.getString("VideoCall", R.string.VideoCall));
+        videoCallItem = menu.addItem(video_call_item, works.heymate.beta.R.drawable.profile_video);
+        videoCallItem.setContentDescription(LocaleController.getString("VideoCall", works.heymate.beta.R.string.VideoCall));
         if (chat_id != 0) {
-            callItem = menu.addItem(call_item, R.drawable.msg_voicechat2);
-            callItem.setContentDescription(LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat));
+            callItem = menu.addItem(call_item, works.heymate.beta.R.drawable.msg_voicechat2);
+            callItem.setContentDescription(LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat));
         } else {
-            callItem = menu.addItem(call_item, R.drawable.ic_call);
-            callItem.setContentDescription(LocaleController.getString("Call", R.string.Call));
+            callItem = menu.addItem(call_item, works.heymate.beta.R.drawable.ic_call);
+            callItem.setContentDescription(LocaleController.getString("Call", works.heymate.beta.R.string.Call));
         }
-        editItem = menu.addItem(edit_channel, R.drawable.group_edit_profile);
-        editItem.setContentDescription(LocaleController.getString("Edit", R.string.Edit));
-        otherItem = menu.addItem(10, R.drawable.ic_ab_other);
-        otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        editItem = menu.addItem(edit_channel, works.heymate.beta.R.drawable.group_edit_profile);
+        editItem.setContentDescription(LocaleController.getString("Edit", works.heymate.beta.R.string.Edit));
+        otherItem = menu.addItem(10, works.heymate.beta.R.drawable.ic_ab_other);
+        otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
 
         int scrollTo;
         int scrollToPosition = 0;
@@ -2549,7 +2549,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             intent.putExtra(Intent.EXTRA_TEXT, currentChat.title + "\nhttps://" + getMessagesController().linkPrefix + "/" + currentChat.username);
                         }
-                        getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", R.string.BotShare)), 500);
+                        getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("BotShare", works.heymate.beta.R.string.BotShare)), 500);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -2599,9 +2599,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == questionRow) {
                 showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this));
             } else if (position == faqRow) {
-                Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
+                Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", works.heymate.beta.R.string.TelegramFaqUrl));
             } else if (position == policyRow) {
-                Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl));
+                Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", works.heymate.beta.R.string.PrivacyPolicyUrl));
             } else if (position == sendLogsRow) {
                 sendLogs();
             } else if (position == clearLogsRow) {
@@ -2611,15 +2611,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return;
                 }
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                builder1.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
-                builder1.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder1.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                builder1.setMessage(LocaleController.getString("AreYouSure", works.heymate.beta.R.string.AreYouSure));
+                builder1.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder1.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                     SharedConfig.pushAuthKey = null;
                     SharedConfig.pushAuthKeyId = null;
                     SharedConfig.saveConfig();
                     getConnectionsManager().switchBackend();
                 });
-                builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder1.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder1.create());
             } else if (position == languageRow) {
                 presentFragment(new LanguageSelectActivity());
@@ -2648,22 +2648,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     pressCount++;
                     if (pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
+                        builder.setTitle(LocaleController.getString("DebugMenu", works.heymate.beta.R.string.DebugMenu));
                         CharSequence[] items;
                         items = new CharSequence[]{
-                                LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts),
-                                LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
-                                LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
-                                LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
-                                BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs),
-                                SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
-                                LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
-                                LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
+                                LocaleController.getString("DebugMenuImportContacts", works.heymate.beta.R.string.DebugMenuImportContacts),
+                                LocaleController.getString("DebugMenuReloadContacts", works.heymate.beta.R.string.DebugMenuReloadContacts),
+                                LocaleController.getString("DebugMenuResetContacts", works.heymate.beta.R.string.DebugMenuResetContacts),
+                                LocaleController.getString("DebugMenuResetDialogs", works.heymate.beta.R.string.DebugMenuResetDialogs),
+                                BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", works.heymate.beta.R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", works.heymate.beta.R.string.DebugMenuEnableLogs),
+                                SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", works.heymate.beta.R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", works.heymate.beta.R.string.DebugMenuEnableCamera),
+                                LocaleController.getString("DebugMenuClearMediaCache", works.heymate.beta.R.string.DebugMenuClearMediaCache),
+                                LocaleController.getString("DebugMenuCallSettings", works.heymate.beta.R.string.DebugMenuCallSettings),
                                 null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Check for app updates" : null,
-                                LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
-                                SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
-                                BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
+                                LocaleController.getString("DebugMenuReadAllDialogs", works.heymate.beta.R.string.DebugMenuReadAllDialogs),
+                                SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", works.heymate.beta.R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", works.heymate.beta.R.string.DebugMenuEnablePauseMusic),
+                                BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", works.heymate.beta.R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", works.heymate.beta.R.string.DebugMenuEnableSmoothKeyboard)) : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
                                 Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
                                 SharedConfig.useMediaStream ? "Use call stream in voice chats" : "Use media stream in voice chats"
@@ -2725,7 +2725,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 SharedConfig.toggleUseMediaStream();
                             }
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                         showDialog(builder.create());
                     } else {
                         try {
@@ -2805,10 +2805,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return false;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> searchAdapter.clearRecent());
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("ClearSearch", works.heymate.beta.R.string.ClearSearch));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> searchAdapter.clearRecent());
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
                 return true;
             });
@@ -2876,7 +2876,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView.setText(LocaleController.getString("BanFromTheGroup", R.string.BanFromTheGroup));
+            textView.setText(LocaleController.getString("BanFromTheGroup", works.heymate.beta.R.string.BanFromTheGroup));
             frameLayout1.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 1, 0, 0));
 
             listView.setPadding(0, AndroidUtilities.dp(88), 0, AndroidUtilities.dp(48));
@@ -2901,10 +2901,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(info);
                 if (getImageReceiver().hasNotThumb()) {
-                    info.setText(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
+                    info.setText(LocaleController.getString("AccDescrProfilePicture", works.heymate.beta.R.string.AccDescrProfilePicture));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("Open", R.string.Open)));
-                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccDescrOpenInPhotoViewer", R.string.AccDescrOpenInPhotoViewer)));
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("Open", works.heymate.beta.R.string.Open)));
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccDescrOpenInPhotoViewer", works.heymate.beta.R.string.AccDescrOpenInPhotoViewer)));
                     }
                 } else {
                     info.setVisibleToUser(false);
@@ -3046,7 +3046,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         writeButton = new RLottieImageView(context);
 
-        Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+        Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY));
         CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable,
                 Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground)),
@@ -3055,18 +3055,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         writeButton.setBackgroundDrawable(combinedDrawable);
         if (user_id != 0) {
             if (imageUpdater != null) {
-                cameraDrawable = new RLottieDrawable(R.raw.camera_outline, "" + R.raw.camera_outline, AndroidUtilities.dp(56), AndroidUtilities.dp(56), false, null);
+                cameraDrawable = new RLottieDrawable(works.heymate.beta.R.raw.camera_outline, "" + works.heymate.beta.R.raw.camera_outline, AndroidUtilities.dp(56), AndroidUtilities.dp(56), false, null);
 
                 writeButton.setAnimation(cameraDrawable);
-                writeButton.setContentDescription(LocaleController.getString("AccDescrChangeProfilePicture", R.string.AccDescrChangeProfilePicture));
+                writeButton.setContentDescription(LocaleController.getString("AccDescrChangeProfilePicture", works.heymate.beta.R.string.AccDescrChangeProfilePicture));
                 writeButton.setPadding(AndroidUtilities.dp(2), 0, 0, AndroidUtilities.dp(2));
             } else {
-                writeButton.setImageResource(R.drawable.profile_newmsg);
-                writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
+                writeButton.setImageResource(works.heymate.beta.R.drawable.profile_newmsg);
+                writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", works.heymate.beta.R.string.AccDescrOpenChat));
             }
         } else {
-            writeButton.setImageResource(R.drawable.profile_discuss);
-            writeButton.setContentDescription(LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
+            writeButton.setImageResource(works.heymate.beta.R.drawable.profile_discuss);
+            writeButton.setContentDescription(LocaleController.getString("ViewDiscussion", works.heymate.beta.R.string.ViewDiscussion));
         }
         writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -3453,24 +3453,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (resultOnly) {
                     return true;
                 }
-                items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
-                icons.add(R.drawable.actions_addadmin);
+                items.add(editingAdmin ? LocaleController.getString("EditAdminRights", works.heymate.beta.R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", works.heymate.beta.R.string.SetAsAdmin));
+                icons.add(works.heymate.beta.R.drawable.actions_addadmin);
                 actions.add(0);
             }
             if (canRestrict) {
                 if (resultOnly) {
                     return true;
                 }
-                items.add(LocaleController.getString("ChangePermissions", R.string.ChangePermissions));
-                icons.add(R.drawable.actions_permissions);
+                items.add(LocaleController.getString("ChangePermissions", works.heymate.beta.R.string.ChangePermissions));
+                icons.add(works.heymate.beta.R.drawable.actions_permissions);
                 actions.add(1);
             }
             if (allowKick) {
                 if (resultOnly) {
                     return true;
                 }
-                items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
-                icons.add(R.drawable.actions_remove_user);
+                items.add(LocaleController.getString("KickFromGroup", works.heymate.beta.R.string.KickFromGroup));
+                icons.add(works.heymate.beta.R.drawable.actions_remove_user);
                 actions.add(2);
                 hasRemove = true;
             }
@@ -3489,16 +3489,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     int action = actions.get(i);
                     if (action == 1 && (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_chatParticipantAdmin)) {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
-                        builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
-                        builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
+                        builder2.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                        builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", works.heymate.beta.R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
+                        builder2.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> {
                             if (channelParticipant != null) {
                                 openRightsEdit(action, user, participant, channelParticipant.admin_rights, channelParticipant.banned_rights, channelParticipant.rank, editingAdmin);
                             } else {
                                 openRightsEdit(action, user, participant, null, null, "", editingAdmin);
                             }
                         });
-                        builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder2.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                         showDialog(builder2.create());
                     } else {
                         if (channelParticipant != null) {
@@ -3633,17 +3633,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialogInterface, i) -> {
                 if (i == 0) {
                     try {
                         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
                         String text;
                         if (user_id != 0) {
                             text = "@" + username;
-                            BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("UsernameCopied", R.string.UsernameCopied)).show();
+                            BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("UsernameCopied", works.heymate.beta.R.string.UsernameCopied)).show();
                         } else {
                             text = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/" + username;
-                            BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("LinkCopied", R.string.LinkCopied)).show();
+                            BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("LinkCopied", works.heymate.beta.R.string.LinkCopied)).show();
                         }
                         android.content.ClipData clip = android.content.ClipData.newPlainText("label", text);
                         clipboard.setPrimaryClip(clip);
@@ -3666,17 +3666,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             final ArrayList<Integer> actions = new ArrayList<>();
             if (position == phoneRow) {
                 if (userInfo != null && userInfo.phone_calls_available) {
-                    items.add(LocaleController.getString("CallViaTelegram", R.string.CallViaTelegram));
+                    items.add(LocaleController.getString("CallViaTelegram", works.heymate.beta.R.string.CallViaTelegram));
                     actions.add(2);
                     if (Build.VERSION.SDK_INT >= 18 && userInfo.video_calls_available) {
-                        items.add(LocaleController.getString("VideoCallViaTelegram", R.string.VideoCallViaTelegram));
+                        items.add(LocaleController.getString("VideoCallViaTelegram", works.heymate.beta.R.string.VideoCallViaTelegram));
                         actions.add(3);
                     }
                 }
-                items.add(LocaleController.getString("Call", R.string.Call));
+                items.add(LocaleController.getString("Call", works.heymate.beta.R.string.Call));
                 actions.add(0);
             }
-            items.add(LocaleController.getString("Copy", R.string.Copy));
+            items.add(LocaleController.getString("Copy", works.heymate.beta.R.string.Copy));
             actions.add(1);
             builder.setItems(items.toArray(new CharSequence[0]), (dialogInterface, i) -> {
                 i = actions.get(i);
@@ -3693,7 +3693,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
                         android.content.ClipData clip = android.content.ClipData.newPlainText("label", "+" + user.phone);
                         clipboard.setPrimaryClip(clip);
-                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhoneCopied", R.string.PhoneCopied)).show();
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhoneCopied", works.heymate.beta.R.string.PhoneCopied)).show();
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -3708,7 +3708,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialogInterface, i) -> {
                 try {
                     String about;
                     if (position == locationRow) {
@@ -3723,9 +3723,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     AndroidUtilities.addToClipboard(about);
                     if (position == bioRow) {
-                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("BioCopied", R.string.BioCopied)).show();
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("BioCopied", works.heymate.beta.R.string.BioCopied)).show();
                     } else {
-                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied)).show();
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -4748,7 +4748,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         if (imageUpdater != null) {
             imageUpdater.onResume();
-            setParentActivityTitle(LocaleController.getString("Settings", R.string.Settings));
+            setParentActivityTitle(LocaleController.getString("Settings", works.heymate.beta.R.string.Settings));
         }
 
         updateProfileData();
@@ -4964,7 +4964,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             ActionBarMenu menu = actionBar.createMenu();
             if (menu.getItem(10) == null) {
                 if (animatingItem == null) {
-                    animatingItem = menu.addItem(10, R.drawable.ic_ab_other);
+                    animatingItem = menu.addItem(10, works.heymate.beta.R.drawable.ic_ab_other);
                 }
             }
             if (isOpen) {
@@ -5542,7 +5542,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (verifiedCrossfadeDrawable == null) {
             verifiedDrawable = Theme.profile_verifiedDrawable.getConstantState().newDrawable().mutate();
             verifiedCheckDrawable = Theme.profile_verifiedCheckDrawable.getConstantState().newDrawable().mutate();
-            verifiedCrossfadeDrawable = new CrossfadeDrawable(new CombinedDrawable(verifiedDrawable, verifiedCheckDrawable), ContextCompat.getDrawable(getParentActivity(), R.drawable.verified_profile));
+            verifiedCrossfadeDrawable = new CrossfadeDrawable(new CombinedDrawable(verifiedDrawable, verifiedCheckDrawable), ContextCompat.getDrawable(getParentActivity(), works.heymate.beta.R.drawable.verified_profile));
         }
         return verifiedCrossfadeDrawable;
     }
@@ -5554,13 +5554,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         String onlineTextOverride;
         int currentConnectionState = getConnectionsManager().getConnectionState();
         if (currentConnectionState == ConnectionsManager.ConnectionStateWaitingForNetwork) {
-            onlineTextOverride = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+            onlineTextOverride = LocaleController.getString("WaitingForNetwork", works.heymate.beta.R.string.WaitingForNetwork);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnecting) {
-            onlineTextOverride = LocaleController.getString("Connecting", R.string.Connecting);
+            onlineTextOverride = LocaleController.getString("Connecting", works.heymate.beta.R.string.Connecting);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
-            onlineTextOverride = LocaleController.getString("Updating", R.string.Updating);
+            onlineTextOverride = LocaleController.getString("Updating", works.heymate.beta.R.string.Updating);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnectingToProxy) {
-            onlineTextOverride = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+            onlineTextOverride = LocaleController.getString("ConnectingToProxy", works.heymate.beta.R.string.ConnectingToProxy);
         } else {
             onlineTextOverride = null;
         }
@@ -5598,13 +5598,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             String newString = UserObject.getUserName(user);
             String newString2;
             if (user.id == getUserConfig().getClientUserId()) {
-                newString2 = LocaleController.getString("Online", R.string.Online);
+                newString2 = LocaleController.getString("Online", works.heymate.beta.R.string.Online);
             } else if (user.id == 333000 || user.id == 777000 || user.id == 42777) {
-                newString2 = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
+                newString2 = LocaleController.getString("ServiceNotifications", works.heymate.beta.R.string.ServiceNotifications);
             } else if (MessagesController.isSupportUser(user)) {
-                newString2 = LocaleController.getString("SupportStatus", R.string.SupportStatus);
+                newString2 = LocaleController.getString("SupportStatus", works.heymate.beta.R.string.SupportStatus);
             } else if (isBot) {
-                newString2 = LocaleController.getString("Bot", R.string.Bot);
+                newString2 = LocaleController.getString("Bot", works.heymate.beta.R.string.Bot);
             } else {
                 isOnline[0] = false;
                 newString2 = LocaleController.formatUserStatus(currentAccount, user, isOnline);
@@ -5663,12 +5663,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (ChatObject.isChannel(chat)) {
                 if (chatInfo == null || !currentChat.megagroup && (chatInfo.participants_count == 0 || ChatObject.hasAdminRights(currentChat) || chatInfo.can_view_participants)) {
                     if (currentChat.megagroup) {
-                        statusString = profileStatusString = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
+                        statusString = profileStatusString = LocaleController.getString("Loading", works.heymate.beta.R.string.Loading).toLowerCase();
                     } else {
                         if ((chat.flags & TLRPC.CHAT_FLAG_IS_PUBLIC) != 0) {
-                            statusString = profileStatusString = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
+                            statusString = profileStatusString = LocaleController.getString("ChannelPublic", works.heymate.beta.R.string.ChannelPublic).toLowerCase();
                         } else {
-                            statusString = profileStatusString = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
+                            statusString = profileStatusString = LocaleController.getString("ChannelPrivate", works.heymate.beta.R.string.ChannelPrivate).toLowerCase();
                         }
                     }
                 } else {
@@ -5679,11 +5679,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             if (chatInfo.participants_count == 0) {
                                 if (chat.has_geo) {
-                                    statusString = profileStatusString = LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase();
+                                    statusString = profileStatusString = LocaleController.getString("MegaLocation", works.heymate.beta.R.string.MegaLocation).toLowerCase();
                                 } else if (!TextUtils.isEmpty(chat.username)) {
-                                    statusString = profileStatusString = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
+                                    statusString = profileStatusString = LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic).toLowerCase();
                                 } else {
-                                    statusString = profileStatusString = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
+                                    statusString = profileStatusString = LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate).toLowerCase();
                                 }
                             } else {
                                 statusString = LocaleController.formatPluralString("Members", chatInfo.participants_count);
@@ -5704,9 +5704,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             } else {
                 if (ChatObject.isKickedFromChat(chat)) {
-                    statusString = profileStatusString = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
+                    statusString = profileStatusString = LocaleController.getString("YouWereKicked", works.heymate.beta.R.string.YouWereKicked);
                 } else if (ChatObject.isLeftFromChat(chat)) {
-                    statusString = profileStatusString = LocaleController.getString("YouLeft", R.string.YouLeft);
+                    statusString = profileStatusString = LocaleController.getString("YouLeft", works.heymate.beta.R.string.YouLeft);
                 } else {
                     int count = chat.participants_count;
                     if (chatInfo != null) {
@@ -5757,11 +5757,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (currentChat.megagroup) {
                             if (chatInfo.participants_count == 0) {
                                 if (chat.has_geo) {
-                                    onlineTextView[a].setText(LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase());
+                                    onlineTextView[a].setText(LocaleController.getString("MegaLocation", works.heymate.beta.R.string.MegaLocation).toLowerCase());
                                 } else if (!TextUtils.isEmpty(chat.username)) {
-                                    onlineTextView[a].setText(LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase());
+                                    onlineTextView[a].setText(LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic).toLowerCase());
                                 } else {
-                                    onlineTextView[a].setText(LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase());
+                                    onlineTextView[a].setText(LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate).toLowerCase());
                                 }
                             } else {
                                 onlineTextView[a].setText(LocaleController.formatPluralString("Members", result[0]).replace(String.format("%d", result[0]), shortNumber));
@@ -5826,7 +5826,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             if (UserObject.isUserSelf(user)) {
-                otherItem.addSubItem(edit_name, R.drawable.msg_edit, LocaleController.getString("EditName", R.string.EditName));
+                otherItem.addSubItem(edit_name, works.heymate.beta.R.drawable.msg_edit, LocaleController.getString("EditName", works.heymate.beta.R.string.EditName));
                 selfUser = true;
             } else {
                 if (userInfo != null && userInfo.phone_calls_available) {
@@ -5836,38 +5836,38 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (isBot || getContactsController().contactsDict.get(user_id) == null) {
                     if (MessagesController.isSupportUser(user)) {
                         if (userBlocked) {
-                            otherItem.addSubItem(block_contact, R.drawable.msg_block, LocaleController.getString("Unblock", R.string.Unblock));
+                            otherItem.addSubItem(block_contact, works.heymate.beta.R.drawable.msg_block, LocaleController.getString("Unblock", works.heymate.beta.R.string.Unblock));
                         }
                     } else {
                         if (isBot) {
                             if (!user.bot_nochats) {
-                                otherItem.addSubItem(invite_to_group, R.drawable.msg_addbot, LocaleController.getString("BotInvite", R.string.BotInvite));
+                                otherItem.addSubItem(invite_to_group, works.heymate.beta.R.drawable.msg_addbot, LocaleController.getString("BotInvite", works.heymate.beta.R.string.BotInvite));
                             }
-                            otherItem.addSubItem(share, R.drawable.msg_share, LocaleController.getString("BotShare", R.string.BotShare));
+                            otherItem.addSubItem(share, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("BotShare", works.heymate.beta.R.string.BotShare));
                         } else {
-                            otherItem.addSubItem(add_contact, R.drawable.msg_addcontact, LocaleController.getString("AddContact", R.string.AddContact));
+                            otherItem.addSubItem(add_contact, works.heymate.beta.R.drawable.msg_addcontact, LocaleController.getString("AddContact", works.heymate.beta.R.string.AddContact));
                         }
                         if (!TextUtils.isEmpty(user.phone)) {
-                            otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
+                            otherItem.addSubItem(share_contact, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("ShareContact", works.heymate.beta.R.string.ShareContact));
                         }
                         if (isBot) {
-                            otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_retry, !userBlocked ? LocaleController.getString("BotStop", R.string.BotStop) : LocaleController.getString("BotRestart", R.string.BotRestart));
+                            otherItem.addSubItem(block_contact, !userBlocked ? works.heymate.beta.R.drawable.msg_block : works.heymate.beta.R.drawable.msg_retry, !userBlocked ? LocaleController.getString("BotStop", works.heymate.beta.R.string.BotStop) : LocaleController.getString("BotRestart", works.heymate.beta.R.string.BotRestart));
                         } else {
-                            otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
+                            otherItem.addSubItem(block_contact, !userBlocked ? works.heymate.beta.R.drawable.msg_block : works.heymate.beta.R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", works.heymate.beta.R.string.BlockContact) : LocaleController.getString("Unblock", works.heymate.beta.R.string.Unblock));
                         }
                     }
                 } else {
                     if (!TextUtils.isEmpty(user.phone)) {
-                        otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
+                        otherItem.addSubItem(share_contact, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("ShareContact", works.heymate.beta.R.string.ShareContact));
                     }
-                    otherItem.addSubItem(block_contact, !userBlocked ? R.drawable.msg_block : R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", R.string.BlockContact) : LocaleController.getString("Unblock", R.string.Unblock));
-                    otherItem.addSubItem(edit_contact, R.drawable.msg_edit, LocaleController.getString("EditContact", R.string.EditContact));
-                    otherItem.addSubItem(delete_contact, R.drawable.msg_delete, LocaleController.getString("DeleteContact", R.string.DeleteContact));
+                    otherItem.addSubItem(block_contact, !userBlocked ? works.heymate.beta.R.drawable.msg_block : works.heymate.beta.R.drawable.msg_block, !userBlocked ? LocaleController.getString("BlockContact", works.heymate.beta.R.string.BlockContact) : LocaleController.getString("Unblock", works.heymate.beta.R.string.Unblock));
+                    otherItem.addSubItem(edit_contact, works.heymate.beta.R.drawable.msg_edit, LocaleController.getString("EditContact", works.heymate.beta.R.string.EditContact));
+                    otherItem.addSubItem(delete_contact, works.heymate.beta.R.drawable.msg_delete, LocaleController.getString("DeleteContact", works.heymate.beta.R.string.DeleteContact));
                 }
                 if (!UserObject.isDeleted(user) && !isBot && currentEncryptedChat == null && !userBlocked && user_id != 333000 && user_id != 777000 && user_id != 42777) {
-                    otherItem.addSubItem(start_secret_chat, R.drawable.msg_start_secret, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
+                    otherItem.addSubItem(start_secret_chat, works.heymate.beta.R.drawable.msg_start_secret, LocaleController.getString("StartEncryptedChat", works.heymate.beta.R.string.StartEncryptedChat));
                 }
-                otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString("AddShortcut", R.string.AddShortcut));
+                otherItem.addSubItem(add_shortcut, works.heymate.beta.R.drawable.msg_home, LocaleController.getString("AddShortcut", works.heymate.beta.R.string.AddShortcut));
             }
         } else if (chat_id != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chat_id);
@@ -5878,36 +5878,36 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (chatInfo != null) {
                     if (ChatObject.canManageCalls(chat) && chatInfo.call == null) {
-                        otherItem.addSubItem(call_item, R.drawable.msg_voicechat, LocaleController.getString("StartVoipChat", R.string.StartVoipChat));
+                        otherItem.addSubItem(call_item, works.heymate.beta.R.drawable.msg_voicechat, LocaleController.getString("StartVoipChat", works.heymate.beta.R.string.StartVoipChat));
                         hasVoiceChatItem = true;
                     }
                     if (chatInfo.can_view_stats) {
-                        otherItem.addSubItem(statistics, R.drawable.msg_stats, LocaleController.getString("Statistics", R.string.Statistics));
+                        otherItem.addSubItem(statistics, works.heymate.beta.R.drawable.msg_stats, LocaleController.getString("Statistics", works.heymate.beta.R.string.Statistics));
                     }
                     ChatObject.Call call = getMessagesController().getGroupCall(chat_id, false);
                     callItemVisible = call != null;
                 }
                 if (chat.megagroup) {
                     canSearchMembers = true;
-                    otherItem.addSubItem(search_members, R.drawable.msg_search, LocaleController.getString("SearchMembers", R.string.SearchMembers));
+                    otherItem.addSubItem(search_members, works.heymate.beta.R.drawable.msg_search, LocaleController.getString("SearchMembers", works.heymate.beta.R.string.SearchMembers));
                     if (!chat.creator && !chat.left && !chat.kicked) {
-                        otherItem.addSubItem(leave_group, R.drawable.msg_leave, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu));
+                        otherItem.addSubItem(leave_group, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("LeaveMegaMenu", works.heymate.beta.R.string.LeaveMegaMenu));
                     }
                 } else {
                     if (!TextUtils.isEmpty(chat.username)) {
-                        otherItem.addSubItem(share, R.drawable.msg_share, LocaleController.getString("BotShare", R.string.BotShare));
+                        otherItem.addSubItem(share, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("BotShare", works.heymate.beta.R.string.BotShare));
                     }
                     if (chatInfo != null && chatInfo.linked_chat_id != 0) {
-                        otherItem.addSubItem(view_discussion, R.drawable.msg_discussion, LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
+                        otherItem.addSubItem(view_discussion, works.heymate.beta.R.drawable.msg_discussion, LocaleController.getString("ViewDiscussion", works.heymate.beta.R.string.ViewDiscussion));
                     }
                     if (!currentChat.creator && !currentChat.left && !currentChat.kicked) {
-                        otherItem.addSubItem(leave_group, R.drawable.msg_leave, LocaleController.getString("LeaveChannelMenu", R.string.LeaveChannelMenu));
+                        otherItem.addSubItem(leave_group, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("LeaveChannelMenu", works.heymate.beta.R.string.LeaveChannelMenu));
                     }
                 }
             } else {
                 if (chatInfo != null) {
                     if (ChatObject.canManageCalls(chat) && chatInfo.call == null) {
-                        otherItem.addSubItem(call_item, R.drawable.msg_voicechat, LocaleController.getString("StartVoipChat", R.string.StartVoipChat));
+                        otherItem.addSubItem(call_item, works.heymate.beta.R.drawable.msg_voicechat, LocaleController.getString("StartVoipChat", works.heymate.beta.R.string.StartVoipChat));
                         hasVoiceChatItem = true;
                     }
                     ChatObject.Call call = getMessagesController().getGroupCall(chat_id, false);
@@ -5918,24 +5918,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (!ChatObject.isKickedFromChat(chat) && !ChatObject.isLeftFromChat(chat)) {
                     canSearchMembers = true;
-                    otherItem.addSubItem(search_members, R.drawable.msg_search, LocaleController.getString("SearchMembers", R.string.SearchMembers));
+                    otherItem.addSubItem(search_members, works.heymate.beta.R.drawable.msg_search, LocaleController.getString("SearchMembers", works.heymate.beta.R.string.SearchMembers));
                 }
-                otherItem.addSubItem(leave_group, R.drawable.msg_leave, LocaleController.getString("DeleteAndExit", R.string.DeleteAndExit));
+                otherItem.addSubItem(leave_group, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("DeleteAndExit", works.heymate.beta.R.string.DeleteAndExit));
             }
-            otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString("AddShortcut", R.string.AddShortcut));
+            otherItem.addSubItem(add_shortcut, works.heymate.beta.R.drawable.msg_home, LocaleController.getString("AddShortcut", works.heymate.beta.R.string.AddShortcut));
         }
 
         if (imageUpdater != null) {
-            otherItem.addSubItem(add_photo, R.drawable.msg_addphoto, LocaleController.getString("AddPhoto", R.string.AddPhoto));
-            otherItem.addSubItem(set_as_main, R.drawable.menu_private, LocaleController.getString("SetAsMain", R.string.SetAsMain));
-            otherItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
-            //otherItem.addSubItem(edit_avatar, R.drawable.photo_paint, LocaleController.getString("EditPhoto", R.string.EditPhoto));
-            otherItem.addSubItem(delete_avatar, R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete));
+            otherItem.addSubItem(add_photo, works.heymate.beta.R.drawable.msg_addphoto, LocaleController.getString("AddPhoto", works.heymate.beta.R.string.AddPhoto));
+            otherItem.addSubItem(set_as_main, works.heymate.beta.R.drawable.menu_private, LocaleController.getString("SetAsMain", works.heymate.beta.R.string.SetAsMain));
+            otherItem.addSubItem(gallery_menu_save, works.heymate.beta.R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
+            //otherItem.addSubItem(edit_avatar, works.heymate.beta.R.drawable.photo_paint, LocaleController.getString("EditPhoto", works.heymate.beta.R.string.EditPhoto));
+            otherItem.addSubItem(delete_avatar, works.heymate.beta.R.drawable.msg_delete, LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
         } else {
-            otherItem.addSubItem(gallery_menu_save, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+            otherItem.addSubItem(gallery_menu_save, works.heymate.beta.R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", works.heymate.beta.R.string.SaveToGallery));
         }
         if (selfUser) {
-            otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString("LogOut", R.string.LogOut));
+            otherItem.addSubItem(logout, works.heymate.beta.R.drawable.msg_leave, LocaleController.getString("LogOut", works.heymate.beta.R.string.LogOut));
         }
         if (!isPulledDown) {
             otherItem.hideSubItem(gallery_menu_save);
@@ -6512,7 +6512,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     } else {
                         if (getParentActivity() != null) {
-                            Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -6677,13 +6677,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 break;
                         }
-                        cell.setText(LocaleController.formatString("TelegramVersion", R.string.TelegramVersion, String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code, abi)));
+                        cell.setText(LocaleController.formatString("TelegramVersion", works.heymate.beta.R.string.TelegramVersion, String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code, abi)));
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
                     cell.getTextView().setPadding(0, AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14));
                     view = cell;
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 }
             }
@@ -6714,20 +6714,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == infoHeaderRow) {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup && channelInfoRow != -1) {
-                            headerCell.setText(LocaleController.getString("ReportChatDescription", R.string.ReportChatDescription));
+                            headerCell.setText(LocaleController.getString("ReportChatDescription", works.heymate.beta.R.string.ReportChatDescription));
                         } else {
-                            headerCell.setText(LocaleController.getString("Info", R.string.Info));
+                            headerCell.setText(LocaleController.getString("Info", works.heymate.beta.R.string.Info));
                         }
                     } else if (position == membersHeaderRow) {
-                        headerCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
+                        headerCell.setText(LocaleController.getString("ChannelMembers", works.heymate.beta.R.string.ChannelMembers));
                     } else if (position == settingsSectionRow2) {
-                        headerCell.setText(LocaleController.getString("SETTINGS", R.string.SETTINGS));
+                        headerCell.setText(LocaleController.getString("SETTINGS", works.heymate.beta.R.string.SETTINGS));
                     } else if (position == numberSectionRow) {
-                        headerCell.setText(LocaleController.getString("Account", R.string.Account));
+                        headerCell.setText(LocaleController.getString("Account", works.heymate.beta.R.string.Account));
                     } else if (position == helpHeaderRow) {
-                        headerCell.setText(LocaleController.getString("SettingsHelp", R.string.SettingsHelp));
+                        headerCell.setText(LocaleController.getString("SettingsHelp", works.heymate.beta.R.string.SettingsHelp));
                     } else if (position == debugHeaderRow) {
-                        headerCell.setText(LocaleController.getString("SettingsDebug", R.string.SettingsDebug));
+                        headerCell.setText(LocaleController.getString("SettingsDebug", works.heymate.beta.R.string.SettingsDebug));
                     }
                     break;
                 case 2:
@@ -6738,9 +6738,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (!TextUtils.isEmpty(user.phone)) {
                             text = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
-                            text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);
+                            text = LocaleController.getString("PhoneHidden", works.heymate.beta.R.string.PhoneHidden);
                         }
-                        detailCell.setTextAndValue(text, LocaleController.getString("PhoneMobile", R.string.PhoneMobile), false);
+                        detailCell.setTextAndValue(text, LocaleController.getString("PhoneMobile", works.heymate.beta.R.string.PhoneMobile), false);
                     } else if (position == usernameRow) {
                         String text;
                         if (user_id != 0) {
@@ -6750,15 +6750,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else {
                                 text = "-";
                             }
-                            detailCell.setTextAndValue(text, LocaleController.getString("Username", R.string.Username), false);
+                            detailCell.setTextAndValue(text, LocaleController.getString("Username", works.heymate.beta.R.string.Username), false);
                         } else if (currentChat != null) {
                             TLRPC.Chat chat = getMessagesController().getChat(chat_id);
-                            detailCell.setTextAndValue(getMessagesController().linkPrefix + "/" + chat.username, LocaleController.getString("InviteLink", R.string.InviteLink), false);
+                            detailCell.setTextAndValue(getMessagesController().linkPrefix + "/" + chat.username, LocaleController.getString("InviteLink", works.heymate.beta.R.string.InviteLink), false);
                         }
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
                             TLRPC.TL_channelLocation location = (TLRPC.TL_channelLocation) chatInfo.location;
-                            detailCell.setTextAndValue(location.address, LocaleController.getString("AttachLocation", R.string.AttachLocation), false);
+                            detailCell.setTextAndValue(location.address, LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation), false);
                         }
                     } else if (position == numberRow) {
                         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
@@ -6766,9 +6766,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (user != null && user.phone != null && user.phone.length() != 0) {
                             value = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
-                            value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
+                            value = LocaleController.getString("NumberUnknown", works.heymate.beta.R.string.NumberUnknown);
                         }
-                        detailCell.setTextAndValue(value, LocaleController.getString("TapToChangePhone", R.string.TapToChangePhone), true);
+                        detailCell.setTextAndValue(value, LocaleController.getString("TapToChangePhone", works.heymate.beta.R.string.TapToChangePhone), true);
                         detailCell.setContentDescriptionValueFirst(false);
                     } else if (position == setUsernameRow) {
                         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
@@ -6776,19 +6776,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (user != null && !TextUtils.isEmpty(user.username)) {
                             value = "@" + user.username;
                         } else {
-                            value = LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty);
+                            value = LocaleController.getString("UsernameEmpty", works.heymate.beta.R.string.UsernameEmpty);
                         }
-                        detailCell.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), true);
+                        detailCell.setTextAndValue(value, LocaleController.getString("Username", works.heymate.beta.R.string.Username), true);
                         detailCell.setContentDescriptionValueFirst(true);
                     } else if (position == bioRow) {
                         String value;
                         if (userInfo == null || !TextUtils.isEmpty(userInfo.about)) {
-                            value = userInfo == null ? LocaleController.getString("Loading", R.string.Loading) : userInfo.about;
-                            detailCell.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), false);
+                            value = userInfo == null ? LocaleController.getString("Loading", works.heymate.beta.R.string.Loading) : userInfo.about;
+                            detailCell.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio), false);
                             detailCell.setContentDescriptionValueFirst(true);
                             currentBio = userInfo != null ? userInfo.about : null;
                         } else {
-                            detailCell.setTextAndValue(LocaleController.getString("UserBio", R.string.UserBio), LocaleController.getString("UserBioDetail", R.string.UserBioDetail), false);
+                            detailCell.setTextAndValue(LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio), LocaleController.getString("UserBioDetail", works.heymate.beta.R.string.UserBioDetail), false);
                             detailCell.setContentDescriptionValueFirst(false);
                             currentBio = null;
                         }
@@ -6797,7 +6797,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 case 3:
                     AboutLinkCell aboutLinkCell = (AboutLinkCell) holder.itemView;
                     if (position == userInfoRow) {
-                        aboutLinkCell.setTextAndValue(userInfo.about, LocaleController.getString("UserBio", R.string.UserBio), isBot);
+                        aboutLinkCell.setTextAndValue(userInfo.about, LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio), isBot);
                     } else if (position == channelInfoRow) {
                         String text = chatInfo.about;
                         while (text.contains("\n\n\n")) {
@@ -6814,89 +6814,89 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         TLRPC.EncryptedChat encryptedChat = getMessagesController().getEncryptedChat((int) (dialog_id >> 32));
                         String value;
                         if (encryptedChat.ttl == 0) {
-                            value = LocaleController.getString("ShortMessageLifetimeForever", R.string.ShortMessageLifetimeForever);
+                            value = LocaleController.getString("ShortMessageLifetimeForever", works.heymate.beta.R.string.ShortMessageLifetimeForever);
                         } else {
                             value = LocaleController.formatTTLString(encryptedChat.ttl);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("MessageLifetime", R.string.MessageLifetime), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("MessageLifetime", works.heymate.beta.R.string.MessageLifetime), value, false);
                     } else if (position == unblockRow) {
-                        textCell.setText(LocaleController.getString("Unblock", R.string.Unblock), false);
+                        textCell.setText(LocaleController.getString("Unblock", works.heymate.beta.R.string.Unblock), false);
                         textCell.setColors(null, Theme.key_windowBackgroundWhiteRedText5);
                     } else if (position == settingsKeyRow) {
                         IdenticonDrawable identiconDrawable = new IdenticonDrawable();
                         TLRPC.EncryptedChat encryptedChat = getMessagesController().getEncryptedChat((int) (dialog_id >> 32));
                         identiconDrawable.setEncryptedChat(encryptedChat);
-                        textCell.setTextAndValueDrawable(LocaleController.getString("EncryptionKey", R.string.EncryptionKey), identiconDrawable, false);
+                        textCell.setTextAndValueDrawable(LocaleController.getString("EncryptionKey", works.heymate.beta.R.string.EncryptionKey), identiconDrawable, false);
                     } else if (position == joinRow) {
                         textCell.setColors(null, Theme.key_windowBackgroundWhiteBlueText2);
                         if (currentChat.megagroup) {
-                            textCell.setText(LocaleController.getString("ProfileJoinGroup", R.string.ProfileJoinGroup), false);
+                            textCell.setText(LocaleController.getString("ProfileJoinGroup", works.heymate.beta.R.string.ProfileJoinGroup), false);
                         } else {
-                            textCell.setText(LocaleController.getString("ProfileJoinChannel", R.string.ProfileJoinChannel), false);
+                            textCell.setText(LocaleController.getString("ProfileJoinChannel", works.heymate.beta.R.string.ProfileJoinChannel), false);
                         }
                     } else if (position == subscribersRow) {
                         if (chatInfo != null) {
                             if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), String.format("%d", chatInfo.participants_count), R.drawable.actions_viewmembers, position != membersSectionRow - 1);
+                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", works.heymate.beta.R.string.ChannelSubscribers), String.format("%d", chatInfo.participants_count), works.heymate.beta.R.drawable.actions_viewmembers, position != membersSectionRow - 1);
                             } else {
-                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", chatInfo.participants_count), R.drawable.actions_viewmembers, position != membersSectionRow - 1);
+                                textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelMembers", works.heymate.beta.R.string.ChannelMembers), String.format("%d", chatInfo.participants_count), works.heymate.beta.R.drawable.actions_viewmembers, position != membersSectionRow - 1);
                             }
                         } else {
                             if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                                textCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), R.drawable.actions_viewmembers, position != membersSectionRow - 1);
+                                textCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", works.heymate.beta.R.string.ChannelSubscribers), works.heymate.beta.R.drawable.actions_viewmembers, position != membersSectionRow - 1);
                             } else {
-                                textCell.setTextAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), R.drawable.actions_viewmembers, position != membersSectionRow - 1);
+                                textCell.setTextAndIcon(LocaleController.getString("ChannelMembers", works.heymate.beta.R.string.ChannelMembers), works.heymate.beta.R.drawable.actions_viewmembers, position != membersSectionRow - 1);
                             }
                         }
                     } else if (position == administratorsRow) {
                         if (chatInfo != null) {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", chatInfo.admins_count), R.drawable.actions_addadmin, position != membersSectionRow - 1);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", works.heymate.beta.R.string.ChannelAdministrators), String.format("%d", chatInfo.admins_count), works.heymate.beta.R.drawable.actions_addadmin, position != membersSectionRow - 1);
                         } else {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.actions_addadmin, position != membersSectionRow - 1);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", works.heymate.beta.R.string.ChannelAdministrators), works.heymate.beta.R.drawable.actions_addadmin, position != membersSectionRow - 1);
                         }
                     } else if (position == blockedUsersRow) {
                         if (chatInfo != null) {
-                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", Math.max(chatInfo.banned_count, chatInfo.kicked_count)), R.drawable.actions_removed, position != membersSectionRow - 1);
+                            textCell.setTextAndValueAndIcon(LocaleController.getString("ChannelBlacklist", works.heymate.beta.R.string.ChannelBlacklist), String.format("%d", Math.max(chatInfo.banned_count, chatInfo.kicked_count)), works.heymate.beta.R.drawable.actions_removed, position != membersSectionRow - 1);
                         } else {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.actions_removed, position != membersSectionRow - 1);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", works.heymate.beta.R.string.ChannelBlacklist), works.heymate.beta.R.drawable.actions_removed, position != membersSectionRow - 1);
                         }
                     } else if (position == addMemberRow) {
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                        textCell.setTextAndIcon(LocaleController.getString("AddMember", R.string.AddMember), R.drawable.actions_addmember2, membersSectionRow == -1);
+                        textCell.setTextAndIcon(LocaleController.getString("AddMember", works.heymate.beta.R.string.AddMember), works.heymate.beta.R.drawable.actions_addmember2, membersSectionRow == -1);
                     } else if (position == sendMessageRow) {
-                        textCell.setText(LocaleController.getString("SendMessageLocation", R.string.SendMessageLocation), true);
+                        textCell.setText(LocaleController.getString("SendMessageLocation", works.heymate.beta.R.string.SendMessageLocation), true);
                     } else if (position == reportRow) {
-                        textCell.setText(LocaleController.getString("ReportUserLocation", R.string.ReportUserLocation), false);
+                        textCell.setText(LocaleController.getString("ReportUserLocation", works.heymate.beta.R.string.ReportUserLocation), false);
                         textCell.setColors(null, Theme.key_windowBackgroundWhiteRedText5);
                     } else if (position == languageRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, false);
+                        textCell.setTextAndIcon(LocaleController.getString("Language", works.heymate.beta.R.string.Language), works.heymate.beta.R.drawable.menu_language, false);
                     } else if (position == notificationRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, true);
+                        textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, true);
                     } else if (position == privacyRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, true);
+                        textCell.setTextAndIcon(LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, true);
                     } else if (position == dataRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, true);
+                        textCell.setTextAndIcon(LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, true);
                     } else if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, true);
                     } else if (position == filtersRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Filters", works.heymate.beta.R.string.Filters), works.heymate.beta.R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), R.drawable.menu_support2, true);
+                        textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", works.heymate.beta.R.string.AskAQuestion), works.heymate.beta.R.drawable.menu_support2, true);
                     } else if (position == faqRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), R.drawable.menu_help, true);
+                        textCell.setTextAndIcon(LocaleController.getString("TelegramFAQ", works.heymate.beta.R.string.TelegramFAQ), works.heymate.beta.R.drawable.menu_help, true);
                     } else if (position == policyRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, false);
+                        textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", works.heymate.beta.R.string.PrivacyPolicy), works.heymate.beta.R.drawable.menu_policy, false);
                     } else if (position == sendLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), true);
+                        textCell.setText(LocaleController.getString("DebugSendLogs", works.heymate.beta.R.string.DebugSendLogs), true);
                     } else if (position == clearLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), switchBackendRow != -1);
+                        textCell.setText(LocaleController.getString("DebugClearLogs", works.heymate.beta.R.string.DebugClearLogs), switchBackendRow != -1);
                     } else if (position == switchBackendRow) {
                         textCell.setText("Switch Backend", false);
                     } else if (position == devicesRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_devices, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Devices", works.heymate.beta.R.string.Devices), works.heymate.beta.R.drawable.menu_devices, true);
                     } else if (position == setAvatarRow) {
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                        textCell.setTextAndIcon(LocaleController.getString("SetProfilePhoto", R.string.SetProfilePhoto), R.drawable.msg_addphoto, false);
+                        textCell.setTextAndIcon(LocaleController.getString("SetProfilePhoto", works.heymate.beta.R.string.SetProfilePhoto), works.heymate.beta.R.drawable.msg_addphoto, false);
                     }
                     break;
                 case 6:
@@ -6922,17 +6922,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             delta -= getConnectionsManager().getCurrentTime();
                             if (delta <= 0) {
                                 if (custom) {
-                                    val = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                                    val = LocaleController.getString("NotificationsCustom", works.heymate.beta.R.string.NotificationsCustom);
                                 } else {
-                                    val = LocaleController.getString("NotificationsOn", R.string.NotificationsOn);
+                                    val = LocaleController.getString("NotificationsOn", works.heymate.beta.R.string.NotificationsOn);
                                 }
                                 enabled = true;
                             } else if (delta < 60 * 60) {
-                                val = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                                val = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
                             } else if (delta < 60 * 60 * 24) {
-                                val = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
+                                val = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
                             } else if (delta < 60 * 60 * 24 * 365) {
-                                val = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
+                                val = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
                             } else {
                                 val = null;
                             }
@@ -6947,15 +6947,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 enabled = true;
                             }
                             if (enabled && custom) {
-                                val = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
+                                val = LocaleController.getString("NotificationsCustom", works.heymate.beta.R.string.NotificationsCustom);
                             } else {
-                                val = enabled ? LocaleController.getString("NotificationsOn", R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                                val = enabled ? LocaleController.getString("NotificationsOn", works.heymate.beta.R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", works.heymate.beta.R.string.NotificationsOff);
                             }
                         }
                         if (val == null) {
-                            val = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
+                            val = LocaleController.getString("NotificationsOff", works.heymate.beta.R.string.NotificationsOff);
                         }
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("Notifications", R.string.Notifications), val, enabled, false);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("Notifications", works.heymate.beta.R.string.Notifications), val, enabled, false);
                     }
                     break;
                 case 7:
@@ -6963,9 +6963,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     sectionCell.setTag(position);
                     Drawable drawable;
                     if (position == infoSectionRow && lastSectionRow == -1 && secretSettingsSectionRow == -1 && sharedMediaRow == -1 && membersSectionRow == -1 || position == secretSettingsSectionRow || position == lastSectionRow || position == membersSectionRow && lastSectionRow == -1 && sharedMediaRow == -1) {
-                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        sectionCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 8:
@@ -6989,18 +6989,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 role = channelParticipant.rank;
                             } else {
                                 if (channelParticipant instanceof TLRPC.TL_channelParticipantCreator) {
-                                    role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
+                                    role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
                                 } else if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin) {
-                                    role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
+                                    role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
                                 } else {
                                     role = null;
                                 }
                             }
                         } else {
                             if (part instanceof TLRPC.TL_chatParticipantCreator) {
-                                role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
+                                role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
                             } else if (part instanceof TLRPC.TL_chatParticipantAdmin) {
-                                role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
+                                role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
                             } else {
                                 role = null;
                             }
@@ -7149,9 +7149,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         private SearchResult[] searchArray = new SearchResult[]{
-                new SearchResult(500, LocaleController.getString("EditName", R.string.EditName), 0, () -> presentFragment(new ChangeNameActivity())),
-                new SearchResult(501, LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), 0, () -> presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER))),
-                new SearchResult(502, LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), 0, () -> {
+                new SearchResult(500, LocaleController.getString("EditName", works.heymate.beta.R.string.EditName), 0, () -> presentFragment(new ChangeNameActivity())),
+                new SearchResult(501, LocaleController.getString("ChangePhoneNumber", works.heymate.beta.R.string.ChangePhoneNumber), 0, () -> presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER))),
+                new SearchResult(502, LocaleController.getString("AddAnotherAccount", works.heymate.beta.R.string.AddAnotherAccount), 0, () -> {
                     int freeAccount = -1;
                     for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                         if (!UserConfig.getInstance(a).isClientActivated()) {
@@ -7163,96 +7163,96 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         presentFragment(new LoginActivity(freeAccount));
                     }
                 }),
-                new SearchResult(503, LocaleController.getString("UserBio", R.string.UserBio), 0, () -> {
+                new SearchResult(503, LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio), 0, () -> {
                     if (userInfo != null) {
                         presentFragment(new ChangeBioActivity());
                     }
                 }),
 
-                new SearchResult(1, LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
-                new SearchResult(2, LocaleController.getString("NotificationsPrivateChats", R.string.NotificationsPrivateChats), LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsCustomSettingsActivity(NotificationsController.TYPE_PRIVATE, new ArrayList<>(), true))),
-                new SearchResult(3, LocaleController.getString("NotificationsGroups", R.string.NotificationsGroups), LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsCustomSettingsActivity(NotificationsController.TYPE_GROUP, new ArrayList<>(), true))),
-                new SearchResult(4, LocaleController.getString("NotificationsChannels", R.string.NotificationsChannels), LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsCustomSettingsActivity(NotificationsController.TYPE_CHANNEL, new ArrayList<>(), true))),
-                new SearchResult(5, LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings), "callsSectionRow", LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
-                new SearchResult(6, LocaleController.getString("BadgeNumber", R.string.BadgeNumber), "badgeNumberSection", LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
-                new SearchResult(7, LocaleController.getString("InAppNotifications", R.string.InAppNotifications), "inappSectionRow", LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
-                new SearchResult(8, LocaleController.getString("ContactJoined", R.string.ContactJoined), "contactJoinedRow", LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
-                new SearchResult(9, LocaleController.getString("PinnedMessages", R.string.PinnedMessages), "pinnedMessageRow", LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
-                new SearchResult(10, LocaleController.getString("ResetAllNotifications", R.string.ResetAllNotifications), "resetNotificationsRow", LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(1, LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(2, LocaleController.getString("NotificationsPrivateChats", works.heymate.beta.R.string.NotificationsPrivateChats), LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsCustomSettingsActivity(NotificationsController.TYPE_PRIVATE, new ArrayList<>(), true))),
+                new SearchResult(3, LocaleController.getString("NotificationsGroups", works.heymate.beta.R.string.NotificationsGroups), LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsCustomSettingsActivity(NotificationsController.TYPE_GROUP, new ArrayList<>(), true))),
+                new SearchResult(4, LocaleController.getString("NotificationsChannels", works.heymate.beta.R.string.NotificationsChannels), LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsCustomSettingsActivity(NotificationsController.TYPE_CHANNEL, new ArrayList<>(), true))),
+                new SearchResult(5, LocaleController.getString("VoipNotificationSettings", works.heymate.beta.R.string.VoipNotificationSettings), "callsSectionRow", LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(6, LocaleController.getString("BadgeNumber", works.heymate.beta.R.string.BadgeNumber), "badgeNumberSection", LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(7, LocaleController.getString("InAppNotifications", works.heymate.beta.R.string.InAppNotifications), "inappSectionRow", LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(8, LocaleController.getString("ContactJoined", works.heymate.beta.R.string.ContactJoined), "contactJoinedRow", LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(9, LocaleController.getString("PinnedMessages", works.heymate.beta.R.string.PinnedMessages), "pinnedMessageRow", LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
+                new SearchResult(10, LocaleController.getString("ResetAllNotifications", works.heymate.beta.R.string.ResetAllNotifications), "resetNotificationsRow", LocaleController.getString("NotificationsAndSounds", works.heymate.beta.R.string.NotificationsAndSounds), works.heymate.beta.R.drawable.menu_notifications, () -> presentFragment(new NotificationsSettingsActivity())),
 
-                new SearchResult(100, LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(101, LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyUsersActivity())),
-                new SearchResult(105, LocaleController.getString("PrivacyPhone", R.string.PrivacyPhone), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHONE, true))),
-                new SearchResult(102, LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN, true))),
-                new SearchResult(103, LocaleController.getString("PrivacyProfilePhoto", R.string.PrivacyProfilePhoto), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHOTO, true))),
-                new SearchResult(104, LocaleController.getString("PrivacyForwards", R.string.PrivacyForwards), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_FORWARDS, true))),
-                new SearchResult(105, LocaleController.getString("PrivacyP2P", R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_P2P, true))),
-                new SearchResult(106, LocaleController.getString("Calls", R.string.Calls), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_CALLS, true))),
-                new SearchResult(107, LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_INVITE, true))),
-                new SearchResult(108, LocaleController.getString("Passcode", R.string.Passcode), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PasscodeActivity(SharedConfig.passcodeHash.length() > 0 ? 2 : 0))),
-                new SearchResult(109, LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new TwoStepVerificationActivity())),
-                new SearchResult(110, LocaleController.getString("SessionsTitle", R.string.SessionsTitle), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
-                getMessagesController().autoarchiveAvailable ? new SearchResult(121, LocaleController.getString("ArchiveAndMute", R.string.ArchiveAndMute), "newChatsRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())) : null,
-                new SearchResult(112, LocaleController.getString("DeleteAccountIfAwayFor2", R.string.DeleteAccountIfAwayFor2), "deleteAccountRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(113, LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), "paymentsClearRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(114, LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(1))),
-                new SearchResult(115, LocaleController.getString("SyncContactsDelete", R.string.SyncContactsDelete), "contactsDeleteRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(116, LocaleController.getString("SyncContacts", R.string.SyncContacts), "contactsSyncRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(117, LocaleController.getString("SuggestContacts", R.string.SuggestContacts), "contactsSuggestRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(118, LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), "secretMapRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(119, LocaleController.getString("SecretWebPage", R.string.SecretWebPage), "secretWebpageRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(120, LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
+                new SearchResult(100, LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(101, LocaleController.getString("BlockedUsers", works.heymate.beta.R.string.BlockedUsers), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyUsersActivity())),
+                new SearchResult(105, LocaleController.getString("PrivacyPhone", works.heymate.beta.R.string.PrivacyPhone), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHONE, true))),
+                new SearchResult(102, LocaleController.getString("PrivacyLastSeen", works.heymate.beta.R.string.PrivacyLastSeen), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN, true))),
+                new SearchResult(103, LocaleController.getString("PrivacyProfilePhoto", works.heymate.beta.R.string.PrivacyProfilePhoto), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHOTO, true))),
+                new SearchResult(104, LocaleController.getString("PrivacyForwards", works.heymate.beta.R.string.PrivacyForwards), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_FORWARDS, true))),
+                new SearchResult(105, LocaleController.getString("PrivacyP2P", works.heymate.beta.R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_P2P, true))),
+                new SearchResult(106, LocaleController.getString("Calls", works.heymate.beta.R.string.Calls), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_CALLS, true))),
+                new SearchResult(107, LocaleController.getString("GroupsAndChannels", works.heymate.beta.R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_INVITE, true))),
+                new SearchResult(108, LocaleController.getString("Passcode", works.heymate.beta.R.string.Passcode), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PasscodeActivity(SharedConfig.passcodeHash.length() > 0 ? 2 : 0))),
+                new SearchResult(109, LocaleController.getString("TwoStepVerification", works.heymate.beta.R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new TwoStepVerificationActivity())),
+                new SearchResult(110, LocaleController.getString("SessionsTitle", works.heymate.beta.R.string.SessionsTitle), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
+                getMessagesController().autoarchiveAvailable ? new SearchResult(121, LocaleController.getString("ArchiveAndMute", works.heymate.beta.R.string.ArchiveAndMute), "newChatsRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())) : null,
+                new SearchResult(112, LocaleController.getString("DeleteAccountIfAwayFor2", works.heymate.beta.R.string.DeleteAccountIfAwayFor2), "deleteAccountRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(113, LocaleController.getString("PrivacyPaymentsClear", works.heymate.beta.R.string.PrivacyPaymentsClear), "paymentsClearRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(114, LocaleController.getString("WebSessionsTitle", works.heymate.beta.R.string.WebSessionsTitle), LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(1))),
+                new SearchResult(115, LocaleController.getString("SyncContactsDelete", works.heymate.beta.R.string.SyncContactsDelete), "contactsDeleteRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(116, LocaleController.getString("SyncContacts", works.heymate.beta.R.string.SyncContacts), "contactsSyncRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(117, LocaleController.getString("SuggestContacts", works.heymate.beta.R.string.SuggestContacts), "contactsSuggestRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(118, LocaleController.getString("MapPreviewProvider", works.heymate.beta.R.string.MapPreviewProvider), "secretMapRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(119, LocaleController.getString("SecretWebPage", works.heymate.beta.R.string.SecretWebPage), "secretWebpageRow", LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+                new SearchResult(120, LocaleController.getString("Devices", works.heymate.beta.R.string.Devices), works.heymate.beta.R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
 
-                new SearchResult(200, LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(201, LocaleController.getString("DataUsage", R.string.DataUsage), "usageSectionRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(202, LocaleController.getString("StorageUsage", R.string.StorageUsage), LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
-                new SearchResult(203, LocaleController.getString("KeepMedia", R.string.KeepMedia), "keepMediaRow", LocaleController.getString("DataSettings", R.string.DataSettings), LocaleController.getString("StorageUsage", R.string.StorageUsage), R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
-                new SearchResult(204, LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), "cacheRow", LocaleController.getString("DataSettings", R.string.DataSettings), LocaleController.getString("StorageUsage", R.string.StorageUsage), R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
-                new SearchResult(205, LocaleController.getString("LocalDatabase", R.string.LocalDatabase), "databaseRow", LocaleController.getString("DataSettings", R.string.DataSettings), LocaleController.getString("StorageUsage", R.string.StorageUsage), R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
-                new SearchResult(206, LocaleController.getString("NetworkUsage", R.string.NetworkUsage), LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataUsageActivity())),
-                new SearchResult(207, LocaleController.getString("AutomaticMediaDownload", R.string.AutomaticMediaDownload), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(208, LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData), LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataAutoDownloadActivity(0))),
-                new SearchResult(209, LocaleController.getString("WhenConnectedOnWiFi", R.string.WhenConnectedOnWiFi), LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataAutoDownloadActivity(1))),
-                new SearchResult(210, LocaleController.getString("WhenRoaming", R.string.WhenRoaming), LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataAutoDownloadActivity(2))),
-                new SearchResult(211, LocaleController.getString("ResetAutomaticMediaDownload", R.string.ResetAutomaticMediaDownload), "resetDownloadRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(212, LocaleController.getString("AutoplayMedia", R.string.AutoplayMedia), "autoplayHeaderRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(213, LocaleController.getString("AutoplayGIF", R.string.AutoplayGIF), "autoplayGifsRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(214, LocaleController.getString("AutoplayVideo", R.string.AutoplayVideo), "autoplayVideoRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(215, LocaleController.getString("Streaming", R.string.Streaming), "streamSectionRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(216, LocaleController.getString("EnableStreaming", R.string.EnableStreaming), "enableStreamRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(217, LocaleController.getString("Calls", R.string.Calls), "callsSectionRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(218, LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), "useLessDataForCallsRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(219, LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), "quickRepliesRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
-                new SearchResult(220, LocaleController.getString("ProxySettings", R.string.ProxySettings), LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new ProxyListActivity())),
-                new SearchResult(221, LocaleController.getString("UseProxyForCalls", R.string.UseProxyForCalls), "callsRow", LocaleController.getString("DataSettings", R.string.DataSettings), LocaleController.getString("ProxySettings", R.string.ProxySettings), R.drawable.menu_data, () -> presentFragment(new ProxyListActivity())),
-                new SearchResult(111, LocaleController.getString("PrivacyDeleteCloudDrafts", R.string.PrivacyDeleteCloudDrafts), "clearDraftsRow", LocaleController.getString("DataSettings", R.string.DataSettings), R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(200, LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(201, LocaleController.getString("DataUsage", works.heymate.beta.R.string.DataUsage), "usageSectionRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(202, LocaleController.getString("StorageUsage", works.heymate.beta.R.string.StorageUsage), LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
+                new SearchResult(203, LocaleController.getString("KeepMedia", works.heymate.beta.R.string.KeepMedia), "keepMediaRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), LocaleController.getString("StorageUsage", works.heymate.beta.R.string.StorageUsage), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
+                new SearchResult(204, LocaleController.getString("ClearMediaCache", works.heymate.beta.R.string.ClearMediaCache), "cacheRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), LocaleController.getString("StorageUsage", works.heymate.beta.R.string.StorageUsage), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
+                new SearchResult(205, LocaleController.getString("LocalDatabase", works.heymate.beta.R.string.LocalDatabase), "databaseRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), LocaleController.getString("StorageUsage", works.heymate.beta.R.string.StorageUsage), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new CacheControlActivity())),
+                new SearchResult(206, LocaleController.getString("NetworkUsage", works.heymate.beta.R.string.NetworkUsage), LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataUsageActivity())),
+                new SearchResult(207, LocaleController.getString("AutomaticMediaDownload", works.heymate.beta.R.string.AutomaticMediaDownload), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(208, LocaleController.getString("WhenUsingMobileData", works.heymate.beta.R.string.WhenUsingMobileData), LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataAutoDownloadActivity(0))),
+                new SearchResult(209, LocaleController.getString("WhenConnectedOnWiFi", works.heymate.beta.R.string.WhenConnectedOnWiFi), LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataAutoDownloadActivity(1))),
+                new SearchResult(210, LocaleController.getString("WhenRoaming", works.heymate.beta.R.string.WhenRoaming), LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataAutoDownloadActivity(2))),
+                new SearchResult(211, LocaleController.getString("ResetAutomaticMediaDownload", works.heymate.beta.R.string.ResetAutomaticMediaDownload), "resetDownloadRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(212, LocaleController.getString("AutoplayMedia", works.heymate.beta.R.string.AutoplayMedia), "autoplayHeaderRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(213, LocaleController.getString("AutoplayGIF", works.heymate.beta.R.string.AutoplayGIF), "autoplayGifsRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(214, LocaleController.getString("AutoplayVideo", works.heymate.beta.R.string.AutoplayVideo), "autoplayVideoRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(215, LocaleController.getString("Streaming", works.heymate.beta.R.string.Streaming), "streamSectionRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(216, LocaleController.getString("EnableStreaming", works.heymate.beta.R.string.EnableStreaming), "enableStreamRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(217, LocaleController.getString("Calls", works.heymate.beta.R.string.Calls), "callsSectionRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(218, LocaleController.getString("VoipUseLessData", works.heymate.beta.R.string.VoipUseLessData), "useLessDataForCallsRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(219, LocaleController.getString("VoipQuickReplies", works.heymate.beta.R.string.VoipQuickReplies), "quickRepliesRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
+                new SearchResult(220, LocaleController.getString("ProxySettings", works.heymate.beta.R.string.ProxySettings), LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new ProxyListActivity())),
+                new SearchResult(221, LocaleController.getString("UseProxyForCalls", works.heymate.beta.R.string.UseProxyForCalls), "callsRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), LocaleController.getString("ProxySettings", works.heymate.beta.R.string.ProxySettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new ProxyListActivity())),
+                new SearchResult(111, LocaleController.getString("PrivacyDeleteCloudDrafts", works.heymate.beta.R.string.PrivacyDeleteCloudDrafts), "clearDraftsRow", LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings), works.heymate.beta.R.drawable.menu_data, () -> presentFragment(new DataSettingsActivity())),
 
-                new SearchResult(300, LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(301, LocaleController.getString("TextSizeHeader", R.string.TextSizeHeader), "textSizeHeaderRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(302, LocaleController.getString("ChatBackground", R.string.ChatBackground), LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new WallpapersListActivity(WallpapersListActivity.TYPE_ALL))),
-                new SearchResult(303, LocaleController.getString("SetColor", R.string.SetColor), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("ChatBackground", R.string.ChatBackground), R.drawable.menu_chats, () -> presentFragment(new WallpapersListActivity(WallpapersListActivity.TYPE_COLOR))),
-                new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", R.string.ResetChatBackgrounds), "resetRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("ChatBackground", R.string.ChatBackground), R.drawable.menu_chats, () -> presentFragment(new WallpapersListActivity(WallpapersListActivity.TYPE_ALL))),
-                new SearchResult(305, LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_NIGHT))),
-                new SearchResult(306, LocaleController.getString("ColorTheme", R.string.ColorTheme), "themeHeaderRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(307, LocaleController.getString("ChromeCustomTabs", R.string.ChromeCustomTabs), "customTabsRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(308, LocaleController.getString("DirectShare", R.string.DirectShare), "directShareRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(309, LocaleController.getString("EnableAnimations", R.string.EnableAnimations), "enableAnimationsRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(310, LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), "raiseToSpeakRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(311, LocaleController.getString("SendByEnter", R.string.SendByEnter), "sendByEnterRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(312, LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), "saveToGalleryRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(312, LocaleController.getString("DistanceUnits", R.string.DistanceUnits), "distanceRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
-                new SearchResult(313, LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE))),
-                new SearchResult(314, LocaleController.getString("SuggestStickers", R.string.SuggestStickers), "suggestRow", LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE))),
-                new SearchResult(315, LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new FeaturedStickersActivity())),
-                new SearchResult(316, LocaleController.getString("Masks", R.string.Masks), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_MASK))),
-                new SearchResult(317, LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_IMAGE))),
-                new SearchResult(317, LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_MASK))),
+                new SearchResult(300, LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(301, LocaleController.getString("TextSizeHeader", works.heymate.beta.R.string.TextSizeHeader), "textSizeHeaderRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(302, LocaleController.getString("ChatBackground", works.heymate.beta.R.string.ChatBackground), LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new WallpapersListActivity(WallpapersListActivity.TYPE_ALL))),
+                new SearchResult(303, LocaleController.getString("SetColor", works.heymate.beta.R.string.SetColor), null, LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("ChatBackground", works.heymate.beta.R.string.ChatBackground), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new WallpapersListActivity(WallpapersListActivity.TYPE_COLOR))),
+                new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", works.heymate.beta.R.string.ResetChatBackgrounds), "resetRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("ChatBackground", works.heymate.beta.R.string.ChatBackground), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new WallpapersListActivity(WallpapersListActivity.TYPE_ALL))),
+                new SearchResult(305, LocaleController.getString("AutoNightTheme", works.heymate.beta.R.string.AutoNightTheme), LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_NIGHT))),
+                new SearchResult(306, LocaleController.getString("ColorTheme", works.heymate.beta.R.string.ColorTheme), "themeHeaderRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(307, LocaleController.getString("ChromeCustomTabs", works.heymate.beta.R.string.ChromeCustomTabs), "customTabsRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(308, LocaleController.getString("DirectShare", works.heymate.beta.R.string.DirectShare), "directShareRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(309, LocaleController.getString("EnableAnimations", works.heymate.beta.R.string.EnableAnimations), "enableAnimationsRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(310, LocaleController.getString("RaiseToSpeak", works.heymate.beta.R.string.RaiseToSpeak), "raiseToSpeakRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(311, LocaleController.getString("SendByEnter", works.heymate.beta.R.string.SendByEnter), "sendByEnterRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(312, LocaleController.getString("SaveToGallerySettings", works.heymate.beta.R.string.SaveToGallerySettings), "saveToGalleryRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(312, LocaleController.getString("DistanceUnits", works.heymate.beta.R.string.DistanceUnits), "distanceRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_BASIC))),
+                new SearchResult(313, LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE))),
+                new SearchResult(314, LocaleController.getString("SuggestStickers", works.heymate.beta.R.string.SuggestStickers), "suggestRow", LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE))),
+                new SearchResult(315, LocaleController.getString("FeaturedStickers", works.heymate.beta.R.string.FeaturedStickers), null, LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new FeaturedStickersActivity())),
+                new SearchResult(316, LocaleController.getString("Masks", works.heymate.beta.R.string.Masks), null, LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_MASK))),
+                new SearchResult(317, LocaleController.getString("ArchivedStickers", works.heymate.beta.R.string.ArchivedStickers), null, LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_IMAGE))),
+                new SearchResult(317, LocaleController.getString("ArchivedMasks", works.heymate.beta.R.string.ArchivedMasks), null, LocaleController.getString("ChatSettings", works.heymate.beta.R.string.ChatSettings), LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), works.heymate.beta.R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_MASK))),
 
-                new SearchResult(400, LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, () -> presentFragment(new LanguageSelectActivity())),
+                new SearchResult(400, LocaleController.getString("Language", works.heymate.beta.R.string.Language), works.heymate.beta.R.drawable.menu_language, () -> presentFragment(new LanguageSelectActivity())),
 
-                new SearchResult(402, LocaleController.getString("AskAQuestion", R.string.AskAQuestion), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this))),
-                new SearchResult(403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl))),
-                new SearchResult(404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl))),
+                new SearchResult(402, LocaleController.getString("AskAQuestion", works.heymate.beta.R.string.AskAQuestion), LocaleController.getString("SettingsHelp", works.heymate.beta.R.string.SettingsHelp), works.heymate.beta.R.drawable.menu_help, () -> showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this))),
+                new SearchResult(403, LocaleController.getString("TelegramFAQ", works.heymate.beta.R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", works.heymate.beta.R.string.SettingsHelp), works.heymate.beta.R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", works.heymate.beta.R.string.TelegramFaqUrl))),
+                new SearchResult(404, LocaleController.getString("PrivacyPolicy", works.heymate.beta.R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", works.heymate.beta.R.string.SettingsHelp), works.heymate.beta.R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", works.heymate.beta.R.string.PrivacyPolicyUrl))),
         };
         private ArrayList<MessagesController.FaqSearchResult> faqSearchArray = new ArrayList<>();
 
@@ -7332,7 +7332,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             loadingFaqPage = true;
             final TLRPC.TL_messages_getWebPage req2 = new TLRPC.TL_messages_getWebPage();
-            req2.url = LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl);
+            req2.url = LocaleController.getString("TelegramFaqUrl", works.heymate.beta.R.string.TelegramFaqUrl);
             req2.hash = 0;
             getConnectionsManager().sendRequest(req2, (response2, error2) -> {
                 if (response2 instanceof TLRPC.WebPage) {
@@ -7362,9 +7362,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                         }
                                         String[] path;
                                         if (paragraph != null) {
-                                            path = new String[]{LocaleController.getString("SettingsSearchFaq", R.string.SettingsSearchFaq), paragraph};
+                                            path = new String[]{LocaleController.getString("SettingsSearchFaq", works.heymate.beta.R.string.SettingsSearchFaq), paragraph};
                                         } else {
-                                            path = new String[]{LocaleController.getString("SettingsSearchFaq", R.string.SettingsSearchFaq)};
+                                            path = new String[]{LocaleController.getString("SettingsSearchFaq", works.heymate.beta.R.string.SettingsSearchFaq)};
                                         }
                                         arrayList.add(new MessagesController.FaqSearchResult(text, path, url));
                                     }
@@ -7445,12 +7445,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 case 1: {
                     GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
-                    sectionCell.setText(LocaleController.getString("SettingsFaqSearchTitle", R.string.SettingsFaqSearchTitle));
+                    sectionCell.setText(LocaleController.getString("SettingsFaqSearchTitle", works.heymate.beta.R.string.SettingsFaqSearchTitle));
                     break;
                 }
                 case 2: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    headerCell.setText(LocaleController.getString("SettingsRecent", R.string.SettingsRecent));
+                    headerCell.setText(LocaleController.getString("SettingsRecent", works.heymate.beta.R.string.SettingsRecent));
                     break;
                 }
             }
@@ -7549,7 +7549,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 faqSearchResults.clear();
                 resultNames.clear();
                 emptyView.stickerView.getImageReceiver().startAnimation();
-                emptyView.title.setText(LocaleController.getString("SettingsNoRecent", R.string.SettingsNoRecent));
+                emptyView.title.setText(LocaleController.getString("SettingsNoRecent", works.heymate.beta.R.string.SettingsNoRecent));
                 notifyDataSetChanged();
                 return;
             }
@@ -7644,7 +7644,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     if (!searchWas) {
                         emptyView.stickerView.getImageReceiver().startAnimation();
-                        emptyView.title.setText(LocaleController.getString("SettingsNoResults", R.string.SettingsNoResults));
+                        emptyView.title.setText(LocaleController.getString("SettingsNoResults", works.heymate.beta.R.string.SettingsNoResults));
                     }
                     searchWas = true;
                     searchResults = results;

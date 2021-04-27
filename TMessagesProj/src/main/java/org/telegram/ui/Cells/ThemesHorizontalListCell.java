@@ -39,7 +39,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -165,8 +165,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             super(context);
             setWillNotDraw(false);
 
-            inDrawable = context.getResources().getDrawable(R.drawable.minibubble_in).mutate();
-            outDrawable = context.getResources().getDrawable(R.drawable.minibubble_out).mutate();
+            inDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.minibubble_in).mutate();
+            outDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.minibubble_out).mutate();
 
             textPaint.setTextSize(AndroidUtilities.dp(13));
 
@@ -355,7 +355,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 updateColors(false);
                 optionsDrawable = null;
             } else {
-                optionsDrawable = getResources().getDrawable(R.drawable.preview_dots).mutate();
+                optionsDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.preview_dots).mutate();
                 oldBackColor = backColor = themeInfo.getPreviewBackgroundColor();
             }
 
@@ -385,7 +385,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 hasWhiteBackground = false;
             }
             if (themeInfo.getPreviewBackgroundColor() == 0 && themeInfo.previewParsed && backgroundDrawable == null) {
-                BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile).mutate();
+                BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(works.heymate.beta.R.drawable.catstile).mutate();
                 bitmapShader = new BitmapShader(drawable.getBitmap(), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
                 bitmapPaint.setShader(bitmapShader);
                 backgroundDrawable = drawable;
@@ -413,7 +413,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     if (themeInfo.info.document != null) {
                         themeInfo.themeLoaded = false;
                         placeholderAlpha = 1.0f;
-                        loadingDrawable = getResources().getDrawable(R.drawable.msg_theme).mutate();
+                        loadingDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.msg_theme).mutate();
                         Theme.setDrawableColor(loadingDrawable, loadingColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText7));
                         if (!fileExists) {
                             String name = FileLoader.getAttachFileName(themeInfo.info.document);
@@ -423,7 +423,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                             }
                         }
                     } else {
-                        loadingDrawable = getResources().getDrawable(R.drawable.preview_custom).mutate();
+                        loadingDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.preview_custom).mutate();
                         Theme.setDrawableColor(loadingDrawable, loadingColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText7));
                     }
                 }
@@ -659,7 +659,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             info.setEnabled(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
-                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions)));
+                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_LONG_CLICK, LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions)));
             }
         }
     }

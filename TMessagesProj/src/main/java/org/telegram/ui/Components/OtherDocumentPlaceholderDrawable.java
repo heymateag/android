@@ -17,7 +17,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 
 import java.io.File;
@@ -163,14 +163,14 @@ public class OtherDocumentPlaceholderDrawable extends RecyclableDrawable impleme
         TextPaint paint;
         int offsetY;
         if (loaded) {
-            button = LocaleController.getString("OpenFile", R.string.OpenFile);
+            button = LocaleController.getString("OpenFile", works.heymate.beta.R.string.OpenFile);
             paint = openPaint;
             offsetY = 0;
         } else {
             if (loading) {
-                button = LocaleController.getString("Cancel", R.string.Cancel).toUpperCase();
+                button = LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase();
             } else {
-                button = LocaleController.getString("TapToDownload", R.string.TapToDownload);
+                button = LocaleController.getString("TapToDownload", works.heymate.beta.R.string.TapToDownload);
             }
             offsetY = AndroidUtilities.dp(28);
             paint = buttonPaint;

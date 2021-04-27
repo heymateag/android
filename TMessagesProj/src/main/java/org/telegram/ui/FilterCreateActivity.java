@@ -24,7 +24,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -112,7 +112,7 @@ public class FilterCreateActivity extends BaseFragment {
             super(context);
 
             imageView = new RLottieImageView(context);
-            imageView.setAnimation(R.raw.filter_new, 100, 100);
+            imageView.setAnimation(works.heymate.beta.R.raw.filter_new, 100, 100);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.playAnimation();
             addView(imageView, LayoutHelper.createFrame(100, 100, Gravity.CENTER, 0, 0, 0, 0));
@@ -271,11 +271,11 @@ public class FilterCreateActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         ActionBarMenu menu = actionBar.createMenu();
         if (creatingNew) {
-            actionBar.setTitle(LocaleController.getString("FilterNew", R.string.FilterNew));
+            actionBar.setTitle(LocaleController.getString("FilterNew", works.heymate.beta.R.string.FilterNew));
         } else {
             TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             paint.setTextSize(AndroidUtilities.dp(20));
@@ -293,7 +293,7 @@ public class FilterCreateActivity extends BaseFragment {
                 }
             }
         });
-        doneItem = menu.addItem(done_button, LocaleController.getString("Save", R.string.Save).toUpperCase());
+        doneItem = menu.addItem(done_button, LocaleController.getString("Save", works.heymate.beta.R.string.Save).toUpperCase());
 
         fragmentView = new FrameLayout(context);
         FrameLayout frameLayout = (FrameLayout) fragmentView;
@@ -358,10 +358,10 @@ public class FilterCreateActivity extends BaseFragment {
                 presentFragment(fragment);
             } else if (position == removeRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("FilterDelete", R.string.FilterDelete));
-                builder.setMessage(LocaleController.getString("FilterDeleteAlert", R.string.FilterDeleteAlert));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialog, which) -> {
+                builder.setTitle(LocaleController.getString("FilterDelete", works.heymate.beta.R.string.FilterDelete));
+                builder.setMessage(LocaleController.getString("FilterDeleteAlert", works.heymate.beta.R.string.FilterDeleteAlert));
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialog, which) -> {
                     AlertDialog progressDialog = null;
                     if (getParentActivity() != null) {
                         progressDialog = new AlertDialog(getParentActivity(), 3);
@@ -433,34 +433,34 @@ public class FilterCreateActivity extends BaseFragment {
         String newName = "";
         if ((flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) {
             if ((newFilterFlags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0) {
-                newName = LocaleController.getString("FilterNameUnread", R.string.FilterNameUnread);
+                newName = LocaleController.getString("FilterNameUnread", works.heymate.beta.R.string.FilterNameUnread);
             } else if ((newFilterFlags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) != 0) {
-                newName = LocaleController.getString("FilterNameNonMuted", R.string.FilterNameNonMuted);
+                newName = LocaleController.getString("FilterNameNonMuted", works.heymate.beta.R.string.FilterNameNonMuted);
             }
         } else if ((flags & MessagesController.DIALOG_FILTER_FLAG_CONTACTS) != 0) {
             flags &=~ MessagesController.DIALOG_FILTER_FLAG_CONTACTS;
             if (flags == 0) {
-                newName = LocaleController.getString("FilterContacts", R.string.FilterContacts);
+                newName = LocaleController.getString("FilterContacts", works.heymate.beta.R.string.FilterContacts);
             }
         } else if ((flags & MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS) != 0) {
             flags &=~ MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS;
             if (flags == 0) {
-                newName = LocaleController.getString("FilterNonContacts", R.string.FilterNonContacts);
+                newName = LocaleController.getString("FilterNonContacts", works.heymate.beta.R.string.FilterNonContacts);
             }
         } else if ((flags & MessagesController.DIALOG_FILTER_FLAG_GROUPS) != 0) {
             flags &=~ MessagesController.DIALOG_FILTER_FLAG_GROUPS;
             if (flags == 0) {
-                newName = LocaleController.getString("FilterGroups", R.string.FilterGroups);
+                newName = LocaleController.getString("FilterGroups", works.heymate.beta.R.string.FilterGroups);
             }
         } else if ((flags & MessagesController.DIALOG_FILTER_FLAG_BOTS) != 0) {
             flags &=~ MessagesController.DIALOG_FILTER_FLAG_BOTS;
             if (flags == 0) {
-                newName = LocaleController.getString("FilterBots", R.string.FilterBots);
+                newName = LocaleController.getString("FilterBots", works.heymate.beta.R.string.FilterBots);
             }
         } else if ((flags & MessagesController.DIALOG_FILTER_FLAG_CHANNELS) != 0) {
             flags &=~ MessagesController.DIALOG_FILTER_FLAG_CHANNELS;
             if (flags == 0) {
-                newName = LocaleController.getString("FilterChannels", R.string.FilterChannels);
+                newName = LocaleController.getString("FilterChannels", works.heymate.beta.R.string.FilterChannels);
             }
         }
         if (newName != null && newName.length() > MAX_NAME_LENGTH) {
@@ -477,15 +477,15 @@ public class FilterCreateActivity extends BaseFragment {
         if (doneItem.getAlpha() == 1.0f) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             if (creatingNew) {
-                builder.setTitle(LocaleController.getString("FilterDiscardNewTitle", R.string.FilterDiscardNewTitle));
-                builder.setMessage(LocaleController.getString("FilterDiscardNewAlert", R.string.FilterDiscardNewAlert));
-                builder.setPositiveButton(LocaleController.getString("FilterDiscardNewSave", R.string.FilterDiscardNewSave), (dialogInterface, i) -> processDone());
+                builder.setTitle(LocaleController.getString("FilterDiscardNewTitle", works.heymate.beta.R.string.FilterDiscardNewTitle));
+                builder.setMessage(LocaleController.getString("FilterDiscardNewAlert", works.heymate.beta.R.string.FilterDiscardNewAlert));
+                builder.setPositiveButton(LocaleController.getString("FilterDiscardNewSave", works.heymate.beta.R.string.FilterDiscardNewSave), (dialogInterface, i) -> processDone());
             } else {
-                builder.setTitle(LocaleController.getString("FilterDiscardTitle", R.string.FilterDiscardTitle));
-                builder.setMessage(LocaleController.getString("FilterDiscardAlert", R.string.FilterDiscardAlert));
-                builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), (dialogInterface, i) -> processDone());
+                builder.setTitle(LocaleController.getString("FilterDiscardTitle", works.heymate.beta.R.string.FilterDiscardTitle));
+                builder.setMessage(LocaleController.getString("FilterDiscardAlert", works.heymate.beta.R.string.FilterDiscardAlert));
+                builder.setPositiveButton(LocaleController.getString("ApplyTheme", works.heymate.beta.R.string.ApplyTheme), (dialogInterface, i) -> processDone());
             }
-            builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialog, which) -> finishFragment());
+            builder.setNegativeButton(LocaleController.getString("PassportDiscard", works.heymate.beta.R.string.PassportDiscard), (dialog, which) -> finishFragment());
             showDialog(builder.create());
             return false;
         }
@@ -495,26 +495,26 @@ public class FilterCreateActivity extends BaseFragment {
     private void showRemoveAlert(int position, CharSequence name, Object object, boolean include) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         if (include) {
-            builder.setTitle(LocaleController.getString("FilterRemoveInclusionTitle", R.string.FilterRemoveInclusionTitle));
+            builder.setTitle(LocaleController.getString("FilterRemoveInclusionTitle", works.heymate.beta.R.string.FilterRemoveInclusionTitle));
             if (object instanceof String) {
-                builder.setMessage(LocaleController.formatString("FilterRemoveInclusionText", R.string.FilterRemoveInclusionText, name));
+                builder.setMessage(LocaleController.formatString("FilterRemoveInclusionText", works.heymate.beta.R.string.FilterRemoveInclusionText, name));
             } else if (object instanceof TLRPC.User) {
-                builder.setMessage(LocaleController.formatString("FilterRemoveInclusionUserText", R.string.FilterRemoveInclusionUserText, name));
+                builder.setMessage(LocaleController.formatString("FilterRemoveInclusionUserText", works.heymate.beta.R.string.FilterRemoveInclusionUserText, name));
             } else {
-                builder.setMessage(LocaleController.formatString("FilterRemoveInclusionChatText", R.string.FilterRemoveInclusionChatText, name));
+                builder.setMessage(LocaleController.formatString("FilterRemoveInclusionChatText", works.heymate.beta.R.string.FilterRemoveInclusionChatText, name));
             }
         } else {
-            builder.setTitle(LocaleController.getString("FilterRemoveExclusionTitle", R.string.FilterRemoveExclusionTitle));
+            builder.setTitle(LocaleController.getString("FilterRemoveExclusionTitle", works.heymate.beta.R.string.FilterRemoveExclusionTitle));
             if (object instanceof String) {
-                builder.setMessage(LocaleController.formatString("FilterRemoveExclusionText", R.string.FilterRemoveExclusionText, name));
+                builder.setMessage(LocaleController.formatString("FilterRemoveExclusionText", works.heymate.beta.R.string.FilterRemoveExclusionText, name));
             } else if (object instanceof TLRPC.User) {
-                builder.setMessage(LocaleController.formatString("FilterRemoveExclusionUserText", R.string.FilterRemoveExclusionUserText, name));
+                builder.setMessage(LocaleController.formatString("FilterRemoveExclusionUserText", works.heymate.beta.R.string.FilterRemoveExclusionUserText, name));
             } else {
-                builder.setMessage(LocaleController.formatString("FilterRemoveExclusionChatText", R.string.FilterRemoveExclusionChatText, name));
+                builder.setMessage(LocaleController.formatString("FilterRemoveExclusionChatText", works.heymate.beta.R.string.FilterRemoveExclusionChatText, name));
             }
         }
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        builder.setPositiveButton(LocaleController.getString("StickersRemove", R.string.StickersRemove), (dialogInterface, i) -> {
+        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("StickersRemove", works.heymate.beta.R.string.StickersRemove), (dialogInterface, i) -> {
             if (position == includeContactsRow) {
                 newFilterFlags &=~ MessagesController.DIALOG_FILTER_FLAG_CONTACTS;
             } else if (position == includeNonContactsRow) {
@@ -859,7 +859,7 @@ public class FilterCreateActivity extends BaseFragment {
                 setTextLeft(holder.itemView);
                 PollEditTextCell textCell = (PollEditTextCell) holder.itemView;
                 textCell.setTag(1);
-                textCell.setTextAndHint(newFilterName != null ? newFilterName : "", LocaleController.getString("FilterNameHint", R.string.FilterNameHint), false);
+                textCell.setTextAndHint(newFilterName != null ? newFilterName : "", LocaleController.getString("FilterNameHint", works.heymate.beta.R.string.FilterNameHint), false);
                 textCell.setTag(null);
             }
         }
@@ -882,9 +882,9 @@ public class FilterCreateActivity extends BaseFragment {
                 case 0: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == includeHeaderRow) {
-                        headerCell.setText(LocaleController.getString("FilterInclude", R.string.FilterInclude));
+                        headerCell.setText(LocaleController.getString("FilterInclude", works.heymate.beta.R.string.FilterInclude));
                     } else if (position == excludeHeaderRow) {
-                        headerCell.setText(LocaleController.getString("FilterExclude", R.string.FilterExclude));
+                        headerCell.setText(LocaleController.getString("FilterExclude", works.heymate.beta.R.string.FilterExclude));
                     }
                     break;
                 }
@@ -903,35 +903,35 @@ public class FilterCreateActivity extends BaseFragment {
                         int flag;
                         String name;
                         if (position == includeContactsRow) {
-                            name = LocaleController.getString("FilterContacts", R.string.FilterContacts);
+                            name = LocaleController.getString("FilterContacts", works.heymate.beta.R.string.FilterContacts);
                             object = "contacts";
                             divider = position + 1 != includeSectionRow;
                         } else if (position == includeNonContactsRow) {
-                            name = LocaleController.getString("FilterNonContacts", R.string.FilterNonContacts);
+                            name = LocaleController.getString("FilterNonContacts", works.heymate.beta.R.string.FilterNonContacts);
                             object = "non_contacts";
                             divider = position + 1 != includeSectionRow;
                         } else if (position == includeGroupsRow) {
-                            name = LocaleController.getString("FilterGroups", R.string.FilterGroups);
+                            name = LocaleController.getString("FilterGroups", works.heymate.beta.R.string.FilterGroups);
                             object = "groups";
                             divider = position + 1 != includeSectionRow;
                         } else if (position == includeChannelsRow) {
-                            name = LocaleController.getString("FilterChannels", R.string.FilterChannels);
+                            name = LocaleController.getString("FilterChannels", works.heymate.beta.R.string.FilterChannels);
                             object = "channels";
                             divider = position + 1 != includeSectionRow;
                         } else if (position == includeBotsRow) {
-                            name = LocaleController.getString("FilterBots", R.string.FilterBots);
+                            name = LocaleController.getString("FilterBots", works.heymate.beta.R.string.FilterBots);
                             object = "bots";
                             divider = position + 1 != includeSectionRow;
                         } else if (position == excludeMutedRow) {
-                            name = LocaleController.getString("FilterMuted", R.string.FilterMuted);
+                            name = LocaleController.getString("FilterMuted", works.heymate.beta.R.string.FilterMuted);
                             object = "muted";
                             divider = position + 1 != excludeSectionRow;
                         } else if (position == excludeReadRow) {
-                            name = LocaleController.getString("FilterRead", R.string.FilterRead);
+                            name = LocaleController.getString("FilterRead", works.heymate.beta.R.string.FilterRead);
                             object = "read";
                             divider = position + 1 != excludeSectionRow;
                         } else {
-                            name = LocaleController.getString("FilterArchived", R.string.FilterArchived);
+                            name = LocaleController.getString("FilterArchived", works.heymate.beta.R.string.FilterArchived);
                             object = "archived";
                             divider = position + 1 != excludeSectionRow;
                         }
@@ -943,11 +943,11 @@ public class FilterCreateActivity extends BaseFragment {
                         if (user != null) {
                             String status;
                             if (user.bot) {
-                                status = LocaleController.getString("Bot", R.string.Bot);
+                                status = LocaleController.getString("Bot", works.heymate.beta.R.string.Bot);
                             } else if (user.contact) {
-                                status = LocaleController.getString("FilterContact", R.string.FilterContact);
+                                status = LocaleController.getString("FilterContact", works.heymate.beta.R.string.FilterContact);
                             } else {
-                                status = LocaleController.getString("FilterNonContact", R.string.FilterNonContact);
+                                status = LocaleController.getString("FilterNonContact", works.heymate.beta.R.string.FilterNonContact);
                             }
                             userCell.setData(user, null, status, 0, divider);
                         }
@@ -959,15 +959,15 @@ public class FilterCreateActivity extends BaseFragment {
                                 status = LocaleController.formatPluralString("Members", chat.participants_count);
                             } else if (TextUtils.isEmpty(chat.username)) {
                                 if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                                    status = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate);
+                                    status = LocaleController.getString("ChannelPrivate", works.heymate.beta.R.string.ChannelPrivate);
                                 } else {
-                                    status = LocaleController.getString("MegaPrivate", R.string.MegaPrivate);
+                                    status = LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate);
                                 }
                             } else {
                                 if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                                    status = LocaleController.getString("ChannelPublic", R.string.ChannelPublic);
+                                    status = LocaleController.getString("ChannelPublic", works.heymate.beta.R.string.ChannelPublic);
                                 } else {
-                                    status = LocaleController.getString("MegaPublic", R.string.MegaPublic);
+                                    status = LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic);
                                 }
                             }
                             userCell.setData(chat, null, status, 0, divider);
@@ -977,9 +977,9 @@ public class FilterCreateActivity extends BaseFragment {
                 }
                 case 3: {
                     if (position == removeSectionRow) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -987,33 +987,33 @@ public class FilterCreateActivity extends BaseFragment {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == removeRow) {
                         textCell.setColors(null, Theme.key_windowBackgroundWhiteRedText5);
-                        textCell.setText(LocaleController.getString("FilterDelete", R.string.FilterDelete), false);
+                        textCell.setText(LocaleController.getString("FilterDelete", works.heymate.beta.R.string.FilterDelete), false);
                     } else if (position == includeShowMoreRow) {
                         textCell.setColors(Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhiteBlueText4);
-                        textCell.setTextAndIcon(LocaleController.formatPluralString("FilterShowMoreChats", newAlwaysShow.size() - 5), R.drawable.arrow_more, false);
+                        textCell.setTextAndIcon(LocaleController.formatPluralString("FilterShowMoreChats", newAlwaysShow.size() - 5), works.heymate.beta.R.drawable.arrow_more, false);
                     } else if (position == excludeShowMoreRow) {
                         textCell.setColors(Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhiteBlueText4);
-                        textCell.setTextAndIcon(LocaleController.formatPluralString("FilterShowMoreChats", newNeverShow.size() - 5), R.drawable.arrow_more, false);
+                        textCell.setTextAndIcon(LocaleController.formatPluralString("FilterShowMoreChats", newNeverShow.size() - 5), works.heymate.beta.R.drawable.arrow_more, false);
                     } else if (position == includeAddRow) {
                         textCell.setColors(Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhiteBlueText4);
-                        textCell.setTextAndIcon(LocaleController.getString("FilterAddChats", R.string.FilterAddChats), R.drawable.actions_addchat, position + 1 != includeSectionRow);
+                        textCell.setTextAndIcon(LocaleController.getString("FilterAddChats", works.heymate.beta.R.string.FilterAddChats), works.heymate.beta.R.drawable.actions_addchat, position + 1 != includeSectionRow);
                     } else if (position == excludeAddRow) {
                         textCell.setColors(Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhiteBlueText4);
-                        textCell.setTextAndIcon(LocaleController.getString("FilterRemoveChats", R.string.FilterRemoveChats), R.drawable.actions_addchat, position + 1 != excludeSectionRow);
+                        textCell.setTextAndIcon(LocaleController.getString("FilterRemoveChats", works.heymate.beta.R.string.FilterRemoveChats), works.heymate.beta.R.drawable.actions_addchat, position + 1 != excludeSectionRow);
                     }
                     break;
                 }
                 case 6: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == includeSectionRow) {
-                        cell.setText(LocaleController.getString("FilterIncludeInfo", R.string.FilterIncludeInfo));
+                        cell.setText(LocaleController.getString("FilterIncludeInfo", works.heymate.beta.R.string.FilterIncludeInfo));
                     } else if (position == excludeSectionRow) {
-                        cell.setText(LocaleController.getString("FilterExcludeInfo", R.string.FilterExcludeInfo));
+                        cell.setText(LocaleController.getString("FilterExcludeInfo", works.heymate.beta.R.string.FilterExcludeInfo));
                     }
                     if (position == excludeSectionRow && removeSectionRow == -1) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                 }
             }

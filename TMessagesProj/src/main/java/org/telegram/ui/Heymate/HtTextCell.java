@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Components.LayoutHelper;
@@ -24,7 +24,7 @@ public class HtTextCell extends LinearLayout {
     public HtTextCell(Context context) {
         super(context);
         this.context = context;
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(R.color.ht_green)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         titleLabel = new TextView(context);
         titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
         addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10,10,10,10));
@@ -43,7 +43,7 @@ public class HtTextCell extends LinearLayout {
     }
 
     public void select(){
-        int colorFrom =  context.getResources().getColor(R.color.ht_green);
+        int colorFrom =  context.getResources().getColor(works.heymate.beta.R.color.ht_green);
         int colorTo = Theme.getColor(Theme.key_avatar_backgroundGreen);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
@@ -53,10 +53,10 @@ public class HtTextCell extends LinearLayout {
 
     public void unSelect(){
         int colorFrom = Theme.getColor(Theme.key_avatar_backgroundGreen);
-        int colorTo =  context.getResources().getColor(R.color.ht_green);
+        int colorTo =  context.getResources().getColor(works.heymate.beta.R.color.ht_green);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(320);
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8),  context.getResources().getColor(R.color.ht_green)));
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8),  context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         colorAnimation.start();
     }
 }

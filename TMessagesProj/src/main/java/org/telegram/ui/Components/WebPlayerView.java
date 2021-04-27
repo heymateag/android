@@ -56,7 +56,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 
@@ -1681,7 +1681,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         if (allowShare) {
             shareButton = new ImageView(context);
             shareButton.setScaleType(ImageView.ScaleType.CENTER);
-            shareButton.setImageResource(R.drawable.ic_share_video);
+            shareButton.setImageResource(works.heymate.beta.R.drawable.ic_share_video);
             controlsView.addView(shareButton, LayoutHelper.createFrame(56, 48, Gravity.RIGHT | Gravity.TOP));
             shareButton.setOnClickListener(v -> {
                 if (delegate != null) {
@@ -1855,12 +1855,12 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         AndroidUtilities.cancelRunOnUIThread(progressRunnable);
         if (!videoPlayer.isPlaying()) {
             if (isCompleted) {
-                playButton.setImageResource(isInline ? R.drawable.ic_againinline : R.drawable.ic_again);
+                playButton.setImageResource(isInline ? works.heymate.beta.R.drawable.ic_againinline : works.heymate.beta.R.drawable.ic_again);
             } else {
-                playButton.setImageResource(isInline ? R.drawable.ic_playinline : R.drawable.ic_play);
+                playButton.setImageResource(isInline ? works.heymate.beta.R.drawable.ic_playinline : works.heymate.beta.R.drawable.ic_play);
             }
         } else {
-            playButton.setImageResource(isInline ? R.drawable.ic_pauseinline : R.drawable.ic_pause);
+            playButton.setImageResource(isInline ? works.heymate.beta.R.drawable.ic_pauseinline : works.heymate.beta.R.drawable.ic_pause);
             AndroidUtilities.runOnUIThread(progressRunnable, 500);
             checkAudioFocus();
         }
@@ -1912,10 +1912,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         }
         fullscreenButton.setVisibility(VISIBLE);
         if (!inFullscreen) {
-            fullscreenButton.setImageResource(R.drawable.ic_gofullscreen);
+            fullscreenButton.setImageResource(works.heymate.beta.R.drawable.ic_gofullscreen);
             fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 0, 5));
         } else {
-            fullscreenButton.setImageResource(R.drawable.ic_outfullscreen);
+            fullscreenButton.setImageResource(works.heymate.beta.R.drawable.ic_outfullscreen);
             fullscreenButton.setLayoutParams(LayoutHelper.createFrame(56, 56, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 0, 1));
         }
     }
@@ -1939,7 +1939,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         if (inlineButton == null) {
             return;
         }
-        inlineButton.setImageResource(isInline ? R.drawable.ic_goinline : R.drawable.ic_outinline);
+        inlineButton.setImageResource(isInline ? works.heymate.beta.R.drawable.ic_goinline : works.heymate.beta.R.drawable.ic_outinline);
         inlineButton.setVisibility(videoPlayer.isPlayerPrepared() ? VISIBLE : GONE);
         if (isInline) {
             inlineButton.setLayoutParams(LayoutHelper.createFrame(40, 40, Gravity.RIGHT | Gravity.TOP));

@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -76,7 +76,7 @@ public class GigagroupConvertAlert extends BottomSheet {
 
         RLottieImageView lottieImageView = new RLottieImageView(context);
         lottieImageView.setAutoRepeat(true);
-        lottieImageView.setAnimation(R.raw.utyan_gigagroup, 120, 120);
+        lottieImageView.setAnimation(works.heymate.beta.R.raw.utyan_gigagroup, 120, 120);
         lottieImageView.playAnimation();
         linearLayout.addView(lottieImageView, LayoutHelper.createLinear(160, 160, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 17, 30, 17, 0));
 
@@ -84,7 +84,7 @@ public class GigagroupConvertAlert extends BottomSheet {
         percentTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         percentTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
         percentTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        percentTextView.setText(LocaleController.getString("GigagroupConvertTitle", R.string.GigagroupConvertTitle));
+        percentTextView.setText(LocaleController.getString("GigagroupConvertTitle", works.heymate.beta.R.string.GigagroupConvertTitle));
         linearLayout.addView(percentTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 17, 18, 17, 0));
 
         LinearLayout container = new LinearLayout(context);
@@ -98,7 +98,7 @@ public class GigagroupConvertAlert extends BottomSheet {
 
             ImageView imageView = new ImageView(context);
             imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray3), PorterDuff.Mode.MULTIPLY));
-            imageView.setImageResource(R.drawable.list_circle);
+            imageView.setImageResource(works.heymate.beta.R.drawable.list_circle);
 
             TextView textView = new TextView(context);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -108,13 +108,13 @@ public class GigagroupConvertAlert extends BottomSheet {
 
             switch (a) {
                 case 0:
-                    textView.setText(LocaleController.getString("GigagroupConvertInfo1", R.string.GigagroupConvertInfo1));
+                    textView.setText(LocaleController.getString("GigagroupConvertInfo1", works.heymate.beta.R.string.GigagroupConvertInfo1));
                     break;
                 case 1:
-                    textView.setText(LocaleController.getString("GigagroupConvertInfo2", R.string.GigagroupConvertInfo2));
+                    textView.setText(LocaleController.getString("GigagroupConvertInfo2", works.heymate.beta.R.string.GigagroupConvertInfo2));
                     break;
                 case 2:
-                    textView.setText(LocaleController.getString("GigagroupConvertInfo3", R.string.GigagroupConvertInfo3));
+                    textView.setText(LocaleController.getString("GigagroupConvertInfo3", works.heymate.beta.R.string.GigagroupConvertInfo3));
                     break;
             }
 
@@ -129,14 +129,14 @@ public class GigagroupConvertAlert extends BottomSheet {
 
         BottomSheetCell clearButton = new BottomSheetCell(context);
         clearButton.setBackground(null);
-        clearButton.setText(LocaleController.getString("GigagroupConvertProcessButton", R.string.GigagroupConvertProcessButton));
+        clearButton.setText(LocaleController.getString("GigagroupConvertProcessButton", works.heymate.beta.R.string.GigagroupConvertProcessButton));
         clearButton.background.setOnClickListener(v -> {
             dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("GigagroupConvertAlertTitle", R.string.GigagroupConvertAlertTitle));
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("GigagroupConvertAlertText", R.string.GigagroupConvertAlertText)));
-            builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", R.string.GigagroupConvertAlertConver), (dialogInterface, i) -> onCovert());
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setTitle(LocaleController.getString("GigagroupConvertAlertTitle", works.heymate.beta.R.string.GigagroupConvertAlertTitle));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("GigagroupConvertAlertText", works.heymate.beta.R.string.GigagroupConvertAlertText)));
+            builder.setPositiveButton(LocaleController.getString("GigagroupConvertAlertConver", works.heymate.beta.R.string.GigagroupConvertAlertConver), (dialogInterface, i) -> onCovert());
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             parentFragment.showDialog(builder.create());
         });
         linearLayout.addView(clearButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT | Gravity.TOP, 0, 29, 0, 0));
@@ -144,7 +144,7 @@ public class GigagroupConvertAlert extends BottomSheet {
         TextView cancelTextView = new TextView(context);
         cancelTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         cancelTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        cancelTextView.setText(LocaleController.getString("GigagroupConvertCancelButton", R.string.GigagroupConvertCancelButton));
+        cancelTextView.setText(LocaleController.getString("GigagroupConvertCancelButton", works.heymate.beta.R.string.GigagroupConvertCancelButton));
         cancelTextView.setGravity(Gravity.CENTER);
         linearLayout.addView(cancelTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 48, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 17, 0, 17, 16));
         cancelTextView.setOnClickListener(v -> {

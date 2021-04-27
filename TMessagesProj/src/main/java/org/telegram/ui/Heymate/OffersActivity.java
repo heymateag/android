@@ -28,7 +28,7 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -81,9 +81,9 @@ public class OffersActivity extends BaseFragment {
 //        HtAmplify.getInstance(context).signUp(currentAccount);
 //        HtAmplify.getInstance(context).signIn(currentAccount);
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("HtManageOffers", R.string.HtManageOffers));
+        actionBar.setTitle(LocaleController.getString("HtManageOffers", works.heymate.beta.R.string.HtManageOffers));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -93,35 +93,35 @@ public class OffersActivity extends BaseFragment {
             }
         });
 
-        fragmentView = LayoutInflater.from(context).inflate(R.layout.activity_offers, null, false);
+        fragmentView = LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.activity_offers, null, false);
 
-        TextView textTitle = fragmentView.findViewById(R.id.text_title);
+        TextView textTitle = fragmentView.findViewById(works.heymate.beta.R.id.text_title);
         textTitle.setTypeface(textTitle.getTypeface(), Typeface.BOLD);
         textTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textTitle.setText(Texts.get(Texts.OFFERS));
-        Drawable myOffersDrawable = ContextCompat.getDrawable(context, R.drawable.offer);
-        myOffersDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable myOffersDrawable = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.offer);
+        myOffersDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         textTitle.setCompoundDrawablePadding(AndroidUtilities.dp(5));
         textTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, myOffersDrawable, null);
 
-        mTextStatus = fragmentView.findViewById(R.id.text_status);
+        mTextStatus = fragmentView.findViewById(works.heymate.beta.R.id.text_status);
         mTextStatus.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
 
-        mButtonSchedule = fragmentView.findViewById(R.id.button_schedule);
+        mButtonSchedule = fragmentView.findViewById(works.heymate.beta.R.id.button_schedule);
         mButtonSchedule.setOnClickListener(v -> presentFragment(new MyScheduleActivity()));
         mButtonSchedule.setVisibility(View.INVISIBLE); // TODO Temporary code
 
-        TextView buttonAdd = fragmentView.findViewById(R.id.button_add);
+        TextView buttonAdd = fragmentView.findViewById(works.heymate.beta.R.id.button_add);
         buttonAdd.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
         buttonAdd.setTypeface(buttonAdd.getTypeface(), Typeface.BOLD);
-        buttonAdd.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, R.color.ht_theme)));
+        buttonAdd.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme)));
         buttonAdd.setText(Texts.get(Texts.ADD));
         buttonAdd.setOnClickListener(v -> presentFragment(new HtCreateOfferActivity()));
 
-        HtFiltersCell filters = fragmentView.findViewById(R.id.filters);
+        HtFiltersCell filters = fragmentView.findViewById(works.heymate.beta.R.id.filters);
         filters.setBaseFragment(this);
 
-        offersLayout = fragmentView.findViewById(R.id.list_offer);
+        offersLayout = fragmentView.findViewById(works.heymate.beta.R.id.list_offer);
         offersLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         offersLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -162,14 +162,14 @@ public class OffersActivity extends BaseFragment {
 
         mTextStatus.setText(activeOffersStatus);
 
-        Drawable icon = ContextCompat.getDrawable(getParentActivity(), R.drawable.input_calendar1).mutate();
+        Drawable icon = ContextCompat.getDrawable(getParentActivity(), works.heymate.beta.R.drawable.input_calendar1).mutate();
         icon.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText), PorterDuff.Mode.SRC_IN);
 
         if (activeOffers == 0) {
             mButtonSchedule.setImageDrawable(icon);
         }
         else {
-            Drawable notif = ContextCompat.getDrawable(getParentActivity(), R.drawable.input_calendar2).mutate();
+            Drawable notif = ContextCompat.getDrawable(getParentActivity(), works.heymate.beta.R.drawable.input_calendar2).mutate();
             notif.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteRedText), PorterDuff.Mode.SRC_IN);
 
             CombinedDrawable drawable = new CombinedDrawable(icon, notif);
@@ -225,11 +225,11 @@ public class OffersActivity extends BaseFragment {
                 cal.set(Calendar.MONTH, Integer.parseInt(exp[1]));
                 cal.set(Calendar.YEAR, Integer.parseInt(exp[2]));
                 if(((new Date()).toInstant().toEpochMilli()) > cal.getTimeInMillis())
-                    offerCell1.msgTimeLabel.setText(LocaleController.getString("HtExpired", R.string.HtExpired));
+                    offerCell1.msgTimeLabel.setText(LocaleController.getString("HtExpired", works.heymate.beta.R.string.HtExpired));
                 else
-                    offerCell1.msgTimeLabel.setText(LocaleController.getString("HtValidUntil", R.string.HtValidUntil) + "\n" + offerDto.getTime());
+                    offerCell1.msgTimeLabel.setText(LocaleController.getString("HtValidUntil", works.heymate.beta.R.string.HtValidUntil) + "\n" + offerDto.getTime());
             } catch (Exception e){
-                offerCell1.msgTimeLabel.setText(LocaleController.getString("HtValidUntil", R.string.HtValidUntil) + "\n" + offerDto.getTime());
+                offerCell1.msgTimeLabel.setText(LocaleController.getString("HtValidUntil", works.heymate.beta.R.string.HtValidUntil) + "\n" + offerDto.getTime());
             }
             offerCell1.addressLabel.setText(offerDto.getLocation());
             offerCell1.setRate("" + offerDto.getRate());

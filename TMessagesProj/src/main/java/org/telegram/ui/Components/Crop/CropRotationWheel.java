@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -66,7 +66,7 @@ public class CropRotationWheel extends FrameLayout {
         bluePaint.setAntiAlias(true);
 
         mirrorButton = new ImageView(context);
-        mirrorButton.setImageResource(R.drawable.photo_flip);
+        mirrorButton.setImageResource(works.heymate.beta.R.drawable.photo_flip);
         mirrorButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         mirrorButton.setScaleType(ImageView.ScaleType.CENTER);
         mirrorButton.setOnClickListener(v -> {
@@ -78,11 +78,11 @@ public class CropRotationWheel extends FrameLayout {
             aspectRatioButton.callOnClick();
             return true;
         });
-        mirrorButton.setContentDescription(LocaleController.getString("AccDescrMirror", R.string.AccDescrMirror));
+        mirrorButton.setContentDescription(LocaleController.getString("AccDescrMirror", works.heymate.beta.R.string.AccDescrMirror));
         addView(mirrorButton, LayoutHelper.createFrame(70, 64, Gravity.LEFT | Gravity.CENTER_VERTICAL));
 
         aspectRatioButton = new ImageView(context);
-        aspectRatioButton.setImageResource(R.drawable.tool_cropfix);
+        aspectRatioButton.setImageResource(works.heymate.beta.R.drawable.tool_cropfix);
         aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
         aspectRatioButton.setOnClickListener(v -> {
@@ -91,11 +91,11 @@ public class CropRotationWheel extends FrameLayout {
             }
         });
         aspectRatioButton.setVisibility(GONE);
-        aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", R.string.AccDescrAspectRatio));
+        aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", works.heymate.beta.R.string.AccDescrAspectRatio));
         addView(aspectRatioButton, LayoutHelper.createFrame(70, 64, Gravity.LEFT | Gravity.CENTER_VERTICAL));
 
         rotation90Button = new ImageView(context);
-        rotation90Button.setImageResource(R.drawable.tool_rotate);
+        rotation90Button.setImageResource(works.heymate.beta.R.drawable.tool_rotate);
         rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         rotation90Button.setScaleType(ImageView.ScaleType.CENTER);
         rotation90Button.setOnClickListener(v -> {
@@ -103,7 +103,7 @@ public class CropRotationWheel extends FrameLayout {
                 setRotated(rotationListener.rotate90Pressed());
             }
         });
-        rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", R.string.AccDescrRotate));
+        rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", works.heymate.beta.R.string.AccDescrRotate));
         addView(rotation90Button, LayoutHelper.createFrame(70, 64, Gravity.RIGHT | Gravity.CENTER_VERTICAL));
 
         degreesLabel = new TextView(context);

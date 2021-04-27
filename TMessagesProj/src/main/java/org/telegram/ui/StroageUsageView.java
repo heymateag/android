@@ -14,7 +14,7 @@ import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
@@ -169,8 +169,8 @@ class StroageUsageView extends FrameLayout {
         this.totalDeviceSize = totalDeviceSize;
 
 
-        freeSizeTextView.setText(LocaleController.formatString("TotalDeviceFreeSize", R.string.TotalDeviceFreeSize, AndroidUtilities.formatFileSize(totalDeviceFreeSize)));
-        totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", R.string.TotalDeviceSize, AndroidUtilities.formatFileSize(totalDeviceSize - totalDeviceFreeSize)));
+        freeSizeTextView.setText(LocaleController.formatString("TotalDeviceFreeSize", works.heymate.beta.R.string.TotalDeviceFreeSize, AndroidUtilities.formatFileSize(totalDeviceFreeSize)));
+        totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", works.heymate.beta.R.string.TotalDeviceSize, AndroidUtilities.formatFileSize(totalDeviceSize - totalDeviceFreeSize)));
 
         if (calculating) {
             calculatingTextView.setVisibility(View.VISIBLE);
@@ -189,13 +189,13 @@ class StroageUsageView extends FrameLayout {
                 textSettingsCell.setVisibility(VISIBLE);
                 telegramCacheTextView.setVisibility(View.VISIBLE);
                 telegramDatabaseTextView.setVisibility(GONE);
-                textSettingsCell.setText(LocaleController.getString("ClearTelegramCache", R.string.ClearTelegramCache), false);
-                telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", R.string.TelegramCacheSize, AndroidUtilities.formatFileSize(totalSize + database)));
+                textSettingsCell.setText(LocaleController.getString("ClearTelegramCache", works.heymate.beta.R.string.ClearTelegramCache), false);
+                telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", works.heymate.beta.R.string.TelegramCacheSize, AndroidUtilities.formatFileSize(totalSize + database)));
 
             } else {
                 telegramCacheTextView.setVisibility(View.GONE);
                 telegramDatabaseTextView.setVisibility(VISIBLE);
-                telegramDatabaseTextView.setText(LocaleController.formatString("LocalDatabaseSize", R.string.LocalDatabaseSize, AndroidUtilities.formatFileSize(database)));
+                telegramDatabaseTextView.setText(LocaleController.formatString("LocalDatabaseSize", works.heymate.beta.R.string.LocalDatabaseSize, AndroidUtilities.formatFileSize(database)));
                 divider.setVisibility(GONE);
                 textSettingsCell.setVisibility(GONE);
             }

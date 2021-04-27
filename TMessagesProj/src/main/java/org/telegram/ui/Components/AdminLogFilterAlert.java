@@ -26,7 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -125,7 +125,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         rowCount += 1;
         allAdminsRow = rowCount;
 
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
 
         containerView = new FrameLayout(context) {
@@ -332,12 +332,12 @@ public class AdminLogFilterAlert extends BottomSheet {
         containerView.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 48));
 
         View shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(works.heymate.beta.R.drawable.header_shadow_reverse);
         containerView.addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 3, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 48));
 
         saveButton = new BottomSheet.BottomSheetCell(context, 1);
         saveButton.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        saveButton.setTextAndIcon(LocaleController.getString("Save", R.string.Save).toUpperCase(), 0);
+        saveButton.setTextAndIcon(LocaleController.getString("Save", works.heymate.beta.R.string.Save).toUpperCase(), 0);
         saveButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         saveButton.setOnClickListener(v -> {
             delegate.didSelectRights(currentFilter, selectedAdmins);
@@ -479,33 +479,33 @@ public class AdminLogFilterAlert extends BottomSheet {
                 case 0: {
                     CheckBoxCell cell = (CheckBoxCell) holder.itemView;
                     if (position == 0) {
-                        cell.setText(LocaleController.getString("EventLogFilterAll", R.string.EventLogFilterAll), "", currentFilter == null, true);
+                        cell.setText(LocaleController.getString("EventLogFilterAll", works.heymate.beta.R.string.EventLogFilterAll), "", currentFilter == null, true);
                     } else if (position == restrictionsRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterNewRestrictions", R.string.EventLogFilterNewRestrictions), "", currentFilter == null || currentFilter.kick && currentFilter.ban && currentFilter.unkick && currentFilter.unban, true);
+                        cell.setText(LocaleController.getString("EventLogFilterNewRestrictions", works.heymate.beta.R.string.EventLogFilterNewRestrictions), "", currentFilter == null || currentFilter.kick && currentFilter.ban && currentFilter.unkick && currentFilter.unban, true);
                     } else if (position == adminsRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterNewAdmins", R.string.EventLogFilterNewAdmins), "", currentFilter == null || currentFilter.promote && currentFilter.demote, true);
+                        cell.setText(LocaleController.getString("EventLogFilterNewAdmins", works.heymate.beta.R.string.EventLogFilterNewAdmins), "", currentFilter == null || currentFilter.promote && currentFilter.demote, true);
                     } else if (position == membersRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterNewMembers", R.string.EventLogFilterNewMembers), "", currentFilter == null || currentFilter.invite && currentFilter.join, true);
+                        cell.setText(LocaleController.getString("EventLogFilterNewMembers", works.heymate.beta.R.string.EventLogFilterNewMembers), "", currentFilter == null || currentFilter.invite && currentFilter.join, true);
                     } else if (position == infoRow) {
                         if (isMegagroup) {
-                            cell.setText(LocaleController.getString("EventLogFilterGroupInfo", R.string.EventLogFilterGroupInfo), "", currentFilter == null || currentFilter.info, true);
+                            cell.setText(LocaleController.getString("EventLogFilterGroupInfo", works.heymate.beta.R.string.EventLogFilterGroupInfo), "", currentFilter == null || currentFilter.info, true);
                         } else {
-                            cell.setText(LocaleController.getString("EventLogFilterChannelInfo", R.string.EventLogFilterChannelInfo), "", currentFilter == null || currentFilter.info, true);
+                            cell.setText(LocaleController.getString("EventLogFilterChannelInfo", works.heymate.beta.R.string.EventLogFilterChannelInfo), "", currentFilter == null || currentFilter.info, true);
                         }
                     } else if (position == deleteRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterDeletedMessages", R.string.EventLogFilterDeletedMessages), "", currentFilter == null || currentFilter.delete, true);
+                        cell.setText(LocaleController.getString("EventLogFilterDeletedMessages", works.heymate.beta.R.string.EventLogFilterDeletedMessages), "", currentFilter == null || currentFilter.delete, true);
                     } else if (position == editRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterEditedMessages", R.string.EventLogFilterEditedMessages), "", currentFilter == null || currentFilter.edit, true);
+                        cell.setText(LocaleController.getString("EventLogFilterEditedMessages", works.heymate.beta.R.string.EventLogFilterEditedMessages), "", currentFilter == null || currentFilter.edit, true);
                     } else if (position == pinnedRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterPinnedMessages", R.string.EventLogFilterPinnedMessages), "", currentFilter == null || currentFilter.pinned, true);
+                        cell.setText(LocaleController.getString("EventLogFilterPinnedMessages", works.heymate.beta.R.string.EventLogFilterPinnedMessages), "", currentFilter == null || currentFilter.pinned, true);
                     } else if (position == leavingRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterLeavingMembers", R.string.EventLogFilterLeavingMembers), "", currentFilter == null || currentFilter.leave, callsRow != -1);
+                        cell.setText(LocaleController.getString("EventLogFilterLeavingMembers", works.heymate.beta.R.string.EventLogFilterLeavingMembers), "", currentFilter == null || currentFilter.leave, callsRow != -1);
                     } else if (position == callsRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterCalls", R.string.EventLogFilterCalls), "", currentFilter == null || currentFilter.group_call, false);
+                        cell.setText(LocaleController.getString("EventLogFilterCalls", works.heymate.beta.R.string.EventLogFilterCalls), "", currentFilter == null || currentFilter.group_call, false);
                     } else if (position == invitesRow) {
-                        cell.setText(LocaleController.getString("EventLogFilterInvites", R.string.EventLogFilterInvites), "", currentFilter == null || currentFilter.invites, true);
+                        cell.setText(LocaleController.getString("EventLogFilterInvites", works.heymate.beta.R.string.EventLogFilterInvites), "", currentFilter == null || currentFilter.invites, true);
                     } else if (position == allAdminsRow) {
-                        cell.setText(LocaleController.getString("EventLogAllAdmins", R.string.EventLogAllAdmins), "", selectedAdmins == null, true);
+                        cell.setText(LocaleController.getString("EventLogAllAdmins", works.heymate.beta.R.string.EventLogAllAdmins), "", selectedAdmins == null, true);
                     }
                     break;
                 }

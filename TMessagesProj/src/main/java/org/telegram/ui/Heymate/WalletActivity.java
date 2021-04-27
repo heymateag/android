@@ -23,7 +23,7 @@ import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -81,17 +81,17 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
 
     @Override
     public View createView(Context context) {
-        View content = LayoutInflater.from(context).inflate(R.layout.activity_wallet, null, false);
+        View content = LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.activity_wallet, null, false);
 
-        mImageWallet = content.findViewById(R.id.image_wallet);
-        mTextTitle = content.findViewById(R.id.text_title);
-        mTextStatus = content.findViewById(R.id.text_status);
-        mTextLeftButton = content.findViewById(R.id.text_leftbutton);
-        mImageLeftButton = content.findViewById(R.id.image_leftbutton);
-        mLeftButton = content.findViewById(R.id.leftbutton);
-        mTextRightButton = content.findViewById(R.id.text_rightbutton);
-        mImageRightButton = content.findViewById(R.id.image_rightbutton);
-        mRightButton = content.findViewById(R.id.rightbutton);
+        mImageWallet = content.findViewById(works.heymate.beta.R.id.image_wallet);
+        mTextTitle = content.findViewById(works.heymate.beta.R.id.text_title);
+        mTextStatus = content.findViewById(works.heymate.beta.R.id.text_status);
+        mTextLeftButton = content.findViewById(works.heymate.beta.R.id.text_leftbutton);
+        mImageLeftButton = content.findViewById(works.heymate.beta.R.id.image_leftbutton);
+        mLeftButton = content.findViewById(works.heymate.beta.R.id.leftbutton);
+        mTextRightButton = content.findViewById(works.heymate.beta.R.id.text_rightbutton);
+        mImageRightButton = content.findViewById(works.heymate.beta.R.id.image_rightbutton);
+        mRightButton = content.findViewById(works.heymate.beta.R.id.rightbutton);
 
         mTextStatus.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -276,19 +276,19 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
         mTextRightButton.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
         mImageLeftButton.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
         mImageRightButton.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
-        content.findViewById(R.id.divider).setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
-        content.findViewById(R.id.bottombar).setBackgroundColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
+        content.findViewById(works.heymate.beta.R.id.divider).setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+        content.findViewById(works.heymate.beta.R.id.bottombar).setBackgroundColor(ContextCompat.getColor(content.getContext(), works.heymate.beta.R.color.ht_theme));
     }
 
     private void updateState() {
         if (!mWallet.isCreated()) {
-            mImageWallet.setImageResource(R.drawable.img_no_wallet);
+            mImageWallet.setImageResource(works.heymate.beta.R.drawable.img_no_wallet);
             mTextTitle.setText(Texts.get(Texts.NO_WALLET_DETECTED));
             mTextStatus.setText(Texts.get(Texts.NO_WALLET_DETECTED_MESSAGE));
             mTextLeftButton.setText(Texts.get(Texts.CREATE_NEW_WALLET));
             mTextRightButton.setText(Texts.get(Texts.IMPORT_EXISTING_WALLET));
-            mImageLeftButton.setImageResource(R.drawable.group_edit);
-            mImageRightButton.setImageResource(R.drawable.ic_import);
+            mImageLeftButton.setImageResource(works.heymate.beta.R.drawable.group_edit);
+            mImageRightButton.setImageResource(works.heymate.beta.R.drawable.ic_import);
 
             if (mWallet.isCreating()) {
                 mTextLeftButton.setAlpha(0.6f);
@@ -308,7 +308,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
             }
         }
         else {
-            mImageWallet.setImageResource(R.drawable.img_checked_wallet);
+            mImageWallet.setImageResource(works.heymate.beta.R.drawable.img_checked_wallet);
             mTextTitle.setText(Texts.get(Texts.WALLET_DETECTED));
 
             String message = Texts.get(Texts.WALLET_DETECTED_MESSAGE).toString();
@@ -316,7 +316,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
             int myKeyStartIndex = message.indexOf("__");
 
             if (myKeyStartIndex > 0) {
-                final int themeColor = ContextCompat.getColor(mTextTitle.getContext(), R.color.ht_theme);
+                final int themeColor = ContextCompat.getColor(mTextTitle.getContext(), works.heymate.beta.R.color.ht_theme);
 
                 int myKeyEndIndex = message.indexOf("__", myKeyStartIndex + 2);
 
@@ -359,8 +359,8 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
 
             mTextLeftButton.setText(Texts.get(Texts.SECURE));
             mTextRightButton.setText(Texts.get(Texts.LATER));
-            mImageLeftButton.setImageResource(R.drawable.ic_secure);
-            mImageRightButton.setImageResource(R.drawable.ic_later);
+            mImageLeftButton.setImageResource(works.heymate.beta.R.drawable.ic_secure);
+            mImageRightButton.setImageResource(works.heymate.beta.R.drawable.ic_later);
 
             VerifiedStatus verifiedStatus = mWallet.getVerifiedStatus();
 

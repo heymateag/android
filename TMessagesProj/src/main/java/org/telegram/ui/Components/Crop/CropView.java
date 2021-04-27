@@ -24,7 +24,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -1147,8 +1147,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 new Integer[]{16, 9}
         };
 
-        actions[0] = LocaleController.getString("CropOriginal", R.string.CropOriginal);
-        actions[1] = LocaleController.getString("CropSquare", R.string.CropSquare);
+        actions[0] = LocaleController.getString("CropOriginal", works.heymate.beta.R.string.CropOriginal);
+        actions[1] = LocaleController.getString("CropSquare", works.heymate.beta.R.string.CropSquare);
 
         int i = 2;
         for (Integer[] ratioPair : ratios) {

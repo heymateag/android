@@ -23,7 +23,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -110,12 +110,12 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
         mButtonNextWeek = new ImageView(context);
         mButtonNextWeek.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mButtonNextWeek.setImageResource(R.drawable.ic_chevron_right_white_18);
+        mButtonNextWeek.setImageResource(works.heymate.beta.R.drawable.ic_chevron_right_white_18);
         addView(mButtonNextWeek);
 
         mButtonPreviousWeek = new ImageView(context);
         mButtonPreviousWeek.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        mButtonPreviousWeek.setImageResource(R.drawable.ic_chevron_left_white_18);
+        mButtonPreviousWeek.setImageResource(works.heymate.beta.R.drawable.ic_chevron_left_white_18);
         addView(mButtonPreviousWeek);
 
         mTextDay = new TextView(context);

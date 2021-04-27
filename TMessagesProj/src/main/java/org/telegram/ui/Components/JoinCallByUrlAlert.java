@@ -22,7 +22,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -103,18 +103,18 @@ public class JoinCallByUrlAlert extends BottomSheet {
                 percentTextView.setText(call.call.title);
             }
             if (call.call.participants_count == 0) {
-                infoTextView.setText(LocaleController.getString("NoOneJoinedYet", R.string.NoOneJoinedYet));
+                infoTextView.setText(LocaleController.getString("NoOneJoinedYet", works.heymate.beta.R.string.NoOneJoinedYet));
             } else {
                 infoTextView.setText(LocaleController.formatPluralString("Participants", call.call.participants_count));
             }
         } else {
             percentTextView.setText(chat.title);
-            infoTextView.setText(LocaleController.getString("NoOneJoinedYet", R.string.NoOneJoinedYet));
+            infoTextView.setText(LocaleController.getString("NoOneJoinedYet", works.heymate.beta.R.string.NoOneJoinedYet));
         }
 
         BottomSheetCell clearButton = new BottomSheetCell(context);
         clearButton.setBackground(null);
-        clearButton.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", R.string.VoipGroupJoinVoiceChatUrl));
+        clearButton.setText(LocaleController.getString("VoipGroupJoinVoiceChatUrl", works.heymate.beta.R.string.VoipGroupJoinVoiceChatUrl));
         clearButton.background.setOnClickListener(v -> {
             joinAfterDismiss = true;
             dismiss();

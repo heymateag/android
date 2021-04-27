@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuSubItem extends FrameLayout {
@@ -60,7 +60,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
 
         if (needCheck) {
             checkView = new ImageView(context);
-            checkView.setImageResource(R.drawable.msg_text_check);
+            checkView.setImageResource(works.heymate.beta.R.drawable.msg_text_check);
             checkView.setScaleType(ImageView.ScaleType.CENTER);
             checkView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_radioBackgroundChecked), PorterDuff.Mode.MULTIPLY));
             addView(checkView, LayoutHelper.createFrame(26, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT)));

@@ -70,7 +70,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -299,7 +299,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
         page1 = new FrameLayout(context);
         ActionBarMenu menu = actionBar.createMenu();
-        final ActionBarMenuItem item = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        final ActionBarMenuItem item = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
 
@@ -320,11 +320,11 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
             }
         });
-        item.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        item.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
 
         actionBar.setBackButtonDrawable(new MenuDrawable());
         actionBar.setAddToContainer(false);
-        actionBar.setTitle(LocaleController.getString("ThemePreview", R.string.ThemePreview));
+        actionBar.setTitle(LocaleController.getString("ThemePreview", works.heymate.beta.R.string.ThemePreview));
 
         page1 = new FrameLayout(context) {
             @Override
@@ -372,7 +372,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -380,7 +380,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         }
         floatingButton.setBackgroundDrawable(drawable);
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-        floatingButton.setImageResource(R.drawable.floating_pencil);
+        floatingButton.setImageResource(works.heymate.beta.R.drawable.floating_pencil);
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(floatingButton, "translationZ", AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
@@ -642,14 +642,14 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             actionBar2.setSubtitle(LocaleController.formatPluralString("Members", 505));
         } else {
             if (screenType == SCREEN_TYPE_CHANGE_BACKGROUND) {
-                actionBar2.setTitle(LocaleController.getString("BackgroundPreview", R.string.BackgroundPreview));
+                actionBar2.setTitle(LocaleController.getString("BackgroundPreview", works.heymate.beta.R.string.BackgroundPreview));
                 if (currentWallpaper instanceof WallpapersListActivity.ColorWallpaper || currentWallpaper instanceof TLRPC.TL_wallPaper) {
                     ActionBarMenu menu2 = actionBar2.createMenu();
-                    menu2.addItem(5, R.drawable.ic_share_video);
+                    menu2.addItem(5, works.heymate.beta.R.drawable.ic_share_video);
                 }
             } else if (screenType == SCREEN_TYPE_ACCENT_COLOR) {
                 ActionBarMenu menu2 = actionBar2.createMenu();
-                saveItem = menu2.addItem(4, LocaleController.getString("Save", R.string.Save).toUpperCase());
+                saveItem = menu2.addItem(4, LocaleController.getString("Save", works.heymate.beta.R.string.Save).toUpperCase());
 
                 dropDownContainer = new ActionBarMenuItem(context, menu2, 0, 0) {
                     @Override
@@ -659,9 +659,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     }
                 };
                 dropDownContainer.setSubMenuOpenSide(1);
-                dropDownContainer.addSubItem(1, LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
-                dropDownContainer.addSubItem(2, LocaleController.getString("ColorPickerBackground", R.string.ColorPickerBackground));
-                dropDownContainer.addSubItem(3, LocaleController.getString("ColorPickerMyMessages", R.string.ColorPickerMyMessages));
+                dropDownContainer.addSubItem(1, LocaleController.getString("ColorPickerMainColor", works.heymate.beta.R.string.ColorPickerMainColor));
+                dropDownContainer.addSubItem(2, LocaleController.getString("ColorPickerBackground", works.heymate.beta.R.string.ColorPickerBackground));
+                dropDownContainer.addSubItem(3, LocaleController.getString("ColorPickerMyMessages", works.heymate.beta.R.string.ColorPickerMyMessages));
                 dropDownContainer.setAllowCloseAnimation(false);
                 dropDownContainer.setForceSmoothKeyboard(true);
                 actionBar2.addView(dropDownContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, AndroidUtilities.isTablet() ? 64 : 56, 0, 40, 0));
@@ -676,8 +676,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 dropDown.setEllipsize(TextUtils.TruncateAt.END);
                 dropDown.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
                 dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                dropDown.setText(LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
-                Drawable dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
+                dropDown.setText(LocaleController.getString("ColorPickerMainColor", works.heymate.beta.R.string.ColorPickerMainColor));
+                Drawable dropDownDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_arrow_drop_down).mutate();
                 dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), PorterDuff.Mode.MULTIPLY));
                 dropDown.setCompoundDrawablesWithIntrinsicBounds(null, null, dropDownDrawable, null);
                 dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4));
@@ -1062,12 +1062,12 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 bottomOverlayChatText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                 bottomOverlayChatText.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 bottomOverlayChatText.setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
-                bottomOverlayChatText.setText(LocaleController.getString("SetBackground", R.string.SetBackground));
+                bottomOverlayChatText.setText(LocaleController.getString("SetBackground", works.heymate.beta.R.string.SetBackground));
                 bottomOverlayChat.addView(bottomOverlayChatText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
             }
 
             Rect paddings = new Rect();
-            sheetDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+            sheetDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
             sheetDrawable.getPadding(paddings);
             sheetDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.MULTIPLY));
 
@@ -1078,15 +1078,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             if (textsCount != 0) {
                 buttonsContainer = new FrameLayout(context);
                 if (screenType == SCREEN_TYPE_ACCENT_COLOR) {
-                    texts[0] = LocaleController.getString("BackgroundMotion", R.string.BackgroundMotion);
-                    texts[1] = LocaleController.getString("BackgroundPattern", R.string.BackgroundPattern);
+                    texts[0] = LocaleController.getString("BackgroundMotion", works.heymate.beta.R.string.BackgroundMotion);
+                    texts[1] = LocaleController.getString("BackgroundPattern", works.heymate.beta.R.string.BackgroundPattern);
                 } else if (currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) {
-                    texts[0] = LocaleController.getString("BackgroundColor", R.string.BackgroundColor);
-                    texts[1] = LocaleController.getString("BackgroundPattern", R.string.BackgroundPattern);
-                    texts[2] = LocaleController.getString("BackgroundMotion", R.string.BackgroundMotion);
+                    texts[0] = LocaleController.getString("BackgroundColor", works.heymate.beta.R.string.BackgroundColor);
+                    texts[1] = LocaleController.getString("BackgroundPattern", works.heymate.beta.R.string.BackgroundPattern);
+                    texts[2] = LocaleController.getString("BackgroundMotion", works.heymate.beta.R.string.BackgroundMotion);
                 } else {
-                    texts[0] = LocaleController.getString("BackgroundBlurred", R.string.BackgroundBlurred);
-                    texts[1] = LocaleController.getString("BackgroundMotion", R.string.BackgroundMotion);
+                    texts[0] = LocaleController.getString("BackgroundBlurred", works.heymate.beta.R.string.BackgroundBlurred);
+                    texts[1] = LocaleController.getString("BackgroundMotion", works.heymate.beta.R.string.BackgroundMotion);
                 }
                 TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
                 textPaint.setTextSize(AndroidUtilities.dp(14));
@@ -1231,7 +1231,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                         patternsCancelButton[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                         patternsCancelButton[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                         patternsCancelButton[a].setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
-                        patternsCancelButton[a].setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+                        patternsCancelButton[a].setText(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase());
                         patternsCancelButton[a].setGravity(Gravity.CENTER);
                         patternsCancelButton[a].setPadding(AndroidUtilities.dp(21), 0, AndroidUtilities.dp(21), 0);
                         patternsCancelButton[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 0));
@@ -1278,7 +1278,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                         patternsSaveButton[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                         patternsSaveButton[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                         patternsSaveButton[a].setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
-                        patternsSaveButton[a].setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme).toUpperCase());
+                        patternsSaveButton[a].setText(LocaleController.getString("ApplyTheme", works.heymate.beta.R.string.ApplyTheme).toUpperCase());
                         patternsSaveButton[a].setGravity(Gravity.CENTER);
                         patternsSaveButton[a].setPadding(AndroidUtilities.dp(21), 0, AndroidUtilities.dp(21), 0);
                         patternsSaveButton[a].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 0));
@@ -1299,7 +1299,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                         TextView titleView = new TextView(context);
                         titleView.setLines(1);
                         titleView.setSingleLine(true);
-                        titleView.setText(LocaleController.getString("BackgroundChoosePattern", R.string.BackgroundChoosePattern));
+                        titleView.setText(LocaleController.getString("BackgroundChoosePattern", works.heymate.beta.R.string.BackgroundChoosePattern));
 
                         titleView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
@@ -1355,7 +1355,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                         });
 
                         intensityCell = new HeaderCell(context);
-                        intensityCell.setText(LocaleController.getString("BackgroundIntensity", R.string.BackgroundIntensity));
+                        intensityCell.setText(LocaleController.getString("BackgroundIntensity", works.heymate.beta.R.string.BackgroundIntensity));
                         patternLayout[a].addView(intensityCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 175, 0, 0));
 
                         intensitySeekBar = new SeekBarView(context) {
@@ -1417,16 +1417,16 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                                     return;
                                 }
                                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                                builder1.setTitle(LocaleController.getString("DeleteThemeTitle", R.string.DeleteThemeTitle));
-                                builder1.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
-                                builder1.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
+                                builder1.setTitle(LocaleController.getString("DeleteThemeTitle", works.heymate.beta.R.string.DeleteThemeTitle));
+                                builder1.setMessage(LocaleController.getString("DeleteThemeAlert", works.heymate.beta.R.string.DeleteThemeAlert));
+                                builder1.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
                                     Theme.deleteThemeAccent(applyingTheme, accent, true);
                                     Theme.applyPreviousTheme();
                                     Theme.refreshThemeColors();
                                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, applyingTheme, nightTheme, null, -1);
                                     finishFragment();
                                 });
-                                builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                builder1.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                                 AlertDialog alertDialog = builder1.create();
                                 showDialog(alertDialog);
                                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -1622,7 +1622,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             cancelButton.setGravity(Gravity.CENTER);
             cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(0x0f000000, 0));
             cancelButton.setPadding(AndroidUtilities.dp(29), 0, AndroidUtilities.dp(29), 0);
-            cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+            cancelButton.setText(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase());
             cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             saveButtonsContainer.addView(cancelButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             cancelButton.setOnClickListener(v -> cancelThemeApply(false));
@@ -1633,7 +1633,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             doneButton.setGravity(Gravity.CENTER);
             doneButton.setBackgroundDrawable(Theme.createSelectorDrawable(0x0f000000, 0));
             doneButton.setPadding(AndroidUtilities.dp(29), 0, AndroidUtilities.dp(29), 0);
-            doneButton.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme).toUpperCase());
+            doneButton.setText(LocaleController.getString("ApplyTheme", works.heymate.beta.R.string.ApplyTheme).toUpperCase());
             doneButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             saveButtonsContainer.addView(doneButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
             doneButton.setOnClickListener(v -> {
@@ -1680,9 +1680,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         }
         if (id == 2 && (Theme.hasCustomWallpaper() || accent.backgroundOverrideColor == 0x100000000L)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("ChangeChatBackground", R.string.ChangeChatBackground));
-            builder.setMessage(LocaleController.getString("ChangeWallpaperToColor", R.string.ChangeWallpaperToColor));
-            builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), (dialog, which) -> {
+            builder.setTitle(LocaleController.getString("ChangeChatBackground", works.heymate.beta.R.string.ChangeChatBackground));
+            builder.setMessage(LocaleController.getString("ChangeWallpaperToColor", works.heymate.beta.R.string.ChangeWallpaperToColor));
+            builder.setPositiveButton(LocaleController.getString("Change", works.heymate.beta.R.string.Change), (dialog, which) -> {
                 if (accent.backgroundOverrideColor == 0x100000000L) {
                     accent.backgroundOverrideColor = 0;
                     accent.backgroundGradientOverrideColor = 0;
@@ -1692,7 +1692,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 Theme.resetCustomWallpaper(true);
                 selectColorType(2);
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             showDialog(builder.create());
             return;
         }
@@ -1700,12 +1700,12 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         colorType = id;
         switch (id) {
             case 1:
-                dropDown.setText(LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
+                dropDown.setText(LocaleController.getString("ColorPickerMainColor", works.heymate.beta.R.string.ColorPickerMainColor));
                 colorPicker.setType(1, hasChanges(1), false,  false, false, 0, false);
                 colorPicker.setColor(accent.accentColor, 0);
                 break;
             case 2:
-                dropDown.setText(LocaleController.getString("ColorPickerBackground", R.string.ColorPickerBackground));
+                dropDown.setText(LocaleController.getString("ColorPickerBackground", works.heymate.beta.R.string.ColorPickerBackground));
 
                 int defaultBackground = Theme.getColor(Theme.key_chat_wallpaper);
                 int defaultGradient = Theme.hasThemeKey(Theme.key_chat_wallpaper_gradient_to) ? Theme.getColor(Theme.key_chat_wallpaper_gradient_to) : 0;
@@ -1722,7 +1722,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 listView2.smoothScrollBy(0, AndroidUtilities.dp(60));
                 break;
             case 3:
-                dropDown.setText(LocaleController.getString("ColorPickerMyMessages", R.string.ColorPickerMyMessages));
+                dropDown.setText(LocaleController.getString("ColorPickerMyMessages", works.heymate.beta.R.string.ColorPickerMyMessages));
                 colorPicker.setType(2, hasChanges(3), true, accent.myMessagesGradientAccentColor != 0, true, 0, false);
                 colorPicker.setColor(accent.myMessagesGradientAccentColor, 1);
                 colorPicker.setColor(accent.myMessagesAccentColor != 0 ? accent.myMessagesAccentColor : accent.accentColor, 0);
@@ -1884,10 +1884,10 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 selectedPattern != null && accent.patternIntensity != currentIntensity
         )) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("SaveChangesAlertTitle", R.string.SaveChangesAlertTitle));
-            builder.setMessage(LocaleController.getString("SaveChangesAlertText", R.string.SaveChangesAlertText));
-            builder.setPositiveButton(LocaleController.getString("Save", R.string.Save), (dialogInterface, i) -> actionBar2.getActionBarMenuOnItemClick().onItemClick(4));
-            builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialog, which) -> cancelThemeApply(false));
+            builder.setTitle(LocaleController.getString("SaveChangesAlertTitle", works.heymate.beta.R.string.SaveChangesAlertTitle));
+            builder.setMessage(LocaleController.getString("SaveChangesAlertText", works.heymate.beta.R.string.SaveChangesAlertText));
+            builder.setPositiveButton(LocaleController.getString("Save", works.heymate.beta.R.string.Save), (dialogInterface, i) -> actionBar2.getActionBarMenuOnItemClick().onItemClick(4));
+            builder.setNegativeButton(LocaleController.getString("PassportDiscard", works.heymate.beta.R.string.PassportDiscard), (dialog, which) -> cancelThemeApply(false));
             showDialog(builder.create());
             return false;
         }
@@ -2353,7 +2353,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     radialProgress.setIcon(MediaActionDrawable.ICON_EMPTY, ifSame, animated);
                 }
                 if (screenType == SCREEN_TYPE_CHANGE_BACKGROUND) {
-                    actionBar2.setSubtitle(LocaleController.getString("LoadingFullImage", R.string.LoadingFullImage));
+                    actionBar2.setSubtitle(LocaleController.getString("LoadingFullImage", works.heymate.beta.R.string.LoadingFullImage));
                 }
                 backgroundImage.invalidate();
             }
@@ -2740,8 +2740,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
             int date = (int) (System.currentTimeMillis() / 1000);
             DialogCell.CustomDialog customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog1", R.string.ThemePreviewDialog1);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage1", R.string.ThemePreviewDialogMessage1);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog1", works.heymate.beta.R.string.ThemePreviewDialog1);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage1", works.heymate.beta.R.string.ThemePreviewDialogMessage1);
             customDialog.id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = true;
@@ -2754,8 +2754,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog2", R.string.ThemePreviewDialog2);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage2", R.string.ThemePreviewDialogMessage2);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog2", works.heymate.beta.R.string.ThemePreviewDialog2);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage2", works.heymate.beta.R.string.ThemePreviewDialogMessage2);
             customDialog.id = 1;
             customDialog.unread_count = 2;
             customDialog.pinned = false;
@@ -2768,8 +2768,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog3", R.string.ThemePreviewDialog3);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage3", R.string.ThemePreviewDialogMessage3);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog3", works.heymate.beta.R.string.ThemePreviewDialog3);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage3", works.heymate.beta.R.string.ThemePreviewDialogMessage3);
             customDialog.id = 2;
             customDialog.unread_count = 3;
             customDialog.pinned = false;
@@ -2782,8 +2782,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog4", R.string.ThemePreviewDialog4);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage4", R.string.ThemePreviewDialogMessage4);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog4", works.heymate.beta.R.string.ThemePreviewDialog4);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage4", works.heymate.beta.R.string.ThemePreviewDialogMessage4);
             customDialog.id = 3;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -2796,8 +2796,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog5", R.string.ThemePreviewDialog5);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage5", R.string.ThemePreviewDialogMessage5);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog5", works.heymate.beta.R.string.ThemePreviewDialog5);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage5", works.heymate.beta.R.string.ThemePreviewDialogMessage5);
             customDialog.id = 4;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -2810,8 +2810,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog6", R.string.ThemePreviewDialog6);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage6", R.string.ThemePreviewDialogMessage6);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog6", works.heymate.beta.R.string.ThemePreviewDialog6);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage6", works.heymate.beta.R.string.ThemePreviewDialogMessage6);
             customDialog.id = 5;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -2824,8 +2824,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog7", R.string.ThemePreviewDialog7);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage7", R.string.ThemePreviewDialogMessage7);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog7", works.heymate.beta.R.string.ThemePreviewDialog7);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage7", works.heymate.beta.R.string.ThemePreviewDialogMessage7);
             customDialog.id = 6;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -2838,8 +2838,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             dialogs.add(customDialog);
 
             customDialog = new DialogCell.CustomDialog();
-            customDialog.name = LocaleController.getString("ThemePreviewDialog8", R.string.ThemePreviewDialog8);
-            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage8", R.string.ThemePreviewDialogMessage8);
+            customDialog.name = LocaleController.getString("ThemePreviewDialog8", works.heymate.beta.R.string.ThemePreviewDialog8);
+            customDialog.message = LocaleController.getString("ThemePreviewDialogMessage8", works.heymate.beta.R.string.ThemePreviewDialogMessage8);
             customDialog.id = 0;
             customDialog.unread_count = 0;
             customDialog.pinned = false;
@@ -2910,9 +2910,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             if (screenType == SCREEN_TYPE_CHANGE_BACKGROUND) {
                 message = new TLRPC.TL_message();
                 if (currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) {
-                    message.message = LocaleController.getString("BackgroundColorSinglePreviewLine2", R.string.BackgroundColorSinglePreviewLine2);
+                    message.message = LocaleController.getString("BackgroundColorSinglePreviewLine2", works.heymate.beta.R.string.BackgroundColorSinglePreviewLine2);
                 } else {
-                    message.message = LocaleController.getString("BackgroundPreviewLine2", R.string.BackgroundPreviewLine2);
+                    message.message = LocaleController.getString("BackgroundPreviewLine2", works.heymate.beta.R.string.BackgroundPreviewLine2);
                 }
                 message.date = date + 60;
                 message.dialog_id = 1;
@@ -2931,9 +2931,9 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
 
                 message = new TLRPC.TL_message();
                 if (currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) {
-                    message.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", R.string.BackgroundColorSinglePreviewLine1);
+                    message.message = LocaleController.getString("BackgroundColorSinglePreviewLine1", works.heymate.beta.R.string.BackgroundColorSinglePreviewLine1);
                 } else {
-                    message.message = LocaleController.getString("BackgroundPreviewLine1", R.string.BackgroundPreviewLine1);
+                    message.message = LocaleController.getString("BackgroundPreviewLine1", works.heymate.beta.R.string.BackgroundPreviewLine1);
                 }
                 message.date = date + 60;
                 message.dialog_id = 1;
@@ -2958,7 +2958,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.media.document.size = (int) (1024 * 1024 * 2.5f);
                 message.media.document.dc_id = Integer.MIN_VALUE;
                 TLRPC.TL_documentAttributeFilename attributeFilename = new TLRPC.TL_documentAttributeFilename();
-                attributeFilename.file_name = LocaleController.getString("NewThemePreviewReply2", R.string.NewThemePreviewReply2) + ".mp3";
+                attributeFilename.file_name = LocaleController.getString("NewThemePreviewReply2", works.heymate.beta.R.string.NewThemePreviewReply2) + ".mp3";
                 message.media.document.attributes.add(attributeFilename);
                 message.date = date + 60;
                 message.dialog_id = 1;
@@ -2972,7 +2972,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 MessageObject replyMessageObject = new MessageObject(UserConfig.selectedAccount, message, true, false);
 
                 message = new TLRPC.TL_message();
-                String text = LocaleController.getString("NewThemePreviewLine3", R.string.NewThemePreviewLine3);
+                String text = LocaleController.getString("NewThemePreviewLine3", works.heymate.beta.R.string.NewThemePreviewLine3);
                 StringBuilder builder = new StringBuilder(text);
                 int index1 = text.indexOf('*');
                 int index2 = text.lastIndexOf('*');
@@ -3002,7 +3002,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 messages.add(message1);
 
                 message = new TLRPC.TL_message();
-                message.message = LocaleController.getString("NewThemePreviewLine1", R.string.NewThemePreviewLine1);
+                message.message = LocaleController.getString("NewThemePreviewLine1", works.heymate.beta.R.string.NewThemePreviewLine1);
                 message.date = date + 60;
                 message.dialog_id = 1;
                 message.flags = 257 + 8;
@@ -3015,7 +3015,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 message.peer_id = new TLRPC.TL_peerUser();
                 message.peer_id.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
                 MessageObject message2 = new MessageObject(UserConfig.selectedAccount, message, true, false);
-                message2.customReplyName = LocaleController.getString("NewThemePreviewName", R.string.NewThemePreviewName);
+                message2.customReplyName = LocaleController.getString("NewThemePreviewName", works.heymate.beta.R.string.NewThemePreviewName);
                 message2.eventId = 1;
                 message2.resetLayout();
                 message2.replyMessageObject = replyMessageObject;
@@ -3111,7 +3111,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     messages.add(new MessageObject(currentAccount, message, true, false));
                 } else {
                     message = new TLRPC.TL_message();
-                    message.message = LocaleController.getString("ThemePreviewLine1", R.string.ThemePreviewLine1);
+                    message.message = LocaleController.getString("ThemePreviewLine1", works.heymate.beta.R.string.ThemePreviewLine1);
                     message.date = date + 60;
                     message.dialog_id = 1;
                     message.flags = 259;
@@ -3125,7 +3125,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     MessageObject replyMessageObject = new MessageObject(currentAccount, message, true, false);
 
                     message = new TLRPC.TL_message();
-                    message.message = LocaleController.getString("ThemePreviewLine2", R.string.ThemePreviewLine2);
+                    message.message = LocaleController.getString("ThemePreviewLine2", works.heymate.beta.R.string.ThemePreviewLine2);
                     message.date = date + 960;
                     message.dialog_id = 1;
                     message.flags = 259;
@@ -3151,8 +3151,8 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.media.document.file_reference = new byte[0];
                     TLRPC.TL_documentAttributeAudio audio = new TLRPC.TL_documentAttributeAudio();
                     audio.duration = 243;
-                    audio.performer = LocaleController.getString("ThemePreviewSongPerformer", R.string.ThemePreviewSongPerformer);
-                    audio.title = LocaleController.getString("ThemePreviewSongTitle", R.string.ThemePreviewSongTitle);
+                    audio.performer = LocaleController.getString("ThemePreviewSongPerformer", works.heymate.beta.R.string.ThemePreviewSongPerformer);
+                    audio.title = LocaleController.getString("ThemePreviewSongTitle", works.heymate.beta.R.string.ThemePreviewSongTitle);
                     message.media.document.attributes.add(audio);
                     message.out = false;
                     message.peer_id = new TLRPC.TL_peerUser();
@@ -3160,7 +3160,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     messages.add(new MessageObject(currentAccount, message, true, false));
 
                     message = new TLRPC.TL_message();
-                    message.message = LocaleController.getString("ThemePreviewLine3", R.string.ThemePreviewLine3);
+                    message.message = LocaleController.getString("ThemePreviewLine3", works.heymate.beta.R.string.ThemePreviewLine3);
                     message.date = date + 60;
                     message.dialog_id = 1;
                     message.flags = 257 + 8;
@@ -3173,7 +3173,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     message.peer_id = new TLRPC.TL_peerUser();
                     message.peer_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();
                     messageObject = new MessageObject(currentAccount, message, true, false);
-                    messageObject.customReplyName = LocaleController.getString("ThemePreviewLine3Reply", R.string.ThemePreviewLine3Reply);
+                    messageObject.customReplyName = LocaleController.getString("ThemePreviewLine3Reply", works.heymate.beta.R.string.ThemePreviewLine3Reply);
                     messageObject.replyMessageObject = replyMessageObject;
                     messages.add(messageObject);
 
@@ -3229,7 +3229,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     photoSize.type = "s";
                     photoSize.location = new TLRPC.TL_fileLocationUnavailable();
                     message.media.photo.sizes.add(photoSize);
-                    message.message = LocaleController.getString("ThemePreviewLine4", R.string.ThemePreviewLine4);
+                    message.message = LocaleController.getString("ThemePreviewLine4", works.heymate.beta.R.string.ThemePreviewLine4);
                     message.out = false;
                     message.peer_id = new TLRPC.TL_peerUser();
                     message.peer_id.user_id = UserConfig.getInstance(currentAccount).getClientUserId();

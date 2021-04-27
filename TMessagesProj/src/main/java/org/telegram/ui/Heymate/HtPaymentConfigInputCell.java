@@ -19,7 +19,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -84,7 +84,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         titleLayout3.addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 1f, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 0, 15));
 
         ImageView expandIcon = new ImageView(context);
-        Drawable expandDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+        Drawable expandDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
         expandDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         expandIcon.setImageDrawable(expandDrawable);
         titleLayout3.addView(expandIcon, LayoutHelper.createLinear(15, 15, AndroidUtilities.dp(20), AndroidUtilities.dp(4), 30, 15));
@@ -182,7 +182,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
 
         paymentLayout2.setOrientation(LinearLayout.VERTICAL);
         TextView configTitle1 = new TextView(context);
-        configTitle1.setText(LocaleController.getString("HtServiceProviderPromises", R.string.HtServiceProviderPromises));
+        configTitle1.setText(LocaleController.getString("HtServiceProviderPromises", works.heymate.beta.R.string.HtServiceProviderPromises));
         configTitle1.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         configTitle1.setTypeface(configTitle1.getTypeface(), Typeface.BOLD);
         paymentLayout2.addView(configTitle1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 25, 0, 0, 0));
@@ -190,7 +190,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         LinearLayout configLayout1 = new LinearLayout(context);
         int i = 0;
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtDelayInStart", R.string.HtDelayInStart) + " > 30 " + LocaleController.getString("HtMinutes", R.string.HtMinutes));
+        parametersViews[i].setText(LocaleController.getString("HtDelayInStart", works.heymate.beta.R.string.HtDelayInStart) + " > 30 " + LocaleController.getString("HtMinutes", works.heymate.beta.R.string.HtMinutes));
         parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
         int finalI2 = i;
         parametersViews[i].setOnClickListener(new OnClickListener() {
@@ -199,7 +199,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtDelayTime", R.string.HtDelayTime));
+                builder.setTitle(LocaleController.getString("HtDelayTime", works.heymate.beta.R.string.HtDelayTime));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -213,16 +213,16 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[finalI2].setText(LocaleController.getString("HtDelayInStart", R.string.HtDelayInStart) + " > " + feeTextField.getText().toString() + " " + LocaleController.getString("HtMinutes", R.string.HtMinutes));
+                        parametersViews[finalI2].setText(LocaleController.getString("HtDelayInStart", works.heymate.beta.R.string.HtDelayInStart) + " > " + feeTextField.getText().toString() + " " + LocaleController.getString("HtMinutes", works.heymate.beta.R.string.HtMinutes));
                         delay1 = feeTextField.getText().toString();
                         delayMinutes = delay1;
                     }
@@ -235,8 +235,8 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         configLayout1.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
 
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
+        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
+        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         final int i1 = i;
         parametersViews[i].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,7 +244,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtPercentage", R.string.HtPercentage));
+                builder.setTitle(LocaleController.getString("HtPercentage", works.heymate.beta.R.string.HtPercentage));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -258,14 +258,14 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0) {
                         parametersViews[i1].setText(feeTextField.getText().toString() + "%");
                     }
@@ -279,19 +279,19 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         paymentLayout2.addView(configLayout1);
 
         TextView configTitle2 = new TextView(context);
-        configTitle2.setText(LocaleController.getString("HtAdvancedPayment", R.string.HtAdvancedPayment));
+        configTitle2.setText(LocaleController.getString("HtAdvancedPayment", works.heymate.beta.R.string.HtAdvancedPayment));
         configTitle2.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         configTitle2.setTypeface(configTitle2.getTypeface(), Typeface.BOLD);
         paymentLayout2.addView(configTitle2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 25, 15, 15, 0));
 
         LinearLayout configLayout2 = new LinearLayout(context);
         TextView depositLabel = new TextView(context);
-        depositLabel.setText(LocaleController.getString("HtDeposit", R.string.HtDeposit));
+        depositLabel.setText(LocaleController.getString("HtDeposit", works.heymate.beta.R.string.HtDeposit));
         depositLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         configLayout2.addView(depositLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
+        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
+        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         final int i2 = i;
         parametersViews[i].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,7 +299,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtPercentage", R.string.HtPercentage));
+                builder.setTitle(LocaleController.getString("HtPercentage", works.heymate.beta.R.string.HtPercentage));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -313,14 +313,14 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         parametersViews[i2].setText(feeTextField.getText().toString() + "%");
                     initialDeposit = feeTextField.getText().toString();
@@ -334,7 +334,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         LinearLayout configLayout3 = new LinearLayout(context);
 
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtCancellationIn", R.string.HtCancellationIn) + " < 2 " + LocaleController.getString("HtHoursOfStart", R.string.HtHoursOfStart));
+        parametersViews[i].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " < 2 " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
         parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
         int finalI1 = i;
         parametersViews[i].setOnClickListener(new OnClickListener() {
@@ -343,7 +343,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtCancellationTime", R.string.HtCancellationTime));
+                builder.setTitle(LocaleController.getString("HtCancellationTime", works.heymate.beta.R.string.HtCancellationTime));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -357,16 +357,16 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[finalI1].setText(LocaleController.getString("HtCancellationIn", R.string.HtCancellationIn) + " < " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", R.string.HtHoursOfStart));
+                        parametersViews[finalI1].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " < " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
                         cancellation1 = feeTextField.getText().toString();
                         cancelHours1 = cancellation1;
                     }
@@ -379,8 +379,8 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         configLayout3.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
 
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
+        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
+        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         final int i3 = i;
         parametersViews[i].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,7 +388,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtPercentage", R.string.HtPercentage));
+                builder.setTitle(LocaleController.getString("HtPercentage", works.heymate.beta.R.string.HtPercentage));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -402,14 +402,14 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         parametersViews[i3].setText(feeTextField.getText().toString() + "%");
                     cancelPercent1 = feeTextField.getText().toString();
@@ -423,7 +423,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         LinearLayout configLayout4 = new LinearLayout(context);
 
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtCancellationIn", R.string.HtCancellationIn) + " 2 - 6 " + LocaleController.getString("HtHoursOfStart", R.string.HtHoursOfStart));
+        parametersViews[i].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " 2 - 6 " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
         parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
         int finalI = i;
         parametersViews[i].setOnClickListener(new OnClickListener() {
@@ -432,7 +432,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtCancellationTime", R.string.HtCancellationTime));
+                builder.setTitle(LocaleController.getString("HtCancellationTime", works.heymate.beta.R.string.HtCancellationTime));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -446,16 +446,16 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[finalI].setText(LocaleController.getString("HtCancellationIn", R.string.HtCancellationIn) + " " + cancellation1 + " - " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", R.string.HtHoursOfStart));
+                        parametersViews[finalI].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " " + cancellation1 + " - " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
                         cancellation2 = feeTextField.getText().toString();
                         cancelHours2 = cancellation2;
                     }
@@ -469,8 +469,8 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         configLayout4.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
 
         parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(R.color.ht_green));
+        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
+        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         final int i4 = i;
         parametersViews[i].setOnClickListener(new View.OnClickListener() {
             @Override
@@ -478,7 +478,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtPercentage", R.string.HtPercentage));
+                builder.setTitle(LocaleController.getString("HtPercentage", works.heymate.beta.R.string.HtPercentage));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -492,14 +492,14 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         parametersViews[i4].setText(feeTextField.getText().toString() + "%");
                     cancelPercent2 = feeTextField.getText().toString();
@@ -520,7 +520,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
 
     public void setRes(Object value, int position) {
         parametersViews[position].setText(value.toString());
-        parametersViews[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
+        parametersViews[position].setTextColor(getContext().getResources().getColor(works.heymate.beta.R.color.ht_green));
     }
 
     public JSONObject getRes() {

@@ -22,7 +22,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -67,7 +67,7 @@ public class AdminedChannelCell extends FrameLayout {
 
         deleteButton = new ImageView(context);
         deleteButton.setScaleType(ImageView.ScaleType.CENTER);
-        deleteButton.setImageResource(R.drawable.msg_panel_clear);
+        deleteButton.setImageResource(works.heymate.beta.R.drawable.msg_panel_clear);
         deleteButton.setOnClickListener(onClickListener);
         deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText), PorterDuff.Mode.MULTIPLY));
         addView(deleteButton, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 7 : 0, 12, LocaleController.isRTL ? 0 : 7, 0));

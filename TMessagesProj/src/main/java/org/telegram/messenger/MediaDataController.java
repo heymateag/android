@@ -72,6 +72,8 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import works.heymate.beta.BuildConfig;
+
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
 
@@ -2962,9 +2964,9 @@ public class MediaDataController extends BaseController {
                 intent.setAction("new_dialog");
                 ArrayList<ShortcutInfoCompat> arrayList = new ArrayList<>();
                 arrayList.add(new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, "compose")
-                        .setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut))
-                        .setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut))
-                        .setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose))
+                        .setShortLabel(LocaleController.getString("NewConversationShortcut", works.heymate.beta.R.string.NewConversationShortcut))
+                        .setLongLabel(LocaleController.getString("NewConversationShortcut", works.heymate.beta.R.string.NewConversationShortcut))
+                        .setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.shortcut_compose))
                         .setIntent(intent)
                         .build());
                 if (shortcutsToUpdate.contains("compose")) {
@@ -3073,7 +3075,7 @@ public class MediaDataController extends BaseController {
                     if (bitmap != null) {
                         builder.setIcon(IconCompat.createWithBitmap(bitmap));
                     } else {
-                        builder.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_user));
+                        builder.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.shortcut_user));
                     }
                     arrayList.add(builder.build());
                     if (shortcutsToUpdate.contains(id)) {
@@ -3502,10 +3504,10 @@ public class MediaDataController extends BaseController {
 
             if (user != null) {
                 if (UserObject.isReplyUser(user)) {
-                    name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
+                    name = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
                     overrideAvatar = true;
                 } else if (UserObject.isUserSelf(user)) {
-                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
                     overrideAvatar = true;
                 } else {
                     name = ContactsController.formatName(user.first_name, user.last_name);
@@ -3555,7 +3557,7 @@ public class MediaDataController extends BaseController {
                             canvas.drawRoundRect(bitmapRect, bitmap.getWidth(), bitmap.getHeight(), roundPaint);
                             canvas.restore();
                         }
-                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.book_logo);
+                        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.book_logo);
                         int w = AndroidUtilities.dp(15);
                         int left = size - w - AndroidUtilities.dp(2);
                         int top = size - w - AndroidUtilities.dp(2);
@@ -3583,15 +3585,15 @@ public class MediaDataController extends BaseController {
                 } else {
                     if (user != null) {
                         if (user.bot) {
-                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_bot));
+                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_bot));
                         } else {
-                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_user));
+                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_user));
                         }
                     } else if (chat != null) {
                         if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_channel));
+                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_channel));
                         } else {
-                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_group));
+                            pinShortcutInfo.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_group));
                         }
                     }
                 }
@@ -3604,15 +3606,15 @@ public class MediaDataController extends BaseController {
                 } else {
                     if (user != null) {
                         if (user.bot) {
-                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_bot));
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_bot));
                         } else {
-                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_user));
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_user));
                         }
                     } else if (chat != null) {
                         if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_channel));
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_channel));
                         } else {
-                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, R.drawable.book_group));
+                            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_group));
                         }
                     }
                 }

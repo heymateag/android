@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -63,8 +63,8 @@ public class FinishButtonCell extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
-        textView.setText(LocaleController.getString("HtFinish", R.string.HtFinish));
-        Drawable drawable = getResources().getDrawable(R.drawable.ic_ab_done);
+        textView.setText(LocaleController.getString("HtFinish", works.heymate.beta.R.string.HtFinish));
+        Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.ic_ab_done);
         if (drawable != null) {
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue), PorterDuff.Mode.MULTIPLY));
         }

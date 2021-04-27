@@ -78,9 +78,9 @@ public class ImportingService extends Service implements NotificationCenter.Noti
             builder.setSmallIcon(android.R.drawable.stat_sys_upload);
             builder.setWhen(System.currentTimeMillis());
             builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
-            builder.setTicker(LocaleController.getString("ImporImportingService", R.string.ImporImportingService));
-            builder.setContentText(LocaleController.getString("ImporImportingService", R.string.ImporImportingService));
+            builder.setContentTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+            builder.setTicker(LocaleController.getString("ImporImportingService", works.heymate.beta.R.string.ImporImportingService));
+            builder.setContentText(LocaleController.getString("ImporImportingService", works.heymate.beta.R.string.ImporImportingService));
         }
         builder.setProgress(100, 0, true);
         startForeground(5, builder.build());

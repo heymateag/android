@@ -42,9 +42,9 @@ public class FeedWidgetProvider extends AppWidgetProvider {
         Intent intent2 = new Intent(context, FeedWidgetService.class);
         intent2.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent2.setData(Uri.parse(intent2.toUri(Intent.URI_INTENT_SCHEME)));
-        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.feed_widget_layout);
-        rv.setRemoteAdapter(appWidgetId, R.id.list_view, intent2);
-        rv.setEmptyView(R.id.list_view, R.id.empty_view);
+        RemoteViews rv = new RemoteViews(context.getPackageName(), works.heymate.beta.R.layout.feed_widget_layout);
+        rv.setRemoteAdapter(appWidgetId, works.heymate.beta.R.id.list_view, intent2);
+        rv.setEmptyView(works.heymate.beta.R.id.list_view, works.heymate.beta.R.id.empty_view);
 
         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
         intent.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
@@ -52,7 +52,7 @@ public class FeedWidgetProvider extends AppWidgetProvider {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        rv.setPendingIntentTemplate(R.id.list_view, contentIntent);
+        rv.setPendingIntentTemplate(works.heymate.beta.R.id.list_view, contentIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, rv);
     }

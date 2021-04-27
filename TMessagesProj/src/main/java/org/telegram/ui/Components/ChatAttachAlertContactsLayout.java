@@ -30,7 +30,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -200,7 +200,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 statusTextView.setText(currentStatus);
             } else if (currentUser != null) {
                 if (TextUtils.isEmpty(currentUser.phone)) {
-                    statusTextView.setText(LocaleController.getString("NumberUnknown", R.string.NumberUnknown));
+                    statusTextView.setText(LocaleController.getString("NumberUnknown", works.heymate.beta.R.string.NumberUnknown));
                 } else {
                     statusTextView.setText(PhoneFormat.getInstance().format("+" + currentUser.phone));
                 }
@@ -240,12 +240,12 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             public void onTextChange(String text) {
                 if (text.length() != 0) {
                     if (emptyView != null) {
-                        emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+                        emptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
                     }
                 } else {
                     if (listView.getAdapter() != listAdapter) {
                         int top = getCurrentTop();
-                        emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+                        emptyView.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
                         emptyView.showTextView();
                         listView.setAdapter(listAdapter);
                         listAdapter.notifyDataSetChanged();
@@ -278,12 +278,12 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 parentAlert.makeFocusable(editText, true);
             }
         };
-        searchField.setHint(LocaleController.getString("SearchFriends", R.string.SearchFriends));
+        searchField.setHint(LocaleController.getString("SearchFriends", works.heymate.beta.R.string.SearchFriends));
         frameLayout.addView(searchField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
         emptyView = new EmptyTextProgressView(context);
         emptyView.showTextView();
-        emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+        emptyView.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
         addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 52, 0, 0));
 
         listView = new RecyclerListView(context) {

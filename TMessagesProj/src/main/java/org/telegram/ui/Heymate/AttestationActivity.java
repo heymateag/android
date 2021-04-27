@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -75,16 +75,16 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
 
     @Override
     public View createView(Context context) {
-        View content = LayoutInflater.from(context).inflate(R.layout.activity_attestation, null, false);
+        View content = LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.activity_attestation, null, false);
 
-        mImageStep = content.findViewById(R.id.image_step);
-        mTextTitle = content.findViewById(R.id.text_title);
-        mTextDescription = content.findViewById(R.id.text_description);
-        mInputCode = content.findViewById(R.id.input_code);
-        mIndicatorStep = content.findViewById(R.id.indicator_step);
-        mTextNext = content.findViewById(R.id.text_next);
-        mImageNext = content.findViewById(R.id.image_next);
-        mButtonNext = content.findViewById(R.id.button_next);
+        mImageStep = content.findViewById(works.heymate.beta.R.id.image_step);
+        mTextTitle = content.findViewById(works.heymate.beta.R.id.text_title);
+        mTextDescription = content.findViewById(works.heymate.beta.R.id.text_description);
+        mInputCode = content.findViewById(works.heymate.beta.R.id.input_code);
+        mIndicatorStep = content.findViewById(works.heymate.beta.R.id.indicator_step);
+        mTextNext = content.findViewById(works.heymate.beta.R.id.text_next);
+        mImageNext = content.findViewById(works.heymate.beta.R.id.image_next);
+        mButtonNext = content.findViewById(works.heymate.beta.R.id.button_next);
 
         setupTheme(content);
 
@@ -202,12 +202,12 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
         mTextTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mTextDescription.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         mInputCode.setDigitColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        mInputCode.setIndicatorColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
-        mIndicatorStep.setMainColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
+        mInputCode.setIndicatorColor(ContextCompat.getColor(content.getContext(), works.heymate.beta.R.color.ht_theme));
+        mIndicatorStep.setMainColor(ContextCompat.getColor(content.getContext(), works.heymate.beta.R.color.ht_theme));
         mIndicatorStep.setOthersColor(Theme.getColor(Theme.key_divider));
         mTextNext.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
         mImageNext.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
-        mButtonNext.setBackgroundColor(ContextCompat.getColor(content.getContext(), R.color.ht_theme));
+        mButtonNext.setBackgroundColor(ContextCompat.getColor(content.getContext(), works.heymate.beta.R.color.ht_theme));
     }
 
     private void updateState() {
@@ -244,13 +244,13 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
 
         switch (verifiedStatus.completedAttestations) {
             case 0:
-                mImageStep.setImageResource(R.drawable.img_attestation_1);
+                mImageStep.setImageResource(works.heymate.beta.R.drawable.img_attestation_1);
                 break;
             case 1:
-                mImageStep.setImageResource(R.drawable.img_attestation_2);
+                mImageStep.setImageResource(works.heymate.beta.R.drawable.img_attestation_2);
                 break;
             default:
-                mImageStep.setImageResource(R.drawable.img_attestation_3);
+                mImageStep.setImageResource(works.heymate.beta.R.drawable.img_attestation_3);
                 break;
         }
 
@@ -258,11 +258,11 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
 
         if (verifiedStatus.completedAttestations >= ATTESTATION_COUNT - 1) {
             mTextNext.setText(Texts.get(Texts.CONFIRM));
-            mImageNext.setImageResource(R.drawable.ic_done);
+            mImageNext.setImageResource(works.heymate.beta.R.drawable.ic_done);
         }
         else {
             mTextNext.setText(Texts.get(Texts.NEXT));
-            mImageNext.setImageResource(R.drawable.msg_arrowright);
+            mImageNext.setImageResource(works.heymate.beta.R.drawable.msg_arrowright);
         }
 
         if (mHasPendingAttestationRequest || (verifiedStatus.totalAttestations < ATTESTATION_COUNT && requestAttestation()) || mRequestingComplete) {

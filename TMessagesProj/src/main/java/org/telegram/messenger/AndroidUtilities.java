@@ -153,6 +153,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import works.heymate.beta.BuildConfig;
+
 public class AndroidUtilities {
 
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
@@ -223,17 +225,17 @@ public class AndroidUtilities {
     }
 
     private static int[] documentIcons = {
-            R.drawable.media_doc_blue,
-            R.drawable.media_doc_green,
-            R.drawable.media_doc_red,
-            R.drawable.media_doc_yellow
+            works.heymate.beta.R.drawable.media_doc_blue,
+            works.heymate.beta.R.drawable.media_doc_green,
+            works.heymate.beta.R.drawable.media_doc_red,
+            works.heymate.beta.R.drawable.media_doc_yellow
     };
 
     private static int[] documentMediaIcons = {
-            R.drawable.media_doc_blue_b,
-            R.drawable.media_doc_green_b,
-            R.drawable.media_doc_red_b,
-            R.drawable.media_doc_yellow_b
+            works.heymate.beta.R.drawable.media_doc_blue_b,
+            works.heymate.beta.R.drawable.media_doc_green_b,
+            works.heymate.beta.R.drawable.media_doc_red_b,
+            works.heymate.beta.R.drawable.media_doc_yellow_b
     };
 
     private static boolean containsUnsupportedCharacters(String text) {
@@ -737,8 +739,8 @@ public class AndroidUtilities {
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-            builder.setMessage(LocaleController.getString("InstallGoogleMaps", R.string.InstallGoogleMaps));
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            builder.setMessage(LocaleController.getString("InstallGoogleMaps", works.heymate.beta.R.string.InstallGoogleMaps));
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.apps.maps"));
                     fragment.getParentActivity().startActivityForResult(intent, 500);
@@ -746,7 +748,7 @@ public class AndroidUtilities {
                     FileLog.e(e1);
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             fragment.showDialog(builder.create());
             return false;
         }
@@ -1057,12 +1059,12 @@ public class AndroidUtilities {
 
         public String getType() {
             if (type == 5) {
-                return LocaleController.getString("ContactBirthday", R.string.ContactBirthday);
+                return LocaleController.getString("ContactBirthday", works.heymate.beta.R.string.ContactBirthday);
             } else if (type == 6) {
                 if ("ORG".equalsIgnoreCase(getRawType(true))) {
-                    return LocaleController.getString("ContactJob", R.string.ContactJob);
+                    return LocaleController.getString("ContactJob", works.heymate.beta.R.string.ContactJob);
                 } else {
-                    return LocaleController.getString("ContactJobTitle", R.string.ContactJobTitle);
+                    return LocaleController.getString("ContactJobTitle", works.heymate.beta.R.string.ContactJobTitle);
                 }
             }
             int idx = fullData.indexOf(':');
@@ -1087,20 +1089,20 @@ public class AndroidUtilities {
                 }
                 switch (value) {
                     case "PREF":
-                        value = LocaleController.getString("PhoneMain", R.string.PhoneMain);
+                        value = LocaleController.getString("PhoneMain", works.heymate.beta.R.string.PhoneMain);
                         break;
                     case "HOME":
-                        value = LocaleController.getString("PhoneHome", R.string.PhoneHome);
+                        value = LocaleController.getString("PhoneHome", works.heymate.beta.R.string.PhoneHome);
                         break;
                     case "MOBILE":
                     case "CELL":
-                        value = LocaleController.getString("PhoneMobile", R.string.PhoneMobile);
+                        value = LocaleController.getString("PhoneMobile", works.heymate.beta.R.string.PhoneMobile);
                         break;
                     case "OTHER":
-                        value = LocaleController.getString("PhoneOther", R.string.PhoneOther);
+                        value = LocaleController.getString("PhoneOther", works.heymate.beta.R.string.PhoneOther);
                         break;
                     case "WORK":
-                        value = LocaleController.getString("PhoneWork", R.string.PhoneWork);
+                        value = LocaleController.getString("PhoneWork", works.heymate.beta.R.string.PhoneWork);
                         break;
                 }
             }
@@ -1742,7 +1744,7 @@ public class AndroidUtilities {
 
     public static boolean isTablet() {
         if (isTablet == null) {
-            isTablet = ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
+            isTablet = ApplicationLoader.applicationContext.getResources().getBoolean(works.heymate.beta.R.bool.isTablet);
         }
         return isTablet;
     }
@@ -2719,9 +2721,9 @@ public class AndroidUtilities {
                     parentFragment.presentFragment(new ThemePreviewActivity(themeInfo));
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.getString("IncorrectTheme", R.string.IncorrectTheme));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setMessage(LocaleController.getString("IncorrectTheme", works.heymate.beta.R.string.IncorrectTheme));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     parentFragment.showDialog(builder.create());
                 }
             } else {
@@ -2765,9 +2767,9 @@ public class AndroidUtilities {
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-                    builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                    builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", works.heymate.beta.R.string.NoHandleAppInstalled, message.getDocument().mime_type));
                     if (parentFragment != null) {
                         parentFragment.showDialog(builder.create());
                     } else {
@@ -2807,16 +2809,16 @@ public class AndroidUtilities {
             }
             if (Build.VERSION.SDK_INT >= 26 && realMimeType != null && realMimeType.equals("application/vnd.android.package-archive") && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-                builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("ApkRestricted", works.heymate.beta.R.string.ApkRestricted));
+                builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialogInterface, i) -> {
                     try {
                         activity.startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + activity.getPackageName())));
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 builder.show();
                 return true;
             }
@@ -3070,7 +3072,7 @@ public class AndroidUtilities {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         if (!TextUtils.isEmpty(secret)) {
             TextView titleTextView = new TextView(activity);
-            titleTextView.setText(LocaleController.getString("UseProxyTelegramInfo2", R.string.UseProxyTelegramInfo2));
+            titleTextView.setText(LocaleController.getString("UseProxyTelegramInfo2", works.heymate.beta.R.string.UseProxyTelegramInfo2));
             titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextGray4));
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             titleTextView.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
@@ -3085,19 +3087,19 @@ public class AndroidUtilities {
             String detail = null;
             if (a == 0) {
                 text = address;
-                detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
+                detail = LocaleController.getString("UseProxyAddress", works.heymate.beta.R.string.UseProxyAddress);
             } else if (a == 1) {
                 text = "" + port;
-                detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
+                detail = LocaleController.getString("UseProxyPort", works.heymate.beta.R.string.UseProxyPort);
             } else if (a == 2) {
                 text = secret;
-                detail = LocaleController.getString("UseProxySecret", R.string.UseProxySecret);
+                detail = LocaleController.getString("UseProxySecret", works.heymate.beta.R.string.UseProxySecret);
             } else if (a == 3) {
                 text = user;
-                detail = LocaleController.getString("UseProxyUsername", R.string.UseProxyUsername);
+                detail = LocaleController.getString("UseProxyUsername", works.heymate.beta.R.string.UseProxyUsername);
             } else if (a == 4) {
                 text = password;
-                detail = LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword);
+                detail = LocaleController.getString("UseProxyPassword", works.heymate.beta.R.string.UseProxyPassword);
             }
             if (TextUtils.isEmpty(text)) {
                 continue;
@@ -3117,12 +3119,12 @@ public class AndroidUtilities {
         linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
+        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(view -> dismissRunnable.run());
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", works.heymate.beta.R.string.ConnectingConnectProxy).toUpperCase());
         pickerBottomLayout.doneButton.setOnClickListener(v -> {
             SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
             editor.putBoolean("proxy_enabled", true);

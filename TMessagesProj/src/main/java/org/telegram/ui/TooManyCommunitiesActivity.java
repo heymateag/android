@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -125,9 +125,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     public View createView(Context context) {
         type = arguments.getInt("type", TYPE_JOIN);
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("LimitReached", R.string.LimitReached));
+        actionBar.setTitle(LocaleController.getString("LimitReached", works.heymate.beta.R.string.LimitReached));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -138,7 +138,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        ActionBarMenuItem searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
 
             boolean expanded = false;
 
@@ -188,8 +188,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
 
         FrameLayout contentView = new FrameLayout(context);
         fragmentView = contentView;
@@ -215,7 +215,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         });
         emptyView = new EmptyTextProgressView(context);
         emptyView.setShowAtCenter(true);
-        emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        emptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
         emptyView.showTextView();
 
 
@@ -325,7 +325,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
 
         if (!selectedIds.isEmpty()) {
-            buttonTextView.setText(LocaleController.formatString("LeaveChats", R.string.LeaveChats, LocaleController.formatPluralString("Chats", selectedIds.size())));
+            buttonTextView.setText(LocaleController.formatString("LeaveChats", works.heymate.beta.R.string.LeaveChats, LocaleController.formatPluralString("Chats", selectedIds.size())));
         }
     }
 
@@ -354,12 +354,12 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     }
                     if (ChatObject.isMegagroup(chat)) {
                         String members = LocaleController.formatPluralString("Members", chat.participants_count);
-                        signatures.add(LocaleController.formatString("InactiveChatSignature", R.string.InactiveChatSignature, members, dateFormat));
+                        signatures.add(LocaleController.formatString("InactiveChatSignature", works.heymate.beta.R.string.InactiveChatSignature, members, dateFormat));
                     } else if (ChatObject.isChannel(chat)) {
-                        signatures.add(LocaleController.formatString("InactiveChannelSignature", R.string.InactiveChannelSignature, dateFormat));
+                        signatures.add(LocaleController.formatString("InactiveChannelSignature", works.heymate.beta.R.string.InactiveChannelSignature, dateFormat));
                     } else {
                         String members = LocaleController.formatPluralString("Members", chat.participants_count);
-                        signatures.add(LocaleController.formatString("InactiveChatSignature", R.string.InactiveChatSignature, members, dateFormat));
+                        signatures.add(LocaleController.formatString("InactiveChatSignature", works.heymate.beta.R.string.InactiveChatSignature, members, dateFormat));
                     }
                 }
                 AndroidUtilities.runOnUIThread(() -> {
@@ -450,11 +450,11 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     view = hintCell;
                     String message;
                     if (type == TYPE_JOIN) {
-                        message = LocaleController.getString("TooManyCommunitiesHintJoin", R.string.TooManyCommunitiesHintJoin);
+                        message = LocaleController.getString("TooManyCommunitiesHintJoin", works.heymate.beta.R.string.TooManyCommunitiesHintJoin);
                     } else if (type == TYPE_EDIT) {
-                        message = LocaleController.getString("TooManyCommunitiesHintEdit", R.string.TooManyCommunitiesHintEdit);
+                        message = LocaleController.getString("TooManyCommunitiesHintEdit", works.heymate.beta.R.string.TooManyCommunitiesHintEdit);
                     } else {
-                        message = LocaleController.getString("TooManyCommunitiesHintCreate", R.string.TooManyCommunitiesHintCreate);
+                        message = LocaleController.getString("TooManyCommunitiesHintCreate", works.heymate.beta.R.string.TooManyCommunitiesHintCreate);
                     }
                     hintCell.setMessageText(message);
                     RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -465,7 +465,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     break;
                 case 2:
                     view = new ShadowSectionCell(parent.getContext());
-                    Drawable drawable = Theme.getThemedDrawable(parent.getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+                    Drawable drawable = Theme.getThemedDrawable(parent.getContext(), works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
                     CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
                     combinedDrawable.setFullsize(true);
                     view.setBackground(combinedDrawable);
@@ -474,7 +474,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     HeaderCell header = new HeaderCell(parent.getContext(), Theme.key_windowBackgroundWhiteBlueHeader, 21, 8, false);
                     view = header;
                     header.setHeight(54);
-                    header.setText(LocaleController.getString("InactiveChats", R.string.InactiveChats));
+                    header.setText(LocaleController.getString("InactiveChats", works.heymate.beta.R.string.InactiveChats));
                     break;
                 case 5:
                     view = new EmptyCell(parent.getContext(), AndroidUtilities.dp(12));

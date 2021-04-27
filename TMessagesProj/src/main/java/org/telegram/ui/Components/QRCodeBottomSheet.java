@@ -29,11 +29,11 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildConfig;
+import works.heymate.beta.BuildConfig;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -56,7 +56,7 @@ public class QRCodeBottomSheet extends BottomSheet {
     public QRCodeBottomSheet(Context context, String link, String helpMessage) {
         super(context, false);
 
-        setTitle(LocaleController.getString("InviteByQRCode", R.string.InviteByQRCode), true);
+        setTitle(LocaleController.getString("InviteByQRCode", works.heymate.beta.R.string.InviteByQRCode), true);
         ImageView imageView = new ImageView(context) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -83,7 +83,7 @@ public class QRCodeBottomSheet extends BottomSheet {
         iconImage = new RLottieImageView(context);
         iconImage.setBackgroundColor(Color.WHITE);
         iconImage.setAutoRepeat(true);
-        iconImage.setAnimation(R.raw.qr_code_logo, 60, 60);
+        iconImage.setAnimation(works.heymate.beta.R.raw.qr_code_logo, 60, 60);
         iconImage.playAnimation();
 
         //iconImage.setPadding(-AndroidUtilities.dp(4), -AndroidUtilities.dp(4), -AndroidUtilities.dp(4), -AndroidUtilities.dp(4));
@@ -119,7 +119,7 @@ public class QRCodeBottomSheet extends BottomSheet {
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        buttonTextView.setText(LocaleController.getString("ShareQrCode", R.string.ShareQrCode));
+        buttonTextView.setText(LocaleController.getString("ShareQrCode", works.heymate.beta.R.string.ShareQrCode));
         buttonTextView.setOnClickListener(view -> {
 
             Uri uri = getImageUri(qrCode);
@@ -129,7 +129,7 @@ public class QRCodeBottomSheet extends BottomSheet {
                 i.setType("image/*");
                 i.putExtra(Intent.EXTRA_STREAM, uri);
                 try {
-                    AndroidUtilities.findActivity(context).startActivityForResult(Intent.createChooser(i, LocaleController.getString("InviteByQRCode", R.string.InviteByQRCode)), 500);
+                    AndroidUtilities.findActivity(context).startActivityForResult(Intent.createChooser(i, LocaleController.getString("InviteByQRCode", works.heymate.beta.R.string.InviteByQRCode)), 500);
                 } catch (ActivityNotFoundException ex) {
                     ex.printStackTrace();
                 }

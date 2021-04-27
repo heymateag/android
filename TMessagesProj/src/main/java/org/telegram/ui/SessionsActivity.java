@@ -30,7 +30,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -114,12 +114,12 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     @Override
     public View createView(Context context)  {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (currentType == 0) {
-            actionBar.setTitle(LocaleController.getString("Devices", R.string.Devices));
+            actionBar.setTitle(LocaleController.getString("Devices", works.heymate.beta.R.string.Devices));
         } else {
-            actionBar.setTitle(LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle));
+            actionBar.setTitle(LocaleController.getString("WebSessionsTitle", works.heymate.beta.R.string.WebSessionsTitle));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -139,14 +139,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         emptyLayout = new LinearLayout(context);
         emptyLayout.setOrientation(LinearLayout.VERTICAL);
         emptyLayout.setGravity(Gravity.CENTER);
-        emptyLayout.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        emptyLayout.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         emptyLayout.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()));
 
         imageView = new ImageView(context);
         if (currentType == 0) {
-            imageView.setImageResource(R.drawable.devices);
+            imageView.setImageResource(works.heymate.beta.R.drawable.devices);
         } else {
-            imageView.setImageResource(R.drawable.no_apps);
+            imageView.setImageResource(works.heymate.beta.R.drawable.no_apps);
         }
         imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_sessions_devicesImage), PorterDuff.Mode.MULTIPLY));
         emptyLayout.addView(imageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
@@ -157,9 +157,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         textView1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
         textView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         if (currentType == 0) {
-            textView1.setText(LocaleController.getString("NoOtherSessions", R.string.NoOtherSessions));
+            textView1.setText(LocaleController.getString("NoOtherSessions", works.heymate.beta.R.string.NoOtherSessions));
         } else {
-            textView1.setText(LocaleController.getString("NoOtherWebSessions", R.string.NoOtherWebSessions));
+            textView1.setText(LocaleController.getString("NoOtherWebSessions", works.heymate.beta.R.string.NoOtherWebSessions));
         }
         emptyLayout.addView(textView1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 0));
 
@@ -169,9 +169,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
         textView2.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
         if (currentType == 0) {
-            textView2.setText(LocaleController.getString("NoOtherSessionsInfo", R.string.NoOtherSessionsInfo));
+            textView2.setText(LocaleController.getString("NoOtherSessionsInfo", works.heymate.beta.R.string.NoOtherSessionsInfo));
         } else {
-            textView2.setText(LocaleController.getString("NoOtherWebSessionsInfo", R.string.NoOtherWebSessionsInfo));
+            textView2.setText(LocaleController.getString("NoOtherWebSessionsInfo", works.heymate.beta.R.string.NoOtherWebSessionsInfo));
         }
         emptyLayout.addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 14, 0, 0));
 
@@ -211,11 +211,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                             AndroidUtilities.runOnUIThread(() -> {
                                 final String text;
                                 if (error.text.equals("AUTH_TOKEN_EXCEPTION")) {
-                                    text = LocaleController.getString("AccountAlreadyLoggedIn", R.string.AccountAlreadyLoggedIn);
+                                    text = LocaleController.getString("AccountAlreadyLoggedIn", works.heymate.beta.R.string.AccountAlreadyLoggedIn);
                                 } else {
-                                    text = LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error.text;
+                                    text = LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred) + "\n" + error.text;
                                 }
-                                AlertsCreator.showSimpleAlert(SessionsActivity.this, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), text);
+                                AlertsCreator.showSimpleAlert(SessionsActivity.this, LocaleController.getString("AuthAnotherClient", works.heymate.beta.R.string.AuthAnotherClient), text);
                             });
                         }
                     }));
@@ -228,13 +228,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 String buttonText;
                 if (currentType == 0) {
-                    builder.setMessage(LocaleController.getString("AreYouSureSessions", R.string.AreYouSureSessions));
-                    builder.setTitle(LocaleController.getString("AreYouSureSessionsTitle", R.string.AreYouSureSessionsTitle));
-                    buttonText = LocaleController.getString("Terminate", R.string.Terminate);
+                    builder.setMessage(LocaleController.getString("AreYouSureSessions", works.heymate.beta.R.string.AreYouSureSessions));
+                    builder.setTitle(LocaleController.getString("AreYouSureSessionsTitle", works.heymate.beta.R.string.AreYouSureSessionsTitle));
+                    buttonText = LocaleController.getString("Terminate", works.heymate.beta.R.string.Terminate);
                 } else {
-                    builder.setMessage(LocaleController.getString("AreYouSureWebSessions", R.string.AreYouSureWebSessions));
-                    builder.setTitle(LocaleController.getString("TerminateWebSessionsTitle", R.string.TerminateWebSessionsTitle));
-                    buttonText = LocaleController.getString("Disconnect", R.string.Disconnect);
+                    builder.setMessage(LocaleController.getString("AreYouSureWebSessions", works.heymate.beta.R.string.AreYouSureWebSessions));
+                    builder.setTitle(LocaleController.getString("TerminateWebSessionsTitle", works.heymate.beta.R.string.TerminateWebSessionsTitle));
+                    buttonText = LocaleController.getString("Disconnect", works.heymate.beta.R.string.Disconnect);
                 }
                 builder.setPositiveButton(buttonText, (dialogInterface, i) -> {
                     if (currentType == 0) {
@@ -245,7 +245,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                     return;
                                 }
                                 if (error == null && response instanceof TLRPC.TL_boolTrue) {
-                                    Toast toast = Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllSessions", R.string.TerminateAllSessions), Toast.LENGTH_SHORT);
+                                    Toast toast = Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllSessions", works.heymate.beta.R.string.TerminateAllSessions), Toast.LENGTH_SHORT);
                                     toast.show();
                                     finishFragment();
                                 }
@@ -269,17 +269,17 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                                 return;
                             }
                             if (error == null && response instanceof TLRPC.TL_boolTrue) {
-                                Toast toast = Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllWebSessions", R.string.TerminateAllWebSessions), Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllWebSessions", works.heymate.beta.R.string.TerminateAllWebSessions), Toast.LENGTH_SHORT);
                                 toast.show();
                             } else {
-                                Toast toast = Toast.makeText(getParentActivity(), LocaleController.getString("UnknownError", R.string.UnknownError), Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getParentActivity(), LocaleController.getString("UnknownError", works.heymate.beta.R.string.UnknownError), Toast.LENGTH_SHORT);
                                 toast.show();
                             }
                             finishFragment();
                         }));
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -294,15 +294,15 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 final boolean[] param = new boolean[1];
                 String buttonText;
                 if (currentType == 0) {
-                    builder.setMessage(LocaleController.getString("TerminateSessionText", R.string.TerminateSessionText));
-                    builder.setTitle(LocaleController.getString("AreYouSureSessionTitle", R.string.AreYouSureSessionTitle));
-                    buttonText = LocaleController.getString("Terminate", R.string.Terminate);
+                    builder.setMessage(LocaleController.getString("TerminateSessionText", works.heymate.beta.R.string.TerminateSessionText));
+                    builder.setTitle(LocaleController.getString("AreYouSureSessionTitle", works.heymate.beta.R.string.AreYouSureSessionTitle));
+                    buttonText = LocaleController.getString("Terminate", works.heymate.beta.R.string.Terminate);
                 } else {
                     final TLRPC.TL_webAuthorization authorization = (TLRPC.TL_webAuthorization) sessions.get(position - otherSessionsStartRow);
 
-                    builder.setMessage(LocaleController.formatString("TerminateWebSessionText", R.string.TerminateWebSessionText, authorization.domain));
-                    builder.setTitle(LocaleController.getString("TerminateWebSessionTitle", R.string.TerminateWebSessionTitle));
-                    buttonText = LocaleController.getString("Disconnect", R.string.Disconnect);
+                    builder.setMessage(LocaleController.formatString("TerminateWebSessionText", works.heymate.beta.R.string.TerminateWebSessionText, authorization.domain));
+                    builder.setTitle(LocaleController.getString("TerminateWebSessionTitle", works.heymate.beta.R.string.TerminateWebSessionTitle));
+                    buttonText = LocaleController.getString("Disconnect", works.heymate.beta.R.string.Disconnect);
 
                     FrameLayout frameLayout1 = new FrameLayout(getParentActivity());
 
@@ -316,7 +316,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
                     CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                    cell.setText(LocaleController.formatString("TerminateWebSessionStop", R.string.TerminateWebSessionStop, name), "", false, false);
+                    cell.setText(LocaleController.formatString("TerminateWebSessionStop", works.heymate.beta.R.string.TerminateWebSessionStop, name), "", false, false);
                     cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
                     frameLayout1.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
                     cell.setOnClickListener(v -> {
@@ -385,7 +385,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -615,57 +615,57 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
                         textCell.setTag(Theme.key_windowBackgroundWhiteRedText2);
                         if (currentType == 0) {
-                            textCell.setText(LocaleController.getString("TerminateAllSessions", R.string.TerminateAllSessions), false);
+                            textCell.setText(LocaleController.getString("TerminateAllSessions", works.heymate.beta.R.string.TerminateAllSessions), false);
                         } else {
-                            textCell.setText(LocaleController.getString("TerminateAllWebSessions", R.string.TerminateAllWebSessions), false);
+                            textCell.setText(LocaleController.getString("TerminateAllWebSessions", works.heymate.beta.R.string.TerminateAllWebSessions), false);
                         }
                     } else if (position == qrCodeRow) {
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
                         textCell.setTag(Theme.key_windowBackgroundWhiteBlueText4);
-                        textCell.setText(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), !sessions.isEmpty());
+                        textCell.setText(LocaleController.getString("AuthAnotherClient", works.heymate.beta.R.string.AuthAnotherClient), !sessions.isEmpty());
                     }
                     break;
                 case 1:
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == terminateAllSessionsDetailRow) {
                         if (currentType == 0) {
-                            privacyCell.setText(LocaleController.getString("ClearOtherSessionsHelp", R.string.ClearOtherSessionsHelp));
+                            privacyCell.setText(LocaleController.getString("ClearOtherSessionsHelp", works.heymate.beta.R.string.ClearOtherSessionsHelp));
                         } else {
-                            privacyCell.setText(LocaleController.getString("ClearOtherWebSessionsHelp", R.string.ClearOtherWebSessionsHelp));
+                            privacyCell.setText(LocaleController.getString("ClearOtherWebSessionsHelp", works.heymate.beta.R.string.ClearOtherWebSessionsHelp));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == otherSessionsTerminateDetail) {
                         if (currentType == 0) {
                             if (sessions.isEmpty()) {
                                 privacyCell.setText("");
                             } else {
-                                privacyCell.setText(LocaleController.getString("TerminateSessionInfo", R.string.TerminateSessionInfo));
+                                privacyCell.setText(LocaleController.getString("TerminateSessionInfo", works.heymate.beta.R.string.TerminateSessionInfo));
                             }
                         } else {
-                            privacyCell.setText(LocaleController.getString("TerminateWebSessionInfo", R.string.TerminateWebSessionInfo));
+                            privacyCell.setText(LocaleController.getString("TerminateWebSessionInfo", works.heymate.beta.R.string.TerminateWebSessionInfo));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == passwordSessionsDetailRow) {
-                        privacyCell.setText(LocaleController.getString("LoginAttemptsInfo", R.string.LoginAttemptsInfo));
+                        privacyCell.setText(LocaleController.getString("LoginAttemptsInfo", works.heymate.beta.R.string.LoginAttemptsInfo));
                         if (otherSessionsTerminateDetail == -1) {
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         } else {
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         }
                     }
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == currentSessionSectionRow) {
-                        headerCell.setText(LocaleController.getString("CurrentSession", R.string.CurrentSession));
+                        headerCell.setText(LocaleController.getString("CurrentSession", works.heymate.beta.R.string.CurrentSession));
                     } else if (position == otherSessionsSectionRow) {
                         if (currentType == 0) {
-                            headerCell.setText(LocaleController.getString("OtherSessions", R.string.OtherSessions));
+                            headerCell.setText(LocaleController.getString("OtherSessions", works.heymate.beta.R.string.OtherSessions));
                         } else {
-                            headerCell.setText(LocaleController.getString("OtherWebSessions", R.string.OtherWebSessions));
+                            headerCell.setText(LocaleController.getString("OtherWebSessions", works.heymate.beta.R.string.OtherWebSessions));
                         }
                     } else if (position == passwordSessionsSectionRow) {
-                        headerCell.setText(LocaleController.getString("LoginAttempts", R.string.LoginAttempts));
+                        headerCell.setText(LocaleController.getString("LoginAttempts", works.heymate.beta.R.string.LoginAttempts));
                     }
                     break;
                 case 3:

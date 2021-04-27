@@ -30,7 +30,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -194,9 +194,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         actionBar.setBackButtonDrawable(new BackDrawable(false));
         actionBar.setAllowOverlayTitle(true);
         if (currentType == MediaDataController.TYPE_IMAGE) {
-            actionBar.setTitle(LocaleController.getString("StickersName", R.string.StickersName));
+            actionBar.setTitle(LocaleController.getString("StickersName", works.heymate.beta.R.string.StickersName));
         } else {
-            actionBar.setTitle(LocaleController.getString("Masks", R.string.Masks));
+            actionBar.setTitle(LocaleController.getString("Masks", works.heymate.beta.R.string.Masks));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -226,8 +226,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         actionMode.addView(selectedCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
-        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, AndroidUtilities.dp(54));
-        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, AndroidUtilities.dp(54));
+        archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, works.heymate.beta.R.drawable.msg_archive, AndroidUtilities.dp(54));
+        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, works.heymate.beta.R.drawable.msg_delete, AndroidUtilities.dp(54));
 
         listAdapter = new ListAdapter(context, MediaDataController.getInstance(currentAccount).getStickerSets(currentType));
 
@@ -293,11 +293,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("SuggestStickers", R.string.SuggestStickers));
+                builder.setTitle(LocaleController.getString("SuggestStickers", works.heymate.beta.R.string.SuggestStickers));
                 String[] items = new String[]{
-                        LocaleController.getString("SuggestStickersAll", R.string.SuggestStickersAll),
-                        LocaleController.getString("SuggestStickersInstalled", R.string.SuggestStickersInstalled),
-                        LocaleController.getString("SuggestStickersNone", R.string.SuggestStickersNone),
+                        LocaleController.getString("SuggestStickersAll", works.heymate.beta.R.string.SuggestStickersAll),
+                        LocaleController.getString("SuggestStickersInstalled", works.heymate.beta.R.string.SuggestStickersInstalled),
+                        LocaleController.getString("SuggestStickersNone", works.heymate.beta.R.string.SuggestStickersNone),
                 };
 
                 final LinearLayout linearLayout = new LinearLayout(getParentActivity());
@@ -588,19 +588,19 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
                         final String buttonText;
                         if (which == MENU_DELETE) {
-                            builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", R.string.DeleteStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
-                            builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", R.string.DeleteStickersAlertMessage, count));
-                            buttonText = LocaleController.getString("Delete", R.string.Delete);
+                            builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", works.heymate.beta.R.string.DeleteStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
+                            builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", works.heymate.beta.R.string.DeleteStickersAlertMessage, count));
+                            buttonText = LocaleController.getString("Delete", works.heymate.beta.R.string.Delete);
                         } else {
-                            builder.setTitle(LocaleController.formatString("ArchiveStickerSetsAlertTitle", R.string.ArchiveStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
-                            builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", R.string.ArchiveStickersAlertMessage, count));
-                            buttonText = LocaleController.getString("Archive", R.string.Archive);
+                            builder.setTitle(LocaleController.formatString("ArchiveStickerSetsAlertTitle", works.heymate.beta.R.string.ArchiveStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
+                            builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", works.heymate.beta.R.string.ArchiveStickersAlertMessage, count));
+                            buttonText = LocaleController.getString("Archive", works.heymate.beta.R.string.Archive);
                         }
                         builder.setPositiveButton(buttonText, (dialog, which1) -> {
                             listAdapter.clearSelected();
                             MediaDataController.getInstance(currentAccount).toggleStickerSets(stickerSetList, currentType, which == MENU_DELETE ? 0 : 1, StickersActivity.this, true);
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
 
                         final AlertDialog dialog = builder.create();
                         showDialog(dialog);
@@ -625,7 +625,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_TEXT, String.format(Locale.US, "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/addstickers/%s", stickerSet.set.short_name));
-                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("StickersShare", R.string.StickersShare)), 500);
+                    getParentActivity().startActivityForResult(Intent.createChooser(intent, LocaleController.getString("StickersShare", works.heymate.beta.R.string.StickersShare)), 500);
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -659,63 +659,63 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 case 1:
                     final TextInfoPrivacyCell infoPrivacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == stickersBotInfo) {
-                        infoPrivacyCell.setText(addStickersBotSpan(LocaleController.getString("StickersBotInfo", R.string.StickersBotInfo)));
+                        infoPrivacyCell.setText(addStickersBotSpan(LocaleController.getString("StickersBotInfo", works.heymate.beta.R.string.StickersBotInfo)));
                     } else if (position == archivedInfoRow) {
                         if (currentType == MediaDataController.TYPE_IMAGE) {
-                            infoPrivacyCell.setText(LocaleController.getString("ArchivedStickersInfo", R.string.ArchivedStickersInfo));
+                            infoPrivacyCell.setText(LocaleController.getString("ArchivedStickersInfo", works.heymate.beta.R.string.ArchivedStickersInfo));
                         } else {
-                            infoPrivacyCell.setText(LocaleController.getString("ArchivedMasksInfo", R.string.ArchivedMasksInfo));
+                            infoPrivacyCell.setText(LocaleController.getString("ArchivedMasksInfo", works.heymate.beta.R.string.ArchivedMasksInfo));
                         }
                     } else if (position == loopInfoRow) {
-                        infoPrivacyCell.setText(LocaleController.getString("LoopAnimatedStickersInfo", R.string.LoopAnimatedStickersInfo));
+                        infoPrivacyCell.setText(LocaleController.getString("LoopAnimatedStickersInfo", works.heymate.beta.R.string.LoopAnimatedStickersInfo));
                     } else if (position == masksInfoRow) {
-                        infoPrivacyCell.setText(LocaleController.getString("MasksInfo", R.string.MasksInfo));
+                        infoPrivacyCell.setText(LocaleController.getString("MasksInfo", works.heymate.beta.R.string.MasksInfo));
                     }
                     break;
                 case 2:
                     final TextSettingsCell settingsCell = (TextSettingsCell) holder.itemView;
                     if (position == featuredRow) {
                         final int count = MediaDataController.getInstance(currentAccount).getFeaturedStickerSets().size();
-                        settingsCell.setTextAndValue(LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers), count > 0 ? Integer.toString(count) : "", true);
+                        settingsCell.setTextAndValue(LocaleController.getString("FeaturedStickers", works.heymate.beta.R.string.FeaturedStickers), count > 0 ? Integer.toString(count) : "", true);
                     } else if (position == archivedRow) {
                         final int count = MediaDataController.getInstance(currentAccount).getArchivedStickersCount(currentType);
                         final String value = count > 0 ? Integer.toString(count) : "";
                         if (currentType == MediaDataController.TYPE_IMAGE) {
-                            settingsCell.setTextAndValue(LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers), value, true);
+                            settingsCell.setTextAndValue(LocaleController.getString("ArchivedStickers", works.heymate.beta.R.string.ArchivedStickers), value, true);
                         } else {
-                            settingsCell.setTextAndValue(LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks), value, true);
+                            settingsCell.setTextAndValue(LocaleController.getString("ArchivedMasks", works.heymate.beta.R.string.ArchivedMasks), value, true);
                         }
                     } else if (position == masksRow) {
                         final int type = MediaDataController.TYPE_MASK;
                         final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
                         final int count = mediaDataController.getStickerSets(type).size() + mediaDataController.getArchivedStickersCount(type);
-                        settingsCell.setTextAndValue(LocaleController.getString("Masks", R.string.Masks), count > 0 ? Integer.toString(count) : "", false);
+                        settingsCell.setTextAndValue(LocaleController.getString("Masks", works.heymate.beta.R.string.Masks), count > 0 ? Integer.toString(count) : "", false);
                     } else if (position == suggestRow) {
                         String value;
                         switch (SharedConfig.suggestStickers) {
                             case 0:
-                                value = LocaleController.getString("SuggestStickersAll", R.string.SuggestStickersAll);
+                                value = LocaleController.getString("SuggestStickersAll", works.heymate.beta.R.string.SuggestStickersAll);
                                 break;
                             case 1:
-                                value = LocaleController.getString("SuggestStickersInstalled", R.string.SuggestStickersInstalled);
+                                value = LocaleController.getString("SuggestStickersInstalled", works.heymate.beta.R.string.SuggestStickersInstalled);
                                 break;
                             case 2:
                             default:
-                                value = LocaleController.getString("SuggestStickersNone", R.string.SuggestStickersNone);
+                                value = LocaleController.getString("SuggestStickersNone", works.heymate.beta.R.string.SuggestStickersNone);
                                 break;
                         }
-                        settingsCell.setTextAndValue(LocaleController.getString("SuggestStickers", R.string.SuggestStickers), value, true);
+                        settingsCell.setTextAndValue(LocaleController.getString("SuggestStickers", works.heymate.beta.R.string.SuggestStickers), value, true);
                     }
                     break;
                 case 3:
                     if (position == stickersShadowRow) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 4:
                     if (position == loopRow) {
                         TextCheckCell cell = (TextCheckCell) holder.itemView;
-                        cell.setTextAndCheck(LocaleController.getString("LoopAnimatedStickers", R.string.LoopAnimatedStickers), SharedConfig.loopStickers, true);
+                        cell.setTextAndCheck(LocaleController.getString("LoopAnimatedStickers", works.heymate.beta.R.string.LoopAnimatedStickers), SharedConfig.loopStickers, true);
                     }
                     break;
             }
@@ -782,25 +782,25 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         if (stickerSet.set.official) {
                             options = new int[]{MENU_ARCHIVE, 4};
                             items = new CharSequence[]{
-                                    LocaleController.getString("StickersHide", R.string.StickersHide),
-                                    LocaleController.getString("StickersReorder", R.string.StickersReorder)
+                                    LocaleController.getString("StickersHide", works.heymate.beta.R.string.StickersHide),
+                                    LocaleController.getString("StickersReorder", works.heymate.beta.R.string.StickersReorder)
                             };
-                            icons = new int[]{R.drawable.msg_archive, R.drawable.msg_reorder};
+                            icons = new int[]{R.drawable.msg_archive, works.heymate.beta.R.drawable.msg_reorder};
                         } else {
                             options = new int[]{MENU_ARCHIVE, 3, 4, 2, MENU_DELETE};
                             items = new CharSequence[]{
-                                    LocaleController.getString("StickersHide", R.string.StickersHide),
-                                    LocaleController.getString("StickersCopy", R.string.StickersCopy),
-                                    LocaleController.getString("StickersReorder", R.string.StickersReorder),
-                                    LocaleController.getString("StickersShare", R.string.StickersShare),
-                                    LocaleController.getString("StickersRemove", R.string.StickersRemove),
+                                    LocaleController.getString("StickersHide", works.heymate.beta.R.string.StickersHide),
+                                    LocaleController.getString("StickersCopy", works.heymate.beta.R.string.StickersCopy),
+                                    LocaleController.getString("StickersReorder", works.heymate.beta.R.string.StickersReorder),
+                                    LocaleController.getString("StickersShare", works.heymate.beta.R.string.StickersShare),
+                                    LocaleController.getString("StickersRemove", works.heymate.beta.R.string.StickersRemove),
                             };
                             icons = new int[]{
-                                    R.drawable.msg_archive,
-                                    R.drawable.msg_link,
-                                    R.drawable.msg_reorder,
-                                    R.drawable.msg_share,
-                                    R.drawable.msg_delete
+                                    works.heymate.beta.R.drawable.msg_archive,
+                                    works.heymate.beta.R.drawable.msg_link,
+                                    works.heymate.beta.R.drawable.msg_reorder,
+                                    works.heymate.beta.R.drawable.msg_share,
+                                    works.heymate.beta.R.drawable.msg_delete
                             };
                         }
                         builder.setItems(items, icons, (dialog, which) -> processSelectionOption(options[which], stickerSet));
@@ -815,7 +815,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new TextSettingsCell(mContext);
@@ -914,7 +914,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     notifyStickersItemsChanged(UPDATE_REORDERABLE);
                     if (!SharedConfig.stickersReorderingHintUsed) {
                         SharedConfig.setStickersReorderingHintUsed(true);
-                        final String stickersReorderHint = LocaleController.getString("StickersReorderHint", R.string.StickersReorderHint);
+                        final String stickersReorderHint = LocaleController.getString("StickersReorderHint", works.heymate.beta.R.string.StickersReorderHint);
                         Bulletin.make(parentLayout, new ReorderingBulletinLayout(mContext, stickersReorderHint), ReorderingHintDrawable.DURATION * 2 + 250).show();
                     }
                 }

@@ -6928,7 +6928,7 @@ public class MessagesStorage extends BaseController {
                 if (appWidgetManager == null) {
                     appWidgetManager = AppWidgetManager.getInstance(ApplicationLoader.applicationContext);
                 }
-                appWidgetManager.notifyAppWidgetViewDataChanged(cursor.intValue(0), R.id.list_view);
+                appWidgetManager.notifyAppWidgetViewDataChanged(cursor.intValue(0), works.heymate.beta.R.id.list_view);
             }
             cursor.dispose();
         } catch (Exception e) {
@@ -11573,7 +11573,7 @@ public class MessagesStorage extends BaseController {
             if (TextUtils.isEmpty(search1)) {
                 return;
             }
-            String savedMessages = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
+            String savedMessages = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages).toLowerCase();
             String savedMessages2 = "saved messages";
             String search2 = LocaleController.getInstance().getTranslitString(search1);
             if (search1.equals(search2) || search2.length() == 0) {

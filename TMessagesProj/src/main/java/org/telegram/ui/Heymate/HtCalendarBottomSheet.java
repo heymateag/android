@@ -26,7 +26,7 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox;
@@ -77,8 +77,8 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
         applyLayout.setGravity(Gravity.RIGHT);
 
         ImageView applyImage = new ImageView(context);
-        Drawable applyDrawable = context.getResources().getDrawable(R.drawable.ht_check_circle);
-        applyDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable applyDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ht_check_circle);
+        applyDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         applyImage.setImageDrawable(applyDrawable);
         applyLayout.addView(applyImage, LayoutHelper.createLinear(30, 30));
 
@@ -96,8 +96,8 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
         ImageView addDateImage = new ImageView(context);
         addDateImage.setId(++i);
-        Drawable addDateDrawable = context.getResources().getDrawable(R.drawable.menu_add);
-        addDateDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable addDateDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.menu_add);
+        addDateDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         addDateImage.setImageDrawable(addDateDrawable);
         RelativeLayout.LayoutParams addDateImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(25), AndroidUtilities.dp(25));
         addDateImageLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -106,8 +106,8 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
         ImageView calendarImage = new ImageView(context);
         calendarImage.setId(++i);
-        Drawable calendarDrawable = context.getResources().getDrawable(R.drawable.msg_calendar);
-        calendarDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable calendarDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_calendar);
+        calendarDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         calendarImage.setImageDrawable(calendarDrawable);
         addDateImage.setOnClickListener(new AddDateOnClickListener(context, calendarAddLayout));
         calendarImage.setOnClickListener(new AddDateOnClickListener(context, calendarAddLayout));
@@ -119,8 +119,8 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
         TextView addDateText = new TextView(context);
         addDateText.setId(++i);
-        addDateText.setText(LocaleController.getString("HtAddNewDate", R.string.HtAddNewDate));
-        addDateText.setTextColor(context.getResources().getColor(R.color.ht_green));
+        addDateText.setText(LocaleController.getString("HtAddNewDate", works.heymate.beta.R.string.HtAddNewDate));
+        addDateText.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         addDateText.setOnClickListener(new AddDateOnClickListener(context, calendarAddLayout));
         RelativeLayout.LayoutParams addDateTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         addDateTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, calendarImage.getId());
@@ -195,7 +195,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
                     HtTimeSlotView timeSlotView = new HtTimeSlotView(context, parentLayout, extras);
                 }
             }, cyear, cmonth, cday);
-            mTimePicker.setTitle(LocaleController.getString("HtSelectDate", R.string.HtSelectDate));
+            mTimePicker.setTitle(LocaleController.getString("HtSelectDate", works.heymate.beta.R.string.HtSelectDate));
             mTimePicker.show();
 
 
@@ -237,7 +237,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
 
             RadioButton newDateCheckBox = new RadioButton(context);
             newDateCheckBox.setSize(AndroidUtilities.dp(20));
-            newDateCheckBox.setColor(Theme.getColor(Theme.key_graySection), context.getResources().getColor(R.color.ht_green));
+            newDateCheckBox.setColor(Theme.getColor(Theme.key_graySection), context.getResources().getColor(works.heymate.beta.R.color.ht_green));
             newDateCheckBox.setChecked(true, true);
             newDateCheckBox.setId(++i);
             newDateCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -272,7 +272,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
             startTimeText.setId(++i);
             startTimeText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
             startTimeText.setText("00:00");
-            startTimeText.setBackgroundResource(R.drawable.border);
+            startTimeText.setBackgroundResource(works.heymate.beta.R.drawable.border);
             RelativeLayout.LayoutParams startTimeTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             startTimeTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, newDateText.getId());
             startTimeTextLayoutParams.addRule(RelativeLayout.BELOW, prevView.getId());
@@ -298,7 +298,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
             endTimeText.setInputType(InputType.TYPE_NULL);
             endTimeText.setTextSize(16);
             endTimeText.setId(++i);
-            endTimeText.setBackgroundResource(R.drawable.border);
+            endTimeText.setBackgroundResource(works.heymate.beta.R.drawable.border);
             endTimeText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
             endTimeText.setText("00:00");
             RelativeLayout.LayoutParams endTimeTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -323,7 +323,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
                     startDateSelected(context, startTimeText, endTimeText, newDateCheckBox, extras);
                 }
             }, 0, 0, true);
-            mTimePicker.setTitle(LocaleController.getString("HtSelectStartTime", R.string.HtSelectStartTime));
+            mTimePicker.setTitle(LocaleController.getString("HtSelectStartTime", works.heymate.beta.R.string.HtSelectStartTime));
             if (extras.get("StartYear") == null)
                 mTimePicker.show();
             else {
@@ -353,7 +353,7 @@ public class HtCalendarBottomSheet extends BottomSheet implements NotificationCe
                     endDateSelected(endTimeText, newDateCheckBox, extras);
                 }
             }, 0, 0, true);
-            mTimePicker.setTitle(LocaleController.getString("HtSelectEndTime", R.string.HtSelectEndTime));
+            mTimePicker.setTitle(LocaleController.getString("HtSelectEndTime", works.heymate.beta.R.string.HtSelectEndTime));
             if (extras.get("EndYear") == null)
                 mTimePicker.show();
             else {

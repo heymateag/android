@@ -25,7 +25,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -209,7 +209,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         titleTextView.setEllipsize(TextUtils.TruncateAt.END);
         titleTextView.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
         titleTextView.setGravity(Gravity.CENTER_VERTICAL);
-        titleTextView.setText(LocaleController.getString("FilterChoose", R.string.FilterChoose));
+        titleTextView.setText(LocaleController.getString("FilterChoose", works.heymate.beta.R.string.FilterChoose));
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         containerView.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT | Gravity.TOP, 0, 0, 40, 0));
 
@@ -394,30 +394,30 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 cell.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 int icon;
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == (MessagesController.DIALOG_FILTER_FLAG_CONTACTS | MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS)) {
-                    icon = R.drawable.menu_private;
+                    icon = works.heymate.beta.R.drawable.menu_private;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ) != 0 && (filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) {
-                    icon = R.drawable.menu_unread;
+                    icon = works.heymate.beta.R.drawable.menu_unread;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_CHANNELS) {
-                    icon = R.drawable.menu_broadcast;
+                    icon = works.heymate.beta.R.drawable.menu_broadcast;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_GROUPS) {
-                    icon = R.drawable.menu_groups;
+                    icon = works.heymate.beta.R.drawable.menu_groups;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_CONTACTS) {
-                    icon = R.drawable.menu_contacts;
+                    icon = works.heymate.beta.R.drawable.menu_contacts;
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS) {
-                    icon = R.drawable.menu_bots;
+                    icon = works.heymate.beta.R.drawable.menu_bots;
                 } else {
-                    icon = R.drawable.menu_folders;
+                    icon = works.heymate.beta.R.drawable.menu_folders;
                 }
                 cell.setTextAndIcon(filter.name, icon);
             } else {
                 cell.getImageView().setColorFilter(null);
-                Drawable drawable1 = context.getResources().getDrawable(R.drawable.poll_add_circle);
-                Drawable drawable2 = context.getResources().getDrawable(R.drawable.poll_add_plus);
+                Drawable drawable1 = context.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_circle);
+                Drawable drawable2 = context.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_plus);
                 drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
                 drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
                 cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
-                cell.setTextAndIcon(LocaleController.getString("CreateNewFilter", R.string.CreateNewFilter), combinedDrawable);
+                cell.setTextAndIcon(LocaleController.getString("CreateNewFilter", works.heymate.beta.R.string.CreateNewFilter), combinedDrawable);
             }
         }
     }

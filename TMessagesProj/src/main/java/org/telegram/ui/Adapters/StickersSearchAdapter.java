@@ -23,7 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -376,14 +376,14 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
 
                 emptyImageView = new ImageView(context);
                 emptyImageView.setScaleType(ImageView.ScaleType.CENTER);
-                emptyImageView.setImageResource(R.drawable.stickers_empty);
+                emptyImageView.setImageResource(works.heymate.beta.R.drawable.stickers_empty);
                 emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_emojiPanelEmptyText), PorterDuff.Mode.MULTIPLY));
                 layout.addView(emptyImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
                 layout.addView(new Space(context), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 15));
 
                 emptyTextView = new TextView(context);
-                emptyTextView.setText(LocaleController.getString("NoStickersFound", R.string.NoStickersFound));
+                emptyTextView.setText(LocaleController.getString("NoStickersFound", works.heymate.beta.R.string.NoStickersFound));
                 emptyTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 emptyTextView.setTextColor(Theme.getColor(Theme.key_chat_emojiPanelEmptyText));
                 layout.addView(emptyTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));

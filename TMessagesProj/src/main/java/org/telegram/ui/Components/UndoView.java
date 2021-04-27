@@ -40,7 +40,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -246,7 +246,7 @@ public class UndoView extends FrameLayout {
         });
 
         undoImageView = new ImageView(context);
-        undoImageView.setImageResource(R.drawable.chats_undo);
+        undoImageView.setImageResource(works.heymate.beta.R.drawable.chats_undo);
         undoImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_undo_cancelColor), PorterDuff.Mode.MULTIPLY));
         undoButton.addView(undoImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.LEFT));
 
@@ -254,7 +254,7 @@ public class UndoView extends FrameLayout {
         undoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         undoTextView.setTextColor(Theme.getColor(Theme.key_undo_cancelColor));
-        undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
+        undoTextView.setText(LocaleController.getString("Undo", works.heymate.beta.R.string.Undo));
         undoButton.addView(undoTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.LEFT, 6, 0, 0, 0));
 
         rect = new RectF(AndroidUtilities.dp(15), AndroidUtilities.dp(15), AndroidUtilities.dp(15 + 18), AndroidUtilities.dp(15 + 18));
@@ -401,7 +401,7 @@ public class UndoView extends FrameLayout {
         timeLeft = 5000;
         currentInfoObject = infoObject;
         lastUpdateTime = SystemClock.elapsedRealtime();
-        undoTextView.setText(LocaleController.getString("Undo", R.string.Undo).toUpperCase());
+        undoTextView.setText(LocaleController.getString("Undo", works.heymate.beta.R.string.Undo).toUpperCase());
         undoImageView.setVisibility(VISIBLE);
         leftImageView.setPadding(0, 0, 0, 0);
         infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -438,13 +438,13 @@ public class UndoView extends FrameLayout {
 
             if (action == ACTION_REPORT_SENT) {
                 subinfoTextView.setSingleLine(false);
-                infoText = LocaleController.getString("ReportChatSent", R.string.ReportChatSent);
-                subInfoText = LocaleController.formatString("ReportSentInfo", R.string.ReportSentInfo);
-                icon = R.raw.ic_admin;
+                infoText = LocaleController.getString("ReportChatSent", works.heymate.beta.R.string.ReportChatSent);
+                subInfoText = LocaleController.formatString("ReportSentInfo", works.heymate.beta.R.string.ReportSentInfo);
+                icon = works.heymate.beta.R.raw.ic_admin;
                 timeLeft = 4000;
             } else if (action == ACTION_VOIP_INVITED) {
                 TLRPC.User user = (TLRPC.User) infoObject;
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupInvitedUser", R.string.VoipGroupInvitedUser, UserObject.getFirstName(user)));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupInvitedUser", works.heymate.beta.R.string.VoipGroupInvitedUser, UserObject.getFirstName(user)));
                 subInfoText = null;
                 icon = 0;
                 AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -468,29 +468,29 @@ public class UndoView extends FrameLayout {
                     avatarImageView.setForUserOrChat(chat, avatarDrawable);
                     name = chat.title;
                 }
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserChanged", R.string.VoipGroupUserChanged, name));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserChanged", works.heymate.beta.R.string.VoipGroupUserChanged, name));
                 subInfoText = null;
                 icon = 0;
                 avatarImageView.setVisibility(VISIBLE);
                 timeLeft = 3000;
             } else if(action == ACTION_OFFER_DATA_INCOMPLETE){
                 infoText = "Some incomplete fields";
-                icon = R.drawable.ic_close_white;
+                icon = works.heymate.beta.R.drawable.ic_close_white;
                 subInfoText = "Please complete all the provided feilds";
 
             } else if(action == ACTION_OFFER_SAVED){
                 infoText = "Some saved";
                 subInfoText = "";
-                icon = R.drawable.ic_close_white;
+                icon = works.heymate.beta.R.drawable.ic_close_white;
             }else if (action == ACTION_VOIP_LINK_COPIED) {
-                infoText = LocaleController.getString("VoipGroupCopyInviteLinkCopied", R.string.VoipGroupCopyInviteLinkCopied);
+                infoText = LocaleController.getString("VoipGroupCopyInviteLinkCopied", works.heymate.beta.R.string.VoipGroupCopyInviteLinkCopied);
                 subInfoText = null;
-                icon = R.raw.voip_invite;
+                icon = works.heymate.beta.R.raw.voip_invite;
                 timeLeft = 3000;
             } else if (action == ACTION_PAYMENT_SUCCESS) {
                 infoText = (CharSequence) infoObject;
                 subInfoText = null;
-                icon = R.raw.payment_success;
+                icon = works.heymate.beta.R.raw.payment_success;
                 timeLeft = 5000;
                 if (parentFragment != null && infoObject2 instanceof TLRPC.Message) {
                     TLRPC.Message message = (TLRPC.Message) infoObject2;
@@ -517,9 +517,9 @@ public class UndoView extends FrameLayout {
                     TLRPC.Chat chat = (TLRPC.Chat) infoObject;
                     name = chat.title;
                 }
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCantNowSpeak", R.string.VoipGroupUserCantNowSpeak, name));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCantNowSpeak", works.heymate.beta.R.string.VoipGroupUserCantNowSpeak, name));
                 subInfoText = null;
-                icon = R.raw.voip_muted;
+                icon = works.heymate.beta.R.raw.voip_muted;
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_MUTED_FOR_YOU) {
                 String name;
@@ -532,9 +532,9 @@ public class UndoView extends FrameLayout {
                 } else {
                     name = "";
                 }
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCantNowSpeakForYou", R.string.VoipGroupUserCantNowSpeakForYou, name));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCantNowSpeakForYou", works.heymate.beta.R.string.VoipGroupUserCantNowSpeakForYou, name));
                 subInfoText = null;
-                icon = R.raw.voip_muted;
+                icon = works.heymate.beta.R.raw.voip_muted;
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_UNMUTED) {
                 String name;
@@ -545,39 +545,39 @@ public class UndoView extends FrameLayout {
                     TLRPC.Chat chat = (TLRPC.Chat) infoObject;
                     name = chat.title;
                 }
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCanNowSpeak", R.string.VoipGroupUserCanNowSpeak, name));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCanNowSpeak", works.heymate.beta.R.string.VoipGroupUserCanNowSpeak, name));
                 subInfoText = null;
-                icon = R.raw.voip_unmuted;
+                icon = works.heymate.beta.R.raw.voip_unmuted;
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_CAN_NOW_SPEAK) {
                 if (infoObject instanceof TLRPC.Chat) {
                     TLRPC.Chat chat = (TLRPC.Chat) infoObject;
-                    infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupYouCanNowSpeakIn", R.string.VoipGroupYouCanNowSpeakIn, chat.title));
+                    infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupYouCanNowSpeakIn", works.heymate.beta.R.string.VoipGroupYouCanNowSpeakIn, chat.title));
                 } else {
-                    infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupYouCanNowSpeak", R.string.VoipGroupYouCanNowSpeak));
+                    infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupYouCanNowSpeak", works.heymate.beta.R.string.VoipGroupYouCanNowSpeak));
                 }
                 subInfoText = null;
-                icon = R.raw.voip_allow_talk;
+                icon = works.heymate.beta.R.raw.voip_allow_talk;
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_SOUND_MUTED) {
-                infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupSoundMuted", R.string.VoipGroupSoundMuted));
+                infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupSoundMuted", works.heymate.beta.R.string.VoipGroupSoundMuted));
                 subInfoText = null;
-                icon = R.raw.ic_mute;
+                icon = works.heymate.beta.R.raw.ic_mute;
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_SOUND_UNMUTED) {
-                infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupSoundUnmuted", R.string.VoipGroupSoundUnmuted));
+                infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupSoundUnmuted", works.heymate.beta.R.string.VoipGroupSoundUnmuted));
                 subInfoText = null;
-                icon = R.raw.ic_unmute;
+                icon = works.heymate.beta.R.raw.ic_unmute;
                 timeLeft = 3000;
             } else if (currentAction == ACTION_VOIP_RECORDING_STARTED) {
-                infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupAudioRecordStarted", R.string.VoipGroupAudioRecordStarted));
+                infoText = AndroidUtilities.replaceTags(LocaleController.getString("VoipGroupAudioRecordStarted", works.heymate.beta.R.string.VoipGroupAudioRecordStarted));
                 subInfoText = null;
-                icon = R.raw.voip_record_start;
+                icon = works.heymate.beta.R.raw.voip_record_start;
                 timeLeft = 3000;
             } else if (currentAction == ACTION_VOIP_RECORDING_FINISHED) {
-                String text = LocaleController.getString("VoipGroupAudioRecordSaved", R.string.VoipGroupAudioRecordSaved);
+                String text = LocaleController.getString("VoipGroupAudioRecordSaved", works.heymate.beta.R.string.VoipGroupAudioRecordSaved);
                 subInfoText = null;
-                icon = R.raw.voip_record_saved;
+                icon = works.heymate.beta.R.raw.voip_record_saved;
                 timeLeft = 4000;
                 infoTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
                 SpannableStringBuilder builder = new SpannableStringBuilder(text);
@@ -602,9 +602,9 @@ public class UndoView extends FrameLayout {
                     TLRPC.Chat chat = (TLRPC.Chat) infoObject;
                     name = chat.title;
                 }
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCanNowSpeakForYou", R.string.VoipGroupUserCanNowSpeakForYou, name));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupUserCanNowSpeakForYou", works.heymate.beta.R.string.VoipGroupUserCanNowSpeakForYou, name));
                 subInfoText = null;
-                icon = R.raw.voip_unmuted;
+                icon = works.heymate.beta.R.raw.voip_unmuted;
                 timeLeft = 3000;
             } else if (action == ACTION_VOIP_REMOVED) {
                 String name;
@@ -615,76 +615,76 @@ public class UndoView extends FrameLayout {
                     TLRPC.Chat chat = (TLRPC.Chat) infoObject;
                     name = chat.title;
                 }
-                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupRemovedFromGroup", R.string.VoipGroupRemovedFromGroup, name));
+                infoText = AndroidUtilities.replaceTags(LocaleController.formatString("VoipGroupRemovedFromGroup", works.heymate.beta.R.string.VoipGroupRemovedFromGroup, name));
                 subInfoText = null;
-                icon = R.raw.voip_group_removed;
+                icon = works.heymate.beta.R.raw.voip_group_removed;
                 timeLeft = 3000;
             } else if (action == ACTION_OWNER_TRANSFERED_CHANNEL || action == ACTION_OWNER_TRANSFERED_GROUP) {
                 TLRPC.User user = (TLRPC.User) infoObject;
                 if (action == ACTION_OWNER_TRANSFERED_CHANNEL) {
-                    infoText = AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferChannelToast", R.string.EditAdminTransferChannelToast, UserObject.getFirstName(user)));
+                    infoText = AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferChannelToast", works.heymate.beta.R.string.EditAdminTransferChannelToast, UserObject.getFirstName(user)));
                 } else {
-                    infoText = AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferGroupToast", R.string.EditAdminTransferGroupToast, UserObject.getFirstName(user)));
+                    infoText = AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferGroupToast", works.heymate.beta.R.string.EditAdminTransferGroupToast, UserObject.getFirstName(user)));
                 }
                 subInfoText = null;
-                icon = R.raw.contact_check;
+                icon = works.heymate.beta.R.raw.contact_check;
             } else if (action == ACTION_CONTACT_ADDED) {
                 TLRPC.User user = (TLRPC.User) infoObject;
-                infoText = LocaleController.formatString("NowInContacts", R.string.NowInContacts, UserObject.getFirstName(user));
+                infoText = LocaleController.formatString("NowInContacts", works.heymate.beta.R.string.NowInContacts, UserObject.getFirstName(user));
                 subInfoText = null;
-                icon = R.raw.contact_check;
+                icon = works.heymate.beta.R.raw.contact_check;
             } else if (action == ACTION_PROFILE_PHOTO_CHANGED) {
                 if (did > 0) {
                     if (infoObject == null) {
-                        infoText = LocaleController.getString("MainProfilePhotoSetHint", R.string.MainProfilePhotoSetHint);
+                        infoText = LocaleController.getString("MainProfilePhotoSetHint", works.heymate.beta.R.string.MainProfilePhotoSetHint);
                     } else {
-                        infoText = LocaleController.getString("MainProfileVideoSetHint", R.string.MainProfileVideoSetHint);
+                        infoText = LocaleController.getString("MainProfileVideoSetHint", works.heymate.beta.R.string.MainProfileVideoSetHint);
                     }
                 } else {
                     TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat((int) -did);
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
                         if (infoObject == null) {
-                            infoText = LocaleController.getString("MainChannelProfilePhotoSetHint", R.string.MainChannelProfilePhotoSetHint);
+                            infoText = LocaleController.getString("MainChannelProfilePhotoSetHint", works.heymate.beta.R.string.MainChannelProfilePhotoSetHint);
                         } else {
-                            infoText = LocaleController.getString("MainChannelProfileVideoSetHint", R.string.MainChannelProfileVideoSetHint);
+                            infoText = LocaleController.getString("MainChannelProfileVideoSetHint", works.heymate.beta.R.string.MainChannelProfileVideoSetHint);
                         }
                     } else {
                         if (infoObject == null) {
-                            infoText = LocaleController.getString("MainGroupProfilePhotoSetHint", R.string.MainGroupProfilePhotoSetHint);
+                            infoText = LocaleController.getString("MainGroupProfilePhotoSetHint", works.heymate.beta.R.string.MainGroupProfilePhotoSetHint);
                         } else {
-                            infoText = LocaleController.getString("MainGroupProfileVideoSetHint", R.string.MainGroupProfileVideoSetHint);
+                            infoText = LocaleController.getString("MainGroupProfileVideoSetHint", works.heymate.beta.R.string.MainGroupProfileVideoSetHint);
                         }
                     }
                 }
                 subInfoText = null;
-                icon = R.raw.contact_check;
+                icon = works.heymate.beta.R.raw.contact_check;
             } else if (action == ACTION_CHAT_UNARCHIVED) {
-                infoText = LocaleController.getString("ChatWasMovedToMainList", R.string.ChatWasMovedToMainList);
+                infoText = LocaleController.getString("ChatWasMovedToMainList", works.heymate.beta.R.string.ChatWasMovedToMainList);
                 subInfoText = null;
-                icon = R.raw.contact_check;
+                icon = works.heymate.beta.R.raw.contact_check;
             } else if (action == ACTION_ARCHIVE_HIDDEN) {
-                infoText = LocaleController.getString("ArchiveHidden", R.string.ArchiveHidden);
-                subInfoText = LocaleController.getString("ArchiveHiddenInfo", R.string.ArchiveHiddenInfo);
-                icon = R.raw.chats_swipearchive;
+                infoText = LocaleController.getString("ArchiveHidden", works.heymate.beta.R.string.ArchiveHidden);
+                subInfoText = LocaleController.getString("ArchiveHiddenInfo", works.heymate.beta.R.string.ArchiveHiddenInfo);
+                icon = works.heymate.beta.R.raw.chats_swipearchive;
                 size = 48;
             } else if (currentAction == ACTION_QUIZ_CORRECT) {
-                infoText = LocaleController.getString("QuizWellDone", R.string.QuizWellDone);
-                subInfoText = LocaleController.getString("QuizWellDoneInfo", R.string.QuizWellDoneInfo);
-                icon = R.raw.wallet_congrats;
+                infoText = LocaleController.getString("QuizWellDone", works.heymate.beta.R.string.QuizWellDone);
+                subInfoText = LocaleController.getString("QuizWellDoneInfo", works.heymate.beta.R.string.QuizWellDoneInfo);
+                icon = works.heymate.beta.R.raw.wallet_congrats;
                 size = 44;
             } else if (currentAction == ACTION_QUIZ_INCORRECT) {
-                infoText = LocaleController.getString("QuizWrongAnswer", R.string.QuizWrongAnswer);
-                subInfoText = LocaleController.getString("QuizWrongAnswerInfo", R.string.QuizWrongAnswerInfo);
-                icon = R.raw.wallet_science;
+                infoText = LocaleController.getString("QuizWrongAnswer", works.heymate.beta.R.string.QuizWrongAnswer);
+                subInfoText = LocaleController.getString("QuizWrongAnswerInfo", works.heymate.beta.R.string.QuizWrongAnswerInfo);
+                icon = works.heymate.beta.R.raw.wallet_science;
                 size = 44;
             } else if (action == ACTION_ARCHIVE_PINNED) {
-                infoText = LocaleController.getString("ArchivePinned", R.string.ArchivePinned);
+                infoText = LocaleController.getString("ArchivePinned", works.heymate.beta.R.string.ArchivePinned);
                 if (MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
-                    subInfoText = LocaleController.getString("ArchivePinnedInfo", R.string.ArchivePinnedInfo);
+                    subInfoText = LocaleController.getString("ArchivePinnedInfo", works.heymate.beta.R.string.ArchivePinnedInfo);
                 } else {
                     subInfoText = null;
                 }
-                icon = R.raw.chats_infotip;
+                icon = works.heymate.beta.R.raw.chats_infotip;
             } else if (action == ACTION_ADDED_TO_FOLDER || action == ACTION_REMOVED_FROM_FOLDER) {
                 MessagesController.DialogFilter filter = (MessagesController.DialogFilter) infoObject2;
                 if (did != 0) {
@@ -696,43 +696,43 @@ public class UndoView extends FrameLayout {
                     if (lowerId > 0) {
                         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(lowerId);
                         if (action == ACTION_ADDED_TO_FOLDER) {
-                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterUserAddedToExisting", R.string.FilterUserAddedToExisting, UserObject.getFirstName(user), filter.name));
+                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterUserAddedToExisting", works.heymate.beta.R.string.FilterUserAddedToExisting, UserObject.getFirstName(user), filter.name));
                         } else {
-                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterUserRemovedFrom", R.string.FilterUserRemovedFrom, UserObject.getFirstName(user), filter.name));
+                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterUserRemovedFrom", works.heymate.beta.R.string.FilterUserRemovedFrom, UserObject.getFirstName(user), filter.name));
                         }
                     } else {
                         TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-lowerId);
                         if (action == ACTION_ADDED_TO_FOLDER) {
-                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatAddedToExisting", R.string.FilterChatAddedToExisting, chat.title, filter.name));
+                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatAddedToExisting", works.heymate.beta.R.string.FilterChatAddedToExisting, chat.title, filter.name));
                         } else {
-                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatRemovedFrom", R.string.FilterChatRemovedFrom, chat.title, filter.name));
+                            infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatRemovedFrom", works.heymate.beta.R.string.FilterChatRemovedFrom, chat.title, filter.name));
                         }
                     }
                 } else {
                     if (action == ACTION_ADDED_TO_FOLDER) {
-                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsAddedToExisting", R.string.FilterChatsAddedToExisting, LocaleController.formatPluralString("ChatsSelected", (Integer) infoObject), filter.name));
+                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsAddedToExisting", works.heymate.beta.R.string.FilterChatsAddedToExisting, LocaleController.formatPluralString("ChatsSelected", (Integer) infoObject), filter.name));
                     } else {
-                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsRemovedFrom", R.string.FilterChatsRemovedFrom, LocaleController.formatPluralString("ChatsSelected", (Integer) infoObject), filter.name));
+                        infoText = AndroidUtilities.replaceTags(LocaleController.formatString("FilterChatsRemovedFrom", works.heymate.beta.R.string.FilterChatsRemovedFrom, LocaleController.formatPluralString("ChatsSelected", (Integer) infoObject), filter.name));
                     }
                 }
                 subInfoText = null;
-                icon = action == ACTION_ADDED_TO_FOLDER ? R.raw.folder_in : R.raw.folder_out;
+                icon = action == ACTION_ADDED_TO_FOLDER ? works.heymate.beta.R.raw.folder_in : works.heymate.beta.R.raw.folder_out;
             } else if (action == ACTION_CACHE_WAS_CLEARED) {
                 infoText = this.infoText;
                 subInfoText = null;
-                icon = R.raw.chats_infotip;
+                icon = works.heymate.beta.R.raw.chats_infotip;
             }  else {
                 if (action == ACTION_ARCHIVE_HINT) {
-                    infoText = LocaleController.getString("ChatArchived", R.string.ChatArchived);
+                    infoText = LocaleController.getString("ChatArchived", works.heymate.beta.R.string.ChatArchived);
                 } else {
-                    infoText = LocaleController.getString("ChatsArchived", R.string.ChatsArchived);
+                    infoText = LocaleController.getString("ChatsArchived", works.heymate.beta.R.string.ChatsArchived);
                 }
                 if (MessagesController.getInstance(currentAccount).dialogFilters.isEmpty()) {
-                    subInfoText = LocaleController.getString("ChatArchivedInfo", R.string.ChatArchivedInfo);
+                    subInfoText = LocaleController.getString("ChatArchivedInfo", works.heymate.beta.R.string.ChatArchivedInfo);
                 } else {
                     subInfoText = null;
                 }
-                icon = R.raw.chats_infotip;
+                icon = works.heymate.beta.R.raw.chats_infotip;
             }
 
             infoTextView.setText(infoText);
@@ -786,14 +786,14 @@ public class UndoView extends FrameLayout {
             infoTextView.setTypeface(Typeface.DEFAULT);
 
             if (currentAction == ACTION_GIGAGROUP_SUCCESS) {
-                infoTextView.setText(LocaleController.getString("BroadcastGroupConvertSuccess", R.string.BroadcastGroupConvertSuccess));
-                leftImageView.setAnimation(R.raw.gigagroup_convert, 36, 36);
+                infoTextView.setText(LocaleController.getString("BroadcastGroupConvertSuccess", works.heymate.beta.R.string.BroadcastGroupConvertSuccess));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.gigagroup_convert, 36, 36);
                 infoOnly = true;
                 layoutParams.topMargin = AndroidUtilities.dp(9);
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             } else if (currentAction == ACTION_GIGAGROUP_CANCEL) {
-                infoTextView.setText(LocaleController.getString("GigagroupConvertCancelHint", R.string.GigagroupConvertCancelHint));
-                leftImageView.setAnimation(R.raw.chats_infotip, 36, 36);
+                infoTextView.setText(LocaleController.getString("GigagroupConvertCancelHint", works.heymate.beta.R.string.GigagroupConvertCancelHint));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.chats_infotip, 36, 36);
                 infoOnly = true;
                 layoutParams.topMargin = AndroidUtilities.dp(9);
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -811,133 +811,133 @@ public class UndoView extends FrameLayout {
                 } else {
                     time = LocaleController.formatPluralString("Seconds", ttl);
                 }
-                infoTextView.setText(LocaleController.formatString("AutoDeleteHintOnText", R.string.AutoDeleteHintOnText, time));
-                leftImageView.setAnimation(R.raw.fire_on, 36, 36);
+                infoTextView.setText(LocaleController.formatString("AutoDeleteHintOnText", works.heymate.beta.R.string.AutoDeleteHintOnText, time));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.fire_on, 36, 36);
                 layoutParams.topMargin = AndroidUtilities.dp(9);
                 timeLeft = 4000;
                 infoOnly = true;
                 leftImageView.setPadding(0, 0, 0, AndroidUtilities.dp(3));
             } else if (currentAction == ACTION_AUTO_DELETE_OFF) {
-                infoTextView.setText(LocaleController.getString("AutoDeleteHintOffText", R.string.AutoDeleteHintOffText));
-                leftImageView.setAnimation(R.raw.fire_off, 36, 36);
+                infoTextView.setText(LocaleController.getString("AutoDeleteHintOffText", works.heymate.beta.R.string.AutoDeleteHintOffText));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.fire_off, 36, 36);
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 timeLeft = 3000;
                 leftImageView.setPadding(0, 0, 0, AndroidUtilities.dp(4));
             } else if (currentAction == ACTION_IMPORT_NOT_MUTUAL) {
-                infoTextView.setText(LocaleController.getString("ImportMutualError", R.string.ImportMutualError));
-                leftImageView.setAnimation(R.raw.error, 36, 36);
+                infoTextView.setText(LocaleController.getString("ImportMutualError", works.heymate.beta.R.string.ImportMutualError));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.error, 36, 36);
                 infoOnly = true;
                 layoutParams.topMargin = AndroidUtilities.dp(9);
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             } else if (currentAction == ACTION_IMPORT_GROUP_NOT_ADMIN) {
-                infoTextView.setText(LocaleController.getString("ImportNotAdmin", R.string.ImportNotAdmin));
-                leftImageView.setAnimation(R.raw.error, 36, 36);
+                infoTextView.setText(LocaleController.getString("ImportNotAdmin", works.heymate.beta.R.string.ImportNotAdmin));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.error, 36, 36);
                 infoOnly = true;
                 layoutParams.topMargin = AndroidUtilities.dp(9);
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             } else if (currentAction == ACTION_IMPORT_INFO) {
-                infoTextView.setText(LocaleController.getString("ImportedInfo", R.string.ImportedInfo));
-                leftImageView.setAnimation(R.raw.imported, 36, 36);
+                infoTextView.setText(LocaleController.getString("ImportedInfo", works.heymate.beta.R.string.ImportedInfo));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.imported, 36, 36);
                 leftImageView.setPadding(0, 0, 0, AndroidUtilities.dp(5));
                 infoOnly = true;
                 layoutParams.topMargin = AndroidUtilities.dp(9);
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             } else if (currentAction == ACTION_PLAYBACK_SPEED_DISABLED) {
-                infoTextView.setText(LocaleController.getString("AudioSpeedNormal", R.string.AudioSpeedNormal));
-                leftImageView.setAnimation(R.raw.audio_stop_speed, 36, 36);
+                infoTextView.setText(LocaleController.getString("AudioSpeedNormal", works.heymate.beta.R.string.AudioSpeedNormal));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.audio_stop_speed, 36, 36);
                 timeLeft = 3000;
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             } else if (currentAction == ACTION_PLAYBACK_SPEED_ENABLED) {
-                infoTextView.setText(LocaleController.getString("AudioSpeedFast", R.string.AudioSpeedFast));
-                leftImageView.setAnimation(R.raw.audio_speed, 36, 36);
+                infoTextView.setText(LocaleController.getString("AudioSpeedFast", works.heymate.beta.R.string.AudioSpeedFast));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.audio_speed, 36, 36);
                 timeLeft = 3000;
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             } else if (currentAction == ACTION_MESSAGE_COPIED || currentAction == ACTION_USERNAME_COPIED || currentAction == ACTION_HASHTAG_COPIED || currentAction == ACTION_TEXT_COPIED || currentAction == ACTION_LINK_COPIED || currentAction == ACTION_PHONE_COPIED) {
-                int iconRawId = R.raw.copy;
+                int iconRawId = works.heymate.beta.R.raw.copy;
                 if (currentAction == ACTION_PHONE_COPIED) {
-                    infoTextView.setText(LocaleController.getString("PhoneCopied", R.string.PhoneCopied));
+                    infoTextView.setText(LocaleController.getString("PhoneCopied", works.heymate.beta.R.string.PhoneCopied));
                 } else if (currentAction == ACTION_USERNAME_COPIED) {
-                    infoTextView.setText(LocaleController.getString("UsernameCopied", R.string.UsernameCopied));
+                    infoTextView.setText(LocaleController.getString("UsernameCopied", works.heymate.beta.R.string.UsernameCopied));
                 } else if (currentAction == ACTION_HASHTAG_COPIED) {
-                    infoTextView.setText(LocaleController.getString("HashtagCopied", R.string.HashtagCopied));
+                    infoTextView.setText(LocaleController.getString("HashtagCopied", works.heymate.beta.R.string.HashtagCopied));
                 } else if (currentAction == ACTION_MESSAGE_COPIED) {
-                    infoTextView.setText(LocaleController.getString("MessageCopied", R.string.MessageCopied));
+                    infoTextView.setText(LocaleController.getString("MessageCopied", works.heymate.beta.R.string.MessageCopied));
                 } else if (currentAction == ACTION_LINK_COPIED) {
-                    iconRawId = R.raw.voip_invite;
-                    infoTextView.setText(LocaleController.getString("LinkCopied", R.string.LinkCopied));
+                    iconRawId = works.heymate.beta.R.raw.voip_invite;
+                    infoTextView.setText(LocaleController.getString("LinkCopied", works.heymate.beta.R.string.LinkCopied));
                 } else {
-                    infoTextView.setText(LocaleController.getString("TextCopied", R.string.TextCopied));
+                    infoTextView.setText(LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied));
                 }
                 leftImageView.setAnimation(iconRawId, 30, 30);
                 timeLeft = 3000;
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             } else if (currentAction == ACTION_NOTIFY_ON) {
-                infoTextView.setText(LocaleController.getString("ChannelNotifyMembersInfoOn", R.string.ChannelNotifyMembersInfoOn));
-                leftImageView.setAnimation(R.raw.silent_unmute, 30, 30);
+                infoTextView.setText(LocaleController.getString("ChannelNotifyMembersInfoOn", works.heymate.beta.R.string.ChannelNotifyMembersInfoOn));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.silent_unmute, 30, 30);
                 timeLeft = 3000;
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             } else if (currentAction == ACTION_NOTIFY_OFF) {
-                infoTextView.setText(LocaleController.getString("ChannelNotifyMembersInfoOff", R.string.ChannelNotifyMembersInfoOff));
-                leftImageView.setAnimation(R.raw.silent_mute, 30, 30);
+                infoTextView.setText(LocaleController.getString("ChannelNotifyMembersInfoOff", works.heymate.beta.R.string.ChannelNotifyMembersInfoOff));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.silent_mute, 30, 30);
                 timeLeft = 3000;
                 infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             } else if (currentAction == ACTION_VOIP_INVITE_LINK_SENT) {
                 if (infoObject2 == null) {
                     if (did == UserConfig.getInstance(currentAccount).clientUserId) {
-                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("InvLinkToSavedMessages", R.string.InvLinkToSavedMessages)));
+                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("InvLinkToSavedMessages", works.heymate.beta.R.string.InvLinkToSavedMessages)));
                     } else {
                         int lowerId = (int) did;
                         if (lowerId < 0) {
                             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-lowerId);
-                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToGroup", R.string.InvLinkToGroup, chat.title)));
+                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToGroup", works.heymate.beta.R.string.InvLinkToGroup, chat.title)));
                         } else {
                             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(lowerId);
-                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToUser", R.string.InvLinkToUser, UserObject.getFirstName(user))));
+                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToUser", works.heymate.beta.R.string.InvLinkToUser, UserObject.getFirstName(user))));
                         }
                     }
                 } else {
                     int amount = (Integer) infoObject2;
-                    infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToChats", R.string.InvLinkToChats, LocaleController.formatPluralString("Chats", amount))));
+                    infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToChats", works.heymate.beta.R.string.InvLinkToChats, LocaleController.formatPluralString("Chats", amount))));
                 }
-                leftImageView.setAnimation(R.raw.contact_check, 36, 36);
+                leftImageView.setAnimation(works.heymate.beta.R.raw.contact_check, 36, 36);
                 timeLeft = 3000;
             } else if (currentAction == ACTION_FWD_MESSAGES) {
                 Integer count = (Integer) infoObject;
                 if (infoObject2 == null) {
                     if (did == UserConfig.getInstance(currentAccount).clientUserId) {
                         if (count == 1) {
-                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("FwdMessageToSavedMessages", R.string.FwdMessageToSavedMessages)));
+                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("FwdMessageToSavedMessages", works.heymate.beta.R.string.FwdMessageToSavedMessages)));
                         } else {
-                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("FwdMessagesToSavedMessages", R.string.FwdMessagesToSavedMessages)));
+                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("FwdMessagesToSavedMessages", works.heymate.beta.R.string.FwdMessagesToSavedMessages)));
                         }
-                        leftImageView.setAnimation(R.raw.saved_messages, 30, 30);
+                        leftImageView.setAnimation(works.heymate.beta.R.raw.saved_messages, 30, 30);
                     } else {
                         int lowerId = (int) did;
                         if (lowerId < 0) {
                             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-lowerId);
                             if (count == 1) {
-                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToGroup", R.string.FwdMessageToGroup, chat.title)));
+                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToGroup", works.heymate.beta.R.string.FwdMessageToGroup, chat.title)));
                             } else {
-                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToGroup", R.string.FwdMessagesToGroup, chat.title)));
+                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToGroup", works.heymate.beta.R.string.FwdMessagesToGroup, chat.title)));
                             }
                         } else {
                             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(lowerId);
                             if (count == 1) {
-                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToUser", R.string.FwdMessageToUser, UserObject.getFirstName(user))));
+                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToUser", works.heymate.beta.R.string.FwdMessageToUser, UserObject.getFirstName(user))));
                             } else {
-                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToUser", R.string.FwdMessagesToUser, UserObject.getFirstName(user))));
+                                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToUser", works.heymate.beta.R.string.FwdMessagesToUser, UserObject.getFirstName(user))));
                             }
                         }
-                        leftImageView.setAnimation(R.raw.forward, 30, 30);
+                        leftImageView.setAnimation(works.heymate.beta.R.raw.forward, 30, 30);
                     }
                 } else {
                     int amount = (Integer) infoObject2;
                     if (count == 1) {
-                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToChats", R.string.FwdMessageToChats, LocaleController.formatPluralString("Chats", amount))));
+                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToChats", works.heymate.beta.R.string.FwdMessageToChats, LocaleController.formatPluralString("Chats", amount))));
                     } else {
-                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToChats", R.string.FwdMessagesToChats, LocaleController.formatPluralString("Chats", amount))));
+                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToChats", works.heymate.beta.R.string.FwdMessagesToChats, LocaleController.formatPluralString("Chats", amount))));
                     }
-                    leftImageView.setAnimation(R.raw.forward, 30, 30);
+                    leftImageView.setAnimation(works.heymate.beta.R.raw.forward, 30, 30);
                 }
                 timeLeft = 3000;
             }
@@ -966,16 +966,16 @@ public class UndoView extends FrameLayout {
                 leftImageView.setLayerColor("Wibe Big 3.**", Theme.getColor(Theme.key_undo_infoColor));
                 leftImageView.setLayerColor("Wibe Small.**", Theme.getColor(Theme.key_undo_infoColor));
 
-                infoTextView.setText(LocaleController.getString("ProximityAlertSet", R.string.ProximityAlertSet));
-                leftImageView.setAnimation(R.raw.ic_unmute, 28, 28);
+                infoTextView.setText(LocaleController.getString("ProximityAlertSet", works.heymate.beta.R.string.ProximityAlertSet));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.ic_unmute, 28, 28);
                 subinfoTextView.setVisibility(VISIBLE);
                 subinfoTextView.setSingleLine(false);
                 subinfoTextView.setMaxLines(3);
 
                 if (user != null) {
-                    subinfoTextView.setText(LocaleController.formatString("ProximityAlertSetInfoUser", R.string.ProximityAlertSetInfoUser, UserObject.getFirstName(user), LocaleController.formatDistance(radius, 2)));
+                    subinfoTextView.setText(LocaleController.formatString("ProximityAlertSetInfoUser", works.heymate.beta.R.string.ProximityAlertSetInfoUser, UserObject.getFirstName(user), LocaleController.formatDistance(radius, 2)));
                 } else {
-                    subinfoTextView.setText(LocaleController.formatString("ProximityAlertSetInfoGroup2", R.string.ProximityAlertSetInfoGroup2, LocaleController.formatDistance(radius, 2)));
+                    subinfoTextView.setText(LocaleController.formatString("ProximityAlertSetInfoGroup2", works.heymate.beta.R.string.ProximityAlertSetInfoGroup2, LocaleController.formatDistance(radius, 2)));
                 }
                 undoButton.setVisibility(GONE);
 
@@ -992,8 +992,8 @@ public class UndoView extends FrameLayout {
 
                 layoutParams.topMargin = AndroidUtilities.dp(14);
 
-                infoTextView.setText(LocaleController.getString("ProximityAlertCancelled", R.string.ProximityAlertCancelled));
-                leftImageView.setAnimation(R.raw.ic_mute, 28, 28);
+                infoTextView.setText(LocaleController.getString("ProximityAlertCancelled", works.heymate.beta.R.string.ProximityAlertCancelled));
+                leftImageView.setAnimation(works.heymate.beta.R.raw.ic_mute, 28, 28);
                 subinfoTextView.setVisibility(GONE);
                 undoTextView.setTextColor(Theme.getColor(Theme.key_undo_cancelColor));
                 undoButton.setVisibility(VISIBLE);
@@ -1006,8 +1006,8 @@ public class UndoView extends FrameLayout {
         } else if (currentAction == ACTION_QR_SESSION_ACCEPTED) {
             TLRPC.TL_authorization authorization = (TLRPC.TL_authorization) infoObject;
 
-            infoTextView.setText(LocaleController.getString("AuthAnotherClientOk", R.string.AuthAnotherClientOk));
-            leftImageView.setAnimation(R.raw.contact_check, 36, 36);
+            infoTextView.setText(LocaleController.getString("AuthAnotherClientOk", works.heymate.beta.R.string.AuthAnotherClientOk));
+            leftImageView.setAnimation(works.heymate.beta.R.raw.contact_check, 36, 36);
 
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.topMargin = AndroidUtilities.dp(6);
@@ -1025,9 +1025,9 @@ public class UndoView extends FrameLayout {
             leftImageView.playAnimation();
         } else if (currentAction == ACTION_FILTERS_AVAILABLE) {
             timeLeft = 10000;
-            undoTextView.setText(LocaleController.getString("Open", R.string.Open).toUpperCase());
-            infoTextView.setText(LocaleController.getString("FilterAvailableTitle", R.string.FilterAvailableTitle));
-            leftImageView.setAnimation(R.raw.filter_new, 36, 36);
+            undoTextView.setText(LocaleController.getString("Open", works.heymate.beta.R.string.Open).toUpperCase());
+            infoTextView.setText(LocaleController.getString("FilterAvailableTitle", works.heymate.beta.R.string.FilterAvailableTitle));
+            leftImageView.setAnimation(works.heymate.beta.R.raw.filter_new, 36, 36);
             int margin = (int) Math.ceil(undoTextView.getPaint().measureText(undoTextView.getText().toString())) + AndroidUtilities.dp(26);
 
             layoutParams.leftMargin = AndroidUtilities.dp(58);
@@ -1037,7 +1037,7 @@ public class UndoView extends FrameLayout {
             layoutParams = (FrameLayout.LayoutParams) subinfoTextView.getLayoutParams();
             layoutParams.rightMargin = margin;
 
-            String text = LocaleController.getString("FilterAvailableText", R.string.FilterAvailableText);
+            String text = LocaleController.getString("FilterAvailableText", works.heymate.beta.R.string.FilterAvailableText);
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
             int index1 = text.indexOf('*');
             int index2 = text.lastIndexOf('*');
@@ -1063,17 +1063,17 @@ public class UndoView extends FrameLayout {
             infoTextView.setMinHeight(AndroidUtilities.dp(30));
             String emoji = (String) infoObject;
             if ("\uD83C\uDFB2".equals(emoji)) {
-                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DiceInfo2", R.string.DiceInfo2)));
-                leftImageView.setImageResource(R.drawable.dice);
+                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DiceInfo2", works.heymate.beta.R.string.DiceInfo2)));
+                leftImageView.setImageResource(works.heymate.beta.R.drawable.dice);
             } else{
                 if ("\uD83C\uDFAF".equals(emoji)) {
-                    infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DartInfo", R.string.DartInfo)));
+                    infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DartInfo", works.heymate.beta.R.string.DartInfo)));
                 } else {
                     String info = LocaleController.getServerString("DiceEmojiInfo_" + emoji);
                     if (!TextUtils.isEmpty(info)) {
                         infoTextView.setText(Emoji.replaceEmoji(info, infoTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
                     } else {
-                        infoTextView.setText(Emoji.replaceEmoji(LocaleController.formatString("DiceEmojiInfo", R.string.DiceEmojiInfo, emoji), infoTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
+                        infoTextView.setText(Emoji.replaceEmoji(LocaleController.formatString("DiceEmojiInfo", works.heymate.beta.R.string.DiceEmojiInfo, emoji), infoTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false));
                     }
                 }
                 leftImageView.setImageDrawable(Emoji.getEmojiDrawable(emoji));
@@ -1084,7 +1084,7 @@ public class UndoView extends FrameLayout {
                 layoutParams2.width = AndroidUtilities.dp(26);
                 layoutParams2.height = AndroidUtilities.dp(26);
             }
-            undoTextView.setText(LocaleController.getString("SendDice", R.string.SendDice));
+            undoTextView.setText(LocaleController.getString("SendDice", works.heymate.beta.R.string.SendDice));
 
             int margin;
             if (currentAction == ACTION_DICE_INFO) {
@@ -1126,12 +1126,12 @@ public class UndoView extends FrameLayout {
             layoutParams2.topMargin = layoutParams2.bottomMargin = AndroidUtilities.dp(8);
 
             leftImageView.setVisibility(VISIBLE);
-            leftImageView.setAnimation(R.raw.chats_infotip, 36, 36);
+            leftImageView.setAnimation(works.heymate.beta.R.raw.chats_infotip, 36, 36);
             leftImageView.setProgress(0);
             leftImageView.playAnimation();
         } else if (currentAction == ACTION_THEME_CHANGED) {
-            infoTextView.setText(LocaleController.getString("ColorThemeChanged", R.string.ColorThemeChanged));
-            leftImageView.setImageResource(R.drawable.toast_pallete);
+            infoTextView.setText(LocaleController.getString("ColorThemeChanged", works.heymate.beta.R.string.ColorThemeChanged));
+            leftImageView.setImageResource(works.heymate.beta.R.drawable.toast_pallete);
 
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.rightMargin = AndroidUtilities.dp(48);
@@ -1140,7 +1140,7 @@ public class UndoView extends FrameLayout {
             layoutParams = (FrameLayout.LayoutParams) subinfoTextView.getLayoutParams();
             layoutParams.rightMargin = AndroidUtilities.dp(48);
 
-            String text = LocaleController.getString("ColorThemeChangedInfo", R.string.ColorThemeChangedInfo);
+            String text = LocaleController.getString("ColorThemeChangedInfo", works.heymate.beta.R.string.ColorThemeChangedInfo);
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
             int index1 = text.indexOf('*');
             int index2 = text.lastIndexOf('*');
@@ -1158,9 +1158,9 @@ public class UndoView extends FrameLayout {
             leftImageView.setVisibility(VISIBLE);
         } else if (currentAction == ACTION_ARCHIVE || currentAction == ACTION_ARCHIVE_FEW) {
             if (action == ACTION_ARCHIVE) {
-                infoTextView.setText(LocaleController.getString("ChatArchived", R.string.ChatArchived));
+                infoTextView.setText(LocaleController.getString("ChatArchived", works.heymate.beta.R.string.ChatArchived));
             } else {
-                infoTextView.setText(LocaleController.getString("ChatsArchived", R.string.ChatsArchived));
+                infoTextView.setText(LocaleController.getString("ChatsArchived", works.heymate.beta.R.string.ChatsArchived));
             }
 
             layoutParams.leftMargin = AndroidUtilities.dp(58);
@@ -1173,7 +1173,7 @@ public class UndoView extends FrameLayout {
             subinfoTextView.setVisibility(GONE);
 
             leftImageView.setVisibility(VISIBLE);
-            leftImageView.setAnimation(R.raw.chats_archived, 36, 36);
+            leftImageView.setAnimation(works.heymate.beta.R.raw.chats_archived, 36, 36);
             leftImageView.setProgress(0);
             leftImageView.playAnimation();
         } else {
@@ -1188,15 +1188,15 @@ public class UndoView extends FrameLayout {
             leftImageView.setVisibility(GONE);
 
             if (currentAction == ACTION_CLEAR) {
-                infoTextView.setText(LocaleController.getString("HistoryClearedUndo", R.string.HistoryClearedUndo));
+                infoTextView.setText(LocaleController.getString("HistoryClearedUndo", works.heymate.beta.R.string.HistoryClearedUndo));
             } else {
                 int lowerId = (int) did;
                 if (lowerId < 0) {
                     TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-lowerId);
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                        infoTextView.setText(LocaleController.getString("ChannelDeletedUndo", R.string.ChannelDeletedUndo));
+                        infoTextView.setText(LocaleController.getString("ChannelDeletedUndo", works.heymate.beta.R.string.ChannelDeletedUndo));
                     } else {
-                        infoTextView.setText(LocaleController.getString("GroupDeletedUndo", R.string.GroupDeletedUndo));
+                        infoTextView.setText(LocaleController.getString("GroupDeletedUndo", works.heymate.beta.R.string.GroupDeletedUndo));
                     }
                 } else {
                     if(action == ACTION_OFFER_DATA_INCOMPLETE){
@@ -1206,7 +1206,7 @@ public class UndoView extends FrameLayout {
                         undoButton.setVisibility(GONE);
                         infoTextView.setText("Offer Saved");
                     } else {
-                        infoTextView.setText(LocaleController.getString("ChatDeletedUndo", R.string.ChatDeletedUndo));
+                        infoTextView.setText(LocaleController.getString("ChatDeletedUndo", works.heymate.beta.R.string.ChatDeletedUndo));
                     }
                 }
             }

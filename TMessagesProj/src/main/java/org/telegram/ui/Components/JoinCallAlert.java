@@ -29,7 +29,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLObject;
@@ -276,7 +276,7 @@ public class JoinCallAlert extends BottomSheet {
         this.delegate = delegate;
         currentType = type;
 
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
         if (type == TYPE_DISPLAY) {
             if (VoIPService.getSharedInstance() != null) {
                 int did = VoIPService.getSharedInstance().getSelfId();
@@ -473,7 +473,7 @@ public class JoinCallAlert extends BottomSheet {
         if (type == TYPE_CREATE) {
             RLottieImageView imageView = new RLottieImageView(context);
             imageView.setAutoRepeat(true);
-            imageView.setAnimation(R.raw.utyan_schedule, 120, 120);
+            imageView.setAnimation(works.heymate.beta.R.raw.utyan_schedule, 120, 120);
             imageView.playAnimation();
             internalLayout.addView(imageView, LayoutHelper.createLinear(160, 160, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 17, 8, 17, 0));
         }
@@ -489,13 +489,13 @@ public class JoinCallAlert extends BottomSheet {
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         if (type == TYPE_CREATE) {
-            textView.setText(LocaleController.getString("StartVoipChatTitle", R.string.StartVoipChatTitle));
+            textView.setText(LocaleController.getString("StartVoipChatTitle", works.heymate.beta.R.string.StartVoipChatTitle));
             internalLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 23, 16, 23, 0));
         } else {
             if (type == TYPE_DISPLAY) {
-                textView.setText(LocaleController.getString("VoipGroupDisplayAs", R.string.VoipGroupDisplayAs));
+                textView.setText(LocaleController.getString("VoipGroupDisplayAs", works.heymate.beta.R.string.VoipGroupDisplayAs));
             } else {
-                textView.setText(LocaleController.getString("VoipGroupJoinAs", R.string.VoipGroupJoinAs));
+                textView.setText(LocaleController.getString("VoipGroupJoinAs", works.heymate.beta.R.string.VoipGroupJoinAs));
             }
             internalLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 23, 8, 23, 0));
         }
@@ -524,12 +524,12 @@ public class JoinCallAlert extends BottomSheet {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat((int) -dialogId);
             StringBuilder builder = new StringBuilder();
             if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                builder.append(LocaleController.getString("VoipChannelStart2", R.string.VoipChannelStart2));
+                builder.append(LocaleController.getString("VoipChannelStart2", works.heymate.beta.R.string.VoipChannelStart2));
             } else {
-                builder.append(LocaleController.getString("VoipGroupStart2", R.string.VoipGroupStart2));
+                builder.append(LocaleController.getString("VoipGroupStart2", works.heymate.beta.R.string.VoipGroupStart2));
             }
             if (chats.size() > 1) {
-                builder.append("\n\n").append(LocaleController.getString("VoipChatDisplayedAs", R.string.VoipChatDisplayedAs));
+                builder.append("\n\n").append(LocaleController.getString("VoipChatDisplayedAs", works.heymate.beta.R.string.VoipChatDisplayedAs));
             } else {
                 listView.setVisibility(View.GONE);
             }
@@ -538,9 +538,9 @@ public class JoinCallAlert extends BottomSheet {
             internalLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 23, 0, 23, 5));
         } else {
             if (hasGroup) {
-                messageTextView.setText(LocaleController.getString("VoipGroupStartAsInfoGroup", R.string.VoipGroupStartAsInfoGroup));
+                messageTextView.setText(LocaleController.getString("VoipGroupStartAsInfoGroup", works.heymate.beta.R.string.VoipGroupStartAsInfoGroup));
             } else {
-                messageTextView.setText(LocaleController.getString("VoipGroupStartAsInfo", R.string.VoipGroupStartAsInfo));
+                messageTextView.setText(LocaleController.getString("VoipGroupStartAsInfo", works.heymate.beta.R.string.VoipGroupStartAsInfo));
             }
             messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             internalLayout.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 23, 0, 23, 5));
@@ -566,7 +566,7 @@ public class JoinCallAlert extends BottomSheet {
             internalLayout.addView(doneButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
             BottomSheetCell scheduleButton = new BottomSheetCell(context, true);
-            scheduleButton.setText(LocaleController.getString("VoipGroupScheduleVoiceChat", R.string.VoipGroupScheduleVoiceChat), false);
+            scheduleButton.setText(LocaleController.getString("VoipGroupScheduleVoiceChat", works.heymate.beta.R.string.VoipGroupScheduleVoiceChat), false);
             scheduleButton.background.setOnClickListener(v -> {
                 selectAfterDismiss = MessagesController.getInstance(currentAccount).getInputPeer(MessageObject.getPeerId(selectedPeer));
                 schedule = true;
@@ -581,15 +581,15 @@ public class JoinCallAlert extends BottomSheet {
 
     private void updateDoneButton(boolean animated) {
         if (currentType == TYPE_CREATE) {
-            doneButton.setText(LocaleController.formatString("VoipGroupStartVoiceChat", R.string.VoipGroupStartVoiceChat), animated);
+            doneButton.setText(LocaleController.formatString("VoipGroupStartVoiceChat", works.heymate.beta.R.string.VoipGroupStartVoiceChat), animated);
         } else {
             int did = MessageObject.getPeerId(selectedPeer);
             if (did > 0) {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(did);
-                doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", R.string.VoipGroupContinueAs, UserObject.getFirstName(user)), animated);
+                doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", works.heymate.beta.R.string.VoipGroupContinueAs, UserObject.getFirstName(user)), animated);
             } else {
                 TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-did);
-                doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", R.string.VoipGroupContinueAs, chat != null ? chat.title : ""), animated);
+                doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", works.heymate.beta.R.string.VoipGroupContinueAs, chat != null ? chat.title : ""), animated);
             }
         }
     }
@@ -693,7 +693,7 @@ public class JoinCallAlert extends BottomSheet {
             String status;
             if (did > 0) {
                 object = MessagesController.getInstance(currentAccount).getUser(did);
-                status = LocaleController.getString("VoipGroupPersonalAccount", R.string.VoipGroupPersonalAccount);
+                status = LocaleController.getString("VoipGroupPersonalAccount", works.heymate.beta.R.string.VoipGroupPersonalAccount);
             } else {
                 object = MessagesController.getInstance(currentAccount).getChat(-did);
                 status = null;

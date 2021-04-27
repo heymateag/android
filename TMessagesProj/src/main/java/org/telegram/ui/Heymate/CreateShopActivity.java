@@ -21,7 +21,7 @@ import com.google.android.exoplayer2.util.Log;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -85,7 +85,7 @@ public class CreateShopActivity extends BaseFragment {
         container.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
         TextView textTitle = new TextView(context);
-        textTitle.setTextColor(ContextCompat.getColor(context, R.color.ht_theme));
+        textTitle.setTextColor(ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme));
         textTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         textTitle.setTypeface(textTitle.getTypeface(), Typeface.BOLD);
         textTitle.setText(Texts.get(Texts.CREATE_SHOP_SHOP_TYPE));
@@ -93,12 +93,12 @@ public class CreateShopActivity extends BaseFragment {
 
         mButtonMarketplace = new RadioButtonCellWithIcon(context);
         mButtonMarketplace.setTextAndValue(Texts.get(Texts.CREATE_SHOP_MARKETPLACE).toString(), Texts.get(Texts.CREATE_SHOP_MARKETPLACE_DESCRIPTION).toString(), false, false);
-        mButtonMarketplace.setIcon(R.drawable.ic_marketplace);
+        mButtonMarketplace.setIcon(works.heymate.beta.R.drawable.ic_marketplace);
         content.addView(mButtonMarketplace, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 8, 0, 0));
 
         mButtonShop = new RadioButtonCellWithIcon(context);
         mButtonShop.setTextAndValue(Texts.get(Texts.CREATE_SHOP_SHOP).toString(), Texts.get(Texts.CREATE_SHOP_SHOP_DESCRIPTION).toString(), false, false);
-        mButtonShop.setIcon(R.drawable.ic_shop);
+        mButtonShop.setIcon(works.heymate.beta.R.drawable.ic_shop);
         content.addView(mButtonShop, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
         content.addView(new ShadowSectionCell(context, 12, Theme.getColor(Theme.key_windowBackgroundGray)), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -106,7 +106,7 @@ public class CreateShopActivity extends BaseFragment {
         ActionBar actionBar = getActionBar();
         actionBar.setBackButtonDrawable(new BackDrawable(false));
         actionBar.setTitle(Texts.get(Texts.CREATE_SHOP_TITLE));
-        actionBar.createMenu().addItem(0, R.drawable.checkbig);
+        actionBar.createMenu().addItem(0, works.heymate.beta.R.drawable.checkbig);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -202,9 +202,9 @@ public class CreateShopActivity extends BaseFragment {
             radioButton = new RadioButton(context);
             radioButton.setSize(AndroidUtilities.dp(20));
             if (dialog) {
-                radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), ContextCompat.getColor(context, R.color.ht_theme));
+                radioButton.setColor(Theme.getColor(Theme.key_dialogRadioBackground), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme));
             } else {
-                radioButton.setColor(Theme.getColor(Theme.key_radioBackground), ContextCompat.getColor(context, R.color.ht_theme));
+                radioButton.setColor(Theme.getColor(Theme.key_radioBackground), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme));
             }
             addView(radioButton, LayoutHelper.createFrame(22, 22, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 20), 10, (LocaleController.isRTL ? 20 : 0), 0));
 

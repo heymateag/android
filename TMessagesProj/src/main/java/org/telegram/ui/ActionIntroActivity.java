@@ -40,7 +40,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -101,7 +101,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     @Override
     public View createView(Context context) {
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
         actionBar.setCastShadows(false);
@@ -444,7 +444,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 if (a == 0) {
                     desctiptionLines[a * 2 + 1].setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
                     desctiptionLines[a * 2 + 1].setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
-                    String text = LocaleController.getString("AuthAnotherClientInfo1", R.string.AuthAnotherClientInfo1);
+                    String text = LocaleController.getString("AuthAnotherClientInfo1", works.heymate.beta.R.string.AuthAnotherClientInfo1);
                     SpannableStringBuilder spanned = new SpannableStringBuilder(text);
                     int index1 = text.indexOf('*');
                     int index2 = text.lastIndexOf('*');
@@ -452,13 +452,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         desctiptionLines[a * 2 + 1].setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
                         spanned.replace(index2, index2 + 1, "");
                         spanned.replace(index1, index1 + 1, "");
-                        spanned.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", R.string.AuthAnotherClientDownloadClientUrl)), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spanned.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", works.heymate.beta.R.string.AuthAnotherClientDownloadClientUrl)), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                     desctiptionLines[a * 2 + 1].setText(spanned);
                 } else if (a == 1) {
-                    desctiptionLines[a * 2 + 1].setText(LocaleController.getString("AuthAnotherClientInfo2", R.string.AuthAnotherClientInfo2));
+                    desctiptionLines[a * 2 + 1].setText(LocaleController.getString("AuthAnotherClientInfo2", works.heymate.beta.R.string.AuthAnotherClientInfo2));
                 } else if (a == 2) {
-                    desctiptionLines[a * 2 + 1].setText(LocaleController.getString("AuthAnotherClientInfo3", R.string.AuthAnotherClientInfo3));
+                    desctiptionLines[a * 2 + 1].setText(LocaleController.getString("AuthAnotherClientInfo3", works.heymate.beta.R.string.AuthAnotherClientInfo3));
                 }
                 if (LocaleController.isRTL) {
                     linearLayout.setGravity(Gravity.RIGHT);
@@ -544,10 +544,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 }
                 case ACTION_TYPE_CHANGE_PHONE_NUMBER: {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", R.string.PhoneNumberChangeTitle));
-                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
-                    builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), (dialogInterface, i) -> presentFragment(new ChangePhoneActivity(), true));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", works.heymate.beta.R.string.PhoneNumberChangeTitle));
+                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", works.heymate.beta.R.string.PhoneNumberAlert));
+                    builder.setPositiveButton(LocaleController.getString("Change", works.heymate.beta.R.string.Change), (dialogInterface, i) -> presentFragment(new ChangePhoneActivity(), true));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     showDialog(builder.create());
                     break;
                 }
@@ -557,10 +557,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         switch (currentType) {
             case ACTION_TYPE_CHANNEL_CREATE: {
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageView.setAnimation(R.raw.channel_create, 200, 200);
-                titleTextView.setText(LocaleController.getString("ChannelAlertTitle", R.string.ChannelAlertTitle));
-                descriptionText.setText(LocaleController.getString("ChannelAlertText", R.string.ChannelAlertText));
-                buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", R.string.ChannelAlertCreate2));
+                imageView.setAnimation(works.heymate.beta.R.raw.channel_create, 200, 200);
+                titleTextView.setText(LocaleController.getString("ChannelAlertTitle", works.heymate.beta.R.string.ChannelAlertTitle));
+                descriptionText.setText(LocaleController.getString("ChannelAlertText", works.heymate.beta.R.string.ChannelAlertText));
+                buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", works.heymate.beta.R.string.ChannelAlertCreate2));
                 imageView.playAnimation();
                 break;
             }
@@ -568,46 +568,46 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100), Theme.getColor(Theme.key_chats_archiveBackground)));
                 imageView.setImageDrawable(new ShareLocationDrawable(context, 3));
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                titleTextView.setText(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
-                descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", R.string.PeopleNearbyAccessInfo));
-                buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", R.string.PeopleNearbyAllowAccess));
+                titleTextView.setText(LocaleController.getString("PeopleNearby", works.heymate.beta.R.string.PeopleNearby));
+                descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", works.heymate.beta.R.string.PeopleNearbyAccessInfo));
+                buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", works.heymate.beta.R.string.PeopleNearbyAllowAccess));
                 break;
             }
             case ACTION_TYPE_NEARBY_LOCATION_ENABLED: {
                 imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100), Theme.getColor(Theme.key_chats_archiveBackground)));
                 imageView.setImageDrawable(new ShareLocationDrawable(context, 3));
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                titleTextView.setText(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
-                descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", R.string.PeopleNearbyGpsInfo));
-                buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", R.string.PeopleNearbyGps));
+                titleTextView.setText(LocaleController.getString("PeopleNearby", works.heymate.beta.R.string.PeopleNearby));
+                descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", works.heymate.beta.R.string.PeopleNearbyGpsInfo));
+                buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", works.heymate.beta.R.string.PeopleNearbyGps));
                 break;
             }
             case ACTION_TYPE_QR_LOGIN: {
                 colors = new int[8];
                 updateColors();
-                imageView.setAnimation(R.raw.qr_login, 334, 334, colors);
+                imageView.setAnimation(works.heymate.beta.R.raw.qr_login, 334, 334, colors);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                titleTextView.setText(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient));
-                buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
+                titleTextView.setText(LocaleController.getString("AuthAnotherClient", works.heymate.beta.R.string.AuthAnotherClient));
+                buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", works.heymate.beta.R.string.AuthAnotherClientScan));
                 imageView.playAnimation();
                 break;
             }
             case ACTION_TYPE_NEARBY_GROUP_CREATE: {
                 subtitleTextView.setVisibility(View.VISIBLE);
                 descriptionText2.setVisibility(View.VISIBLE);
-                imageView.setImageResource(Theme.getCurrentTheme().isDark() ? R.drawable.groupsintro2 : R.drawable.groupsintro);
+                imageView.setImageResource(Theme.getCurrentTheme().isDark() ? works.heymate.beta.R.drawable.groupsintro2 : works.heymate.beta.R.drawable.groupsintro);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 subtitleTextView.setText(currentGroupCreateDisplayAddress != null ? currentGroupCreateDisplayAddress : "");
-                titleTextView.setText(LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup));
-                descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", R.string.NearbyCreateGroupInfo));
-                descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", R.string.NearbyCreateGroupInfo2));
-                buttonTextView.setText(LocaleController.getString("NearbyStartGroup", R.string.NearbyStartGroup));
+                titleTextView.setText(LocaleController.getString("NearbyCreateGroup", works.heymate.beta.R.string.NearbyCreateGroup));
+                descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", works.heymate.beta.R.string.NearbyCreateGroupInfo));
+                descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", works.heymate.beta.R.string.NearbyCreateGroupInfo2));
+                buttonTextView.setText(LocaleController.getString("NearbyStartGroup", works.heymate.beta.R.string.NearbyStartGroup));
                 break;
             }
             case ACTION_TYPE_CHANGE_PHONE_NUMBER: {
                 subtitleTextView.setVisibility(View.VISIBLE);
-                drawable1 = context.getResources().getDrawable(R.drawable.sim_old);
-                drawable2 = context.getResources().getDrawable(R.drawable.sim_new);
+                drawable1 = context.getResources().getDrawable(works.heymate.beta.R.drawable.sim_old);
+                drawable2 = context.getResources().getDrawable(works.heymate.beta.R.drawable.sim_new);
                 drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), PorterDuff.Mode.MULTIPLY));
                 drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image2), PorterDuff.Mode.MULTIPLY));
                 imageView.setImageDrawable(new CombinedDrawable(drawable1, drawable2));
@@ -620,9 +620,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 if (user != null) {
                     subtitleTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
                 }
-                titleTextView.setText(LocaleController.getString("PhoneNumberChange2", R.string.PhoneNumberChange2));
-                descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
-                buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", R.string.PhoneNumberChange2));
+                titleTextView.setText(LocaleController.getString("PhoneNumberChange2", works.heymate.beta.R.string.PhoneNumberChange2));
+                descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", works.heymate.beta.R.string.PhoneNumberHelp)));
+                buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", works.heymate.beta.R.string.PhoneNumberChange2));
                 break;
             }
         }
@@ -668,9 +668,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+        builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
                 return;
             }
@@ -682,7 +682,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 FileLog.e(e);
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         showDialog(builder.create());
     }
 
@@ -722,9 +722,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             if (grantResults != null && grantResults.length != 0) {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                    builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
-                    builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
+                    builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
                         if (getParentActivity() == null) {
                             return;
                         }
@@ -736,7 +736,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                             FileLog.e(e);
                         }
                     });
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     showDialog(builder.create());
                 } else {
                     AndroidUtilities.runOnUIThread(() -> presentFragment(new PeopleNearbyActivity(), true));
@@ -747,9 +747,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 processOpenQrReader();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("QRCodePermissionNoCamera", R.string.QRCodePermissionNoCamera));
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("QRCodePermissionNoCamera", works.heymate.beta.R.string.QRCodePermissionNoCamera));
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
                     try {
                         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -758,7 +758,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         FileLog.e(e);
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                 builder.show();
             }
         }

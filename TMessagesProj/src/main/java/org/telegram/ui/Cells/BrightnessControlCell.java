@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
@@ -34,7 +34,7 @@ public class BrightnessControlCell extends FrameLayout {
         super(context);
 
         leftImageView = new ImageView(context);
-        leftImageView.setImageResource(R.drawable.brightness_low);
+        leftImageView.setImageResource(works.heymate.beta.R.drawable.brightness_low);
         addView(leftImageView, LayoutHelper.createFrame(24, 24, Gravity.LEFT | Gravity.TOP, 17, 12, 0, 0));
 
         seekBarView = new SeekBarView(context, /* inPercents = */ true) {
@@ -66,7 +66,7 @@ public class BrightnessControlCell extends FrameLayout {
         addView(seekBarView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.TOP | Gravity.LEFT, 54, 5, 54, 0));
 
         rightImageView = new ImageView(context);
-        rightImageView.setImageResource(R.drawable.brightness_high);
+        rightImageView.setImageResource(works.heymate.beta.R.drawable.brightness_high);
         addView(rightImageView, LayoutHelper.createFrame(24, 24, Gravity.RIGHT | Gravity.TOP, 0, 12, 17, 0));
     }
 

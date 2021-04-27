@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -58,7 +58,7 @@ public class HtCategoryInputCell extends LinearLayout {
         titleLayout3.addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 1f, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 0, 15));
 
         ImageView expandIcon = new ImageView(context);
-        Drawable expandDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+        Drawable expandDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
         expandDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         expandIcon.setImageDrawable(expandDrawable);
         titleLayout3.addView(expandIcon, LayoutHelper.createLinear(15, 15, AndroidUtilities.dp(20), AndroidUtilities.dp(4), 30, 15));
@@ -147,7 +147,7 @@ public class HtCategoryInputCell extends LinearLayout {
         int i = 0;
         for (Object arg : args.keySet().stream().sorted().toArray()) {
             LinearLayout outerLayout = new LinearLayout(context);
-            outerLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5), context.getResources().getColor(R.color.ht_green)));
+            outerLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(5), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
             outerLayout.setGravity(Gravity.CENTER);
 
             LinearLayout parametersLayout = new LinearLayout(context);
@@ -185,7 +185,7 @@ public class HtCategoryInputCell extends LinearLayout {
     public void setRes(String arg, Object value, int position) {
         parameterValues.put(arg, value);
         parameterViews[position].setText(value.toString());
-        parameterViews[position].setTextColor(getContext().getResources().getColor(R.color.ht_green));
+        parameterViews[position].setTextColor(getContext().getResources().getColor(works.heymate.beta.R.color.ht_green));
     }
 
     public String getRes(String arg){

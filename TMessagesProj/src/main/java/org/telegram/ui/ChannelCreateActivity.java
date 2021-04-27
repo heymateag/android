@@ -42,7 +42,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -253,7 +253,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
         final boolean shop = shopType == CreateShopActivity.TYPE_SHOP;
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -297,14 +297,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         if (!isPrivate) {
                             if (descriptionTextView.length() == 0) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("ChannelPublicEmptyUsernameTitle", R.string.ChannelPublicEmptyUsernameTitle));
+                                builder.setTitle(LocaleController.getString("ChannelPublicEmptyUsernameTitle", works.heymate.beta.R.string.ChannelPublicEmptyUsernameTitle));
                                 if (shop) {
                                     builder.setMessage(Texts.get(Texts.NEW_SHOP_NO_LINK));
                                 }
                                 else {
-                                    builder.setMessage(LocaleController.getString("ChannelPublicEmptyUsername", R.string.ChannelPublicEmptyUsername));
+                                    builder.setMessage(LocaleController.getString("ChannelPublicEmptyUsername", works.heymate.beta.R.string.ChannelPublicEmptyUsername));
                                 }
-                                builder.setPositiveButton(LocaleController.getString("Close", R.string.Close), null);
+                                builder.setPositiveButton(LocaleController.getString("Close", works.heymate.beta.R.string.Close), null);
                                 showDialog(builder.create());
                                 return;
                             } else {
@@ -332,10 +332,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
 
         if (currentStep == 0) {
-            actionBar.setTitle(shop ? Texts.get(Texts.NEW_SHOP_TITLE) : LocaleController.getString("NewChannel", R.string.NewChannel));
+            actionBar.setTitle(shop ? Texts.get(Texts.NEW_SHOP_TITLE) : LocaleController.getString("NewChannel", works.heymate.beta.R.string.NewChannel));
 
             SizeNotifierFrameLayout sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
@@ -524,7 +524,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 avatarEditor.playAnimation();
             });
 
-            cameraDrawable = new RLottieDrawable(R.raw.camera, "" + R.raw.camera, AndroidUtilities.dp(60), AndroidUtilities.dp(60), false, null);
+            cameraDrawable = new RLottieDrawable(works.heymate.beta.R.raw.camera, "" + works.heymate.beta.R.raw.camera, AndroidUtilities.dp(60), AndroidUtilities.dp(60), false, null);
 
             avatarEditor = new RLottieImageView(context) {
                 @Override
@@ -555,7 +555,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             showAvatarProgress(false, false);
 
             nameTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, this, EditTextEmoji.STYLE_FRAGMENT);
-            nameTextView.setHint(shop ? Texts.get(Texts.NEW_SHOP_NAME_HINT) : LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
+            nameTextView.setHint(shop ? Texts.get(Texts.NEW_SHOP_NAME_HINT) : LocaleController.getString("EnterChannelName", works.heymate.beta.R.string.EnterChannelName));
             if (nameToSet != null) {
                 nameTextView.setText(nameToSet);
                 nameToSet = null;
@@ -586,7 +586,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             inputFilters = new InputFilter[1];
             inputFilters[0] = new InputFilter.LengthFilter(120);
             descriptionTextView.setFilters(inputFilters);
-            descriptionTextView.setHint(LocaleController.getString("DescriptionPlaceholder", R.string.DescriptionPlaceholder));
+            descriptionTextView.setHint(LocaleController.getString("DescriptionPlaceholder", works.heymate.beta.R.string.DescriptionPlaceholder));
             descriptionTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             descriptionTextView.setCursorSize(AndroidUtilities.dp(20));
             descriptionTextView.setCursorWidth(1.5f);
@@ -619,7 +619,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             helpTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
             helpTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-            helpTextView.setText(shop ? Texts.get(Texts.NEW_SHOP_DESCRIPTION_GUIDE) : LocaleController.getString("DescriptionInfo", R.string.DescriptionInfo));
+            helpTextView.setText(shop ? Texts.get(Texts.NEW_SHOP_DESCRIPTION_GUIDE) : LocaleController.getString("DescriptionInfo", works.heymate.beta.R.string.DescriptionInfo));
             linearLayout.addView(helpTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 24, 10, 24, 20));
         } else if (currentStep == 1) {
             fragmentView = new ScrollView(context);
@@ -629,14 +629,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             scrollView.addView(linearLayout, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            actionBar.setTitle(shop ? Texts.get(Texts.NEW_SHOP_SETTINGS) : LocaleController.getString("ChannelSettingsTitle", R.string.ChannelSettingsTitle));
+            actionBar.setTitle(shop ? Texts.get(Texts.NEW_SHOP_SETTINGS) : LocaleController.getString("ChannelSettingsTitle", works.heymate.beta.R.string.ChannelSettingsTitle));
             fragmentView.setTag(Theme.key_windowBackgroundGray);
             fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
             headerCell2 = new HeaderCell(context, 23);
             headerCell2.setHeight(46);
             headerCell2.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            headerCell2.setText(shop ? Texts.get(Texts.NEW_SHOP_TYPE) : LocaleController.getString("ChannelTypeHeader", R.string.ChannelTypeHeader));
+            headerCell2.setText(shop ? Texts.get(Texts.NEW_SHOP_TYPE) : LocaleController.getString("ChannelTypeHeader", works.heymate.beta.R.string.ChannelTypeHeader));
             linearLayout.addView(headerCell2);
 
             linearLayout2 = new LinearLayout(context);
@@ -647,8 +647,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             radioButtonCell1 = new RadioButtonCell(context);
             radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             radioButtonCell1.setTextAndValue(
-                    shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_SHOP).toString() : LocaleController.getString("ChannelPublic", R.string.ChannelPublic),
-                    shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_SHOP_DESCRIPTION).toString() : LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo),
+                    shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_SHOP).toString() : LocaleController.getString("ChannelPublic", works.heymate.beta.R.string.ChannelPublic),
+                    shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_SHOP_DESCRIPTION).toString() : LocaleController.getString("ChannelPublicInfo", works.heymate.beta.R.string.ChannelPublicInfo),
                     false, !isPrivate);
             linearLayout2.addView(radioButtonCell1, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             radioButtonCell1.setOnClickListener(v -> {
@@ -662,8 +662,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             radioButtonCell2 = new RadioButtonCell(context);
             radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             radioButtonCell2.setTextAndValue(
-                    shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_SHOP).toString() : LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate),
-                    shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_SHOP_DESCRIPTION).toString() : LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo),
+                    shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_SHOP).toString() : LocaleController.getString("ChannelPrivate", works.heymate.beta.R.string.ChannelPrivate),
+                    shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_SHOP_DESCRIPTION).toString() : LocaleController.getString("ChannelPrivateInfo", works.heymate.beta.R.string.ChannelPrivateInfo),
                     false, isPrivate);
             linearLayout2.addView(radioButtonCell2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             radioButtonCell2.setOnClickListener(v -> {
@@ -715,7 +715,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             descriptionTextView.setSingleLine(true);
             descriptionTextView.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
             descriptionTextView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            descriptionTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", R.string.ChannelUsernamePlaceholder));
+            descriptionTextView.setHint(LocaleController.getString("ChannelUsernamePlaceholder", works.heymate.beta.R.string.ChannelUsernamePlaceholder));
             descriptionTextView.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             descriptionTextView.setCursorSize(AndroidUtilities.dp(20));
             descriptionTextView.setCursorWidth(1.5f);
@@ -754,7 +754,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             linkContainer.addView(checkTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 17, 3, 17, 7));
 
             typeInfoCell = new TextInfoPrivacyCell(context);
-            typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             linearLayout.addView(typeInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
             loadingAdminedCell = new LoadingCell(context);
@@ -766,7 +766,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             linearLayout.addView(adminnedChannelsLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
             adminedInfoCell = new TextInfoPrivacyCell(context);
-            adminedInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            adminedInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             linearLayout.addView(adminedInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
             updatePrivatePublic();
@@ -807,7 +807,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             return;
         }
         if (!isPrivate && !canCreatePublic) {
-            typeInfoCell.setText(LocaleController.getString("ChangePublicLimitReached", R.string.ChangePublicLimitReached));
+            typeInfoCell.setText(LocaleController.getString("ChangePublicLimitReached", works.heymate.beta.R.string.ChangePublicLimitReached));
             typeInfoCell.setTag(Theme.key_windowBackgroundWhiteRedText4);
             typeInfoCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             linkContainer.setVisibility(View.GONE);
@@ -815,10 +815,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             if (loadingAdminedChannels) {
                 loadingAdminedCell.setVisibility(View.VISIBLE);
                 adminnedChannelsLayout.setVisibility(View.GONE);
-                typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                 adminedInfoCell.setVisibility(View.GONE);
             } else {
-                typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 loadingAdminedCell.setVisibility(View.GONE);
                 adminnedChannelsLayout.setVisibility(View.VISIBLE);
                 adminedInfoCell.setVisibility(View.VISIBLE);
@@ -831,13 +831,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             sectionCell.setVisibility(View.VISIBLE);
             adminedInfoCell.setVisibility(View.GONE);
             adminnedChannelsLayout.setVisibility(View.GONE);
-            typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             linkContainer.setVisibility(View.VISIBLE);
             loadingAdminedCell.setVisibility(View.GONE);
             typeInfoCell.setText(
-                    isPrivate ? (shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_LINK_GUIDE) : LocaleController.getString("ChannelPrivateLinkHelp", R.string.ChannelPrivateLinkHelp)) :
-                            (shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_LINK_GUIDE) : LocaleController.getString("ChannelUsernameHelp", R.string.ChannelUsernameHelp)));
-            headerCell.setText(isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", R.string.ChannelLinkTitle));
+                    isPrivate ? (shop ? Texts.get(Texts.NEW_SHOP_PRIVATE_LINK_GUIDE) : LocaleController.getString("ChannelPrivateLinkHelp", works.heymate.beta.R.string.ChannelPrivateLinkHelp)) :
+                            (shop ? Texts.get(Texts.NEW_SHOP_PUBLIC_LINK_GUIDE) : LocaleController.getString("ChannelUsernameHelp", works.heymate.beta.R.string.ChannelUsernameHelp)));
+            headerCell.setText(isPrivate ? LocaleController.getString("ChannelInviteLinkTitle", works.heymate.beta.R.string.ChannelInviteLinkTitle) : LocaleController.getString("ChannelLinkTitle", works.heymate.beta.R.string.ChannelLinkTitle));
             publicContainer.setVisibility(isPrivate ? View.GONE : View.VISIBLE);
             privateContainer.setVisibility(isPrivate ? View.VISIBLE : View.GONE);
             linkContainer.setPadding(0, 0, 0, isPrivate ? 0 : AndroidUtilities.dp(7));
@@ -1066,14 +1066,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         AdminedChannelCell cell = (AdminedChannelCell) view.getParent();
                         final TLRPC.Chat channel = cell.getCurrentChannel();
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
                         if (channel.megagroup) {
-                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", works.heymate.beta.R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + channel.username, channel.title)));
                         } else {
-                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix  + "/" + channel.username, channel.title)));
+                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", works.heymate.beta.R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix  + "/" + channel.username, channel.title)));
                         }
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                        builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), (dialogInterface, i) -> {
+                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder.setPositiveButton(LocaleController.getString("RevokeButton", works.heymate.beta.R.string.RevokeButton), (dialogInterface, i) -> {
                             TLRPC.TL_channels_updateUsername req1 = new TLRPC.TL_channels_updateUsername();
                             req1.channel = MessagesController.getInputChannel(channel);
                             req1.username = "";
@@ -1117,7 +1117,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         lastNameAvailable = false;
         if (name != null) {
             if (name.startsWith("_") || name.endsWith("_")) {
-                checkTextView.setText(LocaleController.getString("LinkInvalid", R.string.LinkInvalid));
+                checkTextView.setText(LocaleController.getString("LinkInvalid", works.heymate.beta.R.string.LinkInvalid));
                 checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                 return false;
@@ -1125,13 +1125,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             for (int a = 0; a < name.length(); a++) {
                 char ch = name.charAt(a);
                 if (a == 0 && ch >= '0' && ch <= '9') {
-                    checkTextView.setText(LocaleController.getString("LinkInvalidStartNumber", R.string.LinkInvalidStartNumber));
+                    checkTextView.setText(LocaleController.getString("LinkInvalidStartNumber", works.heymate.beta.R.string.LinkInvalidStartNumber));
                     checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                     checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     return false;
                 }
                 if (!(ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_')) {
-                    checkTextView.setText(LocaleController.getString("LinkInvalid", R.string.LinkInvalid));
+                    checkTextView.setText(LocaleController.getString("LinkInvalid", works.heymate.beta.R.string.LinkInvalid));
                     checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                     checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     return false;
@@ -1139,19 +1139,19 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
         }
         if (name == null || name.length() < 5) {
-            checkTextView.setText(LocaleController.getString("LinkInvalidShort", R.string.LinkInvalidShort));
+            checkTextView.setText(LocaleController.getString("LinkInvalidShort", works.heymate.beta.R.string.LinkInvalidShort));
             checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
             checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             return false;
         }
         if (name.length() > 32) {
-            checkTextView.setText(LocaleController.getString("LinkInvalidLong", R.string.LinkInvalidLong));
+            checkTextView.setText(LocaleController.getString("LinkInvalidLong", works.heymate.beta.R.string.LinkInvalidLong));
             checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
             checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             return false;
         }
 
-        checkTextView.setText(LocaleController.getString("LinkChecking", R.string.LinkChecking));
+        checkTextView.setText(LocaleController.getString("LinkChecking", works.heymate.beta.R.string.LinkChecking));
         checkTextView.setTag(Theme.key_windowBackgroundWhiteGrayText8);
         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
         lastCheckName = name;
@@ -1163,7 +1163,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 checkReqId = 0;
                 if (lastCheckName != null && lastCheckName.equals(name)) {
                     if (error == null && response instanceof TLRPC.TL_boolTrue) {
-                        checkTextView.setText(LocaleController.formatString("LinkAvailable", R.string.LinkAvailable, name));
+                        checkTextView.setText(LocaleController.formatString("LinkAvailable", works.heymate.beta.R.string.LinkAvailable, name));
                         checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                         lastNameAvailable = true;
@@ -1172,7 +1172,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             canCreatePublic = false;
                             loadAdminedChannels();
                         } else {
-                            checkTextView.setText(LocaleController.getString("LinkInUse", R.string.LinkInUse));
+                            checkTextView.setText(LocaleController.getString("LinkInUse", works.heymate.beta.R.string.LinkInUse));
                         }
                         checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
@@ -1190,19 +1190,19 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
         switch (error) {
             case "USERNAME_INVALID":
-                builder.setMessage(LocaleController.getString("LinkInvalid", R.string.LinkInvalid));
+                builder.setMessage(LocaleController.getString("LinkInvalid", works.heymate.beta.R.string.LinkInvalid));
                 break;
             case "USERNAME_OCCUPIED":
-                builder.setMessage(LocaleController.getString("LinkInUse", R.string.LinkInUse));
+                builder.setMessage(LocaleController.getString("LinkInUse", works.heymate.beta.R.string.LinkInUse));
                 break;
             default:
-                builder.setMessage(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
+                builder.setMessage(LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred));
                 break;
         }
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         showDialog(builder.create());
     }
 

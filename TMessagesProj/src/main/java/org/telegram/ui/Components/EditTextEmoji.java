@@ -25,7 +25,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -160,10 +160,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         emojiButton.setImageDrawable(emojiIconDrawable = new ReplaceableIconDrawable(context));
         emojiIconDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
         if (style == STYLE_FRAGMENT) {
-            emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, false);
+            emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.smiles_tab_smiles, false);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), 0, 0, 0, 7));
         } else {
-            emojiIconDrawable.setIcon(R.drawable.input_smile, false);
+            emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_smile, false);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 0));
         }
         if (Build.VERSION.SDK_INT >= 21) {
@@ -181,7 +181,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 openKeyboardInternal();
             }
         });
-        emojiButton.setContentDescription(LocaleController.getString("Emoji", R.string.Emoji));
+        emojiButton.setContentDescription(LocaleController.getString("Emoji", works.heymate.beta.R.string.Emoji));
     }
 
     protected void onLineCountChanged(int oldLineCount, int newLineCount) {
@@ -403,7 +403,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
+                emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
             }
 
@@ -430,9 +430,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         } else {
             if (emojiButton != null) {
                 if (currentStyle == STYLE_FRAGMENT) {
-                      emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, true);
+                      emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.smiles_tab_smiles, true);
                 } else {
-                      emojiIconDrawable.setIcon(R.drawable.input_smile, true);
+                      emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_smile, true);
                 }
             }
             if (emojiView != null) {
@@ -502,10 +502,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             @Override
             public void onClearEmojiRecent() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ClearRecentEmoji", R.string.ClearRecentEmoji));
-                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> emojiView.clearRecentEmoji());
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setMessage(LocaleController.getString("ClearRecentEmoji", works.heymate.beta.R.string.ClearRecentEmoji));
+                builder.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> emojiView.clearRecentEmoji());
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 if (parentFragment != null) {
                     parentFragment.showDialog(builder.create());
                 } else {

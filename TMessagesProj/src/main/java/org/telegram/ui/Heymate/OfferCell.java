@@ -36,7 +36,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -69,7 +69,7 @@ public class OfferCell extends FrameLayout {
 
     private int getOfferStatusColor(OfferStatus offerStatus){
         switch (offerStatus){
-            case ACTIVE: return context.getResources().getColor(R.color.ht_green);
+            case ACTIVE: return context.getResources().getColor(works.heymate.beta.R.color.ht_green);
             case EXPIRED: return Theme.getColor(Theme.key_wallet_redText);
             default: return Theme.getColor(Theme.key_dialogGrayLine);
         }
@@ -98,7 +98,7 @@ public class OfferCell extends FrameLayout {
         offerTitle.setText(dto.getTitle());
         offerTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
 
-        Drawable offerTitleDrawable = context.getResources().getDrawable(R.drawable.menu_jobtitle);
+        Drawable offerTitleDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.menu_jobtitle);
         offerTitle.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         offerTitle.setTypeface(offerTitle.getTypeface(), Typeface.BOLD);
         offerTitleDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
@@ -122,7 +122,7 @@ public class OfferCell extends FrameLayout {
         titleLayout.addView(offerStatus, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 40, 0, 0, 0));
 
         slideImage = new ImageView(context);
-        Drawable slideDrawable = context.getResources().getDrawable(R.drawable.arrow_more);
+        Drawable slideDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
         slideDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray), PorterDuff.Mode.MULTIPLY));
         slideImage.setImageDrawable(slideDrawable);
         slideImage.setRotation(270);
@@ -136,7 +136,7 @@ public class OfferCell extends FrameLayout {
                     setAlpha(enabled ? 1.0f : 0.5f);
                 }
             };
-            Drawable galleryDrawable = context.getResources().getDrawable(R.drawable.msg_gallery);
+            Drawable galleryDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_gallery);
             galleryDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_subtitleInProfileBlue), PorterDuff.Mode.MULTIPLY));
             galleryImage.setImageDrawable(galleryDrawable);
             galleryImage.setEnabled(true);
@@ -165,7 +165,7 @@ public class OfferCell extends FrameLayout {
         offerTime.setMinLines(2);
         offerTime.setMaxLines(3);
 
-        Drawable offerTimeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
+        Drawable offerTimeDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_timer);
         Bitmap b = ((BitmapDrawable) offerTimeDrawable).getBitmap();
         Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 60, 60, false);
         BitmapDrawable gdrawable = new BitmapDrawable(context.getResources(), bitmapResized);
@@ -180,7 +180,7 @@ public class OfferCell extends FrameLayout {
         offerLocation.setGravity(Gravity.CENTER);
         offerLocation.setTypeface(offerLocation.getTypeface(), Typeface.BOLD);
 
-        Drawable offerLocationDrawable = context.getResources().getDrawable(R.drawable.msg_location);
+        Drawable offerLocationDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_location);
         Bitmap b4 = ((BitmapDrawable) offerLocationDrawable).getBitmap();
         Bitmap bitmapResized4 = Bitmap.createScaledBitmap(b4, 60, 60, false);
         BitmapDrawable gdrawable4 = new BitmapDrawable(context.getResources(), bitmapResized4);
@@ -230,7 +230,7 @@ public class OfferCell extends FrameLayout {
                 Animation colorAnim = new Animation() {
                     @Override
                     protected void applyTransformation(float interpolatedTime, Transformation t) {
-                        infoIcon.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+                        infoIcon.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
                     }
                 };
                 infoIcon.startAnimation(colorAnim);
@@ -240,7 +240,7 @@ public class OfferCell extends FrameLayout {
             public void onAnimationEnd(Animator animation) {
                 showingOptions = true;
                 duringShowingOptions = false;
-                Drawable infoIconDrawable = context.getResources().getDrawable(R.drawable.menu_info);
+                Drawable infoIconDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.menu_info);
                 infoIconDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue), PorterDuff.Mode.MULTIPLY));
                 infoIcon.setImageDrawable(infoIconDrawable);
                 infoIcon.setMaxWidth(AndroidUtilities.dp(25));
@@ -270,7 +270,7 @@ public class OfferCell extends FrameLayout {
                 if(place == 2)
                     editIcon.setVisibility(GONE);
 
-                Drawable editIconDrawable = context.getResources().getDrawable(R.drawable.msg_edit);
+                Drawable editIconDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_edit);
                 editIconDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlue), PorterDuff.Mode.MULTIPLY));
                 editIcon.setImageDrawable(editIconDrawable);
                 editIcon.setMaxWidth(AndroidUtilities.dp(25));
@@ -294,8 +294,8 @@ public class OfferCell extends FrameLayout {
                 if(place == 2)
                     archiveIcon.setVisibility(GONE);
 
-                Drawable archiveIconDrawable = context.getResources().getDrawable(R.drawable.share);
-                archiveIconDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+                Drawable archiveIconDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.share);
+                archiveIconDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
                 archiveIcon.setImageDrawable(archiveIconDrawable);
                 archiveIcon.setMaxWidth(AndroidUtilities.dp(25));
                 archiveIcon.setMaxHeight(AndroidUtilities.dp(25));
@@ -329,7 +329,7 @@ public class OfferCell extends FrameLayout {
                         }
                         String message = OfferUtils.serializeBeautiful(dto.asOffer(), name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                         share.putExtra(Intent.EXTRA_TEXT, message);
-                        context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", R.string.HtPromoteYourOffer)));
+                        context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
 
                         anim5.addListener(new Animator.AnimatorListener() {
                             @Override
@@ -500,7 +500,7 @@ public class OfferCell extends FrameLayout {
 
             TextView titleLabel = new TextView(context);
             titleLabel.setText(dto.getTitle());
-            titleLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+            titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
             titleLabel.setTypeface(titleLabel.getTypeface(), Typeface.BOLD);
             titleLabel.setTextSize(16);
             titleLayout.addView(titleLabel, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 40, 20, 0, 20));
@@ -529,7 +529,7 @@ public class OfferCell extends FrameLayout {
             LinearLayout locationLayout = new LinearLayout(context);
 
             TextView locationLabel = new TextView(context);
-            Drawable locationDrawable = context.getResources().getDrawable(R.drawable.menu_location);
+            Drawable locationDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.menu_location);
             locationDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_backgroundCyan), PorterDuff.Mode.MULTIPLY));
             locationLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
             locationLabel.setCompoundDrawablesWithIntrinsicBounds(locationDrawable, null, null, null);
@@ -543,7 +543,7 @@ public class OfferCell extends FrameLayout {
             LinearLayout timeLayout = new LinearLayout(context);
             TextView timeLabel = new TextView(context);
 
-            Drawable timeDrawable = context.getResources().getDrawable(R.drawable.msg_timer);
+            Drawable timeDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.msg_timer);
             timeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_avatar_backgroundViolet), PorterDuff.Mode.MULTIPLY));
             timeLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
             timeLabel.setCompoundDrawablesWithIntrinsicBounds(timeDrawable, null, null, null);

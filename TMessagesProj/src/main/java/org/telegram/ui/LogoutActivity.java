@@ -22,7 +22,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -89,8 +89,8 @@ public class LogoutActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("LogOutTitle", R.string.LogOutTitle));
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setTitle(LocaleController.getString("LogOutTitle", works.heymate.beta.R.string.LogOutTitle));
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -141,10 +141,10 @@ public class LogoutActivity extends BaseFragment {
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 UserConfig userConfig = getUserConfig();
-                builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
-                builder.setTitle(LocaleController.getString("LogOut", R.string.LogOut));
-                builder.setPositiveButton(LocaleController.getString("LogOut", R.string.LogOut), (dialogInterface, i) -> MessagesController.getInstance(currentAccount).performLogout(1));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setMessage(LocaleController.getString("AreYouSureLogout", works.heymate.beta.R.string.AreYouSureLogout));
+                builder.setTitle(LocaleController.getString("LogOut", works.heymate.beta.R.string.LogOut));
+                builder.setPositiveButton(LocaleController.getString("LogOut", works.heymate.beta.R.string.LogOut), (dialogInterface, i) -> MessagesController.getInstance(currentAccount).performLogout(1));
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -189,22 +189,22 @@ public class LogoutActivity extends BaseFragment {
                 case 0: {
                     HeaderCell view = (HeaderCell) holder.itemView;
                     if (position == alternativeHeaderRow) {
-                        view.setText(LocaleController.getString("AlternativeOptions", R.string.AlternativeOptions));
+                        view.setText(LocaleController.getString("AlternativeOptions", works.heymate.beta.R.string.AlternativeOptions));
                     }
                     break;
                 }
                 case 1: {
                     TextDetailSettingsCell view = (TextDetailSettingsCell) holder.itemView;
                     if (position == addAccountRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), LocaleController.getString("AddAnotherAccountInfo", R.string.AddAnotherAccountInfo), R.drawable.actions_addmember2, true);
+                        view.setTextAndValueAndIcon(LocaleController.getString("AddAnotherAccount", works.heymate.beta.R.string.AddAnotherAccount), LocaleController.getString("AddAnotherAccountInfo", works.heymate.beta.R.string.AddAnotherAccountInfo), works.heymate.beta.R.drawable.actions_addmember2, true);
                     } else if (position == passcodeRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", R.string.SetPasscode), LocaleController.getString("SetPasscodeInfo", R.string.SetPasscodeInfo), R.drawable.menu_passcode, true);
+                        view.setTextAndValueAndIcon(LocaleController.getString("SetPasscode", works.heymate.beta.R.string.SetPasscode), LocaleController.getString("SetPasscodeInfo", works.heymate.beta.R.string.SetPasscodeInfo), works.heymate.beta.R.drawable.menu_passcode, true);
                     } else if (position == cacheRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("ClearCache", R.string.ClearCache), LocaleController.getString("ClearCacheInfo", R.string.ClearCacheInfo), R.drawable.menu_clearcache, true);
+                        view.setTextAndValueAndIcon(LocaleController.getString("ClearCache", works.heymate.beta.R.string.ClearCache), LocaleController.getString("ClearCacheInfo", works.heymate.beta.R.string.ClearCacheInfo), works.heymate.beta.R.drawable.menu_clearcache, true);
                     } else if (position == phoneRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", R.string.ChangePhoneNumberInfo), R.drawable.menu_newphone, true);
+                        view.setTextAndValueAndIcon(LocaleController.getString("ChangePhoneNumber", works.heymate.beta.R.string.ChangePhoneNumber), LocaleController.getString("ChangePhoneNumberInfo", works.heymate.beta.R.string.ChangePhoneNumberInfo), works.heymate.beta.R.drawable.menu_newphone, true);
                     } else if (position == supportRow) {
-                        view.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", R.string.ContactSupport), LocaleController.getString("ContactSupportInfo", R.string.ContactSupportInfo), R.drawable.menu_support, false);
+                        view.setTextAndValueAndIcon(LocaleController.getString("ContactSupport", works.heymate.beta.R.string.ContactSupport), LocaleController.getString("ContactSupportInfo", works.heymate.beta.R.string.ContactSupportInfo), works.heymate.beta.R.drawable.menu_support, false);
                     }
                     break;
                 }
@@ -212,14 +212,14 @@ public class LogoutActivity extends BaseFragment {
                     TextSettingsCell view = (TextSettingsCell) holder.itemView;
                     if (position == logoutRow) {
                         view.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
-                        view.setText(LocaleController.getString("LogOutTitle", R.string.LogOutTitle), false);
+                        view.setText(LocaleController.getString("LogOutTitle", works.heymate.beta.R.string.LogOutTitle), false);
                     }
                     break;
                 }
                 case 4: {
                     TextInfoPrivacyCell view = (TextInfoPrivacyCell) holder.itemView;
                     if (position == logoutSectionRow) {
-                        view.setText(LocaleController.getString("LogOutInfo", R.string.LogOutInfo));
+                        view.setText(LocaleController.getString("LogOutInfo", works.heymate.beta.R.string.LogOutInfo));
                     }
                     break;
                 }
@@ -260,7 +260,7 @@ public class LogoutActivity extends BaseFragment {
                 case 4:
                 default: {
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 }
             }

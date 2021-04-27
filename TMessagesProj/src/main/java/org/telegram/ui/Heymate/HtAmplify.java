@@ -29,7 +29,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.stripe.android.exception.APIException;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.Shop;

@@ -24,7 +24,7 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -66,8 +66,8 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
         upperLayout.setGravity(Gravity.RIGHT);
 
         ImageView applyImage = new ImageView(context);
-        Drawable applyDrawable = context.getResources().getDrawable(R.drawable.ht_check_circle);
-        applyDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable applyDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ht_check_circle);
+        applyDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         applyImage.setImageDrawable(applyDrawable);
         applyImage.setEnabled(true);
         applyImage.setHovered(true);
@@ -114,7 +114,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                 }
             }
         };
-        categorySearch.setHint(LocaleController.getString("HtCategory", R.string.HtCategory));
+        categorySearch.setHint(LocaleController.getString("HtCategory", works.heymate.beta.R.string.HtCategory));
         categoryMainLayout.addView(categorySearch, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 3,10,3,10));
 
         final HtTextCell[] prev = {null};
@@ -178,7 +178,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                 }
             }
         };;
-        subCategorySearch.setHint(LocaleController.getString("HtSubCategory", R.string.HtSubCategory));
+        subCategorySearch.setHint(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
         final HtTextCell[] previousSelectedSubCategory = {null};
         subCategoryMainLayout.addView(subCategorySearch, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 3,10,3,10));
 

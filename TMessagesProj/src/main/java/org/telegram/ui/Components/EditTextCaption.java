@@ -40,7 +40,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -150,7 +150,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public void makeSelectedUrl() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(LocaleController.getString("CreateLink", R.string.CreateLink));
+        builder.setTitle(LocaleController.getString("CreateLink", works.heymate.beta.R.string.CreateLink));
 
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
             @Override
@@ -161,7 +161,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         editText.setText("http://");
         editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        editText.setHintText(LocaleController.getString("URL", R.string.URL));
+        editText.setHintText(LocaleController.getString("URL", works.heymate.beta.R.string.URL));
         editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
         editText.setSingleLine(true);
         editText.setFocusable(true);
@@ -184,7 +184,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             end = getSelectionEnd();
         }
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
             Editable editable = getText();
             CharacterStyle[] spans = editable.getSpans(start, end, CharacterStyle.class);
             if (spans != null && spans.length > 0) {
@@ -210,7 +210,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 delegate.onSpansChanged();
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {
             editText.requestFocus();
             AndroidUtilities.showKeyboard(editText);
@@ -333,25 +333,25 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     private boolean performMenuAction(int itemId) {
-        if (itemId == R.id.menu_regular) {
+        if (itemId == works.heymate.beta.R.id.menu_regular) {
             makeSelectedRegular();
             return true;
-        } else if (itemId == R.id.menu_bold) {
+        } else if (itemId == works.heymate.beta.R.id.menu_bold) {
             makeSelectedBold();
             return true;
-        } else if (itemId == R.id.menu_italic) {
+        } else if (itemId == works.heymate.beta.R.id.menu_italic) {
             makeSelectedItalic();
             return true;
-        } else if (itemId == R.id.menu_mono) {
+        } else if (itemId == works.heymate.beta.R.id.menu_mono) {
             makeSelectedMono();
             return true;
-        } else if (itemId == R.id.menu_link) {
+        } else if (itemId == works.heymate.beta.R.id.menu_link) {
             makeSelectedUrl();
             return true;
-        } else if (itemId == R.id.menu_strike) {
+        } else if (itemId == works.heymate.beta.R.id.menu_strike) {
             makeSelectedStrike();
             return true;
-        } else if (itemId == R.id.menu_underline) {
+        } else if (itemId == works.heymate.beta.R.id.menu_underline) {
             makeSelectedUnderline();
             return true;
         }
@@ -469,13 +469,13 @@ public class EditTextCaption extends EditTextBoldCursor {
             }
         }
         if (hasSelection()) {
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_bold, LocaleController.getString("Bold", R.string.Bold)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_italic, LocaleController.getString("Italic", R.string.Italic)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_mono, LocaleController.getString("Mono", R.string.Mono)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_strike, LocaleController.getString("Strike", R.string.Strike)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_underline, LocaleController.getString("Underline", R.string.Underline)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_link, LocaleController.getString("CreateLink", R.string.CreateLink)));
-            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_regular, LocaleController.getString("Regular", R.string.Regular)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_bold, LocaleController.getString("Bold", works.heymate.beta.R.string.Bold)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_italic, LocaleController.getString("Italic", works.heymate.beta.R.string.Italic)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_mono, LocaleController.getString("Mono", works.heymate.beta.R.string.Mono)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_strike, LocaleController.getString("Strike", works.heymate.beta.R.string.Strike)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_underline, LocaleController.getString("Underline", works.heymate.beta.R.string.Underline)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_link, LocaleController.getString("CreateLink", works.heymate.beta.R.string.CreateLink)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(works.heymate.beta.R.id.menu_regular, LocaleController.getString("Regular", works.heymate.beta.R.string.Regular)));
         }
     }
 

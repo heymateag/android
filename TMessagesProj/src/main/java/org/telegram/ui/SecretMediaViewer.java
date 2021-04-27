@@ -51,7 +51,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -124,7 +124,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             circlePaint.setColor(0x7f000000);
 
-            drawable = context.getResources().getDrawable(R.drawable.flame_small);
+            drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.flame_small);
         }
 
         private void setDestroyTime(long time, long ttl, boolean videoProgress) {
@@ -628,7 +628,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         actionBar.setBackgroundColor(Theme.ACTION_BAR_PHOTO_VIEWER_COLOR);
         actionBar.setOccupyStatusBar(Build.VERSION.SDK_INT >= 21);
         actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setTitleRightMargin(AndroidUtilities.dp(70));
         containerView.addView(actionBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -758,12 +758,12 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         currentThumb = object.imageReceiver.getThumbBitmapSafe();
         if (document != null) {
             if (MessageObject.isGifDocument(document)) {
-                actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
+                actionBar.setTitle(LocaleController.getString("DisappearingGif", works.heymate.beta.R.string.DisappearingGif));
                 centerImage.setImage(ImageLocation.getForDocument(document), null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 1);
                 secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
             } else {
                 playerRetryPlayCount = 1;
-                actionBar.setTitle(LocaleController.getString("DisappearingVideo", R.string.DisappearingVideo));
+                actionBar.setTitle(LocaleController.getString("DisappearingVideo", works.heymate.beta.R.string.DisappearingVideo));
                 File f = new File(messageObject.messageOwner.attachPath);
                 if (f.exists()) {
                     preparePlayer(f);
@@ -788,7 +788,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 }
             }
         } else {
-            actionBar.setTitle(LocaleController.getString("DisappearingPhoto", R.string.DisappearingPhoto));
+            actionBar.setTitle(LocaleController.getString("DisappearingPhoto", works.heymate.beta.R.string.DisappearingPhoto));
             TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
             centerImage.setImage(ImageLocation.getForObject(sizeFull, messageObject.photoThumbsObject), null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 2);
             secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);

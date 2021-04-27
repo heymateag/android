@@ -50,7 +50,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraSession;
@@ -196,7 +196,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
         actionBar.setCastShadows(false);
@@ -368,31 +368,31 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         recognizedMrzView.setAlpha(0);
 
         if (currentType == TYPE_MRZ) {
-            titleTextView.setText(LocaleController.getString("PassportScanPassport", R.string.PassportScanPassport));
-            descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", R.string.PassportScanPassportInfo));
+            titleTextView.setText(LocaleController.getString("PassportScanPassport", works.heymate.beta.R.string.PassportScanPassport));
+            descriptionText.setText(LocaleController.getString("PassportScanPassportInfo", works.heymate.beta.R.string.PassportScanPassportInfo));
             titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             recognizedMrzView.setTypeface(Typeface.MONOSPACE);
             cameraView.addView(recognizedMrzView);
         } else {
             if (needGalleryButton) {
-                //titleTextView.setText(LocaleController.getString("WalletScanCode", R.string.WalletScanCode));
+                //titleTextView.setText(LocaleController.getString("WalletScanCode", works.heymate.beta.R.string.WalletScanCode));
             } else {
-                titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
+                titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", works.heymate.beta.R.string.AuthAnotherClientScan));
             }
             titleTextView.setTextColor(0xffffffff);
             recognizedMrzView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             recognizedMrzView.setPadding(AndroidUtilities.dp(10), 0, AndroidUtilities.dp(10), AndroidUtilities.dp(10));
             if (needGalleryButton) {
-                //recognizedMrzView.setText(LocaleController.getString("WalletScanCodeNotFound", R.string.WalletScanCodeNotFound));
+                //recognizedMrzView.setText(LocaleController.getString("WalletScanCodeNotFound", works.heymate.beta.R.string.WalletScanCodeNotFound));
             } else {
-                recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", R.string.AuthAnotherClientNotFound));
+                recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", works.heymate.beta.R.string.AuthAnotherClientNotFound));
             }
             viewGroup.addView(recognizedMrzView);
 
             if (needGalleryButton) {
                 galleryButton = new ImageView(context);
                 galleryButton.setScaleType(ImageView.ScaleType.CENTER);
-                galleryButton.setImageResource(R.drawable.qr_gallery);
+                galleryButton.setImageResource(works.heymate.beta.R.drawable.qr_gallery);
                 galleryButton.setBackgroundDrawable(Theme.createSelectorDrawableFromDrawables(Theme.createCircleDrawable(AndroidUtilities.dp(60), 0x22ffffff), Theme.createCircleDrawable(AndroidUtilities.dp(60), 0x44ffffff)));
                 viewGroup.addView(galleryButton);
                 galleryButton.setOnClickListener(currentImage -> {
@@ -448,7 +448,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
 
             flashButton = new ImageView(context);
             flashButton.setScaleType(ImageView.ScaleType.CENTER);
-            flashButton.setImageResource(R.drawable.qr_flashlight);
+            flashButton.setImageResource(works.heymate.beta.R.drawable.qr_flashlight);
             flashButton.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(60), 0x22ffffff));
             viewGroup.addView(flashButton);
             flashButton.setOnClickListener(currentImage -> {

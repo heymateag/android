@@ -26,7 +26,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -398,7 +398,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             case 5:
             default:
                 view = new ShadowSectionCell(mContext);
-                Drawable drawable = Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+                Drawable drawable = Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
@@ -439,23 +439,23 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 if (section == 0) {
                     if (needPhonebook) {
                         if (position == 0) {
-                            textCell.setTextAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite, false);
+                            textCell.setTextAndIcon(LocaleController.getString("InviteFriends", works.heymate.beta.R.string.InviteFriends), works.heymate.beta.R.drawable.menu_invite, false);
                         } else if (position == 1) {
-                            textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", R.string.AddPeopleNearby), R.drawable.menu_location, false);
+                            textCell.setTextAndIcon(LocaleController.getString("AddPeopleNearby", works.heymate.beta.R.string.AddPeopleNearby), works.heymate.beta.R.drawable.menu_location, false);
                         }
                     } else if (isAdmin) {
                         if (isChannel) {
-                            textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", R.string.ChannelInviteViaLink), R.drawable.profile_link, false);
+                            textCell.setTextAndIcon(LocaleController.getString("ChannelInviteViaLink", works.heymate.beta.R.string.ChannelInviteViaLink), works.heymate.beta.R.drawable.profile_link, false);
                         } else {
-                            textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink), R.drawable.profile_link, false);
+                            textCell.setTextAndIcon(LocaleController.getString("InviteToGroupByLink", works.heymate.beta.R.string.InviteToGroupByLink), works.heymate.beta.R.drawable.profile_link, false);
                         }
                     } else {
                         if (position == 0) {
-                            textCell.setTextAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_groups, false);
+                            textCell.setTextAndIcon(LocaleController.getString("NewGroup", works.heymate.beta.R.string.NewGroup), works.heymate.beta.R.drawable.menu_groups, false);
                         } else if (position == 1) {
-                            textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret, false);
+                            textCell.setTextAndIcon(LocaleController.getString("NewSecretChat", works.heymate.beta.R.string.NewSecretChat), works.heymate.beta.R.drawable.menu_secret, false);
                         } else if (position == 2) {
-                            textCell.setTextAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast, false);
+                            textCell.setTextAndIcon(LocaleController.getString("NewChannel", works.heymate.beta.R.string.NewChannel), works.heymate.beta.R.drawable.menu_broadcast, false);
                         }
                     }
                 } else {
@@ -472,11 +472,11 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             case 2:
                 GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
                 if (sortType == 0) {
-                    sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts));
+                    sectionCell.setText(LocaleController.getString("Contacts", works.heymate.beta.R.string.Contacts));
                 } else if (sortType == 1) {
-                    sectionCell.setText(LocaleController.getString("SortedByName", R.string.SortedByName));
+                    sectionCell.setText(LocaleController.getString("SortedByName", works.heymate.beta.R.string.SortedByName));
                 } else {
-                    sectionCell.setText(LocaleController.getString("SortedByLastSeen", R.string.SortedByLastSeen));
+                    sectionCell.setText(LocaleController.getString("SortedByLastSeen", works.heymate.beta.R.string.SortedByLastSeen));
                 }
                 break;
         }

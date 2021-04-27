@@ -35,7 +35,7 @@ import android.widget.ScrollView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -105,7 +105,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
 
-            backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
+            backgroundDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.popup_fixed_alert2).mutate();
             setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
 
             setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
@@ -133,8 +133,8 @@ public class ActionBarPopupWindow extends PopupWindow {
                             if (view.getVisibility() == GONE) {
                                 continue;
                             }
-                            Object tag = view.getTag(R.id.width_tag);
-                            Object tag2 = view.getTag(R.id.object_tag);
+                            Object tag = view.getTag(works.heymate.beta.R.id.width_tag);
+                            Object tag2 = view.getTag(works.heymate.beta.R.id.object_tag);
                             measureChildWithMargins(view, widthMeasureSpec, 0, heightMeasureSpec, 0);
                             if (!(tag instanceof Integer) && tag2 == null) {
                                 maxWidth = Math.max(maxWidth, view.getMeasuredWidth());

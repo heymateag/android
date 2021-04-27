@@ -30,7 +30,7 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -112,10 +112,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 56 : 21), 35, (LocaleController.isRTL ? 21 : 56), 0));
 
             checkImageView = new ImageView(context);
-            checkImageView.setImageResource(R.drawable.profile_info);
+            checkImageView.setImageResource(works.heymate.beta.R.drawable.profile_info);
             checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), PorterDuff.Mode.MULTIPLY));
             checkImageView.setScaleType(ImageView.ScaleType.CENTER);
-            checkImageView.setContentDescription(LocaleController.getString("Edit", R.string.Edit));
+            checkImageView.setContentDescription(LocaleController.getString("Edit", works.heymate.beta.R.string.Edit));
             addView(checkImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 8, 8, 8, 0));
             checkImageView.setOnClickListener(v -> presentFragment(new ProxySettingsActivity(currentInfo)));
 
@@ -138,30 +138,30 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 if (currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
                     colorKey = Theme.key_windowBackgroundWhiteBlueText6;
                     if (currentInfo.ping != 0) {
-                        valueTextView.setText(LocaleController.getString("Connected", R.string.Connected) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                        valueTextView.setText(LocaleController.getString("Connected", works.heymate.beta.R.string.Connected) + ", " + LocaleController.formatString("Ping", works.heymate.beta.R.string.Ping, currentInfo.ping));
                     } else {
-                        valueTextView.setText(LocaleController.getString("Connected", R.string.Connected));
+                        valueTextView.setText(LocaleController.getString("Connected", works.heymate.beta.R.string.Connected));
                     }
                     if (!currentInfo.checking && !currentInfo.available) {
                         currentInfo.availableCheckTime = 0;
                     }
                 } else {
                     colorKey = Theme.key_windowBackgroundWhiteGrayText2;
-                    valueTextView.setText(LocaleController.getString("Connecting", R.string.Connecting));
+                    valueTextView.setText(LocaleController.getString("Connecting", works.heymate.beta.R.string.Connecting));
                 }
             } else {
                 if (currentInfo.checking) {
-                    valueTextView.setText(LocaleController.getString("Checking", R.string.Checking));
+                    valueTextView.setText(LocaleController.getString("Checking", works.heymate.beta.R.string.Checking));
                     colorKey = Theme.key_windowBackgroundWhiteGrayText2;
                 } else if (currentInfo.available) {
                     if (currentInfo.ping != 0) {
-                        valueTextView.setText(LocaleController.getString("Available", R.string.Available) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                        valueTextView.setText(LocaleController.getString("Available", works.heymate.beta.R.string.Available) + ", " + LocaleController.formatString("Ping", works.heymate.beta.R.string.Ping, currentInfo.ping));
                     } else {
-                        valueTextView.setText(LocaleController.getString("Available", R.string.Available));
+                        valueTextView.setText(LocaleController.getString("Available", works.heymate.beta.R.string.Available));
                     }
                     colorKey = Theme.key_windowBackgroundWhiteGreenText;
                 } else {
-                    valueTextView.setText(LocaleController.getString("Unavailable", R.string.Unavailable));
+                    valueTextView.setText(LocaleController.getString("Unavailable", works.heymate.beta.R.string.Unavailable));
                     colorKey = Theme.key_windowBackgroundWhiteRedText4;
                 }
             }
@@ -176,7 +176,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         public void setChecked(boolean checked) {
             if (checked) {
                 if (checkDrawable == null) {
-                    checkDrawable = getResources().getDrawable(R.drawable.proxy_check).mutate();
+                    checkDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.proxy_check).mutate();
                 }
                 if (checkDrawable != null) {
                     checkDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
@@ -237,8 +237,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("ProxySettings", R.string.ProxySettings));
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setTitle(LocaleController.getString("ProxySettings", works.heymate.beta.R.string.ProxySettings));
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -363,10 +363,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             if (position >= proxyStartRow && position < proxyEndRow) {
                 final SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("DeleteProxy", R.string.DeleteProxy));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
+                builder.setMessage(LocaleController.getString("DeleteProxy", works.heymate.beta.R.string.DeleteProxy));
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> {
                     SharedConfig.deleteProxy(info);
                     if (SharedConfig.currentProxy == null) {
                         useProxyForCalls = false;
@@ -520,9 +520,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             switch (holder.getItemViewType()) {
                 case 0: {
                     if (position == proxyDetailRow && callsRow == -1) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -530,31 +530,31 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == proxyAddRow) {
-                        textCell.setText(LocaleController.getString("AddProxy", R.string.AddProxy), false);
+                        textCell.setText(LocaleController.getString("AddProxy", works.heymate.beta.R.string.AddProxy), false);
                     }
                     break;
                 }
                 case 2: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == connectionsHeaderRow) {
-                        headerCell.setText(LocaleController.getString("ProxyConnections", R.string.ProxyConnections));
+                        headerCell.setText(LocaleController.getString("ProxyConnections", works.heymate.beta.R.string.ProxyConnections));
                     }
                     break;
                 }
                 case 3: {
                     TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                     if (position == useProxyRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UseProxySettings", R.string.UseProxySettings), useProxySettings, false);
+                        checkCell.setTextAndCheck(LocaleController.getString("UseProxySettings", works.heymate.beta.R.string.UseProxySettings), useProxySettings, false);
                     } else if (position == callsRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UseProxyForCalls", R.string.UseProxyForCalls), useProxyForCalls, false);
+                        checkCell.setTextAndCheck(LocaleController.getString("UseProxyForCalls", works.heymate.beta.R.string.UseProxyForCalls), useProxyForCalls, false);
                     }
                     break;
                 }
                 case 4: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == callsDetailRow) {
-                        cell.setText(LocaleController.getString("UseProxyForCallsInfo", R.string.UseProxyForCallsInfo));
-                        cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        cell.setText(LocaleController.getString("UseProxyForCallsInfo", works.heymate.beta.R.string.UseProxyForCallsInfo));
+                        cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -624,7 +624,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     break;
                 case 4:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 5:
                     view = new TextDetailProxyCell(mContext);

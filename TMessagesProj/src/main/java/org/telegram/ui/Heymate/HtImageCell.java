@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 
@@ -14,7 +14,7 @@ public class HtImageCell extends ImageView {
 
     public HtImageCell(Context context, BaseFragment parentFragment, boolean inner) {
         super(context);
-        Drawable drawable = context.getResources().getDrawable(R.drawable.theme_preview_image);
+        Drawable drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.theme_preview_image);
         setImageDrawable(drawable);
         setEnabled(true);
         if (!inner) {

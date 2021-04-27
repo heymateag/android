@@ -34,7 +34,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -83,9 +83,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(info);
                 if (avatarClickable && getImageReceiver().hasNotThumb()) {
-                    info.setText(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
+                    info.setText(LocaleController.getString("AccDescrProfilePicture", works.heymate.beta.R.string.AccDescrProfilePicture));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("Open", R.string.Open)));
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("Open", works.heymate.beta.R.string.Open)));
                     }
                 } else {
                     info.setVisibleToUser(false);
@@ -98,7 +98,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 avatarImageView.setVisibility(GONE);
             }
         }
-        avatarImageView.setContentDescription(LocaleController.getString("AccDescrProfilePicture", R.string.AccDescrProfilePicture));
+        avatarImageView.setContentDescription(LocaleController.getString("AccDescrProfilePicture", works.heymate.beta.R.string.AccDescrProfilePicture));
         avatarImageView.setRoundRadius(AndroidUtilities.dp(21));
         addView(avatarImageView);
         if (avatarClickable) {
@@ -140,9 +140,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
             });
             if (secretChatTimer) {
-                timeItem.setContentDescription(LocaleController.getString("SetTimer", R.string.SetTimer));
+                timeItem.setContentDescription(LocaleController.getString("SetTimer", works.heymate.beta.R.string.SetTimer));
             } else {
-                timeItem.setContentDescription(LocaleController.getString("AccAutoDeleteTimer", R.string.AccAutoDeleteTimer));
+                timeItem.setContentDescription(LocaleController.getString("AccAutoDeleteTimer", works.heymate.beta.R.string.AccAutoDeleteTimer));
             }
         }
 
@@ -484,29 +484,29 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     } else {
                         if (chat.megagroup) {
                             if (info == null) {
-                                newSubtitle = LocaleController.getString("Loading", R.string.Loading).toLowerCase();
+                                newSubtitle = LocaleController.getString("Loading", works.heymate.beta.R.string.Loading).toLowerCase();
                             } else {
                                 if (chat.has_geo) {
-                                    newSubtitle = LocaleController.getString("MegaLocation", R.string.MegaLocation).toLowerCase();
+                                    newSubtitle = LocaleController.getString("MegaLocation", works.heymate.beta.R.string.MegaLocation).toLowerCase();
                                 } else if (!TextUtils.isEmpty(chat.username)) {
-                                    newSubtitle = LocaleController.getString("MegaPublic", R.string.MegaPublic).toLowerCase();
+                                    newSubtitle = LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic).toLowerCase();
                                 } else {
-                                    newSubtitle = LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase();
+                                    newSubtitle = LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate).toLowerCase();
                                 }
                             }
                         } else {
                             if ((chat.flags & TLRPC.CHAT_FLAG_IS_PUBLIC) != 0) {
-                                newSubtitle = LocaleController.getString("ChannelPublic", R.string.ChannelPublic).toLowerCase();
+                                newSubtitle = LocaleController.getString("ChannelPublic", works.heymate.beta.R.string.ChannelPublic).toLowerCase();
                             } else {
-                                newSubtitle = LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase();
+                                newSubtitle = LocaleController.getString("ChannelPrivate", works.heymate.beta.R.string.ChannelPrivate).toLowerCase();
                             }
                         }
                     }
                 } else {
                     if (ChatObject.isKickedFromChat(chat)) {
-                        newSubtitle = LocaleController.getString("YouWereKicked", R.string.YouWereKicked);
+                        newSubtitle = LocaleController.getString("YouWereKicked", works.heymate.beta.R.string.YouWereKicked);
                     } else if (ChatObject.isLeftFromChat(chat)) {
-                        newSubtitle = LocaleController.getString("YouLeft", R.string.YouLeft);
+                        newSubtitle = LocaleController.getString("YouLeft", works.heymate.beta.R.string.YouLeft);
                     } else {
                         int count = chat.participants_count;
                         if (info != null && info.participants != null) {
@@ -528,13 +528,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 if (UserObject.isReplyUser(user)) {
                     newStatus = "";
                 } else if (user.id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                    newStatus = LocaleController.getString("ChatYourSelf", R.string.ChatYourSelf);
+                    newStatus = LocaleController.getString("ChatYourSelf", works.heymate.beta.R.string.ChatYourSelf);
                 } else if (user.id == 333000 || user.id == 777000 || user.id == 42777) {
-                    newStatus = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
+                    newStatus = LocaleController.getString("ServiceNotifications", works.heymate.beta.R.string.ServiceNotifications);
                 } else if (MessagesController.isSupportUser(user)) {
-                    newStatus = LocaleController.getString("SupportStatus", R.string.SupportStatus);
+                    newStatus = LocaleController.getString("SupportStatus", works.heymate.beta.R.string.SupportStatus);
                 } else if (user.bot) {
-                    newStatus = LocaleController.getString("Bot", R.string.Bot);
+                    newStatus = LocaleController.getString("Bot", works.heymate.beta.R.string.Bot);
                 } else {
                     isOnline[0] = false;
                     newStatus = LocaleController.formatUserStatus(currentAccount, user, isOnline);
@@ -709,13 +709,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private void updateCurrentConnectionState() {
         String title = null;
         if (currentConnectionState == ConnectionsManager.ConnectionStateWaitingForNetwork) {
-            title = LocaleController.getString("WaitingForNetwork", R.string.WaitingForNetwork);
+            title = LocaleController.getString("WaitingForNetwork", works.heymate.beta.R.string.WaitingForNetwork);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnecting) {
-            title = LocaleController.getString("Connecting", R.string.Connecting);
+            title = LocaleController.getString("Connecting", works.heymate.beta.R.string.Connecting);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
-            title = LocaleController.getString("Updating", R.string.Updating);
+            title = LocaleController.getString("Updating", works.heymate.beta.R.string.Updating);
         } else if (currentConnectionState == ConnectionsManager.ConnectionStateConnectingToProxy) {
-            title = LocaleController.getString("ConnectingToProxy", R.string.ConnectingToProxy);
+            title = LocaleController.getString("ConnectingToProxy", works.heymate.beta.R.string.ConnectingToProxy);
         }
         if (title == null) {
             if (lastSubtitle != null) {
@@ -740,7 +740,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         if (info.isClickable() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("OpenProfile", R.string.OpenProfile)));
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, LocaleController.getString("OpenProfile", works.heymate.beta.R.string.OpenProfile)));
         }
     }
 

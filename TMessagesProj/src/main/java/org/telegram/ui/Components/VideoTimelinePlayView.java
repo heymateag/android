@@ -25,7 +25,7 @@ import android.view.View;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 
 import java.util.ArrayList;
 
@@ -82,9 +82,9 @@ public class VideoTimelinePlayView extends View {
         paint.setColor(0xffffffff);
         paint2 = new Paint();
         paint2.setColor(0x7f000000);
-        drawableLeft = context.getResources().getDrawable(R.drawable.video_cropleft);
+        drawableLeft = context.getResources().getDrawable(works.heymate.beta.R.drawable.video_cropleft);
         drawableLeft.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
-        drawableRight = context.getResources().getDrawable(R.drawable.video_cropright);
+        drawableRight = context.getResources().getDrawable(works.heymate.beta.R.drawable.video_cropright);
         drawableRight.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
         exclusionRects.add(exclustionRect);
     }

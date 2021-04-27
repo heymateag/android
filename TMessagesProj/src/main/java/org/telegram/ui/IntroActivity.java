@@ -44,7 +44,7 @@ import org.telegram.messenger.Intro;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -87,7 +87,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.Theme_TMessages);
+        setTheme(works.heymate.beta.R.style.Theme_TMessages);
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -95,14 +95,14 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         preferences.edit().putLong("intro_crashed_time", System.currentTimeMillis()).commit();
 
         titles = new String[]{
-                LocaleController.getString("Page1Title", R.string.Page1Title),
-                LocaleController.getString("Page2Title", R.string.Page2Title),
-                LocaleController.getString("Page3Title", R.string.Page3Title),
+                LocaleController.getString("Page1Title", works.heymate.beta.R.string.Page1Title),
+                LocaleController.getString("Page2Title", works.heymate.beta.R.string.Page2Title),
+                LocaleController.getString("Page3Title", works.heymate.beta.R.string.Page3Title),
         };
         messages = new String[]{
-                LocaleController.getString("Page1Message", R.string.Page1Message),
-                LocaleController.getString("Page2Message", R.string.Page2Message),
-                LocaleController.getString("Page3Message", R.string.Page3Message),
+                LocaleController.getString("Page1Message", works.heymate.beta.R.string.Page1Message),
+                LocaleController.getString("Page2Message", works.heymate.beta.R.string.Page2Message),
+                LocaleController.getString("Page3Message", works.heymate.beta.R.string.Page3Message),
         };
 
         ScrollView scrollView = new ScrollView(this);
@@ -212,7 +212,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         });
 
         startMessagingButton = new TextView(this);
-        startMessagingButton.setText(LocaleController.getString("StartMessaging", R.string.StartMessaging));
+        startMessagingButton.setText(LocaleController.getString("StartMessaging", works.heymate.beta.R.string.StartMessaging));
         startMessagingButton.setGravity(Gravity.CENTER);
         startMessagingButton.setTextColor(0xffffffff);
         startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -264,13 +264,13 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             setContentView(frameLayout3);
 
             View imageView = new ImageView(this);
-            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.catstile);
+            BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(works.heymate.beta.R.drawable.catstile);
             drawable.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
             imageView.setBackgroundDrawable(drawable);
             frameLayout3.addView(imageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             FrameLayout frameLayout4 = new FrameLayout(this);
-            frameLayout4.setBackgroundResource(R.drawable.btnshadow);
+            frameLayout4.setBackgroundResource(works.heymate.beta.R.drawable.btnshadow);
             frameLayout4.addView(scrollView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             frameLayout3.addView(frameLayout4, LayoutHelper.createFrame(498, 528, Gravity.CENTER));
         } else {
@@ -560,29 +560,29 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             gl = eglContext.getGL();
 
             GLES20.glGenTextures(23, textures, 0);
-            loadTexture(R.drawable.intro_heymate_sphere, 0);
-            loadTexture(R.drawable.intro_heymate_sphere, 1);
-            loadTexture(R.drawable.intro_heymate_offer, 2);
-            loadTexture(R.drawable.places_btn, 3);
-            loadTexture(R.drawable.intro_ic_bubble_dot, 4);
-            loadTexture(R.drawable.intro_ic_bubble, 5);
-            loadTexture(R.drawable.intro_ic_cam_lens, 6);
-            loadTexture(R.drawable.intro_ic_cam, 7);
-            loadTexture(R.drawable.intro_ic_pencil, 8);
-            loadTexture(R.drawable.intro_ic_pin, 9);
-            loadTexture(R.drawable.intro_ic_smile_eye, 10);
-            loadTexture(R.drawable.intro_ic_smile, 11);
-            loadTexture(R.drawable.intro_ic_videocam, 12);
-            loadTexture(R.drawable.intro_knot_down, 13);
-            loadTexture(R.drawable.heymate_intro_defi, 14);
-            loadTexture(R.drawable.intro_powerful_infinity_white, 15);
-            loadTexture(R.drawable.intro_powerful_infinity, 16);
-            loadTexture(R.drawable.intro_powerful_mask, 17);
-            loadTexture(R.drawable.intro_powerful_star, 18);
-            loadTexture(R.drawable.intro_private_door, 19);
-            loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.heymate_logo, 21);
-            loadTexture(R.drawable.intro_heymate_sphere, 22);
+            loadTexture(works.heymate.beta.R.drawable.intro_heymate_sphere, 0);
+            loadTexture(works.heymate.beta.R.drawable.intro_heymate_sphere, 1);
+            loadTexture(works.heymate.beta.R.drawable.intro_heymate_offer, 2);
+            loadTexture(works.heymate.beta.R.drawable.places_btn, 3);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_bubble_dot, 4);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_bubble, 5);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_cam_lens, 6);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_cam, 7);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_pencil, 8);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_pin, 9);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_smile_eye, 10);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_smile, 11);
+            loadTexture(works.heymate.beta.R.drawable.intro_ic_videocam, 12);
+            loadTexture(works.heymate.beta.R.drawable.intro_knot_down, 13);
+            loadTexture(works.heymate.beta.R.drawable.heymate_intro_defi, 14);
+            loadTexture(works.heymate.beta.R.drawable.intro_powerful_infinity_white, 15);
+            loadTexture(works.heymate.beta.R.drawable.intro_powerful_infinity, 16);
+            loadTexture(works.heymate.beta.R.drawable.intro_powerful_mask, 17);
+            loadTexture(works.heymate.beta.R.drawable.intro_powerful_star, 18);
+            loadTexture(works.heymate.beta.R.drawable.intro_private_door, 19);
+            loadTexture(works.heymate.beta.R.drawable.intro_private_screw, 20);
+            loadTexture(works.heymate.beta.R.drawable.heymate_logo, 21);
+            loadTexture(works.heymate.beta.R.drawable.intro_heymate_sphere, 22);
 
             Intro.setTelegramTextures(textures[22], textures[21]);
             Intro.setPowerfulTextures(textures[17], textures[18], textures[16], textures[15]);

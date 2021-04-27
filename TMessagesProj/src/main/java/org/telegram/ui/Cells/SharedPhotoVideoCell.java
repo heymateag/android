@@ -35,7 +35,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -108,7 +108,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             container.addView(videoInfoContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 17, Gravity.BOTTOM | Gravity.LEFT, 4, 0, 0, 4));
 
             ImageView imageView1 = new ImageView(context);
-            imageView1.setImageResource(R.drawable.play_mini_video);
+            imageView1.setImageResource(works.heymate.beta.R.drawable.play_mini_video);
             videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL));
 
             videoTextView = new TextView(context);
@@ -181,7 +181,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             String restrictionReason = MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason);
             if (!TextUtils.isEmpty(restrictionReason)) {
                 videoInfoContainer.setVisibility(INVISIBLE);
-                imageView.setImageResource(R.drawable.photo_placeholder_in);
+                imageView.setImageResource(works.heymate.beta.R.drawable.photo_placeholder_in);
             } else if (messageObject.isVideo()) {
                 videoInfoContainer.setVisibility(VISIBLE);
                 videoTextView.setText(AndroidUtilities.formatShortDuration(messageObject.getDuration()));
@@ -192,9 +192,9 @@ public class SharedPhotoVideoCell extends FrameLayout {
                     qualityThumb = null;
                 }
                 if (thumb != null) {
-                    imageView.setImage(ImageLocation.getForDocument(qualityThumb, document), "100_100", ImageLocation.getForDocument(thumb, document), "b", ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, null, 0, messageObject);
+                    imageView.setImage(ImageLocation.getForDocument(qualityThumb, document), "100_100", ImageLocation.getForDocument(thumb, document), "b", ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.photo_placeholder_in), null, null, 0, messageObject);
                 } else {
-                    imageView.setImageResource(R.drawable.photo_placeholder_in);
+                    imageView.setImageResource(works.heymate.beta.R.drawable.photo_placeholder_in);
                 }
             } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto && messageObject.messageOwner.media.photo != null && !messageObject.photoThumbs.isEmpty()) {
                 videoInfoContainer.setVisibility(INVISIBLE);
@@ -206,11 +206,11 @@ public class SharedPhotoVideoCell extends FrameLayout {
                     }
                     imageView.getImageReceiver().setImage(ImageLocation.getForObject(currentPhotoObject, messageObject.photoThumbsObject), "100_100", ImageLocation.getForObject(currentPhotoObjectThumb, messageObject.photoThumbsObject), "b", currentPhotoObject != null ? currentPhotoObject.size : 0, null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
                 } else {
-                    imageView.setImage(null, null, ImageLocation.getForObject(currentPhotoObjectThumb, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.photo_placeholder_in), null, null, 0, messageObject);
+                    imageView.setImage(null, null, ImageLocation.getForObject(currentPhotoObjectThumb, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.photo_placeholder_in), null, null, 0, messageObject);
                 }
             } else {
                 videoInfoContainer.setVisibility(INVISIBLE);
-                imageView.setImageResource(R.drawable.photo_placeholder_in);
+                imageView.setImageResource(works.heymate.beta.R.drawable.photo_placeholder_in);
             }
         }
 
@@ -234,9 +234,9 @@ public class SharedPhotoVideoCell extends FrameLayout {
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
             if (currentMessageObject.isVideo()) {
-                info.setText(LocaleController.getString("AttachVideo", R.string.AttachVideo) + ", " + LocaleController.formatDuration(currentMessageObject.getDuration()));
+                info.setText(LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo) + ", " + LocaleController.formatDuration(currentMessageObject.getDuration()));
             } else {
-                info.setText(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
+                info.setText(LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto));
             }
             if (checkBox.isChecked()) {
                 info.setCheckable(true);

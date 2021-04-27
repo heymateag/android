@@ -68,7 +68,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -227,20 +227,20 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         searching = false;
         searchWas = false;
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (destroyAfterSelect) {
             if (returnAsResult) {
-                actionBar.setTitle(LocaleController.getString("SelectContact", R.string.SelectContact));
+                actionBar.setTitle(LocaleController.getString("SelectContact", works.heymate.beta.R.string.SelectContact));
             } else {
                 if (createSecretChat) {
-                    actionBar.setTitle(LocaleController.getString("NewSecretChat", R.string.NewSecretChat));
+                    actionBar.setTitle(LocaleController.getString("NewSecretChat", works.heymate.beta.R.string.NewSecretChat));
                 } else {
-                    actionBar.setTitle(LocaleController.getString("NewMessageTitle", R.string.NewMessageTitle));
+                    actionBar.setTitle(LocaleController.getString("NewMessageTitle", works.heymate.beta.R.string.NewMessageTitle));
                 }
             }
         } else {
-            actionBar.setTitle(LocaleController.getString("Contacts", R.string.Contacts));
+            actionBar.setTitle(LocaleController.getString("Contacts", works.heymate.beta.R.string.Contacts));
         }
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -252,13 +252,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     SharedConfig.toggleSortContactsByName();
                     sortByName = SharedConfig.sortContactsByName;
                     listViewAdapter.setSortType(sortByName ? 1 : 2, false);
-                    sortItem.setIcon(sortByName ? R.drawable.contacts_sort_time : R.drawable.contacts_sort_name);
+                    sortItem.setIcon(sortByName ? works.heymate.beta.R.drawable.contacts_sort_time : works.heymate.beta.R.drawable.contacts_sort_name);
                 }
             }
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        ActionBarMenuItem item = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem item = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -280,7 +280,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 listViewAdapter.notifyDataSetChanged();
                 listView.setFastScrollVisible(true);
                 listView.setVerticalScrollBarEnabled(false);
-               // emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
+               // emptyView.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
                 if (floatingButtonContainer != null) {
                     floatingButtonContainer.setVisibility(View.VISIBLE);
                     floatingHidden = true;
@@ -317,11 +317,11 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 }
             }
         });
-        item.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
-        item.setContentDescription(LocaleController.getString("Search", R.string.Search));
+        item.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        item.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
         if (!createSecretChat && !returnAsResult) {
-            sortItem = menu.addItem(sort_button, sortByName ? R.drawable.contacts_sort_time : R.drawable.contacts_sort_name);
-            sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", R.string.AccDescrContactSorting));
+            sortItem = menu.addItem(sort_button, sortByName ? works.heymate.beta.R.drawable.contacts_sort_time : works.heymate.beta.R.drawable.contacts_sort_name);
+            sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", works.heymate.beta.R.string.AccDescrContactSorting));
         }
 
         searchListViewAdapter = new SearchAdapter(context, ignoreUsers, allowUsernameSearch, false, false, allowBots, allowSelf, true, 0) {
@@ -390,8 +390,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         emptyView.addView(flickerLoadingView, 0);
         emptyView.setAnimateLayoutChange(true);
         emptyView.showProgress(true, false);
-        emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
-        emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
+        emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+        emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", works.heymate.beta.R.string.SearchEmptyViewFilteredSubtitle2));
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         listView = new RecyclerListView(context) {
@@ -550,10 +550,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                             return;
                         }
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setMessage(LocaleController.getString("InviteUser", R.string.InviteUser));
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder.setMessage(LocaleController.getString("InviteUser", works.heymate.beta.R.string.InviteUser));
+                        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
                         final String arg1 = usePhone;
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                             try {
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", arg1, null));
                                 intent.putExtra("sms_body", ContactsController.getInstance(currentAccount).getInviteText(1));
@@ -562,7 +562,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                 FileLog.e(e);
                             }
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                         showDialog(builder.create());
                     }
                 }
@@ -624,7 +624,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             floatingButton.setScaleType(ImageView.ScaleType.CENTER);
             Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
             if (Build.VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+                Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
                 shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -634,8 +634,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             boolean configAnimationsEnabled = preferences.getBoolean("view_animations", true);
-            floatingButton.setAnimation(configAnimationsEnabled ? R.raw.write_contacts_fab_icon : R.raw.write_contacts_fab_icon_reverse, 52, 52);
-            floatingButtonContainer.setContentDescription(LocaleController.getString("CreateNewContact", R.string.CreateNewContact));
+            floatingButton.setAnimation(configAnimationsEnabled ? works.heymate.beta.R.raw.write_contacts_fab_icon : works.heymate.beta.R.raw.write_contacts_fab_icon_reverse, 52, 52);
+            floatingButtonContainer.setContentDescription(LocaleController.getString("CreateNewContact", works.heymate.beta.R.string.CreateNewContact));
             if (Build.VERSION.SDK_INT >= 21) {
                 StateListAnimator animator = new StateListAnimator();
                 animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(floatingButton, View.TRANSLATION_Z, AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
@@ -668,7 +668,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (user.bot) {
                 if (user.bot_nochats) {
                     try {
-                        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", R.string.BotCantJoinGroups)).show();
+                        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", works.heymate.beta.R.string.BotCantJoinGroups)).show();
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -678,29 +678,29 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(channelId);
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     if (ChatObject.canAddAdmins(chat)) {
-                        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                        builder.setMessage(LocaleController.getString("AddBotAsAdmin", R.string.AddBotAsAdmin));
-                        builder.setPositiveButton(LocaleController.getString("MakeAdmin", R.string.MakeAdmin), (dialogInterface, i) -> {
+                        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                        builder.setMessage(LocaleController.getString("AddBotAsAdmin", works.heymate.beta.R.string.AddBotAsAdmin));
+                        builder.setPositiveButton(LocaleController.getString("MakeAdmin", works.heymate.beta.R.string.MakeAdmin), (dialogInterface, i) -> {
                             if (delegate != null) {
                                 delegate.didSelectContact(user, param, this);
                                 delegate = null;
                             }
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     } else {
-                        builder.setMessage(LocaleController.getString("CantAddBotAsAdmin", R.string.CantAddBotAsAdmin));
-                        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                        builder.setMessage(LocaleController.getString("CantAddBotAsAdmin", works.heymate.beta.R.string.CantAddBotAsAdmin));
+                        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     }
                     showDialog(builder.create());
                     return;
                 }
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
             String message = LocaleController.formatStringSimple(selectAlertString, UserObject.getUserName(user));
             EditTextBoldCursor editText = null;
             if (!user.bot && needForwardCount) {
-                message = String.format("%s\n\n%s", message, LocaleController.getString("AddToTheGroupForwardCount", R.string.AddToTheGroupForwardCount));
+                message = String.format("%s\n\n%s", message, LocaleController.getString("AddToTheGroupForwardCount", works.heymate.beta.R.string.AddToTheGroupForwardCount));
                 editText = new EditTextBoldCursor(getParentActivity());
                 editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 editText.setText("50");
@@ -748,8 +748,8 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             }
             builder.setMessage(message);
             final EditText finalEditText = editText;
-            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> didSelectResult(user, false, finalEditText != null ? finalEditText.getText().toString() : "0"));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> didSelectResult(user, false, finalEditText != null ? finalEditText.getText().toString() : "0"));
+            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
             showDialog(builder.create());
             if (editText != null) {
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
@@ -1050,7 +1050,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
                     previousFab.setVisibility(View.VISIBLE);
                     if (!isOpen) {
-                        previousFab.setAnimation(R.raw.write_contacts_fab_icon_reverse, 52, 52);
+                        previousFab.setAnimation(works.heymate.beta.R.raw.write_contacts_fab_icon_reverse, 52, 52);
                         previousFab.getAnimatedDrawable().setCurrentFrame(floatingButton.getAnimatedDrawable().getCurrentFrame());
                         previousFab.playAnimation();
                     }
@@ -1063,10 +1063,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             animationIndex = getNotificationCenter().setAnimationInProgress(animationIndex, null);
             animatorSet.start();
             if (isOpen) {
-                floatingButton.setAnimation(R.raw.write_contacts_fab_icon, 52, 52);
+                floatingButton.setAnimation(works.heymate.beta.R.raw.write_contacts_fab_icon, 52, 52);
                 floatingButton.playAnimation();
             } else {
-                floatingButton.setAnimation(R.raw.write_contacts_fab_icon_reverse, 52, 52);
+                floatingButton.setAnimation(works.heymate.beta.R.raw.write_contacts_fab_icon_reverse, 52, 52);
                 floatingButton.playAnimation();
             }
             if (bounceIconAnimator != null) {

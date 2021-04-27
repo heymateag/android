@@ -24,6 +24,8 @@ import java.util.concurrent.CountDownLatch;
 
 import androidx.core.content.FileProvider;
 
+import works.heymate.beta.BuildConfig;
+
 public class FeedWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -78,31 +80,31 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
         MessageObject messageObject = messages.get(position);
         String name;
 
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.feed_widget_item);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.feed_widget_item);
         if (messageObject.type == 0) {
-            rv.setTextViewText(R.id.feed_widget_item_text, messageObject.messageText);
-            rv.setViewVisibility(R.id.feed_widget_item_text, View.VISIBLE);
+            rv.setTextViewText(works.heymate.beta.R.id.feed_widget_item_text, messageObject.messageText);
+            rv.setViewVisibility(works.heymate.beta.R.id.feed_widget_item_text, View.VISIBLE);
         } else {
             if (TextUtils.isEmpty(messageObject.caption)) {
-                rv.setViewVisibility(R.id.feed_widget_item_text, View.GONE);
+                rv.setViewVisibility(works.heymate.beta.R.id.feed_widget_item_text, View.GONE);
             } else {
-                rv.setTextViewText(R.id.feed_widget_item_text, messageObject.caption);
-                rv.setViewVisibility(R.id.feed_widget_item_text, View.VISIBLE);
+                rv.setTextViewText(works.heymate.beta.R.id.feed_widget_item_text, messageObject.caption);
+                rv.setViewVisibility(works.heymate.beta.R.id.feed_widget_item_text, View.VISIBLE);
             }
         }
 
         if (messageObject.photoThumbs == null || messageObject.photoThumbs.isEmpty()) {
-            rv.setViewVisibility(R.id.feed_widget_item_image, View.GONE);
+            rv.setViewVisibility(works.heymate.beta.R.id.feed_widget_item_image, View.GONE);
         } else {
             TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
             File f = FileLoader.getPathToAttach(size);
             if (f.exists()) {
-                rv.setViewVisibility(R.id.feed_widget_item_image, View.VISIBLE);
+                rv.setViewVisibility(works.heymate.beta.R.id.feed_widget_item_image, View.VISIBLE);
                 Uri uri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", f);
                 grantUriAccessToWidget(mContext, uri);
-                rv.setImageViewUri(R.id.feed_widget_item_image, uri);
+                rv.setImageViewUri(works.heymate.beta.R.id.feed_widget_item_image, uri);
             } else {
-                rv.setViewVisibility(R.id.feed_widget_item_image, View.GONE);
+                rv.setViewVisibility(works.heymate.beta.R.id.feed_widget_item_image, View.GONE);
             }
         }
 
@@ -113,7 +115,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtras(extras);
-        rv.setOnClickFillInIntent(R.id.shortcut_widget_item, fillInIntent);
+        rv.setOnClickFillInIntent(works.heymate.beta.R.id.shortcut_widget_item, fillInIntent);
 
         return rv;
     }

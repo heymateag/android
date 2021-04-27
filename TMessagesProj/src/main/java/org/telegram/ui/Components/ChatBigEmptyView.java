@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class ChatBigEmptyView extends LinearLayout {
     public ChatBigEmptyView(Context context, int type) {
         super(context);
 
-        setBackgroundResource(R.drawable.system);
+        setBackgroundResource(works.heymate.beta.R.drawable.system);
         getBackground().setColorFilter(Theme.colorFilter);
         setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(12), AndroidUtilities.dp(16), AndroidUtilities.dp(12));
         setOrientation(LinearLayout.VERTICAL);
@@ -60,19 +60,19 @@ public class ChatBigEmptyView extends LinearLayout {
             addView(statusTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
         } else {
             ImageView imageView = new ImageView(context);
-            imageView.setImageResource(R.drawable.cloud_big);
+            imageView.setImageResource(works.heymate.beta.R.drawable.cloud_big);
             addView(imageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 2, 0, 0));
         }
 
         TextView textView = new TextView(context);
         if (type == EMPTY_VIEW_TYPE_SECRET) {
-            textView.setText(LocaleController.getString("EncryptedDescriptionTitle", R.string.EncryptedDescriptionTitle));
+            textView.setText(LocaleController.getString("EncryptedDescriptionTitle", works.heymate.beta.R.string.EncryptedDescriptionTitle));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         } else if (type == EMPTY_VIEW_TYPE_GROUP) {
-            textView.setText(LocaleController.getString("GroupEmptyTitle2", R.string.GroupEmptyTitle2));
+            textView.setText(LocaleController.getString("GroupEmptyTitle2", works.heymate.beta.R.string.GroupEmptyTitle2));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         } else {
-            textView.setText(LocaleController.getString("ChatYourSelfTitle", R.string.ChatYourSelfTitle));
+            textView.setText(LocaleController.getString("ChatYourSelfTitle", works.heymate.beta.R.string.ChatYourSelfTitle));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -90,11 +90,11 @@ public class ChatBigEmptyView extends LinearLayout {
             ImageView imageView = new ImageView(context);
             imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_serviceText), PorterDuff.Mode.MULTIPLY));
             if (type == EMPTY_VIEW_TYPE_SECRET) {
-                imageView.setImageResource(R.drawable.ic_lock_white);
+                imageView.setImageResource(works.heymate.beta.R.drawable.ic_lock_white);
             } else if (type == EMPTY_VIEW_TYPE_SAVED) {
-                imageView.setImageResource(R.drawable.list_circle);
+                imageView.setImageResource(works.heymate.beta.R.drawable.list_circle);
             } else {
-                imageView.setImageResource(R.drawable.groups_overview_check);
+                imageView.setImageResource(works.heymate.beta.R.drawable.groups_overview_check);
             }
             imageViews.add(imageView);
 
@@ -108,38 +108,38 @@ public class ChatBigEmptyView extends LinearLayout {
             switch (a) {
                 case 0:
                     if (type == EMPTY_VIEW_TYPE_SECRET) {
-                        textView.setText(LocaleController.getString("EncryptedDescription1", R.string.EncryptedDescription1));
+                        textView.setText(LocaleController.getString("EncryptedDescription1", works.heymate.beta.R.string.EncryptedDescription1));
                     } else if (type == EMPTY_VIEW_TYPE_SAVED) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription1", R.string.ChatYourSelfDescription1));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription1", works.heymate.beta.R.string.ChatYourSelfDescription1));
                     } else {
-                        textView.setText(LocaleController.getString("GroupDescription1", R.string.GroupDescription1));
+                        textView.setText(LocaleController.getString("GroupDescription1", works.heymate.beta.R.string.GroupDescription1));
                     }
                     break;
                 case 1:
                     if (type == EMPTY_VIEW_TYPE_SECRET) {
-                        textView.setText(LocaleController.getString("EncryptedDescription2", R.string.EncryptedDescription2));
+                        textView.setText(LocaleController.getString("EncryptedDescription2", works.heymate.beta.R.string.EncryptedDescription2));
                     } else if (type == EMPTY_VIEW_TYPE_SAVED) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription2", R.string.ChatYourSelfDescription2));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription2", works.heymate.beta.R.string.ChatYourSelfDescription2));
                     } else {
-                        textView.setText(LocaleController.getString("GroupDescription2", R.string.GroupDescription2));
+                        textView.setText(LocaleController.getString("GroupDescription2", works.heymate.beta.R.string.GroupDescription2));
                     }
                     break;
                 case 2:
                     if (type == EMPTY_VIEW_TYPE_SECRET) {
-                        textView.setText(LocaleController.getString("EncryptedDescription3", R.string.EncryptedDescription3));
+                        textView.setText(LocaleController.getString("EncryptedDescription3", works.heymate.beta.R.string.EncryptedDescription3));
                     } else if (type == EMPTY_VIEW_TYPE_SAVED) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription3", R.string.ChatYourSelfDescription3));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription3", works.heymate.beta.R.string.ChatYourSelfDescription3));
                     } else {
-                        textView.setText(LocaleController.getString("GroupDescription3", R.string.GroupDescription3));
+                        textView.setText(LocaleController.getString("GroupDescription3", works.heymate.beta.R.string.GroupDescription3));
                     }
                     break;
                 case 3:
                     if (type == EMPTY_VIEW_TYPE_SECRET) {
-                        textView.setText(LocaleController.getString("EncryptedDescription4", R.string.EncryptedDescription4));
+                        textView.setText(LocaleController.getString("EncryptedDescription4", works.heymate.beta.R.string.EncryptedDescription4));
                     } else if (type == EMPTY_VIEW_TYPE_SAVED) {
-                        textView.setText(LocaleController.getString("ChatYourSelfDescription4", R.string.ChatYourSelfDescription4));
+                        textView.setText(LocaleController.getString("ChatYourSelfDescription4", works.heymate.beta.R.string.ChatYourSelfDescription4));
                     } else {
-                        textView.setText(LocaleController.getString("GroupDescription4", R.string.GroupDescription4));
+                        textView.setText(LocaleController.getString("GroupDescription4", works.heymate.beta.R.string.GroupDescription4));
                     }
                     break;
             }

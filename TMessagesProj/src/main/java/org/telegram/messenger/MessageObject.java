@@ -1057,9 +1057,9 @@ public class MessageObject {
         if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeTitle) {
             String title = ((TLRPC.TL_channelAdminLogEventActionChangeTitle) event.action).new_value;
             if (chat.megagroup) {
-                messageText = replaceWithLink(LocaleController.formatString("EventLogEditedGroupTitle", R.string.EventLogEditedGroupTitle, title), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("EventLogEditedGroupTitle", works.heymate.beta.R.string.EventLogEditedGroupTitle, title), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.formatString("EventLogEditedChannelTitle", R.string.EventLogEditedChannelTitle, title), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("EventLogEditedChannelTitle", works.heymate.beta.R.string.EventLogEditedChannelTitle, title), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangePhoto) {
             TLRPC.TL_channelAdminLogEventActionChangePhoto action = (TLRPC.TL_channelAdminLogEventActionChangePhoto) event.action;
@@ -1067,9 +1067,9 @@ public class MessageObject {
             if (action.new_photo instanceof TLRPC.TL_photoEmpty) {
                 messageOwner.action = new TLRPC.TL_messageActionChatDeletePhoto();
                 if (chat.megagroup) {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedWGroupPhoto", R.string.EventLogRemovedWGroupPhoto), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedWGroupPhoto", works.heymate.beta.R.string.EventLogRemovedWGroupPhoto), "un1", fromUser);
                 } else {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedChannelPhoto", R.string.EventLogRemovedChannelPhoto), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedChannelPhoto", works.heymate.beta.R.string.EventLogRemovedChannelPhoto), "un1", fromUser);
                 }
             } else {
                 messageOwner.action = new TLRPC.TL_messageActionChatEditPhoto();
@@ -1077,32 +1077,32 @@ public class MessageObject {
 
                 if (chat.megagroup) {
                     if (isVideoAvatar()) {
-                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupVideo", R.string.EventLogEditedGroupVideo), "un1", fromUser);
+                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupVideo", works.heymate.beta.R.string.EventLogEditedGroupVideo), "un1", fromUser);
                     } else {
-                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupPhoto", R.string.EventLogEditedGroupPhoto), "un1", fromUser);
+                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedGroupPhoto", works.heymate.beta.R.string.EventLogEditedGroupPhoto), "un1", fromUser);
                     }
                 } else {
                     if (isVideoAvatar()) {
-                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedChannelVideo", R.string.EventLogEditedChannelVideo), "un1", fromUser);
+                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedChannelVideo", works.heymate.beta.R.string.EventLogEditedChannelVideo), "un1", fromUser);
                     } else {
-                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedChannelPhoto", R.string.EventLogEditedChannelPhoto), "un1", fromUser);
+                        messageText = replaceWithLink(LocaleController.getString("EventLogEditedChannelPhoto", works.heymate.beta.R.string.EventLogEditedChannelPhoto), "un1", fromUser);
                     }
                 }
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantJoin) {
             if (chat.megagroup) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", R.string.EventLogGroupJoined), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", works.heymate.beta.R.string.EventLogGroupJoined), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", R.string.EventLogChannelJoined), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", works.heymate.beta.R.string.EventLogChannelJoined), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantLeave) {
             messageOwner = new TLRPC.TL_messageService();
             messageOwner.action = new TLRPC.TL_messageActionChatDeleteUser();
             messageOwner.action.user_id = event.user_id;
             if (chat.megagroup) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogLeftGroup", R.string.EventLogLeftGroup), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogLeftGroup", works.heymate.beta.R.string.EventLogLeftGroup), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogLeftChannel", R.string.EventLogLeftChannel), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogLeftChannel", works.heymate.beta.R.string.EventLogLeftChannel), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantInvite) {
             TLRPC.TL_channelAdminLogEventActionParticipantInvite action = (TLRPC.TL_channelAdminLogEventActionParticipantInvite) event.action;
@@ -1117,12 +1117,12 @@ public class MessageObject {
             }
             if (messageOwner.from_id instanceof TLRPC.TL_peerUser && peerId == messageOwner.from_id.user_id) {
                 if (chat.megagroup) {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", R.string.EventLogGroupJoined), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogGroupJoined", works.heymate.beta.R.string.EventLogGroupJoined), "un1", fromUser);
                 } else {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", R.string.EventLogChannelJoined), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogChannelJoined", works.heymate.beta.R.string.EventLogChannelJoined), "un1", fromUser);
                 }
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogAdded", R.string.EventLogAdded), "un2", whoUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogAdded", works.heymate.beta.R.string.EventLogAdded), "un2", whoUser);
                 messageText = replaceWithLink(messageText, "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantToggleAdmin ||
@@ -1148,7 +1148,7 @@ public class MessageObject {
             }
             StringBuilder rights;
             if (!(prev_participant instanceof TLRPC.TL_channelParticipantCreator) && new_participant instanceof TLRPC.TL_channelParticipantCreator) {
-                String str = LocaleController.getString("EventLogChangedOwnership", R.string.EventLogChangedOwnership);
+                String str = LocaleController.getString("EventLogChangedOwnership", works.heymate.beta.R.string.EventLogChangedOwnership);
                 int offset = str.indexOf("%1$s");
                 rights = new StringBuilder(String.format(str, getUserName(whoUser, messageOwner.entities, offset)));
             } else {
@@ -1162,9 +1162,9 @@ public class MessageObject {
                 }
                 String str;
                 if (n.other) {
-                    str = LocaleController.getString("EventLogPromotedNoRights", R.string.EventLogPromotedNoRights);
+                    str = LocaleController.getString("EventLogPromotedNoRights", works.heymate.beta.R.string.EventLogPromotedNoRights);
                 } else {
-                    str = LocaleController.getString("EventLogPromoted", R.string.EventLogPromoted);
+                    str = LocaleController.getString("EventLogPromoted", works.heymate.beta.R.string.EventLogPromoted);
                 }
                 int offset = str.indexOf("%1$s");
                 rights = new StringBuilder(String.format(str, getUserName(whoUser, messageOwner.entities, offset)));
@@ -1172,56 +1172,56 @@ public class MessageObject {
                 if (!TextUtils.equals(prev_participant.rank, new_participant.rank)) {
                     if (TextUtils.isEmpty(new_participant.rank)) {
                         rights.append('\n').append('-').append(' ');
-                        rights.append(LocaleController.getString("EventLogPromotedRemovedTitle", R.string.EventLogPromotedRemovedTitle));
+                        rights.append(LocaleController.getString("EventLogPromotedRemovedTitle", works.heymate.beta.R.string.EventLogPromotedRemovedTitle));
                     } else {
                         rights.append('\n').append('+').append(' ');
-                        rights.append(LocaleController.formatString("EventLogPromotedTitle", R.string.EventLogPromotedTitle, new_participant.rank));
+                        rights.append(LocaleController.formatString("EventLogPromotedTitle", works.heymate.beta.R.string.EventLogPromotedTitle, new_participant.rank));
                     }
                 }
                 if (o.change_info != n.change_info) {
                     rights.append('\n').append(n.change_info ? '+' : '-').append(' ');
-                    rights.append(chat.megagroup ? LocaleController.getString("EventLogPromotedChangeGroupInfo", R.string.EventLogPromotedChangeGroupInfo) : LocaleController.getString("EventLogPromotedChangeChannelInfo", R.string.EventLogPromotedChangeChannelInfo));
+                    rights.append(chat.megagroup ? LocaleController.getString("EventLogPromotedChangeGroupInfo", works.heymate.beta.R.string.EventLogPromotedChangeGroupInfo) : LocaleController.getString("EventLogPromotedChangeChannelInfo", works.heymate.beta.R.string.EventLogPromotedChangeChannelInfo));
                 }
                 if (!chat.megagroup) {
                     if (o.post_messages != n.post_messages) {
                         rights.append('\n').append(n.post_messages ? '+' : '-').append(' ');
-                        rights.append(LocaleController.getString("EventLogPromotedPostMessages", R.string.EventLogPromotedPostMessages));
+                        rights.append(LocaleController.getString("EventLogPromotedPostMessages", works.heymate.beta.R.string.EventLogPromotedPostMessages));
                     }
                     if (o.edit_messages != n.edit_messages) {
                         rights.append('\n').append(n.edit_messages ? '+' : '-').append(' ');
-                        rights.append(LocaleController.getString("EventLogPromotedEditMessages", R.string.EventLogPromotedEditMessages));
+                        rights.append(LocaleController.getString("EventLogPromotedEditMessages", works.heymate.beta.R.string.EventLogPromotedEditMessages));
                     }
                 }
                 if (o.delete_messages != n.delete_messages) {
                     rights.append('\n').append(n.delete_messages ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogPromotedDeleteMessages", R.string.EventLogPromotedDeleteMessages));
+                    rights.append(LocaleController.getString("EventLogPromotedDeleteMessages", works.heymate.beta.R.string.EventLogPromotedDeleteMessages));
                 }
                 if (o.add_admins != n.add_admins) {
                     rights.append('\n').append(n.add_admins ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogPromotedAddAdmins", R.string.EventLogPromotedAddAdmins));
+                    rights.append(LocaleController.getString("EventLogPromotedAddAdmins", works.heymate.beta.R.string.EventLogPromotedAddAdmins));
                 }
                 if (o.anonymous != n.anonymous) {
                     rights.append('\n').append(n.anonymous ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogPromotedSendAnonymously", R.string.EventLogPromotedSendAnonymously));
+                    rights.append(LocaleController.getString("EventLogPromotedSendAnonymously", works.heymate.beta.R.string.EventLogPromotedSendAnonymously));
                 }
                 if (chat.megagroup) {
                     if (o.ban_users != n.ban_users) {
                         rights.append('\n').append(n.ban_users ? '+' : '-').append(' ');
-                        rights.append(LocaleController.getString("EventLogPromotedBanUsers", R.string.EventLogPromotedBanUsers));
+                        rights.append(LocaleController.getString("EventLogPromotedBanUsers", works.heymate.beta.R.string.EventLogPromotedBanUsers));
                     }
                     if (o.manage_call != n.manage_call) {
                         rights.append('\n').append(n.manage_call ? '+' : '-').append(' ');
-                        rights.append(LocaleController.getString("EventLogPromotedManageCall", R.string.EventLogPromotedManageCall));
+                        rights.append(LocaleController.getString("EventLogPromotedManageCall", works.heymate.beta.R.string.EventLogPromotedManageCall));
                     }
                 }
                 if (o.invite_users != n.invite_users) {
                     rights.append('\n').append(n.invite_users ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogPromotedAddUsers", R.string.EventLogPromotedAddUsers));
+                    rights.append(LocaleController.getString("EventLogPromotedAddUsers", works.heymate.beta.R.string.EventLogPromotedAddUsers));
                 }
                 if (chat.megagroup) {
                     if (o.pin_messages != n.pin_messages) {
                         rights.append('\n').append(n.pin_messages ? '+' : '-').append(' ');
-                        rights.append(LocaleController.getString("EventLogPromotedPinMessages", R.string.EventLogPromotedPinMessages));
+                        rights.append(LocaleController.getString("EventLogPromotedPinMessages", works.heymate.beta.R.string.EventLogPromotedPinMessages));
                     }
                 }
             }
@@ -1232,7 +1232,7 @@ public class MessageObject {
 
             TLRPC.TL_chatBannedRights o = bannedRights.prev_banned_rights;
             TLRPC.TL_chatBannedRights n = bannedRights.new_banned_rights;
-            StringBuilder rights = new StringBuilder(LocaleController.getString("EventLogDefaultPermissions", R.string.EventLogDefaultPermissions));
+            StringBuilder rights = new StringBuilder(LocaleController.getString("EventLogDefaultPermissions", works.heymate.beta.R.string.EventLogDefaultPermissions));
             boolean added = false;
             if (o == null) {
                 o = new TLRPC.TL_chatBannedRights();
@@ -1244,7 +1244,7 @@ public class MessageObject {
                 rights.append('\n');
                 added = true;
                 rights.append('\n').append(!n.send_messages ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedSendMessages", R.string.EventLogRestrictedSendMessages));
+                rights.append(LocaleController.getString("EventLogRestrictedSendMessages", works.heymate.beta.R.string.EventLogRestrictedSendMessages));
             }
             if (o.send_stickers != n.send_stickers || o.send_inline != n.send_inline || o.send_gifs != n.send_gifs || o.send_games != n.send_games) {
                 if (!added) {
@@ -1252,7 +1252,7 @@ public class MessageObject {
                     added = true;
                 }
                 rights.append('\n').append(!n.send_stickers ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedSendStickers", R.string.EventLogRestrictedSendStickers));
+                rights.append(LocaleController.getString("EventLogRestrictedSendStickers", works.heymate.beta.R.string.EventLogRestrictedSendStickers));
             }
             if (o.send_media != n.send_media) {
                 if (!added) {
@@ -1260,7 +1260,7 @@ public class MessageObject {
                     added = true;
                 }
                 rights.append('\n').append(!n.send_media ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedSendMedia", R.string.EventLogRestrictedSendMedia));
+                rights.append(LocaleController.getString("EventLogRestrictedSendMedia", works.heymate.beta.R.string.EventLogRestrictedSendMedia));
             }
             if (o.send_polls != n.send_polls) {
                 if (!added) {
@@ -1268,7 +1268,7 @@ public class MessageObject {
                     added = true;
                 }
                 rights.append('\n').append(!n.send_polls ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedSendPolls", R.string.EventLogRestrictedSendPolls));
+                rights.append(LocaleController.getString("EventLogRestrictedSendPolls", works.heymate.beta.R.string.EventLogRestrictedSendPolls));
             }
             if (o.embed_links != n.embed_links) {
                 if (!added) {
@@ -1276,7 +1276,7 @@ public class MessageObject {
                     added = true;
                 }
                 rights.append('\n').append(!n.embed_links ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedSendEmbed", R.string.EventLogRestrictedSendEmbed));
+                rights.append(LocaleController.getString("EventLogRestrictedSendEmbed", works.heymate.beta.R.string.EventLogRestrictedSendEmbed));
             }
 
             if (o.change_info != n.change_info) {
@@ -1285,7 +1285,7 @@ public class MessageObject {
                     added = true;
                 }
                 rights.append('\n').append(!n.change_info ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedChangeInfo", R.string.EventLogRestrictedChangeInfo));
+                rights.append(LocaleController.getString("EventLogRestrictedChangeInfo", works.heymate.beta.R.string.EventLogRestrictedChangeInfo));
             }
             if (o.invite_users != n.invite_users) {
                 if (!added) {
@@ -1293,14 +1293,14 @@ public class MessageObject {
                     added = true;
                 }
                 rights.append('\n').append(!n.invite_users ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedInviteUsers", R.string.EventLogRestrictedInviteUsers));
+                rights.append(LocaleController.getString("EventLogRestrictedInviteUsers", works.heymate.beta.R.string.EventLogRestrictedInviteUsers));
             }
             if (o.pin_messages != n.pin_messages) {
                 if (!added) {
                     rights.append('\n');
                 }
                 rights.append('\n').append(!n.pin_messages ? '+' : '-').append(' ');
-                rights.append(LocaleController.getString("EventLogRestrictedPinMessages", R.string.EventLogRestrictedPinMessages));
+                rights.append(LocaleController.getString("EventLogRestrictedPinMessages", works.heymate.beta.R.string.EventLogRestrictedPinMessages));
             }
             messageText = rights.toString();
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantToggleBan) {
@@ -1356,9 +1356,9 @@ public class MessageObject {
                         }
                     }
                 } else {
-                    bannedDuration = new StringBuilder(LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever));
+                    bannedDuration = new StringBuilder(LocaleController.getString("UserRestrictionsUntilForever", works.heymate.beta.R.string.UserRestrictionsUntilForever));
                 }
-                String str = LocaleController.getString("EventLogRestrictedUntil", R.string.EventLogRestrictedUntil);
+                String str = LocaleController.getString("EventLogRestrictedUntil", works.heymate.beta.R.string.EventLogRestrictedUntil);
                 int offset = str.indexOf("%1$s");
                 rights = new StringBuilder(String.format(str, getUserName(whoUser, messageOwner.entities, offset), bannedDuration.toString()));
                 boolean added = false;
@@ -1372,7 +1372,7 @@ public class MessageObject {
                     rights.append('\n');
                     added = true;
                     rights.append('\n').append(!n.view_messages ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedReadMessages", R.string.EventLogRestrictedReadMessages));
+                    rights.append(LocaleController.getString("EventLogRestrictedReadMessages", works.heymate.beta.R.string.EventLogRestrictedReadMessages));
                 }
                 if (o.send_messages != n.send_messages) {
                     if (!added) {
@@ -1380,7 +1380,7 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.send_messages ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedSendMessages", R.string.EventLogRestrictedSendMessages));
+                    rights.append(LocaleController.getString("EventLogRestrictedSendMessages", works.heymate.beta.R.string.EventLogRestrictedSendMessages));
                 }
                 if (o.send_stickers != n.send_stickers ||
                         o.send_inline != n.send_inline ||
@@ -1391,7 +1391,7 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.send_stickers ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedSendStickers", R.string.EventLogRestrictedSendStickers));
+                    rights.append(LocaleController.getString("EventLogRestrictedSendStickers", works.heymate.beta.R.string.EventLogRestrictedSendStickers));
                 }
                 if (o.send_media != n.send_media) {
                     if (!added) {
@@ -1399,7 +1399,7 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.send_media ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedSendMedia", R.string.EventLogRestrictedSendMedia));
+                    rights.append(LocaleController.getString("EventLogRestrictedSendMedia", works.heymate.beta.R.string.EventLogRestrictedSendMedia));
                 }
                 if (o.send_polls != n.send_polls) {
                     if (!added) {
@@ -1407,7 +1407,7 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.send_polls ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedSendPolls", R.string.EventLogRestrictedSendPolls));
+                    rights.append(LocaleController.getString("EventLogRestrictedSendPolls", works.heymate.beta.R.string.EventLogRestrictedSendPolls));
                 }
                 if (o.embed_links != n.embed_links) {
                     if (!added) {
@@ -1415,7 +1415,7 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.embed_links ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedSendEmbed", R.string.EventLogRestrictedSendEmbed));
+                    rights.append(LocaleController.getString("EventLogRestrictedSendEmbed", works.heymate.beta.R.string.EventLogRestrictedSendEmbed));
                 }
 
                 if (o.change_info != n.change_info) {
@@ -1424,7 +1424,7 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.change_info ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedChangeInfo", R.string.EventLogRestrictedChangeInfo));
+                    rights.append(LocaleController.getString("EventLogRestrictedChangeInfo", works.heymate.beta.R.string.EventLogRestrictedChangeInfo));
                 }
                 if (o.invite_users != n.invite_users) {
                     if (!added) {
@@ -1432,22 +1432,22 @@ public class MessageObject {
                         added = true;
                     }
                     rights.append('\n').append(!n.invite_users ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedInviteUsers", R.string.EventLogRestrictedInviteUsers));
+                    rights.append(LocaleController.getString("EventLogRestrictedInviteUsers", works.heymate.beta.R.string.EventLogRestrictedInviteUsers));
                 }
                 if (o.pin_messages != n.pin_messages) {
                     if (!added) {
                         rights.append('\n');
                     }
                     rights.append('\n').append(!n.pin_messages ? '+' : '-').append(' ');
-                    rights.append(LocaleController.getString("EventLogRestrictedPinMessages", R.string.EventLogRestrictedPinMessages));
+                    rights.append(LocaleController.getString("EventLogRestrictedPinMessages", works.heymate.beta.R.string.EventLogRestrictedPinMessages));
                 }
                 messageText = rights.toString();
             } else {
                 String str;
                 if (n != null && (o == null || n.view_messages)) {
-                    str = LocaleController.getString("EventLogChannelRestricted", R.string.EventLogChannelRestricted);
+                    str = LocaleController.getString("EventLogChannelRestricted", works.heymate.beta.R.string.EventLogChannelRestricted);
                 } else {
-                    str = LocaleController.getString("EventLogChannelUnrestricted", R.string.EventLogChannelUnrestricted);
+                    str = LocaleController.getString("EventLogChannelUnrestricted", works.heymate.beta.R.string.EventLogChannelUnrestricted);
                 }
                 int offset = str.indexOf("%1$s");
                 messageText = String.format(str, getUserName(whoUser, messageOwner.entities, offset));
@@ -1458,72 +1458,72 @@ public class MessageObject {
             if (fromUser != null && fromUser.id == 136817688 && action.message.fwd_from != null && action.message.fwd_from.from_id instanceof TLRPC.TL_peerChannel) {
                 TLRPC.Chat channel = MessagesController.getInstance(currentAccount).getChat(action.message.fwd_from.from_id.channel_id);
                 if (action.message instanceof TLRPC.TL_messageEmpty || !action.message.pinned) {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogUnpinnedMessages", R.string.EventLogUnpinnedMessages), "un1", channel);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogUnpinnedMessages", works.heymate.beta.R.string.EventLogUnpinnedMessages), "un1", channel);
                 } else {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", R.string.EventLogPinnedMessages), "un1", channel);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", works.heymate.beta.R.string.EventLogPinnedMessages), "un1", channel);
                 }
             } else {
                 if (action.message instanceof TLRPC.TL_messageEmpty || !action.message.pinned) {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogUnpinnedMessages", R.string.EventLogUnpinnedMessages), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogUnpinnedMessages", works.heymate.beta.R.string.EventLogUnpinnedMessages), "un1", fromUser);
                 } else {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", R.string.EventLogPinnedMessages), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogPinnedMessages", works.heymate.beta.R.string.EventLogPinnedMessages), "un1", fromUser);
                 }
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionStopPoll) {
             TLRPC.TL_channelAdminLogEventActionStopPoll action = (TLRPC.TL_channelAdminLogEventActionStopPoll) event.action;
             message = action.message;
             if (message.media instanceof TLRPC.TL_messageMediaPoll && ((TLRPC.TL_messageMediaPoll) message.media).poll.quiz) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogStopQuiz", R.string.EventLogStopQuiz), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogStopQuiz", works.heymate.beta.R.string.EventLogStopQuiz), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogStopPoll", R.string.EventLogStopPoll), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogStopPoll", works.heymate.beta.R.string.EventLogStopPoll), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionToggleSignatures) {
             if (((TLRPC.TL_channelAdminLogEventActionToggleSignatures) event.action).new_value) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOn", R.string.EventLogToggledSignaturesOn), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOn", works.heymate.beta.R.string.EventLogToggledSignaturesOn), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOff", R.string.EventLogToggledSignaturesOff), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledSignaturesOff", works.heymate.beta.R.string.EventLogToggledSignaturesOff), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionToggleInvites) {
             if (((TLRPC.TL_channelAdminLogEventActionToggleInvites) event.action).new_value) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOn", R.string.EventLogToggledInvitesOn), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOn", works.heymate.beta.R.string.EventLogToggledInvitesOn), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOff", R.string.EventLogToggledInvitesOff), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesOff", works.heymate.beta.R.string.EventLogToggledInvitesOff), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionDeleteMessage) {
             message = ((TLRPC.TL_channelAdminLogEventActionDeleteMessage) event.action).message;
-            messageText = replaceWithLink(LocaleController.getString("EventLogDeletedMessages", R.string.EventLogDeletedMessages), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.getString("EventLogDeletedMessages", works.heymate.beta.R.string.EventLogDeletedMessages), "un1", fromUser);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeLinkedChat) {
             int newChatId = ((TLRPC.TL_channelAdminLogEventActionChangeLinkedChat) event.action).new_value;
             int oldChatId = ((TLRPC.TL_channelAdminLogEventActionChangeLinkedChat) event.action).prev_value;
             if (chat.megagroup) {
                 if (newChatId == 0) {
                     TLRPC.Chat oldChat = MessagesController.getInstance(currentAccount).getChat(oldChatId);
-                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedLinkedChannel", R.string.EventLogRemovedLinkedChannel), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedLinkedChannel", works.heymate.beta.R.string.EventLogRemovedLinkedChannel), "un1", fromUser);
                     messageText = replaceWithLink(messageText, "un2", oldChat);
                 } else {
                     TLRPC.Chat newChat = MessagesController.getInstance(currentAccount).getChat(newChatId);
-                    messageText = replaceWithLink(LocaleController.getString("EventLogChangedLinkedChannel", R.string.EventLogChangedLinkedChannel), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogChangedLinkedChannel", works.heymate.beta.R.string.EventLogChangedLinkedChannel), "un1", fromUser);
                     messageText = replaceWithLink(messageText, "un2", newChat);
                 }
             } else {
                 if (newChatId == 0) {
                     TLRPC.Chat oldChat = MessagesController.getInstance(currentAccount).getChat(oldChatId);
-                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedLinkedGroup", R.string.EventLogRemovedLinkedGroup), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogRemovedLinkedGroup", works.heymate.beta.R.string.EventLogRemovedLinkedGroup), "un1", fromUser);
                     messageText = replaceWithLink(messageText, "un2", oldChat);
                 } else {
                     TLRPC.Chat newChat = MessagesController.getInstance(currentAccount).getChat(newChatId);
-                    messageText = replaceWithLink(LocaleController.getString("EventLogChangedLinkedGroup", R.string.EventLogChangedLinkedGroup), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogChangedLinkedGroup", works.heymate.beta.R.string.EventLogChangedLinkedGroup), "un1", fromUser);
                     messageText = replaceWithLink(messageText, "un2", newChat);
                 }
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionTogglePreHistoryHidden) {
             if (((TLRPC.TL_channelAdminLogEventActionTogglePreHistoryHidden) event.action).new_value) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOff", R.string.EventLogToggledInvitesHistoryOff), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOff", works.heymate.beta.R.string.EventLogToggledInvitesHistoryOff), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOn", R.string.EventLogToggledInvitesHistoryOn), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledInvitesHistoryOn", works.heymate.beta.R.string.EventLogToggledInvitesHistoryOn), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeAbout) {
-            messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogEditedGroupDescription", R.string.EventLogEditedGroupDescription) : LocaleController.getString("EventLogEditedChannelDescription", R.string.EventLogEditedChannelDescription), "un1", fromUser);
+            messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogEditedGroupDescription", works.heymate.beta.R.string.EventLogEditedGroupDescription) : LocaleController.getString("EventLogEditedChannelDescription", works.heymate.beta.R.string.EventLogEditedChannelDescription), "un1", fromUser);
             message = new TLRPC.TL_message();
             message.out = false;
             message.unread = false;
@@ -1538,7 +1538,7 @@ public class MessageObject {
                 message.media.webpage.flags = 10;
                 message.media.webpage.display_url = "";
                 message.media.webpage.url = "";
-                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousGroupDescription", R.string.EventLogPreviousGroupDescription);
+                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousGroupDescription", works.heymate.beta.R.string.EventLogPreviousGroupDescription);
                 message.media.webpage.description = ((TLRPC.TL_channelAdminLogEventActionChangeAbout) event.action).prev_value;
             } else {
                 message.media = new TLRPC.TL_messageMediaEmpty();
@@ -1546,9 +1546,9 @@ public class MessageObject {
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeUsername) {
             String newLink = ((TLRPC.TL_channelAdminLogEventActionChangeUsername) event.action).new_value;
             if (!TextUtils.isEmpty(newLink)) {
-                messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogChangedGroupLink", R.string.EventLogChangedGroupLink) : LocaleController.getString("EventLogChangedChannelLink", R.string.EventLogChangedChannelLink), "un1", fromUser);
+                messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogChangedGroupLink", works.heymate.beta.R.string.EventLogChangedGroupLink) : LocaleController.getString("EventLogChangedChannelLink", works.heymate.beta.R.string.EventLogChangedChannelLink), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogRemovedGroupLink", R.string.EventLogRemovedGroupLink) : LocaleController.getString("EventLogRemovedChannelLink", R.string.EventLogRemovedChannelLink), "un1", fromUser);
+                messageText = replaceWithLink(chat.megagroup ? LocaleController.getString("EventLogRemovedGroupLink", works.heymate.beta.R.string.EventLogRemovedGroupLink) : LocaleController.getString("EventLogRemovedChannelLink", works.heymate.beta.R.string.EventLogRemovedChannelLink), "un1", fromUser);
             }
             message = new TLRPC.TL_message();
             message.out = false;
@@ -1572,7 +1572,7 @@ public class MessageObject {
                 message.media.webpage.flags = 10;
                 message.media.webpage.display_url = "";
                 message.media.webpage.url = "";
-                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousLink", R.string.EventLogPreviousLink);
+                message.media.webpage.site_name = LocaleController.getString("EventLogPreviousLink", works.heymate.beta.R.string.EventLogPreviousLink);
                 message.media.webpage.description = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + ((TLRPC.TL_channelAdminLogEventActionChangeUsername) event.action).prev_value;
             } else {
                 message.media = new TLRPC.TL_messageMediaEmpty();
@@ -1603,24 +1603,24 @@ public class MessageObject {
                     changedMedia = false;
                 }
                 if (changedMedia && changedCaption) {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogEditedMediaCaption", R.string.EventLogEditedMediaCaption), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogEditedMediaCaption", works.heymate.beta.R.string.EventLogEditedMediaCaption), "un1", fromUser);
                 } else if (changedCaption) {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", R.string.EventLogEditedCaption), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogEditedCaption", works.heymate.beta.R.string.EventLogEditedCaption), "un1", fromUser);
                 } else {
-                    messageText = replaceWithLink(LocaleController.getString("EventLogEditedMedia", R.string.EventLogEditedMedia), "un1", fromUser);
+                    messageText = replaceWithLink(LocaleController.getString("EventLogEditedMedia", works.heymate.beta.R.string.EventLogEditedMedia), "un1", fromUser);
                 }
                 message.media = newMessage.media;
                 if (changedCaption) {
                     message.media.webpage = new TLRPC.TL_webPage();
-                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", R.string.EventLogOriginalCaption);
+                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalCaption", works.heymate.beta.R.string.EventLogOriginalCaption);
                     if (TextUtils.isEmpty(oldMessage.message)) {
-                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
+                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", works.heymate.beta.R.string.EventLogOriginalCaptionEmpty);
                     } else {
                         message.media.webpage.description = oldMessage.message;
                     }
                 }
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogEditedMessages", R.string.EventLogEditedMessages), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogEditedMessages", works.heymate.beta.R.string.EventLogEditedMessages), "un1", fromUser);
                 if (newMessage.action instanceof TLRPC.TL_messageActionGroupCall) {
                     message = newMessage;
                     message.media = new TLRPC.TL_messageMediaEmpty();
@@ -1628,9 +1628,9 @@ public class MessageObject {
                     message.message = newMessage.message;
                     message.media = new TLRPC.TL_messageMediaWebPage();
                     message.media.webpage = new TLRPC.TL_webPage();
-                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalMessages", R.string.EventLogOriginalMessages);
+                    message.media.webpage.site_name = LocaleController.getString("EventLogOriginalMessages", works.heymate.beta.R.string.EventLogOriginalMessages);
                     if (TextUtils.isEmpty(oldMessage.message)) {
-                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
+                        message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", works.heymate.beta.R.string.EventLogOriginalCaptionEmpty);
                     } else {
                         message.media.webpage.description = oldMessage.message;
                     }
@@ -1646,22 +1646,22 @@ public class MessageObject {
             TLRPC.InputStickerSet newStickerset = ((TLRPC.TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
             TLRPC.InputStickerSet oldStickerset = ((TLRPC.TL_channelAdminLogEventActionChangeStickerSet) event.action).new_stickerset;
             if (newStickerset == null || newStickerset instanceof TLRPC.TL_inputStickerSetEmpty) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogRemovedStickersSet", R.string.EventLogRemovedStickersSet), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogRemovedStickersSet", works.heymate.beta.R.string.EventLogRemovedStickersSet), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogChangedStickersSet", R.string.EventLogChangedStickersSet), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogChangedStickersSet", works.heymate.beta.R.string.EventLogChangedStickersSet), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeLocation) {
             TLRPC.TL_channelAdminLogEventActionChangeLocation location = (TLRPC.TL_channelAdminLogEventActionChangeLocation) event.action;
             if (location.new_value instanceof TLRPC.TL_channelLocationEmpty) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogRemovedLocation", R.string.EventLogRemovedLocation), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogRemovedLocation", works.heymate.beta.R.string.EventLogRemovedLocation), "un1", fromUser);
             } else {
                 TLRPC.TL_channelLocation channelLocation = (TLRPC.TL_channelLocation) location.new_value;
-                messageText = replaceWithLink(LocaleController.formatString("EventLogChangedLocation", R.string.EventLogChangedLocation, channelLocation.address), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("EventLogChangedLocation", works.heymate.beta.R.string.EventLogChangedLocation, channelLocation.address), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionToggleSlowMode) {
             TLRPC.TL_channelAdminLogEventActionToggleSlowMode slowMode = (TLRPC.TL_channelAdminLogEventActionToggleSlowMode) event.action;
             if (slowMode.new_value == 0) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogToggledSlowmodeOff", R.string.EventLogToggledSlowmodeOff), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogToggledSlowmodeOff", works.heymate.beta.R.string.EventLogToggledSlowmodeOff), "un1", fromUser);
             } else {
                 String string;
                 if (slowMode.new_value < 60) {
@@ -1671,12 +1671,12 @@ public class MessageObject {
                 } else {
                     string = LocaleController.formatPluralString("Hours", slowMode.new_value / 60 / 60);
                 }
-                messageText = replaceWithLink(LocaleController.formatString("EventLogToggledSlowmodeOn", R.string.EventLogToggledSlowmodeOn, string), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("EventLogToggledSlowmodeOn", works.heymate.beta.R.string.EventLogToggledSlowmodeOn, string), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionStartGroupCall) {
-            messageText = replaceWithLink(LocaleController.getString("EventLogStartedVoiceChat", R.string.EventLogStartedVoiceChat), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.getString("EventLogStartedVoiceChat", works.heymate.beta.R.string.EventLogStartedVoiceChat), "un1", fromUser);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionDiscardGroupCall) {
-            messageText = replaceWithLink(LocaleController.getString("EventLogEndedVoiceChat", R.string.EventLogEndedVoiceChat), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.getString("EventLogEndedVoiceChat", works.heymate.beta.R.string.EventLogEndedVoiceChat), "un1", fromUser);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantMute) {
             TLRPC.TL_channelAdminLogEventActionParticipantMute action = (TLRPC.TL_channelAdminLogEventActionParticipantMute) event.action;
             int id = getPeerId(action.participant.peer);
@@ -1686,7 +1686,7 @@ public class MessageObject {
             } else {
                 object = MessagesController.getInstance(currentAccount).getChat(-id);
             }
-            messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatMuted", R.string.EventLogVoiceChatMuted), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatMuted", works.heymate.beta.R.string.EventLogVoiceChatMuted), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", object);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantUnmute) {
             TLRPC.TL_channelAdminLogEventActionParticipantUnmute action = (TLRPC.TL_channelAdminLogEventActionParticipantUnmute) event.action;
@@ -1697,32 +1697,32 @@ public class MessageObject {
             } else {
                 object = MessagesController.getInstance(currentAccount).getChat(-id);
             }
-            messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatUnmuted", R.string.EventLogVoiceChatUnmuted), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatUnmuted", works.heymate.beta.R.string.EventLogVoiceChatUnmuted), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", object);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionToggleGroupCallSetting) {
             TLRPC.TL_channelAdminLogEventActionToggleGroupCallSetting action = (TLRPC.TL_channelAdminLogEventActionToggleGroupCallSetting) event.action;
             if (action.join_muted) {
-                messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatNotAllowedToSpeak", R.string.EventLogVoiceChatNotAllowedToSpeak), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatNotAllowedToSpeak", works.heymate.beta.R.string.EventLogVoiceChatNotAllowedToSpeak), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatAllowedToSpeak", R.string.EventLogVoiceChatAllowedToSpeak), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("EventLogVoiceChatAllowedToSpeak", works.heymate.beta.R.string.EventLogVoiceChatAllowedToSpeak), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantJoinByInvite) {
             TLRPC.TL_channelAdminLogEventActionParticipantJoinByInvite action = (TLRPC.TL_channelAdminLogEventActionParticipantJoinByInvite) event.action;
-            messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", R.string.ActionInviteUser), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", works.heymate.beta.R.string.ActionInviteUser), "un1", fromUser);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionExportedInviteDelete) {
             TLRPC.TL_channelAdminLogEventActionExportedInviteDelete action = (TLRPC.TL_channelAdminLogEventActionExportedInviteDelete) event.action;
-            messageText = replaceWithLink(LocaleController.formatString("ActionDeletedInviteLinkClickable", R.string.ActionDeletedInviteLinkClickable), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.formatString("ActionDeletedInviteLinkClickable", works.heymate.beta.R.string.ActionDeletedInviteLinkClickable), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", action.invite);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionExportedInviteRevoke) {
             TLRPC.TL_channelAdminLogEventActionExportedInviteRevoke action = (TLRPC.TL_channelAdminLogEventActionExportedInviteRevoke) event.action;
-            messageText = replaceWithLink(LocaleController.formatString("ActionRevokedInviteLinkClickable", R.string.ActionRevokedInviteLinkClickable, action.invite.link), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.formatString("ActionRevokedInviteLinkClickable", works.heymate.beta.R.string.ActionRevokedInviteLinkClickable, action.invite.link), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", action.invite);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionExportedInviteEdit) {
             TLRPC.TL_channelAdminLogEventActionExportedInviteEdit action = (TLRPC.TL_channelAdminLogEventActionExportedInviteEdit) event.action;
             if (action.prev_invite.link != null &&  action.prev_invite.link.equals(action.new_invite.link)){
-                messageText = replaceWithLink(LocaleController.formatString("ActionEditedInviteLinkToSameClickable", R.string.ActionEditedInviteLinkToSameClickable), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("ActionEditedInviteLinkToSameClickable", works.heymate.beta.R.string.ActionEditedInviteLinkToSameClickable), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(LocaleController.formatString("ActionEditedInviteLinkClickable", R.string.ActionEditedInviteLinkClickable), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("ActionEditedInviteLinkClickable", works.heymate.beta.R.string.ActionEditedInviteLinkClickable), "un1", fromUser);
             }
             messageText = replaceWithLink(messageText, "un2", action.prev_invite);
             messageText = replaceWithLink(messageText, "un3", action.new_invite);
@@ -1736,18 +1736,18 @@ public class MessageObject {
                 object = MessagesController.getInstance(currentAccount).getChat(-id);
             }
             double vol = ChatObject.getParticipantVolume(action.participant) / 100.0;
-            messageText = replaceWithLink(LocaleController.formatString("ActionVolumeChanged", R.string.ActionVolumeChanged,  (int) (vol > 0 ? Math.max(vol, 1) : 0)), "un1", fromUser);
+            messageText = replaceWithLink(LocaleController.formatString("ActionVolumeChanged", works.heymate.beta.R.string.ActionVolumeChanged,  (int) (vol > 0 ? Math.max(vol, 1) : 0)), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", object);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) {
             TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL action = (TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) event.action;
             if (!chat.megagroup) {
                 if (action.new_value != 0) {
-                    messageText = LocaleController.formatString("ActionTTLChannelChanged", R.string.ActionTTLChannelChanged, LocaleController.formatTTLString(action.new_value));
+                    messageText = LocaleController.formatString("ActionTTLChannelChanged", works.heymate.beta.R.string.ActionTTLChannelChanged, LocaleController.formatTTLString(action.new_value));
                 } else {
-                    messageText = LocaleController.getString("ActionTTLChannelDisabled", R.string.ActionTTLChannelDisabled);
+                    messageText = LocaleController.getString("ActionTTLChannelDisabled", works.heymate.beta.R.string.ActionTTLChannelDisabled);
                 }
             } else if (action.new_value == 0) {
-                messageText = replaceWithLink(LocaleController.getString("ActionTTLDisabled", R.string.ActionTTLDisabled), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.getString("ActionTTLDisabled", works.heymate.beta.R.string.ActionTTLDisabled), "un1", fromUser);
             } else {
                 String time;
                 if (action.new_value > 24 * 60 * 60) {
@@ -1759,7 +1759,7 @@ public class MessageObject {
                 } else {
                     time = LocaleController.formatPluralString("Seconds", action.new_value);
                 }
-                messageText = replaceWithLink(LocaleController.formatString("ActionTTLChanged", R.string.ActionTTLChanged, time), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("ActionTTLChanged", works.heymate.beta.R.string.ActionTTLChanged, time), "un1", fromUser);
             }
         } else {
             messageText = "unsupported " + event.action;
@@ -1927,15 +1927,15 @@ public class MessageObject {
         }
         if (game == null) {
             if (fromUser != null && fromUser.id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                messageText = LocaleController.formatString("ActionYouScored", R.string.ActionYouScored, LocaleController.formatPluralString("Points", messageOwner.action.score));
+                messageText = LocaleController.formatString("ActionYouScored", works.heymate.beta.R.string.ActionYouScored, LocaleController.formatPluralString("Points", messageOwner.action.score));
             } else {
-                messageText = replaceWithLink(LocaleController.formatString("ActionUserScored", R.string.ActionUserScored, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("ActionUserScored", works.heymate.beta.R.string.ActionUserScored, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
             }
         } else {
             if (fromUser != null && fromUser.id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                messageText = LocaleController.formatString("ActionYouScoredInGame", R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score));
+                messageText = LocaleController.formatString("ActionYouScoredInGame", works.heymate.beta.R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score));
             } else {
-                messageText = replaceWithLink(LocaleController.formatString("ActionUserScoredInGame", R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
+                messageText = replaceWithLink(LocaleController.formatString("ActionUserScoredInGame", works.heymate.beta.R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
             }
             messageText = replaceWithLink(messageText, "un2", game);
         }
@@ -1956,9 +1956,9 @@ public class MessageObject {
             name = "";
         }
         if (replyMessageObject != null && replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) {
-            messageText = LocaleController.formatString("PaymentSuccessfullyPaid", R.string.PaymentSuccessfullyPaid, LocaleController.getInstance().formatCurrencyString(messageOwner.action.total_amount, messageOwner.action.currency), name, replyMessageObject.messageOwner.media.title);
+            messageText = LocaleController.formatString("PaymentSuccessfullyPaid", works.heymate.beta.R.string.PaymentSuccessfullyPaid, LocaleController.getInstance().formatCurrencyString(messageOwner.action.total_amount, messageOwner.action.currency), name, replyMessageObject.messageOwner.media.title);
         } else {
-            messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", R.string.PaymentSuccessfullyPaidNoItem, LocaleController.getInstance().formatCurrencyString(messageOwner.action.total_amount, messageOwner.action.currency), name);
+            messageText = LocaleController.formatString("PaymentSuccessfullyPaidNoItem", works.heymate.beta.R.string.PaymentSuccessfullyPaidNoItem, LocaleController.getInstance().formatCurrencyString(messageOwner.action.total_amount, messageOwner.action.currency), name);
         }
     }
 
@@ -1976,38 +1976,38 @@ public class MessageObject {
             }
         }
         if (replyMessageObject == null || replyMessageObject.messageOwner instanceof TLRPC.TL_messageEmpty || replyMessageObject.messageOwner.action instanceof TLRPC.TL_messageActionHistoryClear) {
-            messageText = replaceWithLink(LocaleController.getString("ActionPinnedNoText", R.string.ActionPinnedNoText), "un1", fromUser != null ? fromUser : chat);
+            messageText = replaceWithLink(LocaleController.getString("ActionPinnedNoText", works.heymate.beta.R.string.ActionPinnedNoText), "un1", fromUser != null ? fromUser : chat);
         } else {
             if (replyMessageObject.isMusic()) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedMusic", R.string.ActionPinnedMusic), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedMusic", works.heymate.beta.R.string.ActionPinnedMusic), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.isVideo()) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedVideo", R.string.ActionPinnedVideo), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedVideo", works.heymate.beta.R.string.ActionPinnedVideo), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.isGif()) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedGif", R.string.ActionPinnedGif), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedGif", works.heymate.beta.R.string.ActionPinnedGif), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.isVoice()) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedVoice", R.string.ActionPinnedVoice), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedVoice", works.heymate.beta.R.string.ActionPinnedVoice), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.isRoundVideo()) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedRound", R.string.ActionPinnedRound), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedRound", works.heymate.beta.R.string.ActionPinnedRound), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.isSticker() || replyMessageObject.isAnimatedSticker()) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedSticker", R.string.ActionPinnedSticker), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedSticker", works.heymate.beta.R.string.ActionPinnedSticker), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedFile", R.string.ActionPinnedFile), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedFile", works.heymate.beta.R.string.ActionPinnedFile), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedGeo", R.string.ActionPinnedGeo), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedGeo", works.heymate.beta.R.string.ActionPinnedGeo), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedGeoLive", R.string.ActionPinnedGeoLive), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedGeoLive", works.heymate.beta.R.string.ActionPinnedGeoLive), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedContact", R.string.ActionPinnedContact), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedContact", works.heymate.beta.R.string.ActionPinnedContact), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                 if (((TLRPC.TL_messageMediaPoll) replyMessageObject.messageOwner.media).poll.quiz) {
-                    messageText = replaceWithLink(LocaleController.getString("ActionPinnedQuiz", R.string.ActionPinnedQuiz), "un1", fromUser != null ? fromUser : chat);
+                    messageText = replaceWithLink(LocaleController.getString("ActionPinnedQuiz", works.heymate.beta.R.string.ActionPinnedQuiz), "un1", fromUser != null ? fromUser : chat);
                 } else {
-                    messageText = replaceWithLink(LocaleController.getString("ActionPinnedPoll", R.string.ActionPinnedPoll), "un1", fromUser != null ? fromUser : chat);
+                    messageText = replaceWithLink(LocaleController.getString("ActionPinnedPoll", works.heymate.beta.R.string.ActionPinnedPoll), "un1", fromUser != null ? fromUser : chat);
                 }
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedPhoto", R.string.ActionPinnedPhoto), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedPhoto", works.heymate.beta.R.string.ActionPinnedPhoto), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                messageText = replaceWithLink(LocaleController.formatString("ActionPinnedGame", R.string.ActionPinnedGame, "\uD83C\uDFAE " + replyMessageObject.messageOwner.media.game.title), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.formatString("ActionPinnedGame", works.heymate.beta.R.string.ActionPinnedGame, "\uD83C\uDFAE " + replyMessageObject.messageOwner.media.game.title), "un1", fromUser != null ? fromUser : chat);
                 messageText = Emoji.replaceEmoji(messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
             } else if (replyMessageObject.messageText != null && replyMessageObject.messageText.length() > 0) {
                 CharSequence mess = replyMessageObject.messageText;
@@ -2015,9 +2015,9 @@ public class MessageObject {
                     mess = mess.subSequence(0, 20) + "...";
                 }
                 mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
-                messageText = replaceWithLink(LocaleController.formatString("ActionPinnedText", R.string.ActionPinnedText, mess), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.formatString("ActionPinnedText", works.heymate.beta.R.string.ActionPinnedText, mess), "un1", fromUser != null ? fromUser : chat);
             } else {
-                messageText = replaceWithLink(LocaleController.getString("ActionPinnedNoText", R.string.ActionPinnedNoText), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(LocaleController.getString("ActionPinnedNoText", works.heymate.beta.R.string.ActionPinnedNoText), "un1", fromUser != null ? fromUser : chat);
             }
         }
     }
@@ -2341,7 +2341,7 @@ public class MessageObject {
                     botButtonsLayout.append(a).append(b);
                     CharSequence text;
                     if (button instanceof TLRPC.TL_keyboardButtonBuy && (messageOwner.media.flags & 4) != 0) {
-                        text = LocaleController.getString("PaymentReceipt", R.string.PaymentReceipt);
+                        text = LocaleController.getString("PaymentReceipt", works.heymate.beta.R.string.PaymentReceipt);
                     } else {
                         text = Emoji.replaceEmoji(button.text, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
                     }
@@ -2426,7 +2426,7 @@ public class MessageObject {
             if (messageOwner.action != null) {
                 if (messageOwner.action instanceof TLRPC.TL_messageActionGroupCallScheduled) {
                     TLRPC.TL_messageActionGroupCallScheduled action = (TLRPC.TL_messageActionGroupCallScheduled) messageOwner.action;
-                    messageText = LocaleController.formatString("ActionGroupCallScheduled", R.string.ActionGroupCallScheduled, LocaleController.formatStartsTime(action.schedule_date, 3, false));
+                    messageText = LocaleController.formatString("ActionGroupCallScheduled", works.heymate.beta.R.string.ActionGroupCallScheduled, LocaleController.formatStartsTime(action.schedule_date, 3, false));
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionGroupCall) {
                     if (messageOwner.action.duration != 0) {
                         String time;
@@ -2446,13 +2446,13 @@ public class MessageObject {
                                 }
                             }
                         }
-                        messageText = LocaleController.formatString("ActionGroupCallEnded", R.string.ActionGroupCallEnded, time);
+                        messageText = LocaleController.formatString("ActionGroupCallEnded", works.heymate.beta.R.string.ActionGroupCallEnded, time);
                     } else {
-                        messageText = LocaleController.getString("ActionGroupCallJustStarted", R.string.ActionGroupCallJustStarted);
+                        messageText = LocaleController.getString("ActionGroupCallJustStarted", works.heymate.beta.R.string.ActionGroupCallJustStarted);
                         /*if (isOut()) {
-                            messageText = LocaleController.getString("ActionGroupCallStartedByYou", R.string.ActionGroupCallStartedByYou);
+                            messageText = LocaleController.getString("ActionGroupCallStartedByYou", works.heymate.beta.R.string.ActionGroupCallStartedByYou);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallStarted", R.string.ActionGroupCallStarted), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallStarted", works.heymate.beta.R.string.ActionGroupCallStarted), "un1", fromObject);
                         }*/
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionInviteToGroupCall) {
@@ -2464,18 +2464,18 @@ public class MessageObject {
                         TLRPC.User whoUser = getUser(users, sUsers, singleUserId);
 
                         if (isOut()) {
-                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallYouInvited", R.string.ActionGroupCallYouInvited), "un2", whoUser);
+                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallYouInvited", works.heymate.beta.R.string.ActionGroupCallYouInvited), "un2", whoUser);
                         } else if (singleUserId == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallInvitedYou", R.string.ActionGroupCallInvitedYou), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallInvitedYou", works.heymate.beta.R.string.ActionGroupCallInvitedYou), "un1", fromObject);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallInvited", R.string.ActionGroupCallInvited), "un2", whoUser);
+                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallInvited", works.heymate.beta.R.string.ActionGroupCallInvited), "un2", whoUser);
                             messageText = replaceWithLink(messageText, "un1", fromObject);
                         }
                     } else {
                         if (isOut()) {
-                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallYouInvited", R.string.ActionGroupCallYouInvited), "un2", messageOwner.action.users, users, sUsers);
+                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallYouInvited", works.heymate.beta.R.string.ActionGroupCallYouInvited), "un2", messageOwner.action.users, users, sUsers);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallInvited", R.string.ActionGroupCallInvited), "un2", messageOwner.action.users, users, sUsers);
+                            messageText = replaceWithLink(LocaleController.getString("ActionGroupCallInvited", works.heymate.beta.R.string.ActionGroupCallInvited), "un2", messageOwner.action.users, users, sUsers);
                             messageText = replaceWithLink(messageText, "un1", fromObject);
                         }
                     }
@@ -2491,7 +2491,7 @@ public class MessageObject {
                     int toId = getPeerId(action.to_id);
                     int selfUserId = UserConfig.getInstance(currentAccount).getClientUserId();
                     if (toId == selfUserId) {
-                        messageText = replaceWithLink(LocaleController.formatString("ActionUserWithinRadius", R.string.ActionUserWithinRadius, LocaleController.formatDistance(action.distance, 2)), "un1", from);
+                        messageText = replaceWithLink(LocaleController.formatString("ActionUserWithinRadius", works.heymate.beta.R.string.ActionUserWithinRadius, LocaleController.formatDistance(action.distance, 2)), "un1", from);
                     } else {
                         TLObject to;
                         if (toId > 0) {
@@ -2500,9 +2500,9 @@ public class MessageObject {
                             to = getChat(chats, sChats, -toId);
                         }
                         if (fromId == selfUserId) {
-                            messageText = replaceWithLink(LocaleController.formatString("ActionUserWithinYouRadius", R.string.ActionUserWithinYouRadius, LocaleController.formatDistance(action.distance, 2)), "un1", to);
+                            messageText = replaceWithLink(LocaleController.formatString("ActionUserWithinYouRadius", works.heymate.beta.R.string.ActionUserWithinYouRadius, LocaleController.formatDistance(action.distance, 2)), "un1", to);
                         } else {
-                            messageText = replaceWithLink(LocaleController.formatString("ActionUserWithinOtherRadius", R.string.ActionUserWithinOtherRadius, LocaleController.formatDistance(action.distance, 2)), "un2", to);
+                            messageText = replaceWithLink(LocaleController.formatString("ActionUserWithinOtherRadius", works.heymate.beta.R.string.ActionUserWithinOtherRadius, LocaleController.formatDistance(action.distance, 2)), "un2", to);
                             messageText = replaceWithLink(messageText, "un1", from);
                         }
                     }
@@ -2510,25 +2510,25 @@ public class MessageObject {
                     messageText = messageOwner.action.message;
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatCreate) {
                     if (isOut()) {
-                        messageText = LocaleController.getString("ActionYouCreateGroup", R.string.ActionYouCreateGroup);
+                        messageText = LocaleController.getString("ActionYouCreateGroup", works.heymate.beta.R.string.ActionYouCreateGroup);
                     } else {
-                        messageText = replaceWithLink(LocaleController.getString("ActionCreateGroup", R.string.ActionCreateGroup), "un1", fromObject);
+                        messageText = replaceWithLink(LocaleController.getString("ActionCreateGroup", works.heymate.beta.R.string.ActionCreateGroup), "un1", fromObject);
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser) {
                     if (isFromUser() && messageOwner.action.user_id == messageOwner.from_id.user_id) {
                         if (isOut()) {
-                            messageText = LocaleController.getString("ActionYouLeftUser", R.string.ActionYouLeftUser);
+                            messageText = LocaleController.getString("ActionYouLeftUser", works.heymate.beta.R.string.ActionYouLeftUser);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionLeftUser", R.string.ActionLeftUser), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionLeftUser", works.heymate.beta.R.string.ActionLeftUser), "un1", fromObject);
                         }
                     } else {
                         TLRPC.User whoUser = getUser(users, sUsers, messageOwner.action.user_id);
                         if (isOut()) {
-                            messageText = replaceWithLink(LocaleController.getString("ActionYouKickUser", R.string.ActionYouKickUser), "un2", whoUser);
+                            messageText = replaceWithLink(LocaleController.getString("ActionYouKickUser", works.heymate.beta.R.string.ActionYouKickUser), "un2", whoUser);
                         } else if (messageOwner.action.user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                            messageText = replaceWithLink(LocaleController.getString("ActionKickUserYou", R.string.ActionKickUserYou), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionKickUserYou", works.heymate.beta.R.string.ActionKickUserYou), "un1", fromObject);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionKickUser", R.string.ActionKickUser), "un2", whoUser);
+                            messageText = replaceWithLink(LocaleController.getString("ActionKickUser", works.heymate.beta.R.string.ActionKickUser), "un2", whoUser);
                             messageText = replaceWithLink(messageText, "un1", fromObject);
                         }
                     }
@@ -2545,109 +2545,109 @@ public class MessageObject {
                         }
                         if (messageOwner.from_id != null && singleUserId == messageOwner.from_id.user_id) {
                             if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                                messageText = LocaleController.getString("ChannelJoined", R.string.ChannelJoined);
+                                messageText = LocaleController.getString("ChannelJoined", works.heymate.beta.R.string.ChannelJoined);
                             } else {
                                 if (messageOwner.peer_id.channel_id != 0) {
                                     if (singleUserId == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                                        messageText = LocaleController.getString("ChannelMegaJoined", R.string.ChannelMegaJoined);
+                                        messageText = LocaleController.getString("ChannelMegaJoined", works.heymate.beta.R.string.ChannelMegaJoined);
                                     } else {
-                                        messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelfMega", R.string.ActionAddUserSelfMega), "un1", fromObject);
+                                        messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelfMega", works.heymate.beta.R.string.ActionAddUserSelfMega), "un1", fromObject);
                                     }
                                 } else if (isOut()) {
-                                    messageText = LocaleController.getString("ActionAddUserSelfYou", R.string.ActionAddUserSelfYou);
+                                    messageText = LocaleController.getString("ActionAddUserSelfYou", works.heymate.beta.R.string.ActionAddUserSelfYou);
                                 } else {
-                                    messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelf", R.string.ActionAddUserSelf), "un1", fromObject);
+                                    messageText = replaceWithLink(LocaleController.getString("ActionAddUserSelf", works.heymate.beta.R.string.ActionAddUserSelf), "un1", fromObject);
                                 }
                             }
                         } else {
                             if (isOut()) {
-                                messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", R.string.ActionYouAddUser), "un2", whoUser);
+                                messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", works.heymate.beta.R.string.ActionYouAddUser), "un2", whoUser);
                             } else if (singleUserId == UserConfig.getInstance(currentAccount).getClientUserId()) {
                                 if (messageOwner.peer_id.channel_id != 0) {
                                     if (chat != null && chat.megagroup) {
-                                        messageText = replaceWithLink(LocaleController.getString("MegaAddedBy", R.string.MegaAddedBy), "un1", fromObject);
+                                        messageText = replaceWithLink(LocaleController.getString("MegaAddedBy", works.heymate.beta.R.string.MegaAddedBy), "un1", fromObject);
                                     } else {
-                                        messageText = replaceWithLink(LocaleController.getString("ChannelAddedBy", R.string.ChannelAddedBy), "un1", fromObject);
+                                        messageText = replaceWithLink(LocaleController.getString("ChannelAddedBy", works.heymate.beta.R.string.ChannelAddedBy), "un1", fromObject);
                                     }
                                 } else {
-                                    messageText = replaceWithLink(LocaleController.getString("ActionAddUserYou", R.string.ActionAddUserYou), "un1", fromObject);
+                                    messageText = replaceWithLink(LocaleController.getString("ActionAddUserYou", works.heymate.beta.R.string.ActionAddUserYou), "un1", fromObject);
                                 }
                             } else {
-                                messageText = replaceWithLink(LocaleController.getString("ActionAddUser", R.string.ActionAddUser), "un2", whoUser);
+                                messageText = replaceWithLink(LocaleController.getString("ActionAddUser", works.heymate.beta.R.string.ActionAddUser), "un2", whoUser);
                                 messageText = replaceWithLink(messageText, "un1", fromObject);
                             }
                         }
                     } else {
                         if (isOut()) {
-                            messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", R.string.ActionYouAddUser), "un2", messageOwner.action.users, users, sUsers);
+                            messageText = replaceWithLink(LocaleController.getString("ActionYouAddUser", works.heymate.beta.R.string.ActionYouAddUser), "un2", messageOwner.action.users, users, sUsers);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionAddUser", R.string.ActionAddUser), "un2", messageOwner.action.users, users, sUsers);
+                            messageText = replaceWithLink(LocaleController.getString("ActionAddUser", works.heymate.beta.R.string.ActionAddUser), "un2", messageOwner.action.users, users, sUsers);
                             messageText = replaceWithLink(messageText, "un1", fromObject);
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByLink) {
                     if (isOut()) {
-                        messageText = LocaleController.getString("ActionInviteYou", R.string.ActionInviteYou);
+                        messageText = LocaleController.getString("ActionInviteYou", works.heymate.beta.R.string.ActionInviteYou);
                     } else {
-                        messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", R.string.ActionInviteUser), "un1", fromObject);
+                        messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", works.heymate.beta.R.string.ActionInviteUser), "un1", fromObject);
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatEditPhoto) {
                     TLRPC.Chat chat = messageOwner.peer_id != null && messageOwner.peer_id.channel_id != 0 ? getChat(chats, sChats, messageOwner.peer_id.channel_id) : null;
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
                         if (isVideoAvatar()) {
-                            messageText = LocaleController.getString("ActionChannelChangedVideo", R.string.ActionChannelChangedVideo);
+                            messageText = LocaleController.getString("ActionChannelChangedVideo", works.heymate.beta.R.string.ActionChannelChangedVideo);
                         } else {
-                            messageText = LocaleController.getString("ActionChannelChangedPhoto", R.string.ActionChannelChangedPhoto);
+                            messageText = LocaleController.getString("ActionChannelChangedPhoto", works.heymate.beta.R.string.ActionChannelChangedPhoto);
                         }
                     } else {
                         if (isOut()) {
                             if (isVideoAvatar()) {
-                                messageText = LocaleController.getString("ActionYouChangedVideo", R.string.ActionYouChangedVideo);
+                                messageText = LocaleController.getString("ActionYouChangedVideo", works.heymate.beta.R.string.ActionYouChangedVideo);
                             } else {
-                                messageText = LocaleController.getString("ActionYouChangedPhoto", R.string.ActionYouChangedPhoto);
+                                messageText = LocaleController.getString("ActionYouChangedPhoto", works.heymate.beta.R.string.ActionYouChangedPhoto);
                             }
                         } else {
                             if (isVideoAvatar()) {
-                                messageText = replaceWithLink(LocaleController.getString("ActionChangedVideo", R.string.ActionChangedVideo), "un1", fromObject);
+                                messageText = replaceWithLink(LocaleController.getString("ActionChangedVideo", works.heymate.beta.R.string.ActionChangedVideo), "un1", fromObject);
                             } else {
-                                messageText = replaceWithLink(LocaleController.getString("ActionChangedPhoto", R.string.ActionChangedPhoto), "un1", fromObject);
+                                messageText = replaceWithLink(LocaleController.getString("ActionChangedPhoto", works.heymate.beta.R.string.ActionChangedPhoto), "un1", fromObject);
                             }
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatEditTitle) {
                     TLRPC.Chat chat = messageOwner.peer_id != null && messageOwner.peer_id.channel_id != 0 ? getChat(chats, sChats, messageOwner.peer_id.channel_id) : null;
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                        messageText = LocaleController.getString("ActionChannelChangedTitle", R.string.ActionChannelChangedTitle).replace("un2", messageOwner.action.title);
+                        messageText = LocaleController.getString("ActionChannelChangedTitle", works.heymate.beta.R.string.ActionChannelChangedTitle).replace("un2", messageOwner.action.title);
                     } else {
                         if (isOut()) {
-                            messageText = LocaleController.getString("ActionYouChangedTitle", R.string.ActionYouChangedTitle).replace("un2", messageOwner.action.title);
+                            messageText = LocaleController.getString("ActionYouChangedTitle", works.heymate.beta.R.string.ActionYouChangedTitle).replace("un2", messageOwner.action.title);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionChangedTitle", R.string.ActionChangedTitle).replace("un2", messageOwner.action.title), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionChangedTitle", works.heymate.beta.R.string.ActionChangedTitle).replace("un2", messageOwner.action.title), "un1", fromObject);
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatDeletePhoto) {
                     TLRPC.Chat chat = messageOwner.peer_id != null && messageOwner.peer_id.channel_id != 0 ? getChat(chats, sChats, messageOwner.peer_id.channel_id) : null;
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                        messageText = LocaleController.getString("ActionChannelRemovedPhoto", R.string.ActionChannelRemovedPhoto);
+                        messageText = LocaleController.getString("ActionChannelRemovedPhoto", works.heymate.beta.R.string.ActionChannelRemovedPhoto);
                     } else {
                         if (isOut()) {
-                            messageText = LocaleController.getString("ActionYouRemovedPhoto", R.string.ActionYouRemovedPhoto);
+                            messageText = LocaleController.getString("ActionYouRemovedPhoto", works.heymate.beta.R.string.ActionYouRemovedPhoto);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionRemovedPhoto", R.string.ActionRemovedPhoto), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionRemovedPhoto", works.heymate.beta.R.string.ActionRemovedPhoto), "un1", fromObject);
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionTTLChange) {
                     if (messageOwner.action.ttl != 0) {
                         if (isOut()) {
-                            messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(messageOwner.action.ttl));
+                            messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", works.heymate.beta.R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(messageOwner.action.ttl));
                         } else {
-                            messageText = LocaleController.formatString("MessageLifetimeChanged", R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(messageOwner.action.ttl));
+                            messageText = LocaleController.formatString("MessageLifetimeChanged", works.heymate.beta.R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(messageOwner.action.ttl));
                         }
                     } else {
                         if (isOut()) {
-                            messageText = LocaleController.getString("MessageLifetimeYouRemoved", R.string.MessageLifetimeYouRemoved);
+                            messageText = LocaleController.getString("MessageLifetimeYouRemoved", works.heymate.beta.R.string.MessageLifetimeYouRemoved);
                         } else {
-                            messageText = LocaleController.formatString("MessageLifetimeRemoved", R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
+                            messageText = LocaleController.formatString("MessageLifetimeRemoved", works.heymate.beta.R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionSetMessagesTTL) {
@@ -2655,28 +2655,28 @@ public class MessageObject {
                     TLRPC.Chat chat = messageOwner.peer_id != null && messageOwner.peer_id.channel_id != 0 ? getChat(chats, sChats, messageOwner.peer_id.channel_id) : null;
                     if (chat != null && !chat.megagroup) {
                         if (action.period != 0) {
-                            messageText = LocaleController.formatString("ActionTTLChannelChanged", R.string.ActionTTLChannelChanged, LocaleController.formatTTLString(action.period));
+                            messageText = LocaleController.formatString("ActionTTLChannelChanged", works.heymate.beta.R.string.ActionTTLChannelChanged, LocaleController.formatTTLString(action.period));
                         } else {
-                            messageText = LocaleController.getString("ActionTTLChannelDisabled", R.string.ActionTTLChannelDisabled);
+                            messageText = LocaleController.getString("ActionTTLChannelDisabled", works.heymate.beta.R.string.ActionTTLChannelDisabled);
                         }
                     } else if (action.period != 0) {
                         if (isOut()) {
-                            messageText = LocaleController.formatString("ActionTTLYouChanged", R.string.ActionTTLYouChanged, LocaleController.formatTTLString(action.period));
+                            messageText = LocaleController.formatString("ActionTTLYouChanged", works.heymate.beta.R.string.ActionTTLYouChanged, LocaleController.formatTTLString(action.period));
                         } else {
-                            messageText = replaceWithLink(LocaleController.formatString("ActionTTLChanged", R.string.ActionTTLChanged, LocaleController.formatTTLString(action.period)), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.formatString("ActionTTLChanged", works.heymate.beta.R.string.ActionTTLChanged, LocaleController.formatTTLString(action.period)), "un1", fromObject);
                         }
                     } else {
                         if (isOut()) {
-                            messageText = LocaleController.getString("ActionTTLYouDisabled", R.string.ActionTTLYouDisabled);
+                            messageText = LocaleController.getString("ActionTTLYouDisabled", works.heymate.beta.R.string.ActionTTLYouDisabled);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionTTLDisabled", R.string.ActionTTLDisabled), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionTTLDisabled", works.heymate.beta.R.string.ActionTTLDisabled), "un1", fromObject);
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionLoginUnknownLocation) {
                     String date;
                     long time = ((long) messageOwner.date) * 1000;
                     if (LocaleController.getInstance().formatterDay != null && LocaleController.getInstance().formatterYear != null) {
-                        date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(time), LocaleController.getInstance().formatterDay.format(time));
+                        date = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(time), LocaleController.getInstance().formatterDay.format(time));
                     } else {
                         date = "" + messageOwner.date;
                     }
@@ -2685,53 +2685,53 @@ public class MessageObject {
                         to_user = getUser(users, sUsers, messageOwner.peer_id.user_id);
                     }
                     String name = to_user != null ? UserObject.getFirstName(to_user) : "";
-                    messageText = LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, name, date, messageOwner.action.title, messageOwner.action.address);
+                    messageText = LocaleController.formatString("NotificationUnrecognizedDevice", works.heymate.beta.R.string.NotificationUnrecognizedDevice, name, date, messageOwner.action.title, messageOwner.action.address);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionUserJoined || messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp) {
-                    messageText = LocaleController.formatString("NotificationContactJoined", R.string.NotificationContactJoined, UserObject.getUserName(fromUser));
+                    messageText = LocaleController.formatString("NotificationContactJoined", works.heymate.beta.R.string.NotificationContactJoined, UserObject.getUserName(fromUser));
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
-                    messageText = LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, UserObject.getUserName(fromUser));
+                    messageText = LocaleController.formatString("NotificationContactNewPhoto", works.heymate.beta.R.string.NotificationContactNewPhoto, UserObject.getUserName(fromUser));
                 } else if (messageOwner.action instanceof TLRPC.TL_messageEncryptedAction) {
                     if (messageOwner.action.encryptedAction instanceof TLRPC.TL_decryptedMessageActionScreenshotMessages) {
                         if (isOut()) {
-                            messageText = LocaleController.formatString("ActionTakeScreenshootYou", R.string.ActionTakeScreenshootYou);
+                            messageText = LocaleController.formatString("ActionTakeScreenshootYou", works.heymate.beta.R.string.ActionTakeScreenshootYou);
                         } else {
-                            messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", R.string.ActionTakeScreenshoot), "un1", fromObject);
+                            messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", works.heymate.beta.R.string.ActionTakeScreenshoot), "un1", fromObject);
                         }
                     } else if (messageOwner.action.encryptedAction instanceof TLRPC.TL_decryptedMessageActionSetMessageTTL) {
                         TLRPC.TL_decryptedMessageActionSetMessageTTL action = (TLRPC.TL_decryptedMessageActionSetMessageTTL) messageOwner.action.encryptedAction;
                         if (action.ttl_seconds != 0) {
                             if (isOut()) {
-                                messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(action.ttl_seconds));
+                                messageText = LocaleController.formatString("MessageLifetimeChangedOutgoing", works.heymate.beta.R.string.MessageLifetimeChangedOutgoing, LocaleController.formatTTLString(action.ttl_seconds));
                             } else {
-                                messageText = LocaleController.formatString("MessageLifetimeChanged", R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(action.ttl_seconds));
+                                messageText = LocaleController.formatString("MessageLifetimeChanged", works.heymate.beta.R.string.MessageLifetimeChanged, UserObject.getFirstName(fromUser), LocaleController.formatTTLString(action.ttl_seconds));
                             }
                         } else {
                             if (isOut()) {
-                                messageText = LocaleController.getString("MessageLifetimeYouRemoved", R.string.MessageLifetimeYouRemoved);
+                                messageText = LocaleController.getString("MessageLifetimeYouRemoved", works.heymate.beta.R.string.MessageLifetimeYouRemoved);
                             } else {
-                                messageText = LocaleController.formatString("MessageLifetimeRemoved", R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
+                                messageText = LocaleController.formatString("MessageLifetimeRemoved", works.heymate.beta.R.string.MessageLifetimeRemoved, UserObject.getFirstName(fromUser));
                             }
                         }
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionScreenshotTaken) {
                     if (isOut()) {
-                        messageText = LocaleController.formatString("ActionTakeScreenshootYou", R.string.ActionTakeScreenshootYou);
+                        messageText = LocaleController.formatString("ActionTakeScreenshootYou", works.heymate.beta.R.string.ActionTakeScreenshootYou);
                     } else {
-                        messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", R.string.ActionTakeScreenshoot), "un1", fromObject);
+                        messageText = replaceWithLink(LocaleController.getString("ActionTakeScreenshoot", works.heymate.beta.R.string.ActionTakeScreenshoot), "un1", fromObject);
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionCreatedBroadcastList) {
-                    messageText = LocaleController.formatString("YouCreatedBroadcastList", R.string.YouCreatedBroadcastList);
+                    messageText = LocaleController.formatString("YouCreatedBroadcastList", works.heymate.beta.R.string.YouCreatedBroadcastList);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChannelCreate) {
                     TLRPC.Chat chat = messageOwner.peer_id != null && messageOwner.peer_id.channel_id != 0 ? getChat(chats, sChats, messageOwner.peer_id.channel_id) : null;
                     if (ChatObject.isChannel(chat) && chat.megagroup) {
-                        messageText = LocaleController.getString("ActionCreateMega", R.string.ActionCreateMega);
+                        messageText = LocaleController.getString("ActionCreateMega", works.heymate.beta.R.string.ActionCreateMega);
                     } else {
-                        messageText = LocaleController.getString("ActionCreateChannel", R.string.ActionCreateChannel);
+                        messageText = LocaleController.getString("ActionCreateChannel", works.heymate.beta.R.string.ActionCreateChannel);
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatMigrateTo) {
-                    messageText = LocaleController.getString("ActionMigrateFromGroup", R.string.ActionMigrateFromGroup);
+                    messageText = LocaleController.getString("ActionMigrateFromGroup", works.heymate.beta.R.string.ActionMigrateFromGroup);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChannelMigrateFrom) {
-                    messageText = LocaleController.getString("ActionMigrateFromGroup", R.string.ActionMigrateFromGroup);
+                    messageText = LocaleController.getString("ActionMigrateFromGroup", works.heymate.beta.R.string.ActionMigrateFromGroup);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionPinMessage) {
                     TLRPC.Chat chat;
                     if (fromUser == null) {
@@ -2741,7 +2741,7 @@ public class MessageObject {
                     }
                     generatePinMessageText(fromUser, chat);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionHistoryClear) {
-                    messageText = LocaleController.getString("HistoryCleared", R.string.HistoryCleared);
+                    messageText = LocaleController.getString("HistoryCleared", works.heymate.beta.R.string.HistoryCleared);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionGameScore) {
                     generateGameMessageText(fromUser);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall) {
@@ -2750,41 +2750,41 @@ public class MessageObject {
                     if (isFromUser() && messageOwner.from_id.user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
                         if (isMissed) {
                             if (call.video) {
-                                messageText = LocaleController.getString("CallMessageVideoOutgoingMissed", R.string.CallMessageVideoOutgoingMissed);
+                                messageText = LocaleController.getString("CallMessageVideoOutgoingMissed", works.heymate.beta.R.string.CallMessageVideoOutgoingMissed);
                             } else {
-                                messageText = LocaleController.getString("CallMessageOutgoingMissed", R.string.CallMessageOutgoingMissed);
+                                messageText = LocaleController.getString("CallMessageOutgoingMissed", works.heymate.beta.R.string.CallMessageOutgoingMissed);
                             }
                         } else {
                             if (call.video) {
-                                messageText = LocaleController.getString("CallMessageVideoOutgoing", R.string.CallMessageVideoOutgoing);
+                                messageText = LocaleController.getString("CallMessageVideoOutgoing", works.heymate.beta.R.string.CallMessageVideoOutgoing);
                             } else {
-                                messageText = LocaleController.getString("CallMessageOutgoing", R.string.CallMessageOutgoing);
+                                messageText = LocaleController.getString("CallMessageOutgoing", works.heymate.beta.R.string.CallMessageOutgoing);
                             }
                         }
                     } else {
                         if (isMissed) {
                             if (call.video) {
-                                messageText = LocaleController.getString("CallMessageVideoIncomingMissed", R.string.CallMessageVideoIncomingMissed);
+                                messageText = LocaleController.getString("CallMessageVideoIncomingMissed", works.heymate.beta.R.string.CallMessageVideoIncomingMissed);
                             } else {
-                                messageText = LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                                messageText = LocaleController.getString("CallMessageIncomingMissed", works.heymate.beta.R.string.CallMessageIncomingMissed);
                             }
                         } else if (call.reason instanceof TLRPC.TL_phoneCallDiscardReasonBusy) {
                             if (call.video) {
-                                messageText = LocaleController.getString("CallMessageVideoIncomingDeclined", R.string.CallMessageVideoIncomingDeclined);
+                                messageText = LocaleController.getString("CallMessageVideoIncomingDeclined", works.heymate.beta.R.string.CallMessageVideoIncomingDeclined);
                             } else {
-                                messageText = LocaleController.getString("CallMessageIncomingDeclined", R.string.CallMessageIncomingDeclined);
+                                messageText = LocaleController.getString("CallMessageIncomingDeclined", works.heymate.beta.R.string.CallMessageIncomingDeclined);
                             }
                         } else {
                             if (call.video) {
-                                messageText = LocaleController.getString("CallMessageVideoIncoming", R.string.CallMessageVideoIncoming);
+                                messageText = LocaleController.getString("CallMessageVideoIncoming", works.heymate.beta.R.string.CallMessageVideoIncoming);
                             } else {
-                                messageText = LocaleController.getString("CallMessageIncoming", R.string.CallMessageIncoming);
+                                messageText = LocaleController.getString("CallMessageIncoming", works.heymate.beta.R.string.CallMessageIncoming);
                             }
                         }
                     }
                     if (call.duration > 0) {
                         String duration = LocaleController.formatCallDuration(call.duration);
-                        messageText = LocaleController.formatString("CallMessageWithDuration", R.string.CallMessageWithDuration, messageText, duration);
+                        messageText = LocaleController.formatString("CallMessageWithDuration", works.heymate.beta.R.string.CallMessageWithDuration, messageText, duration);
                         String _messageText = messageText.toString();
                         int start = _messageText.indexOf(duration);
                         if (start != -1) {
@@ -2805,7 +2805,7 @@ public class MessageObject {
                     generatePaymentSentMessageText(user);
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionBotAllowed) {
                     String domain = ((TLRPC.TL_messageActionBotAllowed) messageOwner.action).domain;
-                    String text = LocaleController.getString("ActionBotAllowed", R.string.ActionBotAllowed);
+                    String text = LocaleController.getString("ActionBotAllowed", works.heymate.beta.R.string.ActionBotAllowed);
                     int start = text.indexOf("%1$s");
                     SpannableString str = new SpannableString(String.format(text, domain));
                     if (start >= 0) {
@@ -2821,38 +2821,38 @@ public class MessageObject {
                             str.append(", ");
                         }
                         if (type instanceof TLRPC.TL_secureValueTypePhone) {
-                            str.append(LocaleController.getString("ActionBotDocumentPhone", R.string.ActionBotDocumentPhone));
+                            str.append(LocaleController.getString("ActionBotDocumentPhone", works.heymate.beta.R.string.ActionBotDocumentPhone));
                         } else if (type instanceof TLRPC.TL_secureValueTypeEmail) {
-                            str.append(LocaleController.getString("ActionBotDocumentEmail", R.string.ActionBotDocumentEmail));
+                            str.append(LocaleController.getString("ActionBotDocumentEmail", works.heymate.beta.R.string.ActionBotDocumentEmail));
                         } else if (type instanceof TLRPC.TL_secureValueTypeAddress) {
-                            str.append(LocaleController.getString("ActionBotDocumentAddress", R.string.ActionBotDocumentAddress));
+                            str.append(LocaleController.getString("ActionBotDocumentAddress", works.heymate.beta.R.string.ActionBotDocumentAddress));
                         } else if (type instanceof TLRPC.TL_secureValueTypePersonalDetails) {
-                            str.append(LocaleController.getString("ActionBotDocumentIdentity", R.string.ActionBotDocumentIdentity));
+                            str.append(LocaleController.getString("ActionBotDocumentIdentity", works.heymate.beta.R.string.ActionBotDocumentIdentity));
                         } else if (type instanceof TLRPC.TL_secureValueTypePassport) {
-                            str.append(LocaleController.getString("ActionBotDocumentPassport", R.string.ActionBotDocumentPassport));
+                            str.append(LocaleController.getString("ActionBotDocumentPassport", works.heymate.beta.R.string.ActionBotDocumentPassport));
                         } else if (type instanceof TLRPC.TL_secureValueTypeDriverLicense) {
-                            str.append(LocaleController.getString("ActionBotDocumentDriverLicence", R.string.ActionBotDocumentDriverLicence));
+                            str.append(LocaleController.getString("ActionBotDocumentDriverLicence", works.heymate.beta.R.string.ActionBotDocumentDriverLicence));
                         } else if (type instanceof TLRPC.TL_secureValueTypeIdentityCard) {
-                            str.append(LocaleController.getString("ActionBotDocumentIdentityCard", R.string.ActionBotDocumentIdentityCard));
+                            str.append(LocaleController.getString("ActionBotDocumentIdentityCard", works.heymate.beta.R.string.ActionBotDocumentIdentityCard));
                         } else if (type instanceof TLRPC.TL_secureValueTypeUtilityBill) {
-                            str.append(LocaleController.getString("ActionBotDocumentUtilityBill", R.string.ActionBotDocumentUtilityBill));
+                            str.append(LocaleController.getString("ActionBotDocumentUtilityBill", works.heymate.beta.R.string.ActionBotDocumentUtilityBill));
                         } else if (type instanceof TLRPC.TL_secureValueTypeBankStatement) {
-                            str.append(LocaleController.getString("ActionBotDocumentBankStatement", R.string.ActionBotDocumentBankStatement));
+                            str.append(LocaleController.getString("ActionBotDocumentBankStatement", works.heymate.beta.R.string.ActionBotDocumentBankStatement));
                         } else if (type instanceof TLRPC.TL_secureValueTypeRentalAgreement) {
-                            str.append(LocaleController.getString("ActionBotDocumentRentalAgreement", R.string.ActionBotDocumentRentalAgreement));
+                            str.append(LocaleController.getString("ActionBotDocumentRentalAgreement", works.heymate.beta.R.string.ActionBotDocumentRentalAgreement));
                         } else if (type instanceof TLRPC.TL_secureValueTypeInternalPassport) {
-                            str.append(LocaleController.getString("ActionBotDocumentInternalPassport", R.string.ActionBotDocumentInternalPassport));
+                            str.append(LocaleController.getString("ActionBotDocumentInternalPassport", works.heymate.beta.R.string.ActionBotDocumentInternalPassport));
                         } else if (type instanceof TLRPC.TL_secureValueTypePassportRegistration) {
-                            str.append(LocaleController.getString("ActionBotDocumentPassportRegistration", R.string.ActionBotDocumentPassportRegistration));
+                            str.append(LocaleController.getString("ActionBotDocumentPassportRegistration", works.heymate.beta.R.string.ActionBotDocumentPassportRegistration));
                         } else if (type instanceof TLRPC.TL_secureValueTypeTemporaryRegistration) {
-                            str.append(LocaleController.getString("ActionBotDocumentTemporaryRegistration", R.string.ActionBotDocumentTemporaryRegistration));
+                            str.append(LocaleController.getString("ActionBotDocumentTemporaryRegistration", works.heymate.beta.R.string.ActionBotDocumentTemporaryRegistration));
                         }
                     }
                     TLRPC.User user = null;
                     if (messageOwner.peer_id != null) {
                         user = getUser(users, sUsers, messageOwner.peer_id.user_id);
                     }
-                    messageText = LocaleController.formatString("ActionBotDocuments", R.string.ActionBotDocuments, UserObject.getFirstName(user), str.toString());
+                    messageText = LocaleController.formatString("ActionBotDocuments", works.heymate.beta.R.string.ActionBotDocuments, UserObject.getFirstName(user), str.toString());
                 }
             }
         } else {
@@ -2866,32 +2866,32 @@ public class MessageObject {
                     messageText = getDiceEmoji();
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                     if (((TLRPC.TL_messageMediaPoll) messageOwner.media).poll.quiz) {
-                        messageText = LocaleController.getString("QuizPoll", R.string.QuizPoll);
+                        messageText = LocaleController.getString("QuizPoll", works.heymate.beta.R.string.QuizPoll);
                     } else {
-                        messageText = LocaleController.getString("Poll", R.string.Poll);
+                        messageText = LocaleController.getString("Poll", works.heymate.beta.R.string.Poll);
                     }
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                     if (messageOwner.media.ttl_seconds != 0 && !(messageOwner instanceof TLRPC.TL_message_secret)) {
-                        messageText = LocaleController.getString("AttachDestructingPhoto", R.string.AttachDestructingPhoto);
+                        messageText = LocaleController.getString("AttachDestructingPhoto", works.heymate.beta.R.string.AttachDestructingPhoto);
                     } else {
-                        messageText = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                        messageText = LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto);
                     }
                 } else if (isVideo() || messageOwner.media instanceof TLRPC.TL_messageMediaDocument && getDocument() instanceof TLRPC.TL_documentEmpty && messageOwner.media.ttl_seconds != 0) {
                     if (messageOwner.media.ttl_seconds != 0 && !(messageOwner instanceof TLRPC.TL_message_secret)) {
-                        messageText = LocaleController.getString("AttachDestructingVideo", R.string.AttachDestructingVideo);
+                        messageText = LocaleController.getString("AttachDestructingVideo", works.heymate.beta.R.string.AttachDestructingVideo);
                     } else {
-                        messageText = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                        messageText = LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo);
                     }
                 } else if (isVoice()) {
-                    messageText = LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                    messageText = LocaleController.getString("AttachAudio", works.heymate.beta.R.string.AttachAudio);
                 } else if (isRoundVideo()) {
-                    messageText = LocaleController.getString("AttachRound", R.string.AttachRound);
+                    messageText = LocaleController.getString("AttachRound", works.heymate.beta.R.string.AttachRound);
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                    messageText = LocaleController.getString("AttachLocation", R.string.AttachLocation);
+                    messageText = LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation);
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                    messageText = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                    messageText = LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation);
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
-                    messageText = LocaleController.getString("AttachContact", R.string.AttachContact);
+                    messageText = LocaleController.getString("AttachContact", works.heymate.beta.R.string.AttachContact);
                     if (!TextUtils.isEmpty(messageOwner.media.vcard)) {
                         vCardData = VCardData.parse(messageOwner.media.vcard);
                     }
@@ -2900,25 +2900,25 @@ public class MessageObject {
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) {
                     messageText = messageOwner.media.description;
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaUnsupported) {
-                    messageText = LocaleController.getString("UnsupportedMedia", R.string.UnsupportedMedia);
+                    messageText = LocaleController.getString("UnsupportedMedia", works.heymate.beta.R.string.UnsupportedMedia);
                 } else if (messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                     if (isSticker() || isAnimatedStickerDocument(getDocument(), true)) {
                         String sch = getStickerChar();
                         if (sch != null && sch.length() > 0) {
-                            messageText = String.format("%s %s", sch, LocaleController.getString("AttachSticker", R.string.AttachSticker));
+                            messageText = String.format("%s %s", sch, LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker));
                         } else {
-                            messageText = LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                            messageText = LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                         }
                     } else if (isMusic()) {
-                        messageText = LocaleController.getString("AttachMusic", R.string.AttachMusic);
+                        messageText = LocaleController.getString("AttachMusic", works.heymate.beta.R.string.AttachMusic);
                     } else if (isGif()) {
-                        messageText = LocaleController.getString("AttachGif", R.string.AttachGif);
+                        messageText = LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif);
                     } else {
                         String name = FileLoader.getDocumentFileName(getDocument());
                         if (!TextUtils.isEmpty(name)) {
                             messageText = name;
                         } else {
-                            messageText = LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                            messageText = LocaleController.getString("AttachDocument", works.heymate.beta.R.string.AttachDocument);
                         }
                     }
                 }
@@ -5327,7 +5327,7 @@ public class MessageObject {
                     if (title == null || title.length() == 0) {
                         title = FileLoader.getDocumentFileName(document);
                         if (TextUtils.isEmpty(title) && unknown) {
-                            title = LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
+                            title = LocaleController.getString("AudioUnknownTitle", works.heymate.beta.R.string.AudioUnknownTitle);
                         }
                     }
                     return title;
@@ -5342,7 +5342,7 @@ public class MessageObject {
                 return fileName;
             }
         }
-        return LocaleController.getString("AudioUnknownTitle", R.string.AudioUnknownTitle);
+        return LocaleController.getString("AudioUnknownTitle", works.heymate.beta.R.string.AudioUnknownTitle);
     }
 
     public int getDuration() {
@@ -5414,7 +5414,7 @@ public class MessageObject {
                     } else {
                         String performer = attribute.performer;
                         if (TextUtils.isEmpty(performer) && unknown) {
-                            performer = LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
+                            performer = LocaleController.getString("AudioUnknownArtist", works.heymate.beta.R.string.AudioUnknownArtist);
                         }
                         return performer;
                     }
@@ -5428,7 +5428,7 @@ public class MessageObject {
                         return null;
                     }
                     if (isOutOwner() || messageOwner.fwd_from != null && messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerUser && messageOwner.fwd_from.from_id.user_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                        return LocaleController.getString("FromYou", R.string.FromYou);
+                        return LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou);
                     }
                     TLRPC.User user = null;
                     TLRPC.Chat chat = null;
@@ -5457,7 +5457,7 @@ public class MessageObject {
                 }
             }
         }
-        return LocaleController.getString("AudioUnknownArtist", R.string.AudioUnknownArtist);
+        return LocaleController.getString("AudioUnknownArtist", works.heymate.beta.R.string.AudioUnknownArtist);
     }
 
     public TLRPC.InputStickerSet getInputStickerSet() {

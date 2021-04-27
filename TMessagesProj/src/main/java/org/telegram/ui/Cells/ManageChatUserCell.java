@@ -22,7 +22,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -99,12 +99,12 @@ public class ManageChatUserCell extends FrameLayout {
             optionsButton = new ImageView(context);
             optionsButton.setFocusable(false);
             optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-            optionsButton.setImageResource(R.drawable.ic_ab_other);
+            optionsButton.setImageResource(works.heymate.beta.R.drawable.ic_ab_other);
             optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.MULTIPLY));
             optionsButton.setScaleType(ImageView.ScaleType.CENTER);
             addView(optionsButton, LayoutHelper.createFrame(60, 64, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP));
             optionsButton.setOnClickListener(v -> delegate.onOptionsButtonCheck(ManageChatUserCell.this, true));
-            optionsButton.setContentDescription(LocaleController.getString("AccDescrUserOptions", R.string.AccDescrUserOptions));
+            optionsButton.setContentDescription(LocaleController.getString("AccDescrUserOptions", works.heymate.beta.R.string.AccDescrUserOptions));
         }
     }
 
@@ -245,14 +245,14 @@ public class ManageChatUserCell extends FrameLayout {
                 if (currentUser.bot) {
                     statusTextView.setTextColor(statusColor);
                     if (currentUser.bot_chat_history || isAdmin) {
-                        statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
+                        statusTextView.setText(LocaleController.getString("BotStatusRead", works.heymate.beta.R.string.BotStatusRead));
                     } else {
-                        statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
+                        statusTextView.setText(LocaleController.getString("BotStatusCantRead", works.heymate.beta.R.string.BotStatusCantRead));
                     }
                 } else {
                     if (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
                         statusTextView.setTextColor(statusOnlineColor);
-                        statusTextView.setText(LocaleController.getString("Online", R.string.Online));
+                        statusTextView.setText(LocaleController.getString("Online", works.heymate.beta.R.string.Online));
                     } else {
                         statusTextView.setTextColor(statusColor);
                         statusTextView.setText(LocaleController.formatUserStatus(currentAccount, currentUser));
@@ -309,11 +309,11 @@ public class ManageChatUserCell extends FrameLayout {
                         statusTextView.setText(LocaleController.formatPluralString("Members", currentChat.participants_count));
                     }
                 } else if (currentChat.has_geo) {
-                    statusTextView.setText(LocaleController.getString("MegaLocation", R.string.MegaLocation));
+                    statusTextView.setText(LocaleController.getString("MegaLocation", works.heymate.beta.R.string.MegaLocation));
                 } else if (TextUtils.isEmpty(currentChat.username)) {
-                    statusTextView.setText(LocaleController.getString("MegaPrivate", R.string.MegaPrivate));
+                    statusTextView.setText(LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate));
                 } else {
-                    statusTextView.setText(LocaleController.getString("MegaPublic", R.string.MegaPublic));
+                    statusTextView.setText(LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic));
                 }
             }
             lastAvatar = photo;

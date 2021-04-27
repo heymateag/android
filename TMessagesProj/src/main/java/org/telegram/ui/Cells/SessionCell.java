@@ -21,7 +21,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
@@ -121,7 +121,7 @@ public class SessionCell extends FrameLayout {
             nameTextView.setText(String.format(Locale.US, "%s %s", session.app_name, session.app_version));
             if ((session.flags & 1) != 0) {
                 setTag(Theme.key_windowBackgroundWhiteValueText);
-                onlineTextView.setText(LocaleController.getString("Online", R.string.Online));
+                onlineTextView.setText(LocaleController.getString("Online", works.heymate.beta.R.string.Online));
                 onlineTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
             } else {
                 setTag(Theme.key_windowBackgroundWhiteGrayText3);
@@ -168,7 +168,7 @@ public class SessionCell extends FrameLayout {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.getString("UnofficialApp", R.string.UnofficialApp));
+                stringBuilder.append(LocaleController.getString("UnofficialApp", works.heymate.beta.R.string.UnofficialApp));
                 stringBuilder.append(" (ID: ");
                 stringBuilder.append(session.api_id);
                 stringBuilder.append(")");

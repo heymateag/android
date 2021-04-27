@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.Theme;
@@ -65,7 +65,7 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
-            Drawable drawable = getResources().getDrawable(R.drawable.pin);
+            Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(42), AndroidUtilities.dp(42));
@@ -135,9 +135,9 @@ public class SendLocationCell extends FrameLayout {
     private void checkText() {
         LocationController.SharingLocationInfo info = LocationController.getInstance(currentAccount).getSharingLocationInfo(dialogId);
         if (info != null) {
-            setText(LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? info.messageObject.messageOwner.edit_date : info.messageObject.messageOwner.date));
+            setText(LocaleController.getString("StopLiveLocation", works.heymate.beta.R.string.StopLiveLocation), LocaleController.formatLocationUpdateDate(info.messageObject.messageOwner.edit_date != 0 ? info.messageObject.messageOwner.edit_date : info.messageObject.messageOwner.date));
         } else {
-            setText(LocaleController.getString("SendLiveLocation", R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", R.string.SendLiveLocationInfo));
+            setText(LocaleController.getString("SendLiveLocation", works.heymate.beta.R.string.SendLiveLocation), LocaleController.getString("SendLiveLocationInfo", works.heymate.beta.R.string.SendLiveLocationInfo));
         }
     }
 

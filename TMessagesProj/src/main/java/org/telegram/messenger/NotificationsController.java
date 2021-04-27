@@ -74,6 +74,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import works.heymate.beta.BuildConfig;
+
 public class NotificationsController extends BaseController {
 
     public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";
@@ -158,7 +160,7 @@ public class NotificationsController extends BaseController {
 
     public NotificationsController(int instance) {
         super(instance);
-        
+
         notificationId = currentAccount + 1;
         notificationGroup = "messages" + (currentAccount == 0 ? "" : currentAccount);
         SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
@@ -1224,7 +1226,7 @@ public class NotificationsController extends BaseController {
 
     private String getShortStringForMessage(MessageObject messageObject, String[] userName, boolean[] preview) {
         if (AndroidUtilities.needShowPasscode() || SharedConfig.isWaitingForPasscodeEnter) {
-            return LocaleController.getString("NotificationHiddenMessage", R.string.NotificationHiddenMessage);
+            return LocaleController.getString("NotificationHiddenMessage", works.heymate.beta.R.string.NotificationHiddenMessage);
         }
         long dialogId = messageObject.messageOwner.dialog_id;
         int chat_id = messageObject.messageOwner.peer_id.chat_id != 0 ? messageObject.messageOwner.peer_id.chat_id : messageObject.messageOwner.peer_id.channel_id;
@@ -1243,7 +1245,7 @@ public class NotificationsController extends BaseController {
                     if (preview != null) {
                         preview[0] = false;
                     }
-                    return LocaleController.getString("Message", R.string.Message);
+                    return LocaleController.getString("Message", works.heymate.beta.R.string.Message);
                 }
             } else if (chat_id != 0) {
                 if (messageObject.messageOwner.peer_id.channel_id == 0 || messageObject.isSupergroup()) {
@@ -1256,9 +1258,9 @@ public class NotificationsController extends BaseController {
                         preview[0] = false;
                     }
                     if (messageObject.messageOwner.peer_id.channel_id != 0 && !messageObject.isSupergroup()) {
-                        return LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, messageObject.localName);
+                        return LocaleController.formatString("ChannelMessageNoText", works.heymate.beta.R.string.ChannelMessageNoText, messageObject.localName);
                     } else {
-                        return LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
+                        return LocaleController.formatString("NotificationMessageGroupNoText", works.heymate.beta.R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
                     }
                 }
             }
@@ -1338,7 +1340,7 @@ public class NotificationsController extends BaseController {
         String msg = null;
         if ((int) dialogId == 0) {
             userName[0] = null;
-            return LocaleController.getString("NotificationHiddenMessage", R.string.NotificationHiddenMessage);
+            return LocaleController.getString("NotificationHiddenMessage", works.heymate.beta.R.string.NotificationHiddenMessage);
         } else {
             boolean isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
             if (dialogPreviewEnabled && (chat_id == 0 && fromId != 0 && preferences.getBoolean("EnablePreviewAll", true) || chat_id != 0 && (!isChannel && preferences.getBoolean("EnablePreviewGroup", true) || isChannel && preferences.getBoolean("EnablePreviewChannel", true)))) {
@@ -1347,19 +1349,19 @@ public class NotificationsController extends BaseController {
                     if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGeoProximityReached) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp) {
-                        return LocaleController.formatString("NotificationContactJoined", R.string.NotificationContactJoined, name);
+                        return LocaleController.formatString("NotificationContactJoined", works.heymate.beta.R.string.NotificationContactJoined, name);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
-                        return LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
+                        return LocaleController.formatString("NotificationContactNewPhoto", works.heymate.beta.R.string.NotificationContactNewPhoto, name);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionLoginUnknownLocation) {
-                        String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
-                        return LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, getUserConfig().getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
+                        String date = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
+                        return LocaleController.formatString("NotificationUnrecognizedDevice", works.heymate.beta.R.string.NotificationUnrecognizedDevice, getUserConfig().getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGameScore || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall) {
                         if (messageObject.messageOwner.action.video) {
-                            return LocaleController.getString("CallMessageVideoIncomingMissed", R.string.CallMessageVideoIncomingMissed);
+                            return LocaleController.getString("CallMessageVideoIncomingMissed", works.heymate.beta.R.string.CallMessageVideoIncomingMissed);
                         } else {
-                            return LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                            return LocaleController.getString("CallMessageIncomingMissed", works.heymate.beta.R.string.CallMessageIncomingMissed);
                         }
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatAddUser) {
                         int singleUserId = messageObject.messageOwner.action.user_id;
@@ -1368,10 +1370,10 @@ public class NotificationsController extends BaseController {
                         }
                         if (singleUserId != 0) {
                             if (messageObject.messageOwner.peer_id.channel_id != 0 && !chat.megagroup) {
-                                return LocaleController.formatString("ChannelAddedByNotification", R.string.ChannelAddedByNotification, name, chat.title);
+                                return LocaleController.formatString("ChannelAddedByNotification", works.heymate.beta.R.string.ChannelAddedByNotification, name, chat.title);
                             } else {
                                 if (singleUserId == selfUsedId) {
-                                    return LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, name, chat.title);
+                                    return LocaleController.formatString("NotificationInvitedToGroup", works.heymate.beta.R.string.NotificationInvitedToGroup, name, chat.title);
                                 } else {
                                     TLRPC.User u2 = getMessagesController().getUser(singleUserId);
                                     if (u2 == null) {
@@ -1379,12 +1381,12 @@ public class NotificationsController extends BaseController {
                                     }
                                     if (fromId == u2.id) {
                                         if (chat.megagroup) {
-                                            return LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, name, chat.title);
+                                            return LocaleController.formatString("NotificationGroupAddSelfMega", works.heymate.beta.R.string.NotificationGroupAddSelfMega, name, chat.title);
                                         } else {
-                                            return LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, name, chat.title);
+                                            return LocaleController.formatString("NotificationGroupAddSelf", works.heymate.beta.R.string.NotificationGroupAddSelf, name, chat.title);
                                         }
                                     } else {
-                                        return LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
+                                        return LocaleController.formatString("NotificationGroupAddMember", works.heymate.beta.R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
                                     }
                                 }
                             }
@@ -1400,10 +1402,10 @@ public class NotificationsController extends BaseController {
                                     names.append(name2);
                                 }
                             }
-                            return LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, names.toString());
+                            return LocaleController.formatString("NotificationGroupAddMember", works.heymate.beta.R.string.NotificationGroupAddMember, name, chat.title, names.toString());
                         }
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGroupCall) {
-                        return LocaleController.formatString("NotificationGroupCreatedCall", R.string.NotificationGroupCreatedCall, name, chat.title);
+                        return LocaleController.formatString("NotificationGroupCreatedCall", works.heymate.beta.R.string.NotificationGroupCreatedCall, name, chat.title);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGroupCallScheduled) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionInviteToGroupCall) {
@@ -1413,13 +1415,13 @@ public class NotificationsController extends BaseController {
                         }
                         if (singleUserId != 0) {
                             if (singleUserId == selfUsedId) {
-                                return LocaleController.formatString("NotificationGroupInvitedYouToCall", R.string.NotificationGroupInvitedYouToCall, name, chat.title);
+                                return LocaleController.formatString("NotificationGroupInvitedYouToCall", works.heymate.beta.R.string.NotificationGroupInvitedYouToCall, name, chat.title);
                             } else {
                                 TLRPC.User u2 = getMessagesController().getUser(singleUserId);
                                 if (u2 == null) {
                                     return null;
                                 }
-                                return LocaleController.formatString("NotificationGroupInvitedToCall", R.string.NotificationGroupInvitedToCall, name, chat.title, UserObject.getUserName(u2));
+                                return LocaleController.formatString("NotificationGroupInvitedToCall", works.heymate.beta.R.string.NotificationGroupInvitedToCall, name, chat.title, UserObject.getUserName(u2));
                             }
                         } else {
                             StringBuilder names = new StringBuilder();
@@ -1433,263 +1435,263 @@ public class NotificationsController extends BaseController {
                                     names.append(name2);
                                 }
                             }
-                            return LocaleController.formatString("NotificationGroupInvitedToCall", R.string.NotificationGroupInvitedToCall, name, chat.title, names.toString());
+                            return LocaleController.formatString("NotificationGroupInvitedToCall", works.heymate.beta.R.string.NotificationGroupInvitedToCall, name, chat.title, names.toString());
                         }
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByLink) {
-                        return LocaleController.formatString("NotificationInvitedToGroupByLink", R.string.NotificationInvitedToGroupByLink, name, chat.title);
+                        return LocaleController.formatString("NotificationInvitedToGroupByLink", works.heymate.beta.R.string.NotificationInvitedToGroupByLink, name, chat.title);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatEditTitle) {
-                        return LocaleController.formatString("NotificationEditedGroupName", R.string.NotificationEditedGroupName, name, messageObject.messageOwner.action.title);
+                        return LocaleController.formatString("NotificationEditedGroupName", works.heymate.beta.R.string.NotificationEditedGroupName, name, messageObject.messageOwner.action.title);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatEditPhoto || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatDeletePhoto) {
                         if (messageObject.messageOwner.peer_id.channel_id != 0 && !chat.megagroup) {
                             if (messageObject.isVideoAvatar()) {
-                                return LocaleController.formatString("ChannelVideoEditNotification", R.string.ChannelVideoEditNotification, chat.title);
+                                return LocaleController.formatString("ChannelVideoEditNotification", works.heymate.beta.R.string.ChannelVideoEditNotification, chat.title);
                             } else {
-                                return LocaleController.formatString("ChannelPhotoEditNotification", R.string.ChannelPhotoEditNotification, chat.title);
+                                return LocaleController.formatString("ChannelPhotoEditNotification", works.heymate.beta.R.string.ChannelPhotoEditNotification, chat.title);
                             }
                         } else {
                             if (messageObject.isVideoAvatar()) {
-                                return LocaleController.formatString("NotificationEditedGroupVideo", R.string.NotificationEditedGroupVideo, name, chat.title);
+                                return LocaleController.formatString("NotificationEditedGroupVideo", works.heymate.beta.R.string.NotificationEditedGroupVideo, name, chat.title);
                             } else {
-                                return LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, name, chat.title);
+                                return LocaleController.formatString("NotificationEditedGroupPhoto", works.heymate.beta.R.string.NotificationEditedGroupPhoto, name, chat.title);
                             }
                         }
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser) {
                         if (messageObject.messageOwner.action.user_id == selfUsedId) {
-                            return LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, name, chat.title);
+                            return LocaleController.formatString("NotificationGroupKickYou", works.heymate.beta.R.string.NotificationGroupKickYou, name, chat.title);
                         } else if (messageObject.messageOwner.action.user_id == fromId) {
-                            return LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, name, chat.title);
+                            return LocaleController.formatString("NotificationGroupLeftMember", works.heymate.beta.R.string.NotificationGroupLeftMember, name, chat.title);
                         } else {
                             TLRPC.User u2 = getMessagesController().getUser(messageObject.messageOwner.action.user_id);
                             if (u2 == null) {
                                 return null;
                             }
-                            return LocaleController.formatString("NotificationGroupKickMember", R.string.NotificationGroupKickMember, name, chat.title, UserObject.getUserName(u2));
+                            return LocaleController.formatString("NotificationGroupKickMember", works.heymate.beta.R.string.NotificationGroupKickMember, name, chat.title, UserObject.getUserName(u2));
                         }
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatCreate) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChannelCreate) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatMigrateTo) {
-                        return LocaleController.formatString("ActionMigrateFromGroupNotify", R.string.ActionMigrateFromGroupNotify, chat.title);
+                        return LocaleController.formatString("ActionMigrateFromGroupNotify", works.heymate.beta.R.string.ActionMigrateFromGroupNotify, chat.title);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChannelMigrateFrom) {
-                        return LocaleController.formatString("ActionMigrateFromGroupNotify", R.string.ActionMigrateFromGroupNotify, messageObject.messageOwner.action.title);
+                        return LocaleController.formatString("ActionMigrateFromGroupNotify", works.heymate.beta.R.string.ActionMigrateFromGroupNotify, messageObject.messageOwner.action.title);
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionScreenshotTaken) {
                         return messageObject.messageText.toString();
                     } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage) {
                         if (chat != null && (!ChatObject.isChannel(chat) || chat.megagroup)) {
                             if (messageObject.replyMessageObject == null) {
-                                return LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, name, chat.title);
+                                return LocaleController.formatString("NotificationActionPinnedNoText", works.heymate.beta.R.string.NotificationActionPinnedNoText, name, chat.title);
                             } else {
                                 MessageObject object = messageObject.replyMessageObject;
                                 if (object.isMusic()) {
-                                    return LocaleController.formatString("NotificationActionPinnedMusic", R.string.NotificationActionPinnedMusic, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedMusic", works.heymate.beta.R.string.NotificationActionPinnedMusic, name, chat.title);
                                 } else if (object.isVideo()) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDCF9 " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedVideo", R.string.NotificationActionPinnedVideo, name, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedVideo", works.heymate.beta.R.string.NotificationActionPinnedVideo, name, chat.title);
                                     }
                                 } else if (object.isGif()) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83C\uDFAC " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedGif", R.string.NotificationActionPinnedGif, name, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedGif", works.heymate.beta.R.string.NotificationActionPinnedGif, name, chat.title);
                                     }
                                 } else if (object.isVoice()) {
-                                    return LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedVoice", works.heymate.beta.R.string.NotificationActionPinnedVoice, name, chat.title);
                                 } else if (object.isRoundVideo()) {
-                                    return LocaleController.formatString("NotificationActionPinnedRound", R.string.NotificationActionPinnedRound, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedRound", works.heymate.beta.R.string.NotificationActionPinnedRound, name, chat.title);
                                 } else if (object.isSticker() || object.isAnimatedSticker()) {
                                     String emoji = object.getStickerEmoji();
                                     if (emoji != null) {
-                                        return LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, name, chat.title, emoji);
+                                        return LocaleController.formatString("NotificationActionPinnedStickerEmoji", works.heymate.beta.R.string.NotificationActionPinnedStickerEmoji, name, chat.title, emoji);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedSticker", R.string.NotificationActionPinnedSticker, name, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedSticker", works.heymate.beta.R.string.NotificationActionPinnedSticker, name, chat.title);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDCCE " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedFile", R.string.NotificationActionPinnedFile, name, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedFile", works.heymate.beta.R.string.NotificationActionPinnedFile, name, chat.title);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || object.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                                    return LocaleController.formatString("NotificationActionPinnedGeo", R.string.NotificationActionPinnedGeo, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedGeo", works.heymate.beta.R.string.NotificationActionPinnedGeo, name, chat.title);
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                                    return LocaleController.formatString("NotificationActionPinnedGeoLive", R.string.NotificationActionPinnedGeoLive, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedGeoLive", works.heymate.beta.R.string.NotificationActionPinnedGeoLive, name, chat.title);
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                                     TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) object.messageOwner.media;
-                                    return LocaleController.formatString("NotificationActionPinnedContact2", R.string.NotificationActionPinnedContact2, name, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                                    return LocaleController.formatString("NotificationActionPinnedContact2", works.heymate.beta.R.string.NotificationActionPinnedContact2, name, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                                     TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                                     if (mediaPoll.poll.quiz) {
-                                        return LocaleController.formatString("NotificationActionPinnedQuiz2", R.string.NotificationActionPinnedQuiz2, name, chat.title, mediaPoll.poll.question);
+                                        return LocaleController.formatString("NotificationActionPinnedQuiz2", works.heymate.beta.R.string.NotificationActionPinnedQuiz2, name, chat.title, mediaPoll.poll.question);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedPoll2", R.string.NotificationActionPinnedPoll2, name, chat.title, mediaPoll.poll.question);
+                                        return LocaleController.formatString("NotificationActionPinnedPoll2", works.heymate.beta.R.string.NotificationActionPinnedPoll2, name, chat.title, mediaPoll.poll.question);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDDBC " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedPhoto", R.string.NotificationActionPinnedPhoto, name, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedPhoto", works.heymate.beta.R.string.NotificationActionPinnedPhoto, name, chat.title);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                                    return LocaleController.formatString("NotificationActionPinnedGame", R.string.NotificationActionPinnedGame, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedGame", works.heymate.beta.R.string.NotificationActionPinnedGame, name, chat.title);
                                 } else if (object.messageText != null && object.messageText.length() > 0) {
                                     CharSequence message = object.messageText;
                                     if (message.length() > 20) {
                                         message = message.subSequence(0, 20) + "...";
                                     }
-                                    return LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                 } else {
-                                    return LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, name, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedNoText", works.heymate.beta.R.string.NotificationActionPinnedNoText, name, chat.title);
                                 }
                             }
                         } else if (chat != null) {
                             if (messageObject.replyMessageObject == null) {
-                                return LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, chat.title);
+                                return LocaleController.formatString("NotificationActionPinnedNoTextChannel", works.heymate.beta.R.string.NotificationActionPinnedNoTextChannel, chat.title);
                             } else {
                                 MessageObject object = messageObject.replyMessageObject;
                                 if (object.isMusic()) {
-                                    return LocaleController.formatString("NotificationActionPinnedMusicChannel", R.string.NotificationActionPinnedMusicChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedMusicChannel", works.heymate.beta.R.string.NotificationActionPinnedMusicChannel, chat.title);
                                 } else if (object.isVideo()) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDCF9 " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedVideoChannel", R.string.NotificationActionPinnedVideoChannel, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedVideoChannel", works.heymate.beta.R.string.NotificationActionPinnedVideoChannel, chat.title);
                                     }
                                 } else if (object.isGif()) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83C\uDFAC " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedGifChannel", R.string.NotificationActionPinnedGifChannel, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedGifChannel", works.heymate.beta.R.string.NotificationActionPinnedGifChannel, chat.title);
                                     }
                                 } else if (object.isVoice()) {
-                                    return LocaleController.formatString("NotificationActionPinnedVoiceChannel", R.string.NotificationActionPinnedVoiceChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedVoiceChannel", works.heymate.beta.R.string.NotificationActionPinnedVoiceChannel, chat.title);
                                 } else if (object.isRoundVideo()) {
-                                    return LocaleController.formatString("NotificationActionPinnedRoundChannel", R.string.NotificationActionPinnedRoundChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedRoundChannel", works.heymate.beta.R.string.NotificationActionPinnedRoundChannel, chat.title);
                                 } else if (object.isSticker() || object.isAnimatedSticker()) {
                                     String emoji = object.getStickerEmoji();
                                     if (emoji != null) {
-                                        return LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, emoji);
+                                        return LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", works.heymate.beta.R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, emoji);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedStickerChannel", R.string.NotificationActionPinnedStickerChannel, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedStickerChannel", works.heymate.beta.R.string.NotificationActionPinnedStickerChannel, chat.title);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDCCE " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedFileChannel", R.string.NotificationActionPinnedFileChannel, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedFileChannel", works.heymate.beta.R.string.NotificationActionPinnedFileChannel, chat.title);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || object.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                                    return LocaleController.formatString("NotificationActionPinnedGeoChannel", R.string.NotificationActionPinnedGeoChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedGeoChannel", works.heymate.beta.R.string.NotificationActionPinnedGeoChannel, chat.title);
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                                    return LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", R.string.NotificationActionPinnedGeoLiveChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", works.heymate.beta.R.string.NotificationActionPinnedGeoLiveChannel, chat.title);
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                                     TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) object.messageOwner.media;
-                                    return LocaleController.formatString("NotificationActionPinnedContactChannel2", R.string.NotificationActionPinnedContactChannel2, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                                    return LocaleController.formatString("NotificationActionPinnedContactChannel2", works.heymate.beta.R.string.NotificationActionPinnedContactChannel2, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                                     TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                                     if (mediaPoll.poll.quiz) {
-                                        return LocaleController.formatString("NotificationActionPinnedQuizChannel2", R.string.NotificationActionPinnedQuizChannel2, chat.title, mediaPoll.poll.question);
+                                        return LocaleController.formatString("NotificationActionPinnedQuizChannel2", works.heymate.beta.R.string.NotificationActionPinnedQuizChannel2, chat.title, mediaPoll.poll.question);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedPollChannel2", R.string.NotificationActionPinnedPollChannel2, chat.title, mediaPoll.poll.question);
+                                        return LocaleController.formatString("NotificationActionPinnedPollChannel2", works.heymate.beta.R.string.NotificationActionPinnedPollChannel2, chat.title, mediaPoll.poll.question);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDDBC " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedPhotoChannel", R.string.NotificationActionPinnedPhotoChannel, chat.title);
+                                        return LocaleController.formatString("NotificationActionPinnedPhotoChannel", works.heymate.beta.R.string.NotificationActionPinnedPhotoChannel, chat.title);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                                    return LocaleController.formatString("NotificationActionPinnedGameChannel", R.string.NotificationActionPinnedGameChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedGameChannel", works.heymate.beta.R.string.NotificationActionPinnedGameChannel, chat.title);
                                 } else if (object.messageText != null && object.messageText.length() > 0) {
                                     CharSequence message = object.messageText;
                                     if (message.length() > 20) {
                                         message = message.subSequence(0, 20) + "...";
                                     }
-                                    return LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                    return LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                 } else {
-                                    return LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, chat.title);
+                                    return LocaleController.formatString("NotificationActionPinnedNoTextChannel", works.heymate.beta.R.string.NotificationActionPinnedNoTextChannel, chat.title);
                                 }
                             }
                         } else {
                             if (messageObject.replyMessageObject == null) {
-                                return LocaleController.formatString("NotificationActionPinnedNoTextUser", R.string.NotificationActionPinnedNoTextUser, name);
+                                return LocaleController.formatString("NotificationActionPinnedNoTextUser", works.heymate.beta.R.string.NotificationActionPinnedNoTextUser, name);
                             } else {
                                 MessageObject object = messageObject.replyMessageObject;
                                 if (object.isMusic()) {
-                                    return LocaleController.formatString("NotificationActionPinnedMusicUser", R.string.NotificationActionPinnedMusicUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedMusicUser", works.heymate.beta.R.string.NotificationActionPinnedMusicUser, name);
                                 } else if (object.isVideo()) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDCF9 " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, name, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextUser", works.heymate.beta.R.string.NotificationActionPinnedTextUser, name, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedVideoUser", R.string.NotificationActionPinnedVideoUser, name);
+                                        return LocaleController.formatString("NotificationActionPinnedVideoUser", works.heymate.beta.R.string.NotificationActionPinnedVideoUser, name);
                                     }
                                 } else if (object.isGif()) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83C\uDFAC " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, name, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextUser", works.heymate.beta.R.string.NotificationActionPinnedTextUser, name, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedGifUser", R.string.NotificationActionPinnedGifUser, name);
+                                        return LocaleController.formatString("NotificationActionPinnedGifUser", works.heymate.beta.R.string.NotificationActionPinnedGifUser, name);
                                     }
                                 } else if (object.isVoice()) {
-                                    return LocaleController.formatString("NotificationActionPinnedVoiceUser", R.string.NotificationActionPinnedVoiceUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedVoiceUser", works.heymate.beta.R.string.NotificationActionPinnedVoiceUser, name);
                                 } else if (object.isRoundVideo()) {
-                                    return LocaleController.formatString("NotificationActionPinnedRoundUser", R.string.NotificationActionPinnedRoundUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedRoundUser", works.heymate.beta.R.string.NotificationActionPinnedRoundUser, name);
                                 } else if (object.isSticker() || object.isAnimatedSticker()) {
                                     String emoji = object.getStickerEmoji();
                                     if (emoji != null) {
-                                        return LocaleController.formatString("NotificationActionPinnedStickerEmojiUser", R.string.NotificationActionPinnedStickerEmojiUser, name, emoji);
+                                        return LocaleController.formatString("NotificationActionPinnedStickerEmojiUser", works.heymate.beta.R.string.NotificationActionPinnedStickerEmojiUser, name, emoji);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedStickerUser", R.string.NotificationActionPinnedStickerUser, name);
+                                        return LocaleController.formatString("NotificationActionPinnedStickerUser", works.heymate.beta.R.string.NotificationActionPinnedStickerUser, name);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDCCE " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, name, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextUser", works.heymate.beta.R.string.NotificationActionPinnedTextUser, name, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedFileUser", R.string.NotificationActionPinnedFileUser, name);
+                                        return LocaleController.formatString("NotificationActionPinnedFileUser", works.heymate.beta.R.string.NotificationActionPinnedFileUser, name);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || object.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                                    return LocaleController.formatString("NotificationActionPinnedGeoUser", R.string.NotificationActionPinnedGeoUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedGeoUser", works.heymate.beta.R.string.NotificationActionPinnedGeoUser, name);
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                                    return LocaleController.formatString("NotificationActionPinnedGeoLiveUser", R.string.NotificationActionPinnedGeoLiveUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedGeoLiveUser", works.heymate.beta.R.string.NotificationActionPinnedGeoLiveUser, name);
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                                     TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) object.messageOwner.media;
-                                    return LocaleController.formatString("NotificationActionPinnedContactUser", R.string.NotificationActionPinnedContactUser, name, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                                    return LocaleController.formatString("NotificationActionPinnedContactUser", works.heymate.beta.R.string.NotificationActionPinnedContactUser, name, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                                     TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                                     if (mediaPoll.poll.quiz) {
-                                        return LocaleController.formatString("NotificationActionPinnedQuizUser", R.string.NotificationActionPinnedQuizUser, name, mediaPoll.poll.question);
+                                        return LocaleController.formatString("NotificationActionPinnedQuizUser", works.heymate.beta.R.string.NotificationActionPinnedQuizUser, name, mediaPoll.poll.question);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedPollUser", R.string.NotificationActionPinnedPollUser, name, mediaPoll.poll.question);
+                                        return LocaleController.formatString("NotificationActionPinnedPollUser", works.heymate.beta.R.string.NotificationActionPinnedPollUser, name, mediaPoll.poll.question);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                                     if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                         String message = "\uD83D\uDDBC " + object.messageOwner.message;
-                                        return LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, name, message);
+                                        return LocaleController.formatString("NotificationActionPinnedTextUser", works.heymate.beta.R.string.NotificationActionPinnedTextUser, name, message);
                                     } else {
-                                        return LocaleController.formatString("NotificationActionPinnedPhotoUser", R.string.NotificationActionPinnedPhotoUser, name);
+                                        return LocaleController.formatString("NotificationActionPinnedPhotoUser", works.heymate.beta.R.string.NotificationActionPinnedPhotoUser, name);
                                     }
                                 } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                                    return LocaleController.formatString("NotificationActionPinnedGameUser", R.string.NotificationActionPinnedGameUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedGameUser", works.heymate.beta.R.string.NotificationActionPinnedGameUser, name);
                                 } else if (object.messageText != null && object.messageText.length() > 0) {
                                     CharSequence message = object.messageText;
                                     if (message.length() > 20) {
                                         message = message.subSequence(0, 20) + "...";
                                     }
-                                    return LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, name, message);
+                                    return LocaleController.formatString("NotificationActionPinnedTextUser", works.heymate.beta.R.string.NotificationActionPinnedTextUser, name, message);
                                 } else {
-                                    return LocaleController.formatString("NotificationActionPinnedNoTextUser", R.string.NotificationActionPinnedNoTextUser, name);
+                                    return LocaleController.formatString("NotificationActionPinnedNoTextUser", works.heymate.beta.R.string.NotificationActionPinnedNoTextUser, name);
                                 }
                             }
                         }
@@ -1699,76 +1701,76 @@ public class NotificationsController extends BaseController {
                         if (!TextUtils.isEmpty(messageObject.messageOwner.message)) {
                             return messageObject.messageOwner.message;
                         } else {
-                            return LocaleController.getString("Message", R.string.Message);
+                            return LocaleController.getString("Message", works.heymate.beta.R.string.Message);
                         }
                     } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
                             return "\uD83D\uDDBC " + messageObject.messageOwner.message;
                         } else if (messageObject.messageOwner.media.ttl_seconds != 0) {
-                            return LocaleController.getString("AttachDestructingPhoto", R.string.AttachDestructingPhoto);
+                            return LocaleController.getString("AttachDestructingPhoto", works.heymate.beta.R.string.AttachDestructingPhoto);
                         } else {
-                            return LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                            return LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto);
                         }
                     } else if (messageObject.isVideo()) {
                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
                             return "\uD83D\uDCF9 " + messageObject.messageOwner.message;
                         } else if (messageObject.messageOwner.media.ttl_seconds != 0) {
-                            return LocaleController.getString("AttachDestructingVideo", R.string.AttachDestructingVideo);
+                            return LocaleController.getString("AttachDestructingVideo", works.heymate.beta.R.string.AttachDestructingVideo);
                         } else {
-                            return LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                            return LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo);
                         }
                     } else if (messageObject.isGame()) {
-                        return LocaleController.getString("AttachGame", R.string.AttachGame);
+                        return LocaleController.getString("AttachGame", works.heymate.beta.R.string.AttachGame);
                     } else if (messageObject.isVoice()) {
-                        return LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                        return LocaleController.getString("AttachAudio", works.heymate.beta.R.string.AttachAudio);
                     } else if (messageObject.isRoundVideo()) {
-                        return LocaleController.getString("AttachRound", R.string.AttachRound);
+                        return LocaleController.getString("AttachRound", works.heymate.beta.R.string.AttachRound);
                     } else if (messageObject.isMusic()) {
-                        return LocaleController.getString("AttachMusic", R.string.AttachMusic);
+                        return LocaleController.getString("AttachMusic", works.heymate.beta.R.string.AttachMusic);
                     } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
-                        return LocaleController.getString("AttachContact", R.string.AttachContact);
+                        return LocaleController.getString("AttachContact", works.heymate.beta.R.string.AttachContact);
                     } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                         if (((TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media).poll.quiz) {
-                            return LocaleController.getString("QuizPoll", R.string.QuizPoll);
+                            return LocaleController.getString("QuizPoll", works.heymate.beta.R.string.QuizPoll);
                         } else {
-                            return LocaleController.getString("Poll", R.string.Poll);
+                            return LocaleController.getString("Poll", works.heymate.beta.R.string.Poll);
                         }
                     } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                        return LocaleController.getString("AttachLocation", R.string.AttachLocation);
+                        return LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation);
                     } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                        return LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                        return LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation);
                     } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                         if (messageObject.isSticker() || messageObject.isAnimatedSticker()) {
                             String emoji = messageObject.getStickerEmoji();
                             if (emoji != null) {
-                                return emoji + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                return emoji + " " + LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                             } else {
-                                return LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                return LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                             }
                         } else if (messageObject.isGif()) {
                             if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
                                 return "\uD83C\uDFAC " + messageObject.messageOwner.message;
                             } else {
-                                return LocaleController.getString("AttachGif", R.string.AttachGif);
+                                return LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif);
                             }
                         } else {
                             if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
                                 return "\uD83D\uDCCE " + messageObject.messageOwner.message;
                             } else {
-                                return LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                                return LocaleController.getString("AttachDocument", works.heymate.beta.R.string.AttachDocument);
                             }
                         }
                     } else if (!TextUtils.isEmpty(messageObject.messageText)) {
                         return messageObject.messageText.toString();
                     } else {
-                        return LocaleController.getString("Message", R.string.Message);
+                        return LocaleController.getString("Message", works.heymate.beta.R.string.Message);
                     }
                 }
             } else {
                 if (preview != null) {
                     preview[0] = false;
                 }
-                return LocaleController.getString("Message", R.string.Message);
+                return LocaleController.getString("Message", works.heymate.beta.R.string.Message);
             }
         }
         return null;
@@ -1776,7 +1778,7 @@ public class NotificationsController extends BaseController {
 
     private String getStringForMessage(MessageObject messageObject, boolean shortMessage, boolean[] text, boolean[] preview) {
         if (AndroidUtilities.needShowPasscode() || SharedConfig.isWaitingForPasscodeEnter) {
-            return LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
+            return LocaleController.getString("YouHaveNewMessage", works.heymate.beta.R.string.YouHaveNewMessage);
         }
         long dialog_id = messageObject.messageOwner.dialog_id;
         int chat_id = messageObject.messageOwner.peer_id.chat_id != 0 ? messageObject.messageOwner.peer_id.chat_id : messageObject.messageOwner.peer_id.channel_id;
@@ -1792,7 +1794,7 @@ public class NotificationsController extends BaseController {
                     if (preview != null) {
                         preview[0] = false;
                     }
-                    return LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, messageObject.localName);
+                    return LocaleController.formatString("NotificationMessageNoText", works.heymate.beta.R.string.NotificationMessageNoText, messageObject.localName);
                 }
             } else if (chat_id != 0) {
                 if (!dialogPreviewEnabled || !messageObject.localChannel && !preferences.getBoolean("EnablePreviewGroup", true) || messageObject.localChannel && !preferences.getBoolean("EnablePreviewChannel", true)) {
@@ -1800,9 +1802,9 @@ public class NotificationsController extends BaseController {
                         preview[0] = false;
                     }
                     if (messageObject.messageOwner.peer_id.channel_id != 0 && !messageObject.isSupergroup()) {
-                        return LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, messageObject.localName);
+                        return LocaleController.formatString("ChannelMessageNoText", works.heymate.beta.R.string.ChannelMessageNoText, messageObject.localName);
                     } else {
-                        return LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
+                        return LocaleController.formatString("NotificationMessageGroupNoText", works.heymate.beta.R.string.NotificationMessageGroupNoText, messageObject.localUserName, messageObject.localName);
                     }
                 }
             }
@@ -1831,9 +1833,9 @@ public class NotificationsController extends BaseController {
         if (from_id > 0) {
             if (messageObject.messageOwner.from_scheduled) {
                 if (dialog_id == selfUsedId) {
-                    name = LocaleController.getString("MessageScheduledReminderNotification", R.string.MessageScheduledReminderNotification);
+                    name = LocaleController.getString("MessageScheduledReminderNotification", works.heymate.beta.R.string.MessageScheduledReminderNotification);
                 } else {
-                    name = LocaleController.getString("NotificationMessageScheduledName", R.string.NotificationMessageScheduledName);
+                    name = LocaleController.getString("NotificationMessageScheduledName", works.heymate.beta.R.string.NotificationMessageScheduledName);
                 }
             } else {
                 TLRPC.User user = getMessagesController().getUser(from_id);
@@ -1861,7 +1863,7 @@ public class NotificationsController extends BaseController {
 
         String msg = null;
         if ((int) dialog_id == 0) {
-            msg = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
+            msg = LocaleController.getString("YouHaveNewMessage", works.heymate.beta.R.string.YouHaveNewMessage);
         } else {
             if (chat_id == 0 && from_id != 0) {
                 if (dialogPreviewEnabled && preferences.getBoolean("EnablePreviewAll", true)) {
@@ -1869,106 +1871,106 @@ public class NotificationsController extends BaseController {
                         if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGeoProximityReached) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserJoined || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionContactSignUp) {
-                            msg = LocaleController.formatString("NotificationContactJoined", R.string.NotificationContactJoined, name);
+                            msg = LocaleController.formatString("NotificationContactJoined", works.heymate.beta.R.string.NotificationContactJoined, name);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
-                            msg = LocaleController.formatString("NotificationContactNewPhoto", R.string.NotificationContactNewPhoto, name);
+                            msg = LocaleController.formatString("NotificationContactNewPhoto", works.heymate.beta.R.string.NotificationContactNewPhoto, name);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionLoginUnknownLocation) {
-                            String date = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
-                            msg = LocaleController.formatString("NotificationUnrecognizedDevice", R.string.NotificationUnrecognizedDevice, getUserConfig().getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
+                            String date = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(((long) messageObject.messageOwner.date) * 1000), LocaleController.getInstance().formatterDay.format(((long) messageObject.messageOwner.date) * 1000));
+                            msg = LocaleController.formatString("NotificationUnrecognizedDevice", works.heymate.beta.R.string.NotificationUnrecognizedDevice, getUserConfig().getCurrentUser().first_name, date, messageObject.messageOwner.action.title, messageObject.messageOwner.action.address);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGameScore || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPaymentSent) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall) {
                             if (messageObject.messageOwner.action.video) {
-                                msg = LocaleController.getString("CallMessageVideoIncomingMissed", R.string.CallMessageVideoIncomingMissed);
+                                msg = LocaleController.getString("CallMessageVideoIncomingMissed", works.heymate.beta.R.string.CallMessageVideoIncomingMissed);
                             } else {
-                                msg = LocaleController.getString("CallMessageIncomingMissed", R.string.CallMessageIncomingMissed);
+                                msg = LocaleController.getString("CallMessageIncomingMissed", works.heymate.beta.R.string.CallMessageIncomingMissed);
                             }
                         }
                     } else {
                         if (messageObject.isMediaEmpty()) {
                             if (!shortMessage) {
                                 if (!TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, messageObject.messageOwner.message);
                                     text[0] = true;
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
+                                    msg = LocaleController.formatString("NotificationMessageNoText", works.heymate.beta.R.string.NotificationMessageNoText, name);
                                 }
                             } else {
-                                msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
+                                msg = LocaleController.formatString("NotificationMessageNoText", works.heymate.beta.R.string.NotificationMessageNoText, name);
                             }
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                             if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83D\uDDBC " + messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83D\uDDBC " + messageObject.messageOwner.message);
                                 text[0] = true;
                             } else {
                                 if (messageObject.messageOwner.media.ttl_seconds != 0) {
-                                    msg = LocaleController.formatString("NotificationMessageSDPhoto", R.string.NotificationMessageSDPhoto, name);
+                                    msg = LocaleController.formatString("NotificationMessageSDPhoto", works.heymate.beta.R.string.NotificationMessageSDPhoto, name);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessagePhoto", R.string.NotificationMessagePhoto, name);
+                                    msg = LocaleController.formatString("NotificationMessagePhoto", works.heymate.beta.R.string.NotificationMessagePhoto, name);
                                 }
                             }
                         } else if (messageObject.isVideo()) {
                             if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83D\uDCF9 " + messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83D\uDCF9 " + messageObject.messageOwner.message);
                                 text[0] = true;
                             } else {
                                 if (messageObject.messageOwner.media.ttl_seconds != 0) {
-                                    msg = LocaleController.formatString("NotificationMessageSDVideo", R.string.NotificationMessageSDVideo, name);
+                                    msg = LocaleController.formatString("NotificationMessageSDVideo", works.heymate.beta.R.string.NotificationMessageSDVideo, name);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageVideo", R.string.NotificationMessageVideo, name);
+                                    msg = LocaleController.formatString("NotificationMessageVideo", works.heymate.beta.R.string.NotificationMessageVideo, name);
                                 }
                             }
                         } else if (messageObject.isGame()) {
-                            msg = LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, name, messageObject.messageOwner.media.game.title);
+                            msg = LocaleController.formatString("NotificationMessageGame", works.heymate.beta.R.string.NotificationMessageGame, name, messageObject.messageOwner.media.game.title);
                         } else if (messageObject.isVoice()) {
-                            msg = LocaleController.formatString("NotificationMessageAudio", R.string.NotificationMessageAudio, name);
+                            msg = LocaleController.formatString("NotificationMessageAudio", works.heymate.beta.R.string.NotificationMessageAudio, name);
                         } else if (messageObject.isRoundVideo()) {
-                            msg = LocaleController.formatString("NotificationMessageRound", R.string.NotificationMessageRound, name);
+                            msg = LocaleController.formatString("NotificationMessageRound", works.heymate.beta.R.string.NotificationMessageRound, name);
                         } else if (messageObject.isMusic()) {
-                            msg = LocaleController.formatString("NotificationMessageMusic", R.string.NotificationMessageMusic, name);
+                            msg = LocaleController.formatString("NotificationMessageMusic", works.heymate.beta.R.string.NotificationMessageMusic, name);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                             TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) messageObject.messageOwner.media;
-                            msg = LocaleController.formatString("NotificationMessageContact2", R.string.NotificationMessageContact2, name, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                            msg = LocaleController.formatString("NotificationMessageContact2", works.heymate.beta.R.string.NotificationMessageContact2, name, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                             TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media;
                             if (mediaPoll.poll.quiz) {
-                                msg = LocaleController.formatString("NotificationMessageQuiz2", R.string.NotificationMessageQuiz2, name, mediaPoll.poll.question);
+                                msg = LocaleController.formatString("NotificationMessageQuiz2", works.heymate.beta.R.string.NotificationMessageQuiz2, name, mediaPoll.poll.question);
                             } else {
-                                msg = LocaleController.formatString("NotificationMessagePoll2", R.string.NotificationMessagePoll2, name, mediaPoll.poll.question);
+                                msg = LocaleController.formatString("NotificationMessagePoll2", works.heymate.beta.R.string.NotificationMessagePoll2, name, mediaPoll.poll.question);
                             }
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                            msg = LocaleController.formatString("NotificationMessageMap", R.string.NotificationMessageMap, name);
+                            msg = LocaleController.formatString("NotificationMessageMap", works.heymate.beta.R.string.NotificationMessageMap, name);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                            msg = LocaleController.formatString("NotificationMessageLiveLocation", R.string.NotificationMessageLiveLocation, name);
+                            msg = LocaleController.formatString("NotificationMessageLiveLocation", works.heymate.beta.R.string.NotificationMessageLiveLocation, name);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                             if (messageObject.isSticker() || messageObject.isAnimatedSticker()) {
                                 String emoji = messageObject.getStickerEmoji();
                                 if (emoji != null) {
-                                    msg = LocaleController.formatString("NotificationMessageStickerEmoji", R.string.NotificationMessageStickerEmoji, name, emoji);
+                                    msg = LocaleController.formatString("NotificationMessageStickerEmoji", works.heymate.beta.R.string.NotificationMessageStickerEmoji, name, emoji);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageSticker", R.string.NotificationMessageSticker, name);
+                                    msg = LocaleController.formatString("NotificationMessageSticker", works.heymate.beta.R.string.NotificationMessageSticker, name);
                                 }
                             } else if (messageObject.isGif()) {
                                 if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83C\uDFAC " + messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83C\uDFAC " + messageObject.messageOwner.message);
                                     text[0] = true;
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageGif", R.string.NotificationMessageGif, name);
+                                    msg = LocaleController.formatString("NotificationMessageGif", works.heymate.beta.R.string.NotificationMessageGif, name);
                                 }
                             } else {
                                 if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83D\uDCCE " + messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83D\uDCCE " + messageObject.messageOwner.message);
                                     text[0] = true;
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageDocument", R.string.NotificationMessageDocument, name);
+                                    msg = LocaleController.formatString("NotificationMessageDocument", works.heymate.beta.R.string.NotificationMessageDocument, name);
                                 }
                             }
                         } else {
                             if (!shortMessage && !TextUtils.isEmpty(messageObject.messageText)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageText);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, messageObject.messageText);
                                 text[0] = true;
                             } else {
-                                msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
+                                msg = LocaleController.formatString("NotificationMessageNoText", works.heymate.beta.R.string.NotificationMessageNoText, name);
                             }
                         }
                     }
@@ -1976,7 +1978,7 @@ public class NotificationsController extends BaseController {
                     if (preview != null) {
                         preview[0] = false;
                     }
-                    msg = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, name);
+                    msg = LocaleController.formatString("NotificationMessageNoText", works.heymate.beta.R.string.NotificationMessageNoText, name);
                 }
             } else if (chat_id != 0) {
                 boolean isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
@@ -1989,10 +1991,10 @@ public class NotificationsController extends BaseController {
                             }
                             if (singleUserId != 0) {
                                 if (messageObject.messageOwner.peer_id.channel_id != 0 && !chat.megagroup) {
-                                    msg = LocaleController.formatString("ChannelAddedByNotification", R.string.ChannelAddedByNotification, name, chat.title);
+                                    msg = LocaleController.formatString("ChannelAddedByNotification", works.heymate.beta.R.string.ChannelAddedByNotification, name, chat.title);
                                 } else {
                                     if (singleUserId == selfUsedId) {
-                                        msg = LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationInvitedToGroup", works.heymate.beta.R.string.NotificationInvitedToGroup, name, chat.title);
                                     } else {
                                         TLRPC.User u2 = getMessagesController().getUser(singleUserId);
                                         if (u2 == null) {
@@ -2000,12 +2002,12 @@ public class NotificationsController extends BaseController {
                                         }
                                         if (from_id == u2.id) {
                                             if (chat.megagroup) {
-                                                msg = LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, name, chat.title);
+                                                msg = LocaleController.formatString("NotificationGroupAddSelfMega", works.heymate.beta.R.string.NotificationGroupAddSelfMega, name, chat.title);
                                             } else {
-                                                msg = LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, name, chat.title);
+                                                msg = LocaleController.formatString("NotificationGroupAddSelf", works.heymate.beta.R.string.NotificationGroupAddSelf, name, chat.title);
                                             }
                                         } else {
-                                            msg = LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
+                                            msg = LocaleController.formatString("NotificationGroupAddMember", works.heymate.beta.R.string.NotificationGroupAddMember, name, chat.title, UserObject.getUserName(u2));
                                         }
                                     }
                                 }
@@ -2021,10 +2023,10 @@ public class NotificationsController extends BaseController {
                                         names.append(name2);
                                     }
                                 }
-                                msg = LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, name, chat.title, names.toString());
+                                msg = LocaleController.formatString("NotificationGroupAddMember", works.heymate.beta.R.string.NotificationGroupAddMember, name, chat.title, names.toString());
                             }
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGroupCall) {
-                            msg = LocaleController.formatString("NotificationGroupCreatedCall", R.string.NotificationGroupCreatedCall, name, chat.title);
+                            msg = LocaleController.formatString("NotificationGroupCreatedCall", works.heymate.beta.R.string.NotificationGroupCreatedCall, name, chat.title);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGroupCallScheduled) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionInviteToGroupCall) {
@@ -2034,13 +2036,13 @@ public class NotificationsController extends BaseController {
                             }
                             if (singleUserId != 0) {
                                 if (singleUserId == selfUsedId) {
-                                    msg = LocaleController.formatString("NotificationGroupInvitedYouToCall", R.string.NotificationGroupInvitedYouToCall, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationGroupInvitedYouToCall", works.heymate.beta.R.string.NotificationGroupInvitedYouToCall, name, chat.title);
                                 } else {
                                     TLRPC.User u2 = getMessagesController().getUser(singleUserId);
                                     if (u2 == null) {
                                         return null;
                                     }
-                                    msg = LocaleController.formatString("NotificationGroupInvitedToCall", R.string.NotificationGroupInvitedToCall, name, chat.title, UserObject.getUserName(u2));
+                                    msg = LocaleController.formatString("NotificationGroupInvitedToCall", works.heymate.beta.R.string.NotificationGroupInvitedToCall, name, chat.title, UserObject.getUserName(u2));
                                 }
                             } else {
                                 StringBuilder names = new StringBuilder();
@@ -2054,191 +2056,191 @@ public class NotificationsController extends BaseController {
                                         names.append(name2);
                                     }
                                 }
-                                msg = LocaleController.formatString("NotificationGroupInvitedToCall", R.string.NotificationGroupInvitedToCall, name, chat.title, names.toString());
+                                msg = LocaleController.formatString("NotificationGroupInvitedToCall", works.heymate.beta.R.string.NotificationGroupInvitedToCall, name, chat.title, names.toString());
                             }
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByLink) {
-                            msg = LocaleController.formatString("NotificationInvitedToGroupByLink", R.string.NotificationInvitedToGroupByLink, name, chat.title);
+                            msg = LocaleController.formatString("NotificationInvitedToGroupByLink", works.heymate.beta.R.string.NotificationInvitedToGroupByLink, name, chat.title);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatEditTitle) {
-                            msg = LocaleController.formatString("NotificationEditedGroupName", R.string.NotificationEditedGroupName, name, messageObject.messageOwner.action.title);
+                            msg = LocaleController.formatString("NotificationEditedGroupName", works.heymate.beta.R.string.NotificationEditedGroupName, name, messageObject.messageOwner.action.title);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatEditPhoto || messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatDeletePhoto) {
                             if (messageObject.messageOwner.peer_id.channel_id != 0 && !chat.megagroup) {
                                 if (messageObject.isVideoAvatar()) {
-                                    msg = LocaleController.formatString("ChannelVideoEditNotification", R.string.ChannelVideoEditNotification, chat.title);
+                                    msg = LocaleController.formatString("ChannelVideoEditNotification", works.heymate.beta.R.string.ChannelVideoEditNotification, chat.title);
                                 } else {
-                                    msg = LocaleController.formatString("ChannelPhotoEditNotification", R.string.ChannelPhotoEditNotification, chat.title);
+                                    msg = LocaleController.formatString("ChannelPhotoEditNotification", works.heymate.beta.R.string.ChannelPhotoEditNotification, chat.title);
                                 }
                             } else {
                                 if (messageObject.isVideoAvatar()) {
-                                    msg = LocaleController.formatString("NotificationEditedGroupVideo", R.string.NotificationEditedGroupVideo, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationEditedGroupVideo", works.heymate.beta.R.string.NotificationEditedGroupVideo, name, chat.title);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationEditedGroupPhoto", works.heymate.beta.R.string.NotificationEditedGroupPhoto, name, chat.title);
                                 }
                             }
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatDeleteUser) {
                             if (messageObject.messageOwner.action.user_id == selfUsedId) {
-                                msg = LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, name, chat.title);
+                                msg = LocaleController.formatString("NotificationGroupKickYou", works.heymate.beta.R.string.NotificationGroupKickYou, name, chat.title);
                             } else if (messageObject.messageOwner.action.user_id == from_id) {
-                                msg = LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, name, chat.title);
+                                msg = LocaleController.formatString("NotificationGroupLeftMember", works.heymate.beta.R.string.NotificationGroupLeftMember, name, chat.title);
                             } else {
                                 TLRPC.User u2 = getMessagesController().getUser(messageObject.messageOwner.action.user_id);
                                 if (u2 == null) {
                                     return null;
                                 }
-                                msg = LocaleController.formatString("NotificationGroupKickMember", R.string.NotificationGroupKickMember, name, chat.title, UserObject.getUserName(u2));
+                                msg = LocaleController.formatString("NotificationGroupKickMember", works.heymate.beta.R.string.NotificationGroupKickMember, name, chat.title, UserObject.getUserName(u2));
                             }
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatCreate) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChannelCreate) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChatMigrateTo) {
-                            msg = LocaleController.formatString("ActionMigrateFromGroupNotify", R.string.ActionMigrateFromGroupNotify, chat.title);
+                            msg = LocaleController.formatString("ActionMigrateFromGroupNotify", works.heymate.beta.R.string.ActionMigrateFromGroupNotify, chat.title);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionChannelMigrateFrom) {
-                            msg = LocaleController.formatString("ActionMigrateFromGroupNotify", R.string.ActionMigrateFromGroupNotify, messageObject.messageOwner.action.title);
+                            msg = LocaleController.formatString("ActionMigrateFromGroupNotify", works.heymate.beta.R.string.ActionMigrateFromGroupNotify, messageObject.messageOwner.action.title);
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionScreenshotTaken) {
                             msg = messageObject.messageText.toString();
                         } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage) {
                             if (!ChatObject.isChannel(chat) || chat.megagroup) {
                                 if (messageObject.replyMessageObject == null) {
-                                    msg = LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationActionPinnedNoText", works.heymate.beta.R.string.NotificationActionPinnedNoText, name, chat.title);
                                 } else {
                                     MessageObject object = messageObject.replyMessageObject;
                                     if (object.isMusic()) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedMusic", R.string.NotificationActionPinnedMusic, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedMusic", works.heymate.beta.R.string.NotificationActionPinnedMusic, name, chat.title);
                                     } else if (object.isVideo()) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83D\uDCF9 " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedVideo", R.string.NotificationActionPinnedVideo, name, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedVideo", works.heymate.beta.R.string.NotificationActionPinnedVideo, name, chat.title);
                                         }
                                     } else if (object.isGif()) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83C\uDFAC " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedGif", R.string.NotificationActionPinnedGif, name, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedGif", works.heymate.beta.R.string.NotificationActionPinnedGif, name, chat.title);
                                         }
                                     } else if (object.isVoice()) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedVoice", works.heymate.beta.R.string.NotificationActionPinnedVoice, name, chat.title);
                                     } else if (object.isRoundVideo()) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedRound", R.string.NotificationActionPinnedRound, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedRound", works.heymate.beta.R.string.NotificationActionPinnedRound, name, chat.title);
                                     } else if (object.isSticker() || object.isAnimatedSticker()) {
                                         String emoji = object.getStickerEmoji();
                                         if (emoji != null) {
-                                            msg = LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, name, chat.title, emoji);
+                                            msg = LocaleController.formatString("NotificationActionPinnedStickerEmoji", works.heymate.beta.R.string.NotificationActionPinnedStickerEmoji, name, chat.title, emoji);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedSticker", R.string.NotificationActionPinnedSticker, name, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedSticker", works.heymate.beta.R.string.NotificationActionPinnedSticker, name, chat.title);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83D\uDCCE " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedFile", R.string.NotificationActionPinnedFile, name, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedFile", works.heymate.beta.R.string.NotificationActionPinnedFile, name, chat.title);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || object.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedGeo", R.string.NotificationActionPinnedGeo, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedGeo", works.heymate.beta.R.string.NotificationActionPinnedGeo, name, chat.title);
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedGeoLive", R.string.NotificationActionPinnedGeoLive, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedGeoLive", works.heymate.beta.R.string.NotificationActionPinnedGeoLive, name, chat.title);
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                                         TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) messageObject.messageOwner.media;
-                                        msg = LocaleController.formatString("NotificationActionPinnedContact2", R.string.NotificationActionPinnedContact2, name, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                                        msg = LocaleController.formatString("NotificationActionPinnedContact2", works.heymate.beta.R.string.NotificationActionPinnedContact2, name, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                                         TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                                         if (mediaPoll.poll.quiz) {
-                                            msg = LocaleController.formatString("NotificationActionPinnedQuiz2", R.string.NotificationActionPinnedQuiz2, name, chat.title, mediaPoll.poll.question);
+                                            msg = LocaleController.formatString("NotificationActionPinnedQuiz2", works.heymate.beta.R.string.NotificationActionPinnedQuiz2, name, chat.title, mediaPoll.poll.question);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedPoll2", R.string.NotificationActionPinnedPoll2, name, chat.title, mediaPoll.poll.question);
+                                            msg = LocaleController.formatString("NotificationActionPinnedPoll2", works.heymate.beta.R.string.NotificationActionPinnedPoll2, name, chat.title, mediaPoll.poll.question);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83D\uDDBC " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedPhoto", R.string.NotificationActionPinnedPhoto, name, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedPhoto", works.heymate.beta.R.string.NotificationActionPinnedPhoto, name, chat.title);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedGame", R.string.NotificationActionPinnedGame, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedGame", works.heymate.beta.R.string.NotificationActionPinnedGame, name, chat.title);
                                     } else if (object.messageText != null && object.messageText.length() > 0) {
                                         CharSequence message = object.messageText;
                                         if (message.length() > 20) {
                                             message = message.subSequence(0, 20) + "...";
                                         }
-                                        msg = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, name, message, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, name, message, chat.title);
                                     } else {
-                                        msg = LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, name, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedNoText", works.heymate.beta.R.string.NotificationActionPinnedNoText, name, chat.title);
                                     }
                                 }
                             } else {
                                 if (messageObject.replyMessageObject == null) {
-                                    msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, chat.title);
+                                    msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", works.heymate.beta.R.string.NotificationActionPinnedNoTextChannel, chat.title);
                                 } else {
                                     MessageObject object = messageObject.replyMessageObject;
                                     if (object.isMusic()) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedMusicChannel", R.string.NotificationActionPinnedMusicChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedMusicChannel", works.heymate.beta.R.string.NotificationActionPinnedMusicChannel, chat.title);
                                     } else if (object.isVideo()) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83D\uDCF9 " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedVideoChannel", R.string.NotificationActionPinnedVideoChannel, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedVideoChannel", works.heymate.beta.R.string.NotificationActionPinnedVideoChannel, chat.title);
                                         }
                                     } else if (object.isGif()) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83C\uDFAC " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedGifChannel", R.string.NotificationActionPinnedGifChannel, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedGifChannel", works.heymate.beta.R.string.NotificationActionPinnedGifChannel, chat.title);
                                         }
                                     } else if (object.isVoice()) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedVoiceChannel", R.string.NotificationActionPinnedVoiceChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedVoiceChannel", works.heymate.beta.R.string.NotificationActionPinnedVoiceChannel, chat.title);
                                     } else if (object.isRoundVideo()) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedRoundChannel", R.string.NotificationActionPinnedRoundChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedRoundChannel", works.heymate.beta.R.string.NotificationActionPinnedRoundChannel, chat.title);
                                     } else if (object.isSticker() || object.isAnimatedSticker()) {
                                         String emoji = object.getStickerEmoji();
                                         if (emoji != null) {
-                                            msg = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, emoji);
+                                            msg = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", works.heymate.beta.R.string.NotificationActionPinnedStickerEmojiChannel, chat.title, emoji);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedStickerChannel", R.string.NotificationActionPinnedStickerChannel, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedStickerChannel", works.heymate.beta.R.string.NotificationActionPinnedStickerChannel, chat.title);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83D\uDCCE " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedFileChannel", R.string.NotificationActionPinnedFileChannel, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedFileChannel", works.heymate.beta.R.string.NotificationActionPinnedFileChannel, chat.title);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || object.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedGeoChannel", R.string.NotificationActionPinnedGeoChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedGeoChannel", works.heymate.beta.R.string.NotificationActionPinnedGeoChannel, chat.title);
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", R.string.NotificationActionPinnedGeoLiveChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", works.heymate.beta.R.string.NotificationActionPinnedGeoLiveChannel, chat.title);
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                                         TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) messageObject.messageOwner.media;
-                                        msg = LocaleController.formatString("NotificationActionPinnedContactChannel2", R.string.NotificationActionPinnedContactChannel2, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                                        msg = LocaleController.formatString("NotificationActionPinnedContactChannel2", works.heymate.beta.R.string.NotificationActionPinnedContactChannel2, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                                         TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) object.messageOwner.media;
                                         if (mediaPoll.poll.quiz) {
-                                            msg = LocaleController.formatString("NotificationActionPinnedQuizChannel2", R.string.NotificationActionPinnedQuizChannel2, chat.title, mediaPoll.poll.question);
+                                            msg = LocaleController.formatString("NotificationActionPinnedQuizChannel2", works.heymate.beta.R.string.NotificationActionPinnedQuizChannel2, chat.title, mediaPoll.poll.question);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedPollChannel2", R.string.NotificationActionPinnedPollChannel2, chat.title, mediaPoll.poll.question);
+                                            msg = LocaleController.formatString("NotificationActionPinnedPollChannel2", works.heymate.beta.R.string.NotificationActionPinnedPollChannel2, chat.title, mediaPoll.poll.question);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                                         if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(object.messageOwner.message)) {
                                             String message = "\uD83D\uDDBC " + object.messageOwner.message;
-                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                            msg = LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                         } else {
-                                            msg = LocaleController.formatString("NotificationActionPinnedPhotoChannel", R.string.NotificationActionPinnedPhotoChannel, chat.title);
+                                            msg = LocaleController.formatString("NotificationActionPinnedPhotoChannel", works.heymate.beta.R.string.NotificationActionPinnedPhotoChannel, chat.title);
                                         }
                                     } else if (object.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                                        msg = LocaleController.formatString("NotificationActionPinnedGameChannel", R.string.NotificationActionPinnedGameChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedGameChannel", works.heymate.beta.R.string.NotificationActionPinnedGameChannel, chat.title);
                                     } else if (object.messageText != null && object.messageText.length() > 0) {
                                         CharSequence message = object.messageText;
                                         if (message.length() > 20) {
                                             message = message.subSequence(0, 20) + "...";
                                         }
-                                        msg = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, chat.title, message);
+                                        msg = LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, chat.title, message);
                                     } else {
-                                        msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, chat.title);
+                                        msg = LocaleController.formatString("NotificationActionPinnedNoTextChannel", works.heymate.beta.R.string.NotificationActionPinnedNoTextChannel, chat.title);
                                     }
                                 }
                             }
@@ -2248,143 +2250,143 @@ public class NotificationsController extends BaseController {
                     } else if (ChatObject.isChannel(chat) && !chat.megagroup) {
                         if (messageObject.isMediaEmpty()) {
                             if (!shortMessage && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, messageObject.messageOwner.message);
                                 text[0] = true;
                             } else {
-                                msg = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name);
+                                msg = LocaleController.formatString("ChannelMessageNoText", works.heymate.beta.R.string.ChannelMessageNoText, name);
                             }
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                             if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83D\uDDBC " + messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83D\uDDBC " + messageObject.messageOwner.message);
                                 text[0] = true;
                             } else {
-                                msg = LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, name);
+                                msg = LocaleController.formatString("ChannelMessagePhoto", works.heymate.beta.R.string.ChannelMessagePhoto, name);
                             }
                         } else if (messageObject.isVideo()) {
                             if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83D\uDCF9 " + messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83D\uDCF9 " + messageObject.messageOwner.message);
                                 text[0] = true;
                             } else {
-                                msg = LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, name);
+                                msg = LocaleController.formatString("ChannelMessageVideo", works.heymate.beta.R.string.ChannelMessageVideo, name);
                             }
                         } else if (messageObject.isVoice()) {
-                            msg = LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, name);
+                            msg = LocaleController.formatString("ChannelMessageAudio", works.heymate.beta.R.string.ChannelMessageAudio, name);
                         } else if (messageObject.isRoundVideo()) {
-                            msg = LocaleController.formatString("ChannelMessageRound", R.string.ChannelMessageRound, name);
+                            msg = LocaleController.formatString("ChannelMessageRound", works.heymate.beta.R.string.ChannelMessageRound, name);
                         } else if (messageObject.isMusic()) {
-                            msg = LocaleController.formatString("ChannelMessageMusic", R.string.ChannelMessageMusic, name);
+                            msg = LocaleController.formatString("ChannelMessageMusic", works.heymate.beta.R.string.ChannelMessageMusic, name);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                             TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) messageObject.messageOwner.media;
-                            msg = LocaleController.formatString("ChannelMessageContact2", R.string.ChannelMessageContact2, name, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                            msg = LocaleController.formatString("ChannelMessageContact2", works.heymate.beta.R.string.ChannelMessageContact2, name, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                             TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media;
                             if (mediaPoll.poll.quiz) {
-                                msg = LocaleController.formatString("ChannelMessageQuiz2", R.string.ChannelMessageQuiz2, name, mediaPoll.poll.question);
+                                msg = LocaleController.formatString("ChannelMessageQuiz2", works.heymate.beta.R.string.ChannelMessageQuiz2, name, mediaPoll.poll.question);
                             } else {
-                                msg = LocaleController.formatString("ChannelMessagePoll2", R.string.ChannelMessagePoll2, name, mediaPoll.poll.question);
+                                msg = LocaleController.formatString("ChannelMessagePoll2", works.heymate.beta.R.string.ChannelMessagePoll2, name, mediaPoll.poll.question);
                             }
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                            msg = LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, name);
+                            msg = LocaleController.formatString("ChannelMessageMap", works.heymate.beta.R.string.ChannelMessageMap, name);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                            msg = LocaleController.formatString("ChannelMessageLiveLocation", R.string.ChannelMessageLiveLocation, name);
+                            msg = LocaleController.formatString("ChannelMessageLiveLocation", works.heymate.beta.R.string.ChannelMessageLiveLocation, name);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                             if (messageObject.isSticker() || messageObject.isAnimatedSticker()) {
                                 String emoji = messageObject.getStickerEmoji();
                                 if (emoji != null) {
-                                    msg = LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, name, emoji);
+                                    msg = LocaleController.formatString("ChannelMessageStickerEmoji", works.heymate.beta.R.string.ChannelMessageStickerEmoji, name, emoji);
                                 } else {
-                                    msg = LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, name);
+                                    msg = LocaleController.formatString("ChannelMessageSticker", works.heymate.beta.R.string.ChannelMessageSticker, name);
                                 }
                             } else if (messageObject.isGif()) {
                                 if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83C\uDFAC " + messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83C\uDFAC " + messageObject.messageOwner.message);
                                     text[0] = true;
                                 } else {
-                                    msg = LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, name);
+                                    msg = LocaleController.formatString("ChannelMessageGIF", works.heymate.beta.R.string.ChannelMessageGIF, name);
                                 }
                             } else {
                                 if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, "\uD83D\uDCCE " + messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, "\uD83D\uDCCE " + messageObject.messageOwner.message);
                                     text[0] = true;
                                 } else {
-                                    msg = LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, name);
+                                    msg = LocaleController.formatString("ChannelMessageDocument", works.heymate.beta.R.string.ChannelMessageDocument, name);
                                 }
                             }
                         } else {
                             if (!shortMessage && !TextUtils.isEmpty(messageObject.messageText)) {
-                                msg = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, name, messageObject.messageText);
+                                msg = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, name, messageObject.messageText);
                                 text[0] = true;
                             } else {
-                                msg = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name);
+                                msg = LocaleController.formatString("ChannelMessageNoText", works.heymate.beta.R.string.ChannelMessageNoText, name);
                             }
                         }
                     } else {
                         if (messageObject.isMediaEmpty()) {
                             if (!shortMessage && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageOwner.message);
                             } else {
-                                msg = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, name, chat.title);
+                                msg = LocaleController.formatString("NotificationMessageGroupNoText", works.heymate.beta.R.string.NotificationMessageGroupNoText, name, chat.title);
                             }
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto) {
                             if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\uD83D\uDDBC " + messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, name, chat.title, "\uD83D\uDDBC " + messageObject.messageOwner.message);
                             } else {
-                                msg = LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, name, chat.title);
+                                msg = LocaleController.formatString("NotificationMessageGroupPhoto", works.heymate.beta.R.string.NotificationMessageGroupPhoto, name, chat.title);
                             }
                         } else if (messageObject.isVideo()) {
                             if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                msg = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\uD83D\uDCF9 " + messageObject.messageOwner.message);
+                                msg = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, name, chat.title, "\uD83D\uDCF9 " + messageObject.messageOwner.message);
                             } else {
-                                msg = LocaleController.formatString(" ", R.string.NotificationMessageGroupVideo, name, chat.title);
+                                msg = LocaleController.formatString(" ", works.heymate.beta.R.string.NotificationMessageGroupVideo, name, chat.title);
                             }
                         } else if (messageObject.isVoice()) {
-                            msg = LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, name, chat.title);
+                            msg = LocaleController.formatString("NotificationMessageGroupAudio", works.heymate.beta.R.string.NotificationMessageGroupAudio, name, chat.title);
                         } else if (messageObject.isRoundVideo()) {
-                            msg = LocaleController.formatString("NotificationMessageGroupRound", R.string.NotificationMessageGroupRound, name, chat.title);
+                            msg = LocaleController.formatString("NotificationMessageGroupRound", works.heymate.beta.R.string.NotificationMessageGroupRound, name, chat.title);
                         } else if (messageObject.isMusic()) {
-                            msg = LocaleController.formatString("NotificationMessageGroupMusic", R.string.NotificationMessageGroupMusic, name, chat.title);
+                            msg = LocaleController.formatString("NotificationMessageGroupMusic", works.heymate.beta.R.string.NotificationMessageGroupMusic, name, chat.title);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaContact) {
                             TLRPC.TL_messageMediaContact mediaContact = (TLRPC.TL_messageMediaContact) messageObject.messageOwner.media;
-                            msg = LocaleController.formatString("NotificationMessageGroupContact2", R.string.NotificationMessageGroupContact2, name, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
+                            msg = LocaleController.formatString("NotificationMessageGroupContact2", works.heymate.beta.R.string.NotificationMessageGroupContact2, name, chat.title, ContactsController.formatName(mediaContact.first_name, mediaContact.last_name));
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                             TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) messageObject.messageOwner.media;
                             if (mediaPoll.poll.quiz) {
-                                msg = LocaleController.formatString("NotificationMessageGroupQuiz2", R.string.NotificationMessageGroupQuiz2, name, chat.title, mediaPoll.poll.question);
+                                msg = LocaleController.formatString("NotificationMessageGroupQuiz2", works.heymate.beta.R.string.NotificationMessageGroupQuiz2, name, chat.title, mediaPoll.poll.question);
                             } else {
-                                msg = LocaleController.formatString("NotificationMessageGroupPoll2", R.string.NotificationMessageGroupPoll2, name, chat.title, mediaPoll.poll.question);
+                                msg = LocaleController.formatString("NotificationMessageGroupPoll2", works.heymate.beta.R.string.NotificationMessageGroupPoll2, name, chat.title, mediaPoll.poll.question);
                             }
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                            msg = LocaleController.formatString("NotificationMessageGroupGame", R.string.NotificationMessageGroupGame, name, chat.title, messageObject.messageOwner.media.game.title);
+                            msg = LocaleController.formatString("NotificationMessageGroupGame", works.heymate.beta.R.string.NotificationMessageGroupGame, name, chat.title, messageObject.messageOwner.media.game.title);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                            msg = LocaleController.formatString("NotificationMessageGroupMap", R.string.NotificationMessageGroupMap, name, chat.title);
+                            msg = LocaleController.formatString("NotificationMessageGroupMap", works.heymate.beta.R.string.NotificationMessageGroupMap, name, chat.title);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
-                            msg = LocaleController.formatString("NotificationMessageGroupLiveLocation", R.string.NotificationMessageGroupLiveLocation, name, chat.title);
+                            msg = LocaleController.formatString("NotificationMessageGroupLiveLocation", works.heymate.beta.R.string.NotificationMessageGroupLiveLocation, name, chat.title);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {
                             if (messageObject.isSticker() || messageObject.isAnimatedSticker()) {
                                 String emoji = messageObject.getStickerEmoji();
                                 if (emoji != null) {
-                                    msg = LocaleController.formatString("NotificationMessageGroupStickerEmoji", R.string.NotificationMessageGroupStickerEmoji, name, chat.title, emoji);
+                                    msg = LocaleController.formatString("NotificationMessageGroupStickerEmoji", works.heymate.beta.R.string.NotificationMessageGroupStickerEmoji, name, chat.title, emoji);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageGroupSticker", R.string.NotificationMessageGroupSticker, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationMessageGroupSticker", works.heymate.beta.R.string.NotificationMessageGroupSticker, name, chat.title);
                                 }
                             } else if (messageObject.isGif()) {
                                 if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\uD83C\uDFAC " + messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, name, chat.title, "\uD83C\uDFAC " + messageObject.messageOwner.message);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageGroupGif", R.string.NotificationMessageGroupGif, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationMessageGroupGif", works.heymate.beta.R.string.NotificationMessageGroupGif, name, chat.title);
                                 }
                             } else {
                                 if (!shortMessage && Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(messageObject.messageOwner.message)) {
-                                    msg = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, "\uD83D\uDCCE " + messageObject.messageOwner.message);
+                                    msg = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, name, chat.title, "\uD83D\uDCCE " + messageObject.messageOwner.message);
                                 } else {
-                                    msg = LocaleController.formatString("NotificationMessageGroupDocument", R.string.NotificationMessageGroupDocument, name, chat.title);
+                                    msg = LocaleController.formatString("NotificationMessageGroupDocument", works.heymate.beta.R.string.NotificationMessageGroupDocument, name, chat.title);
                                 }
                             }
                         } else {
                             if (!shortMessage && !TextUtils.isEmpty(messageObject.messageText)) {
-                                msg = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageText);
+                                msg = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, name, chat.title, messageObject.messageText);
                             } else {
-                                msg = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, name, chat.title);
+                                msg = LocaleController.formatString("NotificationMessageGroupNoText", works.heymate.beta.R.string.NotificationMessageGroupNoText, name, chat.title);
                             }
                         }
                     }
@@ -2393,9 +2395,9 @@ public class NotificationsController extends BaseController {
                         preview[0] = false;
                     }
                     if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                        msg = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, name);
+                        msg = LocaleController.formatString("ChannelMessageNoText", works.heymate.beta.R.string.ChannelMessageNoText, name);
                     } else {
-                        msg = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, name, chat.title);
+                        msg = LocaleController.formatString("NotificationMessageGroupNoText", works.heymate.beta.R.string.NotificationMessageGroupNoText, name, chat.title);
                     }
                 }
             }
@@ -2520,7 +2522,7 @@ public class NotificationsController extends BaseController {
                     }
                     if (soundIn == 0 && !soundInLoaded) {
                         soundInLoaded = true;
-                        soundIn = soundPool.load(ApplicationLoader.applicationContext, R.raw.sound_in, 1);
+                        soundIn = soundPool.load(ApplicationLoader.applicationContext, works.heymate.beta.R.raw.sound_in, 1);
                     }
                     if (soundIn != 0) {
                         try {
@@ -2783,9 +2785,9 @@ public class NotificationsController extends BaseController {
                 bubbleBuilder.setIcon(IconCompat.createWithAdaptiveBitmap(avatar));
             } else {
                 if (user != null) {
-                    bubbleBuilder.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, user.bot ? R.drawable.book_bot : R.drawable.book_user));
+                    bubbleBuilder.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, user.bot ? works.heymate.beta.R.drawable.book_bot : works.heymate.beta.R.drawable.book_user));
                 } else {
-                    bubbleBuilder.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_group));
+                    bubbleBuilder.setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.book_group));
                 }
             }
             builder.setBubbleMetadata(bubbleBuilder.build());
@@ -2863,10 +2865,10 @@ public class NotificationsController extends BaseController {
             }
 
             systemNotificationManager.createNotificationChannelGroups(Arrays.asList(
-                    new NotificationChannelGroup("channels" + currentAccount, LocaleController.getString("NotificationsChannels", R.string.NotificationsChannels) + userName),
-                    new NotificationChannelGroup("groups" + currentAccount, LocaleController.getString("NotificationsGroups", R.string.NotificationsGroups) + userName),
-                    new NotificationChannelGroup("private" + currentAccount, LocaleController.getString("NotificationsPrivateChats", R.string.NotificationsPrivateChats) + userName),
-                    new NotificationChannelGroup("other" + currentAccount, LocaleController.getString("NotificationsOther", R.string.NotificationsOther) + userName)
+                    new NotificationChannelGroup("channels" + currentAccount, LocaleController.getString("NotificationsChannels", works.heymate.beta.R.string.NotificationsChannels) + userName),
+                    new NotificationChannelGroup("groups" + currentAccount, LocaleController.getString("NotificationsGroups", works.heymate.beta.R.string.NotificationsGroups) + userName),
+                    new NotificationChannelGroup("private" + currentAccount, LocaleController.getString("NotificationsPrivateChats", works.heymate.beta.R.string.NotificationsPrivateChats) + userName),
+                    new NotificationChannelGroup("other" + currentAccount, LocaleController.getString("NotificationsOther", works.heymate.beta.R.string.NotificationsOther) + userName)
             ));
 
             preferences.edit().putBoolean("groupsCreated4", true).commit();
@@ -2903,10 +2905,10 @@ public class NotificationsController extends BaseController {
         boolean shouldOverwrite = !isInApp && overwriteKey != null && preferences.getBoolean(overwriteKey, false);
 
         if (isSilent) {
-            name = LocaleController.getString("NotificationsSilent", R.string.NotificationsSilent);
+            name = LocaleController.getString("NotificationsSilent", works.heymate.beta.R.string.NotificationsSilent);
             key = "silent";
         } else if (isDefault) {
-            name = isInApp ? LocaleController.getString("NotificationsInAppDefault", R.string.NotificationsInAppDefault) : LocaleController.getString("NotificationsDefault", R.string.NotificationsDefault);
+            name = isInApp ? LocaleController.getString("NotificationsInAppDefault", works.heymate.beta.R.string.NotificationsInAppDefault) : LocaleController.getString("NotificationsDefault", works.heymate.beta.R.string.NotificationsDefault);
             if (type == TYPE_CHANNEL) {
                 key = isInApp ? "channels_ia" : "channels";
             } else if (type == TYPE_GROUP) {
@@ -2916,7 +2918,7 @@ public class NotificationsController extends BaseController {
             }
         } else {
             if (isInApp) {
-                name = LocaleController.formatString("NotificationsChatInApp", R.string.NotificationsChatInApp, name);
+                name = LocaleController.formatString("NotificationsChatInApp", works.heymate.beta.R.string.NotificationsChatInApp, name);
             }
             key = (isInApp ? "org.telegram.keyia" : "org.telegram.key") + dialogId;
         }
@@ -3028,7 +3030,7 @@ public class NotificationsController extends BaseController {
                                     String ringtoneName = null;
                                     if (rng != null) {
                                         if (channelSound.equals(Settings.System.DEFAULT_RINGTONE_URI)) {
-                                            ringtoneName = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
+                                            ringtoneName = LocaleController.getString("DefaultRingtone", works.heymate.beta.R.string.DefaultRingtone);
                                         } else {
                                             ringtoneName = rng.getTitle(ApplicationLoader.applicationContext);
                                         }
@@ -3152,7 +3154,7 @@ public class NotificationsController extends BaseController {
             } else {
                 channelId = currentAccount + "channel_" + dialogId + "_" + Utilities.random.nextLong();
             }
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, secretChat ? LocaleController.getString("SecretChatName", R.string.SecretChatName) : name, importance);
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, secretChat ? LocaleController.getString("SecretChatName", works.heymate.beta.R.string.SecretChatName) : name, importance);
             notificationChannel.setGroup(groupId);
             if (ledColor != 0) {
                 notificationChannel.enableLights(true);
@@ -3255,12 +3257,12 @@ public class NotificationsController extends BaseController {
             if ((int) dialog_id == 0 || pushDialogs.size() > 1 || passcode) {
                 if (passcode) {
                     if (chat_id != 0) {
-                        name = LocaleController.getString("NotificationHiddenChatName", R.string.NotificationHiddenChatName);
+                        name = LocaleController.getString("NotificationHiddenChatName", works.heymate.beta.R.string.NotificationHiddenChatName);
                     } else {
-                        name = LocaleController.getString("NotificationHiddenName", R.string.NotificationHiddenName);
+                        name = LocaleController.getString("NotificationHiddenName", works.heymate.beta.R.string.NotificationHiddenName);
                     }
                 } else {
-                    name = LocaleController.getString("AppName", R.string.AppName);
+                    name = LocaleController.getString("AppName", works.heymate.beta.R.string.AppName);
                 }
                 replace = false;
             } else {
@@ -3281,7 +3283,7 @@ public class NotificationsController extends BaseController {
                 if (pushDialogs.size() == 1) {
                     detailText += LocaleController.formatPluralString("NewMessages", total_unread_count);
                 } else {
-                    detailText += LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", total_unread_count), LocaleController.formatPluralString("FromChats", pushDialogs.size()));
+                    detailText += LocaleController.formatString("NotificationMessagesPeopleDisplayOrder", works.heymate.beta.R.string.NotificationMessagesPeopleDisplayOrder, LocaleController.formatPluralString("NewMessages", total_unread_count), LocaleController.formatPluralString("FromChats", pushDialogs.size()));
                 }
             }
 
@@ -3516,7 +3518,7 @@ public class NotificationsController extends BaseController {
             PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
             mBuilder.setContentTitle(name)
-                    .setSmallIcon(R.drawable.notification)
+                    .setSmallIcon(works.heymate.beta.R.drawable.notification)
                     .setAutoCancel(true)
                     .setNumber(total_unread_count)
                     .setContentIntent(contentIntent)
@@ -3668,9 +3670,9 @@ public class NotificationsController extends BaseController {
                 Intent replyIntent = new Intent(ApplicationLoader.applicationContext, PopupReplyReceiver.class);
                 replyIntent.putExtra("currentAccount", currentAccount);
                 if (Build.VERSION.SDK_INT <= 19) {
-                    mBuilder.addAction(R.drawable.ic_ab_reply2, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                    mBuilder.addAction(works.heymate.beta.R.drawable.ic_ab_reply2, LocaleController.getString("Reply", works.heymate.beta.R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                 } else {
-                    mBuilder.addAction(R.drawable.ic_ab_reply, LocaleController.getString("Reply", R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                    mBuilder.addAction(works.heymate.beta.R.drawable.ic_ab_reply, LocaleController.getString("Reply", works.heymate.beta.R.string.Reply), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                 }
             }
             showExtraNotifications(mBuilder, detailText, dialog_id, chatName, vibrationPattern, ledColor, sound, configImportance, isDefault, isInApp, notifyDisabled, chatType);
@@ -3696,7 +3698,7 @@ public class NotificationsController extends BaseController {
             SharedPreferences.Editor editor = preferences.edit();
 
             String newSound = defaultSound.toString();
-            String ringtoneName = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
+            String ringtoneName = LocaleController.getString("DefaultRingtone", works.heymate.beta.R.string.DefaultRingtone);
             if (isDefault) {
                 if (chatType == TYPE_CHANNEL) {
                     editor.putString("ChannelSound", ringtoneName);
@@ -3871,9 +3873,9 @@ public class NotificationsController extends BaseController {
                         }
                     }
                     if (UserObject.isReplyUser(lowerId)) {
-                        name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
+                        name = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
                     } else if (lowerId == selfUserId) {
-                        name = LocaleController.getString("MessageScheduledReminderNotification", R.string.MessageScheduledReminderNotification);
+                        name = LocaleController.getString("MessageScheduledReminderNotification", works.heymate.beta.R.string.MessageScheduledReminderNotification);
                     }
                 } else {
                     chat = getMessagesController().getChat(-lowerId);
@@ -3915,16 +3917,16 @@ public class NotificationsController extends BaseController {
                         continue;
                     }
                 }
-                name = LocaleController.getString("SecretChatName", R.string.SecretChatName);
+                name = LocaleController.getString("SecretChatName", works.heymate.beta.R.string.SecretChatName);
                 photoPath = null;
                 serializedChat = null;
             }
 
             if (waitingForPasscode) {
                 if (lowerId < 0) {
-                    name = LocaleController.getString("NotificationHiddenChatName", R.string.NotificationHiddenChatName);
+                    name = LocaleController.getString("NotificationHiddenChatName", works.heymate.beta.R.string.NotificationHiddenChatName);
                 } else {
-                    name = LocaleController.getString("NotificationHiddenName", R.string.NotificationHiddenName);
+                    name = LocaleController.getString("NotificationHiddenName", works.heymate.beta.R.string.NotificationHiddenName);
                 }
                 photoPath = null;
                 canReply = false;
@@ -3967,14 +3969,14 @@ public class NotificationsController extends BaseController {
                 replyIntent.putExtra("max_id", max_id);
                 replyIntent.putExtra("currentAccount", currentAccount);
                 PendingIntent replyPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                RemoteInput remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", R.string.Reply)).build();
+                RemoteInput remoteInputWear = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(LocaleController.getString("Reply", works.heymate.beta.R.string.Reply)).build();
                 String replyToString;
                 if (lowerId < 0) {
-                    replyToString = LocaleController.formatString("ReplyToGroup", R.string.ReplyToGroup, name);
+                    replyToString = LocaleController.formatString("ReplyToGroup", works.heymate.beta.R.string.ReplyToGroup, name);
                 } else {
-                    replyToString = LocaleController.formatString("ReplyToUser", R.string.ReplyToUser, name);
+                    replyToString = LocaleController.formatString("ReplyToUser", works.heymate.beta.R.string.ReplyToUser, name);
                 }
-                wearReplyAction = new NotificationCompat.Action.Builder(R.drawable.ic_reply_icon, replyToString, replyPendingIntent)
+                wearReplyAction = new NotificationCompat.Action.Builder(works.heymate.beta.R.drawable.ic_reply_icon, replyToString, replyPendingIntent)
                         .setAllowGeneratedReplies(true)
                         .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
                         .addRemoteInput(remoteInputWear)
@@ -4002,7 +4004,7 @@ public class NotificationsController extends BaseController {
                 }
                 try {
                     if (sender != null && sender.photo != null && sender.photo.photo_small != null && sender.photo.photo_small.volume_id != 0 && sender.photo.photo_small.local_id != 0) {
-                        Person.Builder personBuilder = new Person.Builder().setName(LocaleController.getString("FromYou", R.string.FromYou));
+                        Person.Builder personBuilder = new Person.Builder().setName(LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou));
                         File avatar = FileLoader.getPathToAttach(sender.photo.photo_small, true);
                         loadRoundAvatar(avatar, personBuilder);
                         selfPerson = personBuilder.build();
@@ -4039,7 +4041,7 @@ public class NotificationsController extends BaseController {
                 if (dialog_id == selfUserId) {
                     senderName[0] = name;
                 } else if (lowerId < 0 && messageObject.messageOwner.from_scheduled) {
-                    senderName[0] = LocaleController.getString("NotificationMessageScheduledName", R.string.NotificationMessageScheduledName);
+                    senderName[0] = LocaleController.getString("NotificationMessageScheduledName", works.heymate.beta.R.string.NotificationMessageScheduledName);
                 }
                 if (message == null) {
                     if (BuildVars.LOGS_ENABLED) {
@@ -4051,7 +4053,7 @@ public class NotificationsController extends BaseController {
                     text.append("\n\n");
                 }
                 if (dialog_id != selfUserId && messageObject.messageOwner.from_scheduled && lowerId > 0) {
-                    message = String.format("%1$s: %2$s", LocaleController.getString("NotificationMessageScheduledName", R.string.NotificationMessageScheduledName), message);
+                    message = String.format("%1$s: %2$s", LocaleController.getString("NotificationMessageScheduledName", works.heymate.beta.R.string.NotificationMessageScheduledName), message);
                     text.append(message);
                 } else {
                     if (senderName[0] != null) {
@@ -4078,13 +4080,13 @@ public class NotificationsController extends BaseController {
                         if (lowerId < 0) {
                             if (isChannel) {
                                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
-                                    personName = LocaleController.getString("NotificationHiddenChatName", R.string.NotificationHiddenChatName);
+                                    personName = LocaleController.getString("NotificationHiddenChatName", works.heymate.beta.R.string.NotificationHiddenChatName);
                                 }
                             } else {
-                                personName = LocaleController.getString("NotificationHiddenChatUserName", R.string.NotificationHiddenChatUserName);
+                                personName = LocaleController.getString("NotificationHiddenChatUserName", works.heymate.beta.R.string.NotificationHiddenChatUserName);
                             }
                         } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
-                            personName = LocaleController.getString("NotificationHiddenName", R.string.NotificationHiddenName);
+                            personName = LocaleController.getString("NotificationHiddenName", works.heymate.beta.R.string.NotificationHiddenName);
                         }
                     }
                 } else {
@@ -4233,7 +4235,7 @@ public class NotificationsController extends BaseController {
             msgHeardIntent.putExtra("max_id", max_id);
             msgHeardIntent.putExtra("currentAccount", currentAccount);
             PendingIntent readPendingIntent = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, internalId, msgHeardIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Action readAction = new NotificationCompat.Action.Builder(R.drawable.menu_read, LocaleController.getString("MarkAsRead", R.string.MarkAsRead), readPendingIntent)
+            NotificationCompat.Action readAction = new NotificationCompat.Action.Builder(works.heymate.beta.R.drawable.menu_read, LocaleController.getString("MarkAsRead", works.heymate.beta.R.string.MarkAsRead), readPendingIntent)
                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_MARK_AS_READ)
                     .setShowsUserInterface(false)
                     .build();
@@ -4263,7 +4265,7 @@ public class NotificationsController extends BaseController {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext)
                     .setContentTitle(name)
-                    .setSmallIcon(R.drawable.notification)
+                    .setSmallIcon(works.heymate.beta.R.drawable.notification)
                     .setContentText(text.toString())
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
@@ -4476,7 +4478,7 @@ public class NotificationsController extends BaseController {
                 }
                 if (soundOut == 0 && !soundOutLoaded) {
                     soundOutLoaded = true;
-                    soundOut = soundPool.load(ApplicationLoader.applicationContext, R.raw.sound_out, 1);
+                    soundOut = soundPool.load(ApplicationLoader.applicationContext, works.heymate.beta.R.raw.sound_out, 1);
                 }
                 if (soundOut != 0) {
                     try {

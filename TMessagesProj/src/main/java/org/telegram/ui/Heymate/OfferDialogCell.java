@@ -29,7 +29,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -75,31 +75,31 @@ public class OfferDialogCell extends SequenceLayout {
 
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr) {
         setPageWidth(140);
-        LayoutInflater.from(context).inflate(R.layout.cell_offerdialog, this, true);
-        List<Sequence> sequences = addSequences(R.xml.sequences_cell_offerdialog);
+        LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.cell_offerdialog, this, true);
+        List<Sequence> sequences = addSequences(works.heymate.beta.R.xml.sequences_cell_offerdialog);
         sequences.get(0).getSpans().get(0).size = SharedConfig.useThreeLinesLayout ? 78 : 72;
 
         setWillNotDraw(false);
 
-        mImageDialog = findViewById(R.id.image_dialog);
-        View dividerImage = findViewById(R.id.divider_image);
-        mTextName = findViewById(R.id.text_name);
-        mTextMessage = findViewById(R.id.text_message);
-        mImageTag = findViewById(R.id.image_tag);
-        mTextTime = findViewById(R.id.text_time);
-        mTextUnreadCount = findViewById(R.id.text_unreadcount);
+        mImageDialog = findViewById(works.heymate.beta.R.id.image_dialog);
+        View dividerImage = findViewById(works.heymate.beta.R.id.divider_image);
+        mTextName = findViewById(works.heymate.beta.R.id.text_name);
+        mTextMessage = findViewById(works.heymate.beta.R.id.text_message);
+        mImageTag = findViewById(works.heymate.beta.R.id.image_tag);
+        mTextTime = findViewById(works.heymate.beta.R.id.text_time);
+        mTextUnreadCount = findViewById(works.heymate.beta.R.id.text_unreadcount);
 
-        mImageDialog.setImageResource(R.drawable.offer);
+        mImageDialog.setImageResource(works.heymate.beta.R.drawable.offer);
         mImageDialog.setColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN);
-        mImageDialog.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, R.color.ht_theme)));
+        mImageDialog.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme)));
 //        mImageDialog.setVisibility(INVISIBLE);
 
-        dividerImage.setBackgroundColor(ContextCompat.getColor(context, R.color.ht_theme));
+        dividerImage.setBackgroundColor(ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme));
 
         mTextName.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mTextMessage.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
 
-        mImageTag.setImageResource(R.drawable.offer);
+        mImageTag.setImageResource(works.heymate.beta.R.drawable.offer);
         mImageTag.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteHintText), PorterDuff.Mode.SRC_IN);
 
         mTextTime.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -241,16 +241,16 @@ public class OfferDialogCell extends SequenceLayout {
             if (message == null) {
                 if (encryptedChat != null) {
                     if (encryptedChat instanceof TLRPC.TL_encryptedChatRequested) {
-                        messageString = LocaleController.getString("EncryptionProcessing", R.string.EncryptionProcessing);
+                        messageString = LocaleController.getString("EncryptionProcessing", works.heymate.beta.R.string.EncryptionProcessing);
                     } else if (encryptedChat instanceof TLRPC.TL_encryptedChatWaiting) {
-                        messageString = LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, UserObject.getFirstName(user));
+                        messageString = LocaleController.formatString("AwaitingEncryption", works.heymate.beta.R.string.AwaitingEncryption, UserObject.getFirstName(user));
                     } else if (encryptedChat instanceof TLRPC.TL_encryptedChatDiscarded) {
-                        messageString = LocaleController.getString("EncryptionRejected", R.string.EncryptionRejected);
+                        messageString = LocaleController.getString("EncryptionRejected", works.heymate.beta.R.string.EncryptionRejected);
                     } else if (encryptedChat instanceof TLRPC.TL_encryptedChat) {
                         if (encryptedChat.admin_id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                            messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", R.string.EncryptedChatStartedOutgoing, UserObject.getFirstName(user));
+                            messageString = LocaleController.formatString("EncryptedChatStartedOutgoing", works.heymate.beta.R.string.EncryptedChatStartedOutgoing, UserObject.getFirstName(user));
                         } else {
-                            messageString = LocaleController.getString("EncryptedChatStartedIncoming", R.string.EncryptedChatStartedIncoming);
+                            messageString = LocaleController.getString("EncryptedChatStartedIncoming", works.heymate.beta.R.string.EncryptedChatStartedIncoming);
                         }
                     }
                 } else {
@@ -276,11 +276,11 @@ public class OfferDialogCell extends SequenceLayout {
                     boolean needEmoji = true;
                     if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                         if (message.isOutOwner()) {
-                            messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
+                            messageNameString = LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou);
                         } else if (fromUser != null) {
                             if (SharedConfig.useThreeLinesLayout) {
                                 if (UserObject.isDeleted(fromUser)) {
-                                    messageNameString = LocaleController.getString("HiddenName", R.string.HiddenName);
+                                    messageNameString = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
                                 } else {
                                     messageNameString = ContactsController.formatName(fromUser.first_name, fromUser.last_name).replace("\n", "");
                                 }
@@ -378,9 +378,9 @@ public class OfferDialogCell extends SequenceLayout {
                         }
                     } else {
                         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto && message.messageOwner.media.photo instanceof TLRPC.TL_photoEmpty && message.messageOwner.media.ttl_seconds != 0) {
-                            messageString = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                            messageString = LocaleController.getString("AttachPhotoExpired", works.heymate.beta.R.string.AttachPhotoExpired);
                         } else if (message.messageOwner.media instanceof TLRPC.TL_messageMediaDocument && message.messageOwner.media.document instanceof TLRPC.TL_documentEmpty && message.messageOwner.media.ttl_seconds != 0) {
-                            messageString = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+                            messageString = LocaleController.getString("AttachVideoExpired", works.heymate.beta.R.string.AttachVideoExpired);
                         } else if (message.caption != null) {
                             String emoji;
                             if (!needEmoji) {
@@ -449,11 +449,11 @@ public class OfferDialogCell extends SequenceLayout {
         if (messagesController.isPromoDialog(currentDialogId, true)) {
             promoDialog = true;
             if (messagesController.promoDialogType == MessagesController.PROMO_TYPE_PROXY) {
-                timeString = LocaleController.getString("UseProxySponsor", R.string.UseProxySponsor);
+                timeString = LocaleController.getString("UseProxySponsor", works.heymate.beta.R.string.UseProxySponsor);
             } else if (messagesController.promoDialogType == MessagesController.PROMO_TYPE_PSA) {
                 timeString = LocaleController.getString("PsaType_" + messagesController.promoPsaType);
                 if (TextUtils.isEmpty(timeString)) {
-                    timeString = LocaleController.getString("PsaTypeDefault", R.string.PsaTypeDefault);
+                    timeString = LocaleController.getString("PsaTypeDefault", works.heymate.beta.R.string.PsaTypeDefault);
                 }
                 if (!TextUtils.isEmpty(messagesController.promoPsaMessage)) {
                     messageString = messagesController.promoPsaMessage;
@@ -465,15 +465,15 @@ public class OfferDialogCell extends SequenceLayout {
             nameString = chat.title;
         } else if (user != null) {
             if (UserObject.isReplyUser(user)) {
-                nameString = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
+                nameString = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
             } else if (UserObject.isUserSelf(user)) {
-                nameString = LocaleController.getString("FromYou", R.string.FromYou);
+                nameString = LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou);
             } else {
                 nameString = UserObject.getUserName(user);
             }
         }
         if (nameString.length() == 0) {
-            nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
+            nameString = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
         }
 
         if (checkMessage) {

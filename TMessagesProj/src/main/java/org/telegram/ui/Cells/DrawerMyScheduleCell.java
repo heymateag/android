@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -51,7 +51,7 @@ public class DrawerMyScheduleCell extends FrameLayout {
         super.onAttachedToWindow();
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
         textView.setText("My Schedule");
-        Drawable drawable = getResources().getDrawable(R.drawable.ht_calendar);
+        Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.ht_calendar);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
         textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }

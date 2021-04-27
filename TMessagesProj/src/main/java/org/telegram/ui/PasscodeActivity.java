@@ -44,7 +44,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -128,7 +128,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     @Override
     public View createView(Context context) {
         if (type != 3) {
-            actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         }
         actionBar.setAllowOverlayTitle(false);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -157,18 +157,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
 
         if (type != 0) {
             ActionBarMenu menu = actionBar.createMenu();
-            menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+            menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
 
             titleTextView = new TextView(context);
             titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             if (type == 1) {
                 if (SharedConfig.passcodeHash.length() != 0) {
-                    titleTextView.setText(LocaleController.getString("EnterNewPasscode", R.string.EnterNewPasscode));
+                    titleTextView.setText(LocaleController.getString("EnterNewPasscode", works.heymate.beta.R.string.EnterNewPasscode));
                 } else {
-                    titleTextView.setText(LocaleController.getString("EnterNewFirstPasscode", R.string.EnterNewFirstPasscode));
+                    titleTextView.setText(LocaleController.getString("EnterNewFirstPasscode", works.heymate.beta.R.string.EnterNewFirstPasscode));
                 }
             } else {
-                titleTextView.setText(LocaleController.getString("EnterCurrentPasscode", R.string.EnterCurrentPasscode));
+                titleTextView.setText(LocaleController.getString("EnterCurrentPasscode", works.heymate.beta.R.string.EnterCurrentPasscode));
             }
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             titleTextView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -253,8 +253,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 frameLayout.setTag(Theme.key_windowBackgroundWhite);
                 dropDownContainer = new ActionBarMenuItem(context, menu, 0, 0);
                 dropDownContainer.setSubMenuOpenSide(1);
-                dropDownContainer.addSubItem(pin_item, LocaleController.getString("PasscodePIN", R.string.PasscodePIN));
-                dropDownContainer.addSubItem(password_item, LocaleController.getString("PasscodePassword", R.string.PasscodePassword));
+                dropDownContainer.addSubItem(pin_item, LocaleController.getString("PasscodePIN", works.heymate.beta.R.string.PasscodePIN));
+                dropDownContainer.addSubItem(password_item, LocaleController.getString("PasscodePassword", works.heymate.beta.R.string.PasscodePassword));
                 actionBar.addView(dropDownContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, AndroidUtilities.isTablet() ? 64 : 56, 0, 40, 0));
                 dropDownContainer.setOnClickListener(view -> dropDownContainer.toggleSubMenu());
 
@@ -266,19 +266,19 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 dropDown.setEllipsize(TextUtils.TruncateAt.END);
                 dropDown.setTextColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
                 dropDown.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                dropDownDrawable = context.getResources().getDrawable(R.drawable.ic_arrow_drop_down).mutate();
+                dropDownDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_arrow_drop_down).mutate();
                 dropDownDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), PorterDuff.Mode.MULTIPLY));
                 dropDown.setCompoundDrawablesWithIntrinsicBounds(null, null, dropDownDrawable, null);
                 dropDown.setCompoundDrawablePadding(AndroidUtilities.dp(4));
                 dropDown.setPadding(0, 0, AndroidUtilities.dp(10), 0);
                 dropDownContainer.addView(dropDown, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 16, 0, 0, 1));
             } else {
-                actionBar.setTitle(LocaleController.getString("Passcode", R.string.Passcode));
+                actionBar.setTitle(LocaleController.getString("Passcode", works.heymate.beta.R.string.Passcode));
             }
 
             updateDropDownTextView();
         } else {
-            actionBar.setTitle(LocaleController.getString("Passcode", R.string.Passcode));
+            actionBar.setTitle(LocaleController.getString("Passcode", works.heymate.beta.R.string.Passcode));
             frameLayout.setTag(Theme.key_windowBackgroundGray);
             frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
             listView = new RecyclerListView(context);
@@ -325,7 +325,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AutoLock", R.string.AutoLock));
+                    builder.setTitle(LocaleController.getString("AutoLock", works.heymate.beta.R.string.AutoLock));
                     final NumberPicker numberPicker = new NumberPicker(getParentActivity());
                     numberPicker.setMinValue(0);
                     numberPicker.setMaxValue(4);
@@ -342,20 +342,20 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     }
                     numberPicker.setFormatter(value -> {
                         if (value == 0) {
-                            return LocaleController.getString("AutoLockDisabled", R.string.AutoLockDisabled);
+                            return LocaleController.getString("AutoLockDisabled", works.heymate.beta.R.string.AutoLockDisabled);
                         } else if (value == 1) {
-                            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 1));
+                            return LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 1));
                         } else if (value == 2) {
-                            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 5));
+                            return LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 5));
                         } else if (value == 3) {
-                            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 1));
+                            return LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 1));
                         } else if (value == 4) {
-                            return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 5));
+                            return LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 5));
                         }
                         return "";
                     });
                     builder.setView(numberPicker);
-                    builder.setNegativeButton(LocaleController.getString("Done", R.string.Done), (dialog, which) -> {
+                    builder.setNegativeButton(LocaleController.getString("Done", works.heymate.beta.R.string.Done), (dialog, which) -> {
                         which = numberPicker.getValue();
                         if (which == 0) {
                             SharedConfig.autoLockIn = 0;
@@ -382,7 +382,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     ((TextCheckCell) view).setChecked(SharedConfig.allowScreenCapture);
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetPasscode);
                     if (!SharedConfig.allowScreenCapture) {
-                        AlertsCreator.showSimpleAlert(PasscodeActivity.this, LocaleController.getString("ScreenCaptureAlert", R.string.ScreenCaptureAlert));
+                        AlertsCreator.showSimpleAlert(PasscodeActivity.this, LocaleController.getString("ScreenCaptureAlert", works.heymate.beta.R.string.ScreenCaptureAlert));
                     }
                 }
             });
@@ -475,9 +475,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     private void updateDropDownTextView() {
         if (dropDown != null) {
             if (currentPasswordType == 0) {
-                dropDown.setText(LocaleController.getString("PasscodePIN", R.string.PasscodePIN));
+                dropDown.setText(LocaleController.getString("PasscodePIN", works.heymate.beta.R.string.PasscodePIN));
             } else if (currentPasswordType == 1) {
-                dropDown.setText(LocaleController.getString("PasscodePassword", R.string.PasscodePassword));
+                dropDown.setText(LocaleController.getString("PasscodePassword", works.heymate.beta.R.string.PasscodePassword));
             }
         }
         if (type == 1 && currentPasswordType == 0 || type == 2 && SharedConfig.passcodeType == 0) {
@@ -500,12 +500,12 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             return;
         }
         if (currentPasswordType == 0) {
-            actionBar.setTitle(LocaleController.getString("PasscodePIN", R.string.PasscodePIN));
+            actionBar.setTitle(LocaleController.getString("PasscodePIN", works.heymate.beta.R.string.PasscodePIN));
         } else {
-            actionBar.setTitle(LocaleController.getString("PasscodePassword", R.string.PasscodePassword));
+            actionBar.setTitle(LocaleController.getString("PasscodePassword", works.heymate.beta.R.string.PasscodePassword));
         }
         dropDownContainer.setVisibility(View.GONE);
-        titleTextView.setText(LocaleController.getString("ReEnterYourPasscode", R.string.ReEnterYourPasscode));
+        titleTextView.setText(LocaleController.getString("ReEnterYourPasscode", works.heymate.beta.R.string.ReEnterYourPasscode));
         firstPassword = passwordEditText.getText().toString();
         passwordEditText.setText("");
         passcodeSetStep = 1;
@@ -519,7 +519,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         if (type == 1) {
             if (!firstPassword.equals(passwordEditText.getText().toString())) {
                 try {
-                    Toast.makeText(getParentActivity(), LocaleController.getString("PasscodeDoNotMatch", R.string.PasscodeDoNotMatch), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getParentActivity(), LocaleController.getString("PasscodeDoNotMatch", works.heymate.beta.R.string.PasscodeDoNotMatch), Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -552,7 +552,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         } else if (type == 2) {
             if (SharedConfig.passcodeRetryInMs > 0) {
                 int value = Math.max(1, (int) Math.ceil(SharedConfig.passcodeRetryInMs / 1000.0));
-                Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", R.string.TooManyTries, LocaleController.formatPluralString("Seconds", value)), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", works.heymate.beta.R.string.TooManyTries, LocaleController.formatPluralString("Seconds", value)), Toast.LENGTH_SHORT).show();
                 passwordEditText.setText("");
                 onPasscodeError();
                 return;
@@ -643,18 +643,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 case 0: {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     if (position == passcodeRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("Passcode", R.string.Passcode), SharedConfig.passcodeHash.length() > 0, true);
+                        textCell.setTextAndCheck(LocaleController.getString("Passcode", works.heymate.beta.R.string.Passcode), SharedConfig.passcodeHash.length() > 0, true);
                     } else if (position == fingerprintRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", R.string.UnlockFingerprint), SharedConfig.useFingerprint, true);
+                        textCell.setTextAndCheck(LocaleController.getString("UnlockFingerprint", works.heymate.beta.R.string.UnlockFingerprint), SharedConfig.useFingerprint, true);
                     } else if (position == captureRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ScreenCapture", R.string.ScreenCapture), SharedConfig.allowScreenCapture, false);
+                        textCell.setTextAndCheck(LocaleController.getString("ScreenCapture", works.heymate.beta.R.string.ScreenCapture), SharedConfig.allowScreenCapture, false);
                     }
                     break;
                 }
                 case 1: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == changePasscodeRow) {
-                        textCell.setText(LocaleController.getString("ChangePasscode", R.string.ChangePasscode), false);
+                        textCell.setText(LocaleController.getString("ChangePasscode", works.heymate.beta.R.string.ChangePasscode), false);
                         if (SharedConfig.passcodeHash.length() == 0) {
                             textCell.setTag(Theme.key_windowBackgroundWhiteGrayText7);
                             textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText7));
@@ -665,15 +665,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (position == autoLockRow) {
                         String val;
                         if (SharedConfig.autoLockIn == 0) {
-                            val = LocaleController.formatString("AutoLockDisabled", R.string.AutoLockDisabled);
+                            val = LocaleController.formatString("AutoLockDisabled", works.heymate.beta.R.string.AutoLockDisabled);
                         } else if (SharedConfig.autoLockIn < 60 * 60) {
-                            val = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", SharedConfig.autoLockIn / 60));
+                            val = LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", SharedConfig.autoLockIn / 60));
                         } else if (SharedConfig.autoLockIn < 60 * 60 * 24) {
-                            val = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60)));
+                            val = LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60)));
                         } else {
-                            val = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Days", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60 / 24)));
+                            val = LocaleController.formatString("AutoLockInTime", works.heymate.beta.R.string.AutoLockInTime, LocaleController.formatPluralString("Days", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60 / 24)));
                         }
-                        textCell.setTextAndValue(LocaleController.getString("AutoLock", R.string.AutoLock), val, true);
+                        textCell.setTextAndValue(LocaleController.getString("AutoLock", works.heymate.beta.R.string.AutoLock), val, true);
                         textCell.setTag(Theme.key_windowBackgroundWhiteBlackText);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     }
@@ -682,26 +682,26 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 case 2: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == passcodeDetailRow) {
-                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("ChangePasscodeInfo", R.string.ChangePasscodeInfo));
+                        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("ChangePasscodeInfo", works.heymate.beta.R.string.ChangePasscodeInfo));
                         if (hasWidgets == null) {
                             SharedPreferences preferences = mContext.getSharedPreferences("shortcut_widget", Activity.MODE_PRIVATE);
                             hasWidgets = !preferences.getAll().isEmpty();
                         }
                         if (hasWidgets) {
-                            stringBuilder.append("\n\n").append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscodeEnable2", R.string.WidgetPasscodeEnable2)));
+                            stringBuilder.append("\n\n").append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscodeEnable2", works.heymate.beta.R.string.WidgetPasscodeEnable2)));
                         }
                         cell.setText(stringBuilder);
                         if (autoLockDetailRow != -1) {
-                            cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                            cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         } else {
-                            cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         }
                     } else if (position == autoLockDetailRow) {
-                        cell.setText(LocaleController.getString("AutoLockInfo", R.string.AutoLockInfo));
-                        cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        cell.setText(LocaleController.getString("AutoLockInfo", works.heymate.beta.R.string.AutoLockInfo));
+                        cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == captureDetailRow) {
-                        cell.setText(LocaleController.getString("ScreenCaptureInfo", R.string.ScreenCaptureInfo));
-                        cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        cell.setText(LocaleController.getString("ScreenCaptureInfo", works.heymate.beta.R.string.ScreenCaptureInfo));
+                        cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }

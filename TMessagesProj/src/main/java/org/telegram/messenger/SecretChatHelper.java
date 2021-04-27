@@ -1999,9 +1999,9 @@ public class SecretChatHelper extends BaseController {
                                     FileLog.e(e);
                                 }
                                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                                builder.setMessage(LocaleController.getString("CreateEncryptedChatError", R.string.CreateEncryptedChatError));
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                                builder.setMessage(LocaleController.getString("CreateEncryptedChatError", works.heymate.beta.R.string.CreateEncryptedChatError));
+                                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                                 builder.show().setCanceledOnTouchOutside(true);
                             }
                         });

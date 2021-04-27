@@ -48,7 +48,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SRPHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -199,7 +199,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackgroundDrawable(null);
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(false);
         actionBar.setTitleColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
@@ -220,24 +220,24 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
 
                     });
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setMessage(LocaleController.getString("ResendCodeInfo", R.string.ResendCodeInfo));
-                    builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle));
-                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setMessage(LocaleController.getString("ResendCodeInfo", works.heymate.beta.R.string.ResendCodeInfo));
+                    builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", works.heymate.beta.R.string.TwoStepVerificationTitle));
+                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     showDialog(builder.create());
                 } else if (id == item_abort) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     String text;
                     if (currentPassword != null && currentPassword.has_password) {
-                        text = LocaleController.getString("CancelEmailQuestion", R.string.CancelEmailQuestion);
+                        text = LocaleController.getString("CancelEmailQuestion", works.heymate.beta.R.string.CancelEmailQuestion);
                     } else {
-                        text = LocaleController.getString("CancelPasswordQuestion", R.string.CancelPasswordQuestion);
+                        text = LocaleController.getString("CancelPasswordQuestion", works.heymate.beta.R.string.CancelPasswordQuestion);
                     }
-                    String title = LocaleController.getString("CancelEmailQuestionTitle", R.string.CancelEmailQuestionTitle);
-                    String buttonText = LocaleController.getString("Abort", R.string.Abort);
+                    String title = LocaleController.getString("CancelEmailQuestionTitle", works.heymate.beta.R.string.CancelEmailQuestionTitle);
+                    String buttonText = LocaleController.getString("Abort", works.heymate.beta.R.string.Abort);
                     builder.setMessage(text);
                     builder.setTitle(title);
                     builder.setPositiveButton(buttonText, (dialogInterface, i) -> setNewPassword(true));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -250,9 +250,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
 
         if (currentType == TYPE_EMAIL_CONFIRM) {
             ActionBarMenu menu = actionBar.createMenu();
-            ActionBarMenuItem item = menu.addItem(0, R.drawable.ic_ab_other);
-            item.addSubItem(item_resend, LocaleController.getString("ResendCode", R.string.ResendCode));
-            item.addSubItem(item_abort, LocaleController.getString("AbortPasswordMenu", R.string.AbortPasswordMenu));
+            ActionBarMenuItem item = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
+            item.addSubItem(item_resend, LocaleController.getString("ResendCode", works.heymate.beta.R.string.ResendCode));
+            item.addSubItem(item_abort, LocaleController.getString("AbortPasswordMenu", works.heymate.beta.R.string.AbortPasswordMenu));
         }
 
         topButton = new TextView(context);
@@ -264,13 +264,13 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         topButton.setOnClickListener(v -> {
             if (currentType == TYPE_ENTER_EMAIL) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString("YourEmailSkipWarningText", R.string.YourEmailSkipWarningText));
-                builder.setTitle(LocaleController.getString("YourEmailSkipWarning", R.string.YourEmailSkipWarning));
-                builder.setPositiveButton(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip), (dialogInterface, i) -> {
+                builder.setMessage(LocaleController.getString("YourEmailSkipWarningText", works.heymate.beta.R.string.YourEmailSkipWarningText));
+                builder.setTitle(LocaleController.getString("YourEmailSkipWarning", works.heymate.beta.R.string.YourEmailSkipWarning));
+                builder.setPositiveButton(LocaleController.getString("YourEmailSkip", works.heymate.beta.R.string.YourEmailSkip), (dialogInterface, i) -> {
                     email = "";
                     setNewPassword(false);
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -358,7 +358,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 case TYPE_ENTER_SECOND: {
                     if (!firstPassword.equals(passwordEditText.getText().toString())) {
                         try {
-                            Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", R.string.PasswordDoNotMatch), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getParentActivity(), LocaleController.getString("PasswordDoNotMatch", works.heymate.beta.R.string.PasswordDoNotMatch), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -378,7 +378,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     String hint = passwordEditText.getText().toString();
                     if (hint.toLowerCase().equals(firstPassword.toLowerCase())) {
                         try {
-                            Toast.makeText(getParentActivity(), LocaleController.getString("PasswordAsHintError", R.string.PasswordAsHintError), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getParentActivity(), LocaleController.getString("PasswordAsHintError", works.heymate.beta.R.string.PasswordAsHintError), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -408,15 +408,15 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                         if (error == null) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                                 for (int a = 0, N = fragmentsToClose.size(); a < N; a++) {
                                     fragmentsToClose.get(a).removeSelfFromStack();
                                 }
                                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged);
                                 finishFragment();
                             });
-                            builder.setMessage(LocaleController.getString("PasswordReset", R.string.PasswordReset));
-                            builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle));
+                            builder.setMessage(LocaleController.getString("PasswordReset", works.heymate.beta.R.string.PasswordReset));
+                            builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", works.heymate.beta.R.string.TwoStepVerificationTitle));
                             Dialog dialog = showDialog(builder.create());
                             if (dialog != null) {
                                 dialog.setCanceledOnTouchOutside(false);
@@ -433,9 +433,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", works.heymate.beta.R.string.TwoStepVerificationTitle), LocaleController.formatString("FloodWaitTime", works.heymate.beta.R.string.FloodWaitTime, timeString));
                             } else {
-                                showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle), error.text);
+                                showAlertWithText(LocaleController.getString("TwoStepVerificationTitle", works.heymate.beta.R.string.TwoStepVerificationTitle), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -456,7 +456,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             }
                             if (currentPassword.has_password) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                                     for (int a = 0, N = fragmentsToClose.size(); a < N; a++) {
                                         fragmentsToClose.get(a).removeSelfFromStack();
                                     }
@@ -470,11 +470,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, currentPassword);
                                 });
                                 if (currentPassword.has_recovery) {
-                                    builder.setMessage(LocaleController.getString("YourEmailSuccessChangedText", R.string.YourEmailSuccessChangedText));
+                                    builder.setMessage(LocaleController.getString("YourEmailSuccessChangedText", works.heymate.beta.R.string.YourEmailSuccessChangedText));
                                 } else {
-                                    builder.setMessage(LocaleController.getString("YourEmailSuccessText", R.string.YourEmailSuccessText));
+                                    builder.setMessage(LocaleController.getString("YourEmailSuccessText", works.heymate.beta.R.string.YourEmailSuccessText));
                                 }
-                                builder.setTitle(LocaleController.getString("YourPasswordSuccess", R.string.YourPasswordSuccess));
+                                builder.setTitle(LocaleController.getString("YourPasswordSuccess", works.heymate.beta.R.string.YourPasswordSuccess));
                                 Dialog dialog = showDialog(builder.create());
                                 if (dialog != null) {
                                     dialog.setCanceledOnTouchOutside(false);
@@ -505,9 +505,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                showAlertWithText(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.formatString("FloodWaitTime", works.heymate.beta.R.string.FloodWaitTime, timeString));
                             } else {
-                                showAlertWithText(LocaleController.getString("AppName", R.string.AppName), error.text);
+                                showAlertWithText(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                             }
                         }
                     }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
@@ -776,9 +776,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         info.setChecked(passwordEditText.getTransformationMethod() == null);
                     }
                 };
-                showPasswordButton.setImageResource(R.drawable.msg_message);
+                showPasswordButton.setImageResource(works.heymate.beta.R.drawable.msg_message);
                 showPasswordButton.setScaleType(ImageView.ScaleType.CENTER);
-                showPasswordButton.setContentDescription(LocaleController.getString("TwoStepVerificationShowPassword", R.string.TwoStepVerificationShowPassword));
+                showPasswordButton.setContentDescription(LocaleController.getString("TwoStepVerificationShowPassword", works.heymate.beta.R.string.TwoStepVerificationShowPassword));
                 if (Build.VERSION.SDK_INT >= 21) {
                     showPasswordButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
                 }
@@ -831,9 +831,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     descriptionText3.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                     descriptionText3.setLineSpacing(AndroidUtilities.dp(2), 1);
                     descriptionText3.setPadding(AndroidUtilities.dp(32), 0, AndroidUtilities.dp(32), 0);
-                    descriptionText3.setText(LocaleController.getString("RestoreEmailTroubleNoEmail", R.string.RestoreEmailTroubleNoEmail));
+                    descriptionText3.setText(LocaleController.getString("RestoreEmailTroubleNoEmail", works.heymate.beta.R.string.RestoreEmailTroubleNoEmail));
                     scrollViewLinearLayout.addView(descriptionText3, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 0, 0, 25));
-                    descriptionText3.setOnClickListener(v -> showAlertWithText(LocaleController.getString("RestorePasswordNoEmailTitle", R.string.RestorePasswordNoEmailTitle), LocaleController.getString("RestoreEmailTroubleText", R.string.RestoreEmailTroubleText)));
+                    descriptionText3.setOnClickListener(v -> showAlertWithText(LocaleController.getString("RestorePasswordNoEmailTitle", works.heymate.beta.R.string.RestorePasswordNoEmailTitle), LocaleController.getString("RestoreEmailTroubleText", works.heymate.beta.R.string.RestoreEmailTroubleText)));
                 }
 
                 fragmentView = container;
@@ -861,40 +861,40 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
 
         switch (currentType) {
             case TYPE_INTRO: {
-                titleTextView.setText(LocaleController.getString("TwoStepVerificationTitle", R.string.TwoStepVerificationTitle));
-                descriptionText.setText(LocaleController.getString("SetAdditionalPasswordInfo", R.string.SetAdditionalPasswordInfo));
-                buttonTextView.setText(LocaleController.getString("TwoStepVerificationSetPassword", R.string.TwoStepVerificationSetPassword));
+                titleTextView.setText(LocaleController.getString("TwoStepVerificationTitle", works.heymate.beta.R.string.TwoStepVerificationTitle));
+                descriptionText.setText(LocaleController.getString("SetAdditionalPasswordInfo", works.heymate.beta.R.string.SetAdditionalPasswordInfo));
+                buttonTextView.setText(LocaleController.getString("TwoStepVerificationSetPassword", works.heymate.beta.R.string.TwoStepVerificationSetPassword));
                 descriptionText.setVisibility(View.VISIBLE);
 
-                imageView.setAnimation(R.raw.tsv_setup_intro, 120, 120);
+                imageView.setAnimation(works.heymate.beta.R.raw.tsv_setup_intro, 120, 120);
                 imageView.playAnimation();
                 break;
             }
             case TYPE_PASSWORD_SET: {
-                titleTextView.setText(LocaleController.getString("TwoStepVerificationPasswordSet", R.string.TwoStepVerificationPasswordSet));
-                descriptionText.setText(LocaleController.getString("TwoStepVerificationPasswordSetInfo", R.string.TwoStepVerificationPasswordSetInfo));
+                titleTextView.setText(LocaleController.getString("TwoStepVerificationPasswordSet", works.heymate.beta.R.string.TwoStepVerificationPasswordSet));
+                descriptionText.setText(LocaleController.getString("TwoStepVerificationPasswordSetInfo", works.heymate.beta.R.string.TwoStepVerificationPasswordSetInfo));
                 if (closeAfterSet) {
-                    buttonTextView.setText(LocaleController.getString("TwoStepVerificationPasswordReturnPassport", R.string.TwoStepVerificationPasswordReturnPassport));
+                    buttonTextView.setText(LocaleController.getString("TwoStepVerificationPasswordReturnPassport", works.heymate.beta.R.string.TwoStepVerificationPasswordReturnPassport));
                 } else {
-                    buttonTextView.setText(LocaleController.getString("TwoStepVerificationPasswordReturnSettings", R.string.TwoStepVerificationPasswordReturnSettings));
+                    buttonTextView.setText(LocaleController.getString("TwoStepVerificationPasswordReturnSettings", works.heymate.beta.R.string.TwoStepVerificationPasswordReturnSettings));
                 }
                 descriptionText.setVisibility(View.VISIBLE);
 
-                imageView.setAnimation(R.raw.wallet_allset, 120, 120);
+                imageView.setAnimation(works.heymate.beta.R.raw.wallet_allset, 120, 120);
                 imageView.playAnimation();
                 break;
             }
             case TYPE_ENTER_FIRST: {
                 if (currentPassword.has_password) {
-                    actionBar.setTitle(LocaleController.getString("PleaseEnterNewFirstPassword", R.string.PleaseEnterNewFirstPassword));
-                    titleTextView.setText(LocaleController.getString("PleaseEnterNewFirstPassword", R.string.PleaseEnterNewFirstPassword));
+                    actionBar.setTitle(LocaleController.getString("PleaseEnterNewFirstPassword", works.heymate.beta.R.string.PleaseEnterNewFirstPassword));
+                    titleTextView.setText(LocaleController.getString("PleaseEnterNewFirstPassword", works.heymate.beta.R.string.PleaseEnterNewFirstPassword));
                 } else {
-                    actionBar.setTitle(LocaleController.getString("PleaseEnterFirstPassword", R.string.PleaseEnterFirstPassword));
-                    titleTextView.setText(LocaleController.getString("PleaseEnterFirstPassword", R.string.PleaseEnterFirstPassword));
+                    actionBar.setTitle(LocaleController.getString("PleaseEnterFirstPassword", works.heymate.beta.R.string.PleaseEnterFirstPassword));
+                    titleTextView.setText(LocaleController.getString("PleaseEnterFirstPassword", works.heymate.beta.R.string.PleaseEnterFirstPassword));
                 }
                 actionBar.getTitleTextView().setAlpha(0.0f);
-                buttonTextView.setText(LocaleController.getString("Continue", R.string.Continue));
-                passwordEditText.setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
+                buttonTextView.setText(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue));
+                passwordEditText.setHint(LocaleController.getString("LoginPassword", works.heymate.beta.R.string.LoginPassword));
                 passwordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                 passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -903,22 +903,22 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 passwordEditText.setPadding(0, AndroidUtilities.dp(2), AndroidUtilities.dp(36), 0);
 
                 animationDrawables = new RLottieDrawable[6];
-                animationDrawables[0] = new RLottieDrawable(R.raw.tsv_setup_monkey_idle1, "" + R.raw.tsv_setup_monkey_idle1, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
-                animationDrawables[1] = new RLottieDrawable(R.raw.tsv_setup_monkey_idle2, "" + R.raw.tsv_setup_monkey_idle2, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
-                animationDrawables[2] = new RLottieDrawable(R.raw.tsv_monkey_close, "" + R.raw.tsv_monkey_close, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
-                animationDrawables[3] = new RLottieDrawable(R.raw.tsv_setup_monkey_peek, "" + R.raw.tsv_setup_monkey_peek, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
-                animationDrawables[4] = new RLottieDrawable(R.raw.tsv_setup_monkey_close_and_peek_to_idle, "" + R.raw.tsv_setup_monkey_close_and_peek_to_idle, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
-                animationDrawables[5] = new RLottieDrawable(R.raw.tsv_setup_monkey_close_and_peek, "" + R.raw.tsv_setup_monkey_close_and_peek, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[0] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_setup_monkey_idle1, "" + works.heymate.beta.R.raw.tsv_setup_monkey_idle1, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[1] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_setup_monkey_idle2, "" + works.heymate.beta.R.raw.tsv_setup_monkey_idle2, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[2] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_monkey_close, "" + works.heymate.beta.R.raw.tsv_monkey_close, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[3] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_setup_monkey_peek, "" + works.heymate.beta.R.raw.tsv_setup_monkey_peek, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[4] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_setup_monkey_close_and_peek_to_idle, "" + works.heymate.beta.R.raw.tsv_setup_monkey_close_and_peek_to_idle, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[5] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_setup_monkey_close_and_peek, "" + works.heymate.beta.R.raw.tsv_setup_monkey_close_and_peek, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
                 animationDrawables[2].setOnFinishCallback(finishCallback, 97);
                 setRandomMonkeyIdleAnimation(true);
                 break;
             }
             case TYPE_ENTER_SECOND: {
-                actionBar.setTitle(LocaleController.getString("PleaseReEnterPassword", R.string.PleaseReEnterPassword));
+                actionBar.setTitle(LocaleController.getString("PleaseReEnterPassword", works.heymate.beta.R.string.PleaseReEnterPassword));
                 actionBar.getTitleTextView().setAlpha(0.0f);
-                titleTextView.setText(LocaleController.getString("PleaseReEnterPassword", R.string.PleaseReEnterPassword));
-                buttonTextView.setText(LocaleController.getString("Continue", R.string.Continue));
-                passwordEditText.setHint(LocaleController.getString("LoginPassword", R.string.LoginPassword));
+                titleTextView.setText(LocaleController.getString("PleaseReEnterPassword", works.heymate.beta.R.string.PleaseReEnterPassword));
+                buttonTextView.setText(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue));
+                passwordEditText.setHint(LocaleController.getString("LoginPassword", works.heymate.beta.R.string.LoginPassword));
                 passwordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                 passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -927,7 +927,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 passwordEditText.setPadding(0, AndroidUtilities.dp(2), AndroidUtilities.dp(36), 0);
 
                 animationDrawables = new RLottieDrawable[1];
-                animationDrawables[0] = new RLottieDrawable(R.raw.tsv_setup_monkey_tracking, "" + R.raw.tsv_setup_monkey_tracking, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
+                animationDrawables[0] = new RLottieDrawable(works.heymate.beta.R.raw.tsv_setup_monkey_tracking, "" + works.heymate.beta.R.raw.tsv_setup_monkey_tracking, AndroidUtilities.dp(120), AndroidUtilities.dp(120), true, null);
                 animationDrawables[0].setPlayInDirectionOfCustomEndFrame(true);
                 animationDrawables[0].setCustomEndFrame(19);
                 imageView.setAnimation(animationDrawables[0]);
@@ -935,71 +935,71 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 break;
             }
             case TYPE_ENTER_HINT: {
-                actionBar.setTitle(LocaleController.getString("PasswordHint", R.string.PasswordHint));
+                actionBar.setTitle(LocaleController.getString("PasswordHint", works.heymate.beta.R.string.PasswordHint));
                 actionBar.getTitleTextView().setAlpha(0.0f);
                 topButton.setVisibility(View.VISIBLE);
-                topButton.setText(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip));
-                titleTextView.setText(LocaleController.getString("PasswordHint", R.string.PasswordHint));
-                buttonTextView.setText(LocaleController.getString("Continue", R.string.Continue));
-                passwordEditText.setHint(LocaleController.getString("PasswordHintPlaceholder", R.string.PasswordHintPlaceholder));
+                topButton.setText(LocaleController.getString("YourEmailSkip", works.heymate.beta.R.string.YourEmailSkip));
+                titleTextView.setText(LocaleController.getString("PasswordHint", works.heymate.beta.R.string.PasswordHint));
+                buttonTextView.setText(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue));
+                passwordEditText.setHint(LocaleController.getString("PasswordHintPlaceholder", works.heymate.beta.R.string.PasswordHintPlaceholder));
                 passwordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-                imageView.setAnimation(R.raw.tsv_setup_hint, 120, 120);
+                imageView.setAnimation(works.heymate.beta.R.raw.tsv_setup_hint, 120, 120);
                 imageView.playAnimation();
                 break;
             }
             case TYPE_ENTER_EMAIL: {
-                actionBar.setTitle(LocaleController.getString("RecoveryEmailTitle", R.string.RecoveryEmailTitle));
+                actionBar.setTitle(LocaleController.getString("RecoveryEmailTitle", works.heymate.beta.R.string.RecoveryEmailTitle));
                 actionBar.getTitleTextView().setAlpha(0.0f);
                 if (!emailOnly) {
                     topButton.setVisibility(View.VISIBLE);
-                    topButton.setText(LocaleController.getString("YourEmailSkip", R.string.YourEmailSkip));
+                    topButton.setText(LocaleController.getString("YourEmailSkip", works.heymate.beta.R.string.YourEmailSkip));
                 }
-                titleTextView.setText(LocaleController.getString("RecoveryEmailTitle", R.string.RecoveryEmailTitle));
-                buttonTextView.setText(LocaleController.getString("Continue", R.string.Continue));
-                passwordEditText.setHint(LocaleController.getString("PaymentShippingEmailPlaceholder", R.string.PaymentShippingEmailPlaceholder));
+                titleTextView.setText(LocaleController.getString("RecoveryEmailTitle", works.heymate.beta.R.string.RecoveryEmailTitle));
+                buttonTextView.setText(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue));
+                passwordEditText.setHint(LocaleController.getString("PaymentShippingEmailPlaceholder", works.heymate.beta.R.string.PaymentShippingEmailPlaceholder));
                 passwordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                 passwordEditText.setInputType(EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 
-                imageView.setAnimation(R.raw.tsv_setup_email_sent, 120, 120);
+                imageView.setAnimation(works.heymate.beta.R.raw.tsv_setup_email_sent, 120, 120);
                 imageView.playAnimation();
                 break;
             }
             case TYPE_EMAIL_CONFIRM: {
-                actionBar.setTitle(LocaleController.getString("VerificationCode", R.string.VerificationCode));
+                actionBar.setTitle(LocaleController.getString("VerificationCode", works.heymate.beta.R.string.VerificationCode));
                 actionBar.getTitleTextView().setAlpha(0.0f);
-                titleTextView.setText(LocaleController.getString("VerificationCode", R.string.VerificationCode));
-                buttonTextView.setText(LocaleController.getString("Continue", R.string.Continue));
-                passwordEditText.setHint(LocaleController.getString("EnterCode", R.string.EnterCode));
+                titleTextView.setText(LocaleController.getString("VerificationCode", works.heymate.beta.R.string.VerificationCode));
+                buttonTextView.setText(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue));
+                passwordEditText.setHint(LocaleController.getString("EnterCode", works.heymate.beta.R.string.EnterCode));
                 passwordEditText.setInputType(InputType.TYPE_CLASS_PHONE);
                 passwordEditText.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-                descriptionText2.setText(LocaleController.formatString("EmailPasswordConfirmText2", R.string.EmailPasswordConfirmText2, currentPassword.email_unconfirmed_pattern != null ? currentPassword.email_unconfirmed_pattern : ""));
+                descriptionText2.setText(LocaleController.formatString("EmailPasswordConfirmText2", works.heymate.beta.R.string.EmailPasswordConfirmText2, currentPassword.email_unconfirmed_pattern != null ? currentPassword.email_unconfirmed_pattern : ""));
                 descriptionText2.setVisibility(View.VISIBLE);
                 buttonTextView.setVisibility(View.INVISIBLE);
                 buttonTextView.setAlpha(0.0f);
                 buttonTextView.setScaleX(0.9f);
                 buttonTextView.setScaleY(0.9f);
 
-                imageView.setAnimation(R.raw.tsv_setup_mail, 120, 120);
+                imageView.setAnimation(works.heymate.beta.R.raw.tsv_setup_mail, 120, 120);
                 imageView.playAnimation();
                 break;
             }
             case TYPE_EMAIL_RECOVERY: {
-                actionBar.setTitle(LocaleController.getString("PasswordRecovery", R.string.PasswordRecovery));
+                actionBar.setTitle(LocaleController.getString("PasswordRecovery", works.heymate.beta.R.string.PasswordRecovery));
                 actionBar.getTitleTextView().setAlpha(0.0f);
-                titleTextView.setText(LocaleController.getString("PasswordRecovery", R.string.PasswordRecovery));
-                buttonTextView.setText(LocaleController.getString("Continue", R.string.Continue));
-                passwordEditText.setHint(LocaleController.getString("EnterCode", R.string.EnterCode));
+                titleTextView.setText(LocaleController.getString("PasswordRecovery", works.heymate.beta.R.string.PasswordRecovery));
+                buttonTextView.setText(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue));
+                passwordEditText.setHint(LocaleController.getString("EnterCode", works.heymate.beta.R.string.EnterCode));
                 passwordEditText.setInputType(InputType.TYPE_CLASS_PHONE);
                 passwordEditText.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-                descriptionText2.setText(LocaleController.formatString("RestoreEmailSent", R.string.RestoreEmailSent, currentPassword.email_unconfirmed_pattern != null ? currentPassword.email_unconfirmed_pattern : ""));
+                descriptionText2.setText(LocaleController.formatString("RestoreEmailSent", works.heymate.beta.R.string.RestoreEmailSent, currentPassword.email_unconfirmed_pattern != null ? currentPassword.email_unconfirmed_pattern : ""));
                 descriptionText2.setVisibility(View.VISIBLE);
                 buttonTextView.setVisibility(View.INVISIBLE);
                 buttonTextView.setAlpha(0.0f);
                 buttonTextView.setScaleX(0.9f);
                 buttonTextView.setScaleY(0.9f);
 
-                imageView.setAnimation(R.raw.tsv_setup_mail, 120, 120);
+                imageView.setAnimation(works.heymate.beta.R.raw.tsv_setup_mail, 120, 120);
                 imageView.playAnimation();
                 break;
             }
@@ -1220,7 +1220,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (error == null) {
                 currentPassword = (TLRPC.TL_account_password) response;
                 if (!TwoStepVerificationActivity.canHandleCurrentPassword(currentPassword, false)) {
-                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", works.heymate.beta.R.string.UpdateAppAlert), true);
                     return;
                 }
                 waitingForEmail = !TextUtils.isEmpty(currentPassword.email_unconfirmed_pattern);
@@ -1281,7 +1281,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         builder.setTitle(title);
         builder.setMessage(text);
         showDialog(builder.create());
@@ -1390,7 +1390,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         }
                         if (currentPassword.has_password) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> {
                                 for (int a = 0, N = fragmentsToClose.size(); a < N; a++) {
                                     fragmentsToClose.get(a).removeSelfFromStack();
                                 }
@@ -1404,11 +1404,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, currentPassword);
                             });
                             if (password == null && currentPassword != null && currentPassword.has_password) {
-                                builder.setMessage(LocaleController.getString("YourEmailSuccessText", R.string.YourEmailSuccessText));
+                                builder.setMessage(LocaleController.getString("YourEmailSuccessText", works.heymate.beta.R.string.YourEmailSuccessText));
                             } else {
-                                builder.setMessage(LocaleController.getString("YourPasswordChangedSuccessText", R.string.YourPasswordChangedSuccessText));
+                                builder.setMessage(LocaleController.getString("YourPasswordChangedSuccessText", works.heymate.beta.R.string.YourPasswordChangedSuccessText));
                             }
-                            builder.setTitle(LocaleController.getString("YourPasswordSuccess", R.string.YourPasswordSuccess));
+                            builder.setTitle(LocaleController.getString("YourPasswordSuccess", works.heymate.beta.R.string.YourPasswordSuccess));
                             Dialog dialog = showDialog(builder.create());
                             if (dialog != null) {
                                 dialog.setCanceledOnTouchOutside(false);
@@ -1446,7 +1446,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         presentFragment(fragment, true);
                     } else {
                         if ("EMAIL_INVALID".equals(error.text)) {
-                            showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("PasswordEmailInvalid", R.string.PasswordEmailInvalid));
+                            showAlertWithText(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.getString("PasswordEmailInvalid", works.heymate.beta.R.string.PasswordEmailInvalid));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
                             int time = Utilities.parseInt(error.text);
                             String timeString;
@@ -1455,9 +1455,9 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            showAlertWithText(LocaleController.getString("AppName", R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            showAlertWithText(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), LocaleController.formatString("FloodWaitTime", works.heymate.beta.R.string.FloodWaitTime, timeString));
                         } else {
-                            showAlertWithText(LocaleController.getString("AppName", R.string.AppName), error.text);
+                            showAlertWithText(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName), error.text);
                         }
                     }
                 }

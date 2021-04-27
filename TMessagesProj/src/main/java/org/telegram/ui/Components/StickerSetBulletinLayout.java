@@ -11,7 +11,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 
@@ -95,41 +95,41 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
         switch (type) {
             case TYPE_ADDED:
                 if (stickerSet.masks) {
-                    titleTextView.setText(LocaleController.getString("AddMasksInstalled", R.string.AddMasksInstalled));
-                    subtitleTextView.setText(LocaleController.formatString("AddMasksInstalledInfo", R.string.AddMasksInstalledInfo, stickerSet.title));
+                    titleTextView.setText(LocaleController.getString("AddMasksInstalled", works.heymate.beta.R.string.AddMasksInstalled));
+                    subtitleTextView.setText(LocaleController.formatString("AddMasksInstalledInfo", works.heymate.beta.R.string.AddMasksInstalledInfo, stickerSet.title));
                 } else {
-                    titleTextView.setText(LocaleController.getString("AddStickersInstalled", R.string.AddStickersInstalled));
-                    subtitleTextView.setText(LocaleController.formatString("AddStickersInstalledInfo", R.string.AddStickersInstalledInfo, stickerSet.title));
+                    titleTextView.setText(LocaleController.getString("AddStickersInstalled", works.heymate.beta.R.string.AddStickersInstalled));
+                    subtitleTextView.setText(LocaleController.formatString("AddStickersInstalledInfo", works.heymate.beta.R.string.AddStickersInstalledInfo, stickerSet.title));
                 }
                 break;
             case TYPE_REMOVED:
                 if (stickerSet.masks) {
-                    titleTextView.setText(LocaleController.getString("MasksRemoved", R.string.MasksRemoved));
-                    subtitleTextView.setText(LocaleController.formatString("MasksRemovedInfo", R.string.MasksRemovedInfo, stickerSet.title));
+                    titleTextView.setText(LocaleController.getString("MasksRemoved", works.heymate.beta.R.string.MasksRemoved));
+                    subtitleTextView.setText(LocaleController.formatString("MasksRemovedInfo", works.heymate.beta.R.string.MasksRemovedInfo, stickerSet.title));
                 } else {
-                    titleTextView.setText(LocaleController.getString("StickersRemoved", R.string.StickersRemoved));
-                    subtitleTextView.setText(LocaleController.formatString("StickersRemovedInfo", R.string.StickersRemovedInfo, stickerSet.title));
+                    titleTextView.setText(LocaleController.getString("StickersRemoved", works.heymate.beta.R.string.StickersRemoved));
+                    subtitleTextView.setText(LocaleController.formatString("StickersRemovedInfo", works.heymate.beta.R.string.StickersRemovedInfo, stickerSet.title));
                 }
                 break;
             case TYPE_ARCHIVED:
                 if (stickerSet.masks) {
-                    titleTextView.setText(LocaleController.getString("MasksArchived", R.string.MasksArchived));
-                    subtitleTextView.setText(LocaleController.formatString("MasksArchivedInfo", R.string.MasksArchivedInfo, stickerSet.title));
+                    titleTextView.setText(LocaleController.getString("MasksArchived", works.heymate.beta.R.string.MasksArchived));
+                    subtitleTextView.setText(LocaleController.formatString("MasksArchivedInfo", works.heymate.beta.R.string.MasksArchivedInfo, stickerSet.title));
                 } else {
-                    titleTextView.setText(LocaleController.getString("StickersArchived", R.string.StickersArchived));
-                    subtitleTextView.setText(LocaleController.formatString("StickersArchivedInfo", R.string.StickersArchivedInfo, stickerSet.title));
+                    titleTextView.setText(LocaleController.getString("StickersArchived", works.heymate.beta.R.string.StickersArchived));
+                    subtitleTextView.setText(LocaleController.formatString("StickersArchivedInfo", works.heymate.beta.R.string.StickersArchivedInfo, stickerSet.title));
                 }
                 break;
             case TYPE_REMOVED_FROM_FAVORITES:
-                titleTextView.setText(LocaleController.getString("RemovedFromFavorites", R.string.RemovedFromFavorites));
+                titleTextView.setText(LocaleController.getString("RemovedFromFavorites", works.heymate.beta.R.string.RemovedFromFavorites));
                 subtitleTextView.setVisibility(ViewPagerFixed.GONE);
                 break;
             case TYPE_ADDED_TO_FAVORITES:
-                titleTextView.setText(LocaleController.getString("AddedToFavorites", R.string.AddedToFavorites));
+                titleTextView.setText(LocaleController.getString("AddedToFavorites", works.heymate.beta.R.string.AddedToFavorites));
                 subtitleTextView.setVisibility(ViewPagerFixed.GONE);
                 break;
             case TYPE_REMOVED_FROM_RECENT:
-                titleTextView.setText(LocaleController.getString("RemovedFromRecent", R.string.RemovedFromRecent));
+                titleTextView.setText(LocaleController.getString("RemovedFromRecent", works.heymate.beta.R.string.RemovedFromRecent));
                 subtitleTextView.setVisibility(ViewPagerFixed.GONE);
                 break;
         }

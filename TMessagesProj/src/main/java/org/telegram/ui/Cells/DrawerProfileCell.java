@@ -40,7 +40,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
@@ -78,7 +78,7 @@ public class DrawerProfileCell extends FrameLayout {
         shadowView = new ImageView(context);
         shadowView.setVisibility(INVISIBLE);
         shadowView.setScaleType(ImageView.ScaleType.FIT_XY);
-        shadowView.setImageResource(R.drawable.bottom_shadow);
+        shadowView.setImageResource(works.heymate.beta.R.drawable.bottom_shadow);
         addView(shadowView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 70, Gravity.LEFT | Gravity.BOTTOM));
 
         avatarImageView = new BackupImageView(context);
@@ -105,11 +105,11 @@ public class DrawerProfileCell extends FrameLayout {
 
         arrowView = new ImageView(context);
         arrowView.setScaleType(ImageView.ScaleType.CENTER);
-        arrowView.setImageResource(R.drawable.menu_expand);
+        arrowView.setImageResource(works.heymate.beta.R.drawable.menu_expand);
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
         setArrowState(false);
 
-        sunDrawable = new RLottieDrawable(R.raw.sun, "" + R.raw.sun, AndroidUtilities.dp(28), AndroidUtilities.dp(28), true, null);
+        sunDrawable = new RLottieDrawable(works.heymate.beta.R.raw.sun, "" + works.heymate.beta.R.raw.sun, AndroidUtilities.dp(28), AndroidUtilities.dp(28), true, null);
         if (isCurrentThemeDay()) {
             sunDrawable.setCustomEndFrame(36);
         } else {
@@ -122,9 +122,9 @@ public class DrawerProfileCell extends FrameLayout {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(info);
                 if (sunDrawable.getCustomEndFrame() != 0) {
-                    info.setText(LocaleController.getString("AccDescrSwitchToNightTheme", R.string.AccDescrSwitchToNightTheme));
+                    info.setText(LocaleController.getString("AccDescrSwitchToNightTheme", works.heymate.beta.R.string.AccDescrSwitchToNightTheme));
                 } else {
-                    info.setText(LocaleController.getString("AccDescrSwitchToDayTheme", R.string.AccDescrSwitchToDayTheme));
+                    info.setText(LocaleController.getString("AccDescrSwitchToDayTheme", works.heymate.beta.R.string.AccDescrSwitchToDayTheme));
                 }
             }
         };
@@ -174,7 +174,7 @@ public class DrawerProfileCell extends FrameLayout {
             }
             darkThemeView.playAnimation();
             if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
-                Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", works.heymate.beta.R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
                 Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
                 Theme.saveAutoNightThemeConfig();
                 Theme.cancelAutoNightThemeCallbacks();
@@ -380,6 +380,6 @@ public class DrawerProfileCell extends FrameLayout {
             arrowView.animate().cancel();
             arrowView.setRotation(rotation);
         }
-        arrowView.setContentDescription(accountsShown ? LocaleController.getString("AccDescrHideAccounts", R.string.AccDescrHideAccounts) : LocaleController.getString("AccDescrShowAccounts", R.string.AccDescrShowAccounts));
+        arrowView.setContentDescription(accountsShown ? LocaleController.getString("AccDescrHideAccounts", works.heymate.beta.R.string.AccDescrHideAccounts) : LocaleController.getString("AccDescrShowAccounts", works.heymate.beta.R.string.AccDescrShowAccounts));
     }
 }

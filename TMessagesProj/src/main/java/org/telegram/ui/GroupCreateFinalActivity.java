@@ -47,7 +47,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.GroupCreateUserCell;
@@ -264,7 +264,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             editText.onDestroy();
         }
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (heymateType == CreateShopActivity.TYPE_MARKETPLACE) {
             actionBar.setTitle(Texts.get(Texts.NEW_MARKETPLACE_TITLE));
@@ -273,7 +273,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             actionBar.setTitle(Texts.get(Texts.NEW_SHOP_TITLE));
         }
         else {
-            actionBar.setTitle(LocaleController.getString("NewGroup", R.string.NewGroup));
+            actionBar.setTitle(LocaleController.getString("NewGroup", works.heymate.beta.R.string.NewGroup));
         }
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -408,7 +408,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         fragmentView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         fragmentView.setOnTouchListener((v, event) -> true);
 
-        shadowDrawable = context.getResources().getDrawable(R.drawable.greydivider_top).mutate();
+        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.greydivider_top).mutate();
 
         LinearLayout linearLayout = new LinearLayout(context) {
             @Override
@@ -448,7 +448,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         avatarImage.setRoundRadius(AndroidUtilities.dp(32));
         avatarDrawable.setInfo(5, null, null);
         avatarImage.setImageDrawable(avatarDrawable);
-        avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
+        avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", works.heymate.beta.R.string.ChoosePhoto));
         editTextContainer.addView(avatarImage, LayoutHelper.createFrame(64, 64, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 16, 16, LocaleController.isRTL ? 16 : 0, 16));
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -485,7 +485,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             avatarEditor.playAnimation();
         });
 
-        cameraDrawable = new RLottieDrawable(R.raw.camera, "" + R.raw.camera, AndroidUtilities.dp(60), AndroidUtilities.dp(60), false, null);
+        cameraDrawable = new RLottieDrawable(works.heymate.beta.R.raw.camera, "" + works.heymate.beta.R.raw.camera, AndroidUtilities.dp(60), AndroidUtilities.dp(60), false, null);
 
         avatarEditor = new RLottieImageView(context) {
             @Override
@@ -529,7 +529,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             editText.setHint(Texts.get(Texts.NEW_SHOP_NAME_HINT));
         }
         else {
-            editText.setHint(chatType == ChatObject.CHAT_TYPE_CHAT || chatType == ChatObject.CHAT_TYPE_MEGAGROUP ? LocaleController.getString("EnterGroupNamePlaceholder", R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", R.string.EnterListName));
+            editText.setHint(chatType == ChatObject.CHAT_TYPE_CHAT || chatType == ChatObject.CHAT_TYPE_MEGAGROUP ? LocaleController.getString("EnterGroupNamePlaceholder", works.heymate.beta.R.string.EnterGroupNamePlaceholder) : LocaleController.getString("EnterListName", works.heymate.beta.R.string.EnterListName));
         }
         if (nameToSet != null) {
             editText.setText(nameToSet);
@@ -578,7 +578,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         floatingButtonContainer = new FrameLayout(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -627,9 +627,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         floatingButtonIcon = new ImageView(context);
         floatingButtonIcon.setScaleType(ImageView.ScaleType.CENTER);
         floatingButtonIcon.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-        floatingButtonIcon.setImageResource(R.drawable.checkbig);
+        floatingButtonIcon.setImageResource(works.heymate.beta.R.drawable.checkbig);
         floatingButtonIcon.setPadding(0, AndroidUtilities.dp(2), 0, 0);
-        floatingButtonContainer.setContentDescription(LocaleController.getString("Done", R.string.Done));
+        floatingButtonContainer.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
         floatingButtonContainer.addView(floatingButtonIcon, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60));
 
         progressView = new ContextProgressView(context, 1);
@@ -932,7 +932,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             switch (viewType) {
                 case 0: {
                     view = new ShadowSectionCell(context);
-                    Drawable drawable = Theme.getThemedDrawable(context, R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow);
+                    Drawable drawable = Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow);
                     CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
                     combinedDrawable.setFullsize(true);
                     view.setBackgroundDrawable(combinedDrawable);
@@ -960,7 +960,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 case 1: {
                     HeaderCell cell = (HeaderCell) holder.itemView;
                     if (currentGroupCreateAddress != null && position == 1) {
-                        cell.setText(LocaleController.getString("AttachLocation", R.string.AttachLocation));
+                        cell.setText(LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation));
                     } else {
                         cell.setText(LocaleController.formatPluralString("Members", selectedContacts.size()));
                     }

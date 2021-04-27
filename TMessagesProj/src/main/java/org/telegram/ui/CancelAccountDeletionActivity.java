@@ -55,7 +55,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -144,8 +144,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -158,7 +158,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
         doneButton.setVisibility(View.GONE);
 
         ScrollView scrollView = new ScrollView(context) {
@@ -386,7 +386,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("CancelAccountReset", R.string.CancelAccountReset);
+            return LocaleController.getString("CancelAccountReset", works.heymate.beta.R.string.CancelAccountReset);
         }
 
         @Override
@@ -456,7 +456,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 addView(frameLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
 
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(R.drawable.phone_activate);
+                imageView.setImageResource(works.heymate.beta.R.drawable.phone_activate);
                 if (LocaleController.isRTL) {
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76, Gravity.LEFT | Gravity.CENTER_VERTICAL, 2, 2, 0, 0));
                     frameLayout.addView(confirmTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 64 + 18, 0, 0, 0));
@@ -472,25 +472,25 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
                 if (currentType == 1) {
                     blackImageView = new ImageView(context);
-                    blackImageView.setImageResource(R.drawable.sms_devices);
+                    blackImageView.setImageResource(works.heymate.beta.R.drawable.sms_devices);
                     blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(blackImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
                     blueImageView = new RLottieImageView(context);
-                    blueImageView.setImageResource(R.drawable.sms_bubble);
+                    blueImageView.setImageResource(works.heymate.beta.R.drawable.sms_bubble);
                     blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
-                    titleTextView.setText(LocaleController.getString("SentAppCodeTitle", R.string.SentAppCodeTitle));
+                    titleTextView.setText(LocaleController.getString("SentAppCodeTitle", works.heymate.beta.R.string.SentAppCodeTitle));
                 } else {
                     blueImageView = new RLottieImageView(context);
-                    hintDrawable = new RLottieDrawable(R.raw.sms_incoming_info, "" + R.raw.sms_incoming_info, AndroidUtilities.dp(48), AndroidUtilities.dp(48), true, null);
+                    hintDrawable = new RLottieDrawable(works.heymate.beta.R.raw.sms_incoming_info, "" + works.heymate.beta.R.raw.sms_incoming_info, AndroidUtilities.dp(48), AndroidUtilities.dp(48), true, null);
                     hintDrawable.setLayerColor("Bubble.**", Theme.getColor(Theme.key_chats_actionBackground));
                     hintDrawable.setLayerColor("Phone.**", Theme.getColor(Theme.key_chats_actionBackground));
                     blueImageView.setAnimation(hintDrawable);
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
-                    titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", R.string.SentSmsCodeTitle));
+                    titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", works.heymate.beta.R.string.SentSmsCodeTitle));
                 }
                 addView(titleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 18, 0, 0));
                 addView(confirmTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 17, 0, 0));
@@ -537,9 +537,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             problemText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             problemText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
             if (currentType == 1) {
-                problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", R.string.DidNotGetTheCodeSms));
+                problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", works.heymate.beta.R.string.DidNotGetTheCodeSms));
             } else {
-                problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
+                problemText.setText(LocaleController.getString("DidNotGetTheCode", works.heymate.beta.R.string.DidNotGetTheCode));
             }
             addView(problemText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
             problemText.setOnClickListener(v -> {
@@ -561,7 +561,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         mailer.putExtra(Intent.EXTRA_TEXT, "Phone: " + phone + "\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + lastError);
                         getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                     } catch (Exception e) {
-                        AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                        AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.getString("NoMailInstalled", works.heymate.beta.R.string.NoMailInstalled));
                     }
                 }
             });
@@ -646,7 +646,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             if (currentType == 1) {
                 return phone;
             } else {
-                return LocaleController.getString("CancelAccountReset", R.string.CancelAccountReset);
+                return LocaleController.getString("CancelAccountReset", works.heymate.beta.R.string.CancelAccountReset);
             }
         }
 
@@ -689,7 +689,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     codeField[a].setCursorSize(AndroidUtilities.dp(20));
                     codeField[a].setCursorWidth(1.5f);
 
-                    Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
+                    Drawable pressedDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.search_dark_activated).mutate();
                     pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
 
                     codeField[a].setBackgroundDrawable(pressedDrawable);
@@ -782,7 +782,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
 
             String number = PhoneFormat.getInstance().format(phone);
 
-            SpannableStringBuilder spanned = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo2", R.string.CancelAccountResetInfo2, PhoneFormat.getInstance().format("+" + number))));
+            SpannableStringBuilder spanned = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo2", works.heymate.beta.R.string.CancelAccountResetInfo2, PhoneFormat.getInstance().format("+" + number))));
 
             int index1 = TextUtils.indexOf(spanned, '*');
             int index2 = TextUtils.lastIndexOf(spanned, '*');
@@ -812,18 +812,18 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 problemText.setVisibility(GONE);
                 timeText.setVisibility(VISIBLE);
                 if (nextType == 4) {
-                    timeText.setText(LocaleController.formatString("CallText", R.string.CallText, 1, 0));
+                    timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, 1, 0));
                 } else if (nextType == 2) {
-                    timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 1, 0));
+                    timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, 1, 0));
                 }
                 createTimer();
             } else if (currentType == 2 && (nextType == 4 || nextType == 3)) {
-                timeText.setText(LocaleController.formatString("CallText", R.string.CallText, 2, 0));
+                timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
                 createTimer();
             } else if (currentType == 4 && nextType == 2) {
-                timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 2, 0));
+                timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
                 createTimer();
@@ -892,9 +892,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             int minutes = time / 1000 / 60;
                             int seconds = time / 1000 - minutes * 60;
                             if (nextType == 4 || nextType == 3) {
-                                timeText.setText(LocaleController.formatString("CallText", R.string.CallText, minutes, seconds));
+                                timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, minutes, seconds));
                             } else if (nextType == 2) {
-                                timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, minutes, seconds));
+                                timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, minutes, seconds));
                             }
                             if (progressView != null) {
                                 progressView.setProgress(1.0f - (float) time / (float) timeout);
@@ -913,9 +913,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             } else if (currentType == 2 || currentType == 4) {
                                 if (nextType == 4 || nextType == 2) {
                                     if (nextType == 4) {
-                                        timeText.setText(LocaleController.getString("Calling", R.string.Calling));
+                                        timeText.setText(LocaleController.getString("Calling", works.heymate.beta.R.string.Calling));
                                     } else {
-                                        timeText.setText(LocaleController.getString("SendingSms", R.string.SendingSms));
+                                        timeText.setText(LocaleController.getString("SendingSms", works.heymate.beta.R.string.SendingSms));
                                     }
                                     createCodeTimer();
                                     TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
@@ -992,7 +992,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 needHideProgress();
                 nextPressed = false;
                 if (error == null) {
-                    errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + phone)));
+                    errorDialog = AlertsCreator.showSimpleAlert(CancelAccountDeletionActivity.this, LocaleController.formatString("CancelLinkSuccess", works.heymate.beta.R.string.CancelLinkSuccess, PhoneFormat.getInstance().format("+" + phone)));
                 } else {
                     lastError = error.text;
                     if (currentType == 3 && (nextType == 4 || nextType == 2) || currentType == 2 && (nextType == 4 || nextType == 3) || currentType == 4 && nextType == 2) {

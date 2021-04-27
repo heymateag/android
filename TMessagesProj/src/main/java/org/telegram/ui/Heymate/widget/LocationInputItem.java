@@ -38,7 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.AmplifyModels.ExpandableItem;
@@ -76,8 +76,8 @@ public class LocationInputItem extends ExpandableItem {
 
     public LocationInputItem(@NonNull Context context) {
         super(context);
-        setTitle(LocaleController.getString("HtLocation", R.string.HtLocation));
-        setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.location_on_24_px_1, null));
+        setTitle(LocaleController.getString("HtLocation", works.heymate.beta.R.string.HtLocation));
+        setIcon(ResourcesCompat.getDrawable(getResources(), works.heymate.beta.R.drawable.location_on_24_px_1, null));
     }
 
     public LocationInfo getLocationInfo() {
@@ -135,7 +135,7 @@ public class LocationInputItem extends ExpandableItem {
         mInputAddress.setBackground(Theme.createEditTextDrawable(getContext(), false));
         content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, 92, 4, 20, 0));
 
-        mInputAddress.setAdapter(new ArrayAdapter<WrappedAddress>(getContext(), R.layout.autocomplete_item) {
+        mInputAddress.setAdapter(new ArrayAdapter<WrappedAddress>(getContext(), works.heymate.beta.R.layout.autocomplete_item) {
 
             private Filter mFilter = null;
 
@@ -241,7 +241,7 @@ public class LocationInputItem extends ExpandableItem {
         content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, 20, 48, 20, 18));
 
 //        ImageView imagePin = new ImageView(getContext());
-//        imagePin.setImageResource(R.drawable.map_pin);
+//        imagePin.setImageResource(works.heymate.beta.R.drawable.map_pin);
 //        content.addView(imagePin, LayoutHelper.createFrame(26, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 98));
 
         return content;
@@ -305,7 +305,7 @@ public class LocationInputItem extends ExpandableItem {
 
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin))
+                .icon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin))
                 .anchor(0.5f, 1)
                 .draggable(true);
 

@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -96,7 +96,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         actionBar.setTitleColor(Theme.getColor(Theme.key_dialogTextBlack));
         actionBar.setItemsColor(Theme.getColor(Theme.key_dialogTextBlack), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_dialogButtonSelector), false);
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -115,7 +115,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         hasOwnBackground = true;
 
         ActionBarMenu menu = actionBar.createMenu();
-        searchItem = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 imagesSearch.getActionBar().openSearchField("", false);
@@ -141,7 +141,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                 gifsSearch.getActionBar().onSearchPressed();
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
+        searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", works.heymate.beta.R.string.SearchImagesTitle));
         EditTextBoldCursor editText = searchItem.getSearchField();
         editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         editText.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -163,9 +163,9 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                 switchToCurrentSelectedMode(true);
                 animatingForward = forward;
                 if (id == 0) {
-                    searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
+                    searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", works.heymate.beta.R.string.SearchImagesTitle));
                 } else {
-                    searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
+                    searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", works.heymate.beta.R.string.SearchGifsTitle));
                 }
             }
 
@@ -774,8 +774,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
         if (scrollSlidingTextTabStrip == null) {
             return;
         }
-        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("ImagesTab2", R.string.ImagesTab2));
-        scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("GifsTab2", R.string.GifsTab2));
+        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("ImagesTab2", works.heymate.beta.R.string.ImagesTab2));
+        scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("GifsTab2", works.heymate.beta.R.string.GifsTab2));
         scrollSlidingTextTabStrip.setVisibility(View.VISIBLE);
         actionBar.setExtraHeight(AndroidUtilities.dp(44));
         int id = scrollSlidingTextTabStrip.getCurrentTabId();

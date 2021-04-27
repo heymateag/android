@@ -24,7 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -54,8 +54,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         closeImage = new ImageView(context);
         closeImage.setId(idCounter++);
-        Drawable closeDrawable = context.getResources().getDrawable(R.drawable.pip_close);
-        closeDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable closeDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.pip_close);
+        closeDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         closeImage.setImageDrawable(closeDrawable);
         RelativeLayout.LayoutParams closeImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
         closeImageLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -64,7 +64,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         LinearLayout statusLayout = new LinearLayout(context);
         statusLayout.setId(idCounter++);
-        statusLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        statusLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         RelativeLayout.LayoutParams statusLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(2), AndroidUtilities.dp(45));
         statusLayoutParams.setMargins(AndroidUtilities.dp(20), 0, 0, AndroidUtilities.dp(10));
         statusLayoutParams.addRule(RelativeLayout.BELOW, closeImage.getId());
@@ -95,8 +95,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView archiveImage = new ImageView(context);
         archiveImage.setId(idCounter++);
-        Drawable archiveDrawable = context.getResources().getDrawable(R.drawable.chats_archive);
-        archiveDrawable.setColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY);
+        Drawable archiveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.chats_archive);
+        archiveDrawable.setColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY);
         archiveImage.setImageDrawable(archiveDrawable);
         RelativeLayout.LayoutParams archiveImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(25), AndroidUtilities.dp(25));
         archiveImageLayoutParams.addRule(RelativeLayout.BELOW, closeImage.getId());
@@ -108,7 +108,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         offerImage.setId(idCounter++);
         Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
         if(imageBitmap == null){
-            offerImage.setImageDrawable(context.getResources().getDrawable(R.drawable.np));
+            offerImage.setImageDrawable(context.getResources().getDrawable(works.heymate.beta.R.drawable.np));
         } else {
             offerImage.setImageBitmap(imageBitmap);
         }
@@ -130,7 +130,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView addressImage = new ImageView(context);
         addressImage.setId(idCounter++);
-        Drawable addressDrawable = context.getResources().getDrawable(R.drawable.location_on_24_px_1);
+        Drawable addressDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.location_on_24_px_1);
         addressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray2), PorterDuff.Mode.MULTIPLY));
         addressImage.setImageDrawable(addressDrawable);
         RelativeLayout.LayoutParams addressImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
@@ -151,7 +151,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView expiryImage = new ImageView(context);
         expiryImage.setId(idCounter++);
-        Drawable expiryDrawable = context.getResources().getDrawable(R.drawable.watch_later_24_px_1);
+        Drawable expiryDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.watch_later_24_px_1);
         expiryDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray2), PorterDuff.Mode.MULTIPLY));
         expiryImage.setImageDrawable(expiryDrawable);
         RelativeLayout.LayoutParams expiryImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
@@ -172,7 +172,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView priceImage = new ImageView(context);
         priceImage.setId(idCounter++);
-        Drawable priceDrawable = context.getResources().getDrawable(R.drawable.money);
+        Drawable priceDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.money);
         priceDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray2), PorterDuff.Mode.MULTIPLY));
         priceImage.setImageDrawable(priceDrawable);
         RelativeLayout.LayoutParams priceImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
@@ -219,7 +219,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         TextView termsLinkText = new TextView(context);
         termsLinkText.setId(idCounter++);
         termsLinkText.setTextSize(14);
-        termsLinkText.setTextColor(context.getResources().getColor(R.color.ht_green));
+        termsLinkText.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         termsLinkText.setText("Terms And Conditions Link");
         termsLinkText.setPaintFlags(termsLinkText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         RelativeLayout.LayoutParams termsLinkTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -229,8 +229,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         LinearLayout buyButtonLayout = new LinearLayout(context);
         buyButtonLayout.setId(idCounter++);
-        buyButtonLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(R.color.ht_green)));
+        buyButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
         buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offerUUID)); // TODO Why is there a buy button here?
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(150), AndroidUtilities.dp(50));
@@ -239,7 +239,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayoutParams.setMargins(0, AndroidUtilities.dp(20), 0, 0);
 
         TextView buyText = new TextView(context);
-        buyText.setText(LocaleController.getString("HtBuy", R.string.HtBuy));
+        buyText.setText(LocaleController.getString("HtBuy", works.heymate.beta.R.string.HtBuy));
         buyText.setTextSize(17);
         buyText.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         buyText.setTypeface(buyText.getTypeface(), Typeface.BOLD);
@@ -252,8 +252,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView backImage = new ImageView(context);
         backImage.setId(idCounter++);
-        Drawable backDrawable = context.getResources().getDrawable(R.drawable.ic_ab_back);
-        backDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(R.color.ht_green), PorterDuff.Mode.MULTIPLY));
+        Drawable backDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ic_ab_back);
+        backDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
         backImage.setImageDrawable(backDrawable);
         RelativeLayout.LayoutParams backImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
         backImageLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -295,7 +295,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         TextView termsTitleText = new TextView(context);
         termsTitleText.setId(idCounter++);
         termsTitleText.setTextSize(18);
-        termsTitleText.setTextColor(context.getResources().getColor(R.color.ht_green));
+        termsTitleText.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         termsTitleText.setText("Terms and Conditions");
         termsTitleText.setTypeface(termsTitleText.getTypeface(), Typeface.BOLD);
         RelativeLayout.LayoutParams termsTitleTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

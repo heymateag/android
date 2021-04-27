@@ -27,7 +27,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -80,7 +80,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         addView(videoInfoContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 16, Gravity.BOTTOM | Gravity.LEFT));
 
         ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(R.drawable.ic_video);
+        imageView1.setImageResource(works.heymate.beta.R.drawable.ic_video);
         videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL));
 
         videoTextView = new TextView(context);
@@ -132,7 +132,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     }
 
     public void setImage(MediaController.PhotoEntry photoEntry) {
-        Drawable thumb = getResources().getDrawable(R.drawable.nophotos);
+        Drawable thumb = getResources().getDrawable(works.heymate.beta.R.drawable.nophotos);
         if (photoEntry.thumbPath != null) {
             imageView.setImage(photoEntry.thumbPath, null, thumb);
         } else if (photoEntry.path != null) {
@@ -140,11 +140,11 @@ public class PhotoPickerPhotoCell extends FrameLayout {
             if (photoEntry.isVideo) {
                 videoInfoContainer.setVisibility(View.VISIBLE);
                 videoTextView.setText(AndroidUtilities.formatShortDuration(photoEntry.duration));
-                setContentDescription(LocaleController.getString("AttachVideo", R.string.AttachVideo) + ", " + LocaleController.formatDuration(photoEntry.duration));
+                setContentDescription(LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo) + ", " + LocaleController.formatDuration(photoEntry.duration));
                 imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, thumb);
             } else {
                 videoInfoContainer.setVisibility(View.INVISIBLE);
-                setContentDescription(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
+                setContentDescription(LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto));
                 imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, thumb);
             }
         } else {
@@ -153,7 +153,7 @@ public class PhotoPickerPhotoCell extends FrameLayout {
     }
 
     public void setImage(MediaController.SearchImage searchImage) {
-        Drawable thumb = getResources().getDrawable(R.drawable.nophotos);
+        Drawable thumb = getResources().getDrawable(works.heymate.beta.R.drawable.nophotos);
         if (searchImage.thumbPhotoSize != null) {
             imageView.setImage(ImageLocation.getForPhoto(searchImage.thumbPhotoSize, searchImage.photo), null, thumb, searchImage);
         } else if (searchImage.photoSize != null) {

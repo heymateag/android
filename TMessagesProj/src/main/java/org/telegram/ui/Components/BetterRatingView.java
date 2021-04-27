@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 /**
@@ -25,8 +25,8 @@ public class BetterRatingView extends View {
 
 	public BetterRatingView(Context context) {
 		super(context);
-		filledStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star_filled).extractAlpha();
-		hollowStar = BitmapFactory.decodeResource(getResources(), R.drawable.ic_rating_star).extractAlpha();
+		filledStar = BitmapFactory.decodeResource(getResources(), works.heymate.beta.R.drawable.ic_rating_star_filled).extractAlpha();
+		hollowStar = BitmapFactory.decodeResource(getResources(), works.heymate.beta.R.drawable.ic_rating_star).extractAlpha();
 	}
 
 	@Override

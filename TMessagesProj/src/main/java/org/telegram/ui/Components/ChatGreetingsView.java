@@ -15,7 +15,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -58,11 +58,11 @@ public class ChatGreetingsView extends LinearLayout {
         updateColors();
 
         if (distance <= 0) {
-            titleView.setText(LocaleController.getString("NoMessages", R.string.NoMessages));
-            descriptionView.setText(LocaleController.getString("NoMessagesGreetingsDescription", R.string.NoMessagesGreetingsDescription));
+            titleView.setText(LocaleController.getString("NoMessages", works.heymate.beta.R.string.NoMessages));
+            descriptionView.setText(LocaleController.getString("NoMessagesGreetingsDescription", works.heymate.beta.R.string.NoMessagesGreetingsDescription));
         } else {
-            titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", R.string.NearbyPeopleGreetingsMessage, user.first_name, LocaleController.formatDistance(distance, 1)));
-            descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", R.string.NearbyPeopleGreetingsDescription));
+            titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", works.heymate.beta.R.string.NearbyPeopleGreetingsMessage, user.first_name, LocaleController.formatDistance(distance, 1)));
+            descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", works.heymate.beta.R.string.NearbyPeopleGreetingsDescription));
         }
 
         preloadedGreetingsSticker = sticker;

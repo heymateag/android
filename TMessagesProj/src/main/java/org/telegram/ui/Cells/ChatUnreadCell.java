@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -32,12 +32,12 @@ public class ChatUnreadCell extends FrameLayout {
         super(context);
 
         backgroundLayout = new FrameLayout(context);
-        backgroundLayout.setBackgroundResource(R.drawable.newmsg_divider);
+        backgroundLayout.setBackgroundResource(works.heymate.beta.R.drawable.newmsg_divider);
         backgroundLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_unreadMessagesStartBackground), PorterDuff.Mode.MULTIPLY));
         addView(backgroundLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 27, Gravity.LEFT | Gravity.TOP, 0, 7, 0, 0));
 
         imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.ic_ab_new);
+        imageView.setImageResource(works.heymate.beta.R.drawable.ic_ab_new);
         imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_unreadMessagesStartArrowIcon), PorterDuff.Mode.MULTIPLY));
         imageView.setPadding(0, AndroidUtilities.dp(2), 0, 0);
         backgroundLayout.addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 10, 0));

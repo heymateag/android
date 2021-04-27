@@ -21,7 +21,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
@@ -82,7 +82,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
         blobDrawable.generateBlob();
         blobDrawable2.generateBlob();
 
-        bigMicDrawable = new RLottieDrawable(R.raw.voice_outlined, "" + R.raw.voice_outlined, AndroidUtilities.dp(22), AndroidUtilities.dp(30), true, null);
+        bigMicDrawable = new RLottieDrawable(works.heymate.beta.R.raw.voice_outlined, "" + works.heymate.beta.R.raw.voice_outlined, AndroidUtilities.dp(22), AndroidUtilities.dp(30), true, null);
         setWillNotDraw(false);
 
         muteButton = new RLottieImageView(context);
@@ -408,13 +408,13 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             }
             wavesEnter = showWaves ? 1f : 0f;
         }
-        String contentDescription = LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat);
+        String contentDescription = LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat);
         if (state == MUTE_BUTTON_STATE_UNMUTE) {
-            contentDescription +=  ", " + LocaleController.getString("VoipTapToMute", R.string.VoipTapToMute);
+            contentDescription +=  ", " + LocaleController.getString("VoipTapToMute", works.heymate.beta.R.string.VoipTapToMute);
         } else if (state == MUTE_BUTTON_STATE_RECONNECT) {
-            contentDescription += ", " + LocaleController.getString("Connecting", R.string.Connecting);
+            contentDescription += ", " + LocaleController.getString("Connecting", works.heymate.beta.R.string.Connecting);
         } else if (state == MUTE_BUTTON_STATE_MUTED_BY_ADMIN) {
-            contentDescription += ", " + LocaleController.getString("VoipMutedByAdmin", R.string.VoipMutedByAdmin);
+            contentDescription += ", " + LocaleController.getString("VoipMutedByAdmin", works.heymate.beta.R.string.VoipMutedByAdmin);
         }
         setContentDescription(contentDescription);
         invalidate();
@@ -424,7 +424,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && GroupCallPip.getInstance() != null) {
-            final String label = GroupCallPip.getInstance().showAlert ? LocaleController.getString("AccDescrCloseMenu", R.string.AccDescrCloseMenu) : LocaleController.getString("AccDescrOpenMenu2", R.string.AccDescrOpenMenu2);
+            final String label = GroupCallPip.getInstance().showAlert ? LocaleController.getString("AccDescrCloseMenu", works.heymate.beta.R.string.AccDescrCloseMenu) : LocaleController.getString("AccDescrOpenMenu2", works.heymate.beta.R.string.AccDescrOpenMenu2);
             info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, label));
         }
     }

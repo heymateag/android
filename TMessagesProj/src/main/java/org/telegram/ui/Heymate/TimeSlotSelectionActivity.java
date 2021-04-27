@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -77,7 +77,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
         FrameLayout content = new FrameLayout(context);
 
         mTimeSlotPicker = new TimeSlotPicker(context);
-        mTimeSlotPicker.setAvailableTimeSlotColor(ContextCompat.getColor(context, R.color.ht_theme));
+        mTimeSlotPicker.setAvailableTimeSlotColor(ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme));
         mTimeSlotPicker.setButtonsBackgroundColor(Theme.getColor(Theme.key_chats_actionBackground));
         mTimeSlotPicker.setButtonsColor(Theme.getColor(Theme.key_chats_actionIcon));
         mTimeSlotPicker.setDateColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));

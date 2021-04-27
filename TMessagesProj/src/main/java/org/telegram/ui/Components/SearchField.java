@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 
@@ -51,7 +51,7 @@ public class SearchField extends FrameLayout {
 
         searchIconImageView = new ImageView(context);
         searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
-        searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
+        searchIconImageView.setImageResource(works.heymate.beta.R.drawable.smiles_inputsearch);
         searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogSearchIcon), PorterDuff.Mode.MULTIPLY));
         if (supportRtl) {
             lp = LayoutHelper.createFrameRelatively(36, 36, Gravity.START | Gravity.TOP, 16, 11, 0, 0);

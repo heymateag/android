@@ -33,7 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
@@ -121,12 +121,12 @@ public class HtCreateOfferActivity extends BaseFragment {
         super.createView(context);
         this.context = context;
         if (canEdit)
-            actionBar.setTitle(LocaleController.getString("HtCreateOffer", R.string.HtCreateOffer));
+            actionBar.setTitle(LocaleController.getString("HtCreateOffer", works.heymate.beta.R.string.HtCreateOffer));
         else
-            actionBar.setTitle(LocaleController.getString("HtViewOffer", R.string.HtViewOffer));
+            actionBar.setTitle(LocaleController.getString("HtViewOffer", works.heymate.beta.R.string.HtViewOffer));
         fragmentView = new LinearLayout(context);
 
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setSearchTextColor(0xff4488, true);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -148,19 +148,19 @@ public class HtCreateOfferActivity extends BaseFragment {
         LinearLayout imageLayout = new LinearLayout(context);
         imageLayout.setGravity(Gravity.CENTER);
         imageLayout.setOrientation(LinearLayout.VERTICAL);
-        imageLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
-        imageLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(R.color.ht_green)));
+        imageLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        imageLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         cameraImage = new ImageView(context);
         Drawable cameraDrawable;
         if(actionType != ActionType.EDIT){
-            cameraDrawable = context.getResources().getDrawable(R.drawable.instant_camera);
+            cameraDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.instant_camera);
             cameraImage.setImageDrawable(cameraDrawable);
             cameraImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         }
         imageLayout.addView(cameraImage, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
 
         TextView cameraLabel = new TextView(context);
-        cameraLabel.setText(LocaleController.getString("HtAddOffer", R.string.HtAddPhoto));
+        cameraLabel.setText(LocaleController.getString("HtAddOffer", works.heymate.beta.R.string.HtAddPhoto));
         cameraLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
         cameraLabel.setLines(2);
         imageLayout.addView(cameraLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 5, 15, 15));
@@ -183,7 +183,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                     Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     pickIntent.setType("image/*");
 
-                    Intent chooserIntent = Intent.createChooser(getIntent, LocaleController.getString("HtSelectImage", R.string.HtSelectImage));
+                    Intent chooserIntent = Intent.createChooser(getIntent, LocaleController.getString("HtSelectImage", works.heymate.beta.R.string.HtSelectImage));
                     chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
                     startActivityForResult(chooserIntent, 1);
@@ -206,7 +206,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         titleTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         titleTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
         titleTextField.setMinHeight(AndroidUtilities.dp(36));
-        titleTextField.setHint(LocaleController.getString("HtShortTitle", R.string.HtShortTitle));
+        titleTextField.setHint(LocaleController.getString("HtShortTitle", works.heymate.beta.R.string.HtShortTitle));
         titleTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         titleTextField.setCursorSize(AndroidUtilities.dp(15));
         titleTextField.setCursorWidth(1.5f);
@@ -251,7 +251,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         descriptionTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         descriptionTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
         descriptionTextField.setMinHeight(AndroidUtilities.dp(36));
-        descriptionTextField.setHint(LocaleController.getString("HtDescription", R.string.HtDescription));
+        descriptionTextField.setHint(LocaleController.getString("HtDescription", works.heymate.beta.R.string.HtDescription));
         descriptionTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         descriptionTextField.setCursorSize(AndroidUtilities.dp(15));
         descriptionTextField.setCursorWidth(1.5f);
@@ -301,8 +301,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         mainLayout.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 25, 0, 25));
 
         TextView detailsLabel = new TextView(context);
-        detailsLabel.setText(LocaleController.getString("HtDetails", R.string.HtDetails));
-        detailsLabel.setTextColor(context.getResources().getColor(R.color.ht_green));
+        detailsLabel.setText(LocaleController.getString("HtDetails", works.heymate.beta.R.string.HtDetails));
+        detailsLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         mainLayout.addView(detailsLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 0, 15, 15));
 
         HashMap<String, Runnable> categoryArgs = new HashMap<>();
@@ -326,13 +326,13 @@ public class HtCreateOfferActivity extends BaseFragment {
                 }
             }
         });
-        categoryInputCell = new HtCategoryInputCell(context, this, LocaleController.getString("HtCategory", R.string.HtCategory), categoryArgs, R.drawable.category, canEdit);
+        categoryInputCell = new HtCategoryInputCell(context, this, LocaleController.getString("HtCategory", works.heymate.beta.R.string.HtCategory), categoryArgs, works.heymate.beta.R.drawable.category, canEdit);
         mainLayout.addView(categoryInputCell);
 
         locationInputCell = new LocationInputItem(context);
         mainLayout.addView(locationInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
-        scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", R.string.HtSchedule), scheduleArgs, R.drawable.watch_later_24_px_1, canEdit, this);
+        scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", works.heymate.beta.R.string.HtSchedule), scheduleArgs, works.heymate.beta.R.drawable.watch_later_24_px_1, canEdit, this);
         mainLayout.addView(scheduleInputCell);
 
         HashMap<String, Runnable> priceArgs = new HashMap<>();
@@ -342,17 +342,17 @@ public class HtCreateOfferActivity extends BaseFragment {
                 if (actionType == ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("HtRateType", R.string.HtRateType));
+                builder.setTitle(LocaleController.getString("HtRateType", works.heymate.beta.R.string.HtRateType));
                 String[] subItems = new String[3];
                 int[] icons = new int[3];
 
                 for (int i = 0; i < 3; i++) {
-                    icons[i] = R.drawable.msg_arrowright;
+                    icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
                 }
-                subItems[0] = LocaleController.getString("HtPerItem", R.string.HtPerItem);
-                subItems[1] = LocaleController.getString("HtPerHour", R.string.HtPerHour);
-                subItems[2] = LocaleController.getString("HtRate", R.string.HtRange);
-                builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
+                subItems[0] = LocaleController.getString("HtPerItem", works.heymate.beta.R.string.HtPerItem);
+                subItems[1] = LocaleController.getString("HtPerHour", works.heymate.beta.R.string.HtPerHour);
+                subItems[2] = LocaleController.getString("HtRate", works.heymate.beta.R.string.HtRange);
+                builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -373,7 +373,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 if (actionType == ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtPrice", R.string.HtPrice));
+                builder.setTitle(LocaleController.getString("HtPrice", works.heymate.beta.R.string.HtPrice));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -387,14 +387,14 @@ public class HtCreateOfferActivity extends BaseFragment {
                 feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", R.string.HtAmount));
+                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
                 feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         setFee(feeTextField.getText().toString(), 0);
                 });
@@ -409,17 +409,17 @@ public class HtCreateOfferActivity extends BaseFragment {
                 if (actionType == ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("HtCurrency", R.string.HtCurrency));
+                builder.setTitle(LocaleController.getString("HtCurrency", works.heymate.beta.R.string.HtCurrency));
                 String[] subItems = new String[3];
                 int[] icons = new int[3];
 
                 for (int i = 0; i < 3; i++) {
-                    icons[i] = R.drawable.msg_arrowright;
+                    icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
                 }
                 subItems[0] = "R$";
                 subItems[1] = "US$";
                 subItems[2] = "EUR";
-                builder.setNegativeButton(LocaleController.getString("HtCancel", R.string.HtCancel), new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -435,13 +435,13 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        priceInputCell = new HtPriceInputCell(context, this, LocaleController.getString("HtPrice", R.string.HtPrice), priceArgs, R.drawable.money, canEdit, 0);
-        priceInputCell.setRes(ARGUMENTS_RATE_TYPE, LocaleController.getString("HtPerItem", R.string.HtPerItem), 0);
+        priceInputCell = new HtPriceInputCell(context, this, LocaleController.getString("HtPrice", works.heymate.beta.R.string.HtPrice), priceArgs, works.heymate.beta.R.drawable.money, canEdit, 0);
+        priceInputCell.setRes(ARGUMENTS_RATE_TYPE, LocaleController.getString("HtPerItem", works.heymate.beta.R.string.HtPerItem), 0);
         priceInputCell.setRes(ARGUMENTS_CURRENCY, "R$", 2);
         mainLayout.addView(priceInputCell);
 
         HashMap<String, Runnable> paymentArgs = new HashMap<>();
-        paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", R.string.HtPaymentTerms), paymentArgs, R.drawable.pay, this, actionType);
+        paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", works.heymate.beta.R.string.HtPaymentTerms), paymentArgs, works.heymate.beta.R.drawable.pay, this, actionType);
         mainLayout.addView(paymentInputCell);
 
         HashMap<String, Runnable> expireArgs = new HashMap<>();
@@ -476,12 +476,12 @@ public class HtCreateOfferActivity extends BaseFragment {
                         expireDate = expireDateCal.getTime();
                     }
                 }, year, month, day);
-                mTimePicker.setTitle(LocaleController.getString("HtSelectDate", R.string.HtSelectDate));
+                mTimePicker.setTitle(LocaleController.getString("HtSelectDate", works.heymate.beta.R.string.HtSelectDate));
                 mTimePicker.show();
             }
         });
 
-        expireInputCell = new HtExpireInputCell(context, this, LocaleController.getString("HtExpiration", R.string.HtExpiration), expireArgs, R.drawable.alarm_off_24_px, canEdit);
+        expireInputCell = new HtExpireInputCell(context, this, LocaleController.getString("HtExpiration", works.heymate.beta.R.string.HtExpiration), expireArgs, works.heymate.beta.R.drawable.alarm_off_24_px, canEdit);
         expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(mcurrentTime.getTime()), 0);
         expireDate = mcurrentTime.getTime();
         mainLayout.addView(expireInputCell);
@@ -493,7 +493,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 if (actionType == ActionType.VIEW)
                     return;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtTermsAndConditions", R.string.HtTermsAndConditions));
+                builder.setTitle(LocaleController.getString("HtTermsAndConditions", works.heymate.beta.R.string.HtTermsAndConditions));
                 LinearLayout mainLayout = new LinearLayout(context);
                 EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
                 feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -508,7 +508,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
                 feeTextField.setMinLines(4);
                 feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtPlacePolicy", R.string.HtPlacePolicy));
+                feeTextField.setHint(LocaleController.getString("HtPlacePolicy", works.heymate.beta.R.string.HtPlacePolicy));
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
@@ -523,7 +523,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 });
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 400, 20, 0, 20, 15));
                 builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", R.string.HtApply), (dialog, which) -> {
+                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
                     if (feeTextField.getText().toString().length() > 0)
                         termsInputCell.setRes(ARGUMENTS_TERMS, feeTextField.getText().toString(), 0);
                 });
@@ -532,7 +532,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        termsInputCell = new HtTermsInputCell(context,this,  LocaleController.getString("HtTermsAndConditions", R.string.HtTermsAndConditions), termsArgs, R.drawable.ht_pplicy, canEdit);
+        termsInputCell = new HtTermsInputCell(context,this,  LocaleController.getString("HtTermsAndConditions", works.heymate.beta.R.string.HtTermsAndConditions), termsArgs, works.heymate.beta.R.drawable.ht_pplicy, canEdit);
         termsInputCell.setRes(ARGUMENTS_TERMS, Texts.get(Texts.CREATE_OFFER_SERVICE_PROVIDER_TERMS), 0);
         mainLayout.addView(termsInputCell);
 
@@ -543,23 +543,23 @@ public class HtCreateOfferActivity extends BaseFragment {
         actionLayout.setGravity(Gravity.CENTER);
 
         LinearLayout promoteLayout = new LinearLayout(context);
-        promoteLayout.setBackgroundColor(context.getResources().getColor(R.color.ht_green));
+        promoteLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         promoteLayout.setGravity(Gravity.CENTER);
 
         TextView promoteLabel = new TextView(context);
-        promoteLabel.setText(LocaleController.getString("HtPromote", R.string.HtPromote));
+        promoteLabel.setText(LocaleController.getString("HtPromote", works.heymate.beta.R.string.HtPromote));
         promoteLabel.setTextSize(17);
         promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
         promoteLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
 
-        Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.share);
+        Drawable promoteDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.share);
         promoteDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         promoteLabel.setCompoundDrawablesWithIntrinsicBounds(promoteDrawable, null, null, null);
         promoteLayout.addView(promoteLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         promoteLayout.setEnabled(true);
         promoteLayout.setOnClickListener(v -> {
-            titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
+            titleTextField.setHighlightColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
             priceInputCell.setError(false, 1);
             locationInputCell.setError(false);
             categoryInputCell.setError(false, 0);
@@ -572,27 +572,27 @@ public class HtCreateOfferActivity extends BaseFragment {
             alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
             if (titleTextField.getText().toString().isEmpty()) {
                 titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors += LocaleController.getString("HtTitleEmpty", R.string.HtTitleEmpty);
+                errors += LocaleController.getString("HtTitleEmpty", works.heymate.beta.R.string.HtTitleEmpty);
             }
             if (descriptionTextField.getText().toString().isEmpty()) {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors += LocaleController.getString("HtDescriptionEmpty", R.string.HtDescriptionEmpty);
+                errors += LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty);
             }
             if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
                 priceInputCell.setError(true, 1);
-                errors += LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty);
+                errors += LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty);
             }
             if (locationInputCell.getLocationInfo() == null) {
                 locationInputCell.setError(true);
-                errors += LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty);
+                errors += LocaleController.getString("HtLocationEmpty", works.heymate.beta.R.string.HtLocationEmpty);
             }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
-                errors += LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty);
+                errors += LocaleController.getString("HtCategoryEmpty", works.heymate.beta.R.string.HtCategoryEmpty);
             }
             if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
                 categoryInputCell.setError(true, 1);
-                errors += LocaleController.getString("HtSubCategoryEmpty", R.string.HtSubCategoryEmpty);
+                errors += LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty);
             }
             if (!errors.isEmpty()) {
                 undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
@@ -651,10 +651,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                     }
                 }
 
-//                String message = LocaleController.getString("HtHeymateOffer", R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
+//                String message = LocaleController.getString("HtHeymateOffer", works.heymate.beta.R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
                 String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                 share.putExtra(Intent.EXTRA_TEXT, message);
-                getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", R.string.HtPromoteYourOffer)));
+                getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
                 parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
                 finishFragment();
             }
@@ -665,12 +665,12 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.setGravity(Gravity.CENTER);
 
         TextView saveLabel = new TextView(context);
-        saveLabel.setText(LocaleController.getString("HtSave", R.string.HtSave));
+        saveLabel.setText(LocaleController.getString("HtSave", works.heymate.beta.R.string.HtSave));
         saveLabel.setTextSize(17);
         saveLabel.setTypeface(saveLabel.getTypeface(), Typeface.BOLD);
         saveLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         saveLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
-        Drawable saveDrawable = context.getResources().getDrawable(R.drawable.menu_saved);
+        Drawable saveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.menu_saved);
         saveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         saveLabel.setCompoundDrawablesWithIntrinsicBounds(saveDrawable, null, null, null);
         saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
@@ -689,7 +689,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 return;
             }
 
-            titleTextField.setHighlightColor(context.getResources().getColor(R.color.ht_green));
+            titleTextField.setHighlightColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
             priceInputCell.setError(false, 1);
             locationInputCell.setError(false);
             categoryInputCell.setError(false, 0);
@@ -702,27 +702,27 @@ public class HtCreateOfferActivity extends BaseFragment {
             alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
             if (titleTextField.getText().toString().isEmpty()) {
                 titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors.append(LocaleController.getString("HtTitleEmpty", R.string.HtTitleEmpty));
+                errors.append(LocaleController.getString("HtTitleEmpty", works.heymate.beta.R.string.HtTitleEmpty));
             }
             if (descriptionTextField.getText().toString().isEmpty()) {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors.append(LocaleController.getString("HtDescriptionEmpty", R.string.HtDescriptionEmpty));
+                errors.append(LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty));
             }
             if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
                 priceInputCell.setError(true, 1);
-                errors.append(LocaleController.getString("HtPriceEmpty", R.string.HtPriceEmpty));
+                errors.append(LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty));
             }
             if (locationInputCell.getLocationInfo() == null) {
                 locationInputCell.setError(true);
-                errors.append(LocaleController.getString("HtLocationEmpty", R.string.HtLocationEmpty));
+                errors.append(LocaleController.getString("HtLocationEmpty", works.heymate.beta.R.string.HtLocationEmpty));
             }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
-                errors.append(LocaleController.getString("HtCategoryEmpty", R.string.HtCategoryEmpty));
+                errors.append(LocaleController.getString("HtCategoryEmpty", works.heymate.beta.R.string.HtCategoryEmpty));
             }
             if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
                 categoryInputCell.setError(true, 1);
-                errors.append(LocaleController.getString("HtSubCategoryEmpty", R.string.HtSubCategoryEmpty));
+                errors.append(LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty));
             }
             if (errors.length() > -0) {
                 undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
@@ -789,7 +789,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                         newOffer.setServerUUID(offerUUID);
                         HtAmplify.getInstance(context).updateOffer(newOffer);
                     }
-                    undoView.setColors(context.getResources().getColor(R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
+                    undoView.setColors(context.getResources().getColor(works.heymate.beta.R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
                     undoView.showWithAction(0, UndoView.ACTION_OFFER_SAVED, errors, null, () -> {
                         undoView.setVisibility(View.GONE);
                     });
@@ -903,13 +903,13 @@ public class HtCreateOfferActivity extends BaseFragment {
             contactSenderLayout.setGravity(Gravity.CENTER);
 
             TextView contactSenderLabel = new TextView(context);
-            contactSenderLabel.setText(LocaleController.getString("HtContactSender", R.string.HtContactSender));
+            contactSenderLabel.setText(LocaleController.getString("HtContactSender", works.heymate.beta.R.string.HtContactSender));
             contactSenderLabel.setTextSize(17);
             contactSenderLabel.setTypeface(contactSenderLabel.getTypeface(), Typeface.BOLD);
             contactSenderLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
             contactSenderLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
 
-            Drawable saveDrawable = context.getResources().getDrawable(R.drawable.floating_message);
+            Drawable saveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_message);
             saveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
             contactSenderLabel.setCompoundDrawablesWithIntrinsicBounds(saveDrawable, null, null, null);
             contactSenderLayout.addView(contactSenderLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
@@ -919,15 +919,15 @@ public class HtCreateOfferActivity extends BaseFragment {
         }
         switch (actionType) {
             case CREATE: {
-                actionBar.setTitle(LocaleController.getString("HtCreateOffer", R.string.HtCreateOffer));
+                actionBar.setTitle(LocaleController.getString("HtCreateOffer", works.heymate.beta.R.string.HtCreateOffer));
                 break;
             }
             case EDIT: {
-                actionBar.setTitle(LocaleController.getString("HtEditDraft", R.string.HtEditDraft));
+                actionBar.setTitle(LocaleController.getString("HtEditDraft", works.heymate.beta.R.string.HtEditDraft));
                 break;
             }
             case VIEW: {
-                actionBar.setTitle(LocaleController.getString("HtViewOffer", R.string.HtViewOffer));
+                actionBar.setTitle(LocaleController.getString("HtViewOffer", works.heymate.beta.R.string.HtViewOffer));
                 break;
             }
         }

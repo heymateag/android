@@ -113,7 +113,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
 
                             builder.setContentTitle("Heymate Offers");
                             builder.setAutoCancel(true);
-                            builder.setColor(ContextCompat.getColor(ApplicationLoader.applicationContext, R.color.ht_theme));
+                            builder.setColor(ContextCompat.getColor(ApplicationLoader.applicationContext, works.heymate.beta.R.color.ht_theme));
                             builder.setCategory(NotificationCompat.CATEGORY_EVENT);
                             builder.setPriority(NotificationCompat.PRIORITY_HIGH);
                             builder.setDefaults(NotificationCompat.DEFAULT_ALL);
@@ -459,484 +459,484 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                 switch (loc_key) {
                                     case "MESSAGE_TEXT":
                                     case "CHANNEL_MESSAGE_TEXT": {
-                                        messageText = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationMessageText", works.heymate.beta.R.string.NotificationMessageText, args[0], args[1]);
                                         message1 = args[1];
                                         break;
                                     }
                                     case "MESSAGE_NOTEXT": {
-                                        messageText = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, args[0]);
-                                        message1 = LocaleController.getString("Message", R.string.Message);
+                                        messageText = LocaleController.formatString("NotificationMessageNoText", works.heymate.beta.R.string.NotificationMessageNoText, args[0]);
+                                        message1 = LocaleController.getString("Message", works.heymate.beta.R.string.Message);
                                         break;
                                     }
                                     case "MESSAGE_PHOTO": {
-                                        messageText = LocaleController.formatString("NotificationMessagePhoto", R.string.NotificationMessagePhoto, args[0]);
-                                        message1 = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                                        messageText = LocaleController.formatString("NotificationMessagePhoto", works.heymate.beta.R.string.NotificationMessagePhoto, args[0]);
+                                        message1 = LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto);
                                         break;
                                     }
                                     case "MESSAGE_PHOTO_SECRET": {
-                                        messageText = LocaleController.formatString("NotificationMessageSDPhoto", R.string.NotificationMessageSDPhoto, args[0]);
-                                        message1 = LocaleController.getString("AttachDestructingPhoto", R.string.AttachDestructingPhoto);
+                                        messageText = LocaleController.formatString("NotificationMessageSDPhoto", works.heymate.beta.R.string.NotificationMessageSDPhoto, args[0]);
+                                        message1 = LocaleController.getString("AttachDestructingPhoto", works.heymate.beta.R.string.AttachDestructingPhoto);
                                         break;
                                     }
                                     case "MESSAGE_VIDEO": {
-                                        messageText = LocaleController.formatString("NotificationMessageVideo", R.string.NotificationMessageVideo, args[0]);
-                                        message1 = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                                        messageText = LocaleController.formatString("NotificationMessageVideo", works.heymate.beta.R.string.NotificationMessageVideo, args[0]);
+                                        message1 = LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo);
                                         break;
                                     }
                                     case "MESSAGE_VIDEO_SECRET": {
-                                        messageText = LocaleController.formatString("NotificationMessageSDVideo", R.string.NotificationMessageSDVideo, args[0]);
-                                        message1 = LocaleController.getString("AttachDestructingVideo", R.string.AttachDestructingVideo);
+                                        messageText = LocaleController.formatString("NotificationMessageSDVideo", works.heymate.beta.R.string.NotificationMessageSDVideo, args[0]);
+                                        message1 = LocaleController.getString("AttachDestructingVideo", works.heymate.beta.R.string.AttachDestructingVideo);
                                         break;
                                     }
                                     case "MESSAGE_SCREENSHOT": {
-                                        messageText = LocaleController.getString("ActionTakeScreenshoot", R.string.ActionTakeScreenshoot).replace("un1", args[0]);
+                                        messageText = LocaleController.getString("ActionTakeScreenshoot", works.heymate.beta.R.string.ActionTakeScreenshoot).replace("un1", args[0]);
                                         break;
                                     }
                                     case "MESSAGE_ROUND": {
-                                        messageText = LocaleController.formatString("NotificationMessageRound", R.string.NotificationMessageRound, args[0]);
-                                        message1 = LocaleController.getString("AttachRound", R.string.AttachRound);
+                                        messageText = LocaleController.formatString("NotificationMessageRound", works.heymate.beta.R.string.NotificationMessageRound, args[0]);
+                                        message1 = LocaleController.getString("AttachRound", works.heymate.beta.R.string.AttachRound);
                                         break;
                                     }
                                     case "MESSAGE_DOC": {
-                                        messageText = LocaleController.formatString("NotificationMessageDocument", R.string.NotificationMessageDocument, args[0]);
-                                        message1 = LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                                        messageText = LocaleController.formatString("NotificationMessageDocument", works.heymate.beta.R.string.NotificationMessageDocument, args[0]);
+                                        message1 = LocaleController.getString("AttachDocument", works.heymate.beta.R.string.AttachDocument);
                                         break;
                                     }
                                     case "MESSAGE_STICKER": {
                                         if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                            messageText = LocaleController.formatString("NotificationMessageStickerEmoji", R.string.NotificationMessageStickerEmoji, args[0], args[1]);
-                                            message1 = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                            messageText = LocaleController.formatString("NotificationMessageStickerEmoji", works.heymate.beta.R.string.NotificationMessageStickerEmoji, args[0], args[1]);
+                                            message1 = args[1] + " " + LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                                         } else {
-                                            messageText = LocaleController.formatString("NotificationMessageSticker", R.string.NotificationMessageSticker, args[0]);
-                                            message1 = LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                            messageText = LocaleController.formatString("NotificationMessageSticker", works.heymate.beta.R.string.NotificationMessageSticker, args[0]);
+                                            message1 = LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                                         }
                                         break;
                                     }
                                     case "MESSAGE_AUDIO": {
-                                        messageText = LocaleController.formatString("NotificationMessageAudio", R.string.NotificationMessageAudio, args[0]);
-                                        message1 = LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                                        messageText = LocaleController.formatString("NotificationMessageAudio", works.heymate.beta.R.string.NotificationMessageAudio, args[0]);
+                                        message1 = LocaleController.getString("AttachAudio", works.heymate.beta.R.string.AttachAudio);
                                         break;
                                     }
                                     case "MESSAGE_CONTACT": {
-                                        messageText = LocaleController.formatString("NotificationMessageContact2", R.string.NotificationMessageContact2, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachContact", R.string.AttachContact);
+                                        messageText = LocaleController.formatString("NotificationMessageContact2", works.heymate.beta.R.string.NotificationMessageContact2, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachContact", works.heymate.beta.R.string.AttachContact);
                                         break;
                                     }
                                     case "MESSAGE_QUIZ": {
-                                        messageText = LocaleController.formatString("NotificationMessageQuiz2", R.string.NotificationMessageQuiz2, args[0], args[1]);
-                                        message1 = LocaleController.getString("QuizPoll", R.string.QuizPoll);
+                                        messageText = LocaleController.formatString("NotificationMessageQuiz2", works.heymate.beta.R.string.NotificationMessageQuiz2, args[0], args[1]);
+                                        message1 = LocaleController.getString("QuizPoll", works.heymate.beta.R.string.QuizPoll);
                                         break;
                                     }
                                     case "MESSAGE_POLL": {
-                                        messageText = LocaleController.formatString("NotificationMessagePoll2", R.string.NotificationMessagePoll2, args[0], args[1]);
-                                        message1 = LocaleController.getString("Poll", R.string.Poll);
+                                        messageText = LocaleController.formatString("NotificationMessagePoll2", works.heymate.beta.R.string.NotificationMessagePoll2, args[0], args[1]);
+                                        message1 = LocaleController.getString("Poll", works.heymate.beta.R.string.Poll);
                                         break;
                                     }
                                     case "MESSAGE_GEO": {
-                                        messageText = LocaleController.formatString("NotificationMessageMap", R.string.NotificationMessageMap, args[0]);
-                                        message1 = LocaleController.getString("AttachLocation", R.string.AttachLocation);
+                                        messageText = LocaleController.formatString("NotificationMessageMap", works.heymate.beta.R.string.NotificationMessageMap, args[0]);
+                                        message1 = LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation);
                                         break;
                                     }
                                     case "MESSAGE_GEOLIVE": {
-                                        messageText = LocaleController.formatString("NotificationMessageLiveLocation", R.string.NotificationMessageLiveLocation, args[0]);
-                                        message1 = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                                        messageText = LocaleController.formatString("NotificationMessageLiveLocation", works.heymate.beta.R.string.NotificationMessageLiveLocation, args[0]);
+                                        message1 = LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation);
                                         break;
                                     }
                                     case "MESSAGE_GIF": {
-                                        messageText = LocaleController.formatString("NotificationMessageGif", R.string.NotificationMessageGif, args[0]);
-                                        message1 = LocaleController.getString("AttachGif", R.string.AttachGif);
+                                        messageText = LocaleController.formatString("NotificationMessageGif", works.heymate.beta.R.string.NotificationMessageGif, args[0]);
+                                        message1 = LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif);
                                         break;
                                     }
                                     case "MESSAGE_GAME": {
-                                        messageText = LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachGame", R.string.AttachGame);
+                                        messageText = LocaleController.formatString("NotificationMessageGame", works.heymate.beta.R.string.NotificationMessageGame, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachGame", works.heymate.beta.R.string.AttachGame);
                                         break;
                                     }
                                     case "MESSAGE_GAME_SCORE":
                                     case "CHANNEL_MESSAGE_GAME_SCORE":{
-                                        messageText = LocaleController.formatString("NotificationMessageGameScored", R.string.NotificationMessageGameScored, args[0], args[1], args[2]);
+                                        messageText = LocaleController.formatString("NotificationMessageGameScored", works.heymate.beta.R.string.NotificationMessageGameScored, args[0], args[1], args[2]);
                                         break;
                                     }
                                     case "MESSAGE_INVOICE": {
-                                        messageText = LocaleController.formatString("NotificationMessageInvoice", R.string.NotificationMessageInvoice, args[0], args[1]);
-                                        message1 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice);
+                                        messageText = LocaleController.formatString("NotificationMessageInvoice", works.heymate.beta.R.string.NotificationMessageInvoice, args[0], args[1]);
+                                        message1 = LocaleController.getString("PaymentInvoice", works.heymate.beta.R.string.PaymentInvoice);
                                         break;
                                     }
                                     case "MESSAGE_FWDS": {
-                                        messageText = LocaleController.formatString("NotificationMessageForwardFew", R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("NotificationMessageForwardFew", works.heymate.beta.R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "MESSAGE_PHOTOS": {
-                                        messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("NotificationMessageFew", works.heymate.beta.R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "MESSAGE_VIDEOS": {
-                                        messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("NotificationMessageFew", works.heymate.beta.R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "MESSAGE_PLAYLIST": {
-                                        messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("NotificationMessageFew", works.heymate.beta.R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "MESSAGE_DOCS": {
-                                        messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("NotificationMessageFew", works.heymate.beta.R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "MESSAGES": {
-                                        messageText = LocaleController.formatString("NotificationMessageAlbum", R.string.NotificationMessageAlbum, args[0]);
+                                        messageText = LocaleController.formatString("NotificationMessageAlbum", works.heymate.beta.R.string.NotificationMessageAlbum, args[0]);
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_NOTEXT": {
-                                        messageText = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, args[0]);
-                                        message1 = LocaleController.getString("Message", R.string.Message);
+                                        messageText = LocaleController.formatString("ChannelMessageNoText", works.heymate.beta.R.string.ChannelMessageNoText, args[0]);
+                                        message1 = LocaleController.getString("Message", works.heymate.beta.R.string.Message);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_PHOTO": {
-                                        messageText = LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, args[0]);
-                                        message1 = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                                        messageText = LocaleController.formatString("ChannelMessagePhoto", works.heymate.beta.R.string.ChannelMessagePhoto, args[0]);
+                                        message1 = LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_VIDEO": {
-                                        messageText = LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, args[0]);
-                                        message1 = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                                        messageText = LocaleController.formatString("ChannelMessageVideo", works.heymate.beta.R.string.ChannelMessageVideo, args[0]);
+                                        message1 = LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_ROUND": {
-                                        messageText = LocaleController.formatString("ChannelMessageRound", R.string.ChannelMessageRound, args[0]);
-                                        message1 = LocaleController.getString("AttachRound", R.string.AttachRound);
+                                        messageText = LocaleController.formatString("ChannelMessageRound", works.heymate.beta.R.string.ChannelMessageRound, args[0]);
+                                        message1 = LocaleController.getString("AttachRound", works.heymate.beta.R.string.AttachRound);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_DOC": {
-                                        messageText = LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, args[0]);
-                                        message1 = LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                                        messageText = LocaleController.formatString("ChannelMessageDocument", works.heymate.beta.R.string.ChannelMessageDocument, args[0]);
+                                        message1 = LocaleController.getString("AttachDocument", works.heymate.beta.R.string.AttachDocument);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_STICKER": {
                                         if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                            messageText = LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, args[0], args[1]);
-                                            message1 = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                            messageText = LocaleController.formatString("ChannelMessageStickerEmoji", works.heymate.beta.R.string.ChannelMessageStickerEmoji, args[0], args[1]);
+                                            message1 = args[1] + " " + LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                                         } else {
-                                            messageText = LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, args[0]);
-                                            message1 = LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                            messageText = LocaleController.formatString("ChannelMessageSticker", works.heymate.beta.R.string.ChannelMessageSticker, args[0]);
+                                            message1 = LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                                         }
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_AUDIO": {
-                                        messageText = LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, args[0]);
-                                        message1 = LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                                        messageText = LocaleController.formatString("ChannelMessageAudio", works.heymate.beta.R.string.ChannelMessageAudio, args[0]);
+                                        message1 = LocaleController.getString("AttachAudio", works.heymate.beta.R.string.AttachAudio);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_CONTACT": {
-                                        messageText = LocaleController.formatString("ChannelMessageContact2", R.string.ChannelMessageContact2, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachContact", R.string.AttachContact);
+                                        messageText = LocaleController.formatString("ChannelMessageContact2", works.heymate.beta.R.string.ChannelMessageContact2, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachContact", works.heymate.beta.R.string.AttachContact);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_QUIZ": {
-                                        messageText = LocaleController.formatString("ChannelMessageQuiz2", R.string.ChannelMessageQuiz2, args[0], args[1]);
-                                        message1 = LocaleController.getString("QuizPoll", R.string.QuizPoll);
+                                        messageText = LocaleController.formatString("ChannelMessageQuiz2", works.heymate.beta.R.string.ChannelMessageQuiz2, args[0], args[1]);
+                                        message1 = LocaleController.getString("QuizPoll", works.heymate.beta.R.string.QuizPoll);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_POLL": {
-                                        messageText = LocaleController.formatString("ChannelMessagePoll2", R.string.ChannelMessagePoll2, args[0], args[1]);
-                                        message1 = LocaleController.getString("Poll", R.string.Poll);
+                                        messageText = LocaleController.formatString("ChannelMessagePoll2", works.heymate.beta.R.string.ChannelMessagePoll2, args[0], args[1]);
+                                        message1 = LocaleController.getString("Poll", works.heymate.beta.R.string.Poll);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_GEO": {
-                                        messageText = LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, args[0]);
-                                        message1 = LocaleController.getString("AttachLocation", R.string.AttachLocation);
+                                        messageText = LocaleController.formatString("ChannelMessageMap", works.heymate.beta.R.string.ChannelMessageMap, args[0]);
+                                        message1 = LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_GEOLIVE": {
-                                        messageText = LocaleController.formatString("ChannelMessageLiveLocation", R.string.ChannelMessageLiveLocation, args[0]);
-                                        message1 = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                                        messageText = LocaleController.formatString("ChannelMessageLiveLocation", works.heymate.beta.R.string.ChannelMessageLiveLocation, args[0]);
+                                        message1 = LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_GIF": {
-                                        messageText = LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, args[0]);
-                                        message1 = LocaleController.getString("AttachGif", R.string.AttachGif);
+                                        messageText = LocaleController.formatString("ChannelMessageGIF", works.heymate.beta.R.string.ChannelMessageGIF, args[0]);
+                                        message1 = LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_GAME": {
-                                        messageText = LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, args[0]);
-                                        message1 = LocaleController.getString("AttachGame", R.string.AttachGame);
+                                        messageText = LocaleController.formatString("NotificationMessageGame", works.heymate.beta.R.string.NotificationMessageGame, args[0]);
+                                        message1 = LocaleController.getString("AttachGame", works.heymate.beta.R.string.AttachGame);
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_FWDS": {
-                                        messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1])).toLowerCase());
+                                        messageText = LocaleController.formatString("ChannelMessageFew", works.heymate.beta.R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1])).toLowerCase());
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_PHOTOS": {
-                                        messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("ChannelMessageFew", works.heymate.beta.R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_VIDEOS": {
-                                        messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("ChannelMessageFew", works.heymate.beta.R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_PLAYLIST": {
-                                        messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("ChannelMessageFew", works.heymate.beta.R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHANNEL_MESSAGE_DOCS": {
-                                        messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
+                                        messageText = LocaleController.formatString("ChannelMessageFew", works.heymate.beta.R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHANNEL_MESSAGES": {
-                                        messageText = LocaleController.formatString("ChannelMessageAlbum", R.string.ChannelMessageAlbum, args[0]);
+                                        messageText = LocaleController.formatString("ChannelMessageAlbum", works.heymate.beta.R.string.ChannelMessageAlbum, args[0]);
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHAT_MESSAGE_TEXT": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupText", works.heymate.beta.R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
                                         message1 = args[2];
                                         break;
                                     }
                                     case "CHAT_MESSAGE_NOTEXT": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, args[0], args[1]);
-                                        message1 = LocaleController.getString("Message", R.string.Message);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupNoText", works.heymate.beta.R.string.NotificationMessageGroupNoText, args[0], args[1]);
+                                        message1 = LocaleController.getString("Message", works.heymate.beta.R.string.Message);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_PHOTO": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachPhoto", R.string.AttachPhoto);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupPhoto", works.heymate.beta.R.string.NotificationMessageGroupPhoto, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_VIDEO": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupVideo", R.string.NotificationMessageGroupVideo, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachVideo", R.string.AttachVideo);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupVideo", works.heymate.beta.R.string.NotificationMessageGroupVideo, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_ROUND": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupRound", R.string.NotificationMessageGroupRound, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachRound", R.string.AttachRound);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupRound", works.heymate.beta.R.string.NotificationMessageGroupRound, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachRound", works.heymate.beta.R.string.AttachRound);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_DOC": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupDocument", R.string.NotificationMessageGroupDocument, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachDocument", R.string.AttachDocument);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupDocument", works.heymate.beta.R.string.NotificationMessageGroupDocument, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachDocument", works.heymate.beta.R.string.AttachDocument);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_STICKER": {
                                         if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
-                                            message1 = args[2] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                            messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", works.heymate.beta.R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
+                                            message1 = args[2] + " " + LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                                         } else {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupSticker", R.string.NotificationMessageGroupSticker, args[0], args[1]);
-                                            message1 = args[1] + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker);
+                                            messageText = LocaleController.formatString("NotificationMessageGroupSticker", works.heymate.beta.R.string.NotificationMessageGroupSticker, args[0], args[1]);
+                                            message1 = args[1] + " " + LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
                                         }
                                         break;
                                     }
                                     case "CHAT_MESSAGE_AUDIO": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachAudio", R.string.AttachAudio);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupAudio", works.heymate.beta.R.string.NotificationMessageGroupAudio, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachAudio", works.heymate.beta.R.string.AttachAudio);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_CONTACT": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupContact2", R.string.NotificationMessageGroupContact2, args[0], args[1], args[2]);
-                                        message1 = LocaleController.getString("AttachContact", R.string.AttachContact);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupContact2", works.heymate.beta.R.string.NotificationMessageGroupContact2, args[0], args[1], args[2]);
+                                        message1 = LocaleController.getString("AttachContact", works.heymate.beta.R.string.AttachContact);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_QUIZ": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupQuiz2", R.string.NotificationMessageGroupQuiz2, args[0], args[1], args[2]);
-                                        message1 = LocaleController.getString("PollQuiz", R.string.PollQuiz);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupQuiz2", works.heymate.beta.R.string.NotificationMessageGroupQuiz2, args[0], args[1], args[2]);
+                                        message1 = LocaleController.getString("PollQuiz", works.heymate.beta.R.string.PollQuiz);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_POLL": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupPoll2", R.string.NotificationMessageGroupPoll2, args[0], args[1], args[2]);
-                                        message1 = LocaleController.getString("Poll", R.string.Poll);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupPoll2", works.heymate.beta.R.string.NotificationMessageGroupPoll2, args[0], args[1], args[2]);
+                                        message1 = LocaleController.getString("Poll", works.heymate.beta.R.string.Poll);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_GEO": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupMap", R.string.NotificationMessageGroupMap, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachLocation", R.string.AttachLocation);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupMap", works.heymate.beta.R.string.NotificationMessageGroupMap, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachLocation", works.heymate.beta.R.string.AttachLocation);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_GEOLIVE": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupLiveLocation", R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupLiveLocation", works.heymate.beta.R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_GIF": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupGif", R.string.NotificationMessageGroupGif, args[0], args[1]);
-                                        message1 = LocaleController.getString("AttachGif", R.string.AttachGif);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupGif", works.heymate.beta.R.string.NotificationMessageGroupGif, args[0], args[1]);
+                                        message1 = LocaleController.getString("AttachGif", works.heymate.beta.R.string.AttachGif);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_GAME": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupGame", R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
-                                        message1 = LocaleController.getString("AttachGame", R.string.AttachGame);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupGame", works.heymate.beta.R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
+                                        message1 = LocaleController.getString("AttachGame", works.heymate.beta.R.string.AttachGame);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_GAME_SCORE": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupGameScored", R.string.NotificationMessageGroupGameScored, args[0], args[1], args[2], args[3]);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupGameScored", works.heymate.beta.R.string.NotificationMessageGroupGameScored, args[0], args[1], args[2], args[3]);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_INVOICE": {
-                                        messageText = LocaleController.formatString("NotificationMessageGroupInvoice", R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
-                                        message1 = LocaleController.getString("PaymentInvoice", R.string.PaymentInvoice);
+                                        messageText = LocaleController.formatString("NotificationMessageGroupInvoice", works.heymate.beta.R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
+                                        message1 = LocaleController.getString("PaymentInvoice", works.heymate.beta.R.string.PaymentInvoice);
                                         break;
                                     }
                                     case "CHAT_CREATED":
                                     case "CHAT_ADD_YOU": {
-                                        messageText = LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationInvitedToGroup", works.heymate.beta.R.string.NotificationInvitedToGroup, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_TITLE_EDITED": {
-                                        messageText = LocaleController.formatString("NotificationEditedGroupName", R.string.NotificationEditedGroupName, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationEditedGroupName", works.heymate.beta.R.string.NotificationEditedGroupName, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_PHOTO_EDITED": {
-                                        messageText = LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationEditedGroupPhoto", works.heymate.beta.R.string.NotificationEditedGroupPhoto, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_ADD_MEMBER": {
-                                        messageText = LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
+                                        messageText = LocaleController.formatString("NotificationGroupAddMember", works.heymate.beta.R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
                                         break;
                                     }
                                     case "CHAT_VOICECHAT_START": {
-                                        messageText = LocaleController.formatString("NotificationGroupCreatedCall", R.string.NotificationGroupCreatedCall, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupCreatedCall", works.heymate.beta.R.string.NotificationGroupCreatedCall, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_VOICECHAT_INVITE": {
-                                        messageText = LocaleController.formatString("NotificationGroupInvitedToCall", R.string.NotificationGroupInvitedToCall, args[0], args[1], args[2]);
+                                        messageText = LocaleController.formatString("NotificationGroupInvitedToCall", works.heymate.beta.R.string.NotificationGroupInvitedToCall, args[0], args[1], args[2]);
                                         break;
                                     }
                                     case "CHAT_VOICECHAT_END": {
-                                        messageText = LocaleController.formatString("NotificationGroupEndedCall", R.string.NotificationGroupEndedCall, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupEndedCall", works.heymate.beta.R.string.NotificationGroupEndedCall, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_VOICECHAT_INVITE_YOU": {
-                                        messageText = LocaleController.formatString("NotificationGroupInvitedYouToCall", R.string.NotificationGroupInvitedYouToCall, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupInvitedYouToCall", works.heymate.beta.R.string.NotificationGroupInvitedYouToCall, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_DELETE_MEMBER": {
-                                        messageText = LocaleController.formatString("NotificationGroupKickMember", R.string.NotificationGroupKickMember, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupKickMember", works.heymate.beta.R.string.NotificationGroupKickMember, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_DELETE_YOU": {
-                                        messageText = LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupKickYou", works.heymate.beta.R.string.NotificationGroupKickYou, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_LEFT": {
-                                        messageText = LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupLeftMember", works.heymate.beta.R.string.NotificationGroupLeftMember, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_RETURNED": {
-                                        messageText = LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupAddSelf", works.heymate.beta.R.string.NotificationGroupAddSelf, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_JOINED": {
-                                        messageText = LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupAddSelfMega", works.heymate.beta.R.string.NotificationGroupAddSelfMega, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_FWDS": {
-                                        messageText = LocaleController.formatString("NotificationGroupForwardedFew", R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2])));
+                                        messageText = LocaleController.formatString("NotificationGroupForwardedFew", works.heymate.beta.R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHAT_MESSAGE_PHOTOS": {
-                                        messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2])));
+                                        messageText = LocaleController.formatString("NotificationGroupFew", works.heymate.beta.R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHAT_MESSAGE_VIDEOS": {
-                                        messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[2])));
+                                        messageText = LocaleController.formatString("NotificationGroupFew", works.heymate.beta.R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[2])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHAT_MESSAGE_PLAYLIST": {
-                                        messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[2])));
+                                        messageText = LocaleController.formatString("NotificationGroupFew", works.heymate.beta.R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[2])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHAT_MESSAGE_DOCS": {
-                                        messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Files", Utilities.parseInt(args[2])));
+                                        messageText = LocaleController.formatString("NotificationGroupFew", works.heymate.beta.R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Files", Utilities.parseInt(args[2])));
                                         localMessage = true;
                                         break;
                                     }
                                     case "CHAT_MESSAGES": {
-                                        messageText = LocaleController.formatString("NotificationGroupAlbum", R.string.NotificationGroupAlbum, args[0], args[1]);
+                                        messageText = LocaleController.formatString("NotificationGroupAlbum", works.heymate.beta.R.string.NotificationGroupAlbum, args[0], args[1]);
                                         localMessage = true;
                                         break;
                                     }
                                     case "PINNED_TEXT": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedTextUser", works.heymate.beta.R.string.NotificationActionPinnedTextUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedText", works.heymate.beta.R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedTextChannel", works.heymate.beta.R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_NOTEXT": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedNoTextUser", R.string.NotificationActionPinnedNoTextUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedNoTextUser", works.heymate.beta.R.string.NotificationActionPinnedNoTextUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedNoText", works.heymate.beta.R.string.NotificationActionPinnedNoText, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedNoTextChannel", works.heymate.beta.R.string.NotificationActionPinnedNoTextChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_PHOTO": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedPhotoUser", R.string.NotificationActionPinnedPhotoUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedPhotoUser", works.heymate.beta.R.string.NotificationActionPinnedPhotoUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedPhoto", R.string.NotificationActionPinnedPhoto, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedPhoto", works.heymate.beta.R.string.NotificationActionPinnedPhoto, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedPhotoChannel", R.string.NotificationActionPinnedPhotoChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedPhotoChannel", works.heymate.beta.R.string.NotificationActionPinnedPhotoChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_VIDEO": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedVideoUser", R.string.NotificationActionPinnedVideoUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedVideoUser", works.heymate.beta.R.string.NotificationActionPinnedVideoUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedVideo", R.string.NotificationActionPinnedVideo, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedVideo", works.heymate.beta.R.string.NotificationActionPinnedVideo, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedVideoChannel", R.string.NotificationActionPinnedVideoChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedVideoChannel", works.heymate.beta.R.string.NotificationActionPinnedVideoChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_ROUND": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedRoundUser", R.string.NotificationActionPinnedRoundUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedRoundUser", works.heymate.beta.R.string.NotificationActionPinnedRoundUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedRound", R.string.NotificationActionPinnedRound, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedRound", works.heymate.beta.R.string.NotificationActionPinnedRound, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedRoundChannel", R.string.NotificationActionPinnedRoundChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedRoundChannel", works.heymate.beta.R.string.NotificationActionPinnedRoundChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_DOC": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedFileUser", R.string.NotificationActionPinnedFileUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedFileUser", works.heymate.beta.R.string.NotificationActionPinnedFileUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedFile", R.string.NotificationActionPinnedFile, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedFile", works.heymate.beta.R.string.NotificationActionPinnedFile, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedFileChannel", R.string.NotificationActionPinnedFileChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedFileChannel", works.heymate.beta.R.string.NotificationActionPinnedFileChannel, args[0]);
                                             }
                                         }
                                         break;
@@ -944,22 +944,22 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     case "PINNED_STICKER": {
                                         if (dialogId > 0) {
                                             if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiUser", R.string.NotificationActionPinnedStickerEmojiUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiUser", works.heymate.beta.R.string.NotificationActionPinnedStickerEmojiUser, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedStickerUser", R.string.NotificationActionPinnedStickerUser, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedStickerUser", works.heymate.beta.R.string.NotificationActionPinnedStickerUser, args[0]);
                                             }
                                         } else {
                                             if (isGroup) {
                                                 if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, args[0], args[2], args[1]);
+                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerEmoji", works.heymate.beta.R.string.NotificationActionPinnedStickerEmoji, args[0], args[2], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedSticker", R.string.NotificationActionPinnedSticker, args[0], args[1]);
+                                                    messageText = LocaleController.formatString("NotificationActionPinnedSticker", works.heymate.beta.R.string.NotificationActionPinnedSticker, args[0], args[1]);
                                                 }
                                             } else {
                                                 if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
+                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", works.heymate.beta.R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerChannel", R.string.NotificationActionPinnedStickerChannel, args[0]);
+                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerChannel", works.heymate.beta.R.string.NotificationActionPinnedStickerChannel, args[0]);
                                                 }
                                             }
                                         }
@@ -967,127 +967,127 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     }
                                     case "PINNED_AUDIO": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedVoiceUser", R.string.NotificationActionPinnedVoiceUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedVoiceUser", works.heymate.beta.R.string.NotificationActionPinnedVoiceUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedVoice", works.heymate.beta.R.string.NotificationActionPinnedVoice, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedVoiceChannel", R.string.NotificationActionPinnedVoiceChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedVoiceChannel", works.heymate.beta.R.string.NotificationActionPinnedVoiceChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_CONTACT": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedContactUser", R.string.NotificationActionPinnedContactUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedContactUser", works.heymate.beta.R.string.NotificationActionPinnedContactUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedContact2", R.string.NotificationActionPinnedContact2, args[0], args[2], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedContact2", works.heymate.beta.R.string.NotificationActionPinnedContact2, args[0], args[2], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedContactChannel2", R.string.NotificationActionPinnedContactChannel2, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedContactChannel2", works.heymate.beta.R.string.NotificationActionPinnedContactChannel2, args[0], args[1]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_QUIZ": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedQuizUser", R.string.NotificationActionPinnedQuizUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedQuizUser", works.heymate.beta.R.string.NotificationActionPinnedQuizUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedQuiz2", R.string.NotificationActionPinnedQuiz2, args[0], args[2], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedQuiz2", works.heymate.beta.R.string.NotificationActionPinnedQuiz2, args[0], args[2], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedQuizChannel2", R.string.NotificationActionPinnedQuizChannel2, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedQuizChannel2", works.heymate.beta.R.string.NotificationActionPinnedQuizChannel2, args[0], args[1]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_POLL": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedPollUser", R.string.NotificationActionPinnedPollUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedPollUser", works.heymate.beta.R.string.NotificationActionPinnedPollUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedPoll2", R.string.NotificationActionPinnedPoll2, args[0], args[2], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedPoll2", works.heymate.beta.R.string.NotificationActionPinnedPoll2, args[0], args[2], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedPollChannel2", R.string.NotificationActionPinnedPollChannel2, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedPollChannel2", works.heymate.beta.R.string.NotificationActionPinnedPollChannel2, args[0], args[1]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_GEO": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedGeoUser", R.string.NotificationActionPinnedGeoUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedGeoUser", works.heymate.beta.R.string.NotificationActionPinnedGeoUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGeo", R.string.NotificationActionPinnedGeo, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGeo", works.heymate.beta.R.string.NotificationActionPinnedGeo, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGeoChannel", R.string.NotificationActionPinnedGeoChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGeoChannel", works.heymate.beta.R.string.NotificationActionPinnedGeoChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_GEOLIVE": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveUser", R.string.NotificationActionPinnedGeoLiveUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveUser", works.heymate.beta.R.string.NotificationActionPinnedGeoLiveUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGeoLive", R.string.NotificationActionPinnedGeoLive, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGeoLive", works.heymate.beta.R.string.NotificationActionPinnedGeoLive, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", R.string.NotificationActionPinnedGeoLiveChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGeoLiveChannel", works.heymate.beta.R.string.NotificationActionPinnedGeoLiveChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_GAME": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedGameUser", R.string.NotificationActionPinnedGameUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedGameUser", works.heymate.beta.R.string.NotificationActionPinnedGameUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGame", R.string.NotificationActionPinnedGame, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGame", works.heymate.beta.R.string.NotificationActionPinnedGame, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGameChannel", R.string.NotificationActionPinnedGameChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGameChannel", works.heymate.beta.R.string.NotificationActionPinnedGameChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_GAME_SCORE": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedGameScoreUser", R.string.NotificationActionPinnedGameScoreUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedGameScoreUser", works.heymate.beta.R.string.NotificationActionPinnedGameScoreUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGameScore", R.string.NotificationActionPinnedGameScore, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGameScore", works.heymate.beta.R.string.NotificationActionPinnedGameScore, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGameScoreChannel", R.string.NotificationActionPinnedGameScoreChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGameScoreChannel", works.heymate.beta.R.string.NotificationActionPinnedGameScoreChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_INVOICE": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedInvoiceUser", R.string.NotificationActionPinnedInvoiceUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedInvoiceUser", works.heymate.beta.R.string.NotificationActionPinnedInvoiceUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedInvoice", R.string.NotificationActionPinnedInvoice, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedInvoice", works.heymate.beta.R.string.NotificationActionPinnedInvoice, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedInvoiceChannel", R.string.NotificationActionPinnedInvoiceChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedInvoiceChannel", works.heymate.beta.R.string.NotificationActionPinnedInvoiceChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "PINNED_GIF": {
                                         if (dialogId > 0) {
-                                            messageText = LocaleController.formatString("NotificationActionPinnedGifUser", R.string.NotificationActionPinnedGifUser, args[0], args[1]);
+                                            messageText = LocaleController.formatString("NotificationActionPinnedGifUser", works.heymate.beta.R.string.NotificationActionPinnedGifUser, args[0], args[1]);
                                         } else {
                                             if (isGroup) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGif", R.string.NotificationActionPinnedGif, args[0], args[1]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGif", works.heymate.beta.R.string.NotificationActionPinnedGif, args[0], args[1]);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedGifChannel", R.string.NotificationActionPinnedGifChannel, args[0]);
+                                                messageText = LocaleController.formatString("NotificationActionPinnedGifChannel", works.heymate.beta.R.string.NotificationActionPinnedGifChannel, args[0]);
                                             }
                                         }
                                         break;
                                     }
                                     case "ENCRYPTED_MESSAGE": {
-                                        messageText = LocaleController.getString("YouHaveNewMessage", R.string.YouHaveNewMessage);
-                                        name = LocaleController.getString("SecretChatName", R.string.SecretChatName);
+                                        messageText = LocaleController.getString("YouHaveNewMessage", works.heymate.beta.R.string.YouHaveNewMessage);
+                                        name = LocaleController.getString("SecretChatName", works.heymate.beta.R.string.SecretChatName);
                                         localMessage = true;
                                         break;
                                     }

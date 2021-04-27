@@ -26,7 +26,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -66,7 +66,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             imageView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(20), Theme.getColor(Theme.key_featuredStickers_buttonText)));
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addButton), PorterDuff.Mode.MULTIPLY));
-            imageView.setAnimation(R.raw.import_check, 26, 26);
+            imageView.setAnimation(works.heymate.beta.R.raw.import_check, 26, 26);
             imageView.setScaleX(0.8f);
             imageView.setScaleY(0.8f);
             linearLayout.addView(imageView, LayoutHelper.createLinear(20, 20, Gravity.CENTER_VERTICAL));
@@ -123,17 +123,17 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         textView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        textView.setText(LocaleController.getString("ImportImportingTitle", R.string.ImportImportingTitle));
+        textView.setText(LocaleController.getString("ImportImportingTitle", works.heymate.beta.R.string.ImportImportingTitle));
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 17, 20, 17, 0));
 
-        completedDrawable = new RLottieDrawable(R.raw.import_finish, "" + R.raw.import_finish, AndroidUtilities.dp(120), AndroidUtilities.dp(120), false, null);
+        completedDrawable = new RLottieDrawable(works.heymate.beta.R.raw.import_finish, "" + works.heymate.beta.R.raw.import_finish, AndroidUtilities.dp(120), AndroidUtilities.dp(120), false, null);
         completedDrawable.setAllowDecodeSingleFrame(true);
 
         imageView = new RLottieImageView(context);
         imageView.setAutoRepeat(true);
-        imageView.setAnimation(R.raw.import_loop, 120, 120);
+        imageView.setAnimation(works.heymate.beta.R.raw.import_loop, 120, 120);
         imageView.playAnimation();
         frameLayout.addView(imageView, LayoutHelper.createFrame(160, 160, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 17, 79, 17, 0));
         imageView.getAnimatedDrawable().setOnFinishCallback(onFinishCallback, 178);
@@ -155,7 +155,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
 
         cell = new BottomSheetCell(context);
         cell.setBackground(null);
-        cell.setText(LocaleController.getString("ImportDone", R.string.ImportDone));
+        cell.setText(LocaleController.getString("ImportDone", works.heymate.beta.R.string.ImportDone));
         cell.setVisibility(View.INVISIBLE);
         cell.background.setOnClickListener(v -> dismiss());
         cell.background.setPivotY(AndroidUtilities.dp(48));
@@ -176,11 +176,11 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             frameLayout.addView(infoTextView[a], LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 30, 368, 30, 44));
 
             if (a == 0) {
-                infoTextView[a].setText(LocaleController.getString("ImportImportingInfo", R.string.ImportImportingInfo));
-                importCountTextView[a].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+                infoTextView[a].setText(LocaleController.getString("ImportImportingInfo", works.heymate.beta.R.string.ImportImportingInfo));
+                importCountTextView[a].setText(LocaleController.formatString("ImportCount", works.heymate.beta.R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
             } else {
-                infoTextView[a].setText(LocaleController.getString("ImportDoneInfo", R.string.ImportDoneInfo));
-                importCountTextView[a].setText(LocaleController.getString("ImportDoneTitle", R.string.ImportDoneTitle));
+                infoTextView[a].setText(LocaleController.getString("ImportDoneInfo", works.heymate.beta.R.string.ImportDoneInfo));
+                importCountTextView[a].setText(LocaleController.getString("ImportDoneTitle", works.heymate.beta.R.string.ImportDoneTitle));
 
                 infoTextView[a].setAlpha(0.0f);
                 infoTextView[a].setTranslationY(AndroidUtilities.dp(10));
@@ -241,7 +241,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             }
 
             percentTextView.setText(String.format("%d%%", importingHistory.uploadProgress));
-            importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+            importCountTextView[0].setText(LocaleController.formatString("ImportCount", works.heymate.beta.R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
             lineProgressView.setProgress(importingHistory.uploadProgress / 100.0f, true);
         }
     }

@@ -23,7 +23,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -99,11 +99,11 @@ public class ShareDialogCell extends FrameLayout {
             user = MessagesController.getInstance(currentAccount).getUser(uid);
             avatarDrawable.setInfo(user);
             if (currentType != TYPE_CREATE && UserObject.isReplyUser(user)) {
-                nameTextView.setText(LocaleController.getString("RepliesTitle", R.string.RepliesTitle));
+                nameTextView.setText(LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle));
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else if (currentType != TYPE_CREATE && UserObject.isUserSelf(user)) {
-                nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages));
+                nameTextView.setText(LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages));
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else {

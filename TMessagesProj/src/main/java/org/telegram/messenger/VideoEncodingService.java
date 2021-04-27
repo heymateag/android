@@ -97,13 +97,13 @@ public class VideoEncodingService extends Service implements NotificationCenter.
             builder.setSmallIcon(android.R.drawable.stat_sys_upload);
             builder.setWhen(System.currentTimeMillis());
             builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setContentTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
             if (isGif) {
-                builder.setTicker(LocaleController.getString("SendingGif", R.string.SendingGif));
-                builder.setContentText(LocaleController.getString("SendingGif", R.string.SendingGif));
+                builder.setTicker(LocaleController.getString("SendingGif", works.heymate.beta.R.string.SendingGif));
+                builder.setContentText(LocaleController.getString("SendingGif", works.heymate.beta.R.string.SendingGif));
             } else {
-                builder.setTicker(LocaleController.getString("SendingVideo", R.string.SendingVideo));
-                builder.setContentText(LocaleController.getString("SendingVideo", R.string.SendingVideo));
+                builder.setTicker(LocaleController.getString("SendingVideo", works.heymate.beta.R.string.SendingVideo));
+                builder.setContentText(LocaleController.getString("SendingVideo", works.heymate.beta.R.string.SendingVideo));
             }
         }
         currentProgress = 0;

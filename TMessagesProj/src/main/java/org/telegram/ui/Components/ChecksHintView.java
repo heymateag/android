@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 
@@ -60,17 +60,17 @@ public class ChecksHintView extends FrameLayout {
             backgroundView.addView(textView[a], LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 32, a == 0 ? 2 : 26, 10, 0));
 
             if (a == 0) {
-                imageView[a].setAnimation(R.raw.ticks_single, 24, 24);
-                textView[a].setText(LocaleController.getString("HintSent", R.string.HintSent));
+                imageView[a].setAnimation(works.heymate.beta.R.raw.ticks_single, 24, 24);
+                textView[a].setText(LocaleController.getString("HintSent", works.heymate.beta.R.string.HintSent));
             } else {
-                imageView[a].setAnimation(R.raw.ticks_double, 24, 24);
-                textView[a].setText(LocaleController.getString("HintRead", R.string.HintRead));
+                imageView[a].setAnimation(works.heymate.beta.R.raw.ticks_double, 24, 24);
+                textView[a].setText(LocaleController.getString("HintRead", works.heymate.beta.R.string.HintRead));
             }
             imageView[a].playAnimation();
         }
 
         arrowImageView = new ImageView(context);
-        arrowImageView.setImageResource(R.drawable.tooltip_arrow);
+        arrowImageView.setImageResource(works.heymate.beta.R.drawable.tooltip_arrow);
         arrowImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_gifSaveHintBackground), PorterDuff.Mode.MULTIPLY));
         addView(arrowImageView, LayoutHelper.createFrame(14, 6, Gravity.LEFT | Gravity.BOTTOM, 0, 0, 0, 0));
     }

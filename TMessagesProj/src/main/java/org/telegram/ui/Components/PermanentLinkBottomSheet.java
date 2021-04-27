@@ -12,7 +12,7 @@ import androidx.core.widget.NestedScrollView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -50,7 +50,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         linkActionView = new LinkActionView(context, fragment, this, chatId, true, isChannel);
         linkActionView.setPermanent(true);
         imageView = new RLottieImageView(context);
-        linkIcon = new RLottieDrawable(R.raw.shared_link_enter, "" + R.raw.shared_link_enter, AndroidUtilities.dp(90), AndroidUtilities.dp(90), false, null);
+        linkIcon = new RLottieDrawable(works.heymate.beta.R.raw.shared_link_enter, "" + works.heymate.beta.R.raw.shared_link_enter, AndroidUtilities.dp(90), AndroidUtilities.dp(90), false, null);
         linkIcon.setCustomEndFrame(42);
         imageView.setAnimation(linkIcon);
         linkActionView.setUsers(0, null);
@@ -58,19 +58,19 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         linkActionView.setDelegate(() -> generateLink(true));
 
         titleView = new TextView(context);
-        titleView.setText(LocaleController.getString("InviteLink", R.string.InviteLink));
+        titleView.setText(LocaleController.getString("InviteLink", works.heymate.beta.R.string.InviteLink));
         titleView.setTextSize(24);
         titleView.setGravity(Gravity.CENTER_HORIZONTAL);
         titleView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
 
         subtitle = new TextView(context);
-        subtitle.setText(isChannel ? LocaleController.getString("LinkInfoChannel", R.string.LinkInfoChannel) : LocaleController.getString("LinkInfo", R.string.LinkInfo));
+        subtitle.setText(isChannel ? LocaleController.getString("LinkInfoChannel", works.heymate.beta.R.string.LinkInfoChannel) : LocaleController.getString("LinkInfo", works.heymate.beta.R.string.LinkInfo));
         subtitle.setTextSize(14);
         subtitle.setGravity(Gravity.CENTER_HORIZONTAL);
         subtitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
 
         manage = new TextView(context);
-        manage.setText(LocaleController.getString("ManageInviteLinks", R.string.ManageInviteLinks));
+        manage.setText(LocaleController.getString("ManageInviteLinks", works.heymate.beta.R.string.ManageInviteLinks));
         manage.setTextSize(14);
         manage.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
         manage.setBackground(Theme.createRadSelectorDrawable(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText), (int) (255 * 0.3f)), AndroidUtilities.dp(4), AndroidUtilities.dp(4)));
@@ -134,9 +134,9 @@ public class PermanentLinkBottomSheet extends BottomSheet {
 
                 if (showDialog && fragment != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage(LocaleController.getString("RevokeAlertNewLink", R.string.RevokeAlertNewLink));
-                    builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
-                    builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
+                    builder.setMessage(LocaleController.getString("RevokeAlertNewLink", works.heymate.beta.R.string.RevokeAlertNewLink));
+                    builder.setTitle(LocaleController.getString("RevokeLink", works.heymate.beta.R.string.RevokeLink));
+                    builder.setNegativeButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
                     fragment.showDialog(builder.create());
                 }
             }

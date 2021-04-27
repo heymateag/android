@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -103,7 +103,7 @@ public class ColorPicker extends FrameLayout {
 
         setWillNotDraw(false);
 
-        circleDrawable = context.getResources().getDrawable(R.drawable.knob_shadow).mutate();
+        circleDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.knob_shadow).mutate();
 
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         colorWheelPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
@@ -319,7 +319,7 @@ public class ColorPicker extends FrameLayout {
                 colorEditText[3].requestFocus();
             }
         });
-        clearButton.setContentDescription(LocaleController.getString("ClearButton", R.string.ClearButton));
+        clearButton.setContentDescription(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton));
         addView(clearButton, LayoutHelper.createFrame(42, 42, Gravity.TOP | Gravity.RIGHT, 0, 0, 9, 0));
 
         resetButton = new TextView(context);
@@ -341,11 +341,11 @@ public class ColorPicker extends FrameLayout {
         if (hasMenu) {
             menuItem = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             menuItem.setLongClickEnabled(false);
-            menuItem.setIcon(R.drawable.ic_ab_other);
-            menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-            menuItem.addSubItem(item_edit, R.drawable.msg_edit, LocaleController.getString("OpenInEditor", R.string.OpenInEditor));
-            menuItem.addSubItem(item_share, R.drawable.msg_share, LocaleController.getString("ShareTheme", R.string.ShareTheme));
-            menuItem.addSubItem(item_delete, R.drawable.msg_delete, LocaleController.getString("DeleteTheme", R.string.DeleteTheme));
+            menuItem.setIcon(works.heymate.beta.R.drawable.ic_ab_other);
+            menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
+            menuItem.addSubItem(item_edit, works.heymate.beta.R.drawable.msg_edit, LocaleController.getString("OpenInEditor", works.heymate.beta.R.string.OpenInEditor));
+            menuItem.addSubItem(item_share, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("ShareTheme", works.heymate.beta.R.string.ShareTheme));
+            menuItem.addSubItem(item_delete, works.heymate.beta.R.drawable.msg_delete, LocaleController.getString("DeleteTheme", works.heymate.beta.R.string.DeleteTheme));
             menuItem.setMenuYOffset(-AndroidUtilities.dp(80));
             menuItem.setSubMenuOpenSide(2);
             menuItem.setDelegate(id -> {
@@ -624,10 +624,10 @@ public class ColorPicker extends FrameLayout {
         currentResetType = resetType;
         myMessagesColor = myMessages;
         if (myMessagesColor) {
-            exchangeButton.setImageResource(R.drawable.menu_switch);
+            exchangeButton.setImageResource(works.heymate.beta.R.drawable.menu_switch);
             exchangeButton.setRotation(0);
         } else {
-            exchangeButton.setImageResource(R.drawable.editor_rotate);
+            exchangeButton.setImageResource(works.heymate.beta.R.drawable.editor_rotate);
             exchangeButton.setRotation(angle - 45);
         }
         if (menuItem != null) {
@@ -684,7 +684,7 @@ public class ColorPicker extends FrameLayout {
         }
 
         resetButton.setTag(hasChanges ? 1 : null);
-        resetButton.setText(resetType == 1 ? LocaleController.getString("ColorPickerResetAll", R.string.ColorPickerResetAll) : LocaleController.getString("ColorPickerReset", R.string.ColorPickerReset));
+        resetButton.setText(resetType == 1 ? LocaleController.getString("ColorPickerResetAll", works.heymate.beta.R.string.ColorPickerResetAll) : LocaleController.getString("ColorPickerReset", works.heymate.beta.R.string.ColorPickerReset));
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) resetButton.getLayoutParams();
         layoutParams.rightMargin = AndroidUtilities.dp(resetType == 1 ? 14 : (14 + 47));
         if (animated) {

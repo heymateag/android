@@ -59,7 +59,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -262,7 +262,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         frameLayout.addView(selector, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.blockpanel_shadow);
+        shadow.setBackgroundResource(works.heymate.beta.R.drawable.blockpanel_shadow);
         addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 2, Gravity.LEFT | Gravity.TOP, 0, 36, 0, 0));
 
         playButton = new ImageView(context);
@@ -286,7 +286,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         importingImageView = new RLottieImageView(context);
         importingImageView.setScaleType(ImageView.ScaleType.CENTER);
         importingImageView.setAutoRepeat(true);
-        importingImageView.setAnimation(R.raw.import_progress, 30, 30);
+        importingImageView.setAnimation(works.heymate.beta.R.raw.import_progress, 30, 30);
         importingImageView.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(22), Theme.getColor(Theme.key_inappPlayerPlayPause)));
         addView(importingImageView, LayoutHelper.createFrame(22, 22, Gravity.TOP | Gravity.LEFT, 7, 7, 0, 0));
 
@@ -340,7 +340,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         addView(subtitleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 35, 10, 36, 0));
 
         joinButton = new TextView(context);
-        joinButton.setText(LocaleController.getString("VoipChatJoin", R.string.VoipChatJoin));
+        joinButton.setText(LocaleController.getString("VoipChatJoin", works.heymate.beta.R.string.VoipChatJoin));
         joinButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         joinButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         joinButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -353,8 +353,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!location) {
             playbackSpeedButton = new ImageView(context);
             playbackSpeedButton.setScaleType(ImageView.ScaleType.CENTER);
-            playbackSpeedButton.setImageResource(R.drawable.voice2x);
-            playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", R.string.AccDescrPlayerSpeed));
+            playbackSpeedButton.setImageResource(works.heymate.beta.R.drawable.voice2x);
+            playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", works.heymate.beta.R.string.AccDescrPlayerSpeed));
             if (AndroidUtilities.density >= 3.0f) {
                 playbackSpeedButton.setPadding(0, 1, 0, 0);
             }
@@ -376,7 +376,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         avatars.setVisibility(GONE);
         addView(avatars, LayoutHelper.createFrame(108, 36, Gravity.LEFT | Gravity.TOP));
 
-        muteDrawable = new RLottieDrawable(R.raw.voice_muted, "" + R.raw.voice_muted, AndroidUtilities.dp(16), AndroidUtilities.dp(20), true, null);
+        muteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.voice_muted, "" + works.heymate.beta.R.raw.voice_muted, AndroidUtilities.dp(16), AndroidUtilities.dp(20), true, null);
 
         muteButton = new RLottieImageView(context) {
             boolean scheduled;
@@ -464,7 +464,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(info);
                 info.setClassName(Button.class.getName());
-                info.setText(isMuted ? LocaleController.getString("VoipUnmute", R.string.VoipUnmute) : LocaleController.getString("VoipMute", R.string.VoipMute));
+                info.setText(isMuted ? LocaleController.getString("VoipUnmute", works.heymate.beta.R.string.VoipUnmute) : LocaleController.getString("VoipMute", works.heymate.beta.R.string.VoipMute));
             }
         };
         muteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_returnToCallText), PorterDuff.Mode.MULTIPLY));
@@ -505,7 +505,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         });
 
         closeButton = new ImageView(context);
-        closeButton.setImageResource(R.drawable.miniplayer_close);
+        closeButton.setImageResource(works.heymate.beta.R.drawable.miniplayer_close);
         closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_inappPlayerClose), PorterDuff.Mode.MULTIPLY));
         if (Build.VERSION.SDK_INT >= 21) {
             closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_inappPlayerClose) & 0x19ffffff, 1, AndroidUtilities.dp(14)));
@@ -515,22 +515,22 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         closeButton.setOnClickListener(v -> {
             if (currentStyle == 2) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-                builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", R.string.StopLiveLocationAlertToTitle));
+                builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", works.heymate.beta.R.string.StopLiveLocationAlertToTitle));
                 if (fragment instanceof DialogsActivity) {
-                    builder.setMessage(LocaleController.getString("StopLiveLocationAlertAllText", R.string.StopLiveLocationAlertAllText));
+                    builder.setMessage(LocaleController.getString("StopLiveLocationAlertAllText", works.heymate.beta.R.string.StopLiveLocationAlertAllText));
                 } else {
                     ChatActivity activity = (ChatActivity) fragment;
                     TLRPC.Chat chat = activity.getCurrentChat();
                     TLRPC.User user = activity.getCurrentUser();
                     if (chat != null) {
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToGroupText", R.string.StopLiveLocationAlertToGroupText, chat.title)));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToGroupText", works.heymate.beta.R.string.StopLiveLocationAlertToGroupText, chat.title)));
                     } else if (user != null) {
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToUserText", R.string.StopLiveLocationAlertToUserText, UserObject.getFirstName(user))));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToUserText", works.heymate.beta.R.string.StopLiveLocationAlertToUserText, UserObject.getFirstName(user))));
                     } else {
-                        builder.setMessage(LocaleController.getString("AreYouSure", R.string.AreYouSure));
+                        builder.setMessage(LocaleController.getString("AreYouSure", works.heymate.beta.R.string.AreYouSure));
                     }
                 }
-                builder.setPositiveButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
                     if (fragment instanceof DialogsActivity) {
                         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                             LocationController.getInstance(a).removeAllLocationSharings();
@@ -539,7 +539,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         LocationController.getInstance(fragment.getCurrentAccount()).removeSharingLocation(((ChatActivity) fragment).getDialogId());
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 builder.show();
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -778,7 +778,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             avatars.setVisibility(GONE);
             importingImageView.setVisibility(VISIBLE);
             importingImageView.playAnimation();
-            closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", R.string.AccDescrClosePlayer));
+            closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", works.heymate.beta.R.string.AccDescrClosePlayer));
             if (playbackSpeedButton != null) {
                 playbackSpeedButton.setVisibility(GONE);
             }
@@ -813,11 +813,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (playbackSpeedButton != null) {
                     playbackSpeedButton.setVisibility(VISIBLE);
                 }
-                closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", R.string.AccDescrClosePlayer));
+                closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", works.heymate.beta.R.string.AccDescrClosePlayer));
             } else {
                 playButton.setLayoutParams(LayoutHelper.createFrame(36, 36, Gravity.TOP | Gravity.LEFT, 8, 0, 0, 0));
                 titleTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 35 + 16, 0, 36, 0));
-                closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", R.string.AccDescrStopLiveLocation));
+                closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", works.heymate.beta.R.string.AccDescrStopLiveLocation));
             }
         } else if (style == 4) {
             selector.setBackground(Theme.getSelectorDrawable(false));
@@ -1058,7 +1058,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (call.isScheduled()) {
                         subtitleTextView.setText(LocaleController.formatStartsTime(call.call.schedule_date, 4), false);
                     } else if (call.call.participants_count == 0) {
-                        subtitleTextView.setText(LocaleController.getString("MembersTalkingNobody", R.string.MembersTalkingNobody), false);
+                        subtitleTextView.setText(LocaleController.getString("MembersTalkingNobody", works.heymate.beta.R.string.MembersTalkingNobody), false);
                     } else {
                         subtitleTextView.setText(LocaleController.formatPluralString("Participants", call.call.participants_count), false);
                     }
@@ -1178,7 +1178,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
 
             if (fragment instanceof DialogsActivity) {
-                String liveLocation = LocaleController.getString("LiveLocationContext", R.string.LiveLocationContext);
+                String liveLocation = LocaleController.getString("LiveLocationContext", works.heymate.beta.R.string.LiveLocationContext);
                 String param;
                 String str;
                 ArrayList<LocationController.SharingLocationInfo> infos = new ArrayList<>();
@@ -1191,7 +1191,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (lower_id > 0) {
                         TLRPC.User user = MessagesController.getInstance(info.messageObject.currentAccount).getUser(lower_id);
                         param = UserObject.getFirstName(user);
-                        str = LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing);
+                        str = LocaleController.getString("AttachLiveLocationIsSharing", works.heymate.beta.R.string.AttachLiveLocationIsSharing);
                     } else {
                         TLRPC.Chat chat = MessagesController.getInstance(info.messageObject.currentAccount).getChat(-lower_id);
                         if (chat != null) {
@@ -1199,11 +1199,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         } else {
                             param = "";
                         }
-                        str = LocaleController.getString("AttachLiveLocationIsSharingChat", R.string.AttachLiveLocationIsSharingChat);
+                        str = LocaleController.getString("AttachLiveLocationIsSharingChat", works.heymate.beta.R.string.AttachLiveLocationIsSharingChat);
                     }
                 } else {
                     param = LocaleController.formatPluralString("Chats", infos.size());
-                    str = LocaleController.getString("AttachLiveLocationIsSharingChats", R.string.AttachLiveLocationIsSharingChats);
+                    str = LocaleController.getString("AttachLiveLocationIsSharingChats", works.heymate.beta.R.string.AttachLiveLocationIsSharingChats);
                 }
                 String fullString = String.format(str, liveLocation, param);
                 int start = fullString.indexOf(liveLocation);
@@ -1263,7 +1263,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         lastLocationSharingCount = locationSharingCount;
 
-        String liveLocation = LocaleController.getString("LiveLocationContext", R.string.LiveLocationContext);
+        String liveLocation = LocaleController.getString("LiveLocationContext", works.heymate.beta.R.string.LiveLocationContext);
         String fullString;
         if (locationSharingCount == 0) {
             fullString = liveLocation;
@@ -1272,12 +1272,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (LocationController.getInstance(currentAccount).isSharingLocation(dialogId)) {
                 if (otherSharingCount != 0) {
                     if (otherSharingCount == 1 && notYouUser != null) {
-                        fullString = String.format("%1$s - %2$s", liveLocation, LocaleController.formatString("SharingYouAndOtherName", R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser)));
+                        fullString = String.format("%1$s - %2$s", liveLocation, LocaleController.formatString("SharingYouAndOtherName", works.heymate.beta.R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser)));
                     } else {
-                        fullString = String.format("%1$s - %2$s %3$s", liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount));
+                        fullString = String.format("%1$s - %2$s %3$s", liveLocation, LocaleController.getString("ChatYourSelfName", works.heymate.beta.R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount));
                     }
                 } else {
-                    fullString = String.format("%1$s - %2$s", liveLocation, LocaleController.getString("ChatYourSelfName", R.string.ChatYourSelfName));
+                    fullString = String.format("%1$s - %2$s", liveLocation, LocaleController.getString("ChatYourSelfName", works.heymate.beta.R.string.ChatYourSelfName));
                 }
             } else {
                 if (otherSharingCount != 0) {
@@ -1439,10 +1439,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (MediaController.getInstance().isMessagePaused()) {
                 playPauseDrawable.setPause(false, !create);
-                playButton.setContentDescription(LocaleController.getString("AccActionPlay", R.string.AccActionPlay));
+                playButton.setContentDescription(LocaleController.getString("AccActionPlay", works.heymate.beta.R.string.AccActionPlay));
             } else {
                 playPauseDrawable.setPause(true, !create);
-                playButton.setContentDescription(LocaleController.getString("AccActionPause", R.string.AccActionPause));
+                playButton.setContentDescription(LocaleController.getString("AccActionPause", works.heymate.beta.R.string.AccActionPause));
             }
             if (lastMessageObject != messageObject || prevStyle != 0) {
                 lastMessageObject = messageObject;
@@ -1622,7 +1622,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (currentProgress != importingHistory.uploadProgress) {
                 currentProgress = importingHistory.uploadProgress;
-                titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportUploading", R.string.ImportUploading, importingHistory.uploadProgress)), false);
+                titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportUploading", works.heymate.beta.R.string.ImportUploading, importingHistory.uploadProgress)), false);
             }
         }
     }
@@ -1767,7 +1767,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     if (!TextUtils.isEmpty(call.call.title)) {
                         titleTextView.setText(call.call.title, false);
                     } else {
-                        titleTextView.setText(LocaleController.getString("VoipGroupScheduledVoiceChat", R.string.VoipGroupScheduledVoiceChat), false);
+                        titleTextView.setText(LocaleController.getString("VoipGroupScheduledVoiceChat", works.heymate.beta.R.string.VoipGroupScheduledVoiceChat), false);
                     }
                     subtitleTextView.setText(LocaleController.formatStartsTime(call.call.schedule_date, 4), false);
                     if (!scheduleRunnableScheduled) {
@@ -1776,9 +1776,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     }
                 } else {
                     joinButton.setVisibility(VISIBLE);
-                    titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", R.string.VoipGroupVoiceChat), false);
+                    titleTextView.setText(LocaleController.getString("VoipGroupVoiceChat", works.heymate.beta.R.string.VoipGroupVoiceChat), false);
                     if (call.call.participants_count == 0) {
-                        subtitleTextView.setText(LocaleController.getString("MembersTalkingNobody", R.string.MembersTalkingNobody), false);
+                        subtitleTextView.setText(LocaleController.getString("MembersTalkingNobody", works.heymate.beta.R.string.MembersTalkingNobody), false);
                     } else {
                         subtitleTextView.setText(LocaleController.formatPluralString("Participants", call.call.participants_count), false);
                     }
@@ -2021,13 +2021,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (service != null && (currentStyle == 1 || currentStyle == 3)) {
             int currentCallState = service.getCallState();
             if (!service.isSwitchingStream() && (currentCallState == VoIPService.STATE_WAIT_INIT || currentCallState == VoIPService.STATE_WAIT_INIT_ACK || currentCallState == VoIPService.STATE_CREATING || currentCallState == VoIPService.STATE_RECONNECTING)) {
-                titleTextView.setText(LocaleController.getString("VoipGroupConnecting", R.string. VoipGroupConnecting), false);
+                titleTextView.setText(LocaleController.getString("VoipGroupConnecting", works.heymate.beta.R.string. VoipGroupConnecting), false);
             } else if (service.getChat() != null) {
                 if (!TextUtils.isEmpty(service.groupCall.call.title)) {
                     titleTextView.setText(service.groupCall.call.title, false);
                 } else {
                     if (fragment instanceof ChatActivity && ((ChatActivity) fragment).getCurrentChat() != null && ((ChatActivity) fragment).getCurrentChat().id == service.getChat().id) {
-                        titleTextView.setText(LocaleController.getString("VoipGroupViewVoiceChat", R.string.VoipGroupViewVoiceChat), false);
+                        titleTextView.setText(LocaleController.getString("VoipGroupViewVoiceChat", works.heymate.beta.R.string.VoipGroupViewVoiceChat), false);
                     } else {
                         titleTextView.setText(service.getChat().title, false);
                     }
@@ -2035,7 +2035,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else if (service.getUser() != null) {
                 TLRPC.User user = service.getUser();
                 if (fragment instanceof ChatActivity && ((ChatActivity) fragment).getCurrentUser() != null && ((ChatActivity) fragment).getCurrentUser().id == user.id) {
-                    titleTextView.setText(LocaleController.getString("ReturnToCall", R.string.ReturnToCall));
+                    titleTextView.setText(LocaleController.getString("ReturnToCall", works.heymate.beta.R.string.ReturnToCall));
                 } else {
                     titleTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                 }

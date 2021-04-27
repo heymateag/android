@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:559020673422:android:0bdcfb3033788771937cdf",
         "android_client_info": {
-          "package_name": "org.telegram.messenger"
+          "package_name": "works.heymate.beta"
         }
       },
       "oauth_client": [
@@ -39,7 +39,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:559020673422:android:0bdcfb3033788771937cdf",
         "android_client_info": {
-          "package_name": "org.telegram.messenger.beta"
+          "package_name": "works.heymate.beta.beta"
         }
       },
       "oauth_client": [

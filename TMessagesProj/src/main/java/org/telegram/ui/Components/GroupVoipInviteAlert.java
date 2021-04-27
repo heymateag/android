@@ -25,7 +25,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -652,7 +652,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             switch (viewType) {
                 case 0:
                     ManageChatUserCell manageChatUserCell = new ManageChatUserCell(mContext, 2, 2, false);
-                    manageChatUserCell.setCustomRightImage(R.drawable.msg_invited);
+                    manageChatUserCell.setCustomRightImage(works.heymate.beta.R.drawable.msg_invited);
                     manageChatUserCell.setNameColor(Theme.getColor(Theme.key_voipgroup_nameText));
                     manageChatUserCell.setStatusColors(Theme.getColor(Theme.key_voipgroup_lastSeenTextUnscrolled), Theme.getColor(Theme.key_voipgroup_listeningText));
                     manageChatUserCell.setDividerColor(Theme.key_voipgroup_listViewBackground);
@@ -757,9 +757,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 case 1: {
                     GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
                     if (position == groupStartRow) {
-                        sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
+                        sectionCell.setText(LocaleController.getString("ChannelMembers", works.heymate.beta.R.string.ChannelMembers));
                     } else if (position == globalStartRow) {
-                        sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
+                        sectionCell.setText(LocaleController.getString("GlobalSearch", works.heymate.beta.R.string.GlobalSearch));
                     }
                     break;
                 }
@@ -818,7 +818,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             switch (viewType) {
                 case 0:
                     ManageChatUserCell manageChatUserCell = new ManageChatUserCell(mContext, 6, 2, false);
-                    manageChatUserCell.setCustomRightImage(R.drawable.msg_invited);
+                    manageChatUserCell.setCustomRightImage(works.heymate.beta.R.drawable.msg_invited);
                     manageChatUserCell.setNameColor(Theme.getColor(Theme.key_voipgroup_nameText));
                     manageChatUserCell.setStatusColors(Theme.getColor(Theme.key_voipgroup_lastSeenTextUnscrolled), Theme.getColor(Theme.key_voipgroup_listeningText));
                     manageChatUserCell.setDividerColor(Theme.key_voipgroup_actionBar);
@@ -894,18 +894,18 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     ManageChatTextCell actionCell = (ManageChatTextCell) holder.itemView;
                     if (position == addNewRow) {
                         boolean showDivider = !(loadingUsers && !firstLoaded) && membersHeaderRow == -1 && !participants.isEmpty();
-                        actionCell.setText(LocaleController.getString("VoipGroupCopyInviteLink", R.string.VoipGroupCopyInviteLink), null, R.drawable.msg_link, 7, showDivider);
+                        actionCell.setText(LocaleController.getString("VoipGroupCopyInviteLink", works.heymate.beta.R.string.VoipGroupCopyInviteLink), null, works.heymate.beta.R.drawable.msg_link, 7, showDivider);
                     }
                     break;
                 case 2:
                     GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
                     if (position == membersHeaderRow) {
-                        sectionCell.setText(LocaleController.getString("ChannelOtherMembers", R.string.ChannelOtherMembers));
+                        sectionCell.setText(LocaleController.getString("ChannelOtherMembers", works.heymate.beta.R.string.ChannelOtherMembers));
                     } else if (position == contactsHeaderRow) {
                         if (showContacts) {
-                            sectionCell.setText(LocaleController.getString("YourContactsToInvite", R.string.YourContactsToInvite));
+                            sectionCell.setText(LocaleController.getString("YourContactsToInvite", works.heymate.beta.R.string.YourContactsToInvite));
                         } else {
-                            sectionCell.setText(LocaleController.getString("GroupContacts", R.string.GroupContacts));
+                            sectionCell.setText(LocaleController.getString("GroupContacts", works.heymate.beta.R.string.GroupContacts));
                         }
                     }
                     break;

@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.data.ChartData;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -85,7 +85,7 @@ public class LegendSignatureView extends FrameLayout {
         hourTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
 
         chevron = new ImageView(context);
-        chevron.setImageResource(R.drawable.ic_chevron_right_black_18dp);
+        chevron.setImageResource(works.heymate.beta.R.drawable.ic_chevron_right_black_18dp);
 
         progressView = new RadialProgressView(context);
         progressView.setSize(AndroidUtilities.dp(12));
@@ -107,7 +107,7 @@ public class LegendSignatureView extends FrameLayout {
         chevron.setColorFilter(Theme.getColor(Theme.key_statisticChartChevronColor));
         progressView.setProgressColor(Theme.getColor(Theme.key_statisticChartChevronColor));
 
-        shadowDrawable = getContext().getResources().getDrawable(R.drawable.stats_tooltip).mutate();
+        shadowDrawable = getContext().getResources().getDrawable(works.heymate.beta.R.drawable.stats_tooltip).mutate();
         backgroundDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_dialogBackground), Theme.getColor(Theme.key_listSelector), 0xff000000);
         CombinedDrawable drawable = new CombinedDrawable(shadowDrawable, backgroundDrawable, AndroidUtilities.dp(3), AndroidUtilities.dp(3));
         drawable.setFullsize(true);

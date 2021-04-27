@@ -33,7 +33,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -1020,7 +1020,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
                 boolean savedMessages = false;
                 if (user != null && user.id == selfUserId) {
-                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
                     username = null;
                     savedMessages = true;
                 }
@@ -1047,16 +1047,16 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 if (isRecentSearchDisplayed()) {
                     int offset = (!MediaDataController.getInstance(currentAccount).hints.isEmpty() ? 1 : 0);
                     if (position < offset) {
-                        cell.setText(LocaleController.getString("ChatHints", R.string.ChatHints));
+                        cell.setText(LocaleController.getString("ChatHints", works.heymate.beta.R.string.ChatHints));
                     } else {
-                        cell.setText(LocaleController.getString("Recent", R.string.Recent), LocaleController.getString("ClearButton", R.string.ClearButton), v -> {
+                        cell.setText(LocaleController.getString("Recent", works.heymate.beta.R.string.Recent), LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton), v -> {
                             if (delegate != null) {
                                 delegate.needClearList();
                             }
                         });
                     }
                 } else if (!searchResultHashtags.isEmpty()) {
-                    cell.setText(LocaleController.getString("Hashtags", R.string.Hashtags), LocaleController.getString("ClearButton", R.string.ClearButton), v -> {
+                    cell.setText(LocaleController.getString("Hashtags", works.heymate.beta.R.string.Hashtags), LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton), v -> {
                         if (delegate != null) {
                             delegate.needClearList();
                         }
@@ -1070,13 +1070,13 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                     int messagesCount = searchResultMessages.isEmpty() ? 0 : searchResultMessages.size() + 1;
                     position -= localCount + localServerCount;
                     if (position >= 0 && position < phoneCount) {
-                        cell.setText(LocaleController.getString("PhoneNumberSearch", R.string.PhoneNumberSearch));
+                        cell.setText(LocaleController.getString("PhoneNumberSearch", works.heymate.beta.R.string.PhoneNumberSearch));
                     } else {
                         position -= phoneCount;
                         if (position >= 0 && position < globalCount) {
-                            cell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
+                            cell.setText(LocaleController.getString("GlobalSearch", works.heymate.beta.R.string.GlobalSearch));
                         } else {
-                            cell.setText(LocaleController.getString("SearchMessages", R.string.SearchMessages));
+                            cell.setText(LocaleController.getString("SearchMessages", works.heymate.beta.R.string.SearchMessages));
                         }
                     }
                 }
@@ -1104,7 +1104,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 String str = (String) getItem(position);
                 TextCell cell = (TextCell) holder.itemView;
                 cell.setColors(null, Theme.key_windowBackgroundWhiteBlueText2);
-                cell.setText(LocaleController.formatString("AddContactByPhone", R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + str)), false);
+                cell.setText(LocaleController.formatString("AddContactByPhone", works.heymate.beta.R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + str)), false);
                 break;
             }
         }

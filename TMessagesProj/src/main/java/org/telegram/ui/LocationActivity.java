@@ -88,7 +88,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -313,7 +313,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             addView(frameLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 114));
 
             lastPressedMarkerView = new FrameLayout(context);
-            lastPressedMarkerView.setBackgroundResource(R.drawable.venue_tooltip);
+            lastPressedMarkerView.setBackgroundResource(works.heymate.beta.R.drawable.venue_tooltip);
             lastPressedMarkerView.getBackground().setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
             frameLayout.addView(lastPressedMarkerView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 71));
             lastPressedMarkerView.setAlpha(0.0f);
@@ -349,7 +349,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             lastPressedMarkerView.addView(addressTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 18, 32, 18, 0));
 
             nameTextView.setText(location.venue.title);
-            addressTextView.setText(LocaleController.getString("TapToSendLocation", R.string.TapToSendLocation));
+            addressTextView.setText(LocaleController.getString("TapToSendLocation", works.heymate.beta.R.string.TapToSendLocation));
 
             FrameLayout iconLayout = new FrameLayout(context);
             iconLayout.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(36), LocationCell.getColorForIndex(location.num)));
@@ -530,7 +530,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         actionBar.setTitleColor(Theme.getColor(Theme.key_dialogTextBlack));
         actionBar.setItemsColor(Theme.getColor(Theme.key_dialogTextBlack), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_dialogButtonSelector), false);
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -558,30 +558,30 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
         ActionBarMenu menu = actionBar.createMenu();
         if (chatLocation != null) {
-            actionBar.setTitle(LocaleController.getString("ChatLocation", R.string.ChatLocation));
+            actionBar.setTitle(LocaleController.getString("ChatLocation", works.heymate.beta.R.string.ChatLocation));
         } else if (messageObject != null) {
             if (messageObject.isLiveLocation()) {
-                actionBar.setTitle(LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation));
+                actionBar.setTitle(LocaleController.getString("AttachLiveLocation", works.heymate.beta.R.string.AttachLiveLocation));
             } else {
                 if (messageObject.messageOwner.media.title != null && messageObject.messageOwner.media.title.length() > 0) {
-                    actionBar.setTitle(LocaleController.getString("SharedPlace", R.string.SharedPlace));
+                    actionBar.setTitle(LocaleController.getString("SharedPlace", works.heymate.beta.R.string.SharedPlace));
                 } else {
-                    actionBar.setTitle(LocaleController.getString("ChatLocation", R.string.ChatLocation));
+                    actionBar.setTitle(LocaleController.getString("ChatLocation", works.heymate.beta.R.string.ChatLocation));
                 }
-                otherItem = menu.addItem(0, R.drawable.ic_ab_other);
-                otherItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+                otherItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
+                otherItem.addSubItem(open_in, works.heymate.beta.R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", works.heymate.beta.R.string.OpenInExternalApp));
                 if (!getLocationController().isSharingLocation(dialogId)) {
-                    otherItem.addSubItem(share_live_location, R.drawable.menu_location, LocaleController.getString("SendLiveLocationMenu", R.string.SendLiveLocationMenu));
+                    otherItem.addSubItem(share_live_location, works.heymate.beta.R.drawable.menu_location, LocaleController.getString("SendLiveLocationMenu", works.heymate.beta.R.string.SendLiveLocationMenu));
                 }
-                otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+                otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
             }
         } else {
-            actionBar.setTitle(LocaleController.getString("ShareLocation", R.string.ShareLocation));
+            actionBar.setTitle(LocaleController.getString("ShareLocation", works.heymate.beta.R.string.ShareLocation));
 
             if (locationType != LOCATION_TYPE_GROUP) {
                 overlayView = new MapOverlayView(context);
 
-                searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+                searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
                     @Override
                     public void onSearchExpand() {
                         searching = true;
@@ -628,8 +628,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         searchAdapter.searchDelayed(text, userLocation);
                     }
                 });
-                searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
-                searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
+                searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+                searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
                 EditTextBoldCursor editText = searchItem.getSearchField();
                 editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 editText.setCursorColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -664,7 +664,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         FrameLayout frameLayout = (FrameLayout) fragmentView;
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
 
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
         Rect padding = new Rect();
         shadowDrawable.getPadding(padding);
@@ -693,7 +693,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             searchAreaButton.setTranslationX(-AndroidUtilities.dp(80));
             Drawable drawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
             if (Build.VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.places_btn).mutate();
+                Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.places_btn).mutate();
                 shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, AndroidUtilities.dp(2), AndroidUtilities.dp(2));
                 combinedDrawable.setFullsize(true);
@@ -715,7 +715,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             searchAreaButton.setTextColor(Theme.getColor(Theme.key_location_actionActiveIcon));
             searchAreaButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             searchAreaButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            searchAreaButton.setText(LocaleController.getString("PlacesInThisArea", R.string.PlacesInThisArea));
+            searchAreaButton.setText(LocaleController.getString("PlacesInThisArea", works.heymate.beta.R.string.PlacesInThisArea));
             searchAreaButton.setGravity(Gravity.CENTER);
             searchAreaButton.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
             mapViewClip.addView(searchAreaButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 80, 12, 80, 0));
@@ -732,13 +732,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         mapTypeButton.setSubMenuOpenSide(2);
         mapTypeButton.setAdditionalXOffset(AndroidUtilities.dp(10));
         mapTypeButton.setAdditionalYOffset(-AndroidUtilities.dp(10));
-        mapTypeButton.addSubItem(map_list_menu_map, R.drawable.msg_map, LocaleController.getString("Map", R.string.Map));
-        mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_satellite, LocaleController.getString("Satellite", R.string.Satellite));
-        mapTypeButton.addSubItem(map_list_menu_hybrid, R.drawable.msg_hybrid, LocaleController.getString("Hybrid", R.string.Hybrid));
-        mapTypeButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        mapTypeButton.addSubItem(map_list_menu_map, works.heymate.beta.R.drawable.msg_map, LocaleController.getString("Map", works.heymate.beta.R.string.Map));
+        mapTypeButton.addSubItem(map_list_menu_satellite, works.heymate.beta.R.drawable.msg_satellite, LocaleController.getString("Satellite", works.heymate.beta.R.string.Satellite));
+        mapTypeButton.addSubItem(map_list_menu_hybrid, works.heymate.beta.R.drawable.msg_hybrid, LocaleController.getString("Hybrid", works.heymate.beta.R.string.Hybrid));
+        mapTypeButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(40), AndroidUtilities.dp(40));
@@ -757,7 +757,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             });
         }
         mapTypeButton.setBackgroundDrawable(drawable);
-        mapTypeButton.setIcon(R.drawable.location_type);
+        mapTypeButton.setIcon(works.heymate.beta.R.drawable.location_type);
         mapViewClip.addView(mapTypeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12, 12, 0));
         mapTypeButton.setOnClickListener(v -> mapTypeButton.toggleSubMenu());
         mapTypeButton.setDelegate(id -> {
@@ -776,7 +776,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         locationButton = new ImageView(context);
         drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(40), AndroidUtilities.dp(40));
@@ -795,11 +795,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             });
         }
         locationButton.setBackgroundDrawable(drawable);
-        locationButton.setImageResource(R.drawable.location_current);
+        locationButton.setImageResource(works.heymate.beta.R.drawable.location_current);
         locationButton.setScaleType(ImageView.ScaleType.CENTER);
         locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionActiveIcon), PorterDuff.Mode.MULTIPLY));
         locationButton.setTag(Theme.key_location_actionActiveIcon);
-        locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", R.string.AccDescrMyLocation));
+        locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", works.heymate.beta.R.string.AccDescrMyLocation));
         FrameLayout.LayoutParams layoutParams1 = LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 12, 12);
         layoutParams1.bottomMargin += layoutParams.height - padding.top;
         mapViewClip.addView(locationButton, layoutParams1);
@@ -843,7 +843,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         proximityButton = new ImageView(context);
         drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(40), AndroidUtilities.dp(40));
@@ -864,7 +864,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionIcon), PorterDuff.Mode.MULTIPLY));
         proximityButton.setBackgroundDrawable(drawable);
         proximityButton.setScaleType(ImageView.ScaleType.CENTER);
-        proximityButton.setContentDescription(LocaleController.getString("AccDescrLocationNotify", R.string.AccDescrLocationNotify));
+        proximityButton.setContentDescription(LocaleController.getString("AccDescrLocationNotify", works.heymate.beta.R.string.AccDescrLocationNotify));
         mapViewClip.addView(proximityButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12 + 50, 12, 0));
         proximityButton.setOnClickListener(v -> {
             if (getParentActivity() == null || myLocation == null || !checkGpsEnabled() || googleMap == null) {
@@ -880,7 +880,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 undoView[0].hide(true, 1);
             }
             if (info != null && info.proximityMeters > 0) {
-                proximityButton.setImageResource(R.drawable.msg_location_alert);
+                proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert);
                 if (proximityCircle != null) {
                     proximityCircle.remove();
                     proximityCircle = null;
@@ -891,7 +891,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             getLocationController().setProximityLocation(dialogId, 0, true);
                             canUndo = false;
                         }, () -> {
-                            proximityButton.setImageResource(R.drawable.msg_location_alert2);
+                            proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert2);
                             createCircle(info.proximityMeters);
                             canUndo = false;
                         });
@@ -905,11 +905,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
         if (messageObject == null || !messageObject.isLiveLocation() || messageObject.isExpiredLiveLocation(getConnectionsManager().getCurrentTime()) || ChatObject.isChannel(chat) && !chat.megagroup) {
             proximityButton.setVisibility(View.GONE);
-            proximityButton.setImageResource(R.drawable.msg_location_alert);
+            proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert);
         } else {
             LocationController.SharingLocationInfo myInfo = getLocationController().getSharingLocationInfo(dialogId);
             if (myInfo != null && myInfo.proximityMeters > 0) {
-                proximityButton.setImageResource(R.drawable.msg_location_alert2);
+                proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert2);
             } else {
                 if ((int) dialogId > 0 && messageObject.getFromChatId() == getUserConfig().getClientUserId()) {
                     proximityButton.setVisibility(View.INVISIBLE);
@@ -917,7 +917,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     proximityButton.setScaleX(0.4f);
                     proximityButton.setScaleY(0.4f);
                 }
-                proximityButton.setImageResource(R.drawable.msg_location_alert);
+                proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert);
             }
         }
 
@@ -935,7 +935,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         emptyView.setOnTouchListener((v, event) -> true);
 
         emptyImageView = new ImageView(context);
-        emptyImageView.setImageResource(R.drawable.location_empty);
+        emptyImageView.setImageResource(works.heymate.beta.R.drawable.location_empty);
         emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogEmptyImage), PorterDuff.Mode.MULTIPLY));
         emptyView.addView(emptyImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
@@ -944,7 +944,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         emptyTitleTextView.setGravity(Gravity.CENTER);
         emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         emptyTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        emptyTitleTextView.setText(LocaleController.getString("NoPlacesFound", R.string.NoPlacesFound));
+        emptyTitleTextView.setText(LocaleController.getString("NoPlacesFound", works.heymate.beta.R.string.NoPlacesFound));
         emptyView.addView(emptyTitleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 11, 0, 0));
 
         emptySubtitleTextView = new TextView(context);
@@ -1183,7 +1183,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             googleMap = map1;
                             if (isActiveThemeDark()) {
                                 currentMapStyleDark = true;
-                                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
+                                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, works.heymate.beta.R.raw.mapstyle_night);
                                 googleMap.setMapStyle(style);
                             }
                             googleMap.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
@@ -1203,7 +1203,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (messageObject == null && chatLocation == null) {
             if (chat != null && locationType == LOCATION_TYPE_GROUP && dialogId != 0) {
                 FrameLayout frameLayout1 = new FrameLayout(context);
-                frameLayout1.setBackgroundResource(R.drawable.livepin);
+                frameLayout1.setBackgroundResource(works.heymate.beta.R.drawable.livepin);
                 mapViewClip.addView(frameLayout1, LayoutHelper.createFrame(62, 76, Gravity.TOP | Gravity.CENTER_HORIZONTAL));
 
                 BackupImageView backupImageView = new BackupImageView(context);
@@ -1217,7 +1217,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
             if (markerImageView == null) {
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(R.drawable.map_pin2);
+                imageView.setImageResource(works.heymate.beta.R.drawable.map_pin2);
                 mapViewClip.addView(imageView, LayoutHelper.createFrame(28, 48, Gravity.TOP | Gravity.CENTER_HORIZONTAL));
                 markerImageView = imageView;
             }
@@ -1232,7 +1232,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         searchItem.setShowSearchProgress(searchAdapter.isSearching());
                     }
                     if (emptySubtitleTextView != null) {
-                        emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoPlacesFoundInfo", R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
+                        emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoPlacesFoundInfo", works.heymate.beta.R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
                     }
                     super.notifyDataSetChanged();
                 }
@@ -1374,7 +1374,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             result = Bitmap.createBitmap(AndroidUtilities.dp(62), AndroidUtilities.dp(85), Bitmap.Config.ARGB_8888);
             result.eraseColor(Color.TRANSPARENT);
             Canvas canvas = new Canvas(result);
-            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.map_pin_photo);
+            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.map_pin_photo);
             drawable.setBounds(0, 0, AndroidUtilities.dp(62), AndroidUtilities.dp(85));
             drawable.draw(canvas);
 
@@ -1467,15 +1467,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             LocationController.SharingLocationInfo info = getLocationController().getSharingLocationInfo(dialogId);
             if (info == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("ShareLocationAlertTitle", R.string.ShareLocationAlertTitle));
-                builder.setMessage(LocaleController.getString("ShareLocationAlertText", R.string.ShareLocationAlertText));
-                builder.setPositiveButton(LocaleController.getString("ShareLocationAlertButton", R.string.ShareLocationAlertButton), (dialog, id) -> shareLiveLocation(user, 900, radius));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("ShareLocationAlertTitle", works.heymate.beta.R.string.ShareLocationAlertTitle));
+                builder.setMessage(LocaleController.getString("ShareLocationAlertText", works.heymate.beta.R.string.ShareLocationAlertText));
+                builder.setPositiveButton(LocaleController.getString("ShareLocationAlertButton", works.heymate.beta.R.string.ShareLocationAlertButton), (dialog, id) -> shareLiveLocation(user, 900, radius));
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
                 return false;
             }
             proximitySheet.setRadiusSet();
-            proximityButton.setImageResource(R.drawable.msg_location_alert2);
+            proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert2);
             getUndoView().showWithAction(0, UndoView.ACTION_PROXIMITY_SET, radius, user, null, null);
             getLocationController().setProximityLocation(dialogId, radius, true);
             return true;
@@ -1538,7 +1538,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         delegate.didSelectLocation(location, locationType, true, 0);
         if (radius > 0) {
             proximitySheet.setRadiusSet();
-            proximityButton.setImageResource(R.drawable.msg_location_alert2);
+            proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert2);
             if (proximitySheet != null) {
                 proximitySheet.dismiss();
             }
@@ -1631,11 +1631,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
                         if (message.media.heading != 0) {
                             liveLocation.directionMarker.setRotation(message.media.heading);
-                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_cone2));
+                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin_cone2));
                             liveLocation.hasRotation = true;
                         } else {
                             liveLocation.directionMarker.setRotation(0);
-                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
+                            liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin_circle));
                             liveLocation.hasRotation = false;
                         }
                     }
@@ -1682,7 +1682,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
                 if (!UserObject.isUserSelf(liveLocation.user)) {
                     MarkerOptions dirOptions = new MarkerOptions().position(latLng).flat(true);
-                    dirOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
+                    dirOptions.icon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin_circle));
                     dirOptions.anchor(0.5f, 0.5f);
                     liveLocation.directionMarker = googleMap.addMarker(dirOptions);
                 }
@@ -1714,7 +1714,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else {
                 LatLng latLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
                 try {
-                    googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin2)));
+                    googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin2)));
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -1813,9 +1813,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
             if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", R.string.GpsDisabledAlertTitle));
-                builder.setMessage(LocaleController.getString("GpsDisabledAlertText", R.string.GpsDisabledAlertText));
-                builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), (dialog, id) -> {
+                builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", works.heymate.beta.R.string.GpsDisabledAlertTitle));
+                builder.setMessage(LocaleController.getString("GpsDisabledAlertText", works.heymate.beta.R.string.GpsDisabledAlertText));
+                builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", works.heymate.beta.R.string.ConnectingToProxyEnable), (dialog, id) -> {
                     if (getParentActivity() == null) {
                         return;
                     }
@@ -1825,7 +1825,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                 showDialog(builder.create());
                 return false;
             }
@@ -1871,13 +1871,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
         if (byButton) {
-            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
+            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
         } else {
-            builder.setMessage(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation));
+            builder.setMessage(LocaleController.getString("PermissionNoLocation", works.heymate.beta.R.string.PermissionNoLocation));
         }
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
                 return;
             }
@@ -1889,7 +1889,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 FileLog.e(e);
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
         showDialog(builder.create());
     }
 
@@ -1935,9 +1935,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             preferences.edit().putInt("proximityhint", ++val).commit();
             if ((int) dialogId > 0) {
                 TLRPC.User user = getMessagesController().getUser((int) dialogId);
-                hintView.setOverrideText(LocaleController.formatString("ProximityTooltioUser", R.string.ProximityTooltioUser, UserObject.getFirstName(user)));
+                hintView.setOverrideText(LocaleController.formatString("ProximityTooltioUser", works.heymate.beta.R.string.ProximityTooltioUser, UserObject.getFirstName(user)));
             } else {
-                hintView.setOverrideText(LocaleController.getString("ProximityTooltioGroup", R.string.ProximityTooltioGroup));
+                hintView.setOverrideText(LocaleController.getString("ProximityTooltioGroup", works.heymate.beta.R.string.ProximityTooltioGroup));
             }
             hintView.showForView(proximityButton, true);
         }
@@ -2412,7 +2412,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 } else if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionGeoProximityReached) {
                     int lowerId = (int) messageObject.getDialogId();
                     if (lowerId > 0) {
-                        proximityButton.setImageResource(R.drawable.msg_location_alert);
+                        proximityButton.setImageResource(works.heymate.beta.R.drawable.msg_location_alert);
                         if (proximityCircle != null) {
                             proximityCircle.remove();
                             proximityCircle = null;
@@ -2448,13 +2448,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             if (messageObject.messageOwner.media.heading != 0) {
                                 liveLocation.directionMarker.setRotation(messageObject.messageOwner.media.heading);
                                 if (!liveLocation.hasRotation) {
-                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_cone2));
+                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin_cone2));
                                     liveLocation.hasRotation = true;
                                 }
                             } else {
                                 if (liveLocation.hasRotation) {
                                     liveLocation.directionMarker.setRotation(0);
-                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_circle));
+                                    liveLocation.directionMarker.setIcon(BitmapDescriptorFactory.fromResource(works.heymate.beta.R.drawable.map_pin_circle));
                                     liveLocation.hasRotation = false;
                                 }
                             }
@@ -2586,7 +2586,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 if (isActiveThemeDark()) {
                     if (!currentMapStyleDark) {
                         currentMapStyleDark = true;
-                        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
+                        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, works.heymate.beta.R.raw.mapstyle_night);
                         googleMap.setMapStyle(style);
                         if (proximityCircle != null) {
                             proximityCircle.setStrokeColor(0xffffffff);

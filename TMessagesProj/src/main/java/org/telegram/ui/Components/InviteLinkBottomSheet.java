@@ -29,7 +29,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -299,16 +299,16 @@ public class InviteLinkBottomSheet extends BottomSheet {
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         if (!permanent) {
             if (invite.expired) {
-                titleTextView.setText(LocaleController.getString("ExpiredLink", R.string.ExpiredLink));
+                titleTextView.setText(LocaleController.getString("ExpiredLink", works.heymate.beta.R.string.ExpiredLink));
             } else if (invite.revoked) {
-                titleTextView.setText(LocaleController.getString("RevokedLink", R.string.RevokedLink));
+                titleTextView.setText(LocaleController.getString("RevokedLink", works.heymate.beta.R.string.RevokedLink));
             } else {
-                titleTextView.setText(LocaleController.getString("InviteLink", R.string.InviteLink));
+                titleTextView.setText(LocaleController.getString("InviteLink", works.heymate.beta.R.string.InviteLink));
             }
 
             titleVisible = true;
         } else {
-            titleTextView.setText(LocaleController.getString("InviteLink", R.string.InviteLink));
+            titleTextView.setText(LocaleController.getString("InviteLink", works.heymate.beta.R.string.InviteLink));
             titleVisible = false;
             titleTextView.setVisibility(View.INVISIBLE);
             titleTextView.setAlpha(0f);
@@ -365,7 +365,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
         } else if (view instanceof LinkActionView) {
             ((LinkActionView) view).updateColors();
         } else if (view instanceof TextInfoPrivacyCell) {
-            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(view.getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(view.getContext(), works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
             combinedDrawable.setFullsize(true);
             view.setBackground(combinedDrawable);
             ((TextInfoPrivacyCell) view).setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
@@ -375,13 +375,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
         RecyclerView.ViewHolder holder = listView.getChildViewHolder(view);
         if (holder != null) {
             if (holder.getItemViewType() == 7) {
-                Drawable shadowDrawable = Theme.getThemedDrawable(view.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
+                Drawable shadowDrawable = Theme.getThemedDrawable(view.getContext(), works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
                 Drawable background = new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(background, shadowDrawable, 0, 0);
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
             } else if (holder.getItemViewType() == 2) {
-                Drawable shadowDrawable = Theme.getThemedDrawable(view.getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+                Drawable shadowDrawable = Theme.getThemedDrawable(view.getContext(), works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
                 Drawable background = new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(background, shadowDrawable, 0, 0);
                 combinedDrawable.setFullsize(true);
@@ -600,7 +600,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     break;
                 case 4:
                     view = new TimerPrivacyCell(context);
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     combinedDrawable.setFullsize(true);
                     view.setBackground(combinedDrawable);
                     break;
@@ -621,7 +621,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     break;
                 case 7:
                     view = new ShadowSectionCell(context, 12);
-                    Drawable shadowDrawable = Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
+                    Drawable shadowDrawable = Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
                     Drawable background = new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray));
                     combinedDrawable = new CombinedDrawable(background, shadowDrawable, 0, 0);
                     combinedDrawable.setFullsize(true);
@@ -641,13 +641,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 case 0:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == creatorHeaderRow) {
-                        headerCell.setText(LocaleController.getString("LinkCreatedeBy", R.string.LinkCreatedeBy));
+                        headerCell.setText(LocaleController.getString("LinkCreatedeBy", works.heymate.beta.R.string.LinkCreatedeBy));
                         headerCell.setText2(null);
                     } else if (position == usersHeaderRow) {
                         if (invite.usage > 0) {
                             headerCell.setText(LocaleController.formatPluralString("PeopleJoined", invite.usage));
                         } else {
-                            headerCell.setText(LocaleController.getString("NoOneJoined", R.string.NoOneJoined));
+                            headerCell.setText(LocaleController.getString("NoOneJoined", works.heymate.beta.R.string.NoOneJoined));
                         }
                         if (!invite.expired && !invite.revoked && invite.usage_limit > 0 && invite.usage > 0) {
                             headerCell.setText2(LocaleController.formatPluralString("PeopleJoinedRemaining", invite.usage_limit - invite.usage));
@@ -680,18 +680,18 @@ public class InviteLinkBottomSheet extends BottomSheet {
                                             role = channelParticipant.rank;
                                         } else {
                                             if (channelParticipant instanceof TLRPC.TL_channelParticipantCreator) {
-                                                role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
+                                                role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
                                             } else if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin) {
-                                                role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
+                                                role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
                                             } else {
                                                 role = null;
                                             }
                                         }
                                     } else {
                                         if (part instanceof TLRPC.TL_chatParticipantCreator) {
-                                            role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
+                                            role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
                                         } else if (part instanceof TLRPC.TL_chatParticipantAdmin) {
-                                            role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
+                                            role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
                                         } else {
                                             role = null;
                                         }
@@ -723,12 +723,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     privacyCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
                     privacyCell.setFixedSize(0);
                     if (invite.revoked) {
-                        privacyCell.setText(LocaleController.getString("LinkIsNoActive", R.string.LinkIsNoActive));
+                        privacyCell.setText(LocaleController.getString("LinkIsNoActive", works.heymate.beta.R.string.LinkIsNoActive));
                     } else if (invite.expired) {
                         if (invite.usage_limit > 0 && invite.usage_limit == invite.usage) {
-                            privacyCell.setText(LocaleController.getString("LinkIsExpiredLimitReached", R.string.LinkIsExpiredLimitReached));
+                            privacyCell.setText(LocaleController.getString("LinkIsExpiredLimitReached", works.heymate.beta.R.string.LinkIsExpiredLimitReached));
                         } else {
-                            privacyCell.setText(LocaleController.getString("LinkIsExpired", R.string.LinkIsExpired));
+                            privacyCell.setText(LocaleController.getString("LinkIsExpired", works.heymate.beta.R.string.LinkIsExpired));
                             privacyCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
                         }
 
@@ -743,7 +743,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                         String time;
                         if (timeLeft > 86400000L) {
                             time = LocaleController.formatDateAudio(invite.expire_date, false);
-                            privacyCell.setText(LocaleController.formatString("LinkExpiresIn", R.string.LinkExpiresIn, time));
+                            privacyCell.setText(LocaleController.formatString("LinkExpiresIn", works.heymate.beta.R.string.LinkExpiresIn, time));
                         } else {
                             int s = (int) ((timeLeft / 1000) % 60);
                             int m = (int) ((timeLeft / 1000 / 60) % 60);
@@ -751,7 +751,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                             time = String.format(Locale.ENGLISH, "%02d", h) + String.format(Locale.ENGLISH, ":%02d", m) + String.format(Locale.ENGLISH, ":%02d", s);
                             privacyCell.timer = true;
                             privacyCell.runTimer();
-                            privacyCell.setText(LocaleController.formatString("LinkExpiresInTime", R.string.LinkExpiresInTime, time));
+                            privacyCell.setText(LocaleController.formatString("LinkExpiresInTime", works.heymate.beta.R.string.LinkExpiresInTime, time));
                         }
                     } else {
                         privacyCell.setFixedSize(12);

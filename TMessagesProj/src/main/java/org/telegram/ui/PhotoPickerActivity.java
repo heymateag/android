@@ -61,7 +61,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -459,13 +459,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         actionBar.setTitleColor(Theme.getColor(Theme.key_dialogTextBlack));
         actionBar.setItemsColor(Theme.getColor(Theme.key_dialogTextBlack), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_dialogButtonSelector), false);
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         if (selectedAlbum != null) {
             actionBar.setTitle(selectedAlbum.bucketName);
         } else if (type == 0) {
-            actionBar.setTitle(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
+            actionBar.setTitle(LocaleController.getString("SearchImagesTitle", works.heymate.beta.R.string.SearchImagesTitle));
         } else if (type == 1) {
-            actionBar.setTitle(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
+            actionBar.setTitle(LocaleController.getString("SearchGifsTitle", works.heymate.beta.R.string.SearchGifsTitle));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -493,25 +493,25 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         if (isDocumentsPicker) {
             ActionBarMenu menu = actionBar.createMenu();
-            ActionBarMenuItem menuItem = menu.addItem(0, R.drawable.ic_ab_other);
+            ActionBarMenuItem menuItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
             menuItem.setSubMenuDelegate(new ActionBarMenuItem.ActionBarSubMenuItemDelegate() {
                 @Override
                 public void onShowSubMenu() {
-                    showAsListItem.setText(listSort ? LocaleController.getString("ShowAsGrid", R.string.ShowAsGrid) : LocaleController.getString("ShowAsList", R.string.ShowAsList));
-                    showAsListItem.setIcon(listSort ? R.drawable.msg_media : R.drawable.msg_list);
+                    showAsListItem.setText(listSort ? LocaleController.getString("ShowAsGrid", works.heymate.beta.R.string.ShowAsGrid) : LocaleController.getString("ShowAsList", works.heymate.beta.R.string.ShowAsList));
+                    showAsListItem.setIcon(listSort ? works.heymate.beta.R.drawable.msg_media : works.heymate.beta.R.drawable.msg_list);
                 }
 
                 @Override
                 public void onHideSubMenu() {
                 }
             });
-            showAsListItem = menuItem.addSubItem(change_sort, R.drawable.msg_list, LocaleController.getString("ShowAsList", R.string.ShowAsList));
-            menuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
+            showAsListItem = menuItem.addSubItem(change_sort, works.heymate.beta.R.drawable.msg_list, LocaleController.getString("ShowAsList", works.heymate.beta.R.string.ShowAsList));
+            menuItem.addSubItem(open_in, works.heymate.beta.R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", works.heymate.beta.R.string.OpenInExternalApp));
         }
 
         if (selectedAlbum == null) {
             ActionBarMenu menu = actionBar.createMenu();
-            searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+            searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
                 @Override
                 public void onSearchExpand() {
 
@@ -535,7 +535,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             ConnectionsManager.getInstance(currentAccount).cancelRequest(imageReqId, true);
                             imageReqId = 0;
                         }
-                        emptyView.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+                        emptyView.setText(LocaleController.getString("NoRecentSearches", works.heymate.beta.R.string.NoRecentSearches));
                         updateSearchInterface();
                     }
                 }
@@ -553,9 +553,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         if (selectedAlbum == null) {
             if (type == 0) {
-                searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", R.string.SearchImagesTitle));
+                searchItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", works.heymate.beta.R.string.SearchImagesTitle));
             } else if (type == 1) {
-                searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
+                searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", works.heymate.beta.R.string.SearchGifsTitle));
             }
         }
 
@@ -770,16 +770,16 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     }
                 } else if (position == recentSearches.size() + 1) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("ClearSearchAlertTitle", R.string.ClearSearchAlertTitle));
-                    builder.setMessage(LocaleController.getString("ClearSearchAlert", R.string.ClearSearchAlert));
-                    builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
+                    builder.setTitle(LocaleController.getString("ClearSearchAlertTitle", works.heymate.beta.R.string.ClearSearchAlertTitle));
+                    builder.setMessage(LocaleController.getString("ClearSearchAlert", works.heymate.beta.R.string.ClearSearchAlert));
+                    builder.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
                         if (searchDelegate != null) {
                             searchDelegate.shouldClearRecentSearch();
                         } else {
                             clearRecentSearch();
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
                     AlertDialog dialog = builder.create();
                     showDialog(dialog);
                     TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -887,11 +887,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         emptyView.setProgressBarColor(0xff527da3);
         if (selectedAlbum != null) {
             emptyView.setShowAtCenter(false);
-            emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
+            emptyView.setText(LocaleController.getString("NoPhotos", works.heymate.beta.R.string.NoPhotos));
         } else {
             emptyView.setShowAtTop(true);
             emptyView.setPadding(0, AndroidUtilities.dp(200), 0, 0);
-            emptyView.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+            emptyView.setText(LocaleController.getString("NoRecentSearches", works.heymate.beta.R.string.NoRecentSearches));
         }
         sizeNotifierFrameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, selectPhotoType != PhotoAlbumPickerActivity.SELECT_TYPE_ALL ? 0 : 48));
 
@@ -926,7 +926,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         if (needsBottomLayout) {
             shadow = new View(context);
-            shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
+            shadow.setBackgroundResource(works.heymate.beta.R.drawable.header_shadow_reverse);
             shadow.setTranslationY(AndroidUtilities.dp(48));
             sizeNotifierFrameLayout.addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 3, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 48));
 
@@ -944,7 +944,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             InputFilter[] inputFilters = new InputFilter[1];
             inputFilters[0] = new InputFilter.LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength);
             commentTextView.setFilters(inputFilters);
-            commentTextView.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
+            commentTextView.setHint(LocaleController.getString("AddCaption", works.heymate.beta.R.string.AddCaption));
             commentTextView.onResume();
             EditTextBoldCursor editText = commentTextView.getEditText();
             editText.setMaxLines(1);
@@ -993,14 +993,14 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             writeButton = new ImageView(context);
             writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
             if (Build.VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
+                Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
                 shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, writeButtonDrawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
                 writeButtonDrawable = combinedDrawable;
             }
             writeButton.setBackgroundDrawable(writeButtonDrawable);
-            writeButton.setImageResource(R.drawable.attach_send);
+            writeButton.setImageResource(works.heymate.beta.R.drawable.attach_send);
             writeButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
             writeButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -1064,12 +1064,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == 1);
                         if (num == 0) {
                             if (UserObject.isUserSelf(user)) {
-                                itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
+                                itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", works.heymate.beta.R.string.SetReminder), works.heymate.beta.R.drawable.msg_schedule);
                             } else {
-                                itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
+                                itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", works.heymate.beta.R.string.ScheduleMessage), works.heymate.beta.R.drawable.msg_schedule);
                             }
                         } else if (num == 1) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", works.heymate.beta.R.string.SendWithoutSound), works.heymate.beta.R.drawable.input_notify_off);
                         }
                         itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 
@@ -1089,7 +1089,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
                     sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
                     sendPopupWindow.setAnimationEnabled(false);
-                    sendPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
+                    sendPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation2);
                     sendPopupWindow.setOutsideTouchable(true);
                     sendPopupWindow.setClippingEnabled(true);
                     sendPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -1305,9 +1305,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         lastSearchString = text;
         if (lastSearchString.length() == 0) {
             lastSearchString = null;
-            emptyView.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+            emptyView.setText(LocaleController.getString("NoRecentSearches", works.heymate.beta.R.string.NoRecentSearches));
         } else {
-            emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            emptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
         }
         updateSearchInterface();
     }
@@ -1769,7 +1769,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                                 TLRPC.Chat chat = chatActivity.getCurrentChat();
                                 if (chat != null && !ChatObject.hasAdminRights(chat) && chat.slowmode_enabled) {
                                     if (alertOnlyOnce != 2) {
-                                        AlertsCreator.showSimpleAlert(PhotoPickerActivity.this, LocaleController.getString("Slowmode", R.string.Slowmode), LocaleController.getString("SlowmodeSelectSendError", R.string.SlowmodeSelectSendError));
+                                        AlertsCreator.showSimpleAlert(PhotoPickerActivity.this, LocaleController.getString("Slowmode", works.heymate.beta.R.string.Slowmode), LocaleController.getString("SlowmodeSelectSendError", works.heymate.beta.R.string.SlowmodeSelectSendError));
                                         if (alertOnlyOnce == 1) {
                                             alertOnlyOnce = 2;
                                         }
@@ -1884,9 +1884,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 case 3: {
                     TextCell cell = (TextCell) holder.itemView;
                     if (position < recentSearches.size()) {
-                        cell.setTextAndIcon(recentSearches.get(position), R.drawable.menu_recent, false);
+                        cell.setTextAndIcon(recentSearches.get(position), works.heymate.beta.R.drawable.menu_recent, false);
                     } else {
-                        cell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", R.string.ClearRecentHistory), R.drawable.menu_clear_recent, false);
+                        cell.setTextAndIcon(LocaleController.getString("ClearRecentHistory", works.heymate.beta.R.string.ClearRecentHistory), works.heymate.beta.R.drawable.menu_clear_recent, false);
                     }
                     break;
                 }

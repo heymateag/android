@@ -16,7 +16,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.DocumentObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -64,13 +64,13 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             gradientRotation = 45;
         }
 
-        Drawable backDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_back).mutate();
+        Drawable backDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_back).mutate();
         Theme.setDrawableColor(backDrawable, actionBarIconColor);
-        Drawable otherDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_dots).mutate();
+        Drawable otherDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_dots).mutate();
         Theme.setDrawableColor(otherDrawable, actionBarIconColor);
-        Drawable emojiDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_smile).mutate();
+        Drawable emojiDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_smile).mutate();
         Theme.setDrawableColor(emojiDrawable, messageFieldIconColor);
-        Drawable micDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_mic).mutate();
+        Drawable micDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_mic).mutate();
         Theme.setDrawableColor(micDrawable, messageFieldIconColor);
 
         Theme.MessageDrawable[] messageDrawable = new Theme.MessageDrawable[2];
@@ -165,7 +165,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             hasBackground = true;
         }
         if (!hasBackground) {
-            BitmapDrawable catsDrawable = (BitmapDrawable) ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.catstile).mutate();
+            BitmapDrawable catsDrawable = (BitmapDrawable) ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.catstile).mutate();
             if (serviceColor == null) {
                 serviceColor = AndroidUtilities.calcDrawableColor(catsDrawable)[0];
             }

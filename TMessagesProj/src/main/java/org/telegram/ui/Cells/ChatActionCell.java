@@ -32,7 +32,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
@@ -120,9 +120,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         CharSequence newText;
         if (scheduled) {
             if (date == 0x7ffffffe) {
-                newText = LocaleController.getString("MessageScheduledUntilOnline", R.string.MessageScheduledUntilOnline);
+                newText = LocaleController.getString("MessageScheduledUntilOnline", works.heymate.beta.R.string.MessageScheduledUntilOnline);
             } else {
-                newText = LocaleController.formatString("MessageScheduledOn", R.string.MessageScheduledOn, LocaleController.formatDateChat(date));
+                newText = LocaleController.formatString("MessageScheduledOn", works.heymate.beta.R.string.MessageScheduledOn, LocaleController.formatDateChat(date));
             }
         } else {
             newText = LocaleController.formatDateChat(date);
@@ -415,9 +415,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         if (currentMessageObject != null) {
             if (currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.ttl_seconds != 0) {
                 if (currentMessageObject.messageOwner.media.photo instanceof TLRPC.TL_photoEmpty) {
-                    text = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
+                    text = LocaleController.getString("AttachPhotoExpired", works.heymate.beta.R.string.AttachPhotoExpired);
                 } else if (currentMessageObject.messageOwner.media.document instanceof TLRPC.TL_documentEmpty) {
-                    text = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
+                    text = LocaleController.getString("AttachVideoExpired", works.heymate.beta.R.string.AttachVideoExpired);
                 } else {
                     text = currentMessageObject.messageText;
                 }

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -62,12 +62,12 @@ public class SecureWalletActivity extends BaseFragment {
 
         mButtonBiometric = new RadioButtonCellWithIcon(context);
         mButtonBiometric.setTextAndValue(Texts.get(Texts.SECURE_BIOMETRIC).toString(), Texts.get(Texts.SECURE_BIOMETRIC_DESCRIPTION).toString(), false, false);
-        mButtonBiometric.setIcon(R.drawable.ic_biometric);
+        mButtonBiometric.setIcon(works.heymate.beta.R.drawable.ic_biometric);
         content.addView(mButtonBiometric, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 22, 0, 0));
 
         mButtonPin = new RadioButtonCellWithIcon(context);
         mButtonPin.setTextAndValue(Texts.get(Texts.SECURE_PIN).toString(), Texts.get(Texts.SECURE_PIN_DESCRIPTION).toString(), false, false);
-        mButtonPin.setIcon(R.drawable.ic_pin);
+        mButtonPin.setIcon(works.heymate.beta.R.drawable.ic_pin);
         content.addView(mButtonPin, LayoutHelper.createLinear(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
         content.addView(new ShadowSectionCell(context, 12, Theme.getColor(Theme.key_windowBackgroundGray)), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));

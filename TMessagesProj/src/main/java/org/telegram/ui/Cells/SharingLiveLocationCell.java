@@ -28,7 +28,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -161,7 +161,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         if (!TextUtils.isEmpty(messageObject.messageOwner.media.title)) {
             name = messageObject.messageOwner.media.title;
 
-            Drawable drawable = getResources().getDrawable(R.drawable.pin);
+            Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.pin);
             drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_sendLocationIcon), PorterDuff.Mode.MULTIPLY));
             int color = Theme.getColor(Theme.key_location_placeLocationBackground);
             Drawable circle = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(42), color, color);
@@ -203,7 +203,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (address != null) {
                 distanceTextView.setText(address);
             } else {
-                distanceTextView.setText(LocaleController.getString("Loading", R.string.Loading));
+                distanceTextView.setText(LocaleController.getString("Loading", works.heymate.beta.R.string.Loading));
             }
         }
     }

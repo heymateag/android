@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.LayoutHelper;
@@ -63,7 +63,7 @@ public class VoIPStatusTextView extends FrameLayout {
         addView(reconnectTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 22, 0, 0));
 
         ellipsizeAnimator = new EllipsizeSpanAnimator(this);
-        SpannableStringBuilder ssb = new SpannableStringBuilder(LocaleController.getString("VoipReconnecting", R.string.VoipReconnecting));
+        SpannableStringBuilder ssb = new SpannableStringBuilder(LocaleController.getString("VoipReconnecting", works.heymate.beta.R.string.VoipReconnecting));
         SpannableString ell = new SpannableString("...");
         ellipsizeAnimator.wrap(ell, 0);
         ssb.append(ell);
