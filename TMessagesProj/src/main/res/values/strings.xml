@@ -1523,7 +1523,6 @@
     <string name="HtLocationEmpty">Location should not be empty\n</string>
     <string name="HtCategoryEmpty">Category should not be empty\n</string>
     <string name="HtSubCategoryEmpty">Sub Category should not be empty\n</string>
-    <string name="HtHeymateOffer">This is a Heymate Offer, Tap to open</string>
     <string name="HtSave">Save</string>
     <string name="HtContactSender">Contact Sender</string>
     <string name="HtEditDraft">Edit Draft</string>

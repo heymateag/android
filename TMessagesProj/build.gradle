@@ -52,7 +52,6 @@ dependencies {
     implementation files('libs/libgsaverification-client.aar')
 
     //
-    implementation 'com.google.android.material:material:1.2.1'
     implementation "androidx.biometric:biometric:1.1.0"
 
     implementation 'com.yashoid:sequencelayout:2.0.0'

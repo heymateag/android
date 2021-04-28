@@ -651,7 +651,6 @@ public class HtCreateOfferActivity extends BaseFragment {
                     }
                 }
 
-//                String message = LocaleController.getString("HtHeymateOffer", works.heymate.beta.R.string.HtHeymateOffer) + '\n' + OfferUtils.deepLinkForOffer(createdOffer);
                 String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                 share.putExtra(Intent.EXTRA_TEXT, message);
                 getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
