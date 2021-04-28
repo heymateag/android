@@ -32,6 +32,7 @@ import java.util.TimeZone;
 
 import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
+import works.heymate.celo.CeloSDK;
 import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
@@ -180,7 +181,8 @@ public class HeymatePayment {
                 Texts.get(Texts.AUTHENTICATION),
                 Texts.get(Texts.AUTHENTICATION_DESCRIPTION),
                 new IntentLauncherFragment(fragment),
-                () -> initPreparedPayment(fragment, offer, timeSlot));
+                () -> checkBalanceBeforePayment(fragment, offer, timeSlot));
+//                () -> initPreparedPayment(fragment, offer, timeSlot));
 //                () -> blah(fragment, offer, timeSlot));
 
         if (needsSecuritySettings) {
@@ -218,7 +220,7 @@ public class HeymatePayment {
         wallet.getBalance((success, cents, errorCause) -> {
             loadingDialog.dismiss();
 
-            if (success) {
+            if (success || CeloSDK.isErrorCausedByInsufficientFunds(errorCause)) {
                 long amount = (long) (Double.parseDouble(offer.getRate()) * 100D);
 
                 if (cents >= amount) {
@@ -251,22 +253,7 @@ public class HeymatePayment {
                 Log.e(TAG, "Failed to check balance", errorCause);
                 LogToGroup.log("Failed to check balance", errorCause, fragment);
 
-                if (errorCause instanceof CeloException) {
-                    CeloError coreError = errorCause.getMainCause().getError();
-
-                    if (coreError == CeloError.INSUFFICIENT_BALANCE) {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
-                    }
-                    else if (coreError == CeloError.NETWORK_ERROR) {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                    }
-                }
-                else {
-                    Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                }
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
             }
         });
     }

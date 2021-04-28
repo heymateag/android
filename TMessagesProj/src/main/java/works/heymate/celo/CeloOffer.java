@@ -94,7 +94,7 @@ public class CeloOffer {
             mContractKit.contracts.getStableToken().approve(mContract.getContractAddress(), amount).send();
             mContractKit.contracts.getStableToken().transfer(mContract.getContractAddress(), amount).send();
         } catch (Exception e) {
-            if (e instanceof TransactionException) {
+            if (CeloSDK.isErrorCausedByInsufficientFunds(e)) {
                 throw new CeloException(CeloError.INSUFFICIENT_BALANCE, e);
             }
 

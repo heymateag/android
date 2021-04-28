@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hm_heymate">heymate AG</string>
-    <string name="hm_logo_url">https://img1.wsimg.com/isteam/ip/51d3609a-6d8a-4c89-8c74-5bb19409be91/heymate_logo_t_rgb_1024x500.png/:/rs=h:585/qt=q:95</string>
+    <string name="hm_logo_url">https://yashoid.com/peymate.png</string>
     <string name="hm_offer_phrase_name">offer_phrase</string>
     <string name="hm_offer_phrase">Heymate Offer\n\n‌{title}\n‌{description}\n\n‌{name} will provide ‌{sub_category} at ‌{price} ‌{currency} ‌{payment_type}.\n\nAddress: ‌{address}\n\n‌{initial_deposit}% is paid upfront. ‌{delay_percent}% is returned if they delay more than ‌{delay_time} minutes. If you cancel ‌{cancel_hours1} hours before the appointment ‌{cancel_percent1}% is deposited back to you. If you cancel ‌{cancel_hours2} hours before the appointment ‌{cancel_percent2}% is deposited back to you.\n\nLearn more here: ‌{url}‌</string>
 

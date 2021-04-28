@@ -7,7 +7,9 @@ import works.heymate.core.Texts;
 
 public class Ramp {
 
-    private static final String API_KEY = "";
+    private static final String API_KEY = "nwtv82ts9bpas9k5c5ef8w3mfoy2ak73goq3gvca";
+
+    private static final String RINKEBY_API_KEY = "pskw6bmpx7tomwne2tp3tvrs5c35wexzp7byytdq";
 
     public static Intent getTopUpIntent(String userAddress, String amount, String returnUrl) {
         Uri uri = new Uri.Builder()
