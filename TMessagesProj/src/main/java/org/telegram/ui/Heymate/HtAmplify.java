@@ -1,17 +1,9 @@
 package org.telegram.ui.Heymate;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.service.notification.NotificationListenerService;
-import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
-import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -24,22 +16,19 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
-import com.google.android.gms.common.api.Api;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.stripe.android.exception.APIException;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.R;
+
+import works.heymate.core.Utils;
+
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.Shop;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +55,7 @@ public class HtAmplify {
 
     public interface APICallback<T> {
 
-        void onQueryResult(boolean success, T result, ApiException exception);
+        void onCallResult(boolean success, T result, ApiException exception);
 
     }
 
@@ -132,7 +121,7 @@ public class HtAmplify {
         MarketPlace
     }
 
-    public Offer createOffer(OfferDto dto, Uri pickedImage, String address, String signature) {
+    public void createOffer(OfferDto dto, Uri pickedImage, String address, String signature, APICallback<Offer> callback) {
         Offer newOffer = Offer.builder()
                 .userId("" + dto.getUserId())
                 .title(dto.getTitle())
@@ -164,33 +153,37 @@ public class HtAmplify {
                         HtStorage.getInstance().setOfferImage(context, response.getData().getId(), pickedImage);
                     }
                     Log.i("HtAmplify", "Offer Created.");
+
+                    String fcmToken = FirebaseInstanceId.getInstance().getToken();
+
+                    ArrayList<Long> times = dto.getDateSlots();
+
+                    // TODO Request in a for?
+                    for (int i = 0; i < times.size(); i += 2) {
+                        TimeSlot timeSlot = TimeSlot.builder()
+                                .startTime((int) (times.get(i) / 1000))
+                                .endTime((int) (times.get(i + 1) / 1000))
+                                .offerId(newOffer.getId())
+                                .status(HtTimeSlotStatus.AVAILABLE.ordinal())
+                                .clientUserId("0")
+                                .user1Id(fcmToken)
+                                .build();
+
+                        Amplify.API.mutate(ModelMutation.create(timeSlot),
+                                response2 -> {
+                                    Log.i("HtAmplify", "Time Slot created");
+                                },
+                                error -> Log.e("HtAmplify", "Time Slot creation failed", error)
+                        );
+                    }
+
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, newOffer, null));
                 },
-                error -> Log.e("HtAmplify", "Create failed", error)
+                error -> {
+                    Log.e("HtAmplify", "Create failed", error);
+                    Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+                }
         );
-
-        String fcmToken = FirebaseInstanceId.getInstance().getToken();
-
-        ArrayList<Long> times = dto.getDateSlots();
-        for (int i = 0; i < times.size(); i += 2) {
-
-            TimeSlot timeSlot = TimeSlot.builder()
-                    .startTime((int) (times.get(i) / 1000))
-                    .endTime((int) (times.get(i + 1) / 1000))
-                    .offerId(newOffer.getId())
-                    .status(HtTimeSlotStatus.AVAILABLE.ordinal())
-                    .clientUserId("0")
-                    .user1Id(fcmToken)
-                    .build();
-
-            Amplify.API.mutate(ModelMutation.create(timeSlot),
-                    response -> {
-                        Log.i("HtAmplify", "Time Slot created");
-                    },
-                    error -> Log.e("HtAmplify", "Time Slot creation failed", error)
-            );
-        }
-
-        return newOffer;
     }
 
     public Shop createShop(int tgId, String title, ShopType shopType) {
@@ -317,12 +310,12 @@ public class HtAmplify {
         Amplify.API.query(ModelQuery.get(TimeSlot.class, timeSlotId),
                 response -> {
                     AndroidUtilities.runOnUIThread(() -> {
-                        callback.onQueryResult(true, response.getData(), null);
+                        callback.onCallResult(true, response.getData(), null);
                     });
                 },
                 error -> {
                     AndroidUtilities.runOnUIThread(() -> {
-                        callback.onQueryResult(false, null, error);
+                        callback.onCallResult(false, null, error);
                     });
                 });
     }

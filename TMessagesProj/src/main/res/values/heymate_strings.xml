@@ -43,6 +43,7 @@
 
     <string name="hm_create_offer_heymate_terms">The services contracted here are provided by the service provider directly to you, we “Heymate AG” the software-as-a-service provider are not liable for any breach of contract, abuse or fraudulent activities. Please take up any support issues directly with the service provider in line with their Terms &amp; Conditions listed below.\n\nHeymate AG,\nChurerstrasse 54,\nPfäffikon (SZ),\nSwitzerland</string>
     <string name="hm_create_offer_service_provider_terms">The services provided here are contracted on the basis of the payment conditions (including cancellation terms if any), at the time and location as mentioned in the offer. The services are offered without any insurance or warranties. No changes are allowed unless mutually agreed prior to the start of the service and respecting the cancellation penalties (if any) as in the offer. We welcome your interest in our service and look forward to our collaboration.</string>
+    <string name="hm_create_offer_saved">Offer info saved</string>
     
     <string name="hm_my_schedule">My Schedule</string>
     <string name="hm_my_schedule_offers">My Offers</string>

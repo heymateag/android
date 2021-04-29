@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -62,11 +64,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
+import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
+import works.heymate.core.offer.OfferInfo;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.wallet.Wallet;
 
-public class HtCreateOfferActivity extends BaseFragment {
+public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
+
+    private static final String TAG = "CreateOfferActivity";
 
     public static final String ARGUMENTS_CATEGORY = "0_Category";
     public static final String ARGUMENTS_SUB_CATEGORY = "1_Sub-Category";
@@ -77,6 +83,8 @@ public class HtCreateOfferActivity extends BaseFragment {
     public static final String ARGUMENTS_EXPIRE = "0_Expire";
     public static final String ARGUMENTS_EXPIRE_DATE = "1_Expire";
     public static final String ARGUMENTS_TERMS = "0_Terms";
+
+    private static final String KEY_SAVED_OFFER = "saved_offer";
 
     private Context context;
     private ImageView cameraImage;
@@ -90,9 +98,12 @@ public class HtCreateOfferActivity extends BaseFragment {
     private HtExpireInputCell expireInputCell;
     private HtTermsInputCell termsInputCell;
     private HtPaymentConfigInputCell paymentInputCell;
+
+    private AlertDialog mLoadingDialog = null;
+
     private int priceCellsCount = 0;
     private boolean canEdit = true;
-    private ActionType actionType;
+    private ActionType actionType = ActionType.CREATE;
     private LinearLayout addPriceLayout;
     private LinearLayout actionLayout;
     private String offerUUID;
@@ -122,15 +133,15 @@ public class HtCreateOfferActivity extends BaseFragment {
     public View createView(Context context) {
         super.createView(context);
         this.context = context;
-        if (canEdit)
+        if (canEdit){
             actionBar.setTitle(LocaleController.getString("HtCreateOffer", works.heymate.beta.R.string.HtCreateOffer));
-        else
+        } else {
             actionBar.setTitle(LocaleController.getString("HtViewOffer", works.heymate.beta.R.string.HtViewOffer));
+        }
         fragmentView = new LinearLayout(context);
 
         actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setSearchTextColor(0xff4488, true);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -600,63 +611,16 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
-                // TODO Wrong promote logic.
+                Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
-                String configText = paymentInputCell.getRes().toString();
-
-                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
-
-                OfferDto newOffer = new OfferDto();
-                newOffer.setTitle(titleTextField.getText().toString());
-                newOffer.setDescription(descriptionTextField.getText().toString());
-                newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
-                newOffer.setConfigText(configText);
-                newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
-                newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
-                newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInfo.address);
-                newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
-                newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
-                newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                newOffer.setLatitude(locationInfo.latitude);
-                newOffer.setLongitude(locationInfo.longitude);
-                newOffer.setDateSlots(dateSlots);
-                newOffer.setStatus(OfferStatus.ACTIVE);
-                newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                if(offerUUID == null) {
-                    offerUUID = UUID.randomUUID().toString();
-                    newOffer.setServerUUID(offerUUID);
-                }
-                int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
-                newOffer.setCreatedAt(currentTime);
-                newOffer.setEditedAt(currentTime);
-                Offer createdOffer = HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, null, null);
-
-                HtSQLite.getInstance().addOffer(createdOffer);
-
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-
-                TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-
-                String name;
-
-                if (user.username != null) {
-                    name = "@" + user.username;
+                if (!wallet.isCreated()) {
+                    onLoadingStarted();
+                    HeymateEvents.register(HeymateEvents.WALLET_CREATED, this);
+                    wallet.createNew();
                 }
                 else {
-                    name = user.first_name;
-
-                    if (!TextUtils.isEmpty(user.last_name)) {
-                        name = name + " " + user.last_name;
-                    }
+                    createOffer();
                 }
-
-                String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
-                parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
-                finishFragment();
             }
         });
 
@@ -674,95 +638,178 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         saveLayout.setEnabled(true);
         saveLayout.setOnClickListener(v -> {
-            Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
+            LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+            JSONObject config = paymentInputCell.getRes();
+            String title = titleTextField.getText().toString();
+            String description = descriptionTextField.getText().toString();
+            String terms = termsInputCell.getRes(ARGUMENTS_TERMS);
+            String category = categoryInputCell.getRes(ARGUMENTS_CATEGORY);
+            String subCategory = categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY);
+            Date expireDate = HtCreateOfferActivity.this.expireDate;
+            String currency = priceInputCell.getRes(ARGUMENTS_CURRENCY);
+            String rateType = priceInputCell.getRes(ARGUMENTS_RATE_TYPE);
+            String rate = priceInputCell.getRes(ARGUMENTS_PRICE);
+            ArrayList<Long> dateSlots = HtCreateOfferActivity.this.dateSlots;
 
-            if (!wallet.isCreated()) {
-                AlertDialog alert = new AlertDialog.Builder(getParentActivity())
-                        .setTitle(Texts.get(Texts.CREATE_OFFER_NO_WALLET))
-                        .setMessage(Texts.get(Texts.CREATE_OFFER_NO_WALLET_DESCRIPTION))
-                        .setPositiveButton(Texts.get(Texts.CREATE_WALLET), (dialog, which) -> presentFragment(new WalletActivity(saveLayout::performClick)))
-                        .setNegativeButton(Texts.get(Texts.CANCEL), (dialog, which) -> dialog.dismiss())
-                        .create();
-                showDialog(alert);
-                return;
-            }
+            OfferInfo offerInfo = new OfferInfo();
+            offerInfo.setLocationInfo(locationInfo);
+            offerInfo.setConfig(config);
+            offerInfo.setTitle(title);
+            offerInfo.setDescription(description);
+            offerInfo.setTerms(terms);
+            offerInfo.setCategory(category);
+            offerInfo.setSubCategory(subCategory);
+            offerInfo.setExpireDate(expireDate);
+            offerInfo.setCurrency(currency);
+            offerInfo.setRateType(rateType);
+            offerInfo.setRate(rate);
+            offerInfo.setDateSlots(dateSlots);
 
-            titleTextField.setHighlightColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-            priceInputCell.setError(false, 1);
-            locationInputCell.setError(false);
-            categoryInputCell.setError(false, 0);
-            categoryInputCell.setError(false, 1);
+            HeymateConfig.getGeneral().set(KEY_SAVED_OFFER, offerInfo.asJSON().toString());
+            Toast.makeText(context, Texts.get(Texts.CREATE_OFFER_SAVED), Toast.LENGTH_SHORT).show();
+        });
 
-            UndoView undoView = new UndoView(context, this);
-            undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
-            alertLayout.removeAllViews();
-            StringBuilder errors = new StringBuilder();
-            alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
-            if (titleTextField.getText().toString().isEmpty()) {
-                titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors.append(LocaleController.getString("HtTitleEmpty", works.heymate.beta.R.string.HtTitleEmpty));
+        if (canEdit) {
+            actionLayout.addView(saveLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0.5f));
+
+            View divider = new View(context);
+            divider.setBackgroundColor(Theme.getColor(Theme.key_wallet_whiteText));
+            actionLayout.addView(divider, LayoutHelper.createLinear(1, 36));
+
+
+            if (actionType == ActionType.CREATE) {
+                String savedOffer = HeymateConfig.getGeneral().get(KEY_SAVED_OFFER);
+
+                if (savedOffer != null) {
+                    try {
+                        OfferInfo savedOfferInfo = new OfferInfo(new JSONObject(savedOffer));
+
+                        if (savedOfferInfo.getLocationInfo() != null) {
+                            locationInputCell.setLocationInfo(savedOfferInfo.getLocationInfo());
+                        }
+
+                        if (savedOfferInfo.getConfig() != null) {
+                            setPaymentConfig(savedOfferInfo.getConfig().toString());
+                        }
+
+                        setTitle(savedOfferInfo.getTitle());
+                        setDescription(savedOfferInfo.getDescription());
+                        setTerms(savedOfferInfo.getTerms());
+
+                        if (savedOfferInfo.getCategory() != null) {
+                            setCategory(savedOfferInfo.getCategory());
+                        }
+
+                        if (savedOfferInfo.getSubCategory() != null) {
+                            setSubCategory(savedOfferInfo.getSubCategory());
+                        }
+
+                        expireDate = savedOfferInfo.getExpireDate();
+                        if (expireDate != null) {
+                            expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(expireDate.getTime()), 0);
+                        }
+
+                        if (savedOfferInfo.getCurrency() != null) {
+                            setCurrency(savedOfferInfo.getCurrency(), 0);
+                        }
+
+                        if (savedOfferInfo.getRateType() != null) {
+                            setRateType(savedOfferInfo.getRateType(), 0);
+                        }
+
+                        if (savedOfferInfo.getRate() != null) {
+                            setFee(savedOfferInfo.getRate(), 0);
+                        }
+
+                        if (savedOfferInfo.getDateSlots() != null) {
+                            setDateSlots(new ArrayList<>(savedOfferInfo.getDateSlots()));
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Failed to restore saved offer info", e);
+                    }
+                }
             }
-            if (descriptionTextField.getText().toString().isEmpty()) {
-                descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors.append(LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty));
-            }
-            if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
-                priceInputCell.setError(true, 1);
-                errors.append(LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty));
-            }
-            if (locationInputCell.getLocationInfo() == null) {
-                locationInputCell.setError(true);
-                errors.append(LocaleController.getString("HtLocationEmpty", works.heymate.beta.R.string.HtLocationEmpty));
-            }
-            if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
-                categoryInputCell.setError(true, 0);
-                errors.append(LocaleController.getString("HtCategoryEmpty", works.heymate.beta.R.string.HtCategoryEmpty));
-            }
-            if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
-                categoryInputCell.setError(true, 1);
-                errors.append(LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty));
-            }
-            if (errors.length() > -0) {
-                undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
-                    undoView.setVisibility(View.GONE);
-                });
-            } else {
+        }
+        actionLayout.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0.5f));
+        mainLayout.addView(actionLayout);
+        mainScrollView.addView(mainLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        fragmentMainLayout.addView(mainScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        return fragmentView;
+    }
+
+    @Override
+    public void onHeymateEvent(int event, Object... args) {
+        onLoadingFinished();
+        HeymateEvents.unregister(HeymateEvents.WALLET_CREATED, this);
+        createOffer();
+    }
+
+    private void onLoadingStarted() {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new AlertDialog(getParentActivity(), 3);
+            mLoadingDialog.setCanCacnel(false);
+        }
+
+        mLoadingDialog.show();
+    }
+
+    private void onLoadingFinished() {
+        if (mLoadingDialog == null) {
+            return;
+        }
+
+        mLoadingDialog.dismiss();
+    }
+
+    private void createOffer() {
+        Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
+
+        String rate = priceInputCell.getRes(ARGUMENTS_PRICE);
+        String configText = paymentInputCell.getRes().toString();
+
+        onLoadingStarted();
+
+        wallet.signOffer(rate, configText, (successful, signature, exception) -> {
+            onLoadingFinished();
+
+            if (successful) {
                 LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
 
-                String configText = paymentInputCell.getRes().toString();
-                wallet.signOffer(priceInputCell.getRes(ARGUMENTS_PRICE), configText, (successful, signature, exception) -> {
-                    if (!successful) {
-                        Toast.makeText(context, Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                OfferDto newOffer = new OfferDto();
+                newOffer.setTitle(titleTextField.getText().toString());
+                newOffer.setDescription(descriptionTextField.getText().toString());
+                newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
+                newOffer.setConfigText(configText);
+                newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
+                newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
+                newOffer.setExpire(expireDate);
+                newOffer.setLocation(locationInfo.address);
+                newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
+                newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
+                newOffer.setRate(rate);
+                newOffer.setLatitude(locationInfo.latitude);
+                newOffer.setLongitude(locationInfo.longitude);
+                newOffer.setDateSlots(dateSlots);
+                newOffer.setStatus(OfferStatus.ACTIVE);
+                newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+                if(offerUUID == null) {
+                    offerUUID = UUID.randomUUID().toString();
+                    newOffer.setServerUUID(offerUUID);
+                }
+                int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
+                newOffer.setCreatedAt(currentTime);
+                newOffer.setEditedAt(currentTime);
 
-                    OfferDto newOffer = new OfferDto();
-                    newOffer.setTitle(titleTextField.getText().toString());
-                    newOffer.setDescription(descriptionTextField.getText().toString());
-                    newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
-                    newOffer.setConfigText(configText);
-                    newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
-                    newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
-                    newOffer.setExpire(expireDate);
-                    newOffer.setLocation(locationInfo.address);
-                    newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
-                    newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
-                    newOffer.setRate(priceInputCell.getRes(ARGUMENTS_PRICE));
-                    newOffer.setLatitude(locationInfo.latitude);
-                    newOffer.setLongitude(locationInfo.longitude);
-                    newOffer.setStatus(OfferStatus.ACTIVE);
-                    newOffer.setDateSlots(dateSlots);
-                    newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
+                onLoadingStarted();
 
-                    if(offerUUID == null) {
-                        offerUUID = UUID.randomUUID().toString();
-                        newOffer.setServerUUID(offerUUID);
-                    }
-                    int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
-                    newOffer.setCreatedAt(currentTime);
-                    newOffer.setEditedAt(currentTime);
-                    if (actionType != ActionType.EDIT) {
-                        Offer offer = HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, wallet.getAddress(), signature);
+                HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, wallet.getAddress(), signature, (success, createdOffer, exception1) -> {
+                    onLoadingFinished();
+
+                    if (success) {
+                        HtSQLite.getInstance().addOffer(createdOffer);
+
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("text/plain");
 
                         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
 
@@ -779,39 +826,22 @@ public class HtCreateOfferActivity extends BaseFragment {
                             }
                         }
 
-                        String phrase = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
-
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(phrase, (long) UserConfig.getInstance(currentAccount).clientUserId, null, null, null, false, null, null, null, false, 0);
-                    } else {
-                        HtSQLite.getInstance().addOffer(offerUUID, newOffer);
-                        newOffer.setServerUUID(offerUUID);
-                        HtAmplify.getInstance(context).updateOffer(newOffer);
+                        String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                        share.putExtra(Intent.EXTRA_TEXT, message);
+                        getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
+                        finishFragment();
                     }
-                    undoView.setColors(context.getResources().getColor(works.heymate.beta.R.color.ht_green), Theme.getColor(Theme.key_wallet_whiteText));
-                    undoView.showWithAction(0, UndoView.ACTION_OFFER_SAVED, errors, null, () -> {
-                        undoView.setVisibility(View.GONE);
-                    });
-                    presentFragment(new OffersActivity(context));
-                    parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 2);
-                    if (actionType == ActionType.EDIT)
-                        parentLayout.fragmentsStack.remove(parentLayout.fragmentsStack.size() - 3);
-                    finishFragment();
+                    else {
+                        // TODO Organize error messages
+                        Toast.makeText(context, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                    }
                 });
             }
+            else {
+                // TODO Organize error messages
+                Toast.makeText(context, Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+            }
         });
-
-        if (canEdit) {
-            actionLayout.addView(saveLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0.5f));
-
-            View divider = new View(context);
-            divider.setBackgroundColor(Theme.getColor(Theme.key_wallet_whiteText));
-            actionLayout.addView(divider, LayoutHelper.createLinear(1, 36));
-        }
-        actionLayout.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0.5f));
-        mainLayout.addView(actionLayout);
-        mainScrollView.addView(mainLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        fragmentMainLayout.addView(mainScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        return fragmentView;
     }
 
     public void setCategory(String text) {

@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -54,6 +56,10 @@ public class LocationInputItem extends ExpandableItem {
 
     public static class LocationInfo {
 
+        private static final String ADDRESS = "address";
+        private static final String LATITUDE = "latitude";
+        private static final String LONGITUDE = "longitude";
+
         public final String address;
         public final double latitude;
         public final double longitude;
@@ -62,6 +68,28 @@ public class LocationInputItem extends ExpandableItem {
             this.address = address;
             this.latitude = latitude;
             this.longitude = longitude;
+        }
+
+        public LocationInfo(JSONObject json) {
+            try {
+                address = json.getString(ADDRESS);
+                latitude = json.getDouble(LATITUDE);
+                longitude = json.getDouble(LONGITUDE);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public JSONObject asJSON() {
+            JSONObject json = new JSONObject();
+
+            try {
+                json.put(ADDRESS, address);
+                json.put(LATITUDE, latitude);
+                json.put(LONGITUDE, longitude);
+            } catch (JSONException e) { }
+
+            return json;
         }
 
     }

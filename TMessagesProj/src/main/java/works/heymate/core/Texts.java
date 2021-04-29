@@ -65,6 +65,7 @@ public class Texts {
 
     public static final String CREATE_OFFER_NO_WALLET = "create_offer_no_wallet";
     public static final String CREATE_OFFER_NO_WALLET_DESCRIPTION = "create_offer_no_wallet_description";
+    public static final String CREATE_OFFER_SAVED = "create_offer_saved";
 
     public static final String YOUR_WALLET = "your_wallet";
     public static final String NO_WALLET_DETECTED = "no_wallet_detected";
