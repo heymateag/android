@@ -12,7 +12,7 @@ public class Ramp {
 
     private static final String RINKEBY_API_KEY = "pskw6bmpx7tomwne2tp3tvrs5c35wexzp7byytdq";
 
-    public static RampDialog getDialog(Context context, String userAddress, String amount) {
+    public static RampDialog getDialog(Context context, String userAddress, String amount, RampDialog.OnRampDoneListener listener) {
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .authority("buy.ramp.network")
@@ -24,7 +24,7 @@ public class Ramp {
                 .appendQueryParameter("swapAmount", amount)
                 .build();
 
-        return new RampDialog(context, uri.toString());
+        return new RampDialog(context, uri.toString(), listener);
     }
 
     public static Intent getTopUpIntent(String userAddress, String amount, String returnUrl) {

@@ -236,13 +236,15 @@ public class HeymatePayment {
                             .setPositiveButton("Top up", (dialog, which) -> {
                                 dialog.dismiss();
 
-                                // TODO Save offer info
-                                savedOffer = offer;
-                                savedTimeSlot = timeSlot;
+                                // Save offer info
+//                                savedOffer = offer;
+//                                savedTimeSlot = timeSlot;
 
                                 String topUpAmount = CurrencyUtil.centsToBlockChainValue(missingCents).toString();
 
-                                Ramp.getDialog(fragment.getParentActivity(), wallet.getAddress(), topUpAmount).show();
+                                Ramp.getDialog(fragment.getParentActivity(), wallet.getAddress(), topUpAmount, () -> {
+                                    checkBalanceBeforePayment(fragment, offer, timeSlot);
+                                }).show();
 //                                Intent intent = Ramp.getTopUpIntent(wallet.getAddress(), topUpAmount, RAMP_RETURN_URL);
 //                                intent = intent.createChooser(intent, "Top Up using");
 //                                fragment.getParentActivity().startActivity(intent);

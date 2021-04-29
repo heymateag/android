@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -17,15 +15,27 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class RampDialog extends Dialog {
 
+    private static final String EXIT_URL = "https://heymate.works";
+
+    public interface OnRampDoneListener {
+
+        void onRampDone();
+
+    }
+
     private String mURL;
 
     private WebView mWebView;
 
-    public RampDialog(@NonNull Context context, String url) {
+    private OnRampDoneListener mListener;
+
+    public RampDialog(@NonNull Context context, String url, OnRampDoneListener listener) {
         super(context);
         setCancelable(true);
 
         mURL = url;
+
+        mListener = listener;
     }
 
     @Override
@@ -51,12 +61,13 @@ public class RampDialog extends Dialog {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (mURL.equalsIgnoreCase(url)) {
-                    return false;
+                if (url.toLowerCase().startsWith(EXIT_URL)) {
+                    dismiss();
+                    mListener.onRampDone();
+                    return true;
                 }
 
-                dismiss();
-                return true;
+                return false;
             }
 
             @Override
@@ -71,16 +82,30 @@ public class RampDialog extends Dialog {
 
                 new Handler().postDelayed(() -> {
                     int width = (int) (view.getWidth() / AndroidUtilities.displayMetrics.density);
-                    int fontSize = 18;
+                    int fontSize = 20;
+                    int proceedFontSize = 16;
 
-                    view.loadUrl(
-                            "javascript:(function() {" +
-                                    "document.getElementById('root').children[0].style.width='" + width + "px';" +
-                                    "document.getElementsByClassName('style__sellBuyToggle--2BcMw')[0].style.display='none';" +
-                                    "document.getElementsByClassName('style__poweredByRamp--8Vb21')[0].style.display = 'none';" +
-                                    "[].forEach.call(document.getElementsByClassName('style__amountInput--1zk6X'), function(elem) {elem.style.fontSize='" + fontSize + "px';});" +
-                                    "})()");
-                }, 5000);
+                    String code =
+                            "document.getElementById('root').children[0].style.width='" + width + "px';" +
+                            "document.getElementsByClassName('style__sellBuyToggle--2BcMw')[0].style.display='none';" +
+                            "document.getElementsByClassName('style__poweredByRamp--8Vb21')[0].style.display = 'none';" +
+                            "[].forEach.call(document.getElementsByClassName('style__amountInput--1zk6X'), function(elem) {elem.style.fontSize='" + fontSize + "px';});" +
+                            "document.getElementsByClassName('style__proceedButton--k6MOS')[0].style.fontSize='" + proceedFontSize + "px';";
+
+                String observerScript = "document.addEventListener('DOMNodeInserted', function() {if (document.getElementById('qazxsw')) {" + code + "}}, false);";
+                String immediateScript = "javascript:(function() {" + code + "})()";
+
+                view.loadUrl(immediateScript);
+
+//                    view.loadUrl(
+//                            "javascript:(function() {" +
+//                                    "document.getElementById('root').children[0].style.width='" + width + "px';" +
+//                                    "document.getElementsByClassName('style__sellBuyToggle--2BcMw')[0].style.display='none';" +
+//                                    "document.getElementsByClassName('style__poweredByRamp--8Vb21')[0].style.display = 'none';" +
+//                                    "[].forEach.call(document.getElementsByClassName('style__amountInput--1zk6X'), function(elem) {elem.style.fontSize='" + fontSize + "px';});" +
+//                                    "document.getElementsByClassName('style__proceedButton--k6MOS')[0].style.fontSize='" + proceedFontSize + "px';" +
+//                                    "})()");
+                }, 2000);
             }
 
         });
