@@ -29,6 +29,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -541,21 +543,20 @@ public class HtCreateOfferActivity extends BaseFragment {
 
         actionLayout = new LinearLayout(context);
         actionLayout.setGravity(Gravity.CENTER);
+        actionLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.ht_theme));
 
         LinearLayout promoteLayout = new LinearLayout(context);
-        promoteLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         promoteLayout.setGravity(Gravity.CENTER);
 
         TextView promoteLabel = new TextView(context);
         promoteLabel.setText(LocaleController.getString("HtPromote", works.heymate.beta.R.string.HtPromote));
         promoteLabel.setTextSize(17);
-        promoteLabel.setTypeface(promoteLabel.getTypeface(), Typeface.BOLD);
-        promoteLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+        promoteLabel.setCompoundDrawablePadding(AndroidUtilities.dp(8));
         promoteLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
 
-        Drawable promoteDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.share);
+        Drawable promoteDrawable = context.getResources().getDrawable(R.drawable.ic_send);
         promoteDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
-        promoteLabel.setCompoundDrawablesWithIntrinsicBounds(promoteDrawable, null, null, null);
+        promoteLabel.setCompoundDrawablesWithIntrinsicBounds(null, null, promoteDrawable, null);
         promoteLayout.addView(promoteLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         promoteLayout.setEnabled(true);
         promoteLayout.setOnClickListener(v -> {
@@ -660,18 +661,16 @@ public class HtCreateOfferActivity extends BaseFragment {
         });
 
         LinearLayout saveLayout = new LinearLayout(context);
-        saveLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogTextBlue));
         saveLayout.setGravity(Gravity.CENTER);
 
         TextView saveLabel = new TextView(context);
         saveLabel.setText(LocaleController.getString("HtSave", works.heymate.beta.R.string.HtSave));
         saveLabel.setTextSize(17);
-        saveLabel.setTypeface(saveLabel.getTypeface(), Typeface.BOLD);
-        saveLabel.setCompoundDrawablePadding(AndroidUtilities.dp(4));
+        saveLabel.setCompoundDrawablePadding(AndroidUtilities.dp(8));
         saveLabel.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
-        Drawable saveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.menu_saved);
-        saveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
-        saveLabel.setCompoundDrawablesWithIntrinsicBounds(saveDrawable, null, null, null);
+        Drawable saveDrawable = context.getResources().getDrawable(R.drawable.ic_save).mutate();
+        saveDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.SRC_IN));
+        saveLabel.setCompoundDrawablesWithIntrinsicBounds(null, null, saveDrawable, null);
         saveLayout.addView(saveLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12, 12, 12, 12));
         saveLayout.setEnabled(true);
         saveLayout.setOnClickListener(v -> {
@@ -801,9 +800,14 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        actionLayout.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, 0.5f));
-        if (canEdit)
-            actionLayout.addView(saveLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50, 0.5f));
+        if (canEdit) {
+            actionLayout.addView(saveLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0.5f));
+
+            View divider = new View(context);
+            divider.setBackgroundColor(Theme.getColor(Theme.key_wallet_whiteText));
+            actionLayout.addView(divider, LayoutHelper.createLinear(1, 36));
+        }
+        actionLayout.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0.5f));
         mainLayout.addView(actionLayout);
         mainScrollView.addView(mainLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         fragmentMainLayout.addView(mainScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
