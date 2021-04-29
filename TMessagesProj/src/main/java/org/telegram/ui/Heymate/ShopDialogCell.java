@@ -29,7 +29,6 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -42,7 +41,7 @@ import org.telegram.ui.Components.StatusDrawable;
 
 import java.util.List;
 
-public class OfferDialogCell extends SequenceLayout {
+public class ShopDialogCell extends SequenceLayout {
 
     private ImageView mImageDialog;
     private TextView mTextName;
@@ -58,25 +57,25 @@ public class OfferDialogCell extends SequenceLayout {
     private ImageReceiver avatarImage = new ImageReceiver(this);
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
 
-    public OfferDialogCell(Context context) {
+    public ShopDialogCell(Context context) {
         super(context);
         initialize(context, null, 0);
     }
 
-    public OfferDialogCell(Context context, AttributeSet attrs) {
+    public ShopDialogCell(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context, attrs, 0);
     }
 
-    public OfferDialogCell(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ShopDialogCell(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context, attrs, defStyleAttr);
     }
 
     private void initialize(Context context, AttributeSet attrs, int defStyleAttr) {
         setPageWidth(140);
-        LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.cell_offerdialog, this, true);
-        List<Sequence> sequences = addSequences(works.heymate.beta.R.xml.sequences_cell_offerdialog);
+        LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.cell_shopdialog, this, true);
+        List<Sequence> sequences = addSequences(works.heymate.beta.R.xml.sequences_cell_shopdialog);
         sequences.get(0).getSpans().get(0).size = SharedConfig.useThreeLinesLayout ? 78 : 72;
 
         setWillNotDraw(false);

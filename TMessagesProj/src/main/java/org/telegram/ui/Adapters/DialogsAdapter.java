@@ -32,9 +32,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -57,7 +55,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.Heymate.OfferDialogCell;
+import org.telegram.ui.Heymate.ShopDialogCell;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -367,7 +365,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 view = dialogCell;
                 break;
             case VIEW_TYPE_SHOP:
-                view = new OfferDialogCell(mContext);
+                view = new ShopDialogCell(mContext);
                 break;
             case VIEW_TYPE_FILTER_SPACE:
                 view = new View(mContext) {
@@ -533,7 +531,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 break;
             }
             case VIEW_TYPE_SHOP: {
-                OfferDialogCell cell = (OfferDialogCell) holder.itemView;
+                ShopDialogCell cell = (ShopDialogCell) holder.itemView;
                 TLRPC.Dialog dialog = (TLRPC.Dialog) getItem(i);
                 cell.setDialog(dialog);
                 break;

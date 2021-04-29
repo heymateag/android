@@ -491,12 +491,6 @@ public class HtChatMessageCell extends FrameLayout {
         promoteLabel.setCompoundDrawablePadding(AndroidUtilities.dp(6));
         promoteLayout.addView(promoteLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 12,6,12,6));
         promoteLayout.setEnabled(true);
-        promoteLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         bottomLayer.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
         promoteLayout.setVisibility(GONE);
         promoteLayout.setOnClickListener(v -> {
