@@ -2,12 +2,10 @@ package org.telegram.ui.Heymate;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -27,13 +25,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
@@ -47,19 +45,20 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
 
 public class HtChatMessageCell extends FrameLayout {
 
     private Context context;
+    private BaseFragment parent;
+
     private BackupImageView image;
     private ImageView editIcon;
-    private boolean showingDetails = false;
     public TextView titleLabel;
     public TextView descriptionLabel;
     public TextView msgTimeLabel;
@@ -67,12 +66,20 @@ public class HtChatMessageCell extends FrameLayout {
     public TextView configLabel;
     public TextView addressLabel;
     public TextView expireLabel;
-    private boolean out = false;
     private LinearLayout promoteLayout;
     private LinearLayout buyLayout;
     private LinearLayout viewLayout;
+    private LinearLayout statusLayout;
+    private Drawable archiveDrawable;
+    private ImageView archiveIcon;
+
     private MessageObject message;
-    private BaseFragment parent;
+    private boolean out = false;
+
+    private OfferUtils.PhraseInfo phraseInfo;
+    private Offer offer;
+
+    private boolean showingDetails = false;
     private String messageText;
     private String rate = "";
     private String rateType = "";
@@ -83,10 +90,7 @@ public class HtChatMessageCell extends FrameLayout {
     private String terms = "";
     private OfferStatus status;
     private String offerUUID = "";
-    private LinearLayout statusLayout;
     private boolean archived;
-    private Drawable archiveDrawable;
-    private ImageView archiveIcon;
     private ArrayList<Long> dateSlots = new ArrayList<>();
 
     public ArrayList<Long> getDateSlots() {
@@ -97,11 +101,31 @@ public class HtChatMessageCell extends FrameLayout {
         this.dateSlots = dateSlots;
     }
 
-    private Offer offer;
-
     public void setOffer(Offer offer) {
         this.offer = offer;
-        offerUUID = offer.getId();
+
+        titleLabel.setText(offer.getTitle());
+        descriptionLabel.setText(offer.getDescription());
+        rateLabel.setText(offer.getRate() + offer.getCurrency() + " " + offer.getRateType());
+
+        if (message != null) {
+            msgTimeLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
+        }
+
+        addressLabel.setText(offer.getLocationData());
+        setRate(offer.getRate());
+        setRateType(offer.getRateType());
+        setCurrency(offer.getCurrency());
+        setCategory(offer.getCategory());
+        setSubCategory(offer.getSubCategory());
+        setPaymentConfig(offer.getTermsConfig());
+        setTerms(offer.getTerms());
+        expireLabel.setText("Valid until\n"  + offer.getExpiry().format());
+        setOfferUUID(offer.getId());
+    }
+
+    public void setPhraseInfo(OfferUtils.PhraseInfo phraseInfo) {
+        this.phraseInfo = phraseInfo;
     }
 
     public void setRate(String rate) {
@@ -463,7 +487,7 @@ public class HtChatMessageCell extends FrameLayout {
         buyLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HeymatePayment.initPayment(parent, offer.getId());
+                HeymatePayment.initPayment(parent, offer.getId(), phraseInfo == null ? null : phraseInfo.referralId);
             }
         });
         bottomLayer.addView(buyLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
@@ -494,30 +518,7 @@ public class HtChatMessageCell extends FrameLayout {
         bottomLayer.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
         promoteLayout.setVisibility(GONE);
         promoteLayout.setOnClickListener(v -> {
-            try{
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-
-                TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
-                String name;
-
-                if (user.username != null) {
-                    name = "@" + user.username;
-                }
-                else {
-                    name = user.first_name;
-
-                    if (!TextUtils.isEmpty(user.last_name)) {
-                        name = name + " " + user.last_name;
-                    }
-                }
-                String message = OfferUtils.serializeBeautiful(offer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
-                share.putExtra(Intent.EXTRA_TEXT, message);
-                context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
-
-            } catch (Exception e){
-
-            }
+            HeymatePayment.ensureWalletExistence(this::promote);
         });
 
         viewLayout = new LinearLayout(context) {
@@ -595,6 +596,53 @@ public class HtChatMessageCell extends FrameLayout {
         mainLayout.addView(bottomLayer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 40));
         mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_chat_topPanelBackground)));
         addView(mainLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT, 20, 10, 20, 10));
+    }
+
+    private void promote() {
+        if (offer == null) {
+            return;
+        }
+
+        if (phraseInfo == null || offer.getUserId() != null && offer.getUserId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId))) {
+            doPromote(null);
+            return;
+        }
+
+        LoadingUtil.onLoadingStarted();
+
+        ReferralUtils.getReferralId(phraseInfo, (success, referralId, exception) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (!success) {
+                // TODO Organize error messages
+                Toast.makeText(getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            doPromote(referralId);
+        });
+    }
+
+    private void doPromote(String referralId) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+
+        TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
+        String name;
+
+        if (user.username != null) {
+            name = "@" + user.username;
+        }
+        else {
+            name = user.first_name;
+
+            if (!TextUtils.isEmpty(user.last_name)) {
+                name = name + " " + user.last_name;
+            }
+        }
+        String message = OfferUtils.serializeBeautiful(offer, referralId, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        share.putExtra(Intent.EXTRA_TEXT, message);
+        context.startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
     }
 
     public class HtOfferChatDelegate implements DialogsActivity.DialogsActivityDelegate {

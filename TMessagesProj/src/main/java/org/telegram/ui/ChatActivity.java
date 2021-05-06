@@ -21127,7 +21127,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 view = new HtChatMessageCell(mContext);
                 ((HtChatMessageCell) view).setParent(ChatActivity.this);
             }
-            if (viewType == 0) {
+            else if (viewType == 0) {
 
                 if (!chatMessageCellsCache.isEmpty()) {
                     view = chatMessageCellsCache.get(0);
@@ -21896,39 +21896,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 });
                     }
                     String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
-                    Offer offer = OfferUtils.readBeautiful(finalMessage);
-                    if (offer != null) {
+                    OfferUtils.PhraseInfo phraseInfo = OfferUtils.readBeautiful(finalMessage);
+                    offerCell.setPhraseInfo(phraseInfo);
+                    Offer offer = phraseInfo.offer;
+                    if (phraseInfo.offerId != null) {
                         HtAmplify.getInstance(mContext).getOffer(offer.getId(), ((success, fetchedOffer, exception) -> {
-                            Utils.runOnUIThread(() -> {
-                                if (!success) {
-                                    if (exception != null) {
-                                        Log.e("HtAmplify", "Failed to get offer with id " + offer.getId(), exception);
-                                    }
-
-                                    return;
-                                }
-
-                                HtSQLite.getInstance().addOffer((Offer) fetchedOffer);
-                            });
+                            if (success) {
+                                Utils.runOnUIThread(() -> {
+                                    offerCell.setOffer(fetchedOffer);
+                                });
+                            }
                         }));
-                        offerCell.setOffer(offer);
-                        offerCell.titleLabel.setText(offer.getTitle());
-                        offerCell.descriptionLabel.setText(offer.getDescription());
-                        offerCell.rateLabel.setText(offer.getRate() + offer.getCurrency() + " " + offer.getRateType());
-                        offerCell.msgTimeLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
-                        offerCell.addressLabel.setText(offer.getLocationData());
-                        offerCell.setRate(offer.getRate());
-                        offerCell.setRateType(offer.getRateType());
-                        offerCell.setCurrency(offer.getCurrency());
-                        offerCell.setCategory(offer.getCategory());
-                        offerCell.setSubCategory(offer.getSubCategory());
-                        offerCell.setPaymentConfig(offer.getTermsConfig());
-                        offerCell.setTerms(offer.getTerms());
-                        offerCell.expireLabel.setText("Valid until\n"  + offer.getExpiry().format());
-                        offerCell.setOut(message.isOut());
-                        offerCell.setMessage(message);
-                        offerCell.setOfferUUID(offer.getId());
                     }
+                    else if (phraseInfo.referralId != null) {
+                        HtAmplify.getInstance(mContext).getReferralInfo(phraseInfo.referralId, (success, result, exception) -> {
+                            if (success) {
+                                HtAmplify.getInstance(mContext).getOffer(result.getOfferId(), (success1, fetchedOffer, exception1) -> {
+                                    if (success1) {
+                                        Utils.runOnUIThread(() -> {
+                                            offerCell.setOffer(fetchedOffer);
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    offerCell.setMessage(message);
+                    offerCell.setOut(message.isOut());
+                    offerCell.setOffer(offer);
                 }
                 if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;
@@ -22208,7 +22203,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             });
                 }
                 String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
-                if(OfferUtils.readBeautiful(finalMessage) != null) {
+                if(OfferUtils.urlFromPhrase(finalMessage) != null) {
                     return 10;
                 }
                 return messages.get(position - messagesStartRow).contentType;

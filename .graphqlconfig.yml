@@ -1,0 +1,18 @@
+projects:
+  Heymateapp:
+    schemaPath: TMessagesProj/src/main/graphql/schema.json
+    includes:
+      - TMessagesProj/src/main/graphql/**/*.graphql
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: ''
+        generatedFileName: ''
+        docsFilePath: TMessagesProj/src/main/graphql/com/amazonaws/amplify/generated/graphql
+        region: us-east-1
+        apiId: null
+        maxDepth: 2
+extensions:
+  amplify:
+    version: 3

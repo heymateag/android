@@ -45,8 +45,6 @@ import org.web3j.tx.gas.ContractGasProvider;
 public class Offer extends Contract {
     public static final String BINARY = BIN_NOT_PROVIDED;
 
-    public static final String FUNC_BALANCE = "balance";
-
     public static final String FUNC_CANCELLATIONVALUEDEPOSIT = "cancellationValueDeposit";
 
     public static final String FUNC_CONSUMER = "consumer";
@@ -69,13 +67,7 @@ public class Offer extends Contract {
 
     public static final String FUNC_ESCROWTRANSFER = "EscrowTransfer";
 
-    public static final String FUNC_APPROVETRANSFER = "approveTransfer";
-
-    public static final String FUNC_ALLOWANCE = "Allowance";
-
-    public static final String FUNC_TRANSFERCELO = "TransferCelo";
-
-    public static final String FUNC_TRANSFERFROM = "TransferFrom";
+    public static final String FUNC_TRANSFERAMOUNT = "transferAmount";
 
     public static final String FUNC_CREATEOFFER = "createOffer";
 
@@ -88,8 +80,6 @@ public class Offer extends Contract {
     public static final String FUNC_CONSUMERCANCEL = "consumerCancel";
 
     public static final String FUNC_SERVICEPROVIDERCANCEL = "serviceProviderCancel";
-
-    public static final String FUNC_BALANCEOF = "balanceOf";
 
     public static final String FUNC_WITHDRAWFEES = "withdrawFees";
 
@@ -113,10 +103,6 @@ public class Offer extends Contract {
 
     public static final Event STARTSERVICE_EVENT = new Event("StartService",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
-    ;
-
-    public static final Event TRANSFER_EVENT = new Event("Transfer",
-            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
     ;
 
     @Deprecated
@@ -292,48 +278,6 @@ public class Offer extends Contract {
         return startServiceEventFlowable(filter);
     }
 
-    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
-        ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
-        for (Contract.EventValuesWithLog eventValues : valueList) {
-            TransferEventResponse typedResponse = new TransferEventResponse();
-            typedResponse.log = eventValues.getLog();
-            typedResponse.from = (String) eventValues.getIndexedValues().get(0).getValue();
-            typedResponse.to = (String) eventValues.getIndexedValues().get(1).getValue();
-            typedResponse.value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-            responses.add(typedResponse);
-        }
-        return responses;
-    }
-
-    public Flowable<TransferEventResponse> transferEventFlowable(EthFilter filter) {
-        return web3j.ethLogFlowable(filter).map(new Function<Log, TransferEventResponse>() {
-            @Override
-            public TransferEventResponse apply(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
-                TransferEventResponse typedResponse = new TransferEventResponse();
-                typedResponse.log = log;
-                typedResponse.from = (String) eventValues.getIndexedValues().get(0).getValue();
-                typedResponse.to = (String) eventValues.getIndexedValues().get(1).getValue();
-                typedResponse.value = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
-                return typedResponse;
-            }
-        });
-    }
-
-    public Flowable<TransferEventResponse> transferEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
-        filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
-        return transferEventFlowable(filter);
-    }
-
-    public RemoteFunctionCall<BigInteger> balance() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_BALANCE,
-                Arrays.<Type>asList(),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
-    }
-
     public RemoteFunctionCall<BigInteger> cancellationValueDeposit() {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CANCELLATIONVALUEDEPOSIT,
                 Arrays.<Type>asList(),
@@ -438,44 +382,16 @@ public class Offer extends Contract {
         return executeRemoteCallTransaction(function, weiValue);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> approveTransfer(String spender, BigInteger value) {
+    public RemoteFunctionCall<TransactionReceipt> transferAmount(String to, BigInteger value) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_APPROVETRANSFER,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, spender),
-                        new org.web3j.abi.datatypes.generated.Uint256(value)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> Allowance(String owner, String spender) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_ALLOWANCE,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, owner),
-                        new org.web3j.abi.datatypes.Address(160, spender)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> TransferCelo(String to, BigInteger value) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_TRANSFERCELO,
+                FUNC_TRANSFERAMOUNT,
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, to),
                         new org.web3j.abi.datatypes.generated.Uint256(value)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> TransferFrom(String from, String to, BigInteger value) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_TRANSFERFROM,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, from),
-                        new org.web3j.abi.datatypes.Address(160, to),
-                        new org.web3j.abi.datatypes.generated.Uint256(value)),
-                Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<TransactionReceipt> createOffer(byte[] _tradeID, BigInteger _amount, BigInteger _fee, BigInteger _expiry, BigInteger _slotTime, BigInteger _initialDeposit, List<String> userAddress, List<BigInteger> config, byte[] signature) {
+    public RemoteFunctionCall<TransactionReceipt> createOffer(byte[] _tradeID, BigInteger _amount, BigInteger _fee, BigInteger _expiry, BigInteger _slotTime, BigInteger _initialDeposit, List<String> userAddress, List<BigInteger> config, List<String> referrers, byte[] signature, BigInteger weiValue) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                 FUNC_CREATEOFFER,
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
@@ -490,9 +406,12 @@ public class Offer extends Contract {
                         new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint32>(
                                 org.web3j.abi.datatypes.generated.Uint32.class,
                                 org.web3j.abi.Utils.typeMap(config, org.web3j.abi.datatypes.generated.Uint32.class)),
+                        new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
+                                org.web3j.abi.datatypes.Address.class,
+                                org.web3j.abi.Utils.typeMap(referrers, org.web3j.abi.datatypes.Address.class)),
                         new org.web3j.abi.datatypes.DynamicBytes(signature)),
                 Collections.<TypeReference<?>>emptyList());
-        return executeRemoteCallTransaction(function);
+        return executeRemoteCallTransaction(function, weiValue);
     }
 
     public RemoteFunctionCall<byte[]> prefixed(byte[] hash) {
@@ -548,13 +467,6 @@ public class Offer extends Contract {
                         new org.web3j.abi.datatypes.generated.Uint16(_fee)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
-    }
-
-    public RemoteFunctionCall<BigInteger> balanceOf(String owner) {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_BALANCEOF,
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(160, owner)),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteFunctionCall<TransactionReceipt> withdrawFees(String _to, BigInteger _amount) {
@@ -628,13 +540,5 @@ public class Offer extends Contract {
 
     public static class StartServiceEventResponse extends BaseEventResponse {
         public byte[] _tradeHash;
-    }
-
-    public static class TransferEventResponse extends BaseEventResponse {
-        public String from;
-
-        public String to;
-
-        public BigInteger value;
     }
 }

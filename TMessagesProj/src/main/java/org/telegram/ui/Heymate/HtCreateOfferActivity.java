@@ -3,18 +3,13 @@ package org.telegram.ui.Heymate;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -25,6 +20,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +34,6 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import works.heymate.beta.R;
-import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -48,29 +43,21 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.widget.LocationInputItem;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
-import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferInfo;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.wallet.Wallet;
 
-public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
+public class HtCreateOfferActivity extends BaseFragment {
 
     private static final String TAG = "CreateOfferActivity";
 
@@ -98,8 +85,6 @@ public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents
     private HtExpireInputCell expireInputCell;
     private HtTermsInputCell termsInputCell;
     private HtPaymentConfigInputCell paymentInputCell;
-
-    private AlertDialog mLoadingDialog = null;
 
     private int priceCellsCount = 0;
     private boolean canEdit = true;
@@ -611,16 +596,7 @@ public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents
                     undoView.setVisibility(View.GONE);
                 });
             } else {
-                Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
-
-                if (!wallet.isCreated()) {
-                    onLoadingStarted();
-                    HeymateEvents.register(HeymateEvents.WALLET_CREATED, this);
-                    wallet.createNew();
-                }
-                else {
-                    createOffer();
-                }
+                HeymatePayment.ensureWalletExistence(this::acquirePromotionPlan);
             }
         });
 
@@ -737,40 +713,55 @@ public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents
         return fragmentView;
     }
 
-    @Override
-    public void onHeymateEvent(int event, Object... args) {
-        onLoadingFinished();
-        HeymateEvents.unregister(HeymateEvents.WALLET_CREATED, this);
-        createOffer();
+    private void acquirePromotionPlan() {
+//        EditText editInput = new EditText(getParentActivity());
+//        editInput.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
+//        editInput.setHint("Percentage");
+        NumberPicker numberPicker = new NumberPicker(getParentActivity());
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(100);
+        numberPicker.setValue(20);
+
+        new AlertDialog.Builder(getParentActivity())
+                .setTitle("Promote")
+                .setMessage("You can set a promotion plan or just share this offer with anyone you want.")
+                .setPositiveButton("Promote", (dialog, which) -> {
+                    dialog.dismiss();
+                    new android.app.AlertDialog.Builder(getParentActivity())
+                            .setTitle("Promotion Plan")
+                            .setMessage("Set the percentage of the total offer price to be rewarded to the promoters of your offer.")
+                            .setView(numberPicker)
+                            .setPositiveButton("Promote", (dialog1, which1) -> {
+                                createOffer(numberPicker.getValue());
+                                dialog1.dismiss();
+                            })
+                            .setNegativeButton("Cancel", (dialog1, which1) -> {
+                                dialog1.cancel();
+                            })
+                            .show();
+                })
+                .setNegativeButton("Share", (dialog, which) -> {
+                    createOffer(0);
+                    dialog.dismiss();
+                })
+                .show();
     }
 
-    private void onLoadingStarted() {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = new AlertDialog(getParentActivity(), 3);
-            mLoadingDialog.setCanCacnel(false);
-        }
-
-        mLoadingDialog.show();
-    }
-
-    private void onLoadingFinished() {
-        if (mLoadingDialog == null) {
-            return;
-        }
-
-        mLoadingDialog.dismiss();
-    }
-
-    private void createOffer() {
+    private void createOffer(int promotionPercentage) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
         String rate = priceInputCell.getRes(ARGUMENTS_PRICE);
-        String configText = paymentInputCell.getRes().toString();
 
-        onLoadingStarted();
+        JSONObject config = paymentInputCell.getRes();
 
-        wallet.signOffer(rate, configText, (successful, signature, exception) -> {
-            onLoadingFinished();
+        try {
+            config.put(OfferUtils.PROMOTION_RATE, promotionPercentage);
+        } catch (JSONException e) { }
+
+        LoadingUtil.onLoadingStarted();
+
+        wallet.signOffer(rate, config, (successful, signature, exception) -> {
+            LoadingUtil.onLoadingFinished();
 
             if (successful) {
                 LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
@@ -779,7 +770,7 @@ public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
                 newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
-                newOffer.setConfigText(configText);
+                newOffer.setConfigText(config.toString());
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
@@ -800,10 +791,10 @@ public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents
                 newOffer.setCreatedAt(currentTime);
                 newOffer.setEditedAt(currentTime);
 
-                onLoadingStarted();
+                LoadingUtil.onLoadingStarted();
 
                 HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, wallet.getAddress(), signature, (success, createdOffer, exception1) -> {
-                    onLoadingFinished();
+                    LoadingUtil.onLoadingFinished();
 
                     if (success) {
                         HtSQLite.getInstance().addOffer(createdOffer);
@@ -826,7 +817,7 @@ public class HtCreateOfferActivity extends BaseFragment implements HeymateEvents
                             }
                         }
 
-                        String message = OfferUtils.serializeBeautiful(createdOffer, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                        String message = OfferUtils.serializeBeautiful(createdOffer, null, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                         share.putExtra(Intent.EXTRA_TEXT, message);
                         getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
                         finishFragment();

@@ -204,7 +204,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
                 name = name + " " + user.last_name;
             }
         }
-        String message = OfferUtils.serializeBeautiful(dto.asOffer(), name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        // TODO Make a clean text for offer details!
+        String message = OfferUtils.serializeBeautiful(dto.asOffer(), null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         TextView delayText = new TextView(context);
         delayText.setId(idCounter++);
@@ -232,7 +233,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
-        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offerUUID)); // TODO Why is there a buy button here?
+        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offerUUID, null)); // TODO Referral ID REQUIRED
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(150), AndroidUtilities.dp(50));
         buyButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());

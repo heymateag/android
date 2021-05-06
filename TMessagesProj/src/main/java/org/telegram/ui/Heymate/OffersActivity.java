@@ -116,7 +116,10 @@ public class OffersActivity extends BaseFragment {
         buttonAdd.setTypeface(buttonAdd.getTypeface(), Typeface.BOLD);
         buttonAdd.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme)));
         buttonAdd.setText(Texts.get(Texts.ADD));
-        buttonAdd.setOnClickListener(v -> presentFragment(new HtCreateOfferActivity()));
+        buttonAdd.setOnClickListener(v -> {
+            presentFragment(new HtCreateOfferActivity());
+            HtAmplify.getInstance(getParentActivity()).createReferral("asda", "asdad", (success, result, exception) -> {});
+        });
 
         HtFiltersCell filters = fragmentView.findViewById(works.heymate.beta.R.id.filters);
         filters.setBaseFragment(this);
@@ -186,7 +189,6 @@ public class OffersActivity extends BaseFragment {
         if (offers == null)
             return;
         for (OfferDto offerDto : offers) {
-//            OfferCell offerCell1 = new OfferCell<OffersActivity>(context, this, offerDto, 1)  {
             HtChatMessageCell offerCell1 = new HtChatMessageCell(context) {
                 @Override
                 public void setEnabled(boolean enabled) {
@@ -198,11 +200,7 @@ public class OffersActivity extends BaseFragment {
             offerCell1.setOffer(offerDto.asOffer());
             offerCell1.setOut(true);
             offerCell1.setStatus(offerDto.getStatus());
-            offerCell1.setOfferUUID(offerDto.getServerUUID());
             offerCell1.setArchived(offerDto.getStatus() == OfferStatus.ARCHIVED);
-            offerCell1.titleLabel.setText(offerDto.getTitle());
-            offerCell1.descriptionLabel.setText(offerDto.getDescription());
-            offerCell1.rateLabel.setText(offerDto.getRate() + offerDto.getCurrency() + " " + offerDto.getRateType());
             TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
             String name;
 
@@ -216,30 +214,10 @@ public class OffersActivity extends BaseFragment {
                     name = name + " " + user.last_name;
                 }
             }
-            String message = OfferUtils.serializeBeautiful(offerDto.asOffer(), name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+            // TODO Make a clean text for offer details!
+            String message = OfferUtils.serializeBeautiful(offerDto.asOffer(), null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
             offerCell1.configLabel.setText(message);
-            try {
-                String[] exp = offerDto.getTime().split("-");
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(exp[0]));
-                cal.set(Calendar.MONTH, Integer.parseInt(exp[1]));
-                cal.set(Calendar.YEAR, Integer.parseInt(exp[2]));
-                if(((new Date()).toInstant().toEpochMilli()) > cal.getTimeInMillis())
-                    offerCell1.msgTimeLabel.setText(LocaleController.getString("HtExpired", works.heymate.beta.R.string.HtExpired));
-                else
-                    offerCell1.msgTimeLabel.setText(LocaleController.getString("HtValidUntil", works.heymate.beta.R.string.HtValidUntil) + "\n" + offerDto.getTime());
-            } catch (Exception e){
-                offerCell1.msgTimeLabel.setText(LocaleController.getString("HtValidUntil", works.heymate.beta.R.string.HtValidUntil) + "\n" + offerDto.getTime());
-            }
-            offerCell1.addressLabel.setText(offerDto.getLocation());
-            offerCell1.setRate("" + offerDto.getRate());
-            offerCell1.setRateType(offerDto.getRateType());
-            offerCell1.setCurrency(offerDto.getCurrency());
-            offerCell1.setCategory(offerDto.getCategory());
-            offerCell1.setSubCategory(offerDto.getSubCategory());
-            offerCell1.setPaymentConfig(offerDto.getConfigText());
-            offerCell1.setTerms(offerDto.getTerms());
-            offerCell1.expireLabel.setText(offerDto.getTime());
+
             ArrayList<TimeSlot> timeSlots = new ArrayList<>();
             HtAmplify.getInstance(context).getAvailableTimeSlots(offerDto.getServerUUID(), ((success, data, exception) -> {
                 Utils.runOnUIThread(() -> {
@@ -263,8 +241,6 @@ public class OffersActivity extends BaseFragment {
             ArrayList<Long> dates = new ArrayList<>();
             offerCell1.setDateSlots(dates);
             offerCell1.setParent(this);
-            // TODO
-//            offerCell1.setMessageText("https://ht.me/" + OFFER_MESSAGE_PREFIX + Base64.getEncoder().encodeToString((offerDto.getTitle() + "___" + offerDto.getRate() + "___" + offerDto.getRateType() + "___" + offerDto.getCurrency() + "___" + offerDto.getLocation() + "___" + offerDto.getTime() + "___" + offerDto.getCategory() + "___" + offerDto.getSubCategory() + "___" + offerDto.getConfigText() + "___" + offerDto.getTerms() + "___" + offerDto.getDescription()).getBytes()));
             offersLayout.addView(offerCell1);
             ObjectAnimator anim1 = ObjectAnimator.ofFloat(offerCell1, "scaleX", 0, 1);
             anim1.start();

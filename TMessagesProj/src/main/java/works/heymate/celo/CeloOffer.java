@@ -35,15 +35,13 @@ public class CeloOffer {
         mContract = Offer.load(address, contractKit.web3j, contractKit.transactionManager, new DefaultGasProvider());
     }
 
-    public String createOfferSignature(String address, String rate, String termsConfig) throws Exception {
+    public String createOfferSignature(String address, String rate, JSONObject termsConfig) throws Exception {
         byte[] serviceProviderAddress = Numeric.hexStringToByteArray(address);
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(rate) * 100));
 
-        JSONObject configJSON = new JSONObject(termsConfig);
-
-        BigInteger initialDeposit = new BigInteger(configJSON.getString(OfferUtils.INITIAL_DEPOSIT));
-        BigInteger[] config = getConfig(configJSON).toArray(new BigInteger[0]);
+        BigInteger initialDeposit = new BigInteger(termsConfig.getString(OfferUtils.INITIAL_DEPOSIT));
+        BigInteger[] config = getConfig(termsConfig).toArray(new BigInteger[0]);
 
         Sign.SignatureData signatureData = Sign.signPrefixedMessage(getBytes(serviceProviderAddress, amount, initialDeposit, config), mContractKit.transactionManager.getCredentials().getEcKeyPair());
 
@@ -68,16 +66,10 @@ public class CeloOffer {
     serviceProviderAddress: string
     serviceProviderSignature: string
      */
-    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress, TimeSlot timeSlot) throws CeloException, JSONException {
+    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress,
+                       TimeSlot timeSlot, List<String> referrers) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
         new SecureRandom().nextBytes(tradeId);
-
-//        try {
-//            BigInteger balance = mContractKit.contracts.getStableToken().balanceOf(consumerAddress).send();
-//            Log.d("AAA", "Balance is: " + balance);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 
@@ -111,7 +103,9 @@ public class CeloOffer {
                     initialDeposit,
                     userAddresses,
                     config,
-                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature())
+                    referrers,
+                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature()),
+                    BigInteger.ZERO
             ).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
@@ -204,8 +198,8 @@ public class CeloOffer {
 
         config.add(delayTime);
         config.add(delayPercent);
-        config.add(BigInteger.ZERO);
-        config.add(BigInteger.ZERO);
+        config.add(BigInteger.valueOf(4)); // Linear config
+        config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
 
         return config;
     }

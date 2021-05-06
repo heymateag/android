@@ -8,10 +8,12 @@ import android.os.HandlerThread;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import works.heymate.celo.BuildConfig;
@@ -28,10 +30,11 @@ public class Wallet {
 
     private static final String TAG = "Wallet";
 
-//    private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
-//    private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? "0xeD7Da586614090Bf5112213e710d08517127B079" : "";
-    private static final CeloContext CELO_CONTEXT = CeloContext.MAIN_NET;
-    private static final String OFFER_ADDRESS = "0x13A9E83E2e4367B453F806824531f174b02095Fe";
+    private static final String OFFERS_ON_ALFAJORES = "0xaFA23794A154F8f0fB00067bD85DED04349FbAd0";
+    private static final String OFFERS_ON_MAINNET = "0x13A9E83E2e4367B453F806824531f174b02095Fe";
+
+    private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
+    private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? OFFERS_ON_ALFAJORES : OFFERS_ON_MAINNET;
 
     private static final String PREFERENCES = "heymate_celo_1"; // TODO clear preferences name
     private static final String KEY_PUBLIC_KEY = "public_key";
@@ -228,7 +231,7 @@ public class Wallet {
         });
     }
 
-    public void signOffer(String rate, String termsConfig, SignatureCallback callback) {
+    public void signOffer(String rate, JSONObject termsConfig, SignatureCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -251,7 +254,7 @@ public class Wallet {
         });
     }
 
-    public void createAcceptedOffer(Offer offer, TimeSlot timeSlot, OfferOperationCallback callback) {
+    public void createAcceptedOffer(Offer offer, TimeSlot timeSlot, List<String> referrers, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -261,7 +264,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.create(offer, getAddress(), timeSlot);
+                    mCeloOffer.create(offer, getAddress(), timeSlot, referrers);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {

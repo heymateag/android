@@ -18,15 +18,17 @@ public class LogToGroup {
         StringBuilder sb = new StringBuilder();
         if (message != null) {
             sb.append(message);
-            sb.append("\n");
         }
-        sb.append(t.getMessage());
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
-        t.printStackTrace(writer);
-        writer.flush();
-        sb.append("\n");
-        sb.append(stream.toString());
+        if (t != null) {
+            sb.append("\n");
+            sb.append(t.getMessage());
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
+            t.printStackTrace(writer);
+            writer.flush();
+            sb.append("\n");
+            sb.append(stream.toString());
+        }
         log(sb.toString(), parent);
     }
 

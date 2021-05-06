@@ -1,5 +1,6 @@
 package works.heymate.core.offer;
 
+import android.net.Uri;
 import android.util.Base64;
 
 import com.amplifyframework.core.model.temporal.Temporal;
@@ -9,23 +10,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import works.heymate.core.Texts;
+import works.heymate.core.URLs;
 import works.heymate.core.Utils;
 
 public class OfferUtils {
 
     private static final String TAG = "OfferUtils";
-
-    private static final String HOST = "heymate.works";
-    private static final String PATH_OFFER = "offer";
-    private static final String BASE_URL = "https://" + HOST + "/" + PATH_OFFER;
 
     private static final String PARAMETER_LANGUAGE = "l";
     private static final String PARAMETER_PHRASE_NAME = "p";
@@ -77,8 +73,25 @@ public class OfferUtils {
     public static final String CANCEL_PERCENT1 = "p1";
     public static final String CANCEL_HOURS2 = "c2";
     public static final String CANCEL_PERCENT2 = "p2";
+    public static final String PROMOTION_RATE = "pr";
     public static final String TERMS_CONFIG = "tc";
     public static final String TERMS = "te";
+
+    public static class PhraseInfo {
+
+        public String urlType;
+        public String url;
+        public JSONObject urlParameters;
+
+        public String offerId;
+        public String referralId;
+
+        public String languageCode;
+        public String phraseName;
+
+        public Offer offer;
+
+    }
 
     /*
     Heymate Offer
@@ -96,10 +109,10 @@ public class OfferUtils {
 
     Learn more here: {url}
      */
-    public static String serializeBeautiful(Offer offer, String username, String... additionalFields) {
+    public static String serializeBeautiful(Offer offer, String referralId, String username, String... additionalFields) {
         String phraseName = Texts.get(Texts.OFFER_PHRASE_NAME).toString();
 
-        String url = deepLinkForOffer(offer, additionalFields) +
+        String url = deepLinkForOffer(referralId, offer, additionalFields) +
                 (additionalFields.length > 0 ? "&" : "?") + PARAMETER_LANGUAGE + "=" + Texts.getLanguageCode() +
                 "&" + PARAMETER_PHRASE_NAME + "=" + Base64.encodeToString(phraseName.getBytes(), 0);
 
@@ -138,12 +151,22 @@ public class OfferUtils {
         return phrase;
     }
 
-    // TODO We have a fail case where the phrase is edited. Which is unhandled. Should return null in case of value types not matching. Otherwise will cause crashes.
-    public static Offer readBeautiful(String phrase) {
-        int urlStart = phrase.indexOf(BASE_URL);
+    public static PhraseInfo urlFromPhrase(String phrase) {
+        PhraseInfo phraseInfo = new PhraseInfo();
+
+        int urlStart = phrase.indexOf(URLs.getBaseURL(URLs.PATH_OFFER));
 
         if (urlStart == -1) {
-            return null;
+            urlStart = phrase.indexOf(URLs.getBaseURL(URLs.PATH_REFERRAL));
+
+            if (urlStart == -1) {
+                return null;
+            }
+
+            phraseInfo.urlType = URLs.PATH_REFERRAL;
+        }
+        else {
+            phraseInfo.urlType = URLs.PATH_OFFER;
         }
 
         int urlEnd = phrase.indexOf(" ", urlStart);
@@ -152,27 +175,51 @@ public class OfferUtils {
             urlEnd = phrase.length();
         }
 
-        String url = phrase.substring(urlStart, urlEnd);
+        phraseInfo.url = phrase.substring(urlStart, urlEnd);
 
-        JSONObject urlParameters = Utils.getParameters(url);
+        String id = Uri.parse(phraseInfo.url).getLastPathSegment();
 
-        if (urlParameters == null) {
+        if (id == null || id.length() == 0 || phraseInfo.urlType.equals(id)) {
             return null;
         }
 
-        String languageCode = Utils.getOrNull(urlParameters, PARAMETER_LANGUAGE);
-        String phraseName = Utils.getOrNull(urlParameters, PARAMETER_PHRASE_NAME);
+        if (phraseInfo.urlType.equals(URLs.PATH_OFFER)) {
+            phraseInfo.offerId = id;
+        }
+        else {
+            phraseInfo.referralId = id;
+        }
 
-        if (phraseName == null) {
+        return phraseInfo;
+    }
+
+    // TODO We have a fail case where the phrase is edited. Which is unhandled. Should return null in case of value types not matching. Otherwise will cause crashes.
+    public static PhraseInfo readBeautiful(String phrase) {
+        PhraseInfo phraseInfo = urlFromPhrase(phrase);
+
+        if (phraseInfo == null) {
             return null;
         }
 
-        phraseName = new String(Base64.decode(phraseName, 0));
+        phraseInfo.urlParameters = URLs.getParameters(phraseInfo.url);
+
+        if (phraseInfo.urlParameters == null) {
+            return null;
+        }
+
+        phraseInfo.languageCode = Utils.getOrNull(phraseInfo.urlParameters, PARAMETER_LANGUAGE);
+        phraseInfo.phraseName = Utils.getOrNull(phraseInfo.urlParameters, PARAMETER_PHRASE_NAME);
+
+        if (phraseInfo.phraseName == null) {
+            return null;
+        }
+
+        phraseInfo.phraseName = new String(Base64.decode(phraseInfo.phraseName, 0));
 
         String rawPhrase;
 
         try {
-            rawPhrase = Texts.get(phraseName, languageCode).toString();
+            rawPhrase = Texts.get(phraseInfo.phraseName, phraseInfo.languageCode).toString();
         } catch (Throwable t) {
             return null;
         }
@@ -233,7 +280,7 @@ public class OfferUtils {
             index = end;
         }
 
-        Offer.Builder builder = offerForDeepLink(url);
+        Offer.Builder builder = offerForDeepLink(phraseInfo);
 
         if (builder == null) {
             return null;
@@ -322,13 +369,20 @@ public class OfferUtils {
             }
         }
 
-        return builder.build();
+        phraseInfo.offer = builder.build();
+
+        return phraseInfo;
     }
 
-    public static String deepLinkForOffer(Offer offer, String... additionalFields) {
+    public static String deepLinkForOffer(String referralId, Offer offer, String... additionalFields) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(BASE_URL).append('/').append(offer.getId());
+        if (referralId == null) {
+            sb.append(URLs.getBaseURL(URLs.PATH_OFFER)).append('/').append(offer.getId());
+        }
+        else {
+            sb.append(URLs.getBaseURL(URLs.PATH_REFERRAL)).append('/').append(referralId);
+        }
 
         if (additionalFields.length > 0) {
             JSONObject termsConfig;
@@ -414,35 +468,15 @@ public class OfferUtils {
         return sb.toString();
     }
 
-    public static Offer.Builder offerForDeepLink(String url) {
-        if (!url.startsWith(BASE_URL) || url.length() < BASE_URL.length() + 2) {
-            return null;
-        }
-
-        String urlMeat = url.substring(BASE_URL.length() + 1);
-
-        int slashIndex = urlMeat.indexOf("/");
-        int parametersIndex = urlMeat.indexOf("?");
-
-        String offerId = null;
-
-        if (slashIndex > 0) {
-            offerId = urlMeat.substring(0, slashIndex);
-        }
-
-        if (offerId == null && parametersIndex > 0) {
-            offerId = urlMeat.substring(0, parametersIndex);
-        }
-
-        if (offerId == null) {
-            offerId = urlMeat;
-        }
-
+    public static Offer.Builder offerForDeepLink(PhraseInfo phraseInfo) {
         Offer.Builder builder = new Offer.Builder();
-        builder.id(offerId);
 
-        if (parametersIndex > 0) {
-            JSONObject parameters = Utils.getParameters(url);
+        if (phraseInfo.offerId != null) {
+            builder.id(phraseInfo.offerId);
+        }
+
+        if (phraseInfo.urlParameters != null) {
+            JSONObject parameters = phraseInfo.urlParameters;
 
             if (parameters != null && parameters.has(PARAMETER_DATA) && !parameters.isNull(PARAMETER_DATA)) {
                 try {

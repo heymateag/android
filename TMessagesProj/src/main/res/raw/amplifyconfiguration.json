@@ -4,12 +4,12 @@
     "api": {
         "plugins": {
             "awsAPIPlugin": {
-                "Heymateapp-staging": {
+                "Heymateapp": {
                     "endpointType": "GraphQL",
                     "endpoint": "https://ikcetye4svhsjhcmakz2jyxmke.appsync-api.us-east-1.amazonaws.com/graphql",
                     "region": "us-east-1",
                     "authorizationType": "API_KEY",
-                    "apiKey": "da2-tetwyzi5mjhq3h33zdz6qxfmii"
+                    "apiKey": "da2-tt27hi24szbuvfodfxbah7b664"
                 }
             }
         }
@@ -27,19 +27,45 @@
                         "ApiUrl": "https://ikcetye4svhsjhcmakz2jyxmke.appsync-api.us-east-1.amazonaws.com/graphql",
                         "Region": "us-east-1",
                         "AuthMode": "API_KEY",
-                        "ApiKey": "da2-tetwyzi5mjhq3h33zdz6qxfmii",
-                        "ClientDatabasePrefix": "Heymateapp-staging_API_KEY"
+                        "ApiKey": "da2-tt27hi24szbuvfodfxbah7b664",
+                        "ClientDatabasePrefix": "Heymateapp_API_KEY"
                     },
-                    "Heymate_AWS_IAM": {
+                    "Heymateapp_AWS_IAM": {
                         "ApiUrl": "https://ikcetye4svhsjhcmakz2jyxmke.appsync-api.us-east-1.amazonaws.com/graphql",
                         "Region": "us-east-1",
                         "AuthMode": "AWS_IAM",
-                        "ClientDatabasePrefix": "Heymateapp-staging_AWS_IAM"
+                        "ClientDatabasePrefix": "Heymateapp_AWS_IAM"
+                    }
+                },
+                "CredentialsProvider": {
+                    "CognitoIdentity": {
+                        "Default": {
+                            "PoolId": "us-east-1:f1b2f5e7-09c7-4739-8ea9-ca557a848efb",
+                            "Region": "us-east-1"
+                        }
+                    }
+                },
+                "CognitoUserPool": {
+                    "Default": {
+                        "PoolId": "us-east-1_1uVVRoPZw",
+                        "AppClientId": "3555n6j7p5jo8b0vqhd5pl90ar",
+                        "Region": "us-east-1"
                     }
                 },
                 "Auth": {
                     "Default": {
                         "authenticationFlowType": "USER_SRP_AUTH"
+                    }
+                },
+                "PinpointAnalytics": {
+                    "Default": {
+                        "AppId": "dacddf61019c43739355d16af387f38c",
+                        "Region": "us-east-1"
+                    }
+                },
+                "PinpointTargeting": {
+                    "Default": {
+                        "Region": "us-east-1"
                     }
                 }
             }

@@ -24,6 +24,7 @@ import works.heymate.core.Utils;
 
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.Referral;
 import org.telegram.ui.Heymate.AmplifyModels.Shop;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
@@ -654,6 +655,45 @@ public class HtAmplify {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void getReferralInfo(String referralId, APICallback<Referral> callback) {
+        Amplify.API.query(ModelQuery.get(Referral.class, referralId), response -> {
+            Utils.runOnUIThread(() -> {
+                if (response.hasData()) {
+                    callback.onCallResult(true, response.getData(), null);
+                }
+                else {
+                    Log.e("HtAmplify", "Referral not found.");
+                    callback.onCallResult(false, null, null);
+                }
+            });
+        }, error -> {
+            Utils.runOnUIThread(() -> {
+                Log.e("HtAmplify", "Failed to get referral.", error);
+                callback.onCallResult(false, null, error);
+            });
+        });
+    }
+
+    public void createReferral(String offerId, String referrers, APICallback<Referral> callback) {
+        Referral referral = Referral.builder().offerId(offerId).referrers(referrers).build();
+
+        Amplify.API.mutate(ModelMutation.create(referral), response -> {
+            Utils.runOnUIThread(() -> {
+                if (response.hasData()) {
+                    callback.onCallResult(true, response.getData(), null);
+                }
+                else if (response.hasErrors()) {
+                    callback.onCallResult(false, null, null);
+                }
+            });
+        }, error -> {
+            Utils.runOnUIThread(() -> {
+                Log.e("HtAmplify", "Failed to create referral.", error);
+                callback.onCallResult(false, null, error);
+            });
+        });
     }
 
     public void saveOfferImage(String offerUUID, File file) {

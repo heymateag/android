@@ -22,14 +22,18 @@ import com.google.android.exoplayer2.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Heymate.AmplifyModels.Offer;
+import org.telegram.ui.Heymate.AmplifyModels.Referral;
 import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
+import works.heymate.beta.BuildConfig;
 import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
 import works.heymate.celo.CeloSDK;
@@ -54,35 +58,58 @@ public class HeymatePayment {
     private static int getStateTries = 3;
 
     private static Offer savedOffer = null;
+    private static Referral savedReferral = null;
     private static TimeSlot savedTimeSlot = null;
 
-    public static void initPayment(BaseFragment fragment, String offerId) {
-        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
-        loadingDialog.setCanCacnel(false);
-        loadingDialog.show();
+    public static void initPayment(BaseFragment fragment, String offerId, String referralId) {
+        if (referralId == null) {
+            initPayment(fragment, offerId, (Referral) null);
+            return;
+        }
+
+        LoadingUtil.onLoadingStarted();
+
+        HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
+
+        amplify.getReferralInfo(referralId, (success, result, exception) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (success) {
+                initPayment(fragment, offerId, result);
+            }
+            else {
+                Log.e(TAG, "Failed to get offer with id " + offerId, exception);
+                LogToGroup.log("Failed to get offer with id " + offerId, exception, fragment);
+
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+            }
+
+        });
+    }
+
+    private static void initPayment(BaseFragment fragment, String offerId, Referral referral) {
+        LoadingUtil.onLoadingStarted();
 
         HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
 
         amplify.getOffer(offerId, ((success, offer, exception) -> {
             Utils.runOnUIThread(() -> {
-                loadingDialog.dismiss();
+                LoadingUtil.onLoadingFinished();
 
                 if (!success) {
-                    if (exception != null) {
-                        Log.e(TAG, "Failed to get offer with id " + offerId, exception);
-                        LogToGroup.log("Failed to get offer with id " + offerId, exception, fragment);
-                    }
+                    Log.e(TAG, "Failed to get offer with id " + offerId, exception);
+                    LogToGroup.log("Failed to get offer with id " + offerId, exception, fragment);
 
                     Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                initPayment(fragment, (Offer) offer);
+                initPayment(fragment, (Offer) offer, referral);
             });
         }));
     }
 
-    private static void initPayment(BaseFragment fragment, Offer offer) {
+    private static void initPayment(BaseFragment fragment, Offer offer, Referral referral) {
         ArrayList<TimeSlot> timeSlots = HtAmplify.getInstance(fragment.getParentActivity()).getAvailableTimeSlots(offer.getId());
 
         JSONObject availabilitySlot;
@@ -137,17 +164,17 @@ public class HeymatePayment {
         }
 
         fragment.presentFragment(new TimeSlotSelectionActivity(timeZone, timeSlots, timeSlot -> {
-            initPayment(fragment, offer, timeSlot);
+            initPayment(fragment, offer, referral, timeSlot);
         }));
     }
 
-    private static void initPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
+    private static void initPayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
 
         if (!wallet.isCreated()) {
-            fragment.presentFragment(new WalletActivity(() -> initPayment(fragment, offer, timeSlot)));
+            fragment.presentFragment(new WalletActivity(() -> initPayment(fragment, offer, referral, timeSlot)));
             return;
         }
 
@@ -165,7 +192,7 @@ public class HeymatePayment {
 
             wallet.updateVerifiedStatus();
 
-            sObserver.task = () -> initPayment(fragment, offer, timeSlot);
+            sObserver.task = () -> initPayment(fragment, offer, referral, timeSlot);
             HeymateEvents.register(HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED, sObserver);
             return;
         }
@@ -175,22 +202,24 @@ public class HeymatePayment {
 //            return;
 //        }
 
+        Runnable next = BuildConfig.DEBUG ?
+                () -> alfajoresTopUp(fragment, offer, referral, timeSlot) :
+                () -> checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
+
         boolean needsSecuritySettings = !Security.ensureSecurity(
                 (FragmentActivity) fragment.getParentActivity(),
                 wallet,
                 Texts.get(Texts.AUTHENTICATION),
                 Texts.get(Texts.AUTHENTICATION_DESCRIPTION),
                 new IntentLauncherFragment(fragment),
-                () -> checkBalanceBeforePayment(fragment, offer, timeSlot));
-//                () -> initPreparedPayment(fragment, offer, timeSlot));
-//                () -> blah(fragment, offer, timeSlot));
+                next);
 
         if (needsSecuritySettings) {
-            fragment.presentFragment(new SecureWalletActivity(() -> initPayment(fragment, offer, timeSlot)));
+            fragment.presentFragment(new SecureWalletActivity(() -> initPayment(fragment, offer, referral, timeSlot)));
         }
     }
 
-    private static void blah(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
+    private static void alfajoresTopUp(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
@@ -205,12 +234,12 @@ public class HeymatePayment {
                 .setView(addressView)
                 .setPositiveButton("Go", (dialog, which) -> {
                     dialog.dismiss();
-                    initPreparedPayment(fragment, offer, timeSlot);
+                    initPreparedPayment(fragment, offer, referral, timeSlot);
                 })
                 .show();
     }
 
-    private static void checkBalanceBeforePayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
+    private static void checkBalanceBeforePayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
         loadingDialog.setCanCacnel(false);
         loadingDialog.show();
@@ -224,7 +253,7 @@ public class HeymatePayment {
                 long amount = (long) (Double.parseDouble(offer.getRate()) * 100D);
 
                 if (cents >= amount) {
-                    initPreparedPayment(fragment, offer, timeSlot);
+                    initPreparedPayment(fragment, offer, referral, timeSlot);
                 }
                 else {
                     long missingCents = amount - cents + 100;
@@ -238,12 +267,13 @@ public class HeymatePayment {
 
                                 // Save offer info
 //                                savedOffer = offer;
+//                                savedReferral = referral
 //                                savedTimeSlot = timeSlot;
 
                                 String topUpAmount = CurrencyUtil.centsToBlockChainValue(missingCents).toString();
 
                                 Ramp.getDialog(fragment.getParentActivity(), wallet.getAddress(), topUpAmount, () -> {
-                                    checkBalanceBeforePayment(fragment, offer, timeSlot);
+                                    checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
                                 }).show();
 //                                Intent intent = Ramp.getTopUpIntent(wallet.getAddress(), topUpAmount, RAMP_RETURN_URL);
 //                                intent = intent.createChooser(intent, "Top Up using");
@@ -264,23 +294,44 @@ public class HeymatePayment {
 
     public static boolean resumePayment(BaseFragment fragment) {
         if (savedOffer != null && savedTimeSlot != null) {
-            checkBalanceBeforePayment(fragment, savedOffer, savedTimeSlot);
+            checkBalanceBeforePayment(fragment, savedOffer, savedReferral, savedTimeSlot);
             savedOffer = null;
+            savedReferral = null;
             savedTimeSlot = null;
             return true;
         }
         return false;
     }
 
-    private static void initPreparedPayment(BaseFragment fragment, Offer offer, TimeSlot timeSlot) {
-        org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
-        loadingDialog.setCanCacnel(false);
-        loadingDialog.show();
+    private static void initPreparedPayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
+        LoadingUtil.onLoadingStarted();
+
+        List<String> referrers = new ArrayList<>();
+
+        if (referral != null) {
+            String sReferrers = referral.getReferrers();
+
+            if (sReferrers != null) {
+                try {
+                    JSONArray jReferrers = new JSONArray(sReferrers);
+
+                    for (int i = 0; i < jReferrers.length(); i++) {
+                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
+
+                        if (referrer.walletAddress != null) {
+                            referrers.add(referrer.walletAddress);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
+                }
+            }
+        }
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
-        wallet.createAcceptedOffer(offer, timeSlot, (success, errorCause) -> {
-            loadingDialog.dismiss();
+        wallet.createAcceptedOffer(offer, timeSlot, referrers, (success, errorCause) -> {
+            LoadingUtil.onLoadingFinished();
 
             if (success) {
                 String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
@@ -317,7 +368,22 @@ public class HeymatePayment {
         });
     }
 
+    public static void ensureWalletExistence(Runnable runnable) {
+        Wallet wallet = Wallet.get(ApplicationLoader.applicationContext, TG2HM.getCurrentPhoneNumber());
 
+        if (wallet.isCreated()) {
+            runnable.run();
+        }
+        else {
+            LoadingUtil.onLoadingStarted();
+            sObserver.task = () -> {
+                LoadingUtil.onLoadingFinished();
+                runnable.run();
+            };
+            HeymateEvents.register(HeymateEvents.WALLET_CREATED, sObserver);
+            wallet.createNew();
+        }
+    }
 
     private static class IntentLauncherFragment extends BaseFragment implements Security.IntentLauncher {
 
