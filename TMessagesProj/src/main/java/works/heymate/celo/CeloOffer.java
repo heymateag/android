@@ -1,14 +1,11 @@
 package works.heymate.celo;
 
-import com.google.android.exoplayer2.util.Log;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 
 import org.celo.contractkit.ContractKit;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 import org.web3j.crypto.Sign;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
@@ -21,7 +18,6 @@ import java.util.List;
 
 import works.heymate.celo.contract.Offer;
 import works.heymate.core.offer.OfferUtils;
-import works.heymate.core.wallet.Wallet;
 
 public class CeloOffer {
 
@@ -66,7 +62,7 @@ public class CeloOffer {
     serviceProviderAddress: string
     serviceProviderSignature: string
      */
-    public void create(org.telegram.ui.Heymate.AmplifyModels.Offer offer, String consumerAddress,
+    public void create(com.amplifyframework.datastore.generated.model.Offer offer, String consumerAddress,
                        TimeSlot timeSlot, List<String> referrers) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
         new SecureRandom().nextBytes(tradeId);
@@ -117,7 +113,7 @@ public class CeloOffer {
         }
     }
 
-    public void startService(org.telegram.ui.Heymate.AmplifyModels.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
+    public void startService(com.amplifyframework.datastore.generated.model.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
         byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
@@ -134,7 +130,7 @@ public class CeloOffer {
         }
     }
 
-    public void finishService(org.telegram.ui.Heymate.AmplifyModels.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
+    public void finishService(com.amplifyframework.datastore.generated.model.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
         byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
@@ -151,7 +147,7 @@ public class CeloOffer {
         }
     }
 
-    public void cancelService(org.telegram.ui.Heymate.AmplifyModels.Offer offer, TimeSlot timeSlot, String consumerAddress, boolean consumerCancelled) throws CeloException {
+    public void cancelService(com.amplifyframework.datastore.generated.model.Offer offer, TimeSlot timeSlot, String consumerAddress, boolean consumerCancelled) throws CeloException {
         byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));

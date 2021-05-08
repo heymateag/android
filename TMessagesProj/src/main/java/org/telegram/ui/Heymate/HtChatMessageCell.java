@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.amplifyframework.datastore.generated.model.Offer;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -43,7 +45,6 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -518,7 +519,7 @@ public class HtChatMessageCell extends FrameLayout {
         bottomLayer.addView(promoteLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, 0.25f));
         promoteLayout.setVisibility(GONE);
         promoteLayout.setOnClickListener(v -> {
-            HeymatePayment.ensureWalletExistence(this::promote);
+            HeymatePayment.ensureWalletExistence(context, this::promote);
         });
 
         viewLayout = new LinearLayout(context) {
@@ -608,7 +609,7 @@ public class HtChatMessageCell extends FrameLayout {
             return;
         }
 
-        LoadingUtil.onLoadingStarted();
+        LoadingUtil.onLoadingStarted(getContext());
 
         ReferralUtils.getReferralId(phraseInfo, (success, referralId, exception) -> {
             LoadingUtil.onLoadingFinished();

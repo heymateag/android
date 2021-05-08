@@ -5,10 +5,6 @@ import android.os.Looper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class Utils {
 

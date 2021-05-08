@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate.AmplifyModels;
+package com.amplifyframework.datastore.generated.model;
 
 
 import java.util.List;
@@ -7,7 +7,10 @@ import java.util.Objects;
 
 import androidx.core.util.ObjectsCompat;
 
+import com.amplifyframework.core.model.AuthStrategy;
 import com.amplifyframework.core.model.Model;
+import com.amplifyframework.core.model.ModelOperation;
+import com.amplifyframework.core.model.annotations.AuthRule;
 import com.amplifyframework.core.model.annotations.Index;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
@@ -15,39 +18,41 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is an auto generated class representing the User type in your schema. */
+/** This is an auto generated class representing the Shop type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "Users")
-public final class User implements Model {
-  public static final QueryField ID = field("User", "id");
-  public static final QueryField OFFERS = field("User", "Offers");
-  public static final QueryField NAME = field("User", "name");
-  public static final QueryField PHONE_NO = field("User", "phoneNo");
+@ModelConfig(pluralName = "Shops", authRules = {
+  @AuthRule(allow = AuthStrategy.PUBLIC, operations = { ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ })
+})
+public final class Shop implements Model {
+  public static final QueryField ID = field("Shop", "id");
+  public static final QueryField TG_ID = field("Shop", "tgId");
+  public static final QueryField TITLE = field("Shop", "title");
+  public static final QueryField TYPE = field("Shop", "type");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="ModelOfferConnection") ModelOfferConnection Offers;
-  private final @ModelField(targetType="String") String name;
-  private final @ModelField(targetType="String") String phoneNo;
+  private final @ModelField(targetType="Int", isRequired = true) Integer tgId;
+  private final @ModelField(targetType="String", isRequired = true) String title;
+  private final @ModelField(targetType="Int", isRequired = true) Integer type;
   public String getId() {
       return id;
   }
   
-  public ModelOfferConnection getOffers() {
-      return Offers;
+  public Integer getTgId() {
+      return tgId;
   }
   
-  public String getName() {
-      return name;
+  public String getTitle() {
+      return title;
   }
   
-  public String getPhoneNo() {
-      return phoneNo;
+  public Integer getType() {
+      return type;
   }
   
-  private User(String id, ModelOfferConnection Offers, String name, String phoneNo) {
+  private Shop(String id, Integer tgId, String title, Integer type) {
     this.id = id;
-    this.Offers = Offers;
-    this.name = name;
-    this.phoneNo = phoneNo;
+    this.tgId = tgId;
+    this.title = title;
+    this.type = type;
   }
   
   @Override
@@ -57,11 +62,11 @@ public final class User implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      User user = (User) obj;
-      return ObjectsCompat.equals(getId(), user.getId()) &&
-              ObjectsCompat.equals(getOffers(), user.getOffers()) &&
-              ObjectsCompat.equals(getName(), user.getName()) &&
-              ObjectsCompat.equals(getPhoneNo(), user.getPhoneNo());
+      Shop shop = (Shop) obj;
+      return ObjectsCompat.equals(getId(), shop.getId()) &&
+              ObjectsCompat.equals(getTgId(), shop.getTgId()) &&
+              ObjectsCompat.equals(getTitle(), shop.getTitle()) &&
+              ObjectsCompat.equals(getType(), shop.getType());
       }
   }
   
@@ -69,9 +74,9 @@ public final class User implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getOffers())
-      .append(getName())
-      .append(getPhoneNo())
+      .append(getTgId())
+      .append(getTitle())
+      .append(getType())
       .toString()
       .hashCode();
   }
@@ -79,16 +84,16 @@ public final class User implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("User {")
+      .append("Shop {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("Offers=" + String.valueOf(getOffers()) + ", ")
-      .append("name=" + String.valueOf(getName()) + ", ")
-      .append("phoneNo=" + String.valueOf(getPhoneNo()))
+      .append("tgId=" + String.valueOf(getTgId()) + ", ")
+      .append("title=" + String.valueOf(getTitle()) + ", ")
+      .append("type=" + String.valueOf(getType()))
       .append("}")
       .toString();
   }
   
-  public static BuildStep builder() {
+  public static TgIdStep builder() {
       return new Builder();
   }
   
@@ -101,7 +106,7 @@ public final class User implements Model {
    * @return an instance of this model with only ID populated
    * @throws IllegalArgumentException Checks that ID is in the proper format
    */
-  public static User justId(String id) {
+  public static Shop justId(String id) {
     try {
       UUID.fromString(id); // Check that ID is in the UUID format - if not an exception is thrown
     } catch (Exception exception) {
@@ -111,7 +116,7 @@ public final class User implements Model {
               "creating a new object, use the standard builder method and leave the ID field blank."
       );
     }
-    return new User(
+    return new Shop(
       id,
       null,
       null,
@@ -121,50 +126,65 @@ public final class User implements Model {
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      Offers,
-      name,
-      phoneNo);
+      tgId,
+      title,
+      type);
   }
-  public interface BuildStep {
-    User build();
-    BuildStep id(String id) throws IllegalArgumentException;
-    BuildStep offers(ModelOfferConnection offers);
-    BuildStep name(String name);
-    BuildStep phoneNo(String phoneNo);
+  public interface TgIdStep {
+    TitleStep tgId(Integer tgId);
   }
   
 
-  public static class Builder implements BuildStep {
+  public interface TitleStep {
+    TypeStep title(String title);
+  }
+  
+
+  public interface TypeStep {
+    BuildStep type(Integer type);
+  }
+  
+
+  public interface BuildStep {
+    Shop build();
+    BuildStep id(String id) throws IllegalArgumentException;
+  }
+  
+
+  public static class Builder implements TgIdStep, TitleStep, TypeStep, BuildStep {
     private String id;
-    private ModelOfferConnection Offers;
-    private String name;
-    private String phoneNo;
+    private Integer tgId;
+    private String title;
+    private Integer type;
     @Override
-     public User build() {
+     public Shop build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new User(
+        return new Shop(
           id,
-          Offers,
-          name,
-          phoneNo);
+          tgId,
+          title,
+          type);
     }
     
     @Override
-     public BuildStep offers(ModelOfferConnection offers) {
-        this.Offers = offers;
+     public TitleStep tgId(Integer tgId) {
+        Objects.requireNonNull(tgId);
+        this.tgId = tgId;
         return this;
     }
     
     @Override
-     public BuildStep name(String name) {
-        this.name = name;
+     public TypeStep title(String title) {
+        Objects.requireNonNull(title);
+        this.title = title;
         return this;
     }
     
     @Override
-     public BuildStep phoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+     public BuildStep type(Integer type) {
+        Objects.requireNonNull(type);
+        this.type = type;
         return this;
     }
     
@@ -191,26 +211,26 @@ public final class User implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, ModelOfferConnection offers, String name, String phoneNo) {
+    private CopyOfBuilder(String id, Integer tgId, String title, Integer type) {
       super.id(id);
-      super.offers(offers)
-        .name(name)
-        .phoneNo(phoneNo);
+      super.tgId(tgId)
+        .title(title)
+        .type(type);
     }
     
     @Override
-     public CopyOfBuilder offers(ModelOfferConnection offers) {
-      return (CopyOfBuilder) super.offers(offers);
+     public CopyOfBuilder tgId(Integer tgId) {
+      return (CopyOfBuilder) super.tgId(tgId);
     }
     
     @Override
-     public CopyOfBuilder name(String name) {
-      return (CopyOfBuilder) super.name(name);
+     public CopyOfBuilder title(String title) {
+      return (CopyOfBuilder) super.title(title);
     }
     
     @Override
-     public CopyOfBuilder phoneNo(String phoneNo) {
-      return (CopyOfBuilder) super.phoneNo(phoneNo);
+     public CopyOfBuilder type(Integer type) {
+      return (CopyOfBuilder) super.type(type);
     }
   }
   

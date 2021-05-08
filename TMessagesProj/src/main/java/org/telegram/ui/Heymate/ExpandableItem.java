@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate.AmplifyModels;
+package org.telegram.ui.Heymate;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

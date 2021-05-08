@@ -16,6 +16,10 @@ import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.Referral;
+import com.amplifyframework.datastore.generated.model.Shop;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -23,10 +27,6 @@ import org.telegram.messenger.AndroidUtilities;
 import works.heymate.core.Utils;
 
 import org.telegram.messenger.UserConfig;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-import org.telegram.ui.Heymate.AmplifyModels.Referral;
-import org.telegram.ui.Heymate.AmplifyModels.Shop;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.io.File;
 import java.util.ArrayList;

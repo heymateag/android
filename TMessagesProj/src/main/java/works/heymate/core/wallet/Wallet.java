@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.Hashtable;
 import java.util.List;

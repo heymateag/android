@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.api.ApiException;
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 
@@ -41,8 +43,6 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ViewPagerFixed;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 import org.telegram.ui.ProfileActivity;
 
 import java.util.ArrayList;

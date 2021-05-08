@@ -1,5 +1,7 @@
 package org.telegram.ui.Heymate;
 
+import android.content.Context;
+
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.AlertDialog;
 
@@ -10,12 +12,12 @@ public class LoadingUtil {
     private static AlertDialog mLoadingDialog = null;
     private static int mLoadingCount = 0;
 
-    public static void onLoadingStarted() {
+    public static void onLoadingStarted(Context context) {
         Utils.runOnUIThread(() -> {
             mLoadingCount++;
 
             if (mLoadingDialog == null) {
-                mLoadingDialog = new AlertDialog(ApplicationLoader.applicationContext, 3);
+                mLoadingDialog = new AlertDialog(context, 3);
                 mLoadingDialog.setCanCacnel(false);
             }
 

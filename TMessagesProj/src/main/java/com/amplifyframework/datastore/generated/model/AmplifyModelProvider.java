@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate.AmplifyModels;
+package com.amplifyframework.datastore.generated.model;
 
 import com.amplifyframework.util.Immutable;
 import com.amplifyframework.core.model.Model;
@@ -13,7 +13,7 @@ import java.util.Set;
  */
 
 public final class AmplifyModelProvider implements ModelProvider {
-  private static final String AMPLIFY_MODEL_VERSION = "98942b7f6087f941ebf6f87fa137fc0c";
+  private static final String AMPLIFY_MODEL_VERSION = "3cb5ac52d33d8c008238dee3535778e7";
   private static AmplifyModelProvider amplifyGeneratedModelInstance;
   private AmplifyModelProvider() {
     
@@ -34,7 +34,7 @@ public final class AmplifyModelProvider implements ModelProvider {
   @Override
    public Set<Class<? extends Model>> models() {
     final Set<Class<? extends Model>> modifiableSet = new HashSet<>(
-          Arrays.<Class<? extends Model>>asList(Offer.class, Shop.class, TimeSlot.class, User.class)
+          Arrays.<Class<? extends Model>>asList(User.class, Offer.class, Referral.class, Shop.class, TimeSlot.class)
         );
     
         return Immutable.of(modifiableSet);

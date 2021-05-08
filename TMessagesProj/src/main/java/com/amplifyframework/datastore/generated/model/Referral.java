@@ -1,20 +1,28 @@
-package org.telegram.ui.Heymate.AmplifyModels;
+package com.amplifyframework.datastore.generated.model;
 
+
+import java.util.List;
+import java.util.UUID;
+import java.util.Objects;
 
 import androidx.core.util.ObjectsCompat;
 
+import com.amplifyframework.core.model.AuthStrategy;
 import com.amplifyframework.core.model.Model;
+import com.amplifyframework.core.model.ModelOperation;
+import com.amplifyframework.core.model.annotations.AuthRule;
+import com.amplifyframework.core.model.annotations.Index;
 import com.amplifyframework.core.model.annotations.ModelConfig;
 import com.amplifyframework.core.model.annotations.ModelField;
 import com.amplifyframework.core.model.query.predicate.QueryField;
 
-import java.util.UUID;
-
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is NOT an auto generated class representing the Referral type in your schema. */
+/** This is an auto generated class representing the Referral type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "Referrals")
+@ModelConfig(pluralName = "Referrals", authRules = {
+  @AuthRule(allow = AuthStrategy.PUBLIC, operations = { ModelOperation.CREATE, ModelOperation.UPDATE, ModelOperation.DELETE, ModelOperation.READ })
+})
 public final class Referral implements Model {
   public static final QueryField ID = field("Referral", "id");
   public static final QueryField OFFER_ID = field("Referral", "offerId");
@@ -25,15 +33,15 @@ public final class Referral implements Model {
   public String getId() {
       return id;
   }
-
+  
   public String getOfferId() {
       return offerId;
   }
-
+  
   public String getReferrers() {
       return referrers;
   }
-
+  
   private Referral(String id, String offerId, String referrers) {
     this.id = id;
     this.offerId = offerId;
@@ -67,9 +75,10 @@ public final class Referral implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("TimeSlot {")
+      .append("Referral {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("clientUserId=" + String.valueOf(getOfferId()))
+      .append("offerId=" + String.valueOf(getOfferId()) + ", ")
+      .append("referrers=" + String.valueOf(getReferrers()))
       .append("}")
       .toString();
   }
@@ -106,8 +115,8 @@ public final class Referral implements Model {
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-            offerId,
-            referrers);
+      offerId,
+      referrers);
   }
   public interface BuildStep {
     Referral build();
@@ -127,8 +136,8 @@ public final class Referral implements Model {
         
         return new Referral(
           id,
-                offerId,
-                referrers);
+          offerId,
+          referrers);
     }
     
     @Override

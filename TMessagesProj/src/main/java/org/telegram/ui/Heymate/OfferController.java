@@ -1,5 +1,7 @@
 package org.telegram.ui.Heymate;
 
+import com.amplifyframework.datastore.generated.model.Offer;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
@@ -10,7 +12,6 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.io.File;
 import java.util.ArrayList;

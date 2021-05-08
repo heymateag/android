@@ -2,11 +2,12 @@ package org.telegram.ui.Heymate;
 
 import android.content.Context;
 
+import com.amplifyframework.datastore.generated.model.Shop;
+
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Heymate.AmplifyModels.Shop;
 
 import java.util.ArrayList;
 import java.util.Arrays;

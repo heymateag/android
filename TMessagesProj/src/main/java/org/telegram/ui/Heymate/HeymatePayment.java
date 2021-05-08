@@ -1,22 +1,19 @@
 package org.telegram.ui.Heymate;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import com.amplifyframework.api.graphql.PaginatedResult;
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.Referral;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
@@ -25,9 +22,6 @@ import org.json.JSONObject;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-import org.telegram.ui.Heymate.AmplifyModels.Referral;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +61,7 @@ public class HeymatePayment {
             return;
         }
 
-        LoadingUtil.onLoadingStarted();
+        LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
         HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
 
@@ -88,7 +82,7 @@ public class HeymatePayment {
     }
 
     private static void initPayment(BaseFragment fragment, String offerId, Referral referral) {
-        LoadingUtil.onLoadingStarted();
+        LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
         HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
 
@@ -304,7 +298,7 @@ public class HeymatePayment {
     }
 
     private static void initPreparedPayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
-        LoadingUtil.onLoadingStarted();
+        LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
         List<String> referrers = new ArrayList<>();
 
@@ -368,14 +362,14 @@ public class HeymatePayment {
         });
     }
 
-    public static void ensureWalletExistence(Runnable runnable) {
+    public static void ensureWalletExistence(Context context, Runnable runnable) {
         Wallet wallet = Wallet.get(ApplicationLoader.applicationContext, TG2HM.getCurrentPhoneNumber());
 
         if (wallet.isCreated()) {
             runnable.run();
         }
         else {
-            LoadingUtil.onLoadingStarted();
+            LoadingUtil.onLoadingStarted(context);
             sObserver.task = () -> {
                 LoadingUtil.onLoadingFinished();
                 runnable.run();

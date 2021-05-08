@@ -4,11 +4,11 @@ import android.net.Uri;
 import android.util.Base64;
 
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.util.ArrayList;
 import java.util.Collections;

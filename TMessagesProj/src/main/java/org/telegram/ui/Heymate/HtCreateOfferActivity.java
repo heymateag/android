@@ -596,7 +596,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
-                HeymatePayment.ensureWalletExistence(this::acquirePromotionPlan);
+                HeymatePayment.ensureWalletExistence(getParentActivity(), this::acquirePromotionPlan);
             }
         });
 
@@ -758,7 +758,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             config.put(OfferUtils.PROMOTION_RATE, promotionPercentage);
         } catch (JSONException e) { }
 
-        LoadingUtil.onLoadingStarted();
+        LoadingUtil.onLoadingStarted(getParentActivity());
 
         wallet.signOffer(rate, config, (successful, signature, exception) -> {
             LoadingUtil.onLoadingFinished();
@@ -791,7 +791,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCreatedAt(currentTime);
                 newOffer.setEditedAt(currentTime);
 
-                LoadingUtil.onLoadingStarted();
+                LoadingUtil.onLoadingStarted(getParentActivity());
 
                 HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, wallet.getAddress(), signature, (success, createdOffer, exception1) -> {
                     LoadingUtil.onLoadingFinished();

@@ -92,6 +92,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.util.Log;
 
@@ -219,7 +220,6 @@ import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewHelper;
 import org.telegram.ui.Components.voip.VoIPHelper;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtChatMessageCell;
 import org.telegram.ui.Heymate.HtSQLite;

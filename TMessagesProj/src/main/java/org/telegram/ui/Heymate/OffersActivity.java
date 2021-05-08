@@ -24,6 +24,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
 import com.amplifyframework.api.graphql.PaginatedResult;
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -38,8 +40,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -116,10 +116,7 @@ public class OffersActivity extends BaseFragment {
         buttonAdd.setTypeface(buttonAdd.getTypeface(), Typeface.BOLD);
         buttonAdd.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme)));
         buttonAdd.setText(Texts.get(Texts.ADD));
-        buttonAdd.setOnClickListener(v -> {
-            presentFragment(new HtCreateOfferActivity());
-            HtAmplify.getInstance(getParentActivity()).createReferral("asda", "asdad", (success, result, exception) -> {});
-        });
+        buttonAdd.setOnClickListener(v -> presentFragment(new HtCreateOfferActivity()));
 
         HtFiltersCell filters = fragmentView.findViewById(works.heymate.beta.R.id.filters);
         filters.setBaseFragment(this);

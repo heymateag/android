@@ -7,8 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
+import com.amplifyframework.datastore.generated.model.Offer;
+
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
 
 import java.io.File;
 import java.util.ArrayList;

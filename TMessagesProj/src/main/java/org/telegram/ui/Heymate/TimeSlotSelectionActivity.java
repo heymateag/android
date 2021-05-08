@@ -6,6 +6,8 @@ import android.widget.FrameLayout;
 
 import androidx.core.content.ContextCompat;
 
+import com.amplifyframework.datastore.generated.model.TimeSlot;
+
 import org.telegram.messenger.AndroidUtilities;
 import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -13,7 +15,6 @@ import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 import org.telegram.ui.Heymate.widget.TimeSlotPicker;
 import org.telegram.ui.Heymate.widget.TimeSlotPickerAdapter;
 

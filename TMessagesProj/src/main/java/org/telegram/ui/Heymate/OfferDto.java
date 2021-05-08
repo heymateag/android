@@ -1,12 +1,12 @@
 package org.telegram.ui.Heymate;
 
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.TimeSlot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.AmplifyModels.Offer;
-import org.telegram.ui.Heymate.AmplifyModels.TimeSlot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
