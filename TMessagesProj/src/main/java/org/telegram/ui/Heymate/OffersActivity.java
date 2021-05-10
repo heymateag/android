@@ -25,9 +25,12 @@ import androidx.core.content.ContextCompat;
 
 import com.amplifyframework.api.graphql.PaginatedResult;
 import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import works.heymate.beta.R;
@@ -116,7 +119,21 @@ public class OffersActivity extends BaseFragment {
         buttonAdd.setTypeface(buttonAdd.getTypeface(), Typeface.BOLD);
         buttonAdd.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme)));
         buttonAdd.setText(Texts.get(Texts.ADD));
-        buttonAdd.setOnClickListener(v -> presentFragment(new HtCreateOfferActivity()));
+        buttonAdd.setOnClickListener(v -> {
+            presentFragment(new HtCreateOfferActivity());
+//            ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(
+//                    String.valueOf(UserConfig.getInstance(getCurrentAccount()).clientUserId),
+//                    Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber()).getAddress(),
+//                    FirebaseInstanceId.getInstance().getToken()
+//            );
+//            JSONArray jReferrers = new JSONArray();
+//            jReferrers.put(referrer.asJSON());
+//            HtAmplify.getInstance(getParentActivity()).createReferral("sadada", jReferrers.toString(), (success, result, exception) -> {
+//                if (success) {
+//                    HtAmplify.getInstance(getParentActivity()).notifyReferralPrizeWon(result);
+//                }
+//            });
+        });
 
         HtFiltersCell filters = fragmentView.findViewById(works.heymate.beta.R.id.filters);
         filters.setBaseFragment(this);

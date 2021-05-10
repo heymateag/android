@@ -12,9 +12,15 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.aws.ApiGraphQLRequestOptions;
+import com.amplifyframework.api.aws.AppSyncGraphQLRequest;
+import com.amplifyframework.api.aws.AppSyncGraphQLRequestFactory;
+import com.amplifyframework.api.graphql.MutationType;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.api.rest.RestOptions;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.amplifyframework.datastore.generated.model.Referral;
@@ -693,6 +699,21 @@ public class HtAmplify {
                 Log.e("HtAmplify", "Failed to create referral.", error);
                 callback.onCallResult(false, null, error);
             });
+        });
+    }
+
+    public void notifyReferralPrizeWon(Referral referral) {
+//        AppSyncGraphQLRequest.Builder builder = AppSyncGraphQLRequest.builder();
+//
+//        builder.operation(MutationType.UPDATE)
+//                .modelClass(Referral.class)
+//                .requestOptions(new ApiGraphQLRequestOptions())
+//                .responseType(String.class)
+//                .variable("input", Referral.class, getMapOfFieldNameAndValues(schema, model))
+        Amplify.API.mutate("notifyReferralPrizeWon", ModelMutation.update(referral), response -> {
+            Log.i("HtAmplify", "success: " + response.getData());
+        }, error -> {
+            Log.i("HtAmplify", "failure: " + error.getMessage());
         });
     }
 

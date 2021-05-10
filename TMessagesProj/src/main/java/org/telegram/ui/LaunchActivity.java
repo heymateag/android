@@ -1198,7 +1198,14 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 return true;
             }
             else if ("heymate".equalsIgnoreCase(intent.getData().getScheme())) {
-                presentFragment(new MyScheduleActivity());
+                String host = intent.getData().getHost();
+
+                if ("myoffers".equals(host)) {
+                    presentFragment(new OffersActivity(this));
+                }
+                else if ("myschedule".equals(host)) {
+                    presentFragment(new MyScheduleActivity());
+                }
                 return true;
             }
             if (HeymatePayment.RAMP_SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {

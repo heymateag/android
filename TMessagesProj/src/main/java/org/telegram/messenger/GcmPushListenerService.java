@@ -53,85 +53,112 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         String body = (String) data.get("pinpoint.notification.body");
 
         if (body != null && body.length() > 4) {
-            String timeSlotId = body.substring(4);
+            String title = (String) data.get("pinpoint.notification.title");
 
-            HeymateEvents.notify(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, timeSlotId);
+            if ("Offer Status Updated.".equals(title)) {
 
-            AndroidUtilities.runOnUIThread(() -> {
-                HtAmplify.getInstance(getApplicationContext()).getTimeSlot(timeSlotId, (success, result, exception) -> {
-                    if (success) {
-                        try {
-                            String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+                String timeSlotId = body;
 
-                            boolean isConsumer = userId.equals(result.getClientUserId());
+                HeymateEvents.notify(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, timeSlotId);
 
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+                AndroidUtilities.runOnUIThread(() -> {
+                    HtAmplify.getInstance(getApplicationContext()).getTimeSlot(timeSlotId, (success, result, exception) -> {
+                        if (success) {
+                            try {
+                                String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
 
-                            HtTimeSlotStatus status = HtTimeSlotStatus.values()[result.getStatus()];
+                                boolean isConsumer = userId.equals(result.getClientUserId());
 
-                            switch (status) {
-                                case BOOKED:
-                                    builder.setContentText("1 Offer accepted.");
-                                    break;
-                                case CANCELLED:
-                                    builder.setContentText("1 Offer canceled.");
-                                    break;
-                                case MARKED_AS_STARTED:
-                                    if (isConsumer) {
-                                        builder.setContentText("1 Offer is marked as started.");
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+
+                                HtTimeSlotStatus status = HtTimeSlotStatus.values()[result.getStatus()];
+
+                                switch (status) {
+                                    case BOOKED:
+                                        builder.setContentText("1 Offer accepted.");
                                         break;
-                                    }
-                                    else {
-                                        return;
-                                    }
-                                case STARTED:
-                                    if (isConsumer) {
-                                        return;
-                                    }
-                                    else {
-                                        builder.setContentText("1 Offer officially started.");
+                                    case CANCELLED:
+                                        builder.setContentText("1 Offer canceled.");
                                         break;
-                                    }
-                                case MARKED_AS_FINISHED:
-                                    if (isConsumer) {
-                                        builder.setContentText("1 Offer is marked as finished.");
-                                    }
-                                    else {
+                                    case MARKED_AS_STARTED:
+                                        if (isConsumer) {
+                                            builder.setContentText("1 Offer is marked as started.");
+                                            break;
+                                        }
+                                        else {
+                                            return;
+                                        }
+                                    case STARTED:
+                                        if (isConsumer) {
+                                            return;
+                                        }
+                                        else {
+                                            builder.setContentText("1 Offer officially started.");
+                                            break;
+                                        }
+                                    case MARKED_AS_FINISHED:
+                                        if (isConsumer) {
+                                            builder.setContentText("1 Offer is marked as finished.");
+                                        }
+                                        else {
+                                            return;
+                                        }
+                                    case FINISHED:
+                                        if (isConsumer) {
+                                            return;
+                                        }
+                                        else {
+                                            builder.setContentText("1 Offer officially finished.");
+                                            break;
+                                        }
+                                    default:
                                         return;
-                                    }
-                                case FINISHED:
-                                    if (isConsumer) {
-                                        return;
-                                    }
-                                    else {
-                                        builder.setContentText("1 Offer officially finished.");
-                                        break;
-                                    }
-                                default:
-                                    return;
-                            }
+                                }
 
-                            builder.setContentTitle("Heymate Offers");
-                            builder.setAutoCancel(true);
-                            builder.setColor(ContextCompat.getColor(ApplicationLoader.applicationContext, works.heymate.beta.R.color.ht_theme));
-                            builder.setCategory(NotificationCompat.CATEGORY_EVENT);
-                            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-                            builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+                                builder.setContentTitle("Heymate Offers");
+                                builder.setAutoCancel(true);
+                                builder.setColor(ContextCompat.getColor(ApplicationLoader.applicationContext, works.heymate.beta.R.color.ht_theme));
+                                builder.setCategory(NotificationCompat.CATEGORY_EVENT);
+                                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+                                builder.setDefaults(NotificationCompat.DEFAULT_ALL);
 
-                            Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
-                            intent.setData(Uri.parse("heymate://myschedule/"));
-                            builder.setContentIntent(PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+                                Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+                                intent.setData(Uri.parse("heymate://myschedule/"));
+                                builder.setContentIntent(PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-                            if (Build.VERSION.SDK_INT >= 26) {
-                                NotificationsController.getInstance(UserConfig.selectedAccount).ensureGroupsCreated();
-                                builder.setChannelId("other" + UserConfig.selectedAccount);
-                            }
+                                if (Build.VERSION.SDK_INT >= 26) {
+                                    NotificationsController.getInstance(UserConfig.selectedAccount).ensureGroupsCreated();
+                                    builder.setChannelId("other" + UserConfig.selectedAccount);
+                                }
 
-                            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(new Random().nextInt(213), builder.build());
-                        } catch (Throwable t) { }
-                    }
+                                NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(new Random().nextInt(213), builder.build());
+                            } catch (Throwable t) { }
+                        }
+                    });
                 });
-            });
+            }
+            else if ("ReferralPrizeWon".equals(title)) {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+
+                builder.setContentTitle("Heymate Referrers");
+                builder.setContentText("Congratulations! You have won a referral prize.");
+                builder.setAutoCancel(true);
+                builder.setColor(ContextCompat.getColor(ApplicationLoader.applicationContext, works.heymate.beta.R.color.ht_theme));
+                builder.setCategory(NotificationCompat.CATEGORY_EVENT);
+                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+                builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+
+                Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
+                intent.setData(Uri.parse("heymate://myoffers/"));
+                builder.setContentIntent(PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                if (Build.VERSION.SDK_INT >= 26) {
+                    NotificationsController.getInstance(UserConfig.selectedAccount).ensureGroupsCreated();
+                    builder.setChannelId("other" + UserConfig.selectedAccount);
+                }
+
+                NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(new Random().nextInt(213), builder.build());
+            }
         }
     }
 
@@ -140,7 +167,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
         String from = message.getFrom();
         final Map data = message.getData();
 
-        if (data.containsKey("pinpoint.notification.title") && "Offer Status Updated.".equals(data.get("pinpoint.notification.title"))) {
+        if (data.containsKey("pinpoint.notification.title")) {
             handleHeymateNotification(data);
             return;
         }
