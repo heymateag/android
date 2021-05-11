@@ -195,7 +195,8 @@ public class CeloOffer {
         config.add(delayTime);
         config.add(delayPercent);
         config.add(BigInteger.valueOf(4)); // Linear config
-        config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
+//        config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
+        config.add(BigInteger.ZERO);
 
         return config;
     }

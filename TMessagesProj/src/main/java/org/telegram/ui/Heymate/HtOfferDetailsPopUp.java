@@ -3,6 +3,7 @@ package org.telegram.ui.Heymate;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -19,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.amplifyframework.datastore.generated.model.Offer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +37,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
 
 public class HtOfferDetailsPopUp extends AlertDialog.Builder {
@@ -41,12 +46,16 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     public ImageView closeImage;
     private BaseFragment parent;
 
-    public HtOfferDetailsPopUp(Context context, BaseFragment parent, int progressStyle, String offerUUID) {
+    private Offer offer;
+    private OfferUtils.PhraseInfo phraseInfo;
+
+    public HtOfferDetailsPopUp(Context context, BaseFragment parent, int progressStyle, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
         super(context, progressStyle);
         AlertDialog.Builder builder = this;
         this.parent = parent;
 
-        OfferDto dto = HtSQLite.getInstance().getOffer(offerUUID);
+        this.offer = offer;
+        this.phraseInfo = phraseInfo;
 
         ScrollView scrollView = new ScrollView(context);
         RelativeLayout holderLayout = new RelativeLayout(context);
@@ -74,7 +83,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         titleText.setId(idCounter++);
         titleText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleText.setTextSize(16);
-        titleText.setText(dto.getTitle());
+        titleText.setText(offer.getTitle());
         titleText.setTypeface(titleText.getTypeface(), Typeface.BOLD);
         RelativeLayout.LayoutParams titleTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         titleTextLayoutParams.addRule(RelativeLayout.BELOW, closeImage.getId());
@@ -86,7 +95,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         categoryText.setId(idCounter++);
         categoryText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
         categoryText.setTextSize(14);
-        categoryText.setText(dto.getCategory() + " - " + dto.getSubCategory());
+        categoryText.setText(offer.getCategory() + " - " + offer.getSubCategory());
         RelativeLayout.LayoutParams categoryTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         categoryTextLayoutParams.addRule(RelativeLayout.BELOW, titleText.getId());
         categoryTextLayoutParams.addRule(RelativeLayout.RIGHT_OF, statusLayout.getId());
@@ -106,7 +115,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         BackupImageView offerImage = new BackupImageView(context);
         offerImage.setId(idCounter++);
-        Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offerUUID);
+        Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offer.getId());
         if(imageBitmap == null){
             offerImage.setImageDrawable(context.getResources().getDrawable(works.heymate.beta.R.drawable.np));
         } else {
@@ -122,7 +131,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         descriptionText.setId(idCounter++);
         descriptionText.setTextSize(15);
         descriptionText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        descriptionText.setText(dto.getDescription());
+        descriptionText.setText(offer.getDescription());
         RelativeLayout.LayoutParams descriptionTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         descriptionTextLayoutParams.addRule(RelativeLayout.BELOW, offerImage.getId());
         descriptionTextLayoutParams.setMargins(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
@@ -140,7 +149,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         TextView addressText = new TextView(context);
         addressText.setId(idCounter++);
-        addressText.setText(dto.getLocation());
+        addressText.setText(offer.getLocationData());
         addressText.setTextSize(13);
         addressText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         RelativeLayout.LayoutParams addressTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -161,7 +170,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         TextView expiryText = new TextView(context);
         expiryText.setId(idCounter++);
-        expiryText.setText(dto.getTime());
+        expiryText.setText(offer.getExpiry().format());
         expiryText.setTextSize(14);
         expiryText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         RelativeLayout.LayoutParams expiryTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -182,7 +191,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         TextView priceText = new TextView(context);
         priceText.setId(idCounter++);
-        priceText.setText(dto.getRate() + dto.getCurrency() + " " + dto.getRateType());
+        priceText.setText(offer.getRate() + offer.getCurrency() + " " + offer.getRateType());
         priceText.setTextSize(14);
         priceText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         RelativeLayout.LayoutParams priceTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -205,7 +214,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
             }
         }
         // TODO Make a clean text for offer details!
-        String message = OfferUtils.serializeBeautiful(dto.asOffer(), null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        String message = OfferUtils.serializeBeautiful(offer, null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         TextView delayText = new TextView(context);
         delayText.setId(idCounter++);
@@ -233,11 +242,11 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
-        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offerUUID, null)); // TODO Referral ID REQUIRED
-        RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(150), AndroidUtilities.dp(50));
-        buyButtonLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offer.getId(), phraseInfo == null ? null : phraseInfo.referralId));
+        RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
+        buyButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());
-        buyButtonLayoutParams.setMargins(0, AndroidUtilities.dp(20), 0, 0);
+        buyButtonLayoutParams.setMargins(0, AndroidUtilities.dp(20), AndroidUtilities.dp(20), 0);
 
         TextView buyText = new TextView(context);
         buyText.setText(LocaleController.getString("HtBuy", works.heymate.beta.R.string.HtBuy));
@@ -247,6 +256,26 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.addView(buyText);
 
         mainLayout.addView(buyButtonLayout, buyButtonLayoutParams);
+
+        LinearLayout promoteButtonLayout = new LinearLayout(context);
+        promoteButtonLayout.setId(idCounter++);
+        promoteButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        promoteButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
+        promoteButtonLayout.setGravity(Gravity.CENTER);
+        promoteButtonLayout.setOnClickListener(v -> HeymatePayment.ensureWalletExistence(context, this::promote));
+        RelativeLayout.LayoutParams promoteButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
+        promoteButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        promoteButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());
+        promoteButtonLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(20), 0, 0);
+
+        TextView promoteText = new TextView(context);
+        promoteText.setText(LocaleController.getString("HtPromote", R.string.HtPromote));
+        promoteText.setTextSize(17);
+        promoteText.setTextColor(Theme.getColor(Theme.key_wallet_whiteText));
+        promoteText.setTypeface(buyText.getTypeface(), Typeface.BOLD);
+        promoteButtonLayout.addView(promoteText);
+
+        mainLayout.addView(promoteButtonLayout, promoteButtonLayoutParams);
 
         RelativeLayout termsLayout = new RelativeLayout(context);
         termsLayout.setVisibility(View.GONE);
@@ -319,7 +348,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         termsText.setId(idCounter++);
         termsText.setTextSize(16);
         termsText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        termsText.setText(dto.getTerms());
+        termsText.setText(offer.getTerms());
         RelativeLayout.LayoutParams termsTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         termsTextLayoutParams.addRule(RelativeLayout.BELOW, heymateTermsText.getId());
         termsTextLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(20), AndroidUtilities.dp(10));
@@ -363,4 +392,52 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         builder.setView(scrollView);
     }
+
+    private void promote() {
+        if (offer == null) {
+            return;
+        }
+
+        if (phraseInfo == null || offer.getUserId() != null && offer.getUserId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId))) {
+            doPromote(null);
+            return;
+        }
+
+        LoadingUtil.onLoadingStarted(getContext());
+
+        ReferralUtils.getReferralId(phraseInfo, (success, referralId, exception) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (!success) {
+                // TODO Organize error messages
+                Toast.makeText(getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            doPromote(referralId);
+        });
+    }
+
+    private void doPromote(String referralId) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+
+        TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
+        String name;
+
+        if (user.username != null) {
+            name = "@" + user.username;
+        }
+        else {
+            name = user.first_name;
+
+            if (!TextUtils.isEmpty(user.last_name)) {
+                name = name + " " + user.last_name;
+            }
+        }
+        String message = OfferUtils.serializeBeautiful(offer, referralId, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        share.putExtra(Intent.EXTRA_TEXT, message);
+        getContext().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
+    }
+
 }

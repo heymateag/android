@@ -819,7 +819,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         }
 
         private void showDetails() {
-            HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), MyScheduleActivity.this,  0, mOffer.getId());
+            HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), MyScheduleActivity.this,  0, mOffer, null);
             AlertDialog dialog = detailsPopUp.create();
             detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
                 @Override

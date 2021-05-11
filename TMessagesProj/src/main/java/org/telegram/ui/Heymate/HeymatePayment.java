@@ -199,6 +199,7 @@ public class HeymatePayment {
         Runnable next = BuildConfig.DEBUG ?
                 () -> alfajoresTopUp(fragment, offer, referral, timeSlot) :
                 () -> checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
+//        Runnable next = () -> checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
 
         boolean needsSecuritySettings = !Security.ensureSecurity(
                 (FragmentActivity) fragment.getParentActivity(),

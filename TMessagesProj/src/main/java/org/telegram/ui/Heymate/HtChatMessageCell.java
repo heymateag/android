@@ -557,7 +557,7 @@ public class HtChatMessageCell extends FrameLayout {
         viewLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, parent,  0, offerUUID);
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, parent,  0, offer, phraseInfo);
                 AlertDialog dialog = detailsPopUp.create();
                 detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
                     @Override

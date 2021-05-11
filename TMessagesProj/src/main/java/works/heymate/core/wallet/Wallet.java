@@ -35,6 +35,8 @@ public class Wallet {
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
     private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? OFFERS_ON_ALFAJORES : OFFERS_ON_MAINNET;
+//    private static final CeloContext CELO_CONTEXT = CeloContext.MAIN_NET;
+//    private static final String OFFER_ADDRESS = OFFERS_ON_MAINNET;
 
     private static final String PREFERENCES = "heymate_celo_1"; // TODO clear preferences name
     private static final String KEY_PUBLIC_KEY = "public_key";
