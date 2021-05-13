@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.amplifyframework.datastore.generated.model.Referral;
+import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 
@@ -147,29 +148,33 @@ public class HeymatePayment {
         Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
 
         if (!wallet.isCreated()) {
-            fragment.presentFragment(new WalletActivity(() -> initPayment(fragment, offer, referral, timeSlot)));
+            LoadingUtil.onLoadingStarted(fragment.getParentActivity());
+            ensureWalletExistence(fragment.getParentActivity(), () -> {
+                LoadingUtil.onLoadingFinished();
+                initPayment(fragment, offer, referral, timeSlot);
+            });
             return;
         }
 
-        VerifiedStatus verifiedStatus = wallet.getVerifiedStatus();
-
-        if (verifiedStatus == null) {
-            if (getStateTries == 0) {
-                getStateTries = 3;
-
-                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            getStateTries--;
-
-            wallet.updateVerifiedStatus();
-
-            sObserver.task = () -> initPayment(fragment, offer, referral, timeSlot);
-            HeymateEvents.register(HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED, sObserver);
-            return;
-        }
-
+//        VerifiedStatus verifiedStatus = wallet.getVerifiedStatus();
+//
+//        if (verifiedStatus == null) {
+//            if (getStateTries == 0) {
+//                getStateTries = 3;
+//
+//                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            getStateTries--;
+//
+//            wallet.updateVerifiedStatus();
+//
+//            sObserver.task = () -> initPayment(fragment, offer, referral, timeSlot);
+//            HeymateEvents.register(HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED, sObserver);
+//            return;
+//        }
+//
 //        if (!verifiedStatus.verified) { // TODO uncomment
 //            fragment.presentFragment(new AttestationActivity(() -> initPayment(fragment, offer, timeSlot)));
 //            return;
@@ -302,18 +307,20 @@ public class HeymatePayment {
             }
         }
 
-        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot, referral, (success, reservation, exception) -> {
+        Reservation reservation = HtAmplify.getInstance(fragment.getParentActivity()).createReservation(timeSlot, referral);
+
+        Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
+
+        wallet.createAcceptedOffer(offer, reservation, referrers, (success1, errorCause) -> {
             LoadingUtil.onLoadingFinished();
 
-            if (success) {
+            if (success1) {
                 LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
-                Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
-
-                wallet.createAcceptedOffer(offer, reservation, referrers, (success1, errorCause) -> {
+                HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(reservation, timeSlot, (success, result, exception) -> {
                     LoadingUtil.onLoadingFinished();
 
-                    if (success1) {
+                    if (success) {
                         new AlertDialog.Builder(fragment.getParentActivity()) // TODO Text resource
                                 .setTitle("Offer accepted")
                                 .setMessage("You can check the state of your offer in My Schedule.")
@@ -322,31 +329,31 @@ public class HeymatePayment {
                                 .show();
                     }
                     else {
-                        Log.e(TAG, "Failed to create offer on blockchain", errorCause);
-                        LogToGroup.log("Failed to create offer on blockchain", errorCause, fragment);
-
-                        if (errorCause instanceof CeloException) {
-                            CeloError coreError = errorCause.getMainCause().getError();
-
-                            if (coreError == CeloError.INSUFFICIENT_BALANCE) {
-                                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
-                            }
-                            else if (coreError == CeloError.NETWORK_ERROR) {
-                                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
-                            }
-                            else {
-                                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                        else {
-                            Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                        }
+                        Log.e("TAG", "Failed to book time slot on the back-end.", exception);
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
                     }
                 });
             }
             else {
-                Log.e("TAG", "Failed to book time slot on the back-end.", exception);
-                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Failed to create offer on blockchain", errorCause);
+                LogToGroup.log("Failed to create offer on blockchain", errorCause, fragment);
+
+                if (errorCause instanceof CeloException) {
+                    CeloError coreError = errorCause.getMainCause().getError();
+
+                    if (coreError == CeloError.INSUFFICIENT_BALANCE) {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
+                    }
+                    else if (coreError == CeloError.NETWORK_ERROR) {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

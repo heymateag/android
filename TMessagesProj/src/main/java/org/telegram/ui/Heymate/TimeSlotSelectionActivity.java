@@ -3,6 +3,7 @@ package org.telegram.ui.Heymate;
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -54,7 +55,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
             long start = timeSlot.getStartTime() * 1000L;
             long end = timeSlot.getEndTime() * 1000L;
             int duration = (int) ((end - start) / 1000L / 60L);
-            boolean reserved = timeSlot.getRemainingReservations() == 0;
+            boolean reserved = timeSlot.getRemainingReservations() <= 0;
 
             TimeSlotPickerAdapter.TimeSlot pickerTimeSlot = new TimeSlotPickerAdapter.TimeSlot(start, duration, reserved);
 
@@ -139,6 +140,11 @@ public class TimeSlotSelectionActivity extends BaseFragment {
         });
 
         mTimeSlotPicker.setOnTimeSlotSelectedListener(timeSlot -> {
+            if (timeSlot.reserved) {
+                Toast.makeText(getParentActivity(), "This time slot is fully reserved.", Toast.LENGTH_SHORT).show(); // TODO Put Texts resource.
+                return;
+            }
+
             mResultReceiver.onResult(mTimeSlotsMap.get(timeSlot));
             finishFragment();
         });

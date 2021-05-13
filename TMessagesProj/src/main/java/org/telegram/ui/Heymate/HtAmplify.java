@@ -317,13 +317,11 @@ public class HtAmplify {
                 });
     }
 
-    public void bookTimeSlot(TimeSlot timeSlot, Referral referral, APICallback<Reservation> callback) {
-        Log.i("HtAmplify", "Booking a time slot.");
-
+    public Reservation createReservation(TimeSlot timeSlot, Referral referral) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
         String fcmToken = FirebaseInstanceId.getInstance().getToken();
 
-        Reservation reservation = Reservation.builder()
+        return Reservation.builder()
                 .consumerId(userId)
                 .consumerFcmToken(fcmToken)
                 .offerId(timeSlot.getOfferId())
@@ -336,6 +334,10 @@ public class HtAmplify {
                 .serviceProviderFcmToken(timeSlot.getUserFcmToken())
                 .status(HtTimeSlotStatus.BOOKED.name())
                 .build();
+    }
+
+    public void bookTimeSlot(Reservation reservation, TimeSlot timeSlot, APICallback<Reservation> callback) {
+        Log.i("HtAmplify", "Booking a time slot.");
 
         Amplify.API.mutate(ModelMutation.create(reservation), result -> {
             if (result.hasData()) {
