@@ -22,6 +22,7 @@ public class OfferDto {
     private String rateType;
     private String currency;
     private String location;
+    private int maximumReservations;
     private String time;
     private String category;
     private String subCategory;
@@ -67,6 +68,7 @@ public class OfferDto {
                 .locationData(location)
                 .latitude(String.valueOf(latitude))
                 .longitude(String.valueOf(longitude))
+                .maximumReservations(maximumReservations)
                 .termsConfig(configText)
                 .terms(terms)
                 .expiry(new Temporal.Date(new Date(time))) // Remove At Last
@@ -230,6 +232,14 @@ public class OfferDto {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public int getMaximumReservations() {
+        return maximumReservations;
+    }
+
+    public void setMaximumReservations(int maximumReservations) {
+        this.maximumReservations = maximumReservations;
     }
 
     public String getTime() {

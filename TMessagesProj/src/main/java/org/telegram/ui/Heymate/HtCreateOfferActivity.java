@@ -44,6 +44,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.widget.LocationInputItem;
+import org.telegram.ui.Heymate.widget.ParticipantsInputItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     public EditTextBoldCursor descriptionTextField;
     private HtCategoryInputCell categoryInputCell;
     private LocationInputItem locationInputCell;
+    private ParticipantsInputItem participantsInputCell;
     private HtScheduleInputCell scheduleInputCell;
     private HtPriceInputCell priceInputCell;
     private ArrayList<HtPriceInputCell> pricesInputCell = new ArrayList<>();
@@ -329,6 +331,10 @@ public class HtCreateOfferActivity extends BaseFragment {
 
         locationInputCell = new LocationInputItem(context);
         mainLayout.addView(locationInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        participantsInputCell = new ParticipantsInputItem(context);
+        mainLayout.addView(participantsInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
         scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", works.heymate.beta.R.string.HtSchedule), scheduleArgs, works.heymate.beta.R.drawable.watch_later_24_px_1, canEdit, this);
         mainLayout.addView(scheduleInputCell);
@@ -559,40 +565,45 @@ public class HtCreateOfferActivity extends BaseFragment {
             titleTextField.setHighlightColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
             priceInputCell.setError(false, 1);
             locationInputCell.setError(false);
+            participantsInputCell.setError(false);
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
 
             UndoView undoView = new UndoView(context, this);
             undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
             alertLayout.removeAllViews();
-            String errors = "";
+            StringBuilder errors = new StringBuilder();
             alertLayout.addView(undoView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 15));
             if (titleTextField.getText().toString().isEmpty()) {
                 titleTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors += LocaleController.getString("HtTitleEmpty", works.heymate.beta.R.string.HtTitleEmpty);
+                errors.append(LocaleController.getString("HtTitleEmpty", works.heymate.beta.R.string.HtTitleEmpty)).append('\n');
             }
             if (descriptionTextField.getText().toString().isEmpty()) {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
-                errors += LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty);
+                errors.append(LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty)).append('\n');
             }
             if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
                 priceInputCell.setError(true, 1);
-                errors += LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty);
+                errors.append(LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty)).append('\n');
             }
             if (locationInputCell.getLocationInfo() == null) {
                 locationInputCell.setError(true);
-                errors += LocaleController.getString("HtLocationEmpty", works.heymate.beta.R.string.HtLocationEmpty);
+                errors.append(LocaleController.getString("HtLocationEmpty", works.heymate.beta.R.string.HtLocationEmpty)).append('\n');
+            }
+            if (participantsInputCell.getMaximumParticipants() < 0) {
+                participantsInputCell.setError(true);
+                errors.append(Texts.get(Texts.PARTICIPANTS_INPUT_EMPTY)).append('\n');
             }
             if (categoryInputCell.getRes(ARGUMENTS_CATEGORY) == null) {
                 categoryInputCell.setError(true, 0);
-                errors += LocaleController.getString("HtCategoryEmpty", works.heymate.beta.R.string.HtCategoryEmpty);
+                errors.append(LocaleController.getString("HtCategoryEmpty", works.heymate.beta.R.string.HtCategoryEmpty)).append('\n');
             }
             if (categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY) == null) {
                 categoryInputCell.setError(true, 1);
-                errors += LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty);
+                errors.append(LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty)).append('\n');
             }
-            if (!errors.isEmpty()) {
-                undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors, null, () -> {
+            if (errors.length() > 0) {
+                undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors.toString(), null, () -> {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
@@ -615,6 +626,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.setEnabled(true);
         saveLayout.setOnClickListener(v -> {
             LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+            int maximumParticipants = participantsInputCell.getMaximumParticipants();
             JSONObject config = paymentInputCell.getRes();
             String title = titleTextField.getText().toString();
             String description = descriptionTextField.getText().toString();
@@ -629,6 +641,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
             OfferInfo offerInfo = new OfferInfo();
             offerInfo.setLocationInfo(locationInfo);
+            offerInfo.setMaximumParticipants(maximumParticipants);
             offerInfo.setConfig(config);
             offerInfo.setTitle(title);
             offerInfo.setDescription(description);
@@ -663,6 +676,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                         if (savedOfferInfo.getLocationInfo() != null) {
                             locationInputCell.setLocationInfo(savedOfferInfo.getLocationInfo());
                         }
+
+                        participantsInputCell.setMaximumParticipants(savedOfferInfo.getMaximumParticipants());
 
                         if (savedOfferInfo.getConfig() != null) {
                             setPaymentConfig(savedOfferInfo.getConfig().toString());
@@ -714,37 +729,19 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     private void acquirePromotionPlan() {
-//        EditText editInput = new EditText(getParentActivity());
-//        editInput.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
-//        editInput.setHint("Percentage");
-        NumberPicker numberPicker = new NumberPicker(getParentActivity());
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(100);
-        numberPicker.setValue(20);
+        new PromotionDialog(getParentActivity(), new PromotionDialog.OnPromotionDecisionCallback() {
 
-        new AlertDialog.Builder(getParentActivity())
-                .setTitle("Promote")
-                .setMessage("You can set a promotion plan or just share this offer with anyone you want.")
-                .setPositiveButton("Promote", (dialog, which) -> {
-                    dialog.dismiss();
-                    new android.app.AlertDialog.Builder(getParentActivity())
-                            .setTitle("Promotion Plan")
-                            .setMessage("Set the percentage of the total offer price to be rewarded to the promoters of your offer.")
-                            .setView(numberPicker)
-                            .setPositiveButton("Promote", (dialog1, which1) -> {
-                                createOffer(numberPicker.getValue());
-                                dialog1.dismiss();
-                            })
-                            .setNegativeButton("Cancel", (dialog1, which1) -> {
-                                dialog1.cancel();
-                            })
-                            .show();
-                })
-                .setNegativeButton("Share", (dialog, which) -> {
-                    createOffer(0);
-                    dialog.dismiss();
-                })
-                .show();
+            @Override
+            public void onPromote(int percentage) {
+                createOffer(percentage);
+            }
+
+            @Override
+            public void onShare() {
+                createOffer(0);
+            }
+
+        }).show();
     }
 
     private void createOffer(int promotionPercentage) {
@@ -766,6 +763,8 @@ public class HtCreateOfferActivity extends BaseFragment {
             if (successful) {
                 LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
 
+                int maximumParticipants = participantsInputCell.getMaximumParticipants();
+
                 OfferDto newOffer = new OfferDto();
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
@@ -775,6 +774,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
                 newOffer.setLocation(locationInfo.address);
+                newOffer.setMaximumReservations(maximumParticipants);
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
                 newOffer.setRate(rate);
@@ -873,6 +873,10 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setLocation(String address, double latitude, double longitude) {
         locationInputCell.setLocationInfo(address, latitude, longitude);
+    }
+
+    public void setMaximumReservations(int maximumReservations) {
+        participantsInputCell.setMaximumParticipants(maximumReservations);
     }
 
     public void setCanEdit(boolean canEdit) {

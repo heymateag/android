@@ -12,6 +12,7 @@ import java.util.List;
 public class OfferInfo {
 
     private static final String LOCATION_INFO = "location_info";
+    private static final String MAXIMUM_PARTICIPANTS = "maximum_participants";
     private static final String CONFIG = "config";
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
@@ -25,6 +26,7 @@ public class OfferInfo {
     private static final String DATE_SLOTS = "date_slots";
 
     private LocationInputItem.LocationInfo mLocationInfo;
+    private int mMaximumParticipants = 1;
     private JSONObject mConfig;
     private String mTitle;
     private String mDescription;
@@ -45,6 +47,9 @@ public class OfferInfo {
         try {
             if (hasProperty(json, LOCATION_INFO)) {
                 mLocationInfo = new LocationInputItem.LocationInfo(json.getJSONObject(LOCATION_INFO));
+            }
+            if (hasProperty(json, MAXIMUM_PARTICIPANTS)) {
+                mMaximumParticipants = json.getInt(MAXIMUM_PARTICIPANTS);
             }
             if (hasProperty(json, CONFIG)) {
                 mConfig = json.getJSONObject(CONFIG);
@@ -90,6 +95,10 @@ public class OfferInfo {
 
     public LocationInputItem.LocationInfo getLocationInfo() {
         return mLocationInfo;
+    }
+
+    public int getMaximumParticipants() {
+        return mMaximumParticipants;
     }
 
     public JSONObject getConfig() {
@@ -138,6 +147,10 @@ public class OfferInfo {
 
     public void setLocationInfo(LocationInputItem.LocationInfo locationInfo) {
         mLocationInfo = locationInfo;
+    }
+
+    public void setMaximumParticipants(int participants) {
+        mMaximumParticipants = participants;
     }
 
     public void setConfig(JSONObject config) {
@@ -189,6 +202,7 @@ public class OfferInfo {
 
         try {
             json.put(LOCATION_INFO, mLocationInfo == null ? JSONObject.NULL : mLocationInfo.asJSON());
+            json.put(MAXIMUM_PARTICIPANTS, mMaximumParticipants);
             json.put(CONFIG, mConfig);
             json.put(TITLE, mTitle);
             json.put(DESCRIPTION, mDescription);

@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.widget;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -16,12 +16,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import works.heymate.beta.R;
+
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ExpandableItem extends FrameLayout {
 
     private static final long EXPAND_DURATION = 300;
+
+    protected static final int TITLE_LEFT_MARGIN = 92;
+    protected static final int CONTENT_HORIZONTAL_MARGIN = 20;
+    protected static final int HEADER_LEFT_MARGIN = 24;
+    protected static final int HEADER_RIGHT_MARGIN = 30;
 
     private final ImageView mImageIcon;
     private final TextView mTextTitle;
@@ -36,22 +43,23 @@ public class ExpandableItem extends FrameLayout {
 
         mImageIcon = new ImageView(context);
         mImageIcon.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.SRC_IN);
-        addView(mImageIcon, LayoutHelper.createFrame(24, 24, Gravity.LEFT | Gravity.TOP, 24, 16, 0, 16));
+        addView(mImageIcon, LayoutHelper.createFrame(24, 24, Gravity.LEFT | Gravity.TOP, HEADER_LEFT_MARGIN, 16, 0, 16));
 
         mTextTitle = new TextView(context);
         mTextTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         mTextTitle.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        addView(mTextTitle, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 92, 16, 0, 16));
+        addView(mTextTitle, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, TITLE_LEFT_MARGIN, 16, 0, 16));
 
         mButtonExpand = new ImageView(context);
         mButtonExpand.setImageResource(works.heymate.beta.R.drawable.arrow_more);
         mButtonExpand.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.SRC_IN);
-        addView(mButtonExpand, LayoutHelper.createFrame(16, 16, Gravity.RIGHT | Gravity.TOP, 0, 16, 30, 16));
+        addView(mButtonExpand, LayoutHelper.createFrame(16, 16, Gravity.RIGHT | Gravity.TOP, 0, 16, HEADER_RIGHT_MARGIN, 16));
 
         View clickableArea = new View(context);
         addView(clickableArea, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP));
 
         mContent = createContent();
+        mContent.setPadding(0, 0, 0, AndroidUtilities.dp(18));
         addView(mContent, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, 0, 48, 0, 0));
 
         View divider = new View(context);

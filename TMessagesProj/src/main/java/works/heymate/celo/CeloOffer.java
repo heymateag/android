@@ -1,6 +1,6 @@
 package works.heymate.celo;
 
-import com.amplifyframework.datastore.generated.model.TimeSlot;
+import com.amplifyframework.datastore.generated.model.Reservation;
 
 import org.celo.contractkit.ContractKit;
 import org.json.JSONException;
@@ -63,8 +63,8 @@ public class CeloOffer {
     serviceProviderSignature: string
      */
     public void create(com.amplifyframework.datastore.generated.model.Offer offer, String consumerAddress,
-                       TimeSlot timeSlot, List<String> referrers) throws CeloException, JSONException {
-        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+                       Reservation reservation, List<String> referrers) throws CeloException, JSONException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
         new SecureRandom().nextBytes(tradeId);
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
@@ -95,7 +95,7 @@ public class CeloOffer {
                     amount,
                     BigInteger.ONE, // fee
                     BigInteger.valueOf(offer.getExpiry().toDate().getTime() / 1000),
-                    BigInteger.valueOf(timeSlot.getStartTime()),
+                    BigInteger.valueOf(reservation.getStartTime()),
                     initialDeposit,
                     userAddresses,
                     config,
@@ -113,8 +113,8 @@ public class CeloOffer {
         }
     }
 
-    public void startService(com.amplifyframework.datastore.generated.model.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
-        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+    public void startService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 
@@ -130,8 +130,8 @@ public class CeloOffer {
         }
     }
 
-    public void finishService(com.amplifyframework.datastore.generated.model.Offer offer, TimeSlot timeSlot, String consumerAddress) throws CeloException {
-        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+    public void finishService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 
@@ -147,8 +147,8 @@ public class CeloOffer {
         }
     }
 
-    public void cancelService(com.amplifyframework.datastore.generated.model.Offer offer, TimeSlot timeSlot, String consumerAddress, boolean consumerCancelled) throws CeloException {
-        byte[] tradeId = Numeric.hexStringToByteArray(timeSlot.getId().replaceAll("-", ""));
+    public void cancelService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress, boolean consumerCancelled) throws CeloException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 

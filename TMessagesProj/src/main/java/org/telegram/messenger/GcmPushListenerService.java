@@ -8,7 +8,6 @@
 
 package org.telegram.messenger;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.core.app.NotificationCompat;
@@ -57,21 +55,21 @@ public class GcmPushListenerService extends FirebaseMessagingService {
 
             if ("Offer Status Updated.".equals(title)) {
 
-                String timeSlotId = body;
+                String reservationId = body;
 
-                HeymateEvents.notify(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, timeSlotId);
+                HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservationId);
 
                 AndroidUtilities.runOnUIThread(() -> {
-                    HtAmplify.getInstance(getApplicationContext()).getTimeSlot(timeSlotId, (success, result, exception) -> {
-                        if (success) {
+                    HtAmplify.getInstance(getApplicationContext()).getReservation(reservationId, (success, result, exception) -> {
+                        if (success && result != null) {
                             try {
                                 String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
 
-                                boolean isConsumer = userId.equals(result.getClientUserId());
+                                boolean isConsumer = userId.equals(result.getConsumerId());
 
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
 
-                                HtTimeSlotStatus status = HtTimeSlotStatus.values()[result.getStatus()];
+                                HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(result.getStatus());
 
                                 switch (status) {
                                     case BOOKED:

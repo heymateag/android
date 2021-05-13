@@ -104,8 +104,6 @@ public class HeymatePayment {
     }
 
     private static void initPayment(BaseFragment fragment, Offer offer, Referral referral) {
-        ArrayList<TimeSlot> timeSlots = HtAmplify.getInstance(fragment.getParentActivity()).getAvailableTimeSlots(offer.getId());
-
         JSONObject availabilitySlot;
 
         try {
@@ -116,50 +114,31 @@ public class HeymatePayment {
             return;
         }
 
-        if (timeSlots == null || timeSlots.isEmpty()) {
-            try {
-                JSONArray times = availabilitySlot.getJSONArray("times");
-
-                if (timeSlots == null) {
-                    timeSlots = new ArrayList<>();
-                }
-
-                for (int i = 0; i < times.length(); i++) {
-                    String timeSlotStr = times.getString(i);
-                    int index = timeSlotStr.indexOf(" - ");
-
-                    if (index < 0) {
-                        continue;
-                    }
-
-                    timeSlots.add(new TimeSlot.Builder()
-                            .startTime((int) (Long.parseLong(timeSlotStr.substring(0, index)) / 1000))
-                            .endTime((int) (Long.parseLong(timeSlotStr.substring(index + 3)) / 1000))
-//                            .id("NO ID")
-                            .status(HtTimeSlotStatus.AVAILABLE.ordinal())
-                            .build()
-                    );
-                }
-            } catch (Throwable t) { }
-        }
-
-        if (timeSlots == null) {
-            Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
-            return;
-        }
-
         TimeZone timeZone;
 
         try {
             timeZone = TimeZone.getTimeZone(availabilitySlot.getString("timeZone"));
         } catch (Throwable t) {
+            // TODO FIX ERROR
             Toast.makeText(fragment.getParentActivity(), "Bad TimeZone from offer: " + offer.getAvailabilitySlot(), Toast.LENGTH_LONG).show();
             return;
         }
 
-        fragment.presentFragment(new TimeSlotSelectionActivity(timeZone, timeSlots, timeSlot -> {
-            initPayment(fragment, offer, referral, timeSlot);
-        }));
+        LoadingUtil.onLoadingStarted(fragment.getParentActivity());
+
+        HtAmplify.getInstance(fragment.getParentActivity()).getTimeSlots(offer.getId(), (success, result, exception) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (success) {
+                fragment.presentFragment(new TimeSlotSelectionActivity(timeZone, result, timeSlot -> {
+                    initPayment(fragment, offer, referral, timeSlot);
+                }));
+            }
+            else {
+                Log.e(TAG, "Failed to get time slots", exception);
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private static void initPayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
@@ -323,42 +302,51 @@ public class HeymatePayment {
             }
         }
 
-        Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
-
-        wallet.createAcceptedOffer(offer, timeSlot, referrers, (success, errorCause) -> {
+        HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot, referral, (success, reservation, exception) -> {
             LoadingUtil.onLoadingFinished();
 
             if (success) {
-                String userId = String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId);
-                HtAmplify.getInstance(fragment.getParentActivity()).bookTimeSlot(timeSlot.getId(), userId);
+                LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
-                new AlertDialog.Builder(fragment.getParentActivity())
-                        .setTitle("Offer accepted")
-                        .setMessage("You can check the state of your offer in My Schedule.")
-                        .setCancelable(false)
-                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                        .show();
-            }
-            else {
-                Log.e(TAG, "Failed to create offer on blockchain", errorCause);
-                LogToGroup.log("Failed to create offer on blockchain", errorCause, fragment);
+                Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
-                if (errorCause instanceof CeloException) {
-                    CeloError coreError = errorCause.getMainCause().getError();
+                wallet.createAcceptedOffer(offer, reservation, referrers, (success1, errorCause) -> {
+                    LoadingUtil.onLoadingFinished();
 
-                    if (coreError == CeloError.INSUFFICIENT_BALANCE) {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
-                    }
-                    else if (coreError == CeloError.NETWORK_ERROR) {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                    if (success1) {
+                        new AlertDialog.Builder(fragment.getParentActivity()) // TODO Text resource
+                                .setTitle("Offer accepted")
+                                .setMessage("You can check the state of your offer in My Schedule.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                .show();
                     }
                     else {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "Failed to create offer on blockchain", errorCause);
+                        LogToGroup.log("Failed to create offer on blockchain", errorCause, fragment);
+
+                        if (errorCause instanceof CeloException) {
+                            CeloError coreError = errorCause.getMainCause().getError();
+
+                            if (coreError == CeloError.INSUFFICIENT_BALANCE) {
+                                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
+                            }
+                            else if (coreError == CeloError.NETWORK_ERROR) {
+                                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        else {
+                            Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-                else {
-                    Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                }
+                });
+            }
+            else {
+                Log.e("TAG", "Failed to book time slot on the back-end.", exception);
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
             }
         });
     }

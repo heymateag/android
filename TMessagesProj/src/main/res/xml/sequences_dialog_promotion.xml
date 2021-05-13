@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical id="spine">
+        <Span size="28dp"/>
+        <Span id="title_referral" size="wrap"/>
+        <Span size="12dp"/>
+        <Span id="description_referral" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="moreinfo_referral" size="0px"/>
+        <Span id="infotoggle_referral" size="wrap"/>
+        <Span size="24dp"/>
+        <Span id="text_percentageinfo" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="edit_percentage" size="wrap"/>
+        <Span size="28dp"/>
+        <Span id="title_share" size="wrap"/>
+        <Span size="32dp"/>
+        <Span id="button_cancel" size="36dp"/>
+        <Span size="12dp"/>
+    </Vertical>
+
+    <Vertical start="start@title_referral" end="end@title_referral">
+        <Span size="1w"/>
+        <Span id="radio_referral" size="20dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@title_share" end="end@title_share">
+        <Span size="1w"/>
+        <Span id="radio_share" size="20dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@edit_percentage" end="end@edit_percentage">
+        <Span size="1w"/>
+        <Span id="text_percent" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@button_cancel" end="end@button_cancel">
+        <Span id="button_promote" size="100%"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="24dp"/>
+        <Span id="radio_referral" size="20dp"/>
+        <Span size="8dp"/>
+        <Span id="title_referral" size="1w"/>
+        <Span size="24dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_referral" end="end@title_referral">
+        <Span id="description_referral" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_referral" end="end@title_referral">
+        <Span id="moreinfo_referral" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_referral" end="end@title_referral">
+        <Span id="infotoggle_referral" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_referral" end="end@title_referral">
+        <Span id="text_percentageinfo" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_referral" end="end@title_referral">
+        <Span id="edit_percentage" size="48dp"/>
+        <Span id="text_percent" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@radio_referral" end="end@radio_referral">
+        <Span id="radio_share" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_referral" end="end@title_referral">
+        <Span id="title_share" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="button_cancel" size="96dp"/>
+        <Span size="4dp"/>
+        <Span id="button_promote" size="96dp"/>
+        <Span size="12dp"/>
+    </Horizontal>
+
+</Sequences>

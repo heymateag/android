@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 
 import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.TimeSlot;
+import com.amplifyframework.datastore.generated.model.Reservation;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
@@ -256,7 +256,7 @@ public class Wallet {
         });
     }
 
-    public void createAcceptedOffer(Offer offer, TimeSlot timeSlot, List<String> referrers, OfferOperationCallback callback) {
+    public void createAcceptedOffer(Offer offer, Reservation reservation, List<String> referrers, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -266,7 +266,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.create(offer, getAddress(), timeSlot, referrers);
+                    mCeloOffer.create(offer, getAddress(), reservation, referrers);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
@@ -278,7 +278,7 @@ public class Wallet {
         });
     }
 
-    public void startOffer(Offer offer, TimeSlot timeSlot, OfferOperationCallback callback) {
+    public void startOffer(Offer offer, Reservation reservation, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -288,7 +288,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.startService(offer, timeSlot, getAddress());
+                    mCeloOffer.startService(offer, reservation, getAddress());
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
@@ -298,7 +298,7 @@ public class Wallet {
         });
     }
 
-    public void finishOffer(Offer offer, TimeSlot timeSlot, OfferOperationCallback callback) {
+    public void finishOffer(Offer offer, Reservation reservation, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -308,7 +308,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.finishService(offer, timeSlot, getAddress());
+                    mCeloOffer.finishService(offer, reservation, getAddress());
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
@@ -318,7 +318,7 @@ public class Wallet {
         });
     }
 
-    public void cancelOffer(Offer offer, TimeSlot timeSlot, boolean consumerCancelled, OfferOperationCallback callback) {
+    public void cancelOffer(Offer offer, Reservation reservation, boolean consumerCancelled, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -328,7 +328,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.cancelService(offer, timeSlot, getAddress(), consumerCancelled);
+                    mCeloOffer.cancelService(offer, reservation, getAddress(), consumerCancelled);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {

@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.TimeSlot;
+import com.amplifyframework.datastore.generated.model.Reservation;
 import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 
@@ -29,7 +29,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.time.FastDateFormat;
@@ -51,10 +50,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import works.heymate.celo.CeloError;
-import works.heymate.celo.CeloException;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
@@ -77,14 +74,14 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
     @Override
     public boolean onFragmentCreate() {
-        HeymateEvents.register(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
+        HeymateEvents.register(HeymateEvents.RESERVATION_STATUS_UPDATED, this);
 
         return super.onFragmentCreate();
     }
 
     @Override
     public void onFragmentDestroy() {
-        HeymateEvents.unregister(HeymateEvents.ACCEPTED_OFFER_STATUS_UPDATED, this);
+        HeymateEvents.unregister(HeymateEvents.RESERVATION_STATUS_UPDATED, this);
 
         super.onFragmentDestroy();
     }
@@ -167,22 +164,21 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
     public void onHeymateEvent(int event, Object... args) {
         String id = (String) args[0];
 
-        HtAmplify.getInstance(getParentActivity()).getTimeSlot(id, (success, result, exception) -> {
-            if (success) {
+        HtAmplify.getInstance(getParentActivity()).getReservation(id, (success, result, exception) -> {
+            if (success && result != null) {
                 for (ScheduleAdapter adapter: mAdapters) {
-                    adapter.updateTimeSlot(result);
+                    adapter.updateReservation(result);
                 }
             }
         });
     }
 
-    private class ScheduleAdapter extends RecyclerListView.SectionsAdapter implements
-            HtAmplify.TimeSlotsCallback, HtAmplify.OffersCallback {
+    private class ScheduleAdapter extends RecyclerListView.SectionsAdapter {
 
         private final RecyclerListView mListView;
         private final boolean mIsMyOffers;
 
-        private SparseArray<List<TimeSlot>> mSections = new SparseArray<>();
+        private SparseArray<List<Reservation>> mSections = new SparseArray<>();
         private Map<String, Offer> mOffers = new HashMap<>();
 
         public ScheduleAdapter(RecyclerListView listView, boolean isMyOffers) {
@@ -192,53 +188,19 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
         public void getData() {
             if (mIsMyOffers) {
-                HtAmplify.getInstance(getParentActivity()).getOffersWithoutImages(this);
+                HtAmplify.getInstance(getParentActivity()).getMyAcceptedOffers(this::onReservationsQueryResult);
             }
             else {
-                int userId = UserConfig.getInstance(currentAccount).clientUserId;
-                HtAmplify.getInstance(getParentActivity()).getMyOrders("" + userId, this);
+                HtAmplify.getInstance(getParentActivity()).getMyOrders(this::onReservationsQueryResult);
             }
         }
 
-        @Override
-        public void onOffersQueryResult(boolean success, List<Offer> offers, ApiException exception) {
+        private void onReservationsQueryResult(boolean success, List<Reservation> reservations, ApiException exception) {
             if (!success) {
                 return;
             }
 
-            List<TimeSlot> timeSlots = new ArrayList<>();
-
-            getTimeSlotsForOffer(offers, timeSlots);
-        }
-
-        private void getTimeSlotsForOffer(List<Offer> offers, List<TimeSlot> timeSlots) {
-            if (offers.isEmpty()) {
-                onTimeSlotsQueryResult(true, timeSlots, null);
-                return;
-            }
-
-            Offer offer = offers.remove(0);
-
-            HtAmplify.getInstance(getParentActivity()).getNonAvailableTimeSlots(offer.getId(), (success, offerTimeSlots, exception) -> {
-                if (success) {
-                    timeSlots.addAll(offerTimeSlots);
-
-                    for (TimeSlot timeSlot: offerTimeSlots) {
-                        mOffers.put(timeSlot.getId(), offer);
-                    }
-                }
-
-                getTimeSlotsForOffer(offers, timeSlots);
-            });
-        }
-
-        @Override
-        public void onTimeSlotsQueryResult(boolean success, List<TimeSlot> timeSlots, ApiException exception) {
-            if (!success) {
-                return;
-            }
-
-            Collections.sort(timeSlots, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
+            Collections.sort(reservations, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -249,8 +211,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             mSections.clear();
 
-            for (TimeSlot timeSlot: timeSlots) {
-                long slotTime = timeSlot.getStartTime() * 1000L;
+            for (Reservation reservation: reservations) {
+                long slotTime = reservation.getStartTime() * 1000L;
 
                 int dayDiff;
 
@@ -261,20 +223,20 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                     dayDiff = (int) -((slotTime - baseTime) / ONE_DAY);
                 }
 
-                List<TimeSlot> list = mSections.get(dayDiff);
+                List<Reservation> list = mSections.get(dayDiff);
 
                 if (list == null) {
                     list = new ArrayList<>();
                     mSections.put(dayDiff, list);
                 }
 
-                list.add(timeSlot);
+                list.add(reservation);
 
-                if (!mOffers.containsKey(timeSlot.getId())) {
-                    HtAmplify.getInstance(getParentActivity()).getOffer(timeSlot.getOfferId(), (success1, data, exception1) -> {
+                if (!mOffers.containsKey(reservation.getId())) {
+                    HtAmplify.getInstance(getParentActivity()).getOffer(reservation.getOfferId(), (success1, data, exception1) -> {
                         if (success1) {
-                            mOffers.put(timeSlot.getId(), data);
-                            updateItem(timeSlot);
+                            mOffers.put(reservation.getId(), data);
+                            updateItem(reservation);
                         }
                     });
                 }
@@ -283,31 +245,31 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             notifyDataSetChanged();
         }
 
-        private void updateItem(TimeSlot timeSlot) {
+        private void updateItem(Reservation reservation) {
             for (int i = 0; i < mListView.getChildCount(); i++) {
                 if (mListView.getChildAt(i) instanceof ScheduleItem) {
                     ScheduleItem item = (ScheduleItem) mListView.getChildAt(i);
 
-                    if (timeSlot.getId().equals(item.mTimeSlot.getId())) {
-                        item.setTimeSlot(timeSlot);
-                        item.setOffer(mOffers.get(timeSlot.getId()));
+                    if (reservation.getId().equals(item.mReservation.getId())) {
+                        item.setReservation(reservation);
+                        item.setOffer(mOffers.get(reservation.getId()));
                     }
                 }
             }
         }
 
-        private void updateTimeSlot(TimeSlot timeSlot) {
+        private void updateReservation(Reservation reservation) {
             boolean found = false;
 
             for (int i = 0; i < mSections.size(); i++) {
-                List<TimeSlot> timeSlots = mSections.get(mSections.keyAt(i));
+                List<Reservation> reservations = mSections.get(mSections.keyAt(i));
 
-                if (timeSlots != null) {
-                    for (int index = 0; index < timeSlots.size(); index++) {
-                        if (timeSlot.getId().equals(timeSlots.get(index).getId())) {
+                if (reservations != null) {
+                    for (int index = 0; index < reservations.size(); index++) {
+                        if (reservation.getId().equals(reservations.get(index).getId())) {
                             found = true;
 
-                            timeSlots.set(index, timeSlot);
+                            reservations.set(index, reservation);
                             break;
                         }
                     }
@@ -319,7 +281,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             }
 
             if (found) {
-                updateItem(timeSlot);
+                updateItem(reservation);
             }
         }
 
@@ -386,10 +348,10 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         public void onBindViewHolder(int section, int position, RecyclerView.ViewHolder holder) {
             ScheduleItem item = (ScheduleItem) holder.itemView;
 
-            TimeSlot timeSlot = (TimeSlot) getItem(section, position);
+            Reservation reservation = (Reservation) getItem(section, position);
 
-            item.setTimeSlot(timeSlot);
-            item.setOffer(mOffers.get(timeSlot.getId()));
+            item.setReservation(reservation);
+            item.setOffer(mOffers.get(reservation.getId()));
         }
 
         @Override
@@ -409,13 +371,13 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 case 1:
                     return Texts.get(Texts.YESTERDAY);
                 default:
-                    List<TimeSlot> timeSlots = mSections.get(dayDiff);
+                    List<Reservation> reservations = mSections.get(dayDiff);
 
-                    if (timeSlots == null || timeSlots.isEmpty()) {
+                    if (reservations == null || reservations.isEmpty()) {
                         return "";
                     }
 
-                    return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(timeSlots.get(0).getStartTime() * 1000L);
+                    return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(reservations.get(0).getStartTime() * 1000L);
             }
         }
 
@@ -431,7 +393,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
         private boolean mIsMyOffer;
 
-        private TimeSlot mTimeSlot = null;
+        private Reservation mReservation = null;
         private Offer mOffer = null;
 
         private int mUserId = 0;
@@ -472,12 +434,12 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
             mIsMyOffer = isMyOffer;
         }
 
-        public void setTimeSlot(TimeSlot timeSlot) {
-            mTimeSlot = timeSlot;
+        public void setReservation(Reservation reservation) {
+            mReservation = reservation;
 
             if (mIsMyOffer) {
                 try {
-                    mUserId = Integer.parseInt(timeSlot.getClientUserId());
+                    mUserId = Integer.parseInt(reservation.getConsumerId());
                 } catch (Throwable t) {
                     mUserId = 0;
                 }
@@ -509,10 +471,10 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 onUserLoaded(null);
             }
 
-            if (mOffer != null && mTimeSlot != null) {
+            if (mOffer != null && mReservation != null) {
                 String text;
 
-                HtTimeSlotStatus status = HtTimeSlotStatus.values()[mTimeSlot.getStatus()];
+                HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(mReservation.getStatus());
 
                 switch (status) {
                     case BOOKED:
@@ -540,7 +502,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
                 text = text
                         .replace(PLACEHOLDER_SUB_CATEGORY, mOffer.getSubCategory())
-                        .replace(PLACEHOLDER_TIME_DIFF, getTimeDiff(mTimeSlot.getStartTime() * 1000L));
+                        .replace(PLACEHOLDER_TIME_DIFF, getTimeDiff(mReservation.getStartTime() * 1000L));
 
                 mTextInfo.setText(text);
             }
@@ -548,8 +510,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 mTextInfo.setText("");
             }
 
-            if (mTimeSlot != null) {
-                HtTimeSlotStatus status = HtTimeSlotStatus.values()[mTimeSlot.getStatus()];
+            if (mReservation != null) {
+                HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(mReservation.getStatus());
 
                 switch (status) {
                     case BOOKED:
@@ -674,7 +636,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         }
 
         private void cancel() {
-            if (mOffer == null || mTimeSlot == null) {
+            if (mOffer == null || mReservation == null) {
                 return;
             }
 
@@ -684,13 +646,13 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-            boolean cancelledByConsumer = mTimeSlot.getClientUserId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId));
+            boolean cancelledByConsumer = mReservation.getConsumerId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId));
 
-            wallet.cancelOffer(mOffer, mTimeSlot, cancelledByConsumer, (success, errorCause) -> {
+            wallet.cancelOffer(mOffer, mReservation, cancelledByConsumer, (success, errorCause) -> {
                 loading.dismiss();
 
                 if (success) {
-                    HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
+                    HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.CANCELLED);
                 }
                 else {
                     Log.e(TAG, "Failed to cancel offer", errorCause);
@@ -712,21 +674,21 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 }
             });
 
-//            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.CANCELLED);
+//            HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.CANCELLED);
             disableLeft();
             disableRight();
             // TODO
         }
 
         private void markAsStarted() {
-            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.MARKED_AS_STARTED);
+            HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.MARKED_AS_STARTED);
             disableLeft();
             disableRight();
             // TODO
         }
 
         private void confirmStarted() {
-            if (mOffer == null || mTimeSlot == null) {
+            if (mOffer == null || mReservation == null) {
                 return;
             }
 
@@ -736,11 +698,11 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-            wallet.startOffer(mOffer, mTimeSlot, (success, errorCause) -> {
+            wallet.startOffer(mOffer, mReservation, (success, errorCause) -> {
                 loading.dismiss();
 
                 if (success) {
-                    HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
+                    HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.STARTED);
                 }
                 else {
                     Log.e(TAG, "Failed to confirm started offer", errorCause);
@@ -762,21 +724,21 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 }
             });
 
-//            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.STARTED);
+//            HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.STARTED);
             disableLeft();
             disableRight();
             // TODO
         }
 
         private void markAsFinished() {
-            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.MARKED_AS_FINISHED);
+            HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.MARKED_AS_FINISHED);
             disableLeft();
             disableRight();
             // TODO
         }
 
         private void confirmFinished() {
-            if (mOffer == null || mTimeSlot == null) {
+            if (mOffer == null || mReservation == null) {
                 return;
             }
 
@@ -786,11 +748,11 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-            wallet.finishOffer(mOffer, mTimeSlot, (success, errorCause) -> {
+            wallet.finishOffer(mOffer, mReservation, (success, errorCause) -> {
                 loading.dismiss();
 
                 if (success) {
-                    HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
+                    HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.FINISHED);
                 }
                 else {
                     Log.e(TAG, "Failed to confirm finished offer", errorCause);
@@ -812,7 +774,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 }
             });
 
-//            HtAmplify.getInstance(getParentActivity()).updateTimeSlot(mTimeSlot.getId(), HtTimeSlotStatus.FINISHED);
+//            HtAmplify.getInstance(getParentActivity()).updateReservation(mReservation, HtTimeSlotStatus.FINISHED);
             disableLeft();
             disableRight();
             // TODO

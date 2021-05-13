@@ -37,6 +37,7 @@ public final class Offer implements Model {
   public static final QueryField LATITUDE = field("Offer", "latitude");
   public static final QueryField LOCATION_DATA = field("Offer", "locationData");
   public static final QueryField LONGITUDE = field("Offer", "longitude");
+  public static final QueryField MAXIMUM_RESERVATIONS = field("Offer", "maximumReservations");
   public static final QueryField RATE = field("Offer", "rate");
   public static final QueryField RATE_TYPE = field("Offer", "rateType");
   public static final QueryField SERVICE_PROVIDER_ADDRESS = field("Offer", "serviceProviderAddress");
@@ -58,6 +59,7 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String latitude;
   private final @ModelField(targetType="String") String locationData;
   private final @ModelField(targetType="String") String longitude;
+  private final @ModelField(targetType="Int") Integer maximumReservations;
   private final @ModelField(targetType="String") String rate;
   private final @ModelField(targetType="String") String rateType;
   private final @ModelField(targetType="String") String serviceProviderAddress;
@@ -112,6 +114,10 @@ public final class Offer implements Model {
       return longitude;
   }
   
+  public Integer getMaximumReservations() {
+      return maximumReservations;
+  }
+  
   public String getRate() {
       return rate;
   }
@@ -152,7 +158,7 @@ public final class Offer implements Model {
       return userID;
   }
   
-  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
+  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, Integer maximumReservations, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
@@ -164,6 +170,7 @@ public final class Offer implements Model {
     this.latitude = latitude;
     this.locationData = locationData;
     this.longitude = longitude;
+    this.maximumReservations = maximumReservations;
     this.rate = rate;
     this.rateType = rateType;
     this.serviceProviderAddress = serviceProviderAddress;
@@ -195,6 +202,7 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getLatitude(), offer.getLatitude()) &&
               ObjectsCompat.equals(getLocationData(), offer.getLocationData()) &&
               ObjectsCompat.equals(getLongitude(), offer.getLongitude()) &&
+              ObjectsCompat.equals(getMaximumReservations(), offer.getMaximumReservations()) &&
               ObjectsCompat.equals(getRate(), offer.getRate()) &&
               ObjectsCompat.equals(getRateType(), offer.getRateType()) &&
               ObjectsCompat.equals(getServiceProviderAddress(), offer.getServiceProviderAddress()) &&
@@ -222,6 +230,7 @@ public final class Offer implements Model {
       .append(getLatitude())
       .append(getLocationData())
       .append(getLongitude())
+      .append(getMaximumReservations())
       .append(getRate())
       .append(getRateType())
       .append(getServiceProviderAddress())
@@ -251,6 +260,7 @@ public final class Offer implements Model {
       .append("latitude=" + String.valueOf(getLatitude()) + ", ")
       .append("locationData=" + String.valueOf(getLocationData()) + ", ")
       .append("longitude=" + String.valueOf(getLongitude()) + ", ")
+      .append("maximumReservations=" + String.valueOf(getMaximumReservations()) + ", ")
       .append("rate=" + String.valueOf(getRate()) + ", ")
       .append("rateType=" + String.valueOf(getRateType()) + ", ")
       .append("serviceProviderAddress=" + String.valueOf(getServiceProviderAddress()) + ", ")
@@ -309,6 +319,7 @@ public final class Offer implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -325,6 +336,7 @@ public final class Offer implements Model {
       latitude,
       locationData,
       longitude,
+      maximumReservations,
       rate,
       rateType,
       serviceProviderAddress,
@@ -354,6 +366,7 @@ public final class Offer implements Model {
     BuildStep latitude(String latitude);
     BuildStep locationData(String locationData);
     BuildStep longitude(String longitude);
+    BuildStep maximumReservations(Integer maximumReservations);
     BuildStep rate(String rate);
     BuildStep rateType(String rateType);
     BuildStep serviceProviderAddress(String serviceProviderAddress);
@@ -379,6 +392,7 @@ public final class Offer implements Model {
     private String latitude;
     private String locationData;
     private String longitude;
+    private Integer maximumReservations;
     private String rate;
     private String rateType;
     private String serviceProviderAddress;
@@ -404,6 +418,7 @@ public final class Offer implements Model {
           latitude,
           locationData,
           longitude,
+          maximumReservations,
           rate,
           rateType,
           serviceProviderAddress,
@@ -484,6 +499,12 @@ public final class Offer implements Model {
     }
     
     @Override
+     public BuildStep maximumReservations(Integer maximumReservations) {
+        this.maximumReservations = maximumReservations;
+        return this;
+    }
+    
+    @Override
      public BuildStep rate(String rate) {
         this.rate = rate;
         return this;
@@ -560,7 +581,7 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, Integer maximumReservations, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
       super.id(id);
       super.userId(userId)
         .availabilitySlot(availabilitySlot)
@@ -573,6 +594,7 @@ public final class Offer implements Model {
         .latitude(latitude)
         .locationData(locationData)
         .longitude(longitude)
+        .maximumReservations(maximumReservations)
         .rate(rate)
         .rateType(rateType)
         .serviceProviderAddress(serviceProviderAddress)
@@ -637,6 +659,11 @@ public final class Offer implements Model {
     @Override
      public CopyOfBuilder longitude(String longitude) {
       return (CopyOfBuilder) super.longitude(longitude);
+    }
+    
+    @Override
+     public CopyOfBuilder maximumReservations(Integer maximumReservations) {
+      return (CopyOfBuilder) super.maximumReservations(maximumReservations);
     }
     
     @Override

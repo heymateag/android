@@ -59,7 +59,6 @@ public class OffersActivity extends BaseFragment {
     private static final String ACTIVE_OFFERS_PLACE_HOLDER = "{active_offers}";
 
     private boolean inited = false;
-    private OfferController offerController = OfferController.getInstance();
     private LinearLayout offersLayout;
     private Context context;
 
@@ -232,25 +231,19 @@ public class OffersActivity extends BaseFragment {
             String message = OfferUtils.serializeBeautiful(offerDto.asOffer(), null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
             offerCell1.configLabel.setText(message);
 
-            ArrayList<TimeSlot> timeSlots = new ArrayList<>();
-            HtAmplify.getInstance(context).getAvailableTimeSlots(offerDto.getServerUUID(), ((success, data, exception) -> {
-                Utils.runOnUIThread(() -> {
-                    if (!success) {
-                        if (exception != null) {
-                            Log.e("HtAmplify", "Failed to get time slots for offer with id " + offerDto.getServerUUID(), exception);
-                        }
-                        return;
+            HtAmplify.getInstance(context).getTimeSlots(offerDto.getServerUUID(), ((success, data, exception) -> {
+                if (!success) {
+                    if (exception != null) {
+                        Log.e("HtAmplify", "Failed to get time slots for offer with id " + offerDto.getServerUUID(), exception);
                     }
-                    for (TimeSlot timeSlot : ((PaginatedResult<TimeSlot>)(data)).getItems()) {
-                        timeSlots.add(timeSlot);
-                    }
-                    ArrayList<Long> dates = new ArrayList<>();
-                    for(TimeSlot timeSlot : timeSlots){
-                        dates.add(((long) (timeSlot.getStartTime())) * 1000);
-                        dates.add(((long) (timeSlot.getEndTime())) * 1000);
-                    }
-                    offerCell1.setDateSlots(dates);
-                });
+                    return;
+                }
+                ArrayList<Long> dates = new ArrayList<>();
+                for(TimeSlot timeSlot : data){
+                    dates.add(((long) (timeSlot.getStartTime())) * 1000);
+                    dates.add(((long) (timeSlot.getEndTime())) * 1000);
+                }
+                offerCell1.setDateSlots(dates);
             }));
             ArrayList<Long> dates = new ArrayList<>();
             offerCell1.setDateSlots(dates);

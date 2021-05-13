@@ -37,7 +37,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Heymate.ExpandableItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -155,7 +154,7 @@ public class LocationInputItem extends ExpandableItem {
         mInputAddress.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mInputAddress.setThreshold(2);
         mInputAddress.setBackground(Theme.createEditTextDrawable(getContext(), false));
-        content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, 92, 4, 20, 0));
+        content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, TITLE_LEFT_MARGIN, 4, 20, 0));
 
         mInputAddress.setAdapter(new ArrayAdapter<WrappedAddress>(getContext(), works.heymate.beta.R.layout.autocomplete_item) {
 
@@ -260,7 +259,7 @@ public class LocationInputItem extends ExpandableItem {
             }
 
         };
-        content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, 20, 48, 20, 18));
+        content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, CONTENT_HORIZONTAL_MARGIN, 48, CONTENT_HORIZONTAL_MARGIN, 0));
 
 //        ImageView imagePin = new ImageView(getContext());
 //        imagePin.setImageResource(works.heymate.beta.R.drawable.map_pin);
@@ -302,6 +301,13 @@ public class LocationInputItem extends ExpandableItem {
 
             if (mLocation != null) {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 13));
+
+                if (mSelectedLocation != null) {
+                    mSelectedLocation.setPosition(mLocation);
+                }
+                else {
+                    putMarker(mLocation);
+                }
             }
             else {
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 1));

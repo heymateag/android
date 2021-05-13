@@ -25,62 +25,69 @@ import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 })
 public final class TimeSlot implements Model {
   public static final QueryField ID = field("TimeSlot", "id");
-  public static final QueryField CLIENT_USER_ID = field("TimeSlot", "clientUserId");
-  public static final QueryField END_TIME = field("TimeSlot", "endTime");
   public static final QueryField OFFER_ID = field("TimeSlot", "offerId");
+  public static final QueryField USER_ID = field("TimeSlot", "userId");
   public static final QueryField START_TIME = field("TimeSlot", "startTime");
-  public static final QueryField STATUS = field("TimeSlot", "status");
-  public static final QueryField USER1_ID = field("TimeSlot", "user1Id");
-  public static final QueryField USER2_ID = field("TimeSlot", "user2Id");
+  public static final QueryField END_TIME = field("TimeSlot", "endTime");
+  public static final QueryField USER_FCM_TOKEN = field("TimeSlot", "userFCMToken");
+  public static final QueryField MAXIMUM_RESERVATIONS = field("TimeSlot", "maximumReservations");
+  public static final QueryField COMPLETED_RESERVATIONS = field("TimeSlot", "completedReservations");
+  public static final QueryField REMAINING_RESERVATIONS = field("TimeSlot", "remainingReservations");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="String") String clientUserId;
-  private final @ModelField(targetType="Int") Integer endTime;
   private final @ModelField(targetType="String") String offerId;
+  private final @ModelField(targetType="String") String userId;
   private final @ModelField(targetType="Int") Integer startTime;
-  private final @ModelField(targetType="Int") Integer status;
-  private final @ModelField(targetType="String") String user1Id;
-  private final @ModelField(targetType="String") String user2Id;
+  private final @ModelField(targetType="Int") Integer endTime;
+  private final @ModelField(targetType="String") String userFCMToken;
+  private final @ModelField(targetType="Int") Integer maximumReservations;
+  private final @ModelField(targetType="Int") Integer completedReservations;
+  private final @ModelField(targetType="Int") Integer remainingReservations;
   public String getId() {
       return id;
-  }
-  
-  public String getClientUserId() {
-      return clientUserId;
-  }
-  
-  public Integer getEndTime() {
-      return endTime;
   }
   
   public String getOfferId() {
       return offerId;
   }
   
+  public String getUserId() {
+      return userId;
+  }
+  
   public Integer getStartTime() {
       return startTime;
   }
   
-  public Integer getStatus() {
-      return status;
+  public Integer getEndTime() {
+      return endTime;
   }
   
-  public String getUser1Id() {
-      return user1Id;
+  public String getUserFcmToken() {
+      return userFCMToken;
   }
   
-  public String getUser2Id() {
-      return user2Id;
+  public Integer getMaximumReservations() {
+      return maximumReservations;
   }
   
-  private TimeSlot(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status, String user1Id, String user2Id) {
+  public Integer getCompletedReservations() {
+      return completedReservations;
+  }
+  
+  public Integer getRemainingReservations() {
+      return remainingReservations;
+  }
+  
+  private TimeSlot(String id, String offerId, String userId, Integer startTime, Integer endTime, String userFCMToken, Integer maximumReservations, Integer completedReservations, Integer remainingReservations) {
     this.id = id;
-    this.clientUserId = clientUserId;
-    this.endTime = endTime;
     this.offerId = offerId;
+    this.userId = userId;
     this.startTime = startTime;
-    this.status = status;
-    this.user1Id = user1Id;
-    this.user2Id = user2Id;
+    this.endTime = endTime;
+    this.userFCMToken = userFCMToken;
+    this.maximumReservations = maximumReservations;
+    this.completedReservations = completedReservations;
+    this.remainingReservations = remainingReservations;
   }
   
   @Override
@@ -92,13 +99,14 @@ public final class TimeSlot implements Model {
       } else {
       TimeSlot timeSlot = (TimeSlot) obj;
       return ObjectsCompat.equals(getId(), timeSlot.getId()) &&
-              ObjectsCompat.equals(getClientUserId(), timeSlot.getClientUserId()) &&
-              ObjectsCompat.equals(getEndTime(), timeSlot.getEndTime()) &&
               ObjectsCompat.equals(getOfferId(), timeSlot.getOfferId()) &&
+              ObjectsCompat.equals(getUserId(), timeSlot.getUserId()) &&
               ObjectsCompat.equals(getStartTime(), timeSlot.getStartTime()) &&
-              ObjectsCompat.equals(getStatus(), timeSlot.getStatus()) &&
-              ObjectsCompat.equals(getUser1Id(), timeSlot.getUser1Id()) &&
-              ObjectsCompat.equals(getUser2Id(), timeSlot.getUser2Id());
+              ObjectsCompat.equals(getEndTime(), timeSlot.getEndTime()) &&
+              ObjectsCompat.equals(getUserFcmToken(), timeSlot.getUserFcmToken()) &&
+              ObjectsCompat.equals(getMaximumReservations(), timeSlot.getMaximumReservations()) &&
+              ObjectsCompat.equals(getCompletedReservations(), timeSlot.getCompletedReservations()) &&
+              ObjectsCompat.equals(getRemainingReservations(), timeSlot.getRemainingReservations());
       }
   }
   
@@ -106,13 +114,14 @@ public final class TimeSlot implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getClientUserId())
-      .append(getEndTime())
       .append(getOfferId())
+      .append(getUserId())
       .append(getStartTime())
-      .append(getStatus())
-      .append(getUser1Id())
-      .append(getUser2Id())
+      .append(getEndTime())
+      .append(getUserFcmToken())
+      .append(getMaximumReservations())
+      .append(getCompletedReservations())
+      .append(getRemainingReservations())
       .toString()
       .hashCode();
   }
@@ -122,13 +131,14 @@ public final class TimeSlot implements Model {
     return new StringBuilder()
       .append("TimeSlot {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("clientUserId=" + String.valueOf(getClientUserId()) + ", ")
-      .append("endTime=" + String.valueOf(getEndTime()) + ", ")
       .append("offerId=" + String.valueOf(getOfferId()) + ", ")
+      .append("userId=" + String.valueOf(getUserId()) + ", ")
       .append("startTime=" + String.valueOf(getStartTime()) + ", ")
-      .append("status=" + String.valueOf(getStatus()) + ", ")
-      .append("user1Id=" + String.valueOf(getUser1Id()) + ", ")
-      .append("user2Id=" + String.valueOf(getUser2Id()))
+      .append("endTime=" + String.valueOf(getEndTime()) + ", ")
+      .append("userFCMToken=" + String.valueOf(getUserFcmToken()) + ", ")
+      .append("maximumReservations=" + String.valueOf(getMaximumReservations()) + ", ")
+      .append("completedReservations=" + String.valueOf(getCompletedReservations()) + ", ")
+      .append("remainingReservations=" + String.valueOf(getRemainingReservations()))
       .append("}")
       .toString();
   }
@@ -164,72 +174,71 @@ public final class TimeSlot implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      clientUserId,
-      endTime,
       offerId,
+      userId,
       startTime,
-      status,
-      user1Id,
-      user2Id);
+      endTime,
+      userFCMToken,
+      maximumReservations,
+      completedReservations,
+      remainingReservations);
   }
   public interface BuildStep {
     TimeSlot build();
     BuildStep id(String id) throws IllegalArgumentException;
-    BuildStep clientUserId(String clientUserId);
-    BuildStep endTime(Integer endTime);
     BuildStep offerId(String offerId);
+    BuildStep userId(String userId);
     BuildStep startTime(Integer startTime);
-    BuildStep status(Integer status);
-    BuildStep user1Id(String user1Id);
-    BuildStep user2Id(String user2Id);
+    BuildStep endTime(Integer endTime);
+    BuildStep userFcmToken(String userFcmToken);
+    BuildStep maximumReservations(Integer maximumReservations);
+    BuildStep completedReservations(Integer completedReservations);
+    BuildStep remainingReservations(Integer remainingReservations);
   }
   
 
   public static class Builder implements BuildStep {
     private String id;
-    private String clientUserId;
-    private Integer endTime;
     private String offerId;
+    private String userId;
     private Integer startTime;
-    private Integer status;
-    private String user1Id;
-    private String user2Id;
+    private Integer endTime;
+    private String userFCMToken;
+    private Integer maximumReservations;
+    private Integer completedReservations;
+    private Integer remainingReservations;
     @Override
      public TimeSlot build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
         return new TimeSlot(
           id,
-          clientUserId,
-          endTime,
           offerId,
+          userId,
           startTime,
-          status,
-          user1Id,
-          user2Id);
-    }
-    
-    @Override
-     public BuildStep clientUserId(String clientUserId) {
-        this.clientUserId = clientUserId;
-        return this;
-    }
-    
-    @Override
-     public BuildStep endTime(Integer endTime) {
-        this.endTime = endTime;
-        return this;
+          endTime,
+          userFCMToken,
+          maximumReservations,
+          completedReservations,
+          remainingReservations);
     }
     
     @Override
      public BuildStep offerId(String offerId) {
         this.offerId = offerId;
+        return this;
+    }
+    
+    @Override
+     public BuildStep userId(String userId) {
+        this.userId = userId;
         return this;
     }
     
@@ -240,20 +249,32 @@ public final class TimeSlot implements Model {
     }
     
     @Override
-     public BuildStep status(Integer status) {
-        this.status = status;
+     public BuildStep endTime(Integer endTime) {
+        this.endTime = endTime;
         return this;
     }
     
     @Override
-     public BuildStep user1Id(String user1Id) {
-        this.user1Id = user1Id;
+     public BuildStep userFcmToken(String userFcmToken) {
+        this.userFCMToken = userFcmToken;
         return this;
     }
     
     @Override
-     public BuildStep user2Id(String user2Id) {
-        this.user2Id = user2Id;
+     public BuildStep maximumReservations(Integer maximumReservations) {
+        this.maximumReservations = maximumReservations;
+        return this;
+    }
+    
+    @Override
+     public BuildStep completedReservations(Integer completedReservations) {
+        this.completedReservations = completedReservations;
+        return this;
+    }
+    
+    @Override
+     public BuildStep remainingReservations(Integer remainingReservations) {
+        this.remainingReservations = remainingReservations;
         return this;
     }
     
@@ -280,25 +301,16 @@ public final class TimeSlot implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String clientUserId, Integer endTime, String offerId, Integer startTime, Integer status, String user1Id, String user2Id) {
+    private CopyOfBuilder(String id, String offerId, String userId, Integer startTime, Integer endTime, String userFcmToken, Integer maximumReservations, Integer completedReservations, Integer remainingReservations) {
       super.id(id);
-      super.clientUserId(clientUserId)
-        .endTime(endTime)
-        .offerId(offerId)
+      super.offerId(offerId)
+        .userId(userId)
         .startTime(startTime)
-        .status(status)
-        .user1Id(user1Id)
-        .user2Id(user2Id);
-    }
-    
-    @Override
-     public CopyOfBuilder clientUserId(String clientUserId) {
-      return (CopyOfBuilder) super.clientUserId(clientUserId);
-    }
-    
-    @Override
-     public CopyOfBuilder endTime(Integer endTime) {
-      return (CopyOfBuilder) super.endTime(endTime);
+        .endTime(endTime)
+        .userFcmToken(userFcmToken)
+        .maximumReservations(maximumReservations)
+        .completedReservations(completedReservations)
+        .remainingReservations(remainingReservations);
     }
     
     @Override
@@ -307,23 +319,38 @@ public final class TimeSlot implements Model {
     }
     
     @Override
+     public CopyOfBuilder userId(String userId) {
+      return (CopyOfBuilder) super.userId(userId);
+    }
+    
+    @Override
      public CopyOfBuilder startTime(Integer startTime) {
       return (CopyOfBuilder) super.startTime(startTime);
     }
     
     @Override
-     public CopyOfBuilder status(Integer status) {
-      return (CopyOfBuilder) super.status(status);
+     public CopyOfBuilder endTime(Integer endTime) {
+      return (CopyOfBuilder) super.endTime(endTime);
     }
     
     @Override
-     public CopyOfBuilder user1Id(String user1Id) {
-      return (CopyOfBuilder) super.user1Id(user1Id);
+     public CopyOfBuilder userFcmToken(String userFcmToken) {
+      return (CopyOfBuilder) super.userFcmToken(userFcmToken);
     }
     
     @Override
-     public CopyOfBuilder user2Id(String user2Id) {
-      return (CopyOfBuilder) super.user2Id(user2Id);
+     public CopyOfBuilder maximumReservations(Integer maximumReservations) {
+      return (CopyOfBuilder) super.maximumReservations(maximumReservations);
+    }
+    
+    @Override
+     public CopyOfBuilder completedReservations(Integer completedReservations) {
+      return (CopyOfBuilder) super.completedReservations(completedReservations);
+    }
+    
+    @Override
+     public CopyOfBuilder remainingReservations(Integer remainingReservations) {
+      return (CopyOfBuilder) super.remainingReservations(remainingReservations);
     }
   }
   

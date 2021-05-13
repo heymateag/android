@@ -112,7 +112,7 @@ android {
     buildTypes {
         debug {
             debuggable true
-            jniDebuggable true
+            jniDebuggable false
             signingConfig signingConfigs.debug
             applicationIdSuffix ".beta"
             minifyEnabled false

@@ -54,7 +54,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
             long start = timeSlot.getStartTime() * 1000L;
             long end = timeSlot.getEndTime() * 1000L;
             int duration = (int) ((end - start) / 1000L / 60L);
-            boolean reserved = timeSlot.getStatus() != HtTimeSlotStatus.AVAILABLE.ordinal();
+            boolean reserved = timeSlot.getRemainingReservations() == 0;
 
             TimeSlotPickerAdapter.TimeSlot pickerTimeSlot = new TimeSlotPickerAdapter.TimeSlot(start, duration, reserved);
 
