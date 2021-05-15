@@ -15,7 +15,7 @@ public class HeymateEvents {
 
     public static final int WALLET_CREATED = 0; // Wallet
     public static final int PHONE_NUMBER_VERIFIED_STATUS_UPDATED = 1; // Wallet, VerifiedStatus, CeloError
-    public static final int RESERVATION_STATUS_UPDATED = 2; // reservedTimeSlotId
+    public static final int RESERVATION_STATUS_UPDATED = 2; // reservationId
     public static final int SHOPS_UPDATED = 3; // shops
 
     public interface HeymateEventObserver {

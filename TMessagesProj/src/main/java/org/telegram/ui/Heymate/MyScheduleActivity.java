@@ -144,6 +144,13 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         return fragmentView;
     }
 
+    @Override
+    protected void clearViews() {
+        ((ViewGroup) fragmentView).removeAllViews();
+        mAdapters.clear();
+        super.clearViews();
+    }
+
     private void bindAdapter(RecyclerListView listView, int position) {
         if (listView.getAdapter() == null) {
             ScheduleAdapter adapter = new ScheduleAdapter(listView, position == 0);

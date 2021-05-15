@@ -26,6 +26,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.AndroidUtilities;
 
+import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 
 import org.telegram.messenger.UserConfig;
@@ -89,7 +90,7 @@ public class HtAmplify {
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(context);
-            // da2-l73xgtiwbbdkno7gerln5ahpm4
+
             amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(
                     "AKIATNEPMKIM2UIPWSPC",
                     "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"
@@ -436,6 +437,8 @@ public class HtAmplify {
                 .build();
 
         Amplify.API.mutate(ModelMutation.update(mutatedReservation), result -> {
+            HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservation.getId());
+
             if (result.hasData()) {
                 Log.i("HtAmplify", "Reservation updated.");
 

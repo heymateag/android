@@ -100,8 +100,8 @@ public class CeloOffer {
                     userAddresses,
                     config,
                     referrers,
-                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature()),
-                    BigInteger.ZERO
+                    new ArrayList<>(0),
+                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature())
             ).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
@@ -136,7 +136,7 @@ public class CeloOffer {
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
 
         try {
-            mContract.release(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE, amount).send();
+            mContract.release(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(null, e);
@@ -195,8 +195,7 @@ public class CeloOffer {
         config.add(delayTime);
         config.add(delayPercent);
         config.add(BigInteger.valueOf(4)); // Linear config
-//        config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
-        config.add(BigInteger.ZERO);
+        config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
 
         return config;
     }

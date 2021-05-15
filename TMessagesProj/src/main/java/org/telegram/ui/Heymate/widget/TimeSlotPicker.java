@@ -52,7 +52,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
 
     public interface OnTimeSlotSelectedListener {
 
-        void onTimeSlotSelected(TimeSlotPickerAdapter.TimeSlot timeSlot);
+        boolean onTimeSlotSelected(TimeSlotPickerAdapter.TimeSlot timeSlot);
 
     }
 
@@ -410,17 +410,15 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
         @Override
         public boolean onTimeSlotClicked(int index, PreparedTimeSlot timeSlot) {
             if (mSelectionMode == SELECTION_MODE_SINGLE) {
-                if (mSelectedTimeSlot != null) {
-                    mSelectedTimeSlot.selected = false;
-                }
+                if (mOnTimeSlotSelectedListener == null || mOnTimeSlotSelectedListener.onTimeSlotSelected(timeSlot.slot)) {
+                    if (mSelectedTimeSlot != null) {
+                        mSelectedTimeSlot.selected = false;
+                    }
 
-                mSelectedTimeSlot = timeSlot;
-                mSelectedTimeSlot.selected = true;
+                    mSelectedTimeSlot = timeSlot;
+                    mSelectedTimeSlot.selected = true;
 
-                mTimeSlotView.invalidate();
-
-                if (mOnTimeSlotSelectedListener != null) {
-                    mOnTimeSlotSelectedListener.onTimeSlotSelected(timeSlot.slot);
+                    mTimeSlotView.invalidate();
                 }
 
                 return true;
@@ -833,7 +831,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
                 long time = mCalendar.getTimeInMillis() + (long) (exactTime * ONE_HOUR);
 
                 if (mTimeSlots != null) {
-                    for (int i = 0; i < mTimeSlots.size(); i++) {
+                    for (int i = mTimeSlots.size() - 1; i >= 0; i--) {
                         PreparedTimeSlot timeSlot = mTimeSlots.get(i);
 
                         if (timeSlot.start < time && timeSlot.end > time) {

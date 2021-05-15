@@ -30,7 +30,7 @@ public class Wallet {
 
     private static final String TAG = "Wallet";
 
-    private static final String OFFERS_ON_ALFAJORES = "0xaFA23794A154F8f0fB00067bD85DED04349FbAd0";
+    private static final String OFFERS_ON_ALFAJORES = "0x55FAe3d7A74d0873171967cF098aC0594601D533";
     private static final String OFFERS_ON_MAINNET = "0x13A9E83E2e4367B453F806824531f174b02095Fe";
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;

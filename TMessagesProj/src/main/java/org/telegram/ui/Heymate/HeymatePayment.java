@@ -73,8 +73,8 @@ public class HeymatePayment {
                 initPayment(fragment, offerId, result);
             }
             else {
-                Log.e(TAG, "Failed to get offer with id " + offerId, exception);
-                LogToGroup.log("Failed to get offer with id " + offerId, exception, fragment);
+                Log.e(TAG, "Failed to get referral with id " + offerId, exception);
+                LogToGroup.log("Failed to get referral with id " + offerId, exception, fragment);
 
                 Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
             }

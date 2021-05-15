@@ -2,6 +2,7 @@ package org.telegram.ui.Heymate;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -86,7 +87,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
         mTimeSlotPicker.setDayOfWeekColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         mTimeSlotPicker.setDayTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mTimeSlotPicker.setHourTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        mTimeSlotPicker.setReservedTimeSlotColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+        mTimeSlotPicker.setReservedTimeSlotColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         mTimeSlotPicker.setSelectedTimeSlotColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
         mTimeSlotPicker.setUnavailableTimeSlotColor(Theme.getColor(Theme.key_divider));
         mTimeSlotPicker.setDateTextSize(AndroidUtilities.dp(10));
@@ -142,14 +143,21 @@ public class TimeSlotSelectionActivity extends BaseFragment {
         mTimeSlotPicker.setOnTimeSlotSelectedListener(timeSlot -> {
             if (timeSlot.reserved) {
                 Toast.makeText(getParentActivity(), "This time slot is fully reserved.", Toast.LENGTH_SHORT).show(); // TODO Put Texts resource.
-                return;
+                return false;
             }
 
             mResultReceiver.onResult(mTimeSlotsMap.get(timeSlot));
             finishFragment();
+            return true;
         });
 
         return content;
+    }
+
+    @Override
+    protected void clearViews() {
+        ((ViewGroup) fragmentView).removeAllViews();
+        super.clearViews();
     }
 
     @Override
