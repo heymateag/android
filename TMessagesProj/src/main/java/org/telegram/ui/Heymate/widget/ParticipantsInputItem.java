@@ -85,7 +85,6 @@ public class ParticipantsInputItem extends ExpandableItem {
         radioLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         mCheckBox = new AppCompatCheckBox(getContext());
-        mCheckBox.setVisibility(VISIBLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mCheckBox.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.ht_theme)));
         }

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,11 +17,14 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,11 +41,13 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Heymate.MeetingType;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import works.heymate.beta.R;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 
@@ -87,10 +93,11 @@ public class LocationInputItem extends ExpandableItem {
 
     }
 
+    private AppCompatCheckBox mOnlineMeetingCheckBox;
     private AppCompatAutoCompleteTextView mInputAddress;
-    private Marker mSelectedLocation = null;
-
     private MapView mMapView;
+
+    private Marker mSelectedLocation = null;
 
     private GoogleMap mMap;
     private LatLng mLocation = null;
@@ -144,6 +151,17 @@ public class LocationInputItem extends ExpandableItem {
     protected View createContent() {
         FrameLayout content = new FrameLayout(getContext());
 
+        mOnlineMeetingCheckBox = new AppCompatCheckBox(getContext());
+        mOnlineMeetingCheckBox.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        mOnlineMeetingCheckBox.setTextSize(14);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mOnlineMeetingCheckBox.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.ht_theme)));
+        }
+        mOnlineMeetingCheckBox.setText("Online meeting"); // TODO Resource from Texts
+        mOnlineMeetingCheckBox.setChecked(false);
+        mOnlineMeetingCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkMeetingType());
+        content.addView(mOnlineMeetingCheckBox, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, TITLE_LEFT_MARGIN, 4, 0, 0));
+
         mInputAddress = new AppCompatAutoCompleteTextView(getContext());
         mInputAddress.setInputType(EditorInfo.TYPE_CLASS_TEXT);
         mInputAddress.setSingleLine(true);
@@ -154,7 +172,7 @@ public class LocationInputItem extends ExpandableItem {
         mInputAddress.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mInputAddress.setThreshold(2);
         mInputAddress.setBackground(Theme.createEditTextDrawable(getContext(), false));
-        content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, TITLE_LEFT_MARGIN, 4, 20, 0));
+        content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, TITLE_LEFT_MARGIN, 24, 20, 0));
 
         mInputAddress.setAdapter(new ArrayAdapter<WrappedAddress>(getContext(), works.heymate.beta.R.layout.autocomplete_item) {
 
@@ -259,13 +277,28 @@ public class LocationInputItem extends ExpandableItem {
             }
 
         };
-        content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, CONTENT_HORIZONTAL_MARGIN, 48, CONTENT_HORIZONTAL_MARGIN, 0));
+        content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, CONTENT_HORIZONTAL_MARGIN, 68, CONTENT_HORIZONTAL_MARGIN, 0));
 
 //        ImageView imagePin = new ImageView(getContext());
 //        imagePin.setImageResource(works.heymate.beta.R.drawable.map_pin);
 //        content.addView(imagePin, LayoutHelper.createFrame(26, 42, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 98));
 
         return content;
+    }
+
+    private void checkMeetingType() {
+        boolean isChecked = mOnlineMeetingCheckBox.isChecked();
+        mInputAddress.setVisibility(isChecked ? GONE : VISIBLE);
+        mMapView.setVisibility(isChecked ? GONE : VISIBLE);
+    }
+
+    public String getMeetingType() {
+        return mOnlineMeetingCheckBox.isChecked() ? MeetingType.ONLINE_MEETING : MeetingType.DEFAULT;
+    }
+
+    public void setMeetingType(String type) {
+        mOnlineMeetingCheckBox.setChecked(MeetingType.ONLINE_MEETING.equals(type));
+        checkMeetingType();
     }
 
     @SuppressLint("MissingPermission")

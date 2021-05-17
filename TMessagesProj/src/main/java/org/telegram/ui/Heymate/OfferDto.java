@@ -22,6 +22,7 @@ public class OfferDto {
     private String rateType;
     private String currency;
     private String location;
+    private String meetingType;
     private int maximumReservations;
     private String time;
     private String category;
@@ -68,6 +69,7 @@ public class OfferDto {
                 .locationData(location)
                 .latitude(String.valueOf(latitude))
                 .longitude(String.valueOf(longitude))
+                .meetingType(meetingType)
                 .maximumReservations(maximumReservations)
                 .termsConfig(configText)
                 .terms(terms)
@@ -232,6 +234,14 @@ public class OfferDto {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getMeetingType() {
+        return meetingType;
+    }
+
+    public void setMeetingType(String meetingType) {
+        this.meetingType = meetingType;
     }
 
     public int getMaximumReservations() {

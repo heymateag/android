@@ -211,6 +211,7 @@ public class HtChatMessageCell extends FrameLayout {
                 fragment.setCurrency(offerDto.getCurrency(), 0);
                 fragment.setCanEdit(true);
                 fragment.setLocation(offerDto.getLocation(), offerDto.getLatitude(), offerDto.getLongitude());
+                fragment.setMeetingType(offerDto.getMeetingType());
                 fragment.setMaximumReservations(offerDto.getMaximumReservations());
                 fragment.setCategory(offerDto.getCategory());
                 fragment.setSubCategory(offerDto.getSubCategory());

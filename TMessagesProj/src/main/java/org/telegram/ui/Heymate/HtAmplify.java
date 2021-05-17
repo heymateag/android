@@ -2,6 +2,7 @@ package org.telegram.ui.Heymate;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -9,6 +10,9 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.mobileconnectors.lambdainvoker.*;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
@@ -46,9 +50,6 @@ import java.util.concurrent.Future;
 public class HtAmplify {
 
     private static HtAmplify instance;
-    private Context context;
-
-    public AmazonS3Client amazonS3Client;
 
     public interface OfferCallback<T> {
 
@@ -74,11 +75,79 @@ public class HtAmplify {
 
     }
 
+    public static class GetJWTRequest {
+
+        long iat;
+        long exp;
+        long tokenExp;
+
+        public GetJWTRequest() {
+
+        }
+
+        public GetJWTRequest(long startTime) {
+            iat = startTime;
+            exp = 48L * 60L * 60L;
+            tokenExp = exp;
+        }
+
+        public long getIat() {
+            return iat;
+        }
+
+        public void setIat(long iat) {
+            this.iat = iat;
+        }
+
+        public long getExp() {
+            return exp;
+        }
+
+        public void setExp(long exp) {
+            this.exp = exp;
+        }
+
+        public long getTokenExp() {
+            return tokenExp;
+        }
+
+        public void setTokenExp(long tokenExp) {
+            this.tokenExp = tokenExp;
+        }
+
+    }
+
+    public static class GetJWTResponse {
+
+        String token;
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+    }
+
+    public interface LambdaFunctions {
+
+        @LambdaFunction
+        GetJWTResponse getZoomJWT(GetJWTRequest request);
+
+    }
+
     public static HtAmplify getInstance(Context context) {
         if (instance == null)
             instance = new HtAmplify(context.getApplicationContext());
         return instance;
     }
+
+    private Context context;
+
+    public AmazonS3Client amazonS3Client;
+    private LambdaFunctions mFunctions;
 
     public Context getContext(){
         return context;
@@ -98,6 +167,18 @@ public class HtAmplify {
 
             amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
+
+            // Create an instance of CognitoCachingCredentialsProvider
+            CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(
+                    context, "us-east-1:883d9973-a1d4-4bc0-aa34-55ad8a2cc6c3", Regions.US_EAST_1);
+
+            // Create LambdaInvokerFactory, to be used to instantiate the Lambda proxy.
+            LambdaInvokerFactory factory = new LambdaInvokerFactory(context, Regions.US_EAST_1, cognitoProvider);
+
+            // Create the Lambda proxy object with a default Json data binder.
+            // You can provide your own data binder by implementing
+            // LambdaDataBinder.
+            mFunctions = factory.build(LambdaFunctions.class);
 
             Log.i("HtAmplify", "Initialized Amplify.");
         } catch (AmplifyException error) {
@@ -126,6 +207,7 @@ public class HtAmplify {
                 .id(UUID.randomUUID().toString())
                 .availabilitySlot(dto.getTimeSlotsAsJson())
                 .locationData(dto.getLocation())
+                .meetingType(dto.getMeetingType())
                 .maximumReservations(maximumReservations)
                 .terms(dto.getTerms())
                 .termsConfig(dto.getConfigText())
@@ -250,6 +332,7 @@ public class HtAmplify {
                 .id(dto.getServerUUID())
                 .availabilitySlot(dto.getTimeSlotsAsJson())
                 .locationData(dto.getLocation())
+                .meetingType(dto.getMeetingType())
                 .maximumReservations(maximumReservations)
                 .terms(dto.getTerms())
                 .termsConfig(dto.getConfigText())
@@ -635,6 +718,24 @@ public class HtAmplify {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void getZoomToken(long startTimeInSeconds, APICallback<String> callback) {
+        new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    GetJWTRequest request = new GetJWTRequest(startTimeInSeconds);
+                    GetJWTResponse response = mFunctions.getZoomJWT(request);
+
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, response.token, null));
+                } catch (LambdaFunctionException e) {
+                    Utils.runOnUIThread(() -> callback.onCallResult(false, null, new ApiException(String.valueOf(e.getMessage()), e, e.getDetails())));
+                }
+            }
+
+        }.start();
     }
 
 }

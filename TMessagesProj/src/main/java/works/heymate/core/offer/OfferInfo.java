@@ -3,6 +3,7 @@ package works.heymate.core.offer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.widget.LocationInputItem;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 public class OfferInfo {
 
     private static final String LOCATION_INFO = "location_info";
+    private static final String MEETING_TYPE = "meeting_type";
     private static final String MAXIMUM_PARTICIPANTS = "maximum_participants";
     private static final String CONFIG = "config";
     private static final String TITLE = "title";
@@ -26,6 +28,7 @@ public class OfferInfo {
     private static final String DATE_SLOTS = "date_slots";
 
     private LocationInputItem.LocationInfo mLocationInfo;
+    private String mMeetingType;
     private int mMaximumParticipants = 1;
     private JSONObject mConfig;
     private String mTitle;
@@ -47,6 +50,9 @@ public class OfferInfo {
         try {
             if (hasProperty(json, LOCATION_INFO)) {
                 mLocationInfo = new LocationInputItem.LocationInfo(json.getJSONObject(LOCATION_INFO));
+            }
+            if (hasProperty(json, MEETING_TYPE)) {
+                mMeetingType = json.getString(MEETING_TYPE);
             }
             if (hasProperty(json, MAXIMUM_PARTICIPANTS)) {
                 mMaximumParticipants = json.getInt(MAXIMUM_PARTICIPANTS);
@@ -95,6 +101,10 @@ public class OfferInfo {
 
     public LocationInputItem.LocationInfo getLocationInfo() {
         return mLocationInfo;
+    }
+
+    public String getMeetingType() {
+        return mMeetingType == null ? MeetingType.DEFAULT : mMeetingType;
     }
 
     public int getMaximumParticipants() {
@@ -147,6 +157,10 @@ public class OfferInfo {
 
     public void setLocationInfo(LocationInputItem.LocationInfo locationInfo) {
         mLocationInfo = locationInfo;
+    }
+
+    public void setMeetingType(String meetingType) {
+        mMeetingType = meetingType;
     }
 
     public void setMaximumParticipants(int participants) {
@@ -202,6 +216,7 @@ public class OfferInfo {
 
         try {
             json.put(LOCATION_INFO, mLocationInfo == null ? JSONObject.NULL : mLocationInfo.asJSON());
+            json.put(MEETING_TYPE, mMeetingType == null ? MeetingType.DEFAULT : mMeetingType);
             json.put(MAXIMUM_PARTICIPANTS, mMaximumParticipants);
             json.put(CONFIG, mConfig);
             json.put(TITLE, mTitle);

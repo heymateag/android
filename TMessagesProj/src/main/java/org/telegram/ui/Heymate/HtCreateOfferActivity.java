@@ -586,7 +586,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 priceInputCell.setError(true, 1);
                 errors.append(LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty)).append('\n');
             }
-            if (locationInputCell.getLocationInfo() == null) {
+            if (locationInputCell.getLocationInfo() == null && MeetingType.DEFAULT.equals(locationInputCell.getMeetingType())) {
                 locationInputCell.setError(true);
                 errors.append(LocaleController.getString("HtLocationEmpty", works.heymate.beta.R.string.HtLocationEmpty)).append('\n');
             }
@@ -641,6 +641,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
             OfferInfo offerInfo = new OfferInfo();
             offerInfo.setLocationInfo(locationInfo);
+            offerInfo.setMeetingType(locationInputCell.getMeetingType());
             offerInfo.setMaximumParticipants(maximumParticipants);
             offerInfo.setConfig(config);
             offerInfo.setTitle(title);
@@ -676,6 +677,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                         if (savedOfferInfo.getLocationInfo() != null) {
                             locationInputCell.setLocationInfo(savedOfferInfo.getLocationInfo());
                         }
+
+                        locationInputCell.setMeetingType(savedOfferInfo.getMeetingType());
 
                         participantsInputCell.setMaximumParticipants(savedOfferInfo.getMaximumParticipants());
 
@@ -774,6 +777,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
                 newOffer.setLocation(locationInfo.address);
+                newOffer.setMeetingType(locationInputCell.getMeetingType());
                 newOffer.setMaximumReservations(maximumParticipants);
                 newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
                 newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
@@ -873,6 +877,10 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setLocation(String address, double latitude, double longitude) {
         locationInputCell.setLocationInfo(address, latitude, longitude);
+    }
+
+    public void setMeetingType(String meetingType) {
+        locationInputCell.setMeetingType(meetingType);
     }
 
     public void setMaximumReservations(int maximumReservations) {

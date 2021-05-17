@@ -35,13 +35,13 @@ public class HtSQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS offer;");
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
     }
 
     public String addOffer(Offer offer) {
@@ -66,6 +66,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         contentValues.put("createdAt", offer.getCreatedAt());
         contentValues.put("editedAt", offer.getEditedAt());
         contentValues.put("maximumReservations", offer.getMaximumReservations());
+        contentValues.put("meetingType", offer.getMeetingType());
         database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         return offer.getId();
     }
@@ -91,6 +92,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         contentValues.put("createdAt", offer.getCreatedAt());
         contentValues.put("editedAt", offer.getEditedAt());
         contentValues.put("maximumReservations", offer.getMaximumReservations());
+        contentValues.put("meetingType", offer.getMeetingType());
         database.update("offer", contentValues, "uuid = ?", new String[]{uuid});
     }
 
@@ -115,6 +117,7 @@ public class HtSQLite extends SQLiteOpenHelper {
             offerDto.setCreatedAt(cursor.getInt(13));
             offerDto.setEditedAt(cursor.getInt(14));
             offerDto.setMaximumReservations(cursor.getInt(15));
+            offerDto.setMeetingType(cursor.getString(16));
             return offerDto;
         }
         return null;
@@ -165,6 +168,7 @@ public class HtSQLite extends SQLiteOpenHelper {
                 offerDto.setCreatedAt(cursor.getInt(13));
                 offerDto.setEditedAt(cursor.getInt(14));
                 offerDto.setMaximumReservations(cursor.getInt(15));
+                offerDto.setMeetingType(cursor.getString(16));
                 offers.add(offerDto);
             } while (cursor.moveToNext());
         }
@@ -236,6 +240,7 @@ public class HtSQLite extends SQLiteOpenHelper {
             contentValues.put("createdAt", offer.getCreatedAt());
             contentValues.put("editedAt", offer.getEditedAt());
             contentValues.put("maximumReservations", offer.getMaximumReservations());
+            contentValues.put("meetingType", offer.getMeetingType());
             database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
     }

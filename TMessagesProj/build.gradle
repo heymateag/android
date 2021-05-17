@@ -41,14 +41,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:18.1.2'
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
+    //AppSync SDK
     implementation 'com.amplifyframework:aws-api:1.16.11'
     implementation 'com.amplifyframework:aws-datastore:1.16.11'
     implementation 'com.amplifyframework:aws-auth-cognito:1.17.1'
     implementation 'com.amazonaws:aws-android-sdk-s3:2.22.2'
-    //AppSync SDK
     implementation 'com.amazonaws:aws-android-sdk-appsync:2.9.0'
     implementation 'com.amazonaws:aws-android-sdk-appsync-api:2.9.0'
     implementation 'com.amazonaws:aws-android-sdk-appsync-runtime:2.9.0'
+    implementation 'com.amazonaws:aws-android-sdk-core:2.22.2'
+    implementation 'com.amazonaws:aws-android-sdk-lambda:2.2.0'
     implementation files('libs/libgsaverification-client.aar')
 
     //
