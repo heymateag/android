@@ -190,6 +190,13 @@ public class ExpandableItem extends FrameLayout {
         mExpanded = true;
     }
 
+    protected void updateLayoutHeight() {
+        if (mAnimator == null && mExpanded) {
+            mContent.getLayoutParams().height = measureContentHeight();
+            requestLayout();
+        }
+    }
+
     private int measureContentHeight() {
         int contentWidth = mContent.getWidth();
 

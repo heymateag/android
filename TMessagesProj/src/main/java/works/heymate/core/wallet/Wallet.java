@@ -11,7 +11,9 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import java.math.BigInteger;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
 import works.heymate.celo.CeloOffer;
 import works.heymate.celo.CeloSDK;
+import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 
@@ -31,7 +34,7 @@ public class Wallet {
     private static final String TAG = "Wallet";
 
     private static final String OFFERS_ON_ALFAJORES = "0x55FAe3d7A74d0873171967cF098aC0594601D533";
-    private static final String OFFERS_ON_MAINNET = "0x13A9E83E2e4367B453F806824531f174b02095Fe";
+    private static final String OFFERS_ON_MAINNET = "0xD82Ef810E1AB8873699632e7Eced16ef665CF257";
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
     private static final String OFFER_ADDRESS = BuildConfig.DEBUG ? OFFERS_ON_ALFAJORES : OFFERS_ON_MAINNET;
@@ -348,6 +351,40 @@ public class Wallet {
             else {
                 callback.onBalanceQueryResult(false, 0, errorCause);
             }
+        });
+    }
+
+    public interface TempCallback {
+        void onResult(boolean success, String error);
+    }
+
+    public void transfer(long cents, String destination, TempCallback callback) {
+        ensureCeloSDK();
+
+        mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
+            if (!success) {
+                callback.onResult(false, errorCause.getError().getMessage());
+                return;
+            }
+
+            BigInteger value = CurrencyUtil.centsToBlockChainValue(cents);
+
+            new Handler(mCeloSDK.getLooper()).post(() -> {
+                try {
+                    TransactionReceipt receipt = contractKit.contracts.getStableToken().transfer(destination, value).send();
+
+                    Utils.runOnUIThread(() -> {
+                        if (receipt.isStatusOK()) {
+                            callback.onResult(true, null);
+                        }
+                        else {
+                            callback.onResult(false, receipt.getRevertReason());
+                        }
+                    });
+                } catch (Exception e) {
+                    callback.onResult(false, e.getMessage());
+                }
+            });
         });
     }
 

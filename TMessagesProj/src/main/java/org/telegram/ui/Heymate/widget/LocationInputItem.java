@@ -160,7 +160,7 @@ public class LocationInputItem extends ExpandableItem {
         mOnlineMeetingCheckBox.setText("Online meeting"); // TODO Resource from Texts
         mOnlineMeetingCheckBox.setChecked(false);
         mOnlineMeetingCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkMeetingType());
-        content.addView(mOnlineMeetingCheckBox, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, TITLE_LEFT_MARGIN, 4, 0, 0));
+        content.addView(mOnlineMeetingCheckBox, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, HEADER_LEFT_MARGIN, 4, 0, 0));
 
         mInputAddress = new AppCompatAutoCompleteTextView(getContext());
         mInputAddress.setInputType(EditorInfo.TYPE_CLASS_TEXT);
@@ -172,7 +172,7 @@ public class LocationInputItem extends ExpandableItem {
         mInputAddress.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mInputAddress.setThreshold(2);
         mInputAddress.setBackground(Theme.createEditTextDrawable(getContext(), false));
-        content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, TITLE_LEFT_MARGIN, 24, 20, 0));
+        content.addView(mInputAddress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, HEADER_LEFT_MARGIN, 36, 20, 0));
 
         mInputAddress.setAdapter(new ArrayAdapter<WrappedAddress>(getContext(), works.heymate.beta.R.layout.autocomplete_item) {
 
@@ -277,7 +277,7 @@ public class LocationInputItem extends ExpandableItem {
             }
 
         };
-        content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.TOP, CONTENT_HORIZONTAL_MARGIN, 68, CONTENT_HORIZONTAL_MARGIN, 0));
+        content.addView(mMapView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 172, Gravity.TOP, CONTENT_HORIZONTAL_MARGIN, 68, CONTENT_HORIZONTAL_MARGIN, 0));
 
 //        ImageView imagePin = new ImageView(getContext());
 //        imagePin.setImageResource(works.heymate.beta.R.drawable.map_pin);
@@ -290,6 +290,7 @@ public class LocationInputItem extends ExpandableItem {
         boolean isChecked = mOnlineMeetingCheckBox.isChecked();
         mInputAddress.setVisibility(isChecked ? GONE : VISIBLE);
         mMapView.setVisibility(isChecked ? GONE : VISIBLE);
+        updateLayoutHeight();
     }
 
     public String getMeetingType() {

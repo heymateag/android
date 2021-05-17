@@ -21,7 +21,7 @@ public class HtSQLite extends SQLiteOpenHelper {
     public static void setInstance(Context context){
         if(instance == null){
             File dbFile = new File(ApplicationLoader.getFilesDirFixed().getPath(), "cache4.db");
-            instance = new HtSQLite(context, dbFile.getPath() , null, 80);
+            instance = new HtSQLite(context, dbFile.getPath() , null, 81);
         }
     }
 

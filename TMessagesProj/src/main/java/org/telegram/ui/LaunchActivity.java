@@ -141,6 +141,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 // Heymate
 import org.telegram.ui.Heymate.AttestationActivity;
 import org.telegram.ui.Heymate.DatabaseWatchDog;
+import org.telegram.ui.Heymate.EasterActivity;
 import org.telegram.ui.Heymate.FirebaseService;
 import org.telegram.ui.Heymate.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
@@ -614,7 +615,8 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     }
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 13) {
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFeaturesUrl", works.heymate.beta.R.string.TelegramFeaturesUrl));
+                    // Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFeaturesUrl", works.heymate.beta.R.string.TelegramFeaturesUrl)); TODO Remove easter
+                    presentFragment(new EasterActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 }
             }

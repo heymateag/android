@@ -245,6 +245,7 @@ public class HtAmplify {
                                 .maximumReservations(maximumReservations)
                                 .completedReservations(0)
                                 .remainingReservations(maximumReservations)
+                                .meetingType(newOffer.getMeetingType())
                                 .build();
 
                         Amplify.API.mutate(ModelMutation.create(timeSlot),
@@ -417,6 +418,7 @@ public class HtAmplify {
                 .serviceProviderId(timeSlot.getUserId())
                 .serviceProviderFcmToken(timeSlot.getUserFcmToken())
                 .status(HtTimeSlotStatus.BOOKED.name())
+                .meetingType(timeSlot.getMeetingType())
                 .build();
     }
 

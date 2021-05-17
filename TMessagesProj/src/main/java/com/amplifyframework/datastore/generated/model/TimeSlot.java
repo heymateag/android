@@ -33,6 +33,7 @@ public final class TimeSlot implements Model {
   public static final QueryField MAXIMUM_RESERVATIONS = field("TimeSlot", "maximumReservations");
   public static final QueryField COMPLETED_RESERVATIONS = field("TimeSlot", "completedReservations");
   public static final QueryField REMAINING_RESERVATIONS = field("TimeSlot", "remainingReservations");
+  public static final QueryField MEETING_TYPE = field("TimeSlot", "meetingType");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String offerId;
   private final @ModelField(targetType="String") String userId;
@@ -42,6 +43,7 @@ public final class TimeSlot implements Model {
   private final @ModelField(targetType="Int") Integer maximumReservations;
   private final @ModelField(targetType="Int") Integer completedReservations;
   private final @ModelField(targetType="Int") Integer remainingReservations;
+  private final @ModelField(targetType="String") String meetingType;
   public String getId() {
       return id;
   }
@@ -78,7 +80,11 @@ public final class TimeSlot implements Model {
       return remainingReservations;
   }
   
-  private TimeSlot(String id, String offerId, String userId, Integer startTime, Integer endTime, String userFCMToken, Integer maximumReservations, Integer completedReservations, Integer remainingReservations) {
+  public String getMeetingType() {
+      return meetingType;
+  }
+  
+  private TimeSlot(String id, String offerId, String userId, Integer startTime, Integer endTime, String userFCMToken, Integer maximumReservations, Integer completedReservations, Integer remainingReservations, String meetingType) {
     this.id = id;
     this.offerId = offerId;
     this.userId = userId;
@@ -88,6 +94,7 @@ public final class TimeSlot implements Model {
     this.maximumReservations = maximumReservations;
     this.completedReservations = completedReservations;
     this.remainingReservations = remainingReservations;
+    this.meetingType = meetingType;
   }
   
   @Override
@@ -106,7 +113,8 @@ public final class TimeSlot implements Model {
               ObjectsCompat.equals(getUserFcmToken(), timeSlot.getUserFcmToken()) &&
               ObjectsCompat.equals(getMaximumReservations(), timeSlot.getMaximumReservations()) &&
               ObjectsCompat.equals(getCompletedReservations(), timeSlot.getCompletedReservations()) &&
-              ObjectsCompat.equals(getRemainingReservations(), timeSlot.getRemainingReservations());
+              ObjectsCompat.equals(getRemainingReservations(), timeSlot.getRemainingReservations()) &&
+              ObjectsCompat.equals(getMeetingType(), timeSlot.getMeetingType());
       }
   }
   
@@ -122,6 +130,7 @@ public final class TimeSlot implements Model {
       .append(getMaximumReservations())
       .append(getCompletedReservations())
       .append(getRemainingReservations())
+      .append(getMeetingType())
       .toString()
       .hashCode();
   }
@@ -138,7 +147,8 @@ public final class TimeSlot implements Model {
       .append("userFCMToken=" + String.valueOf(getUserFcmToken()) + ", ")
       .append("maximumReservations=" + String.valueOf(getMaximumReservations()) + ", ")
       .append("completedReservations=" + String.valueOf(getCompletedReservations()) + ", ")
-      .append("remainingReservations=" + String.valueOf(getRemainingReservations()))
+      .append("remainingReservations=" + String.valueOf(getRemainingReservations()) + ", ")
+      .append("meetingType=" + String.valueOf(getMeetingType()))
       .append("}")
       .toString();
   }
@@ -175,6 +185,7 @@ public final class TimeSlot implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -188,7 +199,8 @@ public final class TimeSlot implements Model {
       userFCMToken,
       maximumReservations,
       completedReservations,
-      remainingReservations);
+      remainingReservations,
+      meetingType);
   }
   public interface BuildStep {
     TimeSlot build();
@@ -201,6 +213,7 @@ public final class TimeSlot implements Model {
     BuildStep maximumReservations(Integer maximumReservations);
     BuildStep completedReservations(Integer completedReservations);
     BuildStep remainingReservations(Integer remainingReservations);
+    BuildStep meetingType(String meetingType);
   }
   
 
@@ -214,6 +227,7 @@ public final class TimeSlot implements Model {
     private Integer maximumReservations;
     private Integer completedReservations;
     private Integer remainingReservations;
+    private String meetingType;
     @Override
      public TimeSlot build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -227,7 +241,8 @@ public final class TimeSlot implements Model {
           userFCMToken,
           maximumReservations,
           completedReservations,
-          remainingReservations);
+          remainingReservations,
+          meetingType);
     }
     
     @Override
@@ -278,6 +293,12 @@ public final class TimeSlot implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep meetingType(String meetingType) {
+        this.meetingType = meetingType;
+        return this;
+    }
+    
     /** 
      * WARNING: Do not set ID when creating a new object. Leave this blank and one will be auto generated for you.
      * This should only be set when referring to an already existing object.
@@ -301,7 +322,7 @@ public final class TimeSlot implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String offerId, String userId, Integer startTime, Integer endTime, String userFcmToken, Integer maximumReservations, Integer completedReservations, Integer remainingReservations) {
+    private CopyOfBuilder(String id, String offerId, String userId, Integer startTime, Integer endTime, String userFcmToken, Integer maximumReservations, Integer completedReservations, Integer remainingReservations, String meetingType) {
       super.id(id);
       super.offerId(offerId)
         .userId(userId)
@@ -310,7 +331,8 @@ public final class TimeSlot implements Model {
         .userFcmToken(userFcmToken)
         .maximumReservations(maximumReservations)
         .completedReservations(completedReservations)
-        .remainingReservations(remainingReservations);
+        .remainingReservations(remainingReservations)
+        .meetingType(meetingType);
     }
     
     @Override
@@ -351,6 +373,11 @@ public final class TimeSlot implements Model {
     @Override
      public CopyOfBuilder remainingReservations(Integer remainingReservations) {
       return (CopyOfBuilder) super.remainingReservations(remainingReservations);
+    }
+    
+    @Override
+     public CopyOfBuilder meetingType(String meetingType) {
+      return (CopyOfBuilder) super.meetingType(meetingType);
     }
   }
   
