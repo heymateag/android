@@ -75,7 +75,8 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     case BOOKED:
                                         builder.setContentText("1 Offer accepted.");
                                         break;
-                                    case CANCELLED:
+                                    case CANCELLED_BY_CONSUMER:
+                                    case CANCELLED_BY_SERVICE_PROVIDER:
                                         builder.setContentText("1 Offer canceled.");
                                         break;
                                     case MARKED_AS_STARTED:
