@@ -26,6 +26,9 @@ public class Texts {
     public static final String DETAILS = "details";
     public static final String START = "start";
     public static final String FINISH = "finish";
+    public static final String ONLINE_MEETING = "online_meeting";
+    public static final String START_SESSION = "start_session";
+    public static final String JOIN_SESSION = "join_session";
 
     public static final String NETWORK_BLOCKCHAIN_ERROR = "network_blockchain_error";
     public static final String NETWORK_ERROR = "network_error";

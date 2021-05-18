@@ -113,7 +113,12 @@ public class HtChatMessageCell extends FrameLayout {
             msgTimeLabel.setText(LocaleController.formatDate((long) message.messageOwner.date));
         }
 
-        addressLabel.setText(offer.getLocationData());
+        if (MeetingType.ONLINE_MEETING.equals(offer.getMeetingType())) {
+            addressLabel.setText(Texts.get(Texts.ONLINE_MEETING));
+        }
+        else {
+            addressLabel.setText(offer.getLocationData());
+        }
         setRate(offer.getRate());
         setRateType(offer.getRateType());
         setCurrency(offer.getCurrency());
@@ -300,7 +305,6 @@ public class HtChatMessageCell extends FrameLayout {
         LinearLayout expandableDetailsLayout = new LinearLayout(context);
         expandableDetailsLayout.setOrientation(LinearLayout.VERTICAL);
         addressLabel = new TextView(context);
-        addressLabel.setText("No. 489, 13th Street, Yousefabad District, Tehran, Iran");
         addressLabel.setTextSize(15);
         addressLabel.setMaxLines(5);
         addressLabel.setTypeface(addressLabel.getTypeface(), Typeface.BOLD);

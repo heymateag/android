@@ -20,6 +20,9 @@
     <string name="hm_details">Details</string>
     <string name="hm_start">Start</string>
     <string name="hm_finish">Finish</string>
+    <string name="hm_online_meeting">Online meeting</string>
+    <string name="hm_start_session">Start session</string>
+    <string name="hm_join_session">Join session</string>
 
     <string name="hm_network_blockchain_error">Could not transfer data with node.</string>
     <string name="hm_network_error">Could not transfer data with server.</string>

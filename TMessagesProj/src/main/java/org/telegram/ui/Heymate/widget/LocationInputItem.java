@@ -157,7 +157,7 @@ public class LocationInputItem extends ExpandableItem {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mOnlineMeetingCheckBox.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.ht_theme)));
         }
-        mOnlineMeetingCheckBox.setText("Online meeting"); // TODO Resource from Texts
+        mOnlineMeetingCheckBox.setText(Texts.get(Texts.ONLINE_MEETING));
         mOnlineMeetingCheckBox.setChecked(false);
         mOnlineMeetingCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> checkMeetingType());
         content.addView(mOnlineMeetingCheckBox, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, HEADER_LEFT_MARGIN, 4, 0, 0));

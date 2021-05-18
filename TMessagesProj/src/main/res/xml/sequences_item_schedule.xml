@@ -7,19 +7,21 @@
         <Span size="8dp"/>
     </Vertical>
 
-    <Vertical start="start@image_user">
-        <Span size="8dp"/>
+    <Vertical start="start@image_user" end="end@image_user">
+        <Span size="1w"/>
         <Span id="text_name" size="wrap"/>
-        <Span size="12dp"/>
+        <Span size="4dp"/>
         <Span id="text_info" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="end@text_info">
+        <Span size="8dp"/>
+        <Span id="button_left" size="12pw"/>
         <Span size="8dp"/>
     </Vertical>
 
-    <Vertical start="start@text_name">
-        <Span id="button_left" size="12pw"/>
-    </Vertical>
-
-    <Vertical start="start@text_name">
+    <Vertical start="start@button_left">
         <Span id="button_right" size="12pw"/>
     </Vertical>
 
@@ -28,15 +30,18 @@
         <Span id="image_user" size="16.3pw"/>
         <Span size="12dp"/>
         <Span id="text_name" size="1w"/>
-        <Span size="2dp"/>
-        <Span id="button_left" size="21pw"/>
-        <Span size="4dp"/>
-        <Span id="button_right" size="21pw"/>
         <Span size="20dp"/>
     </Horizontal>
 
-    <Horizontal start="start@text_name" end="start@button_left">
+    <Horizontal start="start@text_name" end="end@text_name">
         <Span id="text_info" size="100%"/>
+    </Horizontal>
+
+    <Horizontal end="end@text_name">
+        <Span size="1w"/>
+        <Span id="button_left" size="21pw"/>
+        <Span size="4dp"/>
+        <Span id="button_right" size="wrap" min="21pw"/>
     </Horizontal>
 
 </Sequences>

@@ -474,6 +474,25 @@ public class HtAmplify {
                 });
     }
 
+    public void getMyReservedTimeSlots(APICallback<List<TimeSlot>> callback) {
+        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+        Amplify.API.query(ModelQuery.list(TimeSlot.class, TimeSlot.USER_ID.eq(userId).and(TimeSlot.COMPLETED_RESERVATIONS.ge(1))), result -> {
+            List<TimeSlot> timeSlots = new ArrayList<>();
+
+            if (result.hasData()) {
+                for (TimeSlot timeSlot: result.getData()) {
+                    timeSlots.add(timeSlot);
+                }
+            }
+
+            Utils.runOnUIThread(() -> callback.onCallResult(true, timeSlots, null));
+        }, error -> {
+            Log.e("HtAmplify", "Failed to get reserved time slots", error);
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
     public void getMyOrders(APICallback<List<Reservation>> callback) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
         getReservations(Reservation.CONSUMER_ID.eq(userId), callback);
@@ -516,18 +535,49 @@ public class HtAmplify {
         });
     }
 
+    public void getTimeSlotReservations(String id, APICallback<List<Reservation>> callback) {
+        Amplify.API.query(ModelQuery.list(Reservation.class, Reservation.OFFER_ID.eq(id)), result -> {
+            List<Reservation> reservations = new ArrayList<>();
+
+            if (result.hasData()) {
+                for (Reservation reservation: result.getData()) {
+                    reservations.add(reservation);
+                }
+            }
+
+            Utils.runOnUIThread(() -> callback.onCallResult(true, reservations, null));
+        }, error -> {
+            Log.e("HtAmplify", "Failed to query reservations.", error);
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
     public void updateReservation(Reservation reservation, HtTimeSlotStatus status) {
         Reservation mutatedReservation = reservation.copyOfBuilder()
                 .status(status.name())
                 .build();
 
-        Amplify.API.mutate(ModelMutation.update(mutatedReservation), result -> {
+        updateReservation(mutatedReservation);
+    }
+
+    public void updateReservation(Reservation reservation, HtTimeSlotStatus status, String meetingId) {
+        Reservation mutatedReservation = reservation.copyOfBuilder()
+                .status(status.name())
+                .meetingId(meetingId)
+                .build();
+
+        updateReservation(mutatedReservation);
+    }
+
+    private void updateReservation(Reservation reservation) {
+        Amplify.API.mutate(ModelMutation.update(reservation), result -> {
             HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservation.getId());
 
             if (result.hasData()) {
                 Log.i("HtAmplify", "Reservation updated.");
 
-                if (status == HtTimeSlotStatus.CANCELLED) {
+                if (HtTimeSlotStatus.CANCELLED_BY_CONSUMER.name().equals(reservation.getStatus()) ||
+                        HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER.name().equals(reservation.getStatus())) {
                     Log.i("HtAmplify", "Updating time slot.");
                     getTimeSlot(reservation.getTimeSlotId(), (success, result1, exception) -> {
                         if (success && result1 != null) {

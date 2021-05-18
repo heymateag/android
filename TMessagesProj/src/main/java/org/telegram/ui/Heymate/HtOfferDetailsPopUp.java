@@ -149,7 +149,12 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         TextView addressText = new TextView(context);
         addressText.setId(idCounter++);
-        addressText.setText(offer.getLocationData());
+        if (MeetingType.ONLINE_MEETING.equals(offer.getMeetingType())) {
+            addressText.setText(Texts.get(Texts.ONLINE_MEETING));
+        }
+        else {
+            addressText.setText(offer.getLocationData());
+        }
         addressText.setTextSize(13);
         addressText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         RelativeLayout.LayoutParams addressTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
