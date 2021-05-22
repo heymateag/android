@@ -30,7 +30,7 @@ public final class Offer implements Model {
   public static final QueryField AVAILABILITY_SLOT = field("Offer", "availabilitySlot");
   public static final QueryField CATEGORY = field("Offer", "category");
   public static final QueryField CREATED_AT = field("Offer", "createdAt");
-  public static final QueryField CURRENCY = field("Offer", "currency");
+  public static final QueryField PRICING_INFO = field("Offer", "pricingInfo");
   public static final QueryField DESCRIPTION = field("Offer", "description");
   public static final QueryField EDITED_AT = field("Offer", "editedAt");
   public static final QueryField EXPIRY = field("Offer", "expiry");
@@ -39,8 +39,6 @@ public final class Offer implements Model {
   public static final QueryField LONGITUDE = field("Offer", "longitude");
   public static final QueryField MEETING_TYPE = field("Offer", "meetingType");
   public static final QueryField MAXIMUM_RESERVATIONS = field("Offer", "maximumReservations");
-  public static final QueryField RATE = field("Offer", "rate");
-  public static final QueryField RATE_TYPE = field("Offer", "rateType");
   public static final QueryField SERVICE_PROVIDER_ADDRESS = field("Offer", "serviceProviderAddress");
   public static final QueryField SERVICE_PROVIDER_SIGNATURE = field("Offer", "serviceProviderSignature");
   public static final QueryField STATUS = field("Offer", "status");
@@ -53,7 +51,7 @@ public final class Offer implements Model {
   private final @ModelField(targetType="AWSJSON") String availabilitySlot;
   private final @ModelField(targetType="String") String category;
   private final @ModelField(targetType="Int") Integer createdAt;
-  private final @ModelField(targetType="String") String currency;
+  private final @ModelField(targetType="String") String pricingInfo;
   private final @ModelField(targetType="String") String description;
   private final @ModelField(targetType="Int") Integer editedAt;
   private final @ModelField(targetType="AWSDate") Temporal.Date expiry;
@@ -62,8 +60,6 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String longitude;
   private final @ModelField(targetType="String") String meetingType;
   private final @ModelField(targetType="Int") Integer maximumReservations;
-  private final @ModelField(targetType="String") String rate;
-  private final @ModelField(targetType="String") String rateType;
   private final @ModelField(targetType="String") String serviceProviderAddress;
   private final @ModelField(targetType="String") String serviceProviderSignature;
   private final @ModelField(targetType="Int") Integer status;
@@ -88,8 +84,8 @@ public final class Offer implements Model {
       return createdAt;
   }
   
-  public String getCurrency() {
-      return currency;
+  public String getPricingInfo() {
+      return pricingInfo;
   }
   
   public String getDescription() {
@@ -124,14 +120,6 @@ public final class Offer implements Model {
       return maximumReservations;
   }
   
-  public String getRate() {
-      return rate;
-  }
-  
-  public String getRateType() {
-      return rateType;
-  }
-  
   public String getServiceProviderAddress() {
       return serviceProviderAddress;
   }
@@ -164,12 +152,12 @@ public final class Offer implements Model {
       return userID;
   }
   
-  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
+  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
     this.createdAt = createdAt;
-    this.currency = currency;
+    this.pricingInfo = pricingInfo;
     this.description = description;
     this.editedAt = editedAt;
     this.expiry = expiry;
@@ -178,8 +166,6 @@ public final class Offer implements Model {
     this.longitude = longitude;
     this.meetingType = meetingType;
     this.maximumReservations = maximumReservations;
-    this.rate = rate;
-    this.rateType = rateType;
     this.serviceProviderAddress = serviceProviderAddress;
     this.serviceProviderSignature = serviceProviderSignature;
     this.status = status;
@@ -202,7 +188,7 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getAvailabilitySlot(), offer.getAvailabilitySlot()) &&
               ObjectsCompat.equals(getCategory(), offer.getCategory()) &&
               ObjectsCompat.equals(getCreatedAt(), offer.getCreatedAt()) &&
-              ObjectsCompat.equals(getCurrency(), offer.getCurrency()) &&
+              ObjectsCompat.equals(getPricingInfo(), offer.getPricingInfo()) &&
               ObjectsCompat.equals(getDescription(), offer.getDescription()) &&
               ObjectsCompat.equals(getEditedAt(), offer.getEditedAt()) &&
               ObjectsCompat.equals(getExpiry(), offer.getExpiry()) &&
@@ -211,8 +197,6 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getLongitude(), offer.getLongitude()) &&
               ObjectsCompat.equals(getMeetingType(), offer.getMeetingType()) &&
               ObjectsCompat.equals(getMaximumReservations(), offer.getMaximumReservations()) &&
-              ObjectsCompat.equals(getRate(), offer.getRate()) &&
-              ObjectsCompat.equals(getRateType(), offer.getRateType()) &&
               ObjectsCompat.equals(getServiceProviderAddress(), offer.getServiceProviderAddress()) &&
               ObjectsCompat.equals(getServiceProviderSignature(), offer.getServiceProviderSignature()) &&
               ObjectsCompat.equals(getStatus(), offer.getStatus()) &&
@@ -231,7 +215,7 @@ public final class Offer implements Model {
       .append(getAvailabilitySlot())
       .append(getCategory())
       .append(getCreatedAt())
-      .append(getCurrency())
+      .append(getPricingInfo())
       .append(getDescription())
       .append(getEditedAt())
       .append(getExpiry())
@@ -240,8 +224,6 @@ public final class Offer implements Model {
       .append(getLongitude())
       .append(getMeetingType())
       .append(getMaximumReservations())
-      .append(getRate())
-      .append(getRateType())
       .append(getServiceProviderAddress())
       .append(getServiceProviderSignature())
       .append(getStatus())
@@ -262,7 +244,7 @@ public final class Offer implements Model {
       .append("availabilitySlot=" + String.valueOf(getAvailabilitySlot()) + ", ")
       .append("category=" + String.valueOf(getCategory()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
-      .append("currency=" + String.valueOf(getCurrency()) + ", ")
+      .append("pricingInfo=" + String.valueOf(getPricingInfo()) + ", ")
       .append("description=" + String.valueOf(getDescription()) + ", ")
       .append("editedAt=" + String.valueOf(getEditedAt()) + ", ")
       .append("expiry=" + String.valueOf(getExpiry()) + ", ")
@@ -271,8 +253,6 @@ public final class Offer implements Model {
       .append("longitude=" + String.valueOf(getLongitude()) + ", ")
       .append("meetingType=" + String.valueOf(getMeetingType()) + ", ")
       .append("maximumReservations=" + String.valueOf(getMaximumReservations()) + ", ")
-      .append("rate=" + String.valueOf(getRate()) + ", ")
-      .append("rateType=" + String.valueOf(getRateType()) + ", ")
       .append("serviceProviderAddress=" + String.valueOf(getServiceProviderAddress()) + ", ")
       .append("serviceProviderSignature=" + String.valueOf(getServiceProviderSignature()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
@@ -329,8 +309,6 @@ public final class Offer implements Model {
       null,
       null,
       null,
-      null,
-      null,
       null
     );
   }
@@ -340,7 +318,7 @@ public final class Offer implements Model {
       availabilitySlot,
       category,
       createdAt,
-      currency,
+      pricingInfo,
       description,
       editedAt,
       expiry,
@@ -349,8 +327,6 @@ public final class Offer implements Model {
       longitude,
       meetingType,
       maximumReservations,
-      rate,
-      rateType,
       serviceProviderAddress,
       serviceProviderSignature,
       status,
@@ -371,7 +347,7 @@ public final class Offer implements Model {
     BuildStep availabilitySlot(String availabilitySlot);
     BuildStep category(String category);
     BuildStep createdAt(Integer createdAt);
-    BuildStep currency(String currency);
+    BuildStep pricingInfo(String pricingInfo);
     BuildStep description(String description);
     BuildStep editedAt(Integer editedAt);
     BuildStep expiry(Temporal.Date expiry);
@@ -380,8 +356,6 @@ public final class Offer implements Model {
     BuildStep longitude(String longitude);
     BuildStep meetingType(String meetingType);
     BuildStep maximumReservations(Integer maximumReservations);
-    BuildStep rate(String rate);
-    BuildStep rateType(String rateType);
     BuildStep serviceProviderAddress(String serviceProviderAddress);
     BuildStep serviceProviderSignature(String serviceProviderSignature);
     BuildStep status(Integer status);
@@ -398,7 +372,7 @@ public final class Offer implements Model {
     private String availabilitySlot;
     private String category;
     private Integer createdAt;
-    private String currency;
+    private String pricingInfo;
     private String description;
     private Integer editedAt;
     private Temporal.Date expiry;
@@ -407,8 +381,6 @@ public final class Offer implements Model {
     private String longitude;
     private String meetingType;
     private Integer maximumReservations;
-    private String rate;
-    private String rateType;
     private String serviceProviderAddress;
     private String serviceProviderSignature;
     private Integer status;
@@ -425,7 +397,7 @@ public final class Offer implements Model {
           availabilitySlot,
           category,
           createdAt,
-          currency,
+          pricingInfo,
           description,
           editedAt,
           expiry,
@@ -434,8 +406,6 @@ public final class Offer implements Model {
           longitude,
           meetingType,
           maximumReservations,
-          rate,
-          rateType,
           serviceProviderAddress,
           serviceProviderSignature,
           status,
@@ -472,8 +442,8 @@ public final class Offer implements Model {
     }
     
     @Override
-     public BuildStep currency(String currency) {
-        this.currency = currency;
+     public BuildStep pricingInfo(String pricingInfo) {
+        this.pricingInfo = pricingInfo;
         return this;
     }
     
@@ -522,18 +492,6 @@ public final class Offer implements Model {
     @Override
      public BuildStep maximumReservations(Integer maximumReservations) {
         this.maximumReservations = maximumReservations;
-        return this;
-    }
-    
-    @Override
-     public BuildStep rate(String rate) {
-        this.rate = rate;
-        return this;
-    }
-    
-    @Override
-     public BuildStep rateType(String rateType) {
-        this.rateType = rateType;
         return this;
     }
     
@@ -602,13 +560,13 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String currency, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String rate, String rateType, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
       super.id(id);
       super.userId(userId)
         .availabilitySlot(availabilitySlot)
         .category(category)
         .createdAt(createdAt)
-        .currency(currency)
+        .pricingInfo(pricingInfo)
         .description(description)
         .editedAt(editedAt)
         .expiry(expiry)
@@ -617,8 +575,6 @@ public final class Offer implements Model {
         .longitude(longitude)
         .meetingType(meetingType)
         .maximumReservations(maximumReservations)
-        .rate(rate)
-        .rateType(rateType)
         .serviceProviderAddress(serviceProviderAddress)
         .serviceProviderSignature(serviceProviderSignature)
         .status(status)
@@ -649,8 +605,8 @@ public final class Offer implements Model {
     }
     
     @Override
-     public CopyOfBuilder currency(String currency) {
-      return (CopyOfBuilder) super.currency(currency);
+     public CopyOfBuilder pricingInfo(String pricingInfo) {
+      return (CopyOfBuilder) super.pricingInfo(pricingInfo);
     }
     
     @Override
@@ -691,16 +647,6 @@ public final class Offer implements Model {
     @Override
      public CopyOfBuilder maximumReservations(Integer maximumReservations) {
       return (CopyOfBuilder) super.maximumReservations(maximumReservations);
-    }
-    
-    @Override
-     public CopyOfBuilder rate(String rate) {
-      return (CopyOfBuilder) super.rate(rate);
-    }
-    
-    @Override
-     public CopyOfBuilder rateType(String rateType) {
-      return (CopyOfBuilder) super.rateType(rateType);
     }
     
     @Override

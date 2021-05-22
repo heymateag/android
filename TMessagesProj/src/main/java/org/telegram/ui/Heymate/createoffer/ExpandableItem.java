@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate.widget;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

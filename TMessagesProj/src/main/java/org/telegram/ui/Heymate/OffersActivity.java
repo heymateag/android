@@ -30,6 +30,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.CombinedDrawable;
+import org.telegram.ui.Heymate.createoffer.HtCreateOfferActivity;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 
 import java.util.ArrayList;
@@ -186,55 +187,10 @@ public class OffersActivity extends BaseFragment {
         if (offers == null)
             return;
         for (OfferDto offerDto : offers) {
-            HtChatMessageCell offerCell1 = new HtChatMessageCell(context) {
-                @Override
-                public void setEnabled(boolean enabled) {
-                    super.setEnabled(enabled);
-                    setAlpha(enabled ? 1.0f : 0.5f);
-                    setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(Theme.getColor(Theme.key_dialogTextGray)));
-                }
-            };
-            offerCell1.setOffer(offerDto.asOffer());
-            offerCell1.setOut(true);
-            offerCell1.setStatus(offerDto.getStatus());
-            offerCell1.setArchived(offerDto.getStatus() == OfferStatus.ARCHIVED);
-            TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-            String name;
-
-            if (user.username != null) {
-                name = "@" + user.username;
-            }
-            else {
-                name = user.first_name;
-
-                if (!TextUtils.isEmpty(user.last_name)) {
-                    name = name + " " + user.last_name;
-                }
-            }
-            // TODO Make a clean text for offer details!
-            String message = OfferUtils.serializeBeautiful(offerDto.asOffer(), null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
-            offerCell1.configLabel.setText(message);
-
-            HtAmplify.getInstance(context).getTimeSlots(offerDto.getServerUUID(), ((success, data, exception) -> {
-                if (!success) {
-                    if (exception != null) {
-                        Log.e("HtAmplify", "Failed to get time slots for offer with id " + offerDto.getServerUUID(), exception);
-                    }
-                    return;
-                }
-                ArrayList<Long> dates = new ArrayList<>();
-                for(TimeSlot timeSlot : data){
-                    dates.add(((long) (timeSlot.getStartTime())) * 1000);
-                    dates.add(((long) (timeSlot.getEndTime())) * 1000);
-                }
-                offerCell1.setDateSlots(dates);
-            }));
-            ArrayList<Long> dates = new ArrayList<>();
-            offerCell1.setDateSlots(dates);
+            OfferMessageItem offerCell1 = new OfferMessageItem(context);
+            offerCell1.setOffer(offerDto.asOffer(), true);
             offerCell1.setParent(this);
             offersLayout.addView(offerCell1);
-            ObjectAnimator anim1 = ObjectAnimator.ofFloat(offerCell1, "scaleX", 0, 1);
-            anim1.start();
         }
 
     }

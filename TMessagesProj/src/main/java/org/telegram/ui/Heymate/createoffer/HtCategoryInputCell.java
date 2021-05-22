@@ -1,16 +1,12 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 

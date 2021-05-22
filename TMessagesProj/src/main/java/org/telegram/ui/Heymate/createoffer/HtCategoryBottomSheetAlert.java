@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -24,12 +24,14 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SearchField;
+import org.telegram.ui.Heymate.DummyCategories;
+import org.telegram.ui.Heymate.createoffer.HtCreateOfferActivity;
+import org.telegram.ui.Heymate.createoffer.HtTextCell;
 
 import java.util.ArrayList;
 import java.util.HashMap;

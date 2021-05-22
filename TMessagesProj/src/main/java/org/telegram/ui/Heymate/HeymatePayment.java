@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
@@ -25,6 +27,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -36,8 +39,9 @@ import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
+import works.heymate.core.offer.PurchasePlanInfo;
+import works.heymate.core.offer.PurchasePlanTypes;
 import works.heymate.core.wallet.Security;
-import works.heymate.core.wallet.VerifiedStatus;
 import works.heymate.core.wallet.Wallet;
 import works.heymate.ramp.Ramp;
 
@@ -53,12 +57,13 @@ public class HeymatePayment {
     private static int getStateTries = 3;
 
     private static Offer savedOffer = null;
+    private static PurchasedPlan savedPurchasedPlan = null;
     private static Referral savedReferral = null;
     private static TimeSlot savedTimeSlot = null;
 
-    public static void initPayment(BaseFragment fragment, String offerId, String referralId) {
+    public static void initPayment(BaseFragment fragment, String offerId, PurchasePlanInfo purchasePlan, String referralId) {
         if (referralId == null) {
-            initPayment(fragment, offerId, (Referral) null);
+            initPayment(fragment, offerId, purchasePlan, (Referral) null);
             return;
         }
 
@@ -70,7 +75,7 @@ public class HeymatePayment {
             LoadingUtil.onLoadingFinished();
 
             if (success) {
-                initPayment(fragment, offerId, result);
+                initPayment(fragment, offerId, purchasePlan, result);
             }
             else {
                 Log.e(TAG, "Failed to get referral with id " + offerId, exception);
@@ -82,7 +87,7 @@ public class HeymatePayment {
         });
     }
 
-    private static void initPayment(BaseFragment fragment, String offerId, Referral referral) {
+    private static void initPayment(BaseFragment fragment, String offerId, PurchasePlanInfo purchasePlan, Referral referral) {
         LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
         HtAmplify amplify = HtAmplify.getInstance(fragment.getParentActivity());
@@ -99,12 +104,48 @@ public class HeymatePayment {
                     return;
                 }
 
-                initPayment(fragment, (Offer) offer, referral);
+                initPayment(fragment, offer, purchasePlan, referral);
             });
         }));
     }
 
-    private static void initPayment(BaseFragment fragment, Offer offer, Referral referral) {
+    private static void initPayment(BaseFragment fragment, Offer offer, PurchasePlanInfo purchasePlan, Referral referral) {
+        PurchasedPlan purchasedPlan = PurchasedPlan.builder()
+                .planType(purchasePlan.type)
+                .offerId(offer.getId())
+                .serviceProviderId(offer.getUserId())
+                .consumerId(String.valueOf(UserConfig.getInstance(fragment.getCurrentAccount()).clientUserId))
+                .finishedReservationsCount(0)
+                .pendingReservationsCount(0)
+                .totalReservationsCount(0)
+                .purchaseTime(new Temporal.Date(new Date(System.currentTimeMillis())))
+                .reservationIds("[]")
+                .build();
+
+        if (PurchasePlanTypes.SINGLE.equals(purchasePlan.type)) {
+            purchaseTimeSlot(fragment, offer, purchasedPlan, referral);
+            return;
+        }
+
+        int price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlan);
+
+        if (PurchasePlanTypes.BUNDLE.equals(purchasePlan.type)) {
+            ensureWalletExistenceWithLoading(fragment, getNetNext(fragment, price, () -> initBundlePurchasePayment(fragment, offer, purchasedPlan, referral)));
+        }
+        else {
+            ensureWalletExistenceWithLoading(fragment, getNetNext(fragment, price, () -> initSubscriptionPurchasePayment(fragment, offer, purchasedPlan, referral)));
+        }
+    }
+
+    private static void initBundlePurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
+        // TODO
+    }
+
+    private static void initSubscriptionPurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
+        // TODO
+    }
+
+    public static void purchaseTimeSlot(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
         JSONObject availabilitySlot;
 
         try {
@@ -132,7 +173,7 @@ public class HeymatePayment {
 
             if (success) {
                 fragment.presentFragment(new TimeSlotSelectionActivity(timeZone, result, timeSlot -> {
-                    initPayment(fragment, offer, referral, timeSlot);
+                    ensureWalletExistenceWithLoading(fragment, () -> purchaseTimeSlot(fragment, offer, purchasedPlan, referral, timeSlot));
                 }));
             }
             else {
@@ -142,19 +183,10 @@ public class HeymatePayment {
         });
     }
 
-    private static void initPayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
+    private static void purchaseTimeSlot(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral, TimeSlot timeSlot) {
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
-
-        if (!wallet.isCreated()) {
-            LoadingUtil.onLoadingStarted(fragment.getParentActivity());
-            ensureWalletExistence(fragment.getParentActivity(), () -> {
-                LoadingUtil.onLoadingFinished();
-                initPayment(fragment, offer, referral, timeSlot);
-            });
-            return;
-        }
 
 //        VerifiedStatus verifiedStatus = wallet.getVerifiedStatus();
 //
@@ -170,20 +202,19 @@ public class HeymatePayment {
 //
 //            wallet.updateVerifiedStatus();
 //
-//            sObserver.task = () -> initPayment(fragment, offer, referral, timeSlot);
+//            sObserver.task = () -> purchaseTimeSlot(fragment, offer, purchasedPlan, referral, timeSlot);
 //            HeymateEvents.register(HeymateEvents.PHONE_NUMBER_VERIFIED_STATUS_UPDATED, sObserver);
 //            return;
 //        }
 //
 //        if (!verifiedStatus.verified) { // TODO uncomment
-//            fragment.presentFragment(new AttestationActivity(() -> initPayment(fragment, offer, timeSlot)));
+//            fragment.presentFragment(new AttestationActivity(() -> purchaseTimeSlot(fragment, offer, purchasedPlan, referral, timeSlot)));
 //            return;
 //        }
 
-        Runnable next = BuildConfig.DEBUG ?
-                () -> alfajoresTopUp(fragment, offer, referral, timeSlot) :
-                () -> checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
-//        Runnable next = () -> checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
+        int price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlan);
+
+        Runnable next = getNetNext(fragment, price, () -> initTimeSlotPurchasePayment(fragment, offer, purchasedPlan, referral, timeSlot));
 
         boolean needsSecuritySettings = !Security.ensureSecurity(
                 (FragmentActivity) fragment.getParentActivity(),
@@ -194,11 +225,22 @@ public class HeymatePayment {
                 next);
 
         if (needsSecuritySettings) {
-            fragment.presentFragment(new SecureWalletActivity(() -> initPayment(fragment, offer, referral, timeSlot)));
+            fragment.presentFragment(new SecureWalletActivity(() -> purchaseTimeSlot(fragment, offer, purchasedPlan, referral, timeSlot)));
         }
     }
 
-    private static void alfajoresTopUp(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
+    private static Runnable getNetNext(BaseFragment fragment, int price, Runnable next) {
+        if (price == 0) {
+            return next;
+        }
+
+        return BuildConfig.DEBUG ?
+                () -> alfajoresTopUp(fragment, next) :
+                () -> checkBalanceBeforePayment(fragment, price, next);
+//        return () -> checkBalanceBeforePayment(fragment, price, () -> initTimeSlotPurchasePayment(fragment, offer, purchasedPlan, referral, timeSlot));
+    }
+
+    private static void alfajoresTopUp(BaseFragment fragment, Runnable next) {
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
@@ -213,12 +255,12 @@ public class HeymatePayment {
                 .setView(addressView)
                 .setPositiveButton("Go", (dialog, which) -> {
                     dialog.dismiss();
-                    initPreparedPayment(fragment, offer, referral, timeSlot);
+                    next.run();
                 })
                 .show();
     }
 
-    private static void checkBalanceBeforePayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
+    private static void checkBalanceBeforePayment(BaseFragment fragment, int price, Runnable next) {
         org.telegram.ui.ActionBar.AlertDialog loadingDialog = new org.telegram.ui.ActionBar.AlertDialog(fragment.getParentActivity(), 3);
         loadingDialog.setCanCacnel(false);
         loadingDialog.show();
@@ -229,10 +271,10 @@ public class HeymatePayment {
             loadingDialog.dismiss();
 
             if (success || CeloSDK.isErrorCausedByInsufficientFunds(errorCause)) {
-                long amount = (long) (Double.parseDouble(offer.getRate()) * 100D);
+                long amount = (long) (price * 100D);
 
                 if (cents >= amount) {
-                    initPreparedPayment(fragment, offer, referral, timeSlot);
+                    next.run();
                 }
                 else {
                     long missingCents = amount - cents + 100;
@@ -244,15 +286,17 @@ public class HeymatePayment {
                             .setPositiveButton("Top up", (dialog, which) -> {
                                 dialog.dismiss();
 
+                                // TODO Save no longer works.
                                 // Save offer info
 //                                savedOffer = offer;
+//                                savedPurchasedPlan = purchasedPlan;
 //                                savedReferral = referral
 //                                savedTimeSlot = timeSlot;
 
                                 String topUpAmount = CurrencyUtil.centsToBlockChainValue(missingCents).toString();
 
                                 Ramp.getDialog(fragment.getParentActivity(), wallet.getAddress(), topUpAmount, () -> {
-                                    checkBalanceBeforePayment(fragment, offer, referral, timeSlot);
+                                    checkBalanceBeforePayment(fragment, price, next);
                                 }).show();
 //                                Intent intent = Ramp.getTopUpIntent(wallet.getAddress(), topUpAmount, RAMP_RETURN_URL);
 //                                intent = intent.createChooser(intent, "Top Up using");
@@ -273,8 +317,10 @@ public class HeymatePayment {
 
     public static boolean resumePayment(BaseFragment fragment) {
         if (savedOffer != null && savedTimeSlot != null) {
-            checkBalanceBeforePayment(fragment, savedOffer, savedReferral, savedTimeSlot);
+            int price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(savedOffer, savedPurchasedPlan);
+            checkBalanceBeforePayment(fragment, price, () -> initTimeSlotPurchasePayment(fragment, savedOffer, savedPurchasedPlan, savedReferral, savedTimeSlot));
             savedOffer = null;
+            savedPurchasedPlan = null;
             savedReferral = null;
             savedTimeSlot = null;
             return true;
@@ -282,7 +328,7 @@ public class HeymatePayment {
         return false;
     }
 
-    private static void initPreparedPayment(BaseFragment fragment, Offer offer, Referral referral, TimeSlot timeSlot) {
+    private static void initTimeSlotPurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral, TimeSlot timeSlot) {
         LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
         List<String> referrers = new ArrayList<>();
@@ -307,11 +353,12 @@ public class HeymatePayment {
             }
         }
 
-        Reservation reservation = HtAmplify.getInstance(fragment.getParentActivity()).createReservation(timeSlot, referral);
+        Reservation reservation = HtAmplify.getInstance(fragment.getParentActivity())
+                .createReservation(timeSlot, purchasedPlan, referral);
 
         Wallet wallet = Wallet.get(fragment.getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
-        wallet.createAcceptedOffer(offer, reservation, referrers, (success1, errorCause) -> {
+        wallet.createAcceptedOffer(offer, reservation, purchasedPlan, referrers, (success1, errorCause) -> {
             LoadingUtil.onLoadingFinished();
 
             if (success1) {
@@ -321,6 +368,21 @@ public class HeymatePayment {
                     LoadingUtil.onLoadingFinished();
 
                     if (success) {
+                        if (!PurchasePlanTypes.SINGLE.equals(purchasedPlan.getPlanType())) {
+                            PurchasedPlan.BuildStep modifiedPurchasedPlan = purchasedPlan.copyOfBuilder();
+
+                            try {
+                                JSONArray reservationIds = new JSONArray(purchasedPlan.getReservationIds());
+                                reservationIds.put(reservation.getId());
+                                modifiedPurchasedPlan.reservationIds(reservationIds.toString());
+                            } catch (JSONException e) { }
+
+                            modifiedPurchasedPlan.totalReservationsCount(purchasedPlan.getTotalReservationsCount() + 1);
+                            modifiedPurchasedPlan.pendingReservationsCount(purchasedPlan.getPendingReservationsCount() + 1);
+
+                            HtAmplify.getInstance(fragment.getParentActivity()).createOrUpdatePurchasedPlan(modifiedPurchasedPlan.build(), null);
+                        }
+
                         new AlertDialog.Builder(fragment.getParentActivity()) // TODO Text resource
                                 .setTitle("Offer accepted")
                                 .setMessage("You can check the state of your offer in My Schedule.")
@@ -356,6 +418,23 @@ public class HeymatePayment {
                 }
             }
         });
+    }
+
+    private static void ensureWalletExistenceWithLoading(BaseFragment fragment, Runnable runnable) {
+        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+
+        Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
+
+        if (!wallet.isCreated()) {
+            LoadingUtil.onLoadingStarted(fragment.getParentActivity());
+            ensureWalletExistence(fragment.getParentActivity(), () -> {
+                LoadingUtil.onLoadingFinished();
+                runnable.run();
+            });
+        }
+        else {
+            runnable.run();
+        }
     }
 
     public static void ensureWalletExistence(Context context, Runnable runnable) {

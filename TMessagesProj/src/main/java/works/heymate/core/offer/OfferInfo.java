@@ -4,7 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.ui.Heymate.MeetingType;
-import org.telegram.ui.Heymate.widget.LocationInputItem;
+import org.telegram.ui.Heymate.createoffer.LocationInputItem;
+import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,9 +23,7 @@ public class OfferInfo {
     private static final String CATEGORY = "category";
     private static final String SUB_CATEGORY = "sub_Category";
     private static final String EXPIRE_DATE = "expire_date";
-    private static final String CURRENCY = "currency";
-    private static final String RATE_TYPE = "rate_type";
-    private static final String RATE = "rate";
+    private static final String PRICING_INFO = "pricing_info";
     private static final String DATE_SLOTS = "date_slots";
 
     private LocationInputItem.LocationInfo mLocationInfo;
@@ -37,9 +36,7 @@ public class OfferInfo {
     private String mCategory;
     private String mSubCategory;
     private long mExpireDate;
-    private String mCurrency;
-    private String mRateType;
-    private String mRate;
+    private PriceInputItem.PricingInfo mPricingInfo;
     private List<Long> mDateSlots;
 
     public OfferInfo() {
@@ -78,14 +75,8 @@ public class OfferInfo {
             if (hasProperty(json, EXPIRE_DATE)) {
                 mExpireDate = json.getLong(EXPIRE_DATE);
             }
-            if (hasProperty(json, CURRENCY)) {
-                mCurrency = json.getString(CURRENCY);
-            }
-            if (hasProperty(json, RATE_TYPE)) {
-                mRateType = json.getString(RATE_TYPE);
-            }
-            if (hasProperty(json, RATE)) {
-                mRate = json.getString(RATE);
+            if (hasProperty(json, PRICING_INFO)) {
+                mPricingInfo = new PriceInputItem.PricingInfo(json.getJSONObject(PRICING_INFO));
             }
             if (hasProperty(json, DATE_SLOTS)) {
                 JSONArray jDateSlots = json.getJSONArray(DATE_SLOTS);
@@ -139,16 +130,8 @@ public class OfferInfo {
         return mExpireDate == 0 ? null : new Date(mExpireDate);
     }
 
-    public String getCurrency() {
-        return mCurrency;
-    }
-
-    public String getRateType() {
-        return mRateType;
-    }
-
-    public String getRate() {
-        return mRate;
+    public PriceInputItem.PricingInfo getPricingInfo() {
+        return mPricingInfo;
     }
 
     public List<Long> getDateSlots() {
@@ -195,16 +178,8 @@ public class OfferInfo {
         mExpireDate = expireDate == null ? 0 : expireDate.getTime();
     }
 
-    public void setCurrency(String currency) {
-        mCurrency = currency;
-    }
-
-    public void setRateType(String rateType) {
-        mRateType = rateType;
-    }
-
-    public void setRate(String rate) {
-        mRate = rate;
+    public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo) {
+        mPricingInfo = pricingInfo;
     }
 
     public void setDateSlots(List<Long> dateSlots) {
@@ -225,9 +200,7 @@ public class OfferInfo {
             json.put(CATEGORY, mCategory);
             json.put(SUB_CATEGORY, mSubCategory);
             json.put(EXPIRE_DATE, mExpireDate);
-            json.put(CURRENCY, mCurrency);
-            json.put(RATE_TYPE, mRateType);
-            json.put(RATE, mRate);
+            json.put(PRICING_INFO, mPricingInfo == null ? JSONObject.NULL : mPricingInfo.asJSON());
 
             if (mDateSlots != null) {
                 JSONArray jDateSlots = new JSONArray();

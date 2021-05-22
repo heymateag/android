@@ -221,8 +221,8 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewHelper;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.HtChatMessageCell;
 import org.telegram.ui.Heymate.HtSQLite;
+import org.telegram.ui.Heymate.OfferMessageItem;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21124,8 +21124,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
             if(viewType == 10){
-                view = new HtChatMessageCell(mContext);
-                ((HtChatMessageCell) view).setParent(ChatActivity.this);
+                view = new OfferMessageItem(mContext);
+                ((OfferMessageItem) view).setParent(ChatActivity.this);
             }
             else if (viewType == 0) {
 
@@ -21133,7 +21133,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     view = chatMessageCellsCache.get(0);
                     chatMessageCellsCache.remove(0);
                 } else {
-                    view = new ChatMessageCell(mContext);
+                    view = new OfferMessageItem(mContext);
+                    ((OfferMessageItem) view).setParent(ChatActivity.this);
                 }
                 MessageObject message = messages.get(messagesStartRow);
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
@@ -21885,8 +21886,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (position >= messagesStartRow && position < messagesEndRow) {
                 MessageObject message = messages.get(position - messagesStartRow);
                 View view = holder.itemView;
-                if(view instanceof HtChatMessageCell){
-                    final HtChatMessageCell offerCell = (HtChatMessageCell) view;
+                if(view instanceof OfferMessageItem){
+                    final OfferMessageItem offerCell = (OfferMessageItem) view;
                     AtomicReference<String> inputUrl = new AtomicReference<>();
                     if(message.messageOwner.entities != null && message.messageOwner.entities.stream().anyMatch((e) -> e instanceof TLRPC.TL_messageEntityTextUrl)){
                         message.messageOwner.entities.stream()
@@ -21903,7 +21904,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         HtAmplify.getInstance(mContext).getOffer(offer.getId(), ((success, fetchedOffer, exception) -> {
                             if (success) {
                                 Utils.runOnUIThread(() -> {
-                                    offerCell.setOffer(fetchedOffer);
+                                    offerCell.setOffer(fetchedOffer, true);
                                 });
                             }
                         }));
@@ -21914,16 +21915,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 HtAmplify.getInstance(mContext).getOffer(result.getOfferId(), (success1, fetchedOffer, exception1) -> {
                                     if (success1) {
                                         Utils.runOnUIThread(() -> {
-                                            offerCell.setOffer(fetchedOffer);
+                                            offerCell.setOffer(fetchedOffer, true);
                                         });
                                     }
                                 });
                             }
                         });
                     }
-                    offerCell.setMessage(message);
-                    offerCell.setOut(message.isOut());
-                    offerCell.setOffer(offer);
+                    offerCell.setOffer(offer, phraseInfo.offerId != null);
                 }
                 if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;

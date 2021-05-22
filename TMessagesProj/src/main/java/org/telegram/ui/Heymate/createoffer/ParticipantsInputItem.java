@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate.widget;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate.widget;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 

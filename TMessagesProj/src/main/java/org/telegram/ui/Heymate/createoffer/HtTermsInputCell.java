@@ -1,16 +1,13 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,35 +15,37 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.HashMap;
 
-public class HtPriceInputCell extends LinearLayout {
+import works.heymate.core.Texts;
+
+public class HtTermsInputCell extends LinearLayout {
 
     private String title;
     private HashMap<String, Object> paremetersValues;
     private TextView[] parametersViews;
     private Drawable iconValue;
     private HashMap<String, Runnable> args;
-    private int position = 0;
 
-    public HtPriceInputCell(Context context, HtCreateOfferActivity parent, String title, HashMap<String, Runnable> args, int icon, boolean canEdit, int position) {
+    public HtTermsInputCell(Context context, HtCreateOfferActivity parent, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
         super(context);
         paremetersValues = new HashMap<>();
         parametersViews = new TextView[args.size()];
-        this.position = position;
         this.args = args;
         this.title = title;
+        setMinimumHeight(500);
 
         LinearLayout titleLayout = new LinearLayout(context);
+
         ImageView titleImage = new ImageView(context);
         iconValue = context.getResources().getDrawable(icon);
         iconValue.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         titleImage.setImageDrawable(iconValue);
         titleLayout.addView(titleImage, LayoutHelper.createLinear(20, 20, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 15, 15));
+
         LinearLayout titleLayout2 = new LinearLayout(context);
         titleLayout2.setOrientation(LinearLayout.VERTICAL);
         LinearLayout titleLayout3 = new LinearLayout(context);
@@ -57,6 +56,7 @@ public class HtPriceInputCell extends LinearLayout {
         titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleLabel.setPadding(15, 0, 0, 0);
         titleLayout3.addView(titleLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 1f, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 0, 15));
+
         ImageView expandIcon = new ImageView(context);
         Drawable expandDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_more);
         expandDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
@@ -65,6 +65,7 @@ public class HtPriceInputCell extends LinearLayout {
         titleLayout2.addView(titleLayout3);
 
         LinearLayout categoryLayout = new LinearLayout(context);
+        categoryLayout.setOrientation(VERTICAL);
         expandIcon.setEnabled(true);
         expandIcon.setHovered(true);
         final boolean[] isOpen = {false};
@@ -145,11 +146,22 @@ public class HtPriceInputCell extends LinearLayout {
         });
         int i = 0;
 
+        LinearLayout selectedTermsLayout = new LinearLayout(context);
+        selectedTermsLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
+        selectedTermsLayout.setGravity(Gravity.CENTER);
+
+        TextView heymateTerms = new TextView(context);
+        heymateTerms.setText(Texts.get(Texts.CREATE_OFFER_HEYMATE_TERMS));
+        heymateTerms.setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
+        heymateTerms.setPaintFlags(heymateTerms.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        heymateTerms.setTypeface(heymateTerms.getTypeface(), Typeface.BOLD);
+        selectedTermsLayout.addView(heymateTerms, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 10, 5, 10, 5));
+        categoryLayout.addView(selectedTermsLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 25, 25, 0));
+
         for (Object arg : args.keySet().stream().sorted().toArray()) {
             LinearLayout parametersLayout = new LinearLayout(context);
             parametersLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
             parametersLayout.setGravity(Gravity.CENTER);
-
             parametersViews[i] = new TextView(context);
             parametersViews[i].setText(((String) arg).substring(2));
             parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
@@ -160,7 +172,7 @@ public class HtPriceInputCell extends LinearLayout {
             if (canEdit) {
                 titleLayout3.setEnabled(true);
                 titleLayout3.setHovered(true);
-                parametersLayout.setOnClickListener(new View.OnClickListener() {
+                parametersLayout.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         args.get(arg).run();
@@ -170,14 +182,13 @@ public class HtPriceInputCell extends LinearLayout {
             categoryLayout.addView(parametersLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 25, 25, 0));
             i++;
         }
-        titleLayout2.addView(categoryLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        titleLayout2.addView(categoryLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 20));
         categoryLayout.setVisibility(GONE);
         titleLayout2.addView(new HtDividerCell(context, true), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 15, 0, 0));
-        titleLayout.addView(titleLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        titleLayout.addView(titleLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 20));
         addView(titleLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
     }
-
 
     public void setRes(String arg, Object value, int position) {
         paremetersValues.put(arg, value);

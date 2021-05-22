@@ -22,10 +22,12 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.query.predicate.QueryPredicate;
 import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
+import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -48,6 +50,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class HtAmplify {
+    
+    private static final String TAG = "HtAmplify";
 
     private static HtAmplify instance;
 
@@ -180,9 +184,9 @@ public class HtAmplify {
             // LambdaDataBinder.
             mFunctions = factory.build(LambdaFunctions.class);
 
-            Log.i("HtAmplify", "Initialized Amplify.");
+            Log.i(TAG, "Initialized Amplify.");
         } catch (AmplifyException error) {
-            Log.e("HtAmplify", "Could not initialize Amplify.", error);
+            Log.e(TAG, "Could not initialize Amplify.", error);
         }
     }
 
@@ -199,9 +203,7 @@ public class HtAmplify {
                 .title(dto.getTitle())
                 .category(dto.getCategory())
                 .subCategory(dto.getSubCategory())
-                .rate("" + dto.getRate())
-                .rateType(dto.getRateType())
-                .currency(dto.getCurrency())
+                .pricingInfo(dto.getPricingInfo() == null ? null : dto.getPricingInfo().asJSON().toString())
                 .description(dto.getDescription())
                 .expiry(new Temporal.Date(dto.getExpire()))
                 .id(UUID.randomUUID().toString())
@@ -226,7 +228,7 @@ public class HtAmplify {
                     if (pickedImage != null) {
                         HtStorage.getInstance().setOfferImage(context, response.getData().getId(), pickedImage);
                     }
-                    Log.i("HtAmplify", "Offer Created.");
+                    Log.i(TAG, "Offer Created.");
 
                     String fcmToken = FirebaseInstanceId.getInstance().getToken();
 
@@ -250,16 +252,16 @@ public class HtAmplify {
 
                         Amplify.API.mutate(ModelMutation.create(timeSlot),
                                 response2 -> {
-                                    Log.i("HtAmplify", "Time Slot created");
+                                    Log.i(TAG, "Time Slot created");
                                 },
-                                error -> Log.e("HtAmplify", "Time Slot creation failed", error)
+                                error -> Log.e(TAG, "Time Slot creation failed", error)
                         );
                     }
 
                     Utils.runOnUIThread(() -> callback.onCallResult(true, newOffer, null));
                 },
                 error -> {
-                    Log.e("HtAmplify", "Create failed", error);
+                    Log.e(TAG, "Create failed", error);
                     Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
                 }
         );
@@ -274,9 +276,9 @@ public class HtAmplify {
 
         Amplify.API.mutate(ModelMutation.create(newShop),
                 response -> {
-                    Log.i("HtAmplify", "Shop Created.");
+                    Log.i(TAG, "Shop Created.");
                 },
-                error -> Log.e("HtAmplify", "Create failed", error)
+                error -> Log.e(TAG, "Create failed", error)
         );
 
         return newShop;
@@ -317,77 +319,6 @@ public class HtAmplify {
         );
     }
 
-    public Offer updateOffer(OfferDto dto) {
-        int maximumReservations = dto.getMaximumReservations();
-
-        Offer newOffer = Offer.builder()
-                .userId("" + dto.getUserId())
-                .title(dto.getTitle())
-                .category(dto.getCategory())
-                .subCategory(dto.getSubCategory())
-                .rate("" + dto.getRate())
-                .rateType(dto.getRateType())
-                .currency(dto.getCurrency())
-                .description(dto.getDescription())
-                .expiry(new Temporal.Date(dto.getExpire()))
-                .id(dto.getServerUUID())
-                .availabilitySlot(dto.getTimeSlotsAsJson())
-                .locationData(dto.getLocation())
-                .meetingType(dto.getMeetingType())
-                .maximumReservations(maximumReservations)
-                .terms(dto.getTerms())
-                .termsConfig(dto.getConfigText())
-                .latitude("" + dto.getLatitude())
-                .longitude("" + dto.getLongitude())
-                .status(dto.getStatus().ordinal())
-                .createdAt(dto.getCreatedAt())
-                .editedAt((int) ((new Date()).toInstant().getEpochSecond() / 1000))
-                .build();
-
-        Amplify.API.query(
-                ModelQuery.list(TimeSlot.class, TimeSlot.OFFER_ID.eq(dto.getServerUUID())),
-                response -> {
-                    if (response.getData() != null) {
-                        for (TimeSlot timeSlot : response.getData()) {
-                            Amplify.API.mutate(
-                                    ModelMutation.delete(timeSlot),
-                                    response2 -> {
-                                        Log.i("HtAmplify", "TimeSlot updated.");
-                                    },
-                                    error2 -> Log.e("HtAmplify", "Failed to update", error2)
-                            );
-                        }
-                    }
-                },
-                error -> Log.e("HtAmplify", "Query failure", error)
-        );
-
-        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
-        String fcmToken = FirebaseInstanceId.getInstance().getToken();
-
-        ArrayList<Long> times = dto.getDateSlots();
-        for (int i = 0; i < times.size(); i += 2) {
-
-            TimeSlot timeSlot = TimeSlot.builder()
-                    .startTime((int) (times.get(i) / 1000))
-                    .endTime((int) (times.get(i + 1) / 1000))
-                    .offerId(newOffer.getId())
-                    .maximumReservations(maximumReservations)
-                    .userId(userId)
-                    .userFcmToken(fcmToken)
-                    .build();
-
-            Amplify.API.mutate(ModelMutation.create(timeSlot),
-                    response -> {
-                        Log.i("HtAmplify", "Time Slot created");
-                    },
-                    error -> Log.e("HtAmplify", "Time Slot creation failed", error)
-            );
-        }
-
-        return newOffer;
-    }
-
     public void getTimeSlot(String timeSlotId, APICallback<TimeSlot> callback) {
         Amplify.API.query(ModelQuery.get(TimeSlot.class, timeSlotId),
                 response -> {
@@ -402,7 +333,51 @@ public class HtAmplify {
                 });
     }
 
-    public Reservation createReservation(TimeSlot timeSlot, Referral referral) {
+    public void createPurchasedPlan(PurchasedPlan plan, APICallback<PurchasedPlan> callback) {
+        Amplify.API.mutate(ModelMutation.create(plan), result -> {
+                if (callback != null) {
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, result.getData(), null));
+                }
+            },
+                error -> {
+                    Log.e(TAG, "Failed to create purchased plan", error);
+
+                    if (callback != null) {
+                        callback.onCallResult(false, null, error);
+                    }
+                });
+    }
+
+    public void updatePurchasedPlan(PurchasedPlan plan, APICallback<PurchasedPlan> callback) {
+        Amplify.API.mutate(ModelMutation.update(plan), result -> {
+                if (callback != null) {
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, result.getData(), null));
+                }
+            },
+            error -> {
+                Log.e(TAG, "Failed to update purchased plan", error);
+
+                if (callback != null) {
+                    callback.onCallResult(false, null, error);
+                }
+            });
+    }
+
+    public void createOrUpdatePurchasedPlan(PurchasedPlan plan, APICallback<PurchasedPlan> callback) {
+        Amplify.API.query(ModelQuery.get(PurchasedPlan.class, plan.getId()), result -> {
+            if (result.hasData()) {
+                updatePurchasedPlan(plan, callback);
+            }
+            else {
+                createPurchasedPlan(plan, callback);
+            }
+        }, error -> {
+            Log.e(TAG, "Failed to query for purchased plan");
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
+    public Reservation createReservation(TimeSlot timeSlot, PurchasedPlan purchasedPlan, Referral referral) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
         String fcmToken = FirebaseInstanceId.getInstance().getToken();
 
@@ -410,6 +385,8 @@ public class HtAmplify {
                 .consumerId(userId)
                 .consumerFcmToken(fcmToken)
                 .offerId(timeSlot.getOfferId())
+                .purchasedPlanId(purchasedPlan.getId())
+                .purchasedPlanType(purchasedPlan.getPlanType())
                 .timeSlotId(timeSlot.getId())
                 .startTime(timeSlot.getStartTime())
                 .endTime(timeSlot.getEndTime())
@@ -423,10 +400,12 @@ public class HtAmplify {
     }
 
     public void bookTimeSlot(Reservation reservation, TimeSlot timeSlot, APICallback<Reservation> callback) {
-        Log.i("HtAmplify", "Booking a time slot.");
+        Log.i(TAG, "Booking a time slot.");
 
         Amplify.API.mutate(ModelMutation.create(reservation), result -> {
             if (result.hasData()) {
+                HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservation.getId());
+
                 Utils.runOnUIThread(() -> callback.onCallResult(true, result.getData(), null));
 
                 TimeSlot newTimeSlot = timeSlot.copyOfBuilder()
@@ -436,22 +415,22 @@ public class HtAmplify {
 
                 Amplify.API.mutate(ModelMutation.update(newTimeSlot), result2 -> {
                     if (!result2.hasData()) {
-                        Log.e("HtAmplify", "Failed to update time slot. Has errors: " + result.hasErrors());
+                        Log.e(TAG, "Failed to update time slot. Has errors: " + result.hasErrors());
                     }
-                }, error -> Log.e("HtAmplify", "Failed to update time slot.", error));
+                }, error -> Log.e(TAG, "Failed to update time slot.", error));
             }
             else {
-                Log.e("HtAmplify", "Failed to create reserved time slot. Has errors: " + result.hasErrors());
+                Log.e(TAG, "Failed to create reserved time slot. Has errors: " + result.hasErrors());
                 Utils.runOnUIThread(() -> callback.onCallResult(false, null, null));
             }
         }, error -> {
-            Log.e("HtAmplify", "Failed to create reserved time slot", error);
+            Log.e(TAG, "Failed to create reserved time slot", error);
             Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
         });
     }
 
     public void getTimeSlots(String offerId, APICallback<ArrayList<TimeSlot>> callback) {
-        Log.i("HtAmplify", "Getting time slots");
+        Log.i(TAG, "Getting time slots");
 
         Amplify.API.query(
                 ModelQuery.list(TimeSlot.class, TimeSlot.OFFER_ID.eq(offerId)), result -> {
@@ -465,11 +444,11 @@ public class HtAmplify {
                         Utils.runOnUIThread(() -> callback.onCallResult(true, timeSlots, null));
                     }
                     else {
-                        Log.e("HtAmplify", "Failed to get time slots. Has errors: " + result.hasErrors());
+                        Log.e(TAG, "Failed to get time slots. Has errors: " + result.hasErrors());
                         Utils.runOnUIThread(() -> callback.onCallResult(false, null, null));
                     }
                 }, error -> {
-                    Log.e("HtAmplify", "Failed to get time slots.", error);
+                    Log.e(TAG, "Failed to get time slots.", error);
                     Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
                 });
     }
@@ -488,7 +467,35 @@ public class HtAmplify {
 
             Utils.runOnUIThread(() -> callback.onCallResult(true, timeSlots, null));
         }, error -> {
-            Log.e("HtAmplify", "Failed to get reserved time slots", error);
+            Log.e(TAG, "Failed to get reserved time slots", error);
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
+    public void getPurchasedPlans(APICallback<List<PurchasedPlan>> callback) {
+        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+        Amplify.API.query(ModelQuery.list(PurchasedPlan.class, PurchasedPlan.CONSUMER_ID.eq(userId)), result -> {
+            List<PurchasedPlan> purchasedPlans = new ArrayList<>();
+
+            if (result.hasData()) {
+                for (PurchasedPlan purchasedPlan: result.getData()) {
+                    purchasedPlans.add(purchasedPlan);
+                }
+            }
+
+            Utils.runOnUIThread(() -> callback.onCallResult(true, purchasedPlans, null));
+        }, error -> {
+            Log.e(TAG, "Failed to get purchased plans", error);
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
+    public void getPurchasedPlan(String purchasedPlanId, APICallback<PurchasedPlan> callback) {
+        Amplify.API.query(ModelQuery.get(PurchasedPlan.class, purchasedPlanId), result ->
+            Utils.runOnUIThread(() -> callback.onCallResult(true, result.getData(), null))
+        , error -> {
+            Log.e(TAG, "Failed to get purchased plan", error);
             Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
         });
     }
@@ -516,12 +523,12 @@ public class HtAmplify {
                         AndroidUtilities.runOnUIThread(() -> callback.onCallResult(true, reservations, null));
                     }
                     else {
-                        Log.e("HtAmplify", "Failed to get reservations. Has errors: " + response.hasErrors());
+                        Log.e(TAG, "Failed to get reservations. Has errors: " + response.hasErrors());
                         AndroidUtilities.runOnUIThread(() -> callback.onCallResult(false, null, null));
                     }
                 },
                 error -> {
-                    Log.e("HtAmplify", "Failed to get reservations.", error);
+                    Log.e(TAG, "Failed to get reservations.", error);
                     AndroidUtilities.runOnUIThread(() -> callback.onCallResult(false, null, error));
                 });
     }
@@ -530,7 +537,7 @@ public class HtAmplify {
         Amplify.API.query(ModelQuery.get(Reservation.class, id), result -> {
             Utils.runOnUIThread(() -> callback.onCallResult(true, result.getData(), null));
         }, error -> {
-            Log.e("HtAmplify", "Failed to query reservation.", error);
+            Log.e(TAG, "Failed to query reservation.", error);
             Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
         });
     }
@@ -547,7 +554,7 @@ public class HtAmplify {
 
             Utils.runOnUIThread(() -> callback.onCallResult(true, reservations, null));
         }, error -> {
-            Log.e("HtAmplify", "Failed to query reservations.", error);
+            Log.e(TAG, "Failed to query reservations.", error);
             Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
         });
     }
@@ -574,11 +581,11 @@ public class HtAmplify {
             HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservation.getId());
 
             if (result.hasData()) {
-                Log.i("HtAmplify", "Reservation updated.");
+                Log.i(TAG, "Reservation updated.");
 
                 if (HtTimeSlotStatus.CANCELLED_BY_CONSUMER.name().equals(reservation.getStatus()) ||
                         HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER.name().equals(reservation.getStatus())) {
-                    Log.i("HtAmplify", "Updating time slot.");
+                    Log.i(TAG, "Updating time slot.");
                     getTimeSlot(reservation.getTimeSlotId(), (success, result1, exception) -> {
                         if (success && result1 != null) {
                             TimeSlot mutatedTimeSlot = result1.copyOfBuilder()
@@ -587,19 +594,59 @@ public class HtAmplify {
                                     .build();
 
                             Amplify.API.mutate(ModelMutation.update(mutatedTimeSlot), result2 -> {
-                                Log.i("HtAmplify", "Time slot updated successfully.");
+                                Log.i(TAG, "Time slot updated successfully.");
                             }, error -> {
-                                Log.e("HtAmplify", "Failed to update time slot.", error);
+                                Log.e(TAG, "Failed to update time slot.", error);
                             });
                         }
                     });
+
+                    if (reservation.getPurchasedPlanId() != null) {
+                        Amplify.API.query(ModelQuery.get(PurchasedPlan.class, reservation.getPurchasedPlanId()), result1 -> {
+                            if (result1.hasData()) {
+                                PurchasedPlan purchasedPlan = result1.getData();
+                                PurchasedPlan modifiedPlan = purchasedPlan.copyOfBuilder()
+                                        .pendingReservationsCount(purchasedPlan.getPendingReservationsCount() - 1)
+                                        .build();
+
+                                Amplify.API.mutate(ModelMutation.update(modifiedPlan),
+                                        result2 -> Log.i(TAG, "Purchased plan updated."),
+                                        error -> Log.e(TAG, "Failed to update purchased plan.", error)
+                                        );
+                            }
+                            else {
+                                Log.e(TAG, "Purchased plan with id " + reservation.getPurchasedPlanId() + " not found!");
+                            }
+                        },
+                        error -> Log.e(TAG, "Failed to get purchased plan", error));
+                    }
+                }
+                else if (HtTimeSlotStatus.FINISHED.name().equals(reservation.getStatus()) && reservation.getPurchasedPlanId() != null) {
+                    Amplify.API.query(ModelQuery.get(PurchasedPlan.class, reservation.getPurchasedPlanId()), result1 -> {
+                                if (result1.hasData()) {
+                                    PurchasedPlan purchasedPlan = result1.getData();
+                                    PurchasedPlan modifiedPlan = purchasedPlan.copyOfBuilder()
+                                            .finishedReservationsCount(purchasedPlan.getFinishedReservationsCount() + 1)
+                                            .pendingReservationsCount(purchasedPlan.getPendingReservationsCount() - 1)
+                                            .build();
+
+                                    Amplify.API.mutate(ModelMutation.update(modifiedPlan),
+                                            result2 -> Log.i(TAG, "Purchased plan updated."),
+                                            error -> Log.e(TAG, "Failed to update purchased plan.", error)
+                                    );
+                                }
+                                else {
+                                    Log.e(TAG, "Purchased plan with id " + reservation.getPurchasedPlanId() + " not found!");
+                                }
+                            },
+                            error -> Log.e(TAG, "Failed to get purchased plan", error));
                 }
             }
             else {
-                Log.i("HtAmplify", "Reservation not found to be updated.");
+                Log.i(TAG, "Reservation not found to be updated.");
             }
         }, error -> {
-            Log.e("HtAmplify", "Failed to update reservation", error);
+            Log.e(TAG, "Failed to update reservation", error);
         });
     }
 
@@ -620,7 +667,7 @@ public class HtAmplify {
     }
 
     public ArrayList<Offer> getOffers(int userId, int currentAccount) {
-        Log.i("HtAmplify", "Getting Offers");
+        Log.i(TAG, "Getting Offers");
 
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future<ArrayList<Offer>> future = pool.submit(new Callable<ArrayList<Offer>>() {
@@ -653,7 +700,7 @@ public class HtAmplify {
                                 }.start();
                             }
                         },
-                        error -> Log.e("HtAmplify", "Query failure", error)
+                        error -> Log.e(TAG, "Query failure", error)
                 );
                 return offers;
             }
@@ -671,7 +718,7 @@ public class HtAmplify {
     }
 
     public Offer getOffer(String offerUUID) {
-        Log.i("HtAmplify", "Getting Offer");
+        Log.i(TAG, "Getting Offer");
 
         ExecutorService pool = Executors.newSingleThreadExecutor();
         Future<Offer> future = pool.submit(new Callable<Offer>() {
@@ -688,7 +735,7 @@ public class HtAmplify {
                                 }
                             }
                         },
-                        error -> Log.e("HtAmplify", "Query failure", error)
+                        error -> Log.e(TAG, "Query failure", error)
                 );
                 return fetchedOffer[0];
             }
@@ -712,13 +759,13 @@ public class HtAmplify {
                     callback.onCallResult(true, response.getData(), null);
                 }
                 else {
-                    Log.e("HtAmplify", "Referral not found.");
+                    Log.e(TAG, "Referral not found.");
                     callback.onCallResult(false, null, null);
                 }
             });
         }, error -> {
             Utils.runOnUIThread(() -> {
-                Log.e("HtAmplify", "Failed to get referral.", error);
+                Log.e(TAG, "Failed to get referral.", error);
                 callback.onCallResult(false, null, error);
             });
         });
@@ -738,7 +785,7 @@ public class HtAmplify {
             });
         }, error -> {
             Utils.runOnUIThread(() -> {
-                Log.e("HtAmplify", "Failed to create referral.", error);
+                Log.e(TAG, "Failed to create referral.", error);
                 callback.onCallResult(false, null, error);
             });
         });

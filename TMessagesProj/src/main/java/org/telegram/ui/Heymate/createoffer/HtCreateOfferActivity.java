@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -20,7 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +42,17 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
-import org.telegram.ui.Heymate.widget.LocationInputItem;
-import org.telegram.ui.Heymate.widget.ParticipantsInputItem;
+import org.telegram.ui.Heymate.HeymateConfig;
+import org.telegram.ui.Heymate.HeymatePayment;
+import org.telegram.ui.Heymate.HtAmplify;
+import org.telegram.ui.Heymate.HtSQLite;
+import org.telegram.ui.Heymate.HtStorage;
+import org.telegram.ui.Heymate.LoadingUtil;
+import org.telegram.ui.Heymate.MeetingType;
+import org.telegram.ui.Heymate.OfferDto;
+import org.telegram.ui.Heymate.OfferStatus;
+import org.telegram.ui.Heymate.PromotionDialog;
+import org.telegram.ui.Heymate.TG2HM;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,7 +90,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private LocationInputItem locationInputCell;
     private ParticipantsInputItem participantsInputCell;
     private HtScheduleInputCell scheduleInputCell;
-    private HtPriceInputCell priceInputCell;
+    private PriceInputItem priceInputCell;
     private ArrayList<HtPriceInputCell> pricesInputCell = new ArrayList<>();
     private HtExpireInputCell expireInputCell;
     private HtTermsInputCell termsInputCell;
@@ -339,109 +347,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", works.heymate.beta.R.string.HtSchedule), scheduleArgs, works.heymate.beta.R.drawable.watch_later_24_px_1, canEdit, this);
         mainLayout.addView(scheduleInputCell);
 
-        HashMap<String, Runnable> priceArgs = new HashMap<>();
-        priceArgs.put(ARGUMENTS_RATE_TYPE, new Runnable() {
-            @Override
-            public void run() {
-                if (actionType == ActionType.VIEW)
-                    return;
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("HtRateType", works.heymate.beta.R.string.HtRateType));
-                String[] subItems = new String[3];
-                int[] icons = new int[3];
-
-                for (int i = 0; i < 3; i++) {
-                    icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
-                }
-                subItems[0] = LocaleController.getString("HtPerItem", works.heymate.beta.R.string.HtPerItem);
-                subItems[1] = LocaleController.getString("HtPerHour", works.heymate.beta.R.string.HtPerHour);
-                subItems[2] = LocaleController.getString("HtRate", works.heymate.beta.R.string.HtRange);
-                builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setRateType(subItems[which], 0);
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                showDialog(alertDialog);
-            }
-        });
-        priceArgs.put(ARGUMENTS_PRICE, new Runnable() {
-            @Override
-            public void run() {
-                if (actionType == ActionType.VIEW)
-                    return;
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(LocaleController.getString("HtPrice", works.heymate.beta.R.string.HtPrice));
-                LinearLayout mainLayout = new LinearLayout(context);
-                EditTextBoldCursor feeTextField = new EditTextBoldCursor(context);
-                feeTextField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-                feeTextField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
-                feeTextField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                feeTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
-                feeTextField.setMaxLines(4);
-                feeTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
-                feeTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-                feeTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-                feeTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                feeTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-                feeTextField.setMinHeight(AndroidUtilities.dp(36));
-                feeTextField.setHint(LocaleController.getString("HtAmount", works.heymate.beta.R.string.HtAmount));
-                feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                feeTextField.setCursorSize(AndroidUtilities.dp(15));
-                feeTextField.setCursorWidth(1.5f);
-                feeTextField.setInputType(InputType.TYPE_CLASS_NUMBER);
-                mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
-                builder.setView(mainLayout);
-                builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0)
-                        setFee(feeTextField.getText().toString(), 0);
-                });
-                AlertDialog alertDialog = builder.create();
-                showDialog(alertDialog);
-
-            }
-        });
-        priceArgs.put(ARGUMENTS_CURRENCY, new Runnable() {
-            @Override
-            public void run() {
-                if (actionType == ActionType.VIEW)
-                    return;
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("HtCurrency", works.heymate.beta.R.string.HtCurrency));
-                String[] subItems = new String[3];
-                int[] icons = new int[3];
-
-                for (int i = 0; i < 3; i++) {
-                    icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
-                }
-                subItems[0] = "R$";
-                subItems[1] = "US$";
-                subItems[2] = "EUR";
-                builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                builder.setItems(subItems, icons, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setCurrency(subItems[which], 0);
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                showDialog(alertDialog);
-            }
-        });
-
-        priceInputCell = new HtPriceInputCell(context, this, LocaleController.getString("HtPrice", works.heymate.beta.R.string.HtPrice), priceArgs, works.heymate.beta.R.drawable.money, canEdit, 0);
-        priceInputCell.setRes(ARGUMENTS_RATE_TYPE, LocaleController.getString("HtPerItem", works.heymate.beta.R.string.HtPerItem), 0);
-        priceInputCell.setRes(ARGUMENTS_CURRENCY, "R$", 2);
+        priceInputCell = new PriceInputItem(context);
         mainLayout.addView(priceInputCell);
 
         HashMap<String, Runnable> paymentArgs = new HashMap<>();
@@ -563,7 +469,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         promoteLayout.setEnabled(true);
         promoteLayout.setOnClickListener(v -> {
             titleTextField.setHighlightColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-            priceInputCell.setError(false, 1);
+            priceInputCell.setError(false);
             locationInputCell.setError(false);
             participantsInputCell.setError(false);
             categoryInputCell.setError(false, 0);
@@ -582,8 +488,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
                 errors.append(LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty)).append('\n');
             }
-            if (priceInputCell.getRes(ARGUMENTS_PRICE) == null) {
-                priceInputCell.setError(true, 1);
+            if (priceInputCell.getPricingInfo() == null) {
+                priceInputCell.setError(true);
                 errors.append(LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty)).append('\n');
             }
             if (locationInputCell.getLocationInfo() == null && MeetingType.DEFAULT.equals(locationInputCell.getMeetingType())) {
@@ -634,9 +540,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             String category = categoryInputCell.getRes(ARGUMENTS_CATEGORY);
             String subCategory = categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY);
             Date expireDate = HtCreateOfferActivity.this.expireDate;
-            String currency = priceInputCell.getRes(ARGUMENTS_CURRENCY);
-            String rateType = priceInputCell.getRes(ARGUMENTS_RATE_TYPE);
-            String rate = priceInputCell.getRes(ARGUMENTS_PRICE);
+            PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
             ArrayList<Long> dateSlots = HtCreateOfferActivity.this.dateSlots;
 
             OfferInfo offerInfo = new OfferInfo();
@@ -650,9 +554,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             offerInfo.setCategory(category);
             offerInfo.setSubCategory(subCategory);
             offerInfo.setExpireDate(expireDate);
-            offerInfo.setCurrency(currency);
-            offerInfo.setRateType(rateType);
-            offerInfo.setRate(rate);
+            offerInfo.setPricingInfo(pricingInfo);
             offerInfo.setDateSlots(dateSlots);
 
             HeymateConfig.getGeneral().set(KEY_SAVED_OFFER, offerInfo.asJSON().toString());
@@ -703,16 +605,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                             expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(expireDate.getTime()), 0);
                         }
 
-                        if (savedOfferInfo.getCurrency() != null) {
-                            setCurrency(savedOfferInfo.getCurrency(), 0);
-                        }
-
-                        if (savedOfferInfo.getRateType() != null) {
-                            setRateType(savedOfferInfo.getRateType(), 0);
-                        }
-
-                        if (savedOfferInfo.getRate() != null) {
-                            setFee(savedOfferInfo.getRate(), 0);
+                        if (savedOfferInfo.getPricingInfo() != null) {
+                            setPricingInfo(savedOfferInfo.getPricingInfo());
                         }
 
                         if (savedOfferInfo.getDateSlots() != null) {
@@ -750,7 +644,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private void createOffer(int promotionPercentage) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
-        String rate = priceInputCell.getRes(ARGUMENTS_PRICE);
+        PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
 
         JSONObject config = paymentInputCell.getRes();
 
@@ -760,7 +654,8 @@ public class HtCreateOfferActivity extends BaseFragment {
 
         LoadingUtil.onLoadingStarted(getParentActivity());
 
-        wallet.signOffer(rate, config, (successful, signature, exception) -> {
+        // TODO Pricing info.
+        wallet.signOffer(String.valueOf(pricingInfo.price), config, (successful, signature, exception) -> {
             LoadingUtil.onLoadingFinished();
 
             if (successful) {
@@ -779,9 +674,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setLocation(locationInfo.address);
                 newOffer.setMeetingType(locationInputCell.getMeetingType());
                 newOffer.setMaximumReservations(maximumParticipants);
-                newOffer.setCurrency(priceInputCell.getRes(ARGUMENTS_CURRENCY));
-                newOffer.setRateType(priceInputCell.getRes(ARGUMENTS_RATE_TYPE));
-                newOffer.setRate(rate);
+                newOffer.setPricingInfo(pricingInfo);
                 newOffer.setLatitude(locationInfo.latitude);
                 newOffer.setLongitude(locationInfo.longitude);
                 newOffer.setDateSlots(dateSlots);
@@ -852,27 +745,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         scheduleInputCell.setDateSlots(dateSlots);
     }
 
-    public void setFee(String text, int position) {
-        priceInputCell.setRes(ARGUMENTS_PRICE, text, 1);
-        if (position == 0)
-            priceInputCell.setRes(ARGUMENTS_PRICE, text, 1);
-        else
-            pricesInputCell.get(position - 1).setRes(ARGUMENTS_PRICE, text, 1);
-    }
-
-    public void setRateType(String text, int position) {
-        if (position == 0)
-            priceInputCell.setRes(ARGUMENTS_RATE_TYPE, text, 0);
-        else
-            pricesInputCell.get(position - 1).setRes(ARGUMENTS_RATE_TYPE, text, 0);
-    }
-
-    public void setCurrency(String text, int position) {
-        if (position == 0)
-            priceInputCell.setRes(ARGUMENTS_CURRENCY, text, 2);
-        else
-            pricesInputCell.get(position - 1).setRes(ARGUMENTS_CURRENCY, text, 2);
-
+    public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo) {
+        priceInputCell.setPricingInfo(pricingInfo);
     }
 
     public void setLocation(String address, double latitude, double longitude) {

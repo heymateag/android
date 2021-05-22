@@ -27,6 +27,8 @@ public final class Reservation implements Model {
   public static final QueryField ID = field("Reservation", "id");
   public static final QueryField OFFER_ID = field("Reservation", "offerId");
   public static final QueryField TIME_SLOT_ID = field("Reservation", "timeSlotId");
+  public static final QueryField PURCHASED_PLAN_ID = field("Reservation", "purchasedPlanId");
+  public static final QueryField PURCHASED_PLAN_TYPE = field("Reservation", "purchasedPlanType");
   public static final QueryField START_TIME = field("Reservation", "startTime");
   public static final QueryField END_TIME = field("Reservation", "endTime");
   public static final QueryField REFERRAL_ID = field("Reservation", "referralId");
@@ -41,6 +43,8 @@ public final class Reservation implements Model {
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String offerId;
   private final @ModelField(targetType="String") String timeSlotId;
+  private final @ModelField(targetType="String") String purchasedPlanId;
+  private final @ModelField(targetType="String") String purchasedPlanType;
   private final @ModelField(targetType="Int") Integer startTime;
   private final @ModelField(targetType="Int") Integer endTime;
   private final @ModelField(targetType="String") String referralId;
@@ -62,6 +66,14 @@ public final class Reservation implements Model {
   
   public String getTimeSlotId() {
       return timeSlotId;
+  }
+  
+  public String getPurchasedPlanId() {
+      return purchasedPlanId;
+  }
+  
+  public String getPurchasedPlanType() {
+      return purchasedPlanType;
   }
   
   public Integer getStartTime() {
@@ -108,10 +120,12 @@ public final class Reservation implements Model {
       return meetingId;
   }
   
-  private Reservation(String id, String offerId, String timeSlotId, Integer startTime, Integer endTime, String referralId, String referrers, String serviceProviderId, String serviceProviderFCMToken, String consumerId, String consumerFCMToken, String status, String meetingType, String meetingId) {
+  private Reservation(String id, String offerId, String timeSlotId, String purchasedPlanId, String purchasedPlanType, Integer startTime, Integer endTime, String referralId, String referrers, String serviceProviderId, String serviceProviderFCMToken, String consumerId, String consumerFCMToken, String status, String meetingType, String meetingId) {
     this.id = id;
     this.offerId = offerId;
     this.timeSlotId = timeSlotId;
+    this.purchasedPlanId = purchasedPlanId;
+    this.purchasedPlanType = purchasedPlanType;
     this.startTime = startTime;
     this.endTime = endTime;
     this.referralId = referralId;
@@ -136,6 +150,8 @@ public final class Reservation implements Model {
       return ObjectsCompat.equals(getId(), reservation.getId()) &&
               ObjectsCompat.equals(getOfferId(), reservation.getOfferId()) &&
               ObjectsCompat.equals(getTimeSlotId(), reservation.getTimeSlotId()) &&
+              ObjectsCompat.equals(getPurchasedPlanId(), reservation.getPurchasedPlanId()) &&
+              ObjectsCompat.equals(getPurchasedPlanType(), reservation.getPurchasedPlanType()) &&
               ObjectsCompat.equals(getStartTime(), reservation.getStartTime()) &&
               ObjectsCompat.equals(getEndTime(), reservation.getEndTime()) &&
               ObjectsCompat.equals(getReferralId(), reservation.getReferralId()) &&
@@ -156,6 +172,8 @@ public final class Reservation implements Model {
       .append(getId())
       .append(getOfferId())
       .append(getTimeSlotId())
+      .append(getPurchasedPlanId())
+      .append(getPurchasedPlanType())
       .append(getStartTime())
       .append(getEndTime())
       .append(getReferralId())
@@ -178,6 +196,8 @@ public final class Reservation implements Model {
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("offerId=" + String.valueOf(getOfferId()) + ", ")
       .append("timeSlotId=" + String.valueOf(getTimeSlotId()) + ", ")
+      .append("purchasedPlanId=" + String.valueOf(getPurchasedPlanId()) + ", ")
+      .append("purchasedPlanType=" + String.valueOf(getPurchasedPlanType()) + ", ")
       .append("startTime=" + String.valueOf(getStartTime()) + ", ")
       .append("endTime=" + String.valueOf(getEndTime()) + ", ")
       .append("referralId=" + String.valueOf(getReferralId()) + ", ")
@@ -230,6 +250,8 @@ public final class Reservation implements Model {
       null,
       null,
       null,
+      null,
+      null,
       null
     );
   }
@@ -238,6 +260,8 @@ public final class Reservation implements Model {
     return new CopyOfBuilder(id,
       offerId,
       timeSlotId,
+      purchasedPlanId,
+      purchasedPlanType,
       startTime,
       endTime,
       referralId,
@@ -255,6 +279,8 @@ public final class Reservation implements Model {
     BuildStep id(String id) throws IllegalArgumentException;
     BuildStep offerId(String offerId);
     BuildStep timeSlotId(String timeSlotId);
+    BuildStep purchasedPlanId(String purchasedPlanId);
+    BuildStep purchasedPlanType(String purchasedPlanType);
     BuildStep startTime(Integer startTime);
     BuildStep endTime(Integer endTime);
     BuildStep referralId(String referralId);
@@ -273,6 +299,8 @@ public final class Reservation implements Model {
     private String id;
     private String offerId;
     private String timeSlotId;
+    private String purchasedPlanId;
+    private String purchasedPlanType;
     private Integer startTime;
     private Integer endTime;
     private String referralId;
@@ -292,6 +320,8 @@ public final class Reservation implements Model {
           id,
           offerId,
           timeSlotId,
+          purchasedPlanId,
+          purchasedPlanType,
           startTime,
           endTime,
           referralId,
@@ -314,6 +344,18 @@ public final class Reservation implements Model {
     @Override
      public BuildStep timeSlotId(String timeSlotId) {
         this.timeSlotId = timeSlotId;
+        return this;
+    }
+    
+    @Override
+     public BuildStep purchasedPlanId(String purchasedPlanId) {
+        this.purchasedPlanId = purchasedPlanId;
+        return this;
+    }
+    
+    @Override
+     public BuildStep purchasedPlanType(String purchasedPlanType) {
+        this.purchasedPlanType = purchasedPlanType;
         return this;
     }
     
@@ -406,10 +448,12 @@ public final class Reservation implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String offerId, String timeSlotId, Integer startTime, Integer endTime, String referralId, String referrers, String serviceProviderId, String serviceProviderFcmToken, String consumerId, String consumerFcmToken, String status, String meetingType, String meetingId) {
+    private CopyOfBuilder(String id, String offerId, String timeSlotId, String purchasedPlanId, String purchasedPlanType, Integer startTime, Integer endTime, String referralId, String referrers, String serviceProviderId, String serviceProviderFcmToken, String consumerId, String consumerFcmToken, String status, String meetingType, String meetingId) {
       super.id(id);
       super.offerId(offerId)
         .timeSlotId(timeSlotId)
+        .purchasedPlanId(purchasedPlanId)
+        .purchasedPlanType(purchasedPlanType)
         .startTime(startTime)
         .endTime(endTime)
         .referralId(referralId)
@@ -431,6 +475,16 @@ public final class Reservation implements Model {
     @Override
      public CopyOfBuilder timeSlotId(String timeSlotId) {
       return (CopyOfBuilder) super.timeSlotId(timeSlotId);
+    }
+    
+    @Override
+     public CopyOfBuilder purchasedPlanId(String purchasedPlanId) {
+      return (CopyOfBuilder) super.purchasedPlanId(purchasedPlanId);
+    }
+    
+    @Override
+     public CopyOfBuilder purchasedPlanType(String purchasedPlanType) {
+      return (CopyOfBuilder) super.purchasedPlanType(purchasedPlanType);
     }
     
     @Override

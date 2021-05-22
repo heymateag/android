@@ -36,6 +36,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
@@ -196,7 +197,10 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         TextView priceText = new TextView(context);
         priceText.setId(idCounter++);
-        priceText.setText(offer.getRate() + offer.getCurrency() + " " + offer.getRateType());
+        try {
+            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+            priceText.setText(pricingInfo.price + pricingInfo.currency + " " + pricingInfo.rateType);
+        } catch (Throwable t) { }
         priceText.setTextSize(14);
         priceText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         RelativeLayout.LayoutParams priceTextLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -247,7 +251,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
-        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offer.getId(), phraseInfo == null ? null : phraseInfo.referralId));
+        // TODO Proper buy in details
+//        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offer.getId(), phraseInfo == null ? null : phraseInfo.referralId));
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
         buyButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());

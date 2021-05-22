@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;

@@ -9,7 +9,9 @@ import androidx.annotation.Nullable;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 
+import org.json.JSONObject;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class HtSQLite extends SQLiteOpenHelper {
     public static void setInstance(Context context){
         if(instance == null){
             File dbFile = new File(ApplicationLoader.getFilesDirFixed().getPath(), "cache4.db");
-            instance = new HtSQLite(context, dbFile.getPath() , null, 81);
+            instance = new HtSQLite(context, dbFile.getPath() , null, 82);
         }
     }
 
@@ -35,13 +37,13 @@ public class HtSQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, pricingInfo TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS offer;");
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, rate TEXT, rateType TEXT, currency TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, pricingInfo TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
     }
 
     public String addOffer(Offer offer) {
@@ -49,9 +51,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("uuid", offer.getId());
         contentValues.put("title", offer.getTitle());
-        contentValues.put("rate", offer.getRate());
-        contentValues.put("rateType", offer.getRateType());
-        contentValues.put("currency", offer.getCurrency());
+        contentValues.put("pricingInfo", offer.getPricingInfo());
         contentValues.put("location", offer.getLocationData());
         contentValues.put("time", offer.getExpiry().toDate().toLocaleString());
         contentValues.put("category", offer.getCategory());
@@ -75,9 +75,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("title", offer.getTitle());
-        contentValues.put("rate", offer.getRate());
-        contentValues.put("rateType", offer.getRateType());
-        contentValues.put("currency", offer.getCurrency());
+        contentValues.put("pricingInfo", offer.getPricingInfo() == null ? null : offer.getPricingInfo().asJSON().toString());
         contentValues.put("location", offer.getLocation());
         contentValues.put("time", offer.getExpire().toLocaleString());
         contentValues.put("category", offer.getCategory());
@@ -102,22 +100,24 @@ public class HtSQLite extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             OfferDto offerDto = new OfferDto();
             offerDto.setTitle(cursor.getString(1));
-            offerDto.setRate(cursor.getString(2));
-            offerDto.setRateType(cursor.getString(3));
-            offerDto.setCurrency(cursor.getString(4));
-            offerDto.setLocation(cursor.getString(5));
-            offerDto.setTime(cursor.getString(6));
-            offerDto.setCategory(cursor.getString(7));
-            offerDto.setSubCategory(cursor.getString(8));
-            offerDto.setConfigText(cursor.getString(9));
-            offerDto.setTerms(cursor.getString(10));
-            offerDto.setDescription(cursor.getString(11));
-            offerDto.setStatus(getOfferStatus(cursor.getInt(12)));
+            try {
+                String sPricingInfo = cursor.getString(2);
+                JSONObject jPricingInfo = new JSONObject(sPricingInfo);
+                offerDto.setPricingInfo(new PriceInputItem.PricingInfo(jPricingInfo));
+            } catch (Throwable t) { }
+            offerDto.setLocation(cursor.getString(3));
+            offerDto.setTime(cursor.getString(4));
+            offerDto.setCategory(cursor.getString(5));
+            offerDto.setSubCategory(cursor.getString(6));
+            offerDto.setConfigText(cursor.getString(7));
+            offerDto.setTerms(cursor.getString(8));
+            offerDto.setDescription(cursor.getString(9));
+            offerDto.setStatus(getOfferStatus(cursor.getInt(10)));
             offerDto.setServerUUID(cursor.getString(0));
-            offerDto.setCreatedAt(cursor.getInt(13));
-            offerDto.setEditedAt(cursor.getInt(14));
-            offerDto.setMaximumReservations(cursor.getInt(15));
-            offerDto.setMeetingType(cursor.getString(16));
+            offerDto.setCreatedAt(cursor.getInt(11));
+            offerDto.setEditedAt(cursor.getInt(12));
+            offerDto.setMaximumReservations(cursor.getInt(13));
+            offerDto.setMeetingType(cursor.getString(14));
             return offerDto;
         }
         return null;
@@ -153,22 +153,24 @@ public class HtSQLite extends SQLiteOpenHelper {
             do {
                 OfferDto offerDto = new OfferDto();
                 offerDto.setTitle(cursor.getString(1));
-                offerDto.setRate(cursor.getString(2));
-                offerDto.setRateType(cursor.getString(3));
-                offerDto.setCurrency(cursor.getString(4));
-                offerDto.setLocation(cursor.getString(5));
-                offerDto.setTime(cursor.getString(6));
-                offerDto.setCategory(cursor.getString(7));
-                offerDto.setSubCategory(cursor.getString(8));
-                offerDto.setConfigText(cursor.getString(9));
-                offerDto.setTerms(cursor.getString(10));
-                offerDto.setDescription(cursor.getString(11));
-                offerDto.setStatus(getOfferStatus(cursor.getInt(12)));
+                try {
+                    String sPricingInfo = cursor.getString(2);
+                    JSONObject jPricingInfo = new JSONObject(sPricingInfo);
+                    offerDto.setPricingInfo(new PriceInputItem.PricingInfo(jPricingInfo));
+                } catch (Throwable t) { }
+                offerDto.setLocation(cursor.getString(3));
+                offerDto.setTime(cursor.getString(4));
+                offerDto.setCategory(cursor.getString(5));
+                offerDto.setSubCategory(cursor.getString(6));
+                offerDto.setConfigText(cursor.getString(7));
+                offerDto.setTerms(cursor.getString(8));
+                offerDto.setDescription(cursor.getString(9));
+                offerDto.setStatus(getOfferStatus(cursor.getInt(10)));
                 offerDto.setServerUUID(cursor.getString(0));
-                offerDto.setCreatedAt(cursor.getInt(13));
-                offerDto.setEditedAt(cursor.getInt(14));
-                offerDto.setMaximumReservations(cursor.getInt(15));
-                offerDto.setMeetingType(cursor.getString(16));
+                offerDto.setCreatedAt(cursor.getInt(11));
+                offerDto.setEditedAt(cursor.getInt(12));
+                offerDto.setMaximumReservations(cursor.getInt(13));
+                offerDto.setMeetingType(cursor.getString(14));
                 offers.add(offerDto);
             } while (cursor.moveToNext());
         }
@@ -222,9 +224,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         for (Offer offer : offers) {
             ContentValues contentValues = new ContentValues();
             contentValues.put("title", offer.getTitle());
-            contentValues.put("rate", offer.getRate());
-            contentValues.put("rateType", offer.getRateType());
-            contentValues.put("currency", offer.getCurrency());
+            contentValues.put("pricingInfo", offer.getPricingInfo());
             contentValues.put("location", offer.getLocationData());
             contentValues.put("time", offer.getExpiry().toDate().toLocaleString());
             contentValues.put("category", offer.getCategory());

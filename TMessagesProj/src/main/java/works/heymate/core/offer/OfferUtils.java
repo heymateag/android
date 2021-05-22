@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,15 +125,29 @@ public class OfferUtils {
             terms = new JSONObject();
         }
 
+        String price;
+        String currency;
+        String rateType;
+
+        try {
+            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+
+            price = String.valueOf(pricingInfo.price);
+            currency = String.valueOf(pricingInfo.currency);
+            rateType = String.valueOf(pricingInfo.rateType);
+        } catch (JSONException e) {
+            return url;
+        }
+
         String phrase = Texts.get(phraseName).toString()
                 .replace(PLACEHOLDER_TITLE, offer.getTitle())
                 .replace(PLACEHOLDER_DESCRIPTION, offer.getDescription())
                 .replace(PLACEHOLDER_NAME, username)
                 .replace(PLACEHOLDER_CATEGORY, offer.getCategory())
                 .replace(PLACEHOLDER_SUB_CATEGORY, offer.getSubCategory())
-                .replace(PLACEHOLDER_PRICE, offer.getRate())
-                .replace(PLACEHOLDER_CURRENCY, offer.getCurrency())
-                .replace(PLACEHOLDER_PAYMENT_TYPE, offer.getRateType())
+                .replace(PLACEHOLDER_PRICE, price)
+                .replace(PLACEHOLDER_CURRENCY, currency)
+                .replace(PLACEHOLDER_PAYMENT_TYPE, rateType)
                 .replace(PLACEHOLDER_ADDRESS, offer.getLocationData())
                 .replace(PLACEHOLDER_EXPIRY, offer.getExpiry().format());
 
@@ -286,6 +301,10 @@ public class OfferUtils {
             return null;
         }
 
+        String price = null;
+        String currency = null;
+        String rateType = null;
+
         JSONObject termsConfig = new JSONObject();
 
         for (Part part: parts) {
@@ -307,13 +326,13 @@ public class OfferUtils {
                     builder.subCategory(part.value);
                     continue;
                 case PLACEHOLDER_PRICE:
-                    builder.rate(part.value);
+                    price = part.value;
                     continue;
                 case PLACEHOLDER_CURRENCY:
-                    builder.currency(part.value);
+                    currency = part.value;
                     continue;
                 case PLACEHOLDER_PAYMENT_TYPE:
-                    builder.rateType(part.value);
+                    rateType = part.value;
                     continue;
                 case PLACEHOLDER_ADDRESS:
                     builder.locationData(part.value);
@@ -342,6 +361,19 @@ public class OfferUtils {
                     Utils.putValues(termsConfig, CANCEL_PERCENT2, part.value);
                     continue;
             }
+        }
+
+        if (price != null && currency != null && rateType != null) {
+            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(
+                    Integer.parseInt(price),
+                    currency,
+                    rateType,
+                    0,
+                    0,
+                    null,
+                    0
+            );
+            builder.pricingInfo(pricingInfo.asJSON().toString());
         }
 
         if (termsConfig.length() > 0) {
@@ -385,6 +417,12 @@ public class OfferUtils {
         }
 
         if (additionalFields.length > 0) {
+            PriceInputItem.PricingInfo pricingInfo = null;
+
+            try {
+                pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+            } catch (Throwable t) { }
+
             JSONObject termsConfig;
 
             try {
@@ -412,13 +450,13 @@ public class OfferUtils {
                         Utils.putValues(data, SUB_CATEGORY, offer.getSubCategory());
                         continue;
                     case PRICE:
-                        Utils.putValues(data, PRICE, offer.getRate());
+                        Utils.putValues(data, PRICE, pricingInfo != null ? String.valueOf(pricingInfo.price) : null);
                         continue;
                     case CURRENCY:
-                        Utils.putValues(data, CURRENCY, offer.getCurrency());
+                        Utils.putValues(data, CURRENCY, pricingInfo != null ? pricingInfo.currency : null);
                         continue;
                     case PAYMENT_TYPE:
-                        Utils.putValues(data, PAYMENT_TYPE, offer.getRateType());
+                        Utils.putValues(data, PAYMENT_TYPE, pricingInfo != null ? pricingInfo.rateType : null);
                         continue;
                     case ADDRESS:
                         Utils.putValues(data, ADDRESS, offer.getLocationData());
@@ -482,6 +520,10 @@ public class OfferUtils {
                 try {
                     JSONObject data = new JSONObject(new String(Base64.decode(parameters.getString(PARAMETER_DATA), Base64.URL_SAFE)));
 
+                    String price = null;
+                    String currency = null;
+                    String rateType = null;
+
                     String termsConfigStr = null;
                     JSONObject termsConfig = new JSONObject();
 
@@ -504,13 +546,13 @@ public class OfferUtils {
                                 builder.subCategory(Utils.getOrNull(data, SUB_CATEGORY));
                                 continue;
                             case PRICE:
-                                builder.rate(Utils.getOrNull(data, PRICE));
+                                price = Utils.getOrNull(data, PRICE);
                                 continue;
                             case CURRENCY:
-                                builder.currency(Utils.getOrNull(data, CURRENCY));
+                                currency = Utils.getOrNull(data, CURRENCY);
                                 continue;
                             case PAYMENT_TYPE:
-                                builder.rateType(Utils.getOrNull(data, PAYMENT_TYPE));
+                                rateType = Utils.getOrNull(data, PAYMENT_TYPE);
                                 continue;
                             case ADDRESS:
                                 builder.locationData(Utils.getOrNull(data, ADDRESS));
@@ -555,6 +597,19 @@ public class OfferUtils {
                                 builder.terms(Utils.getOrNull(data, TERMS));
                                 continue;
                         }
+                    }
+
+                    if (price != null && currency != null && rateType != null) {
+                        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(
+                                Integer.parseInt(price),
+                                currency,
+                                rateType,
+                                0,
+                                0,
+                                null,
+                                0
+                        );
+                        builder.pricingInfo(pricingInfo.asJSON().toString());
                     }
 
                     if (termsConfigStr != null) {

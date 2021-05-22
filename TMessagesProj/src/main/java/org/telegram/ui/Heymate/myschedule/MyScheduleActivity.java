@@ -20,8 +20,13 @@ import works.heymate.core.Texts;
 
 public class MyScheduleActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
-    private MyOrdersAdapter mMyOrdersAdapter;
+    private static final int MY_OFFERS = 0;
+    private static final int MY_ORDERS = 1;
+    private static final int SUBSCRIPTIONS = 2;
+
     private MyOffersAdapter mMyOffersAdapter;
+    private MyOrdersAdapter mMyOrdersAdapter;
+    private SubscriptionsAdapter mSubscriptionsAdapter;
 
     @Override
     public boolean onFragmentCreate() {
@@ -63,7 +68,7 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             @Override
             public int getItemCount() {
-                return 2;
+                return 3;
             }
 
             @Override
@@ -80,7 +85,16 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
             @Override
             public String getItemTitle(int position) {
-                return Texts.get(position == 0 ? Texts.MY_SCHEDULE_OFFERS : Texts.MY_SCHEDULE_ORDERS).toString();
+                switch (position) {
+                    case MY_OFFERS:
+                        return Texts.get(Texts.MY_SCHEDULE_OFFERS).toString();
+                    case MY_ORDERS:
+                        return Texts.get(Texts.MY_SCHEDULE_ORDERS).toString();
+                    case SUBSCRIPTIONS:
+                        return "Subscriptions"; // TODO Texts
+                }
+
+                return "";
             }
 
         });
@@ -105,13 +119,19 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
     private void bindAdapter(RecyclerListView listView, int position) {
         if (listView.getAdapter() == null) {
-            if (position == 0) {
-                mMyOffersAdapter = new MyOffersAdapter(listView, this);
-                listView.setAdapter(mMyOffersAdapter);
-            }
-            else {
-                mMyOrdersAdapter = new MyOrdersAdapter(listView, this);
-                listView.setAdapter(mMyOrdersAdapter);
+            switch (position) {
+                case MY_OFFERS:
+                    mMyOffersAdapter = new MyOffersAdapter(listView, this);
+                    listView.setAdapter(mMyOffersAdapter);
+                    break;
+                case MY_ORDERS:
+                    mMyOrdersAdapter = new MyOrdersAdapter(listView, this);
+                    listView.setAdapter(mMyOrdersAdapter);
+                    break;
+                case SUBSCRIPTIONS:
+                    mSubscriptionsAdapter = new SubscriptionsAdapter(listView, this);
+                    listView.setAdapter(mSubscriptionsAdapter);
+                    break;
             }
         }
 
@@ -137,6 +157,12 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
                 HtAmplify.getInstance(getParentActivity()).getTimeSlot(result.getTimeSlotId(), (success1, result1, exception1) -> {
                     if (success1 && result1 != null && mMyOffersAdapter != null) {
                         mMyOffersAdapter.updateTimeSlot(result1);
+                    }
+                });
+
+                HtAmplify.getInstance(getParentActivity()).getPurchasedPlan(result.getPurchasedPlanId(), (success1, result1, exception1) -> {
+                    if (success1 && result1 != null && mSubscriptionsAdapter != null) {
+                        mSubscriptionsAdapter.updatePurchasedPlan(result1);
                     }
                 });
             }

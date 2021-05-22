@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -26,13 +26,12 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
+import org.telegram.ui.Heymate.createoffer.HtCreateOfferActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

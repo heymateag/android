@@ -7,6 +7,7 @@ import com.amplifyframework.datastore.generated.model.TimeSlot;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,9 +19,7 @@ public class OfferDto {
     private int id;
     private String title;
     private String description;
-    private String rate;
-    private String rateType;
-    private String currency;
+    private PriceInputItem.PricingInfo pricingInfo;
     private String location;
     private String meetingType;
     private int maximumReservations;
@@ -63,9 +62,7 @@ public class OfferDto {
                 .description(description)
                 .category(category)
                 .subCategory(subCategory)
-                .rate(rate)
-                .currency(currency)
-                .rateType(rateType)
+                .pricingInfo(pricingInfo == null ? null : pricingInfo.asJSON().toString())
                 .locationData(location)
                 .latitude(String.valueOf(latitude))
                 .longitude(String.valueOf(longitude))
@@ -204,28 +201,12 @@ public class OfferDto {
         this.title = title;
     }
 
-    public String getRate() {
-        return rate;
+    public PriceInputItem.PricingInfo getPricingInfo() {
+        return pricingInfo;
     }
 
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
-
-    public String getRateType() {
-        return rateType;
-    }
-
-    public void setRateType(String rateType) {
-        this.rateType = rateType;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo) {
+        this.pricingInfo = pricingInfo;
     }
 
     public String getLocation() {

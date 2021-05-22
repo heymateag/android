@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="12dp"/>
+        <Span size="4dp" visibleIf="image"/>
+        <Span id="image" size="120dp"/>
+        <Span size="4dp" visibleIf="image"/>
+        <Span size="8dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="subcategory" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="description" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="holder_fixed_price" size="40dp"/>
+        <Span id="holder_bundle" size="40dp"/>
+        <Span id="holder_subscription" size="40dp"/>
+        <Span size="4dp"/>
+        <Span size="4dp"/>
+        <Span id="more_details" size="46dp"/>
+        <Span size="12dp"/>
+    </Vertical>
+
+    <Vertical start="start@holder_fixed_price" end="end@holder_fixed_price">
+        <Span size="1w"/>
+        <Span id="radio_fixed_price" size="20dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_fixed_price" end="end@holder_fixed_price">
+        <Span size="1w"/>
+        <Span id="title_fixed_price" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="info_fixed_price" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_fixed_price" end="end@holder_fixed_price">
+        <Span size="1w"/>
+        <Span id="price_fixed_price" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="price_info_fixed_price" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_bundle" end="end@holder_bundle">
+        <Span size="1w"/>
+        <Span id="radio_bundle" size="100%radio_fixed_price"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_bundle" end="end@holder_bundle">
+        <Span size="1w"/>
+        <Span id="title_bundle" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="info_bundle" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_bundle" end="end@holder_bundle">
+        <Span size="1w"/>
+        <Span id="price_bundle" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="price_info_bundle" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_subscription" end="end@holder_subscription">
+        <Span size="1w"/>
+        <Span id="radio_subscription" size="100%radio_fixed_price"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_subscription" end="end@holder_subscription">
+        <Span size="1w"/>
+        <Span id="title_subscription" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="info_subscription" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder_subscription" end="end@holder_subscription">
+        <Span size="1w"/>
+        <Span id="price_subscription" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="price_info_subscription" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@more_details" end="end@more_details">
+        <Span id="book" size="100%"/>
+    </Vertical>
+
+    <Vertical start="start@title" end="end@holder_subscription">
+        <Span size="1w"/>
+        <Span id="share" size="32dp"/>
+        <Span size="12dp"/>
+        <Span id="forward" size="32dp"/>
+        <Span size="-4dp"/>
+    </Vertical>
+
+    <Vertical start="start@image" end="end@holder_subscription">
+        <Span size="-4dp" visibleIf="image"/>
+        <Span id="background" size="1w"/>
+        <Span size="-4dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="background" size="1w"/>
+        <Span size="8dp"/>
+        <Span id="share" size="32dp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="4dp"/>
+        <Span id="image" size="1w"/>
+        <Span size="4dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@background">
+        <Span size="16dp"/>
+        <Span id="title" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@title">
+        <Span id="subcategory" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@title">
+        <Span id="description" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span id="holder_fixed_price" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span id="holder_bundle" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span id="holder_subscription" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@title">
+        <Span id="radio_fixed_price" size="20dp"/>
+        <Span size="12dp"/>
+        <Span id="title_fixed_price" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="price_fixed_price" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_fixed_price" end="end@title">
+        <Span id="info_fixed_price" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="price_info_fixed_price" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@title">
+        <Span id="radio_bundle" size="100%radio_fixed_price"/>
+        <Span size="12dp"/>
+        <Span id="title_bundle" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="price_bundle" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_bundle" end="end@title">
+        <Span id="info_bundle" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="price_info_bundle" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@title">
+        <Span id="radio_subscription" size="100%radio_fixed_price"/>
+        <Span size="12dp"/>
+        <Span id="title_subscription" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="price_subscription" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_subscription" end="end@title">
+        <Span id="info_subscription" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="price_info_subscription" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span id="more_details" size="1w"/>
+        <Span size="8dp"/>
+        <Span id="book" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@share" end="end@share">
+        <Span id="forward" size="100%"/>
+    </Horizontal>
+
+</Sequences>

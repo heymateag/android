@@ -12,10 +12,14 @@
         <Span id="text_name" size="wrap"/>
         <Span size="4dp"/>
         <Span id="text_info" size="wrap"/>
+        <Span size="2dp" visibleIf="text_more_info"/>
+        <Span id="text_more_info" size="wrap"/>
         <Span size="1w"/>
     </Vertical>
 
     <Vertical start="end@text_info">
+        <Span size="2dp" visibleIf="text_more_info"/>
+        <Span size="100%text_more_info"/>
         <Span size="8dp"/>
         <Span id="button_left" size="12pw"/>
         <Span size="8dp"/>
@@ -35,6 +39,10 @@
 
     <Horizontal start="start@text_name" end="end@text_name">
         <Span id="text_info" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@text_name" end="end@text_name">
+        <Span id="text_more_info" size="100%"/>
     </Horizontal>
 
     <Horizontal end="end@text_name">

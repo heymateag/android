@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 
 import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.google.android.exoplayer2.util.Log;
 
@@ -259,7 +260,8 @@ public class Wallet {
         });
     }
 
-    public void createAcceptedOffer(Offer offer, Reservation reservation, List<String> referrers, OfferOperationCallback callback) {
+    public void createAcceptedOffer(Offer offer, Reservation reservation, PurchasedPlan purchasedPlan,
+                                    List<String> referrers, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -269,7 +271,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.create(offer, getAddress(), reservation, referrers);
+                    mCeloOffer.create(offer, getAddress(), reservation, purchasedPlan, referrers);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Horizontal id="anchor">
+        <Span size="0px"/>
+        <Span id="fixed_price_title" size="wrap"/>
+    </Horizontal>
+
+    <Vertical>
+        <Span size="8dp"/>
+        <Span id="fixed_price_title" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="fixed_price" size="wrap"/>
+        <Span size="20dp"/>
+        <Span id="check_bundle" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="bundle_session_count" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="bundle_price" size="wrap"/>
+        <Span size="20dp"/>
+        <Span id="check_subscription" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="subscription_period" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="subscription_price" size="wrap"/>
+    </Vertical>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span id="fixed_price" size="60dp"/>
+        <Span size="4dp"/>
+        <Span id="currency" size="36dp"/>
+        <Span size="4dp"/>
+        <Span id="price_type" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span id="check_bundle" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span size="48dp"/>
+        <Span id="bundle_sessions" size="wrap"/>
+        <Span size="8dp"/>
+        <Span size="48dp"/>
+        <Span id="bundle_discount" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title" end="end@bundle_sessions">
+        <Span id="bundle_session_count" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="end@bundle_sessions" end="end@bundle_discount">
+        <Span size="8dp"/>
+        <Span id="bundle_discount_percent" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span id="bundle_price" size="wrap"/>
+        <Span size="16dp"/>
+        <Span id="bundle_calculated_price" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span id="check_subscription" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span id="subscription_period" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="subscriptions_unlimited" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@fixed_price_title">
+        <Span id="subscription_at" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="subscription_price" size="96dp"/>
+        <Span size="2dp"/>
+        <Span id="subscription_per" size="wrap"/>
+    </Horizontal>
+
+    <Vertical start="start@fixed_price">
+        <Span id="currency" size="100%fixed_price"/>
+    </Vertical>
+
+    <Vertical start="start@fixed_price">
+        <Span id="price_type" size="100%fixed_price"/>
+    </Vertical>
+
+    <Vertical start="start@bundle_session_count" end="end@bundle_session_count">
+        <Span size="1w"/>
+        <Span id="bundle_sessions" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@bundle_session_count">
+        <Span id="bundle_discount_percent" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@bundle_session_count" end="end@bundle_session_count">
+        <Span size="1w"/>
+        <Span id="bundle_discount" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@bundle_price">
+        <Span id="bundle_calculated_price" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@subscription_period">
+        <Span id="subscriptions_unlimited" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@subscription_price">
+        <Span id="subscription_at" size="100%subscription_price"/>
+    </Vertical>
+
+    <Vertical start="start@subscription_price">
+        <Span id="subscription_per" size="100%subscription_price"/>
+    </Vertical>
+
+</Sequences>

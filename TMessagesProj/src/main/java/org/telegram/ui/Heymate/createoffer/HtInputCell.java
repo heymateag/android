@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.createoffer;
 
 import android.content.Context;
 import android.graphics.Canvas;

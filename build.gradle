@@ -1,9 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        jcenter()
-        mavenCentral()
         google()
+        mavenCentral()
+        maven { url "https://raw.githubusercontent.com/yasharpm/repo/master/" }
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
@@ -13,6 +14,7 @@ buildscript {
 }
 repositories {
     google()
+    maven { url "https://raw.githubusercontent.com/yasharpm/repo/master/" }
 }
 
 apply plugin: 'com.amplifyframework.amplifytools'
