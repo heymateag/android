@@ -111,7 +111,7 @@ public class MyOffersAdapter extends MyScheduleAdapter {
 
     private void updateItem(TimeSlot timeSlot, boolean queryReservations) {
         for (int i = 0; i < mListView.getChildCount(); i++) {
-            if (mListView.getChildAt(i) instanceof MyOrderItem) {
+            if (mListView.getChildAt(i) instanceof MyOfferItem) {
                 MyOfferItem item = (MyOfferItem) mListView.getChildAt(i);
 
                 if (timeSlot.getId().equals(item.getTimeSlotId())) {

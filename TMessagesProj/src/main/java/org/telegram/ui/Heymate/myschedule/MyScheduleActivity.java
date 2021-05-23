@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -114,28 +115,39 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         ((ViewGroup) fragmentView).removeAllViews();
         mMyOrdersAdapter = null;
         mMyOffersAdapter = null;
+        mSubscriptionsAdapter = null;
         super.clearViews();
     }
 
     private void bindAdapter(RecyclerListView listView, int position) {
-        if (listView.getAdapter() == null) {
-            switch (position) {
-                case MY_OFFERS:
+        MyScheduleAdapter adapter = null;
+
+        switch (position) {
+            case MY_OFFERS:
+                if (mMyOffersAdapter == null) {
                     mMyOffersAdapter = new MyOffersAdapter(listView, this);
-                    listView.setAdapter(mMyOffersAdapter);
-                    break;
-                case MY_ORDERS:
+                }
+                adapter = mMyOffersAdapter;
+                break;
+            case MY_ORDERS:
+                if (mMyOrdersAdapter == null) {
                     mMyOrdersAdapter = new MyOrdersAdapter(listView, this);
-                    listView.setAdapter(mMyOrdersAdapter);
-                    break;
-                case SUBSCRIPTIONS:
+                }
+                adapter = mMyOrdersAdapter;
+                break;
+            case SUBSCRIPTIONS:
+                if (mSubscriptionsAdapter == null) {
                     mSubscriptionsAdapter = new SubscriptionsAdapter(listView, this);
-                    listView.setAdapter(mSubscriptionsAdapter);
-                    break;
-            }
+                }
+                adapter = mSubscriptionsAdapter;
+                break;
         }
 
-        ((MyScheduleAdapter) listView.getAdapter()).getData();
+        if (listView.getAdapter() != adapter) {
+            listView.setAdapter(adapter);
+        }
+
+        adapter.getData();
     }
 
     @Override

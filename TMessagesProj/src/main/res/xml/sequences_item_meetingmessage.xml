@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="12dp"/>
+        <Span size="8dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="subcategory" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="description" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="timer" size="wrap"/>
+        <Span size="4dp"/>
+        <Span size="4dp"/>
+        <Span id="more_details" size="46dp"/>
+        <Span size="12dp"/>
+    </Vertical>
+
+    <Vertical start="start@title">
+        <Span size="-8dp"/>
+        <Span id="image_user" size="36dp"/>
+    </Vertical>
+
+    <Vertical start="start@more_details">
+        <Span id="join" size="100%more_details"/>
+    </Vertical>
+
+    <Vertical start="start@title" end="start@more_details">
+        <Span size="-8dp"/>
+        <Span id="background" size="1w"/>
+        <Span size="4dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="image_user" size="36dp"/>
+        <Span size="8dp"/>
+        <Span id="background" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="title" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@title">
+        <Span id="subcategory" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@title">
+        <Span id="description" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@title">
+        <Span id="timer" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span id="more_details" size="1w"/>
+        <Span size="8dp"/>
+        <Span id="join" size="1w"/>
+    </Horizontal>
+
+</Sequences>

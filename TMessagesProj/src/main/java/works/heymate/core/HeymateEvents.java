@@ -17,6 +17,12 @@ public class HeymateEvents {
     public static final int PHONE_NUMBER_VERIFIED_STATUS_UPDATED = 1; // Wallet, VerifiedStatus, CeloError
     public static final int RESERVATION_STATUS_UPDATED = 2; // reservationId
     public static final int SHOPS_UPDATED = 3; // shops
+    public static final int JOINING_MEETING = 4;
+    public static final int FAILED_TO_JOIN_MEETING = 5; // exception
+    public static final int JOINED_MEETING = 6;
+    public static final int LEFT_MEETING = 7;
+    public static final int USER_JOINED_MEETING = 8; // userId
+    public static final int USER_LEFT_MEETING = 9; // userId
 
     public interface HeymateEventObserver {
 

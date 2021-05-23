@@ -543,7 +543,7 @@ public class HtAmplify {
     }
 
     public void getTimeSlotReservations(String id, APICallback<List<Reservation>> callback) {
-        Amplify.API.query(ModelQuery.list(Reservation.class, Reservation.OFFER_ID.eq(id)), result -> {
+        Amplify.API.query(ModelQuery.list(Reservation.class, Reservation.TIME_SLOT_ID.eq(id)), result -> {
             List<Reservation> reservations = new ArrayList<>();
 
             if (result.hasData()) {

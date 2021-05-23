@@ -33,6 +33,7 @@ import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.TG2HM;
+import org.telegram.ui.Heymate.onlinemeeting.OnlineMeetingActivity;
 import org.telegram.ui.ProfileActivity;
 
 import works.heymate.celo.CeloError;
@@ -94,8 +95,8 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
     public void setReservation(Reservation reservation) {
         mReservation = reservation;
-        mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mReservation.getMeetingType());
 
+        updateIsOnlineMeeting();
         updateLayout();
     }
 
@@ -105,7 +106,6 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
     public void setOffer(Offer offer) {
         mOffer = offer;
-        mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getMeetingType());
 
         try {
             mUserId = Integer.parseInt(offer.getUserId());
@@ -113,7 +113,22 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             mUserId = 0;
         }
 
+        updateIsOnlineMeeting();
         updateLayout();
+    }
+
+    private void updateIsOnlineMeeting() {
+        if (mReservation != null) {
+            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mReservation.getMeetingType());
+        }
+        else if (mOffer != null) {
+            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getMeetingType());
+        }
+        else {
+            mIsOnlineMeeting = false;
+        }
+
+        mTextName.setTextColor(mIsOnlineMeeting ? 0xffff0000 : 0xff000000);
     }
 
     private void updateLayout() {
@@ -416,7 +431,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
         String meetingId = mReservation.getMeetingId();
 
-        // TODO Join session
+        mParent.presentFragment(new OnlineMeetingActivity(meetingId), true);
     }
 
     private void showDetails() {

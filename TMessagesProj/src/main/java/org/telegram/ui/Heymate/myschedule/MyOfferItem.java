@@ -33,6 +33,7 @@ import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.TG2HM;
+import org.telegram.ui.Heymate.onlinemeeting.OnlineMeetingActivity;
 import org.telegram.ui.ProfileActivity;
 
 import java.util.ArrayList;
@@ -97,11 +98,15 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     public void setTimeSlot(TimeSlot timeSlot) {
+        boolean timeSlotChanged = mTimeSlot == null || timeSlot == null || !mTimeSlot.getId().equals(timeSlot.getId());
+
         mTimeSlot = timeSlot;
-        mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mTimeSlot.getMeetingType());
 
-        mUserId = 0;
+        if (timeSlotChanged) {
+            mUserId = 0;
+        }
 
+        updateIsOnlineMeeting();
         updateLayout();
     }
 
@@ -114,9 +119,9 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
             } catch (Throwable t) {
                 mUserId = 0;
             }
-
-            updateLayout();
         }
+
+        updateLayout();
     }
 
     public String getTimeSlotId() {
@@ -125,9 +130,23 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
     public void setOffer(Offer offer) {
         mOffer = offer;
-        mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getMeetingType());
 
+        updateIsOnlineMeeting();
         updateLayout();
+    }
+
+    private void updateIsOnlineMeeting() {
+        if (mTimeSlot != null) {
+            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mTimeSlot.getMeetingType());
+        }
+        else if (mOffer != null) {
+            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getMeetingType());
+        }
+        else {
+            mIsOnlineMeeting = false;
+        }
+
+        mTextName.setTextColor(mIsOnlineMeeting ? 0xffff0000 : 0xff000000);
     }
 
     private HtTimeSlotStatus concludeStatus() {
@@ -165,7 +184,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
         HtTimeSlotStatus status = concludeStatus();
 
-        if (mOffer != null && mTimeSlot != null && mReservations != null) {
+        if (mOffer != null && mTimeSlot != null && mReservations != null && status != null) {
             String text;
 
             switch (status) {
@@ -361,7 +380,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void ensureUniformStatus(HtTimeSlotStatus status, boolean showLoading) {
-        if (mReservations == null) {
+        if (mReservations == null || mOffer == null) {
             return;
         }
 
@@ -439,7 +458,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void joinSession(String meetingId) {
-        // TODO Join session
+        mParent.presentFragment(new OnlineMeetingActivity(meetingId), true);
     }
 
     private String getMeetingId() {

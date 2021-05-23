@@ -135,7 +135,7 @@ public class OfferUtils {
             price = String.valueOf(pricingInfo.price);
             currency = String.valueOf(pricingInfo.currency);
             rateType = String.valueOf(pricingInfo.rateType);
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             return url;
         }
 

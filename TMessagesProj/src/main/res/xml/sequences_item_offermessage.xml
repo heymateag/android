@@ -120,7 +120,7 @@
         <Span size="4dp"/>
     </Horizontal>
 
-    <Horizontal start="start@background">
+    <Horizontal start="start@background" end="end@background">
         <Span size="16dp"/>
         <Span id="title" size="1w"/>
         <Span size="16dp"/>
