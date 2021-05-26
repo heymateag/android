@@ -65,9 +65,6 @@ public class OffersActivity extends BaseFragment {
         DatabaseWatchDog.getInstance().config(currentAccount);
         this.context = context;
 
-//        HtAmplify.getInstance(context).signUp(currentAccount);
-//        HtAmplify.getInstance(context).signIn(currentAccount);
-
         actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setTitle(LocaleController.getString("HtManageOffers", works.heymate.beta.R.string.HtManageOffers));

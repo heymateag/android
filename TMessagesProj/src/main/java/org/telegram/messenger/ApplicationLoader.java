@@ -22,6 +22,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -36,10 +37,18 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
+import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
+import works.heymate.beta.BuildConfig;
 import works.heymate.core.Texts;
 
 public class ApplicationLoader extends Application {
@@ -180,6 +189,23 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
+        if (BuildConfig.DEBUG) {
+            Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+                try {
+                    OutputStream stream = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "heymate_log.txt"));
+                    PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
+                    e.printStackTrace(writer);
+                    writer.flush();
+                } catch (Throwable x) {
+                    x.printStackTrace();
+                }
+
+                defaultHandler.uncaughtException(t, e);
+            });
+        }
+
         Texts.initialize(this);
 
         try {
