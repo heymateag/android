@@ -148,7 +148,7 @@ public class OfferUtils {
                 .replace(PLACEHOLDER_PRICE, price)
                 .replace(PLACEHOLDER_CURRENCY, currency)
                 .replace(PLACEHOLDER_PAYMENT_TYPE, rateType)
-                .replace(PLACEHOLDER_ADDRESS, offer.getLocationData())
+                .replace(PLACEHOLDER_ADDRESS, offer.getLocationData() == null ? "Online meeting" : offer.getLocationData()) // TODO More flexibility needed for phrase.
                 .replace(PLACEHOLDER_EXPIRY, offer.getExpiry().format());
 
         try {

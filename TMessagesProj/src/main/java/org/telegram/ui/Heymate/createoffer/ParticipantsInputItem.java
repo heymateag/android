@@ -103,6 +103,8 @@ public class ParticipantsInputItem extends ExpandableItem {
         params.leftMargin = AndroidUtilities.dp(24);
         content.addView(radioLayout, params);
 
+        mCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> mEditCount.setEnabled(!mCheckBox.isChecked()));
+
         radioLayout.setOnClickListener(v -> {
             mCheckBox.setChecked(!mCheckBox.isChecked());
             mEditCount.setEnabled(!mCheckBox.isChecked());

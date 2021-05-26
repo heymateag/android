@@ -2,6 +2,7 @@ package org.telegram.ui.Heymate;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -95,6 +97,14 @@ public class EasterActivity extends BaseFragment {
                 Toast.makeText(context, "Amount is not a number.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        TextView address = new TextView(context);
+        address.setPadding(0, 0, 0, AndroidUtilities.dp(24));
+        address.setTextIsSelectable(true);
+        address.setTextSize(12);
+        address.setText("Your address is:\n" + (wallet.isCreated() ? wallet.getAddress() : "Wallet hasn't been created."));
+        address.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        content.addView(address, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 0, 1f));
 
         return content;
     }

@@ -237,7 +237,7 @@ public class HeymatePayment {
         return BuildConfig.DEBUG ?
                 () -> alfajoresTopUp(fragment, next) :
                 () -> checkBalanceBeforePayment(fragment, price, next);
-//        return () -> checkBalanceBeforePayment(fragment, price, () -> initTimeSlotPurchasePayment(fragment, offer, purchasedPlan, referral, timeSlot));
+//        return () -> checkBalanceBeforePayment(fragment, price, next);
     }
 
     private static void alfajoresTopUp(BaseFragment fragment, Runnable next) {
@@ -429,6 +429,7 @@ public class HeymatePayment {
             LoadingUtil.onLoadingStarted(fragment.getParentActivity());
             ensureWalletExistence(fragment.getParentActivity(), () -> {
                 LoadingUtil.onLoadingFinished();
+                LogToGroup.announceWallet(fragment, wallet);
                 runnable.run();
             });
         }

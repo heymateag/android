@@ -671,12 +671,12 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
                 newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
                 newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInfo.address);
+                newOffer.setLocation(locationInfo == null ? null : locationInfo.address);
                 newOffer.setMeetingType(locationInputCell.getMeetingType());
                 newOffer.setMaximumReservations(maximumParticipants);
                 newOffer.setPricingInfo(pricingInfo);
-                newOffer.setLatitude(locationInfo.latitude);
-                newOffer.setLongitude(locationInfo.longitude);
+                newOffer.setLatitude(locationInfo == null ? 0 : locationInfo.latitude);
+                newOffer.setLongitude(locationInfo == null ? 0 : locationInfo.longitude);
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);

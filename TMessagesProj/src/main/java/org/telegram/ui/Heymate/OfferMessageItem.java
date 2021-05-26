@@ -192,15 +192,20 @@ public class OfferMessageItem extends SequenceLayout {
                 return;
             }
 
-            HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, mParent,  0, mOffer, mPhraseInfo);
-            AlertDialog dialog = detailsPopUp.create();
-            detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            detailsPopUp.show();
+            try {
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, mParent, 0, mOffer, mPhraseInfo);
+                AlertDialog dialog = detailsPopUp.create();
+                detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                detailsPopUp.show();
+            } catch (Throwable t) {
+                LogToGroup.log("Fail on details dialog", t, mParent);
+                Toast.makeText(getContext(), "Failure! Log sent to group.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         mBook.setOnClickListener(v -> initPayment());
