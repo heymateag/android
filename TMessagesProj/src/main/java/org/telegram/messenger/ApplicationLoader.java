@@ -194,7 +194,7 @@ public class ApplicationLoader extends Application {
 
             Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
                 try {
-                    OutputStream stream = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "heymate_log.txt"));
+                    OutputStream stream = new FileOutputStream(new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "heymate_log.txt"));
                     PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
                     e.printStackTrace(writer);
                     writer.flush();

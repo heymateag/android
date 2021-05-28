@@ -145,8 +145,6 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         else {
             mIsOnlineMeeting = false;
         }
-
-        mTextName.setTextColor(mIsOnlineMeeting ? 0xffff0000 : 0xff000000);
     }
 
     private HtTimeSlotStatus concludeStatus() {
@@ -180,6 +178,10 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         }
         else {
             onUserLoaded(null);
+        }
+
+        if (mReservations != null && mReservations.size() > 1) {
+            mTextName.setText(mReservations.size() + " customers."); // TODO Texts
         }
 
         HtTimeSlotStatus status = concludeStatus();
@@ -238,9 +240,6 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
                     setRightAsDetails();
                     break;
                 case MARKED_AS_STARTED:
-                    mButtonLeft.setVisibility(GONE);
-                    setRightAsDetails();
-                    break;
                 case STARTED:
                     mButtonLeft.setVisibility(GONE);
                     if (mIsOnlineMeeting) {
@@ -386,7 +385,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
         String meetingId = mIsOnlineMeeting ? getMeetingId() : null;
 
-        if (status == HtTimeSlotStatus.MARKED_AS_STARTED && mIsOnlineMeeting) {
+        if (status == HtTimeSlotStatus.MARKED_AS_STARTED && mIsOnlineMeeting && showLoading) {
             joinSession(meetingId);
         }
 

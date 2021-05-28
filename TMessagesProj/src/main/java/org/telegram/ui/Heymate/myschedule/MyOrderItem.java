@@ -127,8 +127,6 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
         else {
             mIsOnlineMeeting = false;
         }
-
-        mTextName.setTextColor(mIsOnlineMeeting ? 0xffff0000 : 0xff000000);
     }
 
     private void updateLayout() {

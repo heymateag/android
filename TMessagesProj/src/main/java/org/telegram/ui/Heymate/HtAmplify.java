@@ -5,9 +5,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.lambda.AWSLambda;
+import com.amazonaws.services.lambda.AWSLambdaClient;
+import com.amazonaws.services.lambda.model.InvokeRequest;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.mobileconnectors.lambdainvoker.*;
@@ -137,7 +142,7 @@ public class HtAmplify {
 
     public interface LambdaFunctions {
 
-        @LambdaFunction
+        @LambdaFunction(functionName = "getZoomJWT-staging")
         GetJWTResponse getZoomJWT(GetJWTRequest request);
 
     }
@@ -164,20 +169,30 @@ public class HtAmplify {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(context);
 
-            amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(
+            AWSCredentials credentials = new BasicAWSCredentials(
                     "AKIATNEPMKIM2UIPWSPC",
                     "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"
-            ));
+            );
+
+            amazonS3Client = new AmazonS3Client(credentials);
+
+            StaticCredentialsProvider credentialsProvider = new StaticCredentialsProvider(credentials);
 
             amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 
+//            AWSLambda lambda = new AWSLambdaClient(credentialsProvider);
+//            lambda.setRegion(Region.getRegion(Regions.US_EAST_1));
+//            lambda.setEndpoint("getZoomJWT-staging");
+//            lambda.invoke(new InvokeRequest());
+
+
             // Create an instance of CognitoCachingCredentialsProvider
-            CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(
-                    context, "us-east-1:883d9973-a1d4-4bc0-aa34-55ad8a2cc6c3", Regions.US_EAST_1);
+//            CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(
+//                    context, "us-east-1:883d9973-a1d4-4bc0-aa34-55ad8a2cc6c3", Regions.US_EAST_1);
 
             // Create LambdaInvokerFactory, to be used to instantiate the Lambda proxy.
-            LambdaInvokerFactory factory = new LambdaInvokerFactory(context, Regions.US_EAST_1, cognitoProvider);
+            LambdaInvokerFactory factory = new LambdaInvokerFactory(context, Regions.US_EAST_1, credentialsProvider);
 
             // Create the Lambda proxy object with a default Json data binder.
             // You can provide your own data binder by implementing

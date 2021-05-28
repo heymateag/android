@@ -62,7 +62,9 @@ public class MyOffersAdapter extends MyScheduleAdapter {
             return;
         }
 
-        Collections.reverse(timeSlots);
+//        while (timeSlots.size() > 1) {
+//            timeSlots.remove(1);
+//        }
         // TODO Sort with some context
         // Collections.sort(reservations, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
 
