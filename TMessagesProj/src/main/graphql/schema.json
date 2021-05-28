@@ -814,7 +814,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderAddress",
+                        "name": "walletAddress",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -824,7 +824,27 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderSignature",
+                        "name": "priceSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "bundleSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "subscriptionSignature",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -1735,7 +1755,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "serviceProviderAddress",
+                        "name": "walletAddress",
                         "description": null,
                         "args": [],
                         "type": {
@@ -1747,7 +1767,31 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "serviceProviderSignature",
+                        "name": "priceSignature",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "bundleSignature",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
+                    },
+                    {
+                        "name": "subscriptionSignature",
                         "description": null,
                         "args": [],
                         "type": {
@@ -4946,7 +4990,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderAddress",
+                        "name": "walletAddress",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -4956,7 +5000,27 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderSignature",
+                        "name": "priceSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "bundleSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "subscriptionSignature",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -5161,7 +5225,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderAddress",
+                        "name": "walletAddress",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -5171,7 +5235,27 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderSignature",
+                        "name": "priceSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "bundleSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelStringInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "subscriptionSignature",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -5424,7 +5508,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderAddress",
+                        "name": "walletAddress",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -5434,7 +5518,27 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "serviceProviderSignature",
+                        "name": "priceSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "bundleSignature",
+                        "description": null,
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "String",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "subscriptionSignature",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",

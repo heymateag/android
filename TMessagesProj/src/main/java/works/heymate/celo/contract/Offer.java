@@ -29,6 +29,7 @@ import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple13;
 import org.web3j.tuples.generated.Tuple14;
+import org.web3j.tuples.generated.Tuple5;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -56,6 +57,8 @@ public class Offer extends Contract {
 
     public static final String FUNC_CREATEOFFER = "createOffer";
 
+    public static final String FUNC_CREATEPLAN = "createPlan";
+
     public static final String FUNC_DELAYCOMPENSATION = "delayCompensation";
 
     public static final String FUNC_ESCROWTRANSFER = "escrowTransfer";
@@ -65,6 +68,10 @@ public class Offer extends Contract {
     public static final String FUNC_OFFERS = "offers";
 
     public static final String FUNC_OWNER = "owner";
+
+    public static final String FUNC_PLANHASH = "planHash";
+
+    public static final String FUNC_PLANS = "plans";
 
     public static final String FUNC_PREFIXED = "prefixed";
 
@@ -97,6 +104,10 @@ public class Offer extends Contract {
     ;
 
     public static final Event CREATED_EVENT = new Event("Created",
+            Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
+    ;
+
+    public static final Event CREATEDPLAN_EVENT = new Event("CreatedPlan",
             Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
     ;
 
@@ -219,6 +230,37 @@ public class Offer extends Contract {
         return createdEventFlowable(filter);
     }
 
+    public List<CreatedPlanEventResponse> getCreatedPlanEvents(TransactionReceipt transactionReceipt) {
+        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(CREATEDPLAN_EVENT, transactionReceipt);
+        ArrayList<CreatedPlanEventResponse> responses = new ArrayList<CreatedPlanEventResponse>(valueList.size());
+        for (Contract.EventValuesWithLog eventValues : valueList) {
+            CreatedPlanEventResponse typedResponse = new CreatedPlanEventResponse();
+            typedResponse.log = eventValues.getLog();
+            typedResponse._planHash = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
+            responses.add(typedResponse);
+        }
+        return responses;
+    }
+
+    public Flowable<CreatedPlanEventResponse> createdPlanEventFlowable(EthFilter filter) {
+        return web3j.ethLogFlowable(filter).map(new Function<Log, CreatedPlanEventResponse>() {
+            @Override
+            public CreatedPlanEventResponse apply(Log log) {
+                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(CREATEDPLAN_EVENT, log);
+                CreatedPlanEventResponse typedResponse = new CreatedPlanEventResponse();
+                typedResponse.log = log;
+                typedResponse._planHash = (byte[]) eventValues.getNonIndexedValues().get(0).getValue();
+                return typedResponse;
+            }
+        });
+    }
+
+    public Flowable<CreatedPlanEventResponse> createdPlanEventFlowable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(CREATEDPLAN_EVENT));
+        return createdPlanEventFlowable(filter);
+    }
+
     public List<ReleasedEventResponse> getReleasedEvents(TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(RELEASED_EVENT, transactionReceipt);
         ArrayList<ReleasedEventResponse> responses = new ArrayList<ReleasedEventResponse>(valueList.size());
@@ -316,10 +358,11 @@ public class Offer extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
-    public RemoteFunctionCall<TransactionReceipt> createOffer(byte[] _tradeID, BigInteger _amount, BigInteger _fee, BigInteger _expiry, BigInteger _slotTime, BigInteger _initialDeposit, List<String> userAddress, List<BigInteger> config, List<String> activeReferrers, List<String> newReferrers, byte[] signature) {
+    public RemoteFunctionCall<TransactionReceipt> createOffer(byte[] _tradeID, byte[] _planID, BigInteger _amount, BigInteger _fee, BigInteger _expiry, BigInteger _slotTime, BigInteger _initialDeposit, List<String> userAddress, List<BigInteger> config, List<String> activeReferrers, List<String> newReferrers, byte[] signature) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                 FUNC_CREATEOFFER,
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_tradeID),
+                        new org.web3j.abi.datatypes.generated.Bytes16(_planID),
                         new org.web3j.abi.datatypes.generated.Uint256(_amount),
                         new org.web3j.abi.datatypes.generated.Uint16(_fee),
                         new org.web3j.abi.datatypes.generated.Uint32(_expiry),
@@ -337,6 +380,22 @@ public class Offer extends Contract {
                         new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
                                 org.web3j.abi.datatypes.Address.class,
                                 org.web3j.abi.Utils.typeMap(newReferrers, org.web3j.abi.datatypes.Address.class)),
+                        new org.web3j.abi.datatypes.DynamicBytes(signature)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> createPlan(byte[] _planID, BigInteger _planType, List<BigInteger> config, List<String> userAddress, byte[] signature) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_CREATEPLAN,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_planID),
+                        new org.web3j.abi.datatypes.generated.Uint256(_planType),
+                        new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.generated.Uint256>(
+                                org.web3j.abi.datatypes.generated.Uint256.class,
+                                org.web3j.abi.Utils.typeMap(config, org.web3j.abi.datatypes.generated.Uint256.class)),
+                        new org.web3j.abi.datatypes.DynamicArray<org.web3j.abi.datatypes.Address>(
+                                org.web3j.abi.datatypes.Address.class,
+                                org.web3j.abi.Utils.typeMap(userAddress, org.web3j.abi.datatypes.Address.class)),
                         new org.web3j.abi.datatypes.DynamicBytes(signature)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
@@ -401,6 +460,32 @@ public class Offer extends Contract {
                 Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}));
         return executeRemoteCallSingleValueReturn(function, String.class);
+    }
+
+    public RemoteFunctionCall<byte[]> planHash() {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_PLANHASH,
+                Arrays.<Type>asList(),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bytes32>() {}));
+        return executeRemoteCallSingleValueReturn(function, byte[].class);
+    }
+
+    public RemoteFunctionCall<Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>> plans(byte[] param0) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_PLANS,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(param0)),
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+        return new RemoteFunctionCall<Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>>(function,
+                new Callable<Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>>() {
+                    @Override
+                    public Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger> call() throws Exception {
+                        List<Type> results = executeCallMultipleValueReturn(function);
+                        return new Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>(
+                                (Boolean) results.get(0).getValue(),
+                                (BigInteger) results.get(1).getValue(),
+                                (BigInteger) results.get(2).getValue(),
+                                (BigInteger) results.get(3).getValue(),
+                                (BigInteger) results.get(4).getValue());
+                    }
+                });
     }
 
     public RemoteFunctionCall<byte[]> prefixed(byte[] hash) {
@@ -546,6 +631,10 @@ public class Offer extends Contract {
 
     public static class CreatedEventResponse extends BaseEventResponse {
         public byte[] _tradeHash;
+    }
+
+    public static class CreatedPlanEventResponse extends BaseEventResponse {
+        public byte[] _planHash;
     }
 
     public static class ReleasedEventResponse extends BaseEventResponse {

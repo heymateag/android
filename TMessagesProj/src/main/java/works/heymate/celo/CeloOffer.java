@@ -42,11 +42,26 @@ public class CeloOffer {
         BigInteger initialDeposit = new BigInteger(termsConfig.getString(OfferUtils.INITIAL_DEPOSIT));
         BigInteger[] config = getConfig(termsConfig).toArray(new BigInteger[0]);
 
-        Sign.SignatureData signatureData = Sign.signPrefixedMessage(getBytes(serviceProviderAddress, amount, initialDeposit, config), mContractKit.transactionManager.getCredentials().getEcKeyPair());
+        return sign(serviceProviderAddress, amount, initialDeposit, config);
+    }
 
-        byte[] signature = getBytes(signatureData.getV(), signatureData.getR(), signatureData.getS());
+    public String createBundleSignature(PriceInputItem.PricingInfo pricingInfo, int promotionPercent) {
+        byte[] address = Numeric.hexStringToByteArray(mContractKit.getAddress());
+        BigInteger[] config = getBundleConfig(pricingInfo, promotionPercent);
+        return sign(address, config);
+    }
 
-        return Numeric.toHexString(signature);
+    public void createBundle(com.amplifyframework.datastore.generated.model.Offer offer,
+                             String consumerAddress, PurchasedPlan purchasePlan, List<String> referrers) throws JSONException {
+        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+
+        JSONObject configJSON = new JSONObject(offer.getTermsConfig());
+        int promotionPercent = configJSON.getInt(OfferUtils.PROMOTION_RATE);
+
+        byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
+        BigInteger planType = BigInteger.ONE;
+        BigInteger[] config = getBundleConfig(pricingInfo, promotionPercent);
+        List<String> userAddresses = Arrays.asList(offer.getServiceProviderAddress())
     }
 
     /*
@@ -220,6 +235,23 @@ public class CeloOffer {
         config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
 
         return config;
+    }
+
+    private static BigInteger[] getBundleConfig(PriceInputItem.PricingInfo pricingInfo, int promotionPercent) {
+        return new BigInteger[] {
+                BigInteger.valueOf(pricingInfo.price * (100 - pricingInfo.bundleDiscountPercent) / 100),
+                BigInteger.valueOf(pricingInfo.bundleCount),
+                BigInteger.valueOf(4),
+                BigInteger.ZERO //BigInteger.valueOf(promotionPercent)
+        };
+    }
+
+    private String sign(Object... params) {
+        Sign.SignatureData signatureData = Sign.signPrefixedMessage(getBytes(params), mContractKit.transactionManager.getCredentials().getEcKeyPair());
+
+        byte[] signature = getBytes(signatureData.getV(), signatureData.getR(), signatureData.getS());
+
+        return Numeric.toHexString(signature);
     }
 
     private static byte[] getBytes(Object... params) {
