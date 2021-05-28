@@ -34,10 +34,10 @@ public class CeloOffer {
         mContract = Offer.load(address, contractKit.web3j, contractKit.transactionManager, new DefaultGasProvider());
     }
 
-    public String createOfferSignature(String address, String rate, JSONObject termsConfig) throws Exception {
-        byte[] serviceProviderAddress = Numeric.hexStringToByteArray(address);
+    public String createOfferSignature(int rate, JSONObject termsConfig) throws Exception {
+        byte[] serviceProviderAddress = Numeric.hexStringToByteArray(mContractKit.getAddress());
 
-        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(rate) * 100));
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate * 100));
 
         BigInteger initialDeposit = new BigInteger(termsConfig.getString(OfferUtils.INITIAL_DEPOSIT));
         BigInteger[] config = getConfig(termsConfig).toArray(new BigInteger[0]);
@@ -47,12 +47,12 @@ public class CeloOffer {
 
     public String createBundleSignature(PriceInputItem.PricingInfo pricingInfo, int promotionPercent) {
         byte[] address = Numeric.hexStringToByteArray(mContractKit.getAddress());
-        BigInteger[] config = getBundleConfig(pricingInfo, promotionPercent);
+        List<BigInteger> config = getBundleConfig(pricingInfo, promotionPercent);
         return sign(address, config);
     }
 
     public void createBundle(com.amplifyframework.datastore.generated.model.Offer offer,
-                             String consumerAddress, PurchasedPlan purchasePlan, List<String> referrers) throws JSONException {
+                             PurchasedPlan purchasePlan, List<String> referrers) throws JSONException, CeloException {
         PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
 
         JSONObject configJSON = new JSONObject(offer.getTermsConfig());
@@ -60,8 +60,38 @@ public class CeloOffer {
 
         byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
         BigInteger planType = BigInteger.ONE;
-        BigInteger[] config = getBundleConfig(pricingInfo, promotionPercent);
-        List<String> userAddresses = Arrays.asList(offer.getServiceProviderAddress())
+        List<BigInteger> config = getBundleConfig(pricingInfo, promotionPercent);
+        List<String> userAddresses = Arrays.asList(offer.getWalletAddress(), mContractKit.getAddress());
+
+        long cents = pricingInfo.getBundleTotalPrice() * 100L;
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue(cents);
+
+        try {
+            mContractKit.contracts.getStableToken().approve(mContract.getContractAddress(), amount).send();
+            mContractKit.contracts.getStableToken().transfer(mContract.getContractAddress(), amount).send();
+        } catch (Exception e) {
+            if (CeloSDK.isErrorCausedByInsufficientFunds(e)) {
+                throw new CeloException(CeloError.INSUFFICIENT_BALANCE, e);
+            }
+
+            throw new CeloException(CeloError.NETWORK_ERROR, e);
+        }
+
+        try {
+            mContract.createPlan(
+                    planId,
+                    planType,
+                    config,
+                    userAddresses,
+                    Numeric.hexStringToByteArray(offer.getBundleSignature())).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
     }
 
     /*
@@ -80,55 +110,57 @@ public class CeloOffer {
     serviceProviderAddress: string
     serviceProviderSignature: string
      */
-    public void create(com.amplifyframework.datastore.generated.model.Offer offer, String consumerAddress,
-                       Reservation reservation, PurchasedPlan purchasePlan, List<String> referrers) throws CeloException, JSONException {
+    public void create(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation,
+                       PurchasedPlan purchasePlan, List<String> referrers) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
+        byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
 
         PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
 
         String purchasePlanType = reservation.getPurchasedPlanType();
 
-        String rate;
+        int rate;
 
         switch (purchasePlanType) {
             case PurchasePlanTypes.SINGLE:
-                rate = String.valueOf(pricingInfo.price);
+                rate = pricingInfo.price;
                 break;
             case PurchasePlanTypes.BUNDLE:
-                rate = String.valueOf(pricingInfo.price * pricingInfo.bundleCount * (100 - pricingInfo.bundleDiscountPercent) / 100);
-                break;
             case PurchasePlanTypes.SUBSCRIPTION:
-                rate = "0";
+                rate = 0;
                 break;
             default:
                 throw new IllegalArgumentException("Purchase plan type not provided.");
         }
 
-        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(rate) * 100));
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate * 100));
 
         BigInteger initialDeposit;
 
-        List<String> userAddresses = Arrays.asList(offer.getServiceProviderAddress(), consumerAddress);
+        List<String> userAddresses = Arrays.asList(offer.getWalletAddress(), mContractKit.getAddress());
 
         JSONObject configJSON = new JSONObject(offer.getTermsConfig());
 
         initialDeposit = new BigInteger(configJSON.getString(OfferUtils.INITIAL_DEPOSIT));
         List<BigInteger> config = getConfig(configJSON);
 
-        try {
-            mContractKit.contracts.getStableToken().approve(mContract.getContractAddress(), amount).send();
-            mContractKit.contracts.getStableToken().transfer(mContract.getContractAddress(), amount).send();
-        } catch (Exception e) {
-            if (CeloSDK.isErrorCausedByInsufficientFunds(e)) {
-                throw new CeloException(CeloError.INSUFFICIENT_BALANCE, e);
-            }
+        if (rate > 0) {
+            try {
+                mContractKit.contracts.getStableToken().approve(mContract.getContractAddress(), amount).send();
+                mContractKit.contracts.getStableToken().transfer(mContract.getContractAddress(), amount).send();
+            } catch (Exception e) {
+                if (CeloSDK.isErrorCausedByInsufficientFunds(e)) {
+                    throw new CeloException(CeloError.INSUFFICIENT_BALANCE, e);
+                }
 
-            throw new CeloException(CeloError.NETWORK_ERROR, e);
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
         }
 
         try {
             mContract.createOffer(
                     tradeId,
+                    planId,
                     amount,
                     BigInteger.ONE, // fee
                     BigInteger.valueOf(offer.getExpiry().toDate().getTime() / 1000),
@@ -138,7 +170,7 @@ public class CeloOffer {
                     config,
                     referrers,
                     new ArrayList<>(0),
-                    Numeric.hexStringToByteArray(offer.getServiceProviderSignature())
+                    Numeric.hexStringToByteArray(offer.getPriceSignature())
             ).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
@@ -237,13 +269,13 @@ public class CeloOffer {
         return config;
     }
 
-    private static BigInteger[] getBundleConfig(PriceInputItem.PricingInfo pricingInfo, int promotionPercent) {
-        return new BigInteger[] {
+    private static List<BigInteger> getBundleConfig(PriceInputItem.PricingInfo pricingInfo, int promotionPercent) {
+        return Arrays.asList(
                 BigInteger.valueOf(pricingInfo.price * (100 - pricingInfo.bundleDiscountPercent) / 100),
                 BigInteger.valueOf(pricingInfo.bundleCount),
                 BigInteger.valueOf(4),
                 BigInteger.ZERO //BigInteger.valueOf(promotionPercent)
-        };
+        );
     }
 
     private String sign(Object... params) {

@@ -210,7 +210,7 @@ public class HtAmplify {
         MarketPlace
     }
 
-    public void createOffer(OfferDto dto, Uri pickedImage, String address, String signature, APICallback<Offer> callback) {
+    public void createOffer(OfferDto dto, Uri pickedImage, String address, String priceSignature, String bundleSignature, String subscriptionSignature, APICallback<Offer> callback) {
         int maximumReservations = dto.getMaximumReservations();
 
         Offer newOffer = Offer.builder()
@@ -230,8 +230,10 @@ public class HtAmplify {
                 .termsConfig(dto.getConfigText())
                 .latitude("" + dto.getLatitude())
                 .longitude("" + dto.getLongitude())
-                .serviceProviderAddress(address)
-                .serviceProviderSignature(signature)
+                .walletAddress(address)
+                .priceSignature(priceSignature)
+                .bundleSignature(bundleSignature)
+                .subscriptionSignature(subscriptionSignature)
                 .status(dto.getStatus().ordinal())
                 .createdAt(dto.getCreatedAt())
                 .editedAt(dto.getEditedAt())

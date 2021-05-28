@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
@@ -654,8 +655,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
         LoadingUtil.onLoadingStarted(getParentActivity());
 
-        // TODO Pricing info.
-        wallet.signOffer(String.valueOf(pricingInfo.price), config, (successful, signature, exception) -> {
+        wallet.signOffer(pricingInfo, config, (successful, priceSignature, bundleSignature, subscriptionSignature, exception) -> {
             LoadingUtil.onLoadingFinished();
 
             if (successful) {
@@ -690,7 +690,10 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                 LoadingUtil.onLoadingStarted(getParentActivity());
 
-                HtAmplify.getInstance(context).createOffer(newOffer, pickedImage, wallet.getAddress(), signature, (success, createdOffer, exception1) -> {
+                HtAmplify.getInstance(context).createOffer(newOffer,
+                        pickedImage, wallet.getAddress(),
+                        priceSignature, bundleSignature, subscriptionSignature,
+                        (success, createdOffer, exception1) -> {
                     LoadingUtil.onLoadingFinished();
 
                     if (success) {

@@ -138,8 +138,44 @@ public class HeymatePayment {
     }
 
     private static void initBundlePurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
+        List<String> referrers = getReferrersFromReferral(referral);
 
-        // TODO
+        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+
+        Wallet wallet = Wallet.get(fragment.getParentActivity(), phoneNumber);
+
+        LoadingUtil.onLoadingStarted(fragment.getParentActivity());
+
+        wallet.createBundle(offer, purchasedPlan, referrers, (success, errorCause) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (success) {
+                LoadingUtil.onLoadingStarted(fragment.getParentActivity());
+
+                HtAmplify.getInstance(fragment.getParentActivity()).createPurchasedPlan(purchasedPlan, (success1, result, exception) -> {
+                    LoadingUtil.onLoadingFinished();
+
+                    if (success1) {
+                        new AlertDialog.Builder(fragment.getParentActivity()) // TODO Text resource
+                                .setTitle("Bundle purchased")
+                                .setMessage("You can check the state of your offer in My Schedule.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                .show();
+                    }
+                    else {
+                        Log.e("TAG", "Failed to create bundle on the back-end.", exception);
+                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else {
+                Log.e(TAG, "Failed to create bundle on blockchain", errorCause);
+                LogToGroup.log("Failed to create bundle on blockchain", errorCause, fragment);
+
+                handleBlockChainError(fragment, errorCause);
+            }
+        });
     }
 
     private static void initSubscriptionPurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
@@ -332,27 +368,7 @@ public class HeymatePayment {
     private static void initTimeSlotPurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral, TimeSlot timeSlot) {
         LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
-        List<String> referrers = new ArrayList<>();
-
-        if (referral != null) {
-            String sReferrers = referral.getReferrers();
-
-            if (sReferrers != null) {
-                try {
-                    JSONArray jReferrers = new JSONArray(sReferrers);
-
-                    for (int i = 0; i < jReferrers.length(); i++) {
-                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
-
-                        if (referrer.walletAddress != null) {
-                            referrers.add(referrer.walletAddress);
-                        }
-                    }
-                } catch (JSONException e) {
-                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
-                }
-            }
-        }
+        List<String> referrers = getReferrersFromReferral(referral);
 
         Reservation reservation = HtAmplify.getInstance(fragment.getParentActivity())
                 .createReservation(timeSlot, purchasedPlan, referral);
@@ -401,24 +417,54 @@ public class HeymatePayment {
                 Log.e(TAG, "Failed to create offer on blockchain", errorCause);
                 LogToGroup.log("Failed to create offer on blockchain", errorCause, fragment);
 
-                if (errorCause instanceof CeloException) {
-                    CeloError coreError = errorCause.getMainCause().getError();
-
-                    if (coreError == CeloError.INSUFFICIENT_BALANCE) {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
-                    }
-                    else if (coreError == CeloError.NETWORK_ERROR) {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                    }
-                }
-                else {
-                    Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
-                }
+                handleBlockChainError(fragment, errorCause);
             }
         });
+    }
+
+    private static void handleBlockChainError(BaseFragment fragment, CeloException errorCause) {
+        if (errorCause instanceof CeloException) {
+            CeloError coreError = errorCause.getMainCause().getError();
+
+            if (coreError == CeloError.INSUFFICIENT_BALANCE) {
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.INSUFFICIENT_BALANCE), Toast.LENGTH_LONG).show();
+            }
+            else if (coreError == CeloError.NETWORK_ERROR) {
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+            }
+        }
+        else {
+            Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private static List<String> getReferrersFromReferral(Referral referral) {
+        List<String> referrers = new ArrayList<>();
+
+        if (referral != null) {
+            String sReferrers = referral.getReferrers();
+
+            if (sReferrers != null) {
+                try {
+                    JSONArray jReferrers = new JSONArray(sReferrers);
+
+                    for (int i = 0; i < jReferrers.length(); i++) {
+                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
+
+                        if (referrer.walletAddress != null) {
+                            referrers.add(referrer.walletAddress);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
+                }
+            }
+        }
+
+        return referrers;
     }
 
     private static void ensureWalletExistenceWithLoading(BaseFragment fragment, Runnable runnable) {

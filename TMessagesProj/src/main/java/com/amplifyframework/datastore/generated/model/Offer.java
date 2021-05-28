@@ -39,8 +39,10 @@ public final class Offer implements Model {
   public static final QueryField LONGITUDE = field("Offer", "longitude");
   public static final QueryField MEETING_TYPE = field("Offer", "meetingType");
   public static final QueryField MAXIMUM_RESERVATIONS = field("Offer", "maximumReservations");
-  public static final QueryField SERVICE_PROVIDER_ADDRESS = field("Offer", "serviceProviderAddress");
-  public static final QueryField SERVICE_PROVIDER_SIGNATURE = field("Offer", "serviceProviderSignature");
+  public static final QueryField WALLET_ADDRESS = field("Offer", "walletAddress");
+  public static final QueryField PRICE_SIGNATURE = field("Offer", "priceSignature");
+  public static final QueryField BUNDLE_SIGNATURE = field("Offer", "bundleSignature");
+  public static final QueryField SUBSCRIPTION_SIGNATURE = field("Offer", "subscriptionSignature");
   public static final QueryField STATUS = field("Offer", "status");
   public static final QueryField SUB_CATEGORY = field("Offer", "subCategory");
   public static final QueryField TERMS = field("Offer", "terms");
@@ -60,8 +62,10 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String longitude;
   private final @ModelField(targetType="String") String meetingType;
   private final @ModelField(targetType="Int") Integer maximumReservations;
-  private final @ModelField(targetType="String") String serviceProviderAddress;
-  private final @ModelField(targetType="String") String serviceProviderSignature;
+  private final @ModelField(targetType="String") String walletAddress;
+  private final @ModelField(targetType="String") String priceSignature;
+  private final @ModelField(targetType="String") String bundleSignature;
+  private final @ModelField(targetType="String") String subscriptionSignature;
   private final @ModelField(targetType="Int") Integer status;
   private final @ModelField(targetType="String") String subCategory;
   private final @ModelField(targetType="String") String terms;
@@ -120,12 +124,20 @@ public final class Offer implements Model {
       return maximumReservations;
   }
   
-  public String getServiceProviderAddress() {
-      return serviceProviderAddress;
+  public String getWalletAddress() {
+      return walletAddress;
   }
   
-  public String getServiceProviderSignature() {
-      return serviceProviderSignature;
+  public String getPriceSignature() {
+      return priceSignature;
+  }
+  
+  public String getBundleSignature() {
+      return bundleSignature;
+  }
+  
+  public String getSubscriptionSignature() {
+      return subscriptionSignature;
   }
   
   public Integer getStatus() {
@@ -152,7 +164,7 @@ public final class Offer implements Model {
       return userID;
   }
   
-  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
+  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
@@ -166,8 +178,10 @@ public final class Offer implements Model {
     this.longitude = longitude;
     this.meetingType = meetingType;
     this.maximumReservations = maximumReservations;
-    this.serviceProviderAddress = serviceProviderAddress;
-    this.serviceProviderSignature = serviceProviderSignature;
+    this.walletAddress = walletAddress;
+    this.priceSignature = priceSignature;
+    this.bundleSignature = bundleSignature;
+    this.subscriptionSignature = subscriptionSignature;
     this.status = status;
     this.subCategory = subCategory;
     this.terms = terms;
@@ -197,8 +211,10 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getLongitude(), offer.getLongitude()) &&
               ObjectsCompat.equals(getMeetingType(), offer.getMeetingType()) &&
               ObjectsCompat.equals(getMaximumReservations(), offer.getMaximumReservations()) &&
-              ObjectsCompat.equals(getServiceProviderAddress(), offer.getServiceProviderAddress()) &&
-              ObjectsCompat.equals(getServiceProviderSignature(), offer.getServiceProviderSignature()) &&
+              ObjectsCompat.equals(getWalletAddress(), offer.getWalletAddress()) &&
+              ObjectsCompat.equals(getPriceSignature(), offer.getPriceSignature()) &&
+              ObjectsCompat.equals(getBundleSignature(), offer.getBundleSignature()) &&
+              ObjectsCompat.equals(getSubscriptionSignature(), offer.getSubscriptionSignature()) &&
               ObjectsCompat.equals(getStatus(), offer.getStatus()) &&
               ObjectsCompat.equals(getSubCategory(), offer.getSubCategory()) &&
               ObjectsCompat.equals(getTerms(), offer.getTerms()) &&
@@ -224,8 +240,10 @@ public final class Offer implements Model {
       .append(getLongitude())
       .append(getMeetingType())
       .append(getMaximumReservations())
-      .append(getServiceProviderAddress())
-      .append(getServiceProviderSignature())
+      .append(getWalletAddress())
+      .append(getPriceSignature())
+      .append(getBundleSignature())
+      .append(getSubscriptionSignature())
       .append(getStatus())
       .append(getSubCategory())
       .append(getTerms())
@@ -253,8 +271,10 @@ public final class Offer implements Model {
       .append("longitude=" + String.valueOf(getLongitude()) + ", ")
       .append("meetingType=" + String.valueOf(getMeetingType()) + ", ")
       .append("maximumReservations=" + String.valueOf(getMaximumReservations()) + ", ")
-      .append("serviceProviderAddress=" + String.valueOf(getServiceProviderAddress()) + ", ")
-      .append("serviceProviderSignature=" + String.valueOf(getServiceProviderSignature()) + ", ")
+      .append("walletAddress=" + String.valueOf(getWalletAddress()) + ", ")
+      .append("priceSignature=" + String.valueOf(getPriceSignature()) + ", ")
+      .append("bundleSignature=" + String.valueOf(getBundleSignature()) + ", ")
+      .append("subscriptionSignature=" + String.valueOf(getSubscriptionSignature()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
       .append("subCategory=" + String.valueOf(getSubCategory()) + ", ")
       .append("terms=" + String.valueOf(getTerms()) + ", ")
@@ -309,6 +329,8 @@ public final class Offer implements Model {
       null,
       null,
       null,
+      null,
+      null,
       null
     );
   }
@@ -327,8 +349,10 @@ public final class Offer implements Model {
       longitude,
       meetingType,
       maximumReservations,
-      serviceProviderAddress,
-      serviceProviderSignature,
+      walletAddress,
+      priceSignature,
+      bundleSignature,
+      subscriptionSignature,
       status,
       subCategory,
       terms,
@@ -356,8 +380,10 @@ public final class Offer implements Model {
     BuildStep longitude(String longitude);
     BuildStep meetingType(String meetingType);
     BuildStep maximumReservations(Integer maximumReservations);
-    BuildStep serviceProviderAddress(String serviceProviderAddress);
-    BuildStep serviceProviderSignature(String serviceProviderSignature);
+    BuildStep walletAddress(String walletAddress);
+    BuildStep priceSignature(String priceSignature);
+    BuildStep bundleSignature(String bundleSignature);
+    BuildStep subscriptionSignature(String subscriptionSignature);
     BuildStep status(Integer status);
     BuildStep subCategory(String subCategory);
     BuildStep terms(String terms);
@@ -381,8 +407,10 @@ public final class Offer implements Model {
     private String longitude;
     private String meetingType;
     private Integer maximumReservations;
-    private String serviceProviderAddress;
-    private String serviceProviderSignature;
+    private String walletAddress;
+    private String priceSignature;
+    private String bundleSignature;
+    private String subscriptionSignature;
     private Integer status;
     private String subCategory;
     private String terms;
@@ -406,8 +434,10 @@ public final class Offer implements Model {
           longitude,
           meetingType,
           maximumReservations,
-          serviceProviderAddress,
-          serviceProviderSignature,
+          walletAddress,
+          priceSignature,
+          bundleSignature,
+          subscriptionSignature,
           status,
           subCategory,
           terms,
@@ -496,14 +526,26 @@ public final class Offer implements Model {
     }
     
     @Override
-     public BuildStep serviceProviderAddress(String serviceProviderAddress) {
-        this.serviceProviderAddress = serviceProviderAddress;
+     public BuildStep walletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
         return this;
     }
     
     @Override
-     public BuildStep serviceProviderSignature(String serviceProviderSignature) {
-        this.serviceProviderSignature = serviceProviderSignature;
+     public BuildStep priceSignature(String priceSignature) {
+        this.priceSignature = priceSignature;
+        return this;
+    }
+    
+    @Override
+     public BuildStep bundleSignature(String bundleSignature) {
+        this.bundleSignature = bundleSignature;
+        return this;
+    }
+    
+    @Override
+     public BuildStep subscriptionSignature(String subscriptionSignature) {
+        this.subscriptionSignature = subscriptionSignature;
         return this;
     }
     
@@ -560,7 +602,7 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String serviceProviderAddress, String serviceProviderSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
       super.id(id);
       super.userId(userId)
         .availabilitySlot(availabilitySlot)
@@ -575,8 +617,10 @@ public final class Offer implements Model {
         .longitude(longitude)
         .meetingType(meetingType)
         .maximumReservations(maximumReservations)
-        .serviceProviderAddress(serviceProviderAddress)
-        .serviceProviderSignature(serviceProviderSignature)
+        .walletAddress(walletAddress)
+        .priceSignature(priceSignature)
+        .bundleSignature(bundleSignature)
+        .subscriptionSignature(subscriptionSignature)
         .status(status)
         .subCategory(subCategory)
         .terms(terms)
@@ -650,13 +694,23 @@ public final class Offer implements Model {
     }
     
     @Override
-     public CopyOfBuilder serviceProviderAddress(String serviceProviderAddress) {
-      return (CopyOfBuilder) super.serviceProviderAddress(serviceProviderAddress);
+     public CopyOfBuilder walletAddress(String walletAddress) {
+      return (CopyOfBuilder) super.walletAddress(walletAddress);
     }
     
     @Override
-     public CopyOfBuilder serviceProviderSignature(String serviceProviderSignature) {
-      return (CopyOfBuilder) super.serviceProviderSignature(serviceProviderSignature);
+     public CopyOfBuilder priceSignature(String priceSignature) {
+      return (CopyOfBuilder) super.priceSignature(priceSignature);
+    }
+    
+    @Override
+     public CopyOfBuilder bundleSignature(String bundleSignature) {
+      return (CopyOfBuilder) super.bundleSignature(bundleSignature);
+    }
+    
+    @Override
+     public CopyOfBuilder subscriptionSignature(String subscriptionSignature) {
+      return (CopyOfBuilder) super.subscriptionSignature(subscriptionSignature);
     }
     
     @Override

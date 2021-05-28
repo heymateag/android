@@ -21,7 +21,6 @@ public class PurchasePlanTypes {
                 case SINGLE:
                     return pricingInfo.price;
                 case BUNDLE:
-                    return pricingInfo.price * (100 - pricingInfo.bundleDiscountPercent) / 100;
                 case SUBSCRIPTION:
                     return 0;
             }
