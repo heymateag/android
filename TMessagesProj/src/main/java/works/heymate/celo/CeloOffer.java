@@ -40,7 +40,7 @@ public class CeloOffer {
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate * 100));
 
         BigInteger initialDeposit = new BigInteger(termsConfig.getString(OfferUtils.INITIAL_DEPOSIT));
-        BigInteger[] config = getConfig(termsConfig).toArray(new BigInteger[0]);
+        List<BigInteger> config = getConfig(termsConfig);
 
         return sign(serviceProviderAddress, amount, initialDeposit, config);
     }
@@ -113,7 +113,7 @@ public class CeloOffer {
     public void create(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation,
                        PurchasedPlan purchasePlan, List<String> referrers) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
-        byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
+        byte[] planId = purchasePlan == null ? null : Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
 
         PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
 
@@ -124,6 +124,7 @@ public class CeloOffer {
         switch (purchasePlanType) {
             case PurchasePlanTypes.SINGLE:
                 rate = pricingInfo.price;
+                planId = new byte[16];
                 break;
             case PurchasePlanTypes.BUNDLE:
             case PurchasePlanTypes.SUBSCRIPTION:
@@ -270,8 +271,11 @@ public class CeloOffer {
     }
 
     private static List<BigInteger> getBundleConfig(PriceInputItem.PricingInfo pricingInfo, int promotionPercent) {
+        BigInteger price = BigInteger.valueOf(pricingInfo.price * (100 - pricingInfo.bundleDiscountPercent))
+                .multiply(CurrencyUtil.WEI).divide(CurrencyUtil.ONE_HUNDRED);
+
         return Arrays.asList(
-                BigInteger.valueOf(pricingInfo.price * (100 - pricingInfo.bundleDiscountPercent) / 100),
+                price,
                 BigInteger.valueOf(pricingInfo.bundleCount),
                 BigInteger.valueOf(4),
                 BigInteger.ZERO //BigInteger.valueOf(promotionPercent)
@@ -304,6 +308,9 @@ public class CeloOffer {
             }
             else if (obj.getClass().isArray()) {
                 bytes[i] = getBytes((Object[]) obj);
+            }
+            else if (obj instanceof List) {
+                bytes[i] = getBytes(((List) obj).toArray(new Object[0]));
             }
             else {
                 throw new IllegalArgumentException("Unsupported type");

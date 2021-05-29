@@ -193,15 +193,14 @@ public class HeymatePayment {
             return;
         }
 
-        TimeZone timeZone;
+        TimeZone timeZone = TimeZone.getDefault();
 
-        try {
-            timeZone = TimeZone.getTimeZone(availabilitySlot.getString("timeZone"));
-        } catch (Throwable t) {
-            // TODO FIX ERROR
-            Toast.makeText(fragment.getParentActivity(), "Bad TimeZone from offer: " + offer.getAvailabilitySlot(), Toast.LENGTH_LONG).show();
-            return;
-        }
+//        try {
+//            timeZone = TimeZone.getTimeZone(availabilitySlot.getString("timeZone"));
+//        } catch (Throwable t) {
+//            Toast.makeText(fragment.getParentActivity(), "Bad TimeZone from offer: " + offer.getAvailabilitySlot(), Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
@@ -385,20 +384,18 @@ public class HeymatePayment {
                     LoadingUtil.onLoadingFinished();
 
                     if (success) {
-                        if (!PurchasePlanTypes.SINGLE.equals(purchasedPlan.getPlanType())) {
-                            PurchasedPlan.BuildStep modifiedPurchasedPlan = purchasedPlan.copyOfBuilder();
+                        PurchasedPlan.BuildStep modifiedPurchasedPlan = purchasedPlan.copyOfBuilder();
 
-                            try {
-                                JSONArray reservationIds = new JSONArray(purchasedPlan.getReservationIds());
-                                reservationIds.put(reservation.getId());
-                                modifiedPurchasedPlan.reservationIds(reservationIds.toString());
-                            } catch (JSONException e) { }
+                        try {
+                            JSONArray reservationIds = new JSONArray(purchasedPlan.getReservationIds());
+                            reservationIds.put(reservation.getId());
+                            modifiedPurchasedPlan.reservationIds(reservationIds.toString());
+                        } catch (JSONException e) { }
 
-                            modifiedPurchasedPlan.totalReservationsCount(purchasedPlan.getTotalReservationsCount() + 1);
-                            modifiedPurchasedPlan.pendingReservationsCount(purchasedPlan.getPendingReservationsCount() + 1);
+                        modifiedPurchasedPlan.totalReservationsCount(purchasedPlan.getTotalReservationsCount() + 1);
+                        modifiedPurchasedPlan.pendingReservationsCount(purchasedPlan.getPendingReservationsCount() + 1);
 
-                            HtAmplify.getInstance(fragment.getParentActivity()).createOrUpdatePurchasedPlan(modifiedPurchasedPlan.build(), null);
-                        }
+                        HtAmplify.getInstance(fragment.getParentActivity()).createOrUpdatePurchasedPlan(modifiedPurchasedPlan.build(), null);
 
                         new AlertDialog.Builder(fragment.getParentActivity()) // TODO Text resource
                                 .setTitle("Offer accepted")

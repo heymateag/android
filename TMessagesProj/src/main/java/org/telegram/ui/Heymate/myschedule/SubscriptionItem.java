@@ -156,6 +156,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
                         if (remainingSessions > 0) {
                             mButtonLeft.setVisibility(VISIBLE);
                             setRightPositive();
+                            mButtonRight.setText("Schedule");
                             mButtonRight.setOnClickListener(v -> scheduleNewReservation());
                         }
                         else {
@@ -180,6 +181,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
 
                 mButtonLeft.setVisibility(VISIBLE);
                 setRightPositive();
+                mButtonRight.setText("Schedule");
                 mButtonRight.setOnClickListener(v -> scheduleNewReservation());
             }
         }

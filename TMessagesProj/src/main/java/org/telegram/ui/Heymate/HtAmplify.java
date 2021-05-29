@@ -39,6 +39,7 @@ import org.telegram.messenger.AndroidUtilities;
 
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
+import works.heymate.core.offer.PurchasePlanTypes;
 
 import org.telegram.messenger.UserConfig;
 
@@ -492,7 +493,13 @@ public class HtAmplify {
     public void getPurchasedPlans(APICallback<List<PurchasedPlan>> callback) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
 
-        Amplify.API.query(ModelQuery.list(PurchasedPlan.class, PurchasedPlan.CONSUMER_ID.eq(userId)), result -> {
+        Amplify.API.query(
+                ModelQuery.list(
+                        PurchasedPlan.class,
+                        PurchasedPlan.CONSUMER_ID.eq(userId)
+                                .and(PurchasedPlan.PLAN_TYPE.ne(PurchasePlanTypes.SINGLE))
+                ),
+                result -> {
             List<PurchasedPlan> purchasedPlans = new ArrayList<>();
 
             if (result.hasData()) {
