@@ -3,7 +3,6 @@ package org.telegram.ui.Heymate.createoffer;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -47,7 +46,7 @@ import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.HeymatePayment;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtSQLite;
-import org.telegram.ui.Heymate.HtStorage;
+import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.OfferDto;
@@ -73,12 +72,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public static final String ARGUMENTS_CATEGORY = "0_Category";
     public static final String ARGUMENTS_SUB_CATEGORY = "1_Sub-Category";
-    public static final String ARGUMENTS_ADDRESS = "0_Address";
-    public static final String ARGUMENTS_RATE_TYPE = "0_Rate Type";
-    public static final String ARGUMENTS_PRICE = "1_Price";
-    public static final String ARGUMENTS_CURRENCY = "2_Currency";
     public static final String ARGUMENTS_EXPIRE = "0_Expire";
-    public static final String ARGUMENTS_EXPIRE_DATE = "1_Expire";
     public static final String ARGUMENTS_TERMS = "0_Terms";
 
     private static final String KEY_SAVED_OFFER = "saved_offer";
@@ -92,20 +86,20 @@ public class HtCreateOfferActivity extends BaseFragment {
     private ParticipantsInputItem participantsInputCell;
     private HtScheduleInputCell scheduleInputCell;
     private PriceInputItem priceInputCell;
-    private ArrayList<HtPriceInputCell> pricesInputCell = new ArrayList<>();
     private HtExpireInputCell expireInputCell;
     private HtTermsInputCell termsInputCell;
     private HtPaymentConfigInputCell paymentInputCell;
 
-    private int priceCellsCount = 0;
     private boolean canEdit = true;
     private ActionType actionType = ActionType.CREATE;
-    private LinearLayout addPriceLayout;
     private LinearLayout actionLayout;
     private String offerUUID;
-    private Uri pickedImage;
     private Date expireDate;
     private ArrayList<Long> dateSlots = new ArrayList<>();
+
+    private Uri pickedImage;
+
+    private String id;
 
     public enum ActionType {
         CREATE,
@@ -121,13 +115,26 @@ public class HtCreateOfferActivity extends BaseFragment {
             cameraImage.getLayoutParams().height = 180;
             cameraImage.getLayoutParams().width = 120;
             cameraImage.requestLayout();
+
             pickedImage = data.getData();
+
+            FileCache.get().captureImage(id, pickedImage, (success, exception) -> {
+                if (!success) {
+                    Log.e(TAG, "Failed to capture selected image.", exception);
+
+                    pickedImage = null;
+                    cameraImage.setImageResource(works.heymate.beta.R.drawable.instant_camera);
+                }
+            });
         }
     }
 
     @Override
     public View createView(Context context) {
         super.createView(context);
+
+        id = UUID.randomUUID().toString();
+
         this.context = context;
         if (canEdit){
             actionBar.setTitle(LocaleController.getString("HtCreateOffer", works.heymate.beta.R.string.HtCreateOffer));
@@ -164,7 +171,6 @@ public class HtCreateOfferActivity extends BaseFragment {
         if(actionType != ActionType.EDIT){
             cameraDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.instant_camera);
             cameraImage.setImageDrawable(cameraDrawable);
-            cameraImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_wallet_whiteText), PorterDuff.Mode.MULTIPLY));
         }
         imageLayout.addView(cameraImage, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 15, 15, 15, 0));
 
@@ -643,6 +649,28 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     private void createOffer(int promotionPercentage) {
+        if (pickedImage != null) {
+            LoadingUtil.onLoadingStarted(getParentActivity());
+
+            FileCache.get().uploadImage(id, (success, exception) -> {
+                LoadingUtil.onLoadingFinished();
+
+                if (success) {
+                    createOfferImageDone(promotionPercentage);
+                }
+                else {
+                    Log.e(TAG, "Failed to upload offer image", exception);
+
+                    Toast.makeText(context, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        else {
+            createOfferImageDone(promotionPercentage);
+        }
+    }
+
+    private void createOfferImageDone(int promotionPercentage) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
         PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
@@ -664,6 +692,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 int maximumParticipants = participantsInputCell.getMaximumParticipants();
 
                 OfferDto newOffer = new OfferDto();
+                newOffer.setHasImage(pickedImage != null);
                 newOffer.setTitle(titleTextField.getText().toString());
                 newOffer.setDescription(descriptionTextField.getText().toString());
                 newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
@@ -680,53 +709,49 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setDateSlots(dateSlots);
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                if(offerUUID == null) {
-                    offerUUID = UUID.randomUUID().toString();
-                    newOffer.setServerUUID(offerUUID);
-                }
+                newOffer.setServerUUID(id);
                 int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
                 newOffer.setCreatedAt(currentTime);
                 newOffer.setEditedAt(currentTime);
 
                 LoadingUtil.onLoadingStarted(getParentActivity());
 
-                HtAmplify.getInstance(context).createOffer(newOffer,
-                        pickedImage, wallet.getAddress(),
+                HtAmplify.getInstance(context).createOffer(newOffer, wallet.getAddress(),
                         priceSignature, bundleSignature, subscriptionSignature,
                         (success, createdOffer, exception1) -> {
-                    LoadingUtil.onLoadingFinished();
+                            LoadingUtil.onLoadingFinished();
 
-                    if (success) {
-                        HtSQLite.getInstance().addOffer(createdOffer);
+                            if (success) {
+                                HtSQLite.getInstance().addOffer(createdOffer);
 
-                        Intent share = new Intent(Intent.ACTION_SEND);
-                        share.setType("text/plain");
+                                Intent share = new Intent(Intent.ACTION_SEND);
+                                share.setType("text/plain");
 
-                        TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
+                                TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
 
-                        String name;
+                                String name;
 
-                        if (user.username != null) {
-                            name = "@" + user.username;
-                        }
-                        else {
-                            name = user.first_name;
+                                if (user.username != null) {
+                                    name = "@" + user.username;
+                                }
+                                else {
+                                    name = user.first_name;
 
-                            if (!TextUtils.isEmpty(user.last_name)) {
-                                name = name + " " + user.last_name;
+                                    if (!TextUtils.isEmpty(user.last_name)) {
+                                        name = name + " " + user.last_name;
+                                    }
+                                }
+
+                                String message = OfferUtils.serializeBeautiful(createdOffer, null, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                                share.putExtra(Intent.EXTRA_TEXT, message);
+                                getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
+                                finishFragment();
                             }
-                        }
-
-                        String message = OfferUtils.serializeBeautiful(createdOffer, null, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
-                        share.putExtra(Intent.EXTRA_TEXT, message);
-                        getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
-                        finishFragment();
-                    }
-                    else {
-                        // TODO Organize error messages
-                        Toast.makeText(context, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
-                    }
-                });
+                            else {
+                                // TODO Organize error messages
+                                Toast.makeText(context, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+                            }
+                        });
             }
             else {
                 // TODO Organize error messages
@@ -774,7 +799,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setOfferUUID(String offerUUID) {
         this.offerUUID = offerUUID;
-        cameraImage.setImageBitmap(HtStorage.getInstance().getOfferImage(context, offerUUID));
+        // TODO Image setup.
     }
 
     public void setDescription(String description) {
@@ -799,7 +824,6 @@ public class HtCreateOfferActivity extends BaseFragment {
         this.actionType = actionType;
         paymentInputCell.setActionType(actionType);
         if (actionType == ActionType.VIEW) {
-            addPriceLayout.setVisibility(View.GONE);
             titleTextField.setKeyListener(null);
             titleTextField.setEnabled(false);
             titleTextField.setClickable(false);

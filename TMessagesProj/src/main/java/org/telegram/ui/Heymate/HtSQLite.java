@@ -23,7 +23,7 @@ public class HtSQLite extends SQLiteOpenHelper {
     public static void setInstance(Context context){
         if(instance == null){
             File dbFile = new File(ApplicationLoader.getFilesDirFixed().getPath(), "cache4.db");
-            instance = new HtSQLite(context, dbFile.getPath() , null, 82);
+            instance = new HtSQLite(context, dbFile.getPath() , null, 83);
         }
     }
 
@@ -37,13 +37,13 @@ public class HtSQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, pricingInfo TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, pricingInfo TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT, hasImage INTEGER);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS offer;");
-        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, pricingInfo TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS offer(uuid TEXT PRIMARY KEY, title TEXT, pricingInfo TEXT, location TEXT, time TEXT, category TEXT, subCategory TEXT, configText TEXT, terms TEXT, description TEXT, status INTEGER, userId TEXT, longitude TEXT, latitude TEXT, createdAt INTEGER, editedAt INTEGER, maximumReservations INTEGER, meetingType TEXT, hasImage INTEGER);");
     }
 
     public String addOffer(Offer offer) {
@@ -67,6 +67,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         contentValues.put("editedAt", offer.getEditedAt());
         contentValues.put("maximumReservations", offer.getMaximumReservations());
         contentValues.put("meetingType", offer.getMeetingType());
+        contentValues.put("hasImage", offer.getHasImage() == null ? 0 : (offer.getHasImage() ? 1 : 0));
         database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_IGNORE);
         return offer.getId();
     }
@@ -91,6 +92,7 @@ public class HtSQLite extends SQLiteOpenHelper {
         contentValues.put("editedAt", offer.getEditedAt());
         contentValues.put("maximumReservations", offer.getMaximumReservations());
         contentValues.put("meetingType", offer.getMeetingType());
+        contentValues.put("hasImage", offer.hasImage() ? 1 : 0);
         database.update("offer", contentValues, "uuid = ?", new String[]{uuid});
     }
 
@@ -118,6 +120,7 @@ public class HtSQLite extends SQLiteOpenHelper {
             offerDto.setEditedAt(cursor.getInt(12));
             offerDto.setMaximumReservations(cursor.getInt(13));
             offerDto.setMeetingType(cursor.getString(14));
+            offerDto.setHasImage(cursor.getInt(15) == 1);
             return offerDto;
         }
         return null;
@@ -171,6 +174,7 @@ public class HtSQLite extends SQLiteOpenHelper {
                 offerDto.setEditedAt(cursor.getInt(12));
                 offerDto.setMaximumReservations(cursor.getInt(13));
                 offerDto.setMeetingType(cursor.getString(14));
+                offerDto.setHasImage(cursor.getInt(15) == 1);
                 offers.add(offerDto);
             } while (cursor.moveToNext());
         }
@@ -241,6 +245,7 @@ public class HtSQLite extends SQLiteOpenHelper {
             contentValues.put("editedAt", offer.getEditedAt());
             contentValues.put("maximumReservations", offer.getMaximumReservations());
             contentValues.put("meetingType", offer.getMeetingType());
+            contentValues.put("hasImage", offer.getHasImage() == null ? 0 : (offer.getHasImage() ? 1 : 0));
             database.insertWithOnConflict("offer", null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         }
     }

@@ -38,6 +38,7 @@ public class OfferDto {
     private ArrayList<TimeSlot> timeSlots;
     private int createdAt;
     private int editedAt;
+    private boolean hasImage;
 
     public int getCreatedAt() {
         return createdAt;
@@ -239,6 +240,14 @@ public class OfferDto {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public boolean hasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 
     public String getTimeSlotsAsJson(){

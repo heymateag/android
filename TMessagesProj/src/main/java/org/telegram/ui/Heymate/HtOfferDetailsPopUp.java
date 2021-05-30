@@ -10,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -116,12 +114,12 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         BackupImageView offerImage = new BackupImageView(context);
         offerImage.setId(idCounter++);
-        Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(context, offer.getId());
-        if(imageBitmap == null){
+        // Bitmap imageBitmap = FileCache.get().getOfferImage(context, offer.getId());
+        //if(imageBitmap == null){
             offerImage.setImageDrawable(context.getResources().getDrawable(works.heymate.beta.R.drawable.np));
-        } else {
-            offerImage.setImageBitmap(imageBitmap);
-        }
+        //} else {
+        //    offerImage.setImageBitmap(imageBitmap);
+        //}
         offerImage.setRoundRadius(AndroidUtilities.dp(4));
         RelativeLayout.LayoutParams offerImageLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(150));
         offerImageLayoutParams.addRule(RelativeLayout.BELOW, statusLayout.getId());

@@ -2,22 +2,18 @@ package org.telegram.ui.Heymate;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.lambda.AWSLambda;
-import com.amazonaws.services.lambda.AWSLambdaClient;
-import com.amazonaws.services.lambda.model.InvokeRequest;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.mobileconnectors.lambdainvoker.*;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.regions.Regions;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
@@ -32,7 +28,6 @@ import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
-import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -45,7 +40,6 @@ import org.telegram.messenger.UserConfig;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -211,18 +205,19 @@ public class HtAmplify {
         MarketPlace
     }
 
-    public void createOffer(OfferDto dto, Uri pickedImage, String address, String priceSignature, String bundleSignature, String subscriptionSignature, APICallback<Offer> callback) {
+    public void createOffer(OfferDto dto, String address, String priceSignature, String bundleSignature, String subscriptionSignature, APICallback<Offer> callback) {
         int maximumReservations = dto.getMaximumReservations();
 
         Offer newOffer = Offer.builder()
                 .userId("" + dto.getUserId())
+                .hasImage(dto.hasImage())
                 .title(dto.getTitle())
                 .category(dto.getCategory())
                 .subCategory(dto.getSubCategory())
                 .pricingInfo(dto.getPricingInfo() == null ? null : dto.getPricingInfo().asJSON().toString())
                 .description(dto.getDescription())
                 .expiry(new Temporal.Date(dto.getExpire()))
-                .id(UUID.randomUUID().toString())
+                .id(dto.getServerUUID())
                 .availabilitySlot(dto.getTimeSlotsAsJson())
                 .locationData(dto.getLocation())
                 .meetingType(dto.getMeetingType())
@@ -243,9 +238,7 @@ public class HtAmplify {
         Amplify.API.mutate(ModelMutation.create(newOffer),
                 response -> {
                     HtSQLite.getInstance().addOffer(newOffer);
-                    if (pickedImage != null) {
-                        HtStorage.getInstance().setOfferImage(context, response.getData().getId(), pickedImage);
-                    }
+
                     Log.i(TAG, "Offer Created.");
 
                     String fcmToken = FirebaseInstanceId.getInstance().getToken();
@@ -706,22 +699,6 @@ public class HtAmplify {
                                     offers.add(offer);
                                 }
                                 HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
-
-                                new Thread(){
-                                    @Override
-                                    public void run() {
-                                        HashMap<String, S3Object> images = new HashMap<>();
-                                        for(Offer offer : offers){
-                                            if(HtStorage.getInstance().imageExists(context, offer.getId()))
-                                                continue;
-                                            S3Object image = getOfferImage(offer.getId());
-                                            if(image != null){
-                                                images.put(offer.getId(), image);
-                                            }
-                                        }
-                                        HtStorage.getInstance().updateOfferImages(context, images);
-                                    }
-                                }.start();
                             }
                         },
                         error -> Log.e(TAG, "Query failure", error)
@@ -815,8 +792,12 @@ public class HtAmplify {
         });
     }
 
-    public void saveOfferImage(String offerUUID, File file) {
-        amazonS3Client.putObject("offerdocuments", offerUUID, file);
+    public void uploadFile(String id, File file) throws AmazonClientException {
+        amazonS3Client.putObject("offerdocuments", id, file);
+    }
+
+    public S3Object downloadFile(String id) throws AmazonClientException {
+        return amazonS3Client.getObject("offerdocuments", id);
     }
 
     public S3Object getOfferImage(String offerUUID) {

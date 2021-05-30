@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.yashoid.sequencelayout.SequenceLayout;
@@ -44,6 +43,8 @@ import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
 
 public class OfferMessageItem extends SequenceLayout {
+
+    private static final int IMAGE_WIDTH_DP = 360 - 16 - 4 - 4 - 8 - 32 - 16; // sequences_item_offermessage
 
     private RoundedCornersImageView mImage;
     private TextView mTitle;
@@ -239,11 +240,21 @@ public class OfferMessageItem extends SequenceLayout {
         mFullyLoaded = fullyLoaded;
 
         if (fullyLoaded) {
-            Bitmap imageBitmap = HtStorage.getInstance().getOfferImage(getContext(), offer.getId());
-
-            if (imageBitmap != null) {
+            if (offer != null && offer.getHasImage() != null && offer.getHasImage()) {
                 mImage.setVisibility(VISIBLE);
-                mImage.setImageBitmap(imageBitmap);
+                mImage.setImageDrawable(null);
+
+                String offerId = offer.getId();
+                int size = AndroidUtilities.dp(IMAGE_WIDTH_DP);
+
+                FileCache.get().getImage(offerId, size, (success, drawable, exception) -> {
+                    if (mOffer == null || !mOffer.getId().equals(offerId)) {
+                        return;
+                    }
+
+                    mImage.setVisibility(VISIBLE);
+                    mImage.setImageDrawable(drawable);
+                });
             }
             else {
                 mImage.setVisibility(GONE);

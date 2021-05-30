@@ -48,6 +48,7 @@ public final class Offer implements Model {
   public static final QueryField TERMS = field("Offer", "terms");
   public static final QueryField TERMS_CONFIG = field("Offer", "termsConfig");
   public static final QueryField TITLE = field("Offer", "title");
+  public static final QueryField HAS_IMAGE = field("Offer", "hasImage");
   public static final QueryField USER_ID = field("Offer", "userID");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="AWSJSON") String availabilitySlot;
@@ -71,6 +72,7 @@ public final class Offer implements Model {
   private final @ModelField(targetType="String") String terms;
   private final @ModelField(targetType="AWSJSON") String termsConfig;
   private final @ModelField(targetType="String") String title;
+  private final @ModelField(targetType="Boolean") Boolean hasImage;
   private final @ModelField(targetType="ID", isRequired = true) String userID;
   public String getId() {
       return id;
@@ -160,11 +162,15 @@ public final class Offer implements Model {
       return title;
   }
   
+  public Boolean getHasImage() {
+      return hasImage;
+  }
+  
   public String getUserId() {
       return userID;
   }
   
-  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userID) {
+  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, Boolean hasImage, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
@@ -187,6 +193,7 @@ public final class Offer implements Model {
     this.terms = terms;
     this.termsConfig = termsConfig;
     this.title = title;
+    this.hasImage = hasImage;
     this.userID = userID;
   }
   
@@ -220,6 +227,7 @@ public final class Offer implements Model {
               ObjectsCompat.equals(getTerms(), offer.getTerms()) &&
               ObjectsCompat.equals(getTermsConfig(), offer.getTermsConfig()) &&
               ObjectsCompat.equals(getTitle(), offer.getTitle()) &&
+              ObjectsCompat.equals(getHasImage(), offer.getHasImage()) &&
               ObjectsCompat.equals(getUserId(), offer.getUserId());
       }
   }
@@ -249,6 +257,7 @@ public final class Offer implements Model {
       .append(getTerms())
       .append(getTermsConfig())
       .append(getTitle())
+      .append(getHasImage())
       .append(getUserId())
       .toString()
       .hashCode();
@@ -280,6 +289,7 @@ public final class Offer implements Model {
       .append("terms=" + String.valueOf(getTerms()) + ", ")
       .append("termsConfig=" + String.valueOf(getTermsConfig()) + ", ")
       .append("title=" + String.valueOf(getTitle()) + ", ")
+      .append("hasImage=" + String.valueOf(getHasImage()) + ", ")
       .append("userID=" + String.valueOf(getUserId()))
       .append("}")
       .toString();
@@ -331,6 +341,7 @@ public final class Offer implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -358,6 +369,7 @@ public final class Offer implements Model {
       terms,
       termsConfig,
       title,
+      hasImage,
       userID);
   }
   public interface UserIdStep {
@@ -389,6 +401,7 @@ public final class Offer implements Model {
     BuildStep terms(String terms);
     BuildStep termsConfig(String termsConfig);
     BuildStep title(String title);
+    BuildStep hasImage(Boolean hasImage);
   }
   
 
@@ -416,6 +429,7 @@ public final class Offer implements Model {
     private String terms;
     private String termsConfig;
     private String title;
+    private Boolean hasImage;
     @Override
      public Offer build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -443,6 +457,7 @@ public final class Offer implements Model {
           terms,
           termsConfig,
           title,
+          hasImage,
           userID);
     }
     
@@ -579,6 +594,12 @@ public final class Offer implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep hasImage(Boolean hasImage) {
+        this.hasImage = hasImage;
+        return this;
+    }
+    
     /** 
      * WARNING: Do not set ID when creating a new object. Leave this blank and one will be auto generated for you.
      * This should only be set when referring to an already existing object.
@@ -602,7 +623,7 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, Boolean hasImage, String userId) {
       super.id(id);
       super.userId(userId)
         .availabilitySlot(availabilitySlot)
@@ -625,7 +646,8 @@ public final class Offer implements Model {
         .subCategory(subCategory)
         .terms(terms)
         .termsConfig(termsConfig)
-        .title(title);
+        .title(title)
+        .hasImage(hasImage);
     }
     
     @Override
@@ -736,6 +758,11 @@ public final class Offer implements Model {
     @Override
      public CopyOfBuilder title(String title) {
       return (CopyOfBuilder) super.title(title);
+    }
+    
+    @Override
+     public CopyOfBuilder hasImage(Boolean hasImage) {
+      return (CopyOfBuilder) super.hasImage(hasImage);
     }
   }
   
