@@ -126,11 +126,11 @@
         <Span size="16dp"/>
     </Horizontal>
 
-    <Horizontal start="start@title">
+    <Horizontal start="start@title" end="end@title">
         <Span id="subcategory" size="1w"/>
     </Horizontal>
 
-    <Horizontal start="start@title">
+    <Horizontal start="start@title" end="end@title">
         <Span id="description" size="1w"/>
     </Horizontal>
 
