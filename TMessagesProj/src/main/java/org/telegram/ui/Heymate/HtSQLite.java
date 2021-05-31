@@ -170,11 +170,16 @@ public class HtSQLite extends SQLiteOpenHelper {
                 offerDto.setDescription(cursor.getString(9));
                 offerDto.setStatus(getOfferStatus(cursor.getInt(10)));
                 offerDto.setServerUUID(cursor.getString(0));
-                offerDto.setCreatedAt(cursor.getInt(11));
-                offerDto.setEditedAt(cursor.getInt(12));
-                offerDto.setMaximumReservations(cursor.getInt(13));
-                offerDto.setMeetingType(cursor.getString(14));
-                offerDto.setHasImage(cursor.getInt(15) == 1);
+                try {
+                    offerDto.setUserId(cursor.getInt(11));
+                } catch (Throwable t) {}
+                offerDto.setLatitude(cursor.getDouble(12));
+                offerDto.setLongitude(cursor.getDouble(13));
+                offerDto.setCreatedAt(cursor.getInt(14));
+                offerDto.setEditedAt(cursor.getInt(15));
+                offerDto.setMaximumReservations(cursor.getInt(16));
+                offerDto.setMeetingType(cursor.getString(17));
+                offerDto.setHasImage(cursor.getInt(18) == 1);
                 offers.add(offerDto);
             } while (cursor.moveToNext());
         }
