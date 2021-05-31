@@ -384,7 +384,10 @@ public class HtAmplify {
             }
         }, error -> {
             Log.e(TAG, "Failed to query for purchased plan");
-            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+
+            if (callback != null) {
+                Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+            }
         });
     }
 

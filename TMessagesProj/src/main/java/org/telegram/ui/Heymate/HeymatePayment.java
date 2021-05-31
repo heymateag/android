@@ -129,15 +129,10 @@ public class HeymatePayment {
 
         int price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlan);
 
-        if (PurchasePlanTypes.BUNDLE.equals(purchasePlan.type)) {
-            ensureWalletExistenceWithLoading(fragment, getNetNext(fragment, price, () -> initBundlePurchasePayment(fragment, offer, purchasedPlan, referral)));
-        }
-        else {
-            ensureWalletExistenceWithLoading(fragment, getNetNext(fragment, price, () -> initSubscriptionPurchasePayment(fragment, offer, purchasedPlan, referral)));
-        }
+        ensureWalletExistenceWithLoading(fragment, getNetNext(fragment, price, () -> initPlanPurchasePayment(fragment, offer, purchasedPlan, referral)));
     }
 
-    private static void initBundlePurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
+    private static void initPlanPurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
         List<String> referrers = getReferrersFromReferral(referral);
 
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
@@ -146,7 +141,7 @@ public class HeymatePayment {
 
         LoadingUtil.onLoadingStarted(fragment.getParentActivity());
 
-        wallet.createBundle(offer, purchasedPlan, referrers, (success, errorCause) -> {
+        wallet.createPaymentPlan(offer, purchasedPlan, referrers, (success, errorCause) -> {
             LoadingUtil.onLoadingFinished();
 
             if (success) {
@@ -157,8 +152,8 @@ public class HeymatePayment {
 
                     if (success1) {
                         new AlertDialog.Builder(fragment.getParentActivity()) // TODO Text resource
-                                .setTitle("Bundle purchased")
-                                .setMessage("You can check the state of your offer in My Schedule.")
+                                .setTitle(PurchasePlanTypes.BUNDLE.equals(purchasedPlan.getPlanType()) ? "Bundle purchased" : "subscription purchased")
+                                .setMessage("You can check the state of your purchase in My Schedule.")
                                 .setCancelable(false)
                                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                                 .show();

@@ -73,6 +73,7 @@ public class OfferDto {
                 .terms(terms)
                 .expiry(new Temporal.Date(new Date(time))) // Remove At Last
                 .createdAt(createdAt)
+                .hasImage(hasImage)
                 .editedAt(editedAt);
 
         if (expire != null) {

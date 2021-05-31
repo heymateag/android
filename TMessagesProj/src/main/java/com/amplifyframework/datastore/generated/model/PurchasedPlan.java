@@ -35,6 +35,7 @@ public final class PurchasedPlan implements Model {
   public static final QueryField PENDING_RESERVATIONS_COUNT = field("PurchasedPlan", "pendingReservationsCount");
   public static final QueryField RESERVATION_IDS = field("PurchasedPlan", "reservationIds");
   public static final QueryField PURCHASE_TIME = field("PurchasedPlan", "purchaseTime");
+  public static final QueryField RENEWAL_PERIOD = field("PurchasedPlan", "renewalPeriod");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String offerId;
   private final @ModelField(targetType="String") String serviceProviderId;
@@ -45,6 +46,7 @@ public final class PurchasedPlan implements Model {
   private final @ModelField(targetType="Int") Integer pendingReservationsCount;
   private final @ModelField(targetType="AWSJSON") String reservationIds;
   private final @ModelField(targetType="AWSDate") Temporal.Date purchaseTime;
+  private final @ModelField(targetType="Int") Integer renewalPeriod;
   public String getId() {
       return id;
   }
@@ -85,7 +87,11 @@ public final class PurchasedPlan implements Model {
       return purchaseTime;
   }
   
-  private PurchasedPlan(String id, String offerId, String serviceProviderId, String consumerId, String planType, Integer totalReservationsCount, Integer finishedReservationsCount, Integer pendingReservationsCount, String reservationIds, Temporal.Date purchaseTime) {
+  public Integer getRenewalPeriod() {
+      return renewalPeriod;
+  }
+  
+  private PurchasedPlan(String id, String offerId, String serviceProviderId, String consumerId, String planType, Integer totalReservationsCount, Integer finishedReservationsCount, Integer pendingReservationsCount, String reservationIds, Temporal.Date purchaseTime, Integer renewalPeriod) {
     this.id = id;
     this.offerId = offerId;
     this.serviceProviderId = serviceProviderId;
@@ -96,6 +102,7 @@ public final class PurchasedPlan implements Model {
     this.pendingReservationsCount = pendingReservationsCount;
     this.reservationIds = reservationIds;
     this.purchaseTime = purchaseTime;
+    this.renewalPeriod = renewalPeriod;
   }
   
   @Override
@@ -115,7 +122,8 @@ public final class PurchasedPlan implements Model {
               ObjectsCompat.equals(getFinishedReservationsCount(), purchasedPlan.getFinishedReservationsCount()) &&
               ObjectsCompat.equals(getPendingReservationsCount(), purchasedPlan.getPendingReservationsCount()) &&
               ObjectsCompat.equals(getReservationIds(), purchasedPlan.getReservationIds()) &&
-              ObjectsCompat.equals(getPurchaseTime(), purchasedPlan.getPurchaseTime());
+              ObjectsCompat.equals(getPurchaseTime(), purchasedPlan.getPurchaseTime()) &&
+              ObjectsCompat.equals(getRenewalPeriod(), purchasedPlan.getRenewalPeriod());
       }
   }
   
@@ -132,6 +140,7 @@ public final class PurchasedPlan implements Model {
       .append(getPendingReservationsCount())
       .append(getReservationIds())
       .append(getPurchaseTime())
+      .append(getRenewalPeriod())
       .toString()
       .hashCode();
   }
@@ -149,7 +158,8 @@ public final class PurchasedPlan implements Model {
       .append("finishedReservationsCount=" + String.valueOf(getFinishedReservationsCount()) + ", ")
       .append("pendingReservationsCount=" + String.valueOf(getPendingReservationsCount()) + ", ")
       .append("reservationIds=" + String.valueOf(getReservationIds()) + ", ")
-      .append("purchaseTime=" + String.valueOf(getPurchaseTime()))
+      .append("purchaseTime=" + String.valueOf(getPurchaseTime()) + ", ")
+      .append("renewalPeriod=" + String.valueOf(getRenewalPeriod()))
       .append("}")
       .toString();
   }
@@ -187,6 +197,7 @@ public final class PurchasedPlan implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -201,7 +212,8 @@ public final class PurchasedPlan implements Model {
       finishedReservationsCount,
       pendingReservationsCount,
       reservationIds,
-      purchaseTime);
+      purchaseTime,
+      renewalPeriod);
   }
   public interface BuildStep {
     PurchasedPlan build();
@@ -215,6 +227,7 @@ public final class PurchasedPlan implements Model {
     BuildStep pendingReservationsCount(Integer pendingReservationsCount);
     BuildStep reservationIds(String reservationIds);
     BuildStep purchaseTime(Temporal.Date purchaseTime);
+    BuildStep renewalPeriod(Integer renewalPeriod);
   }
   
 
@@ -229,6 +242,7 @@ public final class PurchasedPlan implements Model {
     private Integer pendingReservationsCount;
     private String reservationIds;
     private Temporal.Date purchaseTime;
+    private Integer renewalPeriod;
     @Override
      public PurchasedPlan build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
@@ -243,7 +257,8 @@ public final class PurchasedPlan implements Model {
           finishedReservationsCount,
           pendingReservationsCount,
           reservationIds,
-          purchaseTime);
+          purchaseTime,
+          renewalPeriod);
     }
     
     @Override
@@ -300,6 +315,12 @@ public final class PurchasedPlan implements Model {
         return this;
     }
     
+    @Override
+     public BuildStep renewalPeriod(Integer renewalPeriod) {
+        this.renewalPeriod = renewalPeriod;
+        return this;
+    }
+    
     /** 
      * WARNING: Do not set ID when creating a new object. Leave this blank and one will be auto generated for you.
      * This should only be set when referring to an already existing object.
@@ -323,7 +344,7 @@ public final class PurchasedPlan implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String offerId, String serviceProviderId, String consumerId, String planType, Integer totalReservationsCount, Integer finishedReservationsCount, Integer pendingReservationsCount, String reservationIds, Temporal.Date purchaseTime) {
+    private CopyOfBuilder(String id, String offerId, String serviceProviderId, String consumerId, String planType, Integer totalReservationsCount, Integer finishedReservationsCount, Integer pendingReservationsCount, String reservationIds, Temporal.Date purchaseTime, Integer renewalPeriod) {
       super.id(id);
       super.offerId(offerId)
         .serviceProviderId(serviceProviderId)
@@ -333,7 +354,8 @@ public final class PurchasedPlan implements Model {
         .finishedReservationsCount(finishedReservationsCount)
         .pendingReservationsCount(pendingReservationsCount)
         .reservationIds(reservationIds)
-        .purchaseTime(purchaseTime);
+        .purchaseTime(purchaseTime)
+        .renewalPeriod(renewalPeriod);
     }
     
     @Override
@@ -379,6 +401,11 @@ public final class PurchasedPlan implements Model {
     @Override
      public CopyOfBuilder purchaseTime(Temporal.Date purchaseTime) {
       return (CopyOfBuilder) super.purchaseTime(purchaseTime);
+    }
+    
+    @Override
+     public CopyOfBuilder renewalPeriod(Integer renewalPeriod) {
+      return (CopyOfBuilder) super.renewalPeriod(renewalPeriod);
     }
   }
   

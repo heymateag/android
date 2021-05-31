@@ -42,7 +42,7 @@ public class PriceInputItem extends ExpandableItem {
 
     private static final String[] CURRENCIES = { "US$", "€" };
     private static final String[] RATE_TYPES = { "Per Item", "Per Hour" };
-    private static final String[] SUBSCRIPTION_PERIODS = { "Per month", "Per year" };
+    public static final String[] SUBSCRIPTION_PERIODS = { "Per month", "Per year" };
 
     private static final String PRICE = "price";
     private static final String CURRENCY = "currency";

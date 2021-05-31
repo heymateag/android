@@ -30,6 +30,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple13;
 import org.web3j.tuples.generated.Tuple14;
 import org.web3j.tuples.generated.Tuple5;
+import org.web3j.tuples.generated.Tuple6;
 import org.web3j.tx.Contract;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -48,6 +49,8 @@ public class Offer extends Contract {
     public static final String BINARY = BIN_NOT_PROVIDED;
 
     public static final String FUNC_APPROVETRANSFER = "approveTransfer";
+
+    public static final String FUNC_CANCELSUBSCRIPTION = "cancelSubscription";
 
     public static final String FUNC_CANCELLATIONVALUEDEPOSIT = "cancellationValueDeposit";
 
@@ -86,6 +89,8 @@ public class Offer extends Contract {
     public static final String FUNC_SETOWNER = "setOwner";
 
     public static final String FUNC_STARTSERVICE = "startService";
+
+    public static final String FUNC_SUBSCRIPTIONPAYMENT = "subscriptionPayment";
 
     public static final String FUNC_TOTALFEES = "totalFees";
 
@@ -332,6 +337,16 @@ public class Offer extends Contract {
         return executeRemoteCallTransaction(function);
     }
 
+    public RemoteFunctionCall<TransactionReceipt> cancelSubscription(byte[] _planID, String _serviceProvider, String _consumer) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_CANCELSUBSCRIPTION,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_planID),
+                        new org.web3j.abi.datatypes.Address(160, _serviceProvider),
+                        new org.web3j.abi.datatypes.Address(160, _consumer)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
     public RemoteFunctionCall<BigInteger> cancellationValueDeposit() {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_CANCELLATIONVALUEDEPOSIT,
                 Arrays.<Type>asList(),
@@ -469,21 +484,22 @@ public class Offer extends Contract {
         return executeRemoteCallSingleValueReturn(function, byte[].class);
     }
 
-    public RemoteFunctionCall<Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>> plans(byte[] param0) {
+    public RemoteFunctionCall<Tuple6<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>> plans(byte[] param0) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_PLANS,
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes32(param0)),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
-        return new RemoteFunctionCall<Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>>(function,
-                new Callable<Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>>() {
+                Arrays.<TypeReference<?>>asList(new TypeReference<Bool>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+        return new RemoteFunctionCall<Tuple6<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>>(function,
+                new Callable<Tuple6<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>>() {
                     @Override
-                    public Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger> call() throws Exception {
+                    public Tuple6<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger> call() throws Exception {
                         List<Type> results = executeCallMultipleValueReturn(function);
-                        return new Tuple5<Boolean, BigInteger, BigInteger, BigInteger, BigInteger>(
+                        return new Tuple6<Boolean, BigInteger, BigInteger, BigInteger, BigInteger, BigInteger>(
                                 (Boolean) results.get(0).getValue(),
                                 (BigInteger) results.get(1).getValue(),
                                 (BigInteger) results.get(2).getValue(),
                                 (BigInteger) results.get(3).getValue(),
-                                (BigInteger) results.get(4).getValue());
+                                (BigInteger) results.get(4).getValue(),
+                                (BigInteger) results.get(5).getValue());
                     }
                 });
     }
@@ -549,6 +565,16 @@ public class Offer extends Contract {
                         new org.web3j.abi.datatypes.Address(160, _consumer),
                         new org.web3j.abi.datatypes.generated.Uint256(_amount),
                         new org.web3j.abi.datatypes.generated.Uint16(_fee)),
+                Collections.<TypeReference<?>>emptyList());
+        return executeRemoteCallTransaction(function);
+    }
+
+    public RemoteFunctionCall<TransactionReceipt> subscriptionPayment(byte[] _planID, String _serviceProvider, String _consumer) {
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                FUNC_SUBSCRIPTIONPAYMENT,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Bytes16(_planID),
+                        new org.web3j.abi.datatypes.Address(160, _serviceProvider),
+                        new org.web3j.abi.datatypes.Address(160, _consumer)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }

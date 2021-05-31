@@ -51,15 +51,15 @@ public class CeloOffer {
         return sign(address, config);
     }
 
-    public void createBundle(com.amplifyframework.datastore.generated.model.Offer offer,
-                             PurchasedPlan purchasePlan, List<String> referrers) throws JSONException, CeloException {
+    public void createPaymentPlan(com.amplifyframework.datastore.generated.model.Offer offer,
+                                  PurchasedPlan purchasePlan, List<String> referrers) throws JSONException, CeloException {
         PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
 
         JSONObject configJSON = new JSONObject(offer.getTermsConfig());
         int promotionPercent = configJSON.getInt(OfferUtils.PROMOTION_RATE);
 
         byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
-        BigInteger planType = BigInteger.ONE;
+        BigInteger planType = PurchasePlanTypes.BUNDLE.equals(purchasePlan.getPlanType()) ? BigInteger.ONE : BigInteger.valueOf(2L);
         List<BigInteger> config = getBundleConfig(pricingInfo, promotionPercent);
         List<String> userAddresses = Arrays.asList(offer.getWalletAddress(), mContractKit.getAddress());
 
@@ -276,6 +276,7 @@ public class CeloOffer {
 
         return Arrays.asList(
                 price,
+                BigInteger.valueOf(pricingInfo.subscriptionPeriod == null ? 0 : (pricingInfo.subscriptionPeriod.equals(PriceInputItem.SUBSCRIPTION_PERIODS[0]) ? 1 : 2)),
                 BigInteger.valueOf(pricingInfo.bundleCount),
                 BigInteger.valueOf(4),
                 BigInteger.ZERO //BigInteger.valueOf(promotionPercent)

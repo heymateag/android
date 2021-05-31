@@ -36,7 +36,7 @@ public class Wallet {
 
     private static final String TAG = "Wallet";
 
-    private static final String OFFERS_ON_ALFAJORES = "0x44b17bd5543e14c8Aa56d7130968580bE5180757";
+    private static final String OFFERS_ON_ALFAJORES = "0x6c248648D48AC7735989b82469Fa0C87CE430716";
     private static final String OFFERS_ON_MAINNET = "0xD82Ef810E1AB8873699632e7Eced16ef665CF257";
 
     private static final CeloContext CELO_CONTEXT = BuildConfig.DEBUG ? CeloContext.ALFAJORES : CeloContext.MAIN_NET;
@@ -264,7 +264,7 @@ public class Wallet {
         });
     }
 
-    public void createBundle(Offer offer, PurchasedPlan purchasedPlan, List<String> referrers, OfferOperationCallback callback) {
+    public void createPaymentPlan(Offer offer, PurchasedPlan purchasedPlan, List<String> referrers, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -274,7 +274,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.createBundle(offer, purchasedPlan, referrers);
+                    mCeloOffer.createPaymentPlan(offer, purchasedPlan, referrers);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {

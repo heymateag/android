@@ -232,6 +232,7 @@ public class MyOffersAdapter extends MyScheduleAdapter {
 
         item.setTimeSlot(timeSlot);
         item.setOffer(mOffers.get(timeSlot.getId()));
+        item.setReservations(mTimeSlotReservations.get(timeSlot.getId()));
     }
 
     @Override
