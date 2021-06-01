@@ -1685,26 +1685,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     @Override
     public View createView(Context context) {
-/*
-        try {
-            Amplify.addPlugin(new AWSApiPlugin());
-            Amplify.configure(context);
-
-            RestOptions options = RestOptions.builder()
-                    .addPath("/getOffer")
-                    .addBody("{\"userId\":\"2\"}".getBytes())
-                    .build();
-
-
-            Amplify.API.put(options,
-                    response -> Log.i("amplify", "PUT succeeded: " + response),
-                    error -> Log.e("amplify", "PUT failed.", error)
-            );
-
-            Log.i("amplify", "Initialized Amplify.");
-        } catch (AmplifyException error) {
-            Log.e("amplify", "Could not initialize Amplify.", error);
-        }*/
         textSelectionHelper = new TextSelectionHelper.ChatListTextSelectionHelper();
 
         if (reportType >= 0) {
@@ -21123,20 +21103,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
-            if(viewType == 10){
+            if (viewType == 10) {
                 view = new OfferMessageItem(mContext);
                 ((OfferMessageItem) view).setParent(ChatActivity.this);
             }
             else if (viewType == 0) {
-
                 if (!chatMessageCellsCache.isEmpty()) {
                     view = chatMessageCellsCache.get(0);
                     chatMessageCellsCache.remove(0);
                 } else {
-                    view = new OfferMessageItem(mContext);
-                    ((OfferMessageItem) view).setParent(ChatActivity.this);
+                    view = new ChatMessageCell(mContext);
                 }
-                MessageObject message = messages.get(messagesStartRow);
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
                 chatMessageCell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
 
@@ -21776,8 +21753,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (currentEncryptedChat == null) {
                     chatMessageCell.setAllowAssistant(true);
                 }
-
-
             } else if (viewType == 1) {
                 view = new ChatActionCell(mContext) {
                     @Override

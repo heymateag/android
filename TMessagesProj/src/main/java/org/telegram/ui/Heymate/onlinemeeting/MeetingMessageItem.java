@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.amplifyframework.datastore.generated.model.Offer;
+import com.amplifyframework.datastore.generated.model.Reservation;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -75,6 +77,14 @@ public class MeetingMessageItem extends SequenceLayout {
         mJoin.setText("Join Session");
 
         // TODO The rest
+    }
+
+    public void setOffer(Offer offer) {
+        // TODO
+    }
+
+    public void setReservation(Reservation reservation) {
+        // TODO
     }
 
 }
