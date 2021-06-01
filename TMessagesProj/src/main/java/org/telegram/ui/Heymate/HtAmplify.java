@@ -91,7 +91,7 @@ public class HtAmplify {
 
         public GetJWTRequest(long startTime) {
             iat = startTime;
-            exp = 48L * 60L * 60L;
+            exp = startTime + 48L * 60L * 60L;
             tokenExp = exp;
         }
 
@@ -835,7 +835,7 @@ public class HtAmplify {
                 try {
                     GetJWTRequest request = new GetJWTRequest(startTimeInSeconds);
                     GetJWTResponse response = mFunctions.getZoomJWT(request);
-
+                    Log.d("AAA", "token: " + response.token);
                     Utils.runOnUIThread(() -> callback.onCallResult(true, response.token, null));
                 } catch (LambdaFunctionException e) {
                     Utils.runOnUIThread(() -> callback.onCallResult(false, null, new ApiException(String.valueOf(e.getMessage()), e, e.getDetails())));

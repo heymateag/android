@@ -24,18 +24,14 @@ import works.heymate.core.Texts;
 
 public class HtTermsInputCell extends LinearLayout {
 
-    private String title;
     private HashMap<String, Object> paremetersValues;
     private TextView[] parametersViews;
     private Drawable iconValue;
-    private HashMap<String, Runnable> args;
 
     public HtTermsInputCell(Context context, HtCreateOfferActivity parent, String title, HashMap<String, Runnable> args, int icon, boolean canEdit) {
         super(context);
         paremetersValues = new HashMap<>();
         parametersViews = new TextView[args.size()];
-        this.args = args;
-        this.title = title;
         setMinimumHeight(500);
 
         LinearLayout titleLayout = new LinearLayout(context);

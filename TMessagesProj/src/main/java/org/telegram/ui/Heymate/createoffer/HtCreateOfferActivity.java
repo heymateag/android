@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
@@ -357,8 +356,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         priceInputCell = new PriceInputItem(context);
         mainLayout.addView(priceInputCell);
 
-        HashMap<String, Runnable> paymentArgs = new HashMap<>();
-        paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", works.heymate.beta.R.string.HtPaymentTerms), paymentArgs, works.heymate.beta.R.drawable.pay, this, actionType);
+        paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", works.heymate.beta.R.string.HtPaymentTerms), works.heymate.beta.R.drawable.pay, this, actionType);
         mainLayout.addView(paymentInputCell);
 
         HashMap<String, Runnable> expireArgs = new HashMap<>();
@@ -540,7 +538,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.setOnClickListener(v -> {
             LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
             int maximumParticipants = participantsInputCell.getMaximumParticipants();
-            JSONObject config = paymentInputCell.getRes();
+            JSONObject config = paymentInputCell.getConfig();
             String title = titleTextField.getText().toString();
             String description = descriptionTextField.getText().toString();
             String terms = termsInputCell.getRes(ARGUMENTS_TERMS);
@@ -675,7 +673,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
         PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
 
-        JSONObject config = paymentInputCell.getRes();
+        JSONObject config = paymentInputCell.getConfig();
 
         try {
             config.put(OfferUtils.PROMOTION_RATE, promotionPercentage);
@@ -809,10 +807,9 @@ public class HtCreateOfferActivity extends BaseFragment {
     public void setPaymentConfig(String config) {
         try {
             JSONObject json = new JSONObject(config);
-            for(int i = 0; i< 7;i++)
-                paymentInputCell.setRes(json.get("arg" + i), i);
+            paymentInputCell.setConfig(json);
         } catch (JSONException e) {
-            e.printStackTrace();
+            paymentInputCell.setConfig(null);
         }
     }
 

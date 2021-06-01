@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -24,38 +25,33 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
-import java.util.HashMap;
-
-import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 
 public class HtPaymentConfigInputCell extends LinearLayout {
 
-    private String title;
-    private HashMap<String, Object> paremetersValues;
-    private TextView[] parametersViews;
-    private HashMap<String, Runnable> args;
-    private HtCreateOfferActivity.ActionType actionType;
-    private String delay1 = "30";
-    private String cancellation1 = "2";
-    private String cancellation2 = "6";
+    private static final int DELAY_TIME = 0;
+    private static final int DELAY_PERCENT = 1;
+    private static final int INITIAL_DEPOSIT = 2;
+    private static final int CANCEL_HOURS1 = 3;
+    private static final int CANCEL_PERCENT1 = 4;
+    private static final int CANCEL_HOURS2 = 5;
+    private static final int CANCEL_PERCENT2 = 6;
 
-    private String delayMinutes = "30";
-    private String delayPercent = null;
-    private String initialDeposit = null;
-    private String cancelHours1 = "2";
-    private String cancelPercent1 = null;
-    private String cancelHours2 = "6";
-    private String cancelPercent2 = null;
+    private final TextView[] parametersViews;
 
-    public HtPaymentConfigInputCell(Context context, String title, HashMap<String, Runnable> args, int icon, HtCreateOfferActivity parent, HtCreateOfferActivity.ActionType actionType) {
+    private int delayMinutes;
+    private int delayPercent;
+    private int initialDeposit;
+    private int cancelHours1;
+    private int cancelPercent1;
+    private int cancelHours2;
+    private int cancelPercent2;
+
+    public HtPaymentConfigInputCell(Context context, String title, int icon, HtCreateOfferActivity parent, HtCreateOfferActivity.ActionType actionType) {
         super(context);
         LinearLayout paymentLayout = new LinearLayout(context);
         paymentLayout.setOrientation(VERTICAL);
-        paremetersValues = new HashMap<>();
         parametersViews = new TextView[7];
-        this.args = args;
-        this.title = title;
 
         LinearLayout titleLayout = new LinearLayout(context);
         ImageView titleImage = new ImageView(context);
@@ -186,12 +182,9 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         paymentLayout2.addView(configTitle1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 25, 0, 0, 0));
 
         LinearLayout configLayout1 = new LinearLayout(context);
-        int i = 0;
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtDelayInStart", works.heymate.beta.R.string.HtDelayInStart) + " > 30 " + LocaleController.getString("HtMinutes", works.heymate.beta.R.string.HtMinutes));
-        parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
-        int finalI2 = i;
-        parametersViews[i].setOnClickListener(new OnClickListener() {
+        parametersViews[DELAY_TIME] = new TextView(context);
+        parametersViews[DELAY_TIME].setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        parametersViews[DELAY_TIME].setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -219,24 +212,22 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[finalI2].setText(LocaleController.getString("HtDelayInStart", works.heymate.beta.R.string.HtDelayInStart) + " > " + feeTextField.getText().toString() + " " + LocaleController.getString("HtMinutes", works.heymate.beta.R.string.HtMinutes));
-                        delay1 = feeTextField.getText().toString();
-                        delayMinutes = delay1;
+                    try {
+                        delayMinutes = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        delayMinutes = 0;
                     }
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             }
         });
-        parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        configLayout1.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
+        configLayout1.addView(parametersViews[DELAY_TIME], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
 
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-        final int i1 = i;
-        parametersViews[i].setOnClickListener(new View.OnClickListener() {
+        parametersViews[DELAY_PERCENT] = new TextView(context);
+        parametersViews[DELAY_PERCENT].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        parametersViews[DELAY_PERCENT].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -264,16 +255,18 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[i1].setText(feeTextField.getText().toString() + "%");
+                    try {
+                        delayPercent = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        delayPercent = 0;
                     }
-                    delayPercent = feeTextField.getText().toString();
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             }
         });
-        configLayout1.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
+        configLayout1.addView(parametersViews[DELAY_PERCENT], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
         paymentLayout2.addView(configLayout1);
 
         TextView configTitle2 = new TextView(context);
@@ -287,11 +280,9 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         depositLabel.setText(LocaleController.getString("HtDeposit", works.heymate.beta.R.string.HtDeposit));
         depositLabel.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         configLayout2.addView(depositLabel, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-        final int i2 = i;
-        parametersViews[i].setOnClickListener(new View.OnClickListener() {
+        parametersViews[INITIAL_DEPOSIT] = new TextView(context);
+        parametersViews[INITIAL_DEPOSIT].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        parametersViews[INITIAL_DEPOSIT].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -319,23 +310,24 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0)
-                        parametersViews[i2].setText(feeTextField.getText().toString() + "%");
-                    initialDeposit = feeTextField.getText().toString();
+                    try {
+                        initialDeposit = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        initialDeposit = 0;
+                    }
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             }
         });
-        configLayout2.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
+        configLayout2.addView(parametersViews[INITIAL_DEPOSIT], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
         paymentLayout2.addView(configLayout2);
         LinearLayout configLayout3 = new LinearLayout(context);
 
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " < 2 " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
-        parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
-        int finalI1 = i;
-        parametersViews[i].setOnClickListener(new OnClickListener() {
+        parametersViews[CANCEL_HOURS1] = new TextView(context);
+        parametersViews[CANCEL_HOURS1].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
+        parametersViews[CANCEL_HOURS1].setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -363,24 +355,23 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[finalI1].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " < " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
-                        cancellation1 = feeTextField.getText().toString();
-                        cancelHours1 = cancellation1;
+                    try {
+                        cancelHours1 = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        cancelHours1 = 0;
                     }
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             }
         });
-        parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        configLayout3.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
+        parametersViews[CANCEL_HOURS1].setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        configLayout3.addView(parametersViews[CANCEL_HOURS1], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
 
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-        final int i3 = i;
-        parametersViews[i].setOnClickListener(new View.OnClickListener() {
+        parametersViews[CANCEL_PERCENT1] = new TextView(context);
+        parametersViews[CANCEL_PERCENT1].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        parametersViews[CANCEL_PERCENT1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -408,23 +399,24 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0)
-                        parametersViews[i3].setText(feeTextField.getText().toString() + "%");
-                    cancelPercent1 = feeTextField.getText().toString();
+                    try {
+                        cancelPercent1 = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        cancelPercent1 = 0;
+                    }
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             }
         });
-        configLayout3.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
+        configLayout3.addView(parametersViews[CANCEL_PERCENT1], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
         paymentLayout2.addView(configLayout3);
         LinearLayout configLayout4 = new LinearLayout(context);
 
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " 2 - 6 " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
-        parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
-        int finalI = i;
-        parametersViews[i].setOnClickListener(new OnClickListener() {
+        parametersViews[CANCEL_HOURS2] = new TextView(context);
+        parametersViews[CANCEL_HOURS2].setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        parametersViews[CANCEL_HOURS2].setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -452,25 +444,23 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0) {
-                        parametersViews[finalI].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " " + cancellation1 + " - " + feeTextField.getText().toString() + " " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
-                        cancellation2 = feeTextField.getText().toString();
-                        cancelHours2 = cancellation2;
+                    try {
+                        cancelHours2 = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        cancelHours2 = 0;
                     }
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
 
             }
         });
-        parametersViews[i].setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        configLayout4.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
+        configLayout4.addView(parametersViews[CANCEL_HOURS2], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 35, 15, 0, 0));
 
-        parametersViews[i] = new TextView(context);
-        parametersViews[i].setText(LocaleController.getString("HtSelect", works.heymate.beta.R.string.HtSelect));
-        parametersViews[i].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-        final int i4 = i;
-        parametersViews[i].setOnClickListener(new View.OnClickListener() {
+        parametersViews[CANCEL_PERCENT2] = new TextView(context);
+        parametersViews[CANCEL_PERCENT2].setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+        parametersViews[CANCEL_PERCENT2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(actionType == HtCreateOfferActivity.ActionType.VIEW)
@@ -498,15 +488,18 @@ public class HtPaymentConfigInputCell extends LinearLayout {
                 mainLayout.addView(feeTextField, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 20, 0, 20, 15));
                 builder.setView(mainLayout);
                 builder.setPositiveButton(LocaleController.getString("HtApply", works.heymate.beta.R.string.HtApply), (dialog, which) -> {
-                    if (feeTextField.getText().toString().length() > 0)
-                        parametersViews[i4].setText(feeTextField.getText().toString() + "%");
-                    cancelPercent2 = feeTextField.getText().toString();
+                    try {
+                        cancelPercent2 = Integer.parseInt(feeTextField.getText().toString());
+                    } catch (Throwable t) {
+                        cancelPercent2 = 0;
+                    }
+                    updateValues();
                 });
                 AlertDialog alertDialog = builder.create();
                 parent.showDialog(alertDialog);
             }
         });
-        configLayout4.addView(parametersViews[i++], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
+        configLayout4.addView(parametersViews[CANCEL_PERCENT2], LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.5f, 0, 15, 0, 0));
         paymentLayout2.addView(configLayout4,LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         categoryLayout.addView(paymentLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         categoryLayout.setVisibility(GONE);
@@ -514,31 +507,69 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         titleLayout2.addView(new HtDividerCell(context, true), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0,15,0,0));
         addView(paymentLayout,LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
+        setDefaultConfig();
     }
 
-    public void setRes(Object value, int position) {
-        parametersViews[position].setText(value.toString());
-        parametersViews[position].setTextColor(getContext().getResources().getColor(works.heymate.beta.R.color.ht_green));
+    private void updateValues() {
+        parametersViews[DELAY_TIME].setText(LocaleController.getString("HtDelayInStart", works.heymate.beta.R.string.HtDelayInStart) + " > " + delayMinutes + " " + LocaleController.getString("HtMinutes", works.heymate.beta.R.string.HtMinutes));
+        parametersViews[DELAY_PERCENT].setText(delayPercent + "%");
+        parametersViews[INITIAL_DEPOSIT].setText(initialDeposit + "%");
+        parametersViews[CANCEL_HOURS1].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " < " + cancelHours1 + " " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
+        parametersViews[CANCEL_PERCENT1].setText(cancelPercent1 + "%");
+        parametersViews[CANCEL_HOURS2].setText(LocaleController.getString("HtCancellationIn", works.heymate.beta.R.string.HtCancellationIn) + " " + cancelHours1 + " - " + cancelHours2 + " " + LocaleController.getString("HtHoursOfStart", works.heymate.beta.R.string.HtHoursOfStart));
+        parametersViews[CANCEL_PERCENT2].setText(cancelPercent2 + "%");
     }
 
-    public JSONObject getRes() {
+    public void setConfig(JSONObject config) {
+        if (config == null) {
+            setDefaultConfig();
+            return;
+        }
+
+        try {
+            delayMinutes = config.getInt(OfferUtils.DELAY_TIME);
+            delayPercent = config.getInt(OfferUtils.DELAY_PERCENT);
+            initialDeposit = config.getInt(OfferUtils.INITIAL_DEPOSIT);
+            cancelHours1 = config.getInt(OfferUtils.CANCEL_HOURS1);
+            cancelPercent1 = config.getInt(OfferUtils.CANCEL_PERCENT1);
+            cancelHours2 = config.getInt(OfferUtils.CANCEL_HOURS2);
+            cancelPercent2 = config.getInt(OfferUtils.CANCEL_PERCENT2);
+
+            updateValues();
+        } catch (JSONException e) {
+            setConfig(null);
+        }
+    }
+
+    private void setDefaultConfig() {
+        delayMinutes = 30;
+        delayPercent = 0;
+        initialDeposit = 0;
+        cancelHours1 = 2;
+        cancelPercent1 = 0;
+        cancelHours2 = 6;
+        cancelPercent2 = 0;
+
+        updateValues();
+    }
+
+    public JSONObject getConfig() {
         JSONObject json = new JSONObject();
 
-        Utils.putValues(json,
-                OfferUtils.DELAY_TIME, delayMinutes,
-                OfferUtils.DELAY_PERCENT, delayPercent,
-                OfferUtils.INITIAL_DEPOSIT, initialDeposit,
-                OfferUtils.CANCEL_HOURS1, cancelHours1,
-                OfferUtils.CANCEL_PERCENT1, cancelPercent1,
-                OfferUtils.CANCEL_HOURS2, cancelHours2,
-                OfferUtils.CANCEL_PERCENT2, cancelPercent2
-        );
+        try {
+            json.put(OfferUtils.DELAY_TIME, delayMinutes);
+            json.put(OfferUtils.DELAY_PERCENT, delayPercent);
+            json.put(OfferUtils.INITIAL_DEPOSIT, initialDeposit);
+            json.put(OfferUtils.CANCEL_HOURS1, cancelHours1);
+            json.put(OfferUtils.CANCEL_PERCENT1, cancelPercent1);
+            json.put(OfferUtils.CANCEL_HOURS2, cancelHours2);
+            json.put(OfferUtils.CANCEL_PERCENT2, cancelPercent2);
+        } catch (JSONException e) { }
 
         return json;
     }
 
     public void setActionType(HtCreateOfferActivity.ActionType actionType){
-        this.actionType = actionType;
         if(actionType == HtCreateOfferActivity.ActionType.VIEW) {
             for (TextView argValue : parametersViews) {
                 argValue.setOnClickListener(null);
