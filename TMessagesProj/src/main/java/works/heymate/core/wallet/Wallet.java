@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Hashtable;
 import java.util.List;
@@ -102,7 +103,24 @@ public class Wallet {
     }
 
     public boolean isCreated() {
-        return mPreferences.contains(KEY_PRIVATE_KEY);
+        if (mPreferences.contains(KEY_PRIVATE_KEY)) {
+            return true;
+        }
+
+        try {
+            CeloAccount account = WalletSafe.restoreAccount(mPhoneNumber, mContext);
+
+            mPreferences.edit()
+                    .putString(KEY_PRIVATE_KEY, account.privateKey)
+                    .putString(KEY_PUBLIC_KEY, account.publicKey)
+                    .apply();
+
+            return true;
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to restore account.", e);
+        }
+
+        return false;
     }
 
     public boolean isCreating() {
@@ -430,7 +448,15 @@ public class Wallet {
         String privateKey = mPreferences.getString(KEY_PRIVATE_KEY, null);
         String publicKey = mPreferences.getString(KEY_PUBLIC_KEY, null);
 
-        return new CeloAccount(privateKey, publicKey);
+        CeloAccount account = new CeloAccount(privateKey, publicKey);
+
+        try {
+            WalletSafe.secureAccount(account, mPhoneNumber, mContext);
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to secure account", e);
+        }
+
+        return account;
     }
 
     public String getAddress() {
