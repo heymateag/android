@@ -29,6 +29,9 @@ public class MeetingMessageItem extends SequenceLayout {
     private TextView mMoreDetails;
     private TextView mJoin;
 
+    private Offer mOffer = null;
+    private Reservation mReservation = null;
+
     public MeetingMessageItem(Context context) {
         super(context);
         initialize(context, null, 0);
