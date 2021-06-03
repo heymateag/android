@@ -1,22 +1,36 @@
 package org.telegram.ui.Heymate.onlinemeeting;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+
+import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
+import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
 
 public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
@@ -32,8 +46,21 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     private String mMeetingId;
 
     private AutoGridLayout mGrid;
+    private TextView mLeave;
+    private ImageView mMute;
+    private ImageView mImageMic;
+    private TextView mTextMic;
+    private View mMic;
+    private ImageView mImageVideo;
+    private TextView mTextVideo;
+    private View mVideo;
+    private ImageView mImageMembers;
+    private TextView mTextMembers;
+    private View mMembers;
 
     private final Map<String, View> mMemberViews = new HashMap<>();
+
+    private boolean mStarted = false;
 
     public OnlineMeetingActivity(String meetingId) {
         super(createArgs(meetingId));
@@ -48,57 +75,117 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     @Override
     public View createView(Context context) {
-        FrameLayout content = new FrameLayout(context);
-
-        mGrid = new AutoGridLayout(context);
-        content.addView(mGrid, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-
+        HeymateEvents.register(HeymateEvents.JOINING_MEETING, this);
         HeymateEvents.register(HeymateEvents.JOINED_MEETING, this);
+        HeymateEvents.register(HeymateEvents.FAILED_TO_JOIN_MEETING, this);
         HeymateEvents.register(HeymateEvents.USER_JOINED_MEETING, this);
         HeymateEvents.register(HeymateEvents.USER_LEFT_MEETING, this);
 
-        OnlineMeeting.get().ensureSession(mMeetingId);
+        SequenceLayout content = (SequenceLayout) LayoutInflater.from(context).inflate(R.layout.activity_onlinemeeting, null, false);
 
-        TextView endButton = new TextView(context);
-        endButton.setText("End");
-        endButton.setGravity(Gravity.CENTER);
-        endButton.setPadding(AndroidUtilities.dp(12), AndroidUtilities.dp(8), AndroidUtilities.dp(12), AndroidUtilities.dp(8));
-        endButton.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), 0xffdd0000));
-        endButton.setTextColor(Theme.getColor(Theme.key_dialogFloatingIcon));
-        content.addView(endButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 24, 16, 0));
+        content.findSequenceById("grid").getSpans().get(0).size = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+        content.setBackgroundColor(0xff292929);
 
-        endButton.setOnClickListener(v -> closeMeeting());
+        mGrid = content.findViewById(R.id.grid);
+
+        mLeave = content.findViewById(R.id.leave);
+        mLeave.setText("End");
+        mLeave.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), 0xffFE0000));
+        mLeave.setTextColor(0xffffffff);
+        mLeave.setOnClickListener(v -> closeMeeting());
+
+        mMute = content.findViewById(R.id.mute);
+        mMute.setImageResource(R.drawable.ic_not_muted);
+
+        mImageMic = content.findViewById(R.id.image_mic);
+        mImageMic.setImageResource(R.drawable.ic_mic_on);
+
+        mTextMic = content.findViewById(R.id.text_mic);
+        mTextMic.setTextColor(0xFFFFFFFF);
+        mTextMic.setText("Mute");
+
+        mMic = content.findViewById(R.id.mic);
+
+        mImageVideo = content.findViewById(R.id.image_video);
+        mImageVideo.setImageResource(R.drawable.ic_video_on);
+
+        mTextVideo = content.findViewById(R.id.text_video);
+        mTextVideo.setTextColor(0xFFFFFFFF);
+        mTextVideo.setText("Video");
+
+        mVideo = content.findViewById(R.id.video);
+
+        mImageMembers = content.findViewById(R.id.image_members);
+        mImageMembers.setImageResource(R.drawable.ic_zoom_participants);
+
+        mTextMembers = content.findViewById(R.id.text_members);
+        mTextMembers.setTextColor(0xFFFFFFFF);
+        mTextMembers.setText("Members");
+
+        mMembers = content.findViewById(R.id.members);
 
         return content;
     }
 
     @Override
-    protected void clearViews() {
-        for (int i = 0; i < mGrid.getChildCount(); i++) {
-            View child = mGrid.getChildAt(i);
+    public void onResume() {
+        super.onResume();
 
-            if (child.getTag() instanceof MeetingMember) {
-                MeetingMember meetingMember = (MeetingMember) child.getTag();
-                meetingMember.releaseView(child);
-            }
+        checkPermissionsAndStart();
+    }
+
+    private void checkPermissionsAndStart() {
+        String[] missingPermissions = getMissingPermissions();
+
+        if (missingPermissions.length > 0) {
+            ActivityCompat.requestPermissions(getParentActivity(), missingPermissions, 780);
+        }
+        else {
+            checkSessionAndStart();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
+
+        if (getMissingPermissions().length > 0) {
+            finishFragment();
+        }
+        else {
+            checkSessionAndStart();
+        }
+    }
+
+    private void checkSessionAndStart() {
+        if (mStarted) {
+            return;
         }
 
-        ((ViewGroup) fragmentView).removeAllViews();
+        mStarted = true;
 
-        mMemberViews.clear();
-
-        super.clearViews();
+        if (OnlineMeeting.get().ensureSession(mMeetingId)) {
+            onHeymateEvent(HeymateEvents.USER_JOINED_MEETING);
+        }
     }
 
     @Override
     public void onHeymateEvent(int event, Object... args) {
         switch (event) {
+            case HeymateEvents.JOINING_MEETING:
+                // Nothing to do.
+                break;
             case HeymateEvents.JOINED_MEETING:
                 MeetingMember myself = OnlineMeeting.get().getSelf();
                 View myselfView = myself.createView(getParentActivity());
                 myselfView.setTag(OnlineMeeting.get().getSelf());
                 mMemberViews.put(myself.getUserId(), myselfView);
                 mGrid.addView(myselfView);
+                break;
+            case HeymateEvents.FAILED_TO_JOIN_MEETING:
+                mStarted = false;
+                Toast.makeText(getParentActivity(), "Failed to join to the meeting!", Toast.LENGTH_LONG).show(); // TODO Texts
+                finishFragment();
                 break;
             case HeymateEvents.USER_JOINED_MEETING:
                 MeetingMember joinedMember = OnlineMeeting.get().getMeetingMember((String) args[0]);
@@ -121,14 +208,94 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     }
 
     @Override
+    protected void clearViews() {
+        HeymateEvents.unregister(HeymateEvents.JOINING_MEETING, this);
+        HeymateEvents.unregister(HeymateEvents.JOINED_MEETING, this);
+        HeymateEvents.unregister(HeymateEvents.FAILED_TO_JOIN_MEETING, this);
+        HeymateEvents.unregister(HeymateEvents.USER_JOINED_MEETING, this);
+        HeymateEvents.unregister(HeymateEvents.USER_LEFT_MEETING, this);
+
+        for (int i = 0; i < mGrid.getChildCount(); i++) {
+            View child = mGrid.getChildAt(i);
+
+            if (child.getTag() instanceof MeetingMember) {
+                MeetingMember meetingMember = (MeetingMember) child.getTag();
+                meetingMember.releaseView(child);
+            }
+        }
+
+        ((ViewGroup) fragmentView).removeAllViews();
+
+        mMemberViews.clear();
+
+        super.clearViews();
+    }
+
+    @Override
     public boolean onBackPressed() {
         closeMeeting();
         return true;
     }
 
     private void closeMeeting() {
-        OnlineMeeting.get().leaveMeeting();
+        if (mStarted) {
+            OnlineMeeting.get().leaveMeeting();
+        }
+
         finishFragment();
     }
+
+    private String[] getMissingPermissions() {
+        ArrayList<String> permissions = new ArrayList<>(2);
+
+        if (ActivityCompat.checkSelfPermission(getParentActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.CAMERA);
+        }
+
+        if (ActivityCompat.checkSelfPermission(getParentActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+
+        return permissions.toArray(new String[0]);
+    }
+
+    @Override
+    protected void setParentLayout(ActionBarLayout layout) {
+        if (parentLayout != layout) {
+            parentLayout = layout;
+            inBubbleMode = parentLayout != null && parentLayout.isInBubbleMode();
+            if (fragmentView != null) {
+                ViewGroup parent = (ViewGroup) fragmentView.getParent();
+                if (parent != null) {
+                    try {
+                        onRemoveFromParent();
+                        parent.removeViewInLayout(fragmentView);
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+                if (parentLayout != null && parentLayout.getContext() != fragmentView.getContext()) {
+                    fragmentView = null;
+                }
+            }
+            if (actionBar != null) {
+                boolean differentParent = parentLayout != null && parentLayout.getContext() != actionBar.getContext();
+                if (actionBar.shouldAddToContainer() || differentParent) {
+                    ViewGroup parent = (ViewGroup) actionBar.getParent();
+                    if (parent != null) {
+                        try {
+                            parent.removeViewInLayout(actionBar);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                    }
+                }
+                if (differentParent) {
+                    actionBar = null;
+                }
+            }
+        }
+    }
+
 
 }

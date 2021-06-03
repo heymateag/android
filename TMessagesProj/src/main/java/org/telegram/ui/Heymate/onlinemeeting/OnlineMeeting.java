@@ -96,7 +96,9 @@ public class OnlineMeeting {
 
         HeymateEvents.notify(HeymateEvents.JOINING_MEETING, sessionId);
 
-        HtAmplify.getInstance(mContext).getZoomToken(System.currentTimeMillis() / 1000, (success, result, exception) -> {
+        UserInfo userInfo = new UserInfo();
+
+        HtAmplify.getInstance(mContext).getZoomToken(userInfo.id, sessionId, System.currentTimeMillis() / 1000, (success, result, exception) -> {
             if (success) {
                 // Setup audio options
                 ZoomInstantSDKAudioOption audioOptions = new ZoomInstantSDKAudioOption();
@@ -110,14 +112,19 @@ public class OnlineMeeting {
                 params.audioOption = audioOptions;
                 params.videoOption = videoOptions;
                 params.sessionName = sessionId;
-                params.userName = new UserInfo().toString();
+                params.userName = userInfo.toString();
                 params.token = result;
 
                 ZoomInstantSDKSession session = mSDK.joinSession(params);
 
-//                if (session == null) {
-//                    HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
-//                }
+                if (session == null) {
+                    HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
+                }
+            }
+            else {
+                Log.e(TAG, "Failed to get token for video session.", exception);
+
+                HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
             }
         });
 

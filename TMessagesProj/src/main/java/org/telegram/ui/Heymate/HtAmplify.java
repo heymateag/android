@@ -22,12 +22,17 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.model.query.predicate.QueryPredicate;
 import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.DataStoreException;
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
+import com.amplifyframework.hub.AWSHubPlugin;
+import com.amplifyframework.hub.HubChannel;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -81,18 +86,26 @@ public class HtAmplify {
 
     public static class GetJWTRequest {
 
+        int version;
         long iat;
         long exp;
-        long tokenExp;
+        String user_identity;
+        String session_name;
 
-        public GetJWTRequest() {
-
-        }
-
-        public GetJWTRequest(long startTime) {
+        public GetJWTRequest(long startTime, String userName, String sessionName) {
+            version = BuildConfig.VERSION_CODE;
             iat = startTime;
             exp = startTime + 48L * 60L * 60L;
-            tokenExp = exp;
+            user_identity = userName;
+            session_name = sessionName;
+        }
+
+        public int getVersion() {
+            return version;
+        }
+
+        public void setVersion(int version) {
+            this.version = version;
         }
 
         public long getIat() {
@@ -111,12 +124,20 @@ public class HtAmplify {
             this.exp = exp;
         }
 
-        public long getTokenExp() {
-            return tokenExp;
+        public String getUser_identity() {
+            return user_identity;
         }
 
-        public void setTokenExp(long tokenExp) {
-            this.tokenExp = tokenExp;
+        public void setUser_identity(String user_identity) {
+            this.user_identity = user_identity;
+        }
+
+        public String getSession_name() {
+            return session_name;
+        }
+
+        public void setSession_name(String session_name) {
+            this.session_name = session_name;
         }
 
     }
@@ -827,15 +848,15 @@ public class HtAmplify {
         }
     }
 
-    public void getZoomToken(long startTimeInSeconds, APICallback<String> callback) {
+    public void getZoomToken(String userName, String sessionName, long startTimeInSeconds, APICallback<String> callback) {
         new Thread() {
 
             @Override
             public void run() {
                 try {
-                    GetJWTRequest request = new GetJWTRequest(startTimeInSeconds);
+                    GetJWTRequest request = new GetJWTRequest(startTimeInSeconds, userName, sessionName);
                     GetJWTResponse response = mFunctions.getZoomJWT(request);
-                    Log.d("AAA", "token: " + response.token);
+
                     Utils.runOnUIThread(() -> callback.onCallResult(true, response.token, null));
                 } catch (LambdaFunctionException e) {
                     Utils.runOnUIThread(() -> callback.onCallResult(false, null, new ApiException(String.valueOf(e.getMessage()), e, e.getDetails())));
