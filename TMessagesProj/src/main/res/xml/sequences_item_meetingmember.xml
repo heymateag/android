@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="16dp"/>
+        <Span id="image" size="40dp"/>
+        <Span size="16dp"/>
+        <Span id="divider" size="1dp"/>
+    </Vertical>
+
+    <Vertical start="start@image" end="end@image">
+        <Span size="1w"/>
+        <Span id="name" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@image" end="end@image">
+        <Span size="1w"/>
+        <Span id="video" size="36dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@image" end="end@image">
+        <Span size="1w"/>
+        <Span id="audio" size="36dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="image" size="40dp"/>
+        <Span size="16dp"/>
+        <Span id="name" size="1w"/>
+        <Span size="16dp"/>
+        <Span id="video" size="36dp"/>
+        <Span size="4dp"/>
+        <Span id="audio" size="36dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="divider" size="100%"/>
+    </Horizontal>
+
+</Sequences>

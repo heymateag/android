@@ -12,6 +12,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Heymate.HtAmplify;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,12 @@ public class OnlineMeeting {
 
     private static OnlineMeeting mInstance = null;
 
+    private interface DoWithUserCall {
+
+        void doWithUser(ZoomInstantSDKSession session, ZoomInstantSDKUser user);
+
+    }
+
     public static OnlineMeeting get() {
         if (mInstance == null) {
             mInstance = new OnlineMeeting(ApplicationLoader.applicationContext);
@@ -57,7 +64,8 @@ public class OnlineMeeting {
     private ZoomInstantSDK mSDK;
 
     private MeetingMember mSelf;
-    private Map<String, MeetingMember> mMeetingMembers = new HashMap<>();
+    private Map<String, MeetingMember> mMembers = new HashMap<>();
+    private Map<String, MeetingMember> mMembersByZoomIds = new HashMap<>();
 
     private OnlineMeeting(Context context) {
         mContext = context;
@@ -143,8 +151,102 @@ public class OnlineMeeting {
         return mSelf;
     }
 
-    public MeetingMember getMeetingMember(String userId) {
-        return mMeetingMembers.get(userId);
+    public MeetingMember getMember(String userId) {
+        return mMembers.get(userId);
+    }
+
+    public Collection<MeetingMember> getMembers() {
+        return mMembers.values();
+    }
+
+    public void mute(String userId) {
+        doWithUser(userId, (session, user) -> {
+            ZoomInstantSDKAudioHelper audioHelper = mSDK.getAudioHelper();
+            audioHelper.muteAudio(user);
+        });
+    }
+
+    public void unMute(String userId) {
+        doWithUser(userId, (session, user) -> {
+            ZoomInstantSDKAudioHelper audioHelper = mSDK.getAudioHelper();
+            audioHelper.unMuteAudio(user);
+        });
+    }
+
+    public boolean muteAll() {
+        ZoomInstantSDKSession session = mSDK.getSession();
+
+        if (session == null) {
+            return false;
+        }
+
+        if (mSelf == null || !session.getUser(mSelf.getUserId()).isHost()) {
+            return false;
+        }
+
+        for (ZoomInstantSDKUser user: session.getAllUsers()) {
+            if (!user.isHost()) {
+                mSDK.getAudioHelper().muteAudio(user);
+            }
+        }
+
+        return true;
+    }
+
+    public boolean unMuteAll() {
+        ZoomInstantSDKSession session = mSDK.getSession();
+
+        if (session == null) {
+            return false;
+        }
+
+        if (mSelf == null || !session.getUser(mSelf.getUserId()).isHost()) {
+            return false;
+        }
+
+        for (ZoomInstantSDKUser user: session.getAllUsers()) {
+            if (!user.isHost()) {
+                mSDK.getAudioHelper().unMuteAudio(user);
+            }
+        }
+
+        return true;
+    }
+
+    public void kick(String userId) {
+        if (mSelf != null && mSelf.getUserId().equals(userId)) {
+            return;
+        }
+
+        doWithUser(userId, (session, user) -> mSDK.getUserHelper().removeUser(user));
+    }
+
+    public void startVideo() {
+        if (mSDK.isInSession()) {
+            mSDK.getVideoHelper().startVideo();
+        }
+    }
+
+    public void stopVideo() {
+        if (mSDK.isInSession()) {
+            mSDK.getVideoHelper().stopVideo();
+        }
+    }
+
+    private void doWithUser(String userId, DoWithUserCall call) {
+        ZoomInstantSDKSession session = mSDK.getSession();
+
+        if (session == null) {
+            return;
+        }
+
+        MeetingMember meetingMember = mMembers.get(userId);
+
+        if (meetingMember == null) {
+            return;
+        }
+
+        call.doWithUser(session, meetingMember.getZoomUser());
     }
 
     private final ZoomInstantSDKDelegate mZoomDelegate = new ZoomInstantSDKDelegate() {
@@ -152,7 +254,20 @@ public class OnlineMeeting {
         @Override
         public void onSessionJoin() {
             mSelf = new MeetingMember(mSDK.getSession().getMySelf());
+            mMembers.put(mSelf.getUserId(), mSelf);
+            mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
+
             HeymateEvents.notify(HeymateEvents.JOINED_MEETING);
+        }
+
+        @Override public void onSessionLeave() {
+            HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
+
+            Utils.postOnUIThread(() -> {
+                mMembers.remove(mSelf.getUserId());
+                mMembersByZoomIds.remove(mSelf.getZoomUser().getUserId());
+                mSelf = null;
+            });
         }
 
         @Override
@@ -179,10 +294,11 @@ public class OnlineMeeting {
                     HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
                     Utils.postOnUIThread(() -> {
-                        for (MeetingMember meetingMember: mMeetingMembers.values()) {
+                        for (MeetingMember meetingMember: mMembers.values()) {
                             meetingMember.release();
                         }
-                        mMeetingMembers.clear();
+                        mMembers.clear();
+                        mSelf = null;
                     });
                     return;
             }
@@ -193,21 +309,25 @@ public class OnlineMeeting {
             for (ZoomInstantSDKUser user: userList) {
                 MeetingMember meetingMember = new MeetingMember(user);
 
-                mMeetingMembers.put(user.getUserId(), meetingMember);
+                mMembers.put(meetingMember.getUserId(), meetingMember);
+                mMembersByZoomIds.put(user.getUserId(), meetingMember);
 
-                HeymateEvents.notify(HeymateEvents.USER_JOINED_MEETING, user.getUserId());
+                HeymateEvents.notify(HeymateEvents.USER_JOINED_MEETING, meetingMember.getUserId(), meetingMember);
             }
         }
 
         @Override
         public void onUserLeave(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
             for (ZoomInstantSDKUser user: userList) {
-                HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, user.getUserId());
+                MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
+                HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, meetingMember.getUserId(), meetingMember);
 
                 Utils.postOnUIThread(() -> {
-                    MeetingMember meetingMember = mMeetingMembers.get(user.getUserId());
+                    mMembersByZoomIds.remove(user.getUserId());
 
                     if (meetingMember != null) {
+                        mMembers.remove(meetingMember.getUserId());
+
                         meetingMember.release();
                     }
                 });
@@ -216,12 +336,24 @@ public class OnlineMeeting {
 
         @Override
         public void onUserVideoStatusChanged(ZoomInstantSDKVideoHelper videoHelper, List<ZoomInstantSDKUser> userList) {
+            for (ZoomInstantSDKUser user: userList) {
+                MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
+                if (meetingMember != null) {
+                    HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
+                }
+            }
         }
 
         @Override
-        public void onUserAudioStatusChanged(ZoomInstantSDKAudioHelper audioHelper, List<ZoomInstantSDKUser> userHelper) {
+        public void onUserAudioStatusChanged(ZoomInstantSDKAudioHelper audioHelper, List<ZoomInstantSDKUser> userList) {
+            for (ZoomInstantSDKUser user: userList) {
+                MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
+                if (meetingMember != null) {
+                    HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
+                }
+            }
         }
 
         @Override
@@ -243,7 +375,6 @@ public class OnlineMeeting {
         @Override public void onMixedAudioRawDataReceived(ZoomInstantSDKAudioRawData zoomInstantSDKAudioRawData) { }
         @Override public void onOneWayAudioRawDataReceived(ZoomInstantSDKAudioRawData zoomInstantSDKAudioRawData, ZoomInstantSDKUser zoomInstantSDKUser) { }
         @Override public void onSessionPasswordWrong(ZoomInstantSDKPasswordHandler handler) { }
-        @Override public void onSessionLeave() { }
 
     };
 

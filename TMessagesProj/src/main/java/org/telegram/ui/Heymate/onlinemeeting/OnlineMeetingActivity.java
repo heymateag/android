@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +21,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
 
 import java.util.ArrayList;
@@ -80,6 +77,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         HeymateEvents.register(HeymateEvents.FAILED_TO_JOIN_MEETING, this);
         HeymateEvents.register(HeymateEvents.USER_JOINED_MEETING, this);
         HeymateEvents.register(HeymateEvents.USER_LEFT_MEETING, this);
+        HeymateEvents.register(HeymateEvents.MEETING_USER_STATUS_CHANGED, this);
 
         SequenceLayout content = (SequenceLayout) LayoutInflater.from(context).inflate(R.layout.activity_onlinemeeting, null, false);
 
@@ -89,7 +87,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mGrid = content.findViewById(R.id.grid);
 
         mLeave = content.findViewById(R.id.leave);
-        mLeave.setText("End");
+        mLeave.setText("Leave");  // TODO Texts
         mLeave.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), 0xffFE0000));
         mLeave.setTextColor(0xffffffff);
         mLeave.setOnClickListener(v -> closeMeeting());
@@ -98,33 +96,79 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mMute.setImageResource(R.drawable.ic_not_muted);
 
         mImageMic = content.findViewById(R.id.image_mic);
-        mImageMic.setImageResource(R.drawable.ic_mic_on);
-
         mTextMic = content.findViewById(R.id.text_mic);
         mTextMic.setTextColor(0xFFFFFFFF);
-        mTextMic.setText("Mute");
-
         mMic = content.findViewById(R.id.mic);
 
         mImageVideo = content.findViewById(R.id.image_video);
-        mImageVideo.setImageResource(R.drawable.ic_video_on);
-
         mTextVideo = content.findViewById(R.id.text_video);
         mTextVideo.setTextColor(0xFFFFFFFF);
-        mTextVideo.setText("Video");
-
         mVideo = content.findViewById(R.id.video);
 
         mImageMembers = content.findViewById(R.id.image_members);
         mImageMembers.setImageResource(R.drawable.ic_zoom_participants);
-
         mTextMembers = content.findViewById(R.id.text_members);
         mTextMembers.setTextColor(0xFFFFFFFF);
         mTextMembers.setText("Members");
-
         mMembers = content.findViewById(R.id.members);
 
+        mMic.setOnClickListener(v -> {
+            MeetingMember self = OnlineMeeting.get().getSelf();
+
+            if (self == null) {
+                return;
+            }
+
+            if (self.isMuted()) {
+                OnlineMeeting.get().unMute(self.getUserId());
+            }
+            else {
+                OnlineMeeting.get().mute(self.getUserId());
+            }
+        });
+
+        mVideo.setOnClickListener(v -> {
+            MeetingMember self = OnlineMeeting.get().getSelf();
+
+            if (self == null) {
+                return;
+            }
+
+            if (self.isVideoOn()) {
+                OnlineMeeting.get().stopVideo();
+            }
+            else {
+                OnlineMeeting.get().startVideo();
+            }
+        });
+
+        mMembers.setOnClickListener(v -> presentFragment(new MeetingMembersActivity()));
+
+        updateState();
+
         return content;
+    }
+
+    private void updateState() {
+        MeetingMember self = OnlineMeeting.get().getSelf();
+
+        if (self == null || !self.isMuted()) {
+            mImageMic.setImageResource(R.drawable.ic_mic_on);
+            mTextMic.setText("Mute");
+        }
+        else {
+            mImageMic.setImageResource(R.drawable.ic_mic_off);
+            mTextMic.setText("Unmute");
+        }
+
+        if (self == null || self.isVideoOn()) {
+            mImageVideo.setImageResource(R.drawable.ic_video_on);
+            mTextVideo.setText("Disable video");
+        }
+        else {
+            mImageVideo.setImageResource(R.drawable.ic_video_off);
+            mTextVideo.setText("Enable video");
+        }
     }
 
     @Override
@@ -180,6 +224,11 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 View myselfView = myself.createView(getParentActivity());
                 myselfView.setTag(OnlineMeeting.get().getSelf());
                 mMemberViews.put(myself.getUserId(), myselfView);
+
+                if (myself.isHost()) {
+                    mLeave.setText("End");
+                }
+
                 mGrid.addView(myselfView);
                 break;
             case HeymateEvents.FAILED_TO_JOIN_MEETING:
@@ -187,15 +236,18 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 Toast.makeText(getParentActivity(), "Failed to join to the meeting!", Toast.LENGTH_LONG).show(); // TODO Texts
                 finishFragment();
                 break;
+            case HeymateEvents.LEFT_MEETING:
+                // Nothing to do.
+                break;
             case HeymateEvents.USER_JOINED_MEETING:
-                MeetingMember joinedMember = OnlineMeeting.get().getMeetingMember((String) args[0]);
+                MeetingMember joinedMember = OnlineMeeting.get().getMember((String) args[0]);
                 View joinedMemberView = joinedMember.createView(getParentActivity());
                 joinedMemberView.setTag(joinedMember);
                 mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
                 mGrid.addView(joinedMemberView);
                 break;
             case HeymateEvents.USER_LEFT_MEETING:
-                MeetingMember leftMember = OnlineMeeting.get().getMeetingMember((String) args[0]);
+                MeetingMember leftMember = OnlineMeeting.get().getMember((String) args[0]);
                 View leftMemberView = mMemberViews.get(leftMember.getUserId());
 
                 if (leftMemberView != null) {
@@ -203,6 +255,9 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     mMemberViews.remove(leftMember.getUserId());
                     mGrid.removeView(leftMemberView);
                 }
+                break;
+            case HeymateEvents.MEETING_USER_STATUS_CHANGED:
+                updateState();
                 break;
         }
     }
@@ -214,6 +269,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         HeymateEvents.unregister(HeymateEvents.FAILED_TO_JOIN_MEETING, this);
         HeymateEvents.unregister(HeymateEvents.USER_JOINED_MEETING, this);
         HeymateEvents.unregister(HeymateEvents.USER_LEFT_MEETING, this);
+        HeymateEvents.unregister(HeymateEvents.MEETING_USER_STATUS_CHANGED, this);
 
         for (int i = 0; i < mGrid.getChildCount(); i++) {
             View child = mGrid.getChildAt(i);

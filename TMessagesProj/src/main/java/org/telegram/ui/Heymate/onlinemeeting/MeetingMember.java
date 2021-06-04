@@ -29,12 +29,28 @@ public class MeetingMember {
         mUserId = userInfo.id;
     }
 
+    protected ZoomInstantSDKUser getZoomUser() {
+        return mUser;
+    }
+
     public String getName() {
         return mName;
     }
 
     public String getUserId() {
         return mUserId;
+    }
+
+    public boolean isHost() {
+        return mUser.isHost();
+    }
+
+    public boolean isMuted() {
+        return mUser.getAudioStatus().isMuted();
+    }
+
+    public boolean isVideoOn() {
+        return mUser.getVideoStatus().isOn();
     }
 
     public View createView(Context context) {

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span id="list_member" size="1w"/>
+        <Span size="16dp"/>
+        <Span id="mute_all" size="32dp"/>
+        <Span size="16dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span id="list_member" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="mute_all" size="105sp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+</Sequences>
