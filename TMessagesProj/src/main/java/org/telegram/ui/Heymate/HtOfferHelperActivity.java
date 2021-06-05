@@ -17,23 +17,16 @@ import androidx.annotation.RequiresApi;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
-import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class HtOfferHelperActivity extends BaseFragment {
 
-    private View searchButton;
     private ImageView nextBtn;
-
-
-
-    private final static int search_button = 1;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -70,10 +63,6 @@ public class HtOfferHelperActivity extends BaseFragment {
                 }
             }
         });
-
-        ActionBarMenu menu = actionBar.createMenu();
-        searchButton = menu.addItemWithWidth(search_button, works.heymate.beta.R.drawable.menu_search, AndroidUtilities.dp(56));
-        searchButton.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
 
         fragmentView = new LinearLayout(context);
         LinearLayout mainLayout = (LinearLayout) fragmentView;

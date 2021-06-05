@@ -265,10 +265,10 @@ public class HeymatePayment {
             return next;
         }
 
-        return BuildConfig.DEBUG ?
-                () -> alfajoresTopUp(fragment, next) :
-                () -> checkBalanceBeforePayment(fragment, price, next);
-//        return () -> checkBalanceBeforePayment(fragment, price, next);
+//        return BuildConfig.DEBUG ?
+//                () -> alfajoresTopUp(fragment, next) :
+//                () -> checkBalanceBeforePayment(fragment, price, next);
+        return () -> checkBalanceBeforePayment(fragment, price, next);
     }
 
     private static void alfajoresTopUp(BaseFragment fragment, Runnable next) {
