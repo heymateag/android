@@ -12,6 +12,7 @@ public class URLs {
 
     public static final String PATH_OFFER = "offer";
     public static final String PATH_REFERRAL = "referral";
+    public static final String PATH_RESERVATION = "reservation";
 
     public static String getBaseURL(String path) {
         return "https://" + HOST + "/" + path;

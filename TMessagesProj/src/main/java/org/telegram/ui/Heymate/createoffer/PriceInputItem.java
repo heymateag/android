@@ -76,10 +76,24 @@ public class PriceInputItem extends ExpandableItem {
             price = json.getInt(PRICE);
             currency = json.getString(CURRENCY);
             rateType = json.getString(RATE_TYPE);
-            bundleCount = json.getInt(BUNDLE_COUNT);
-            bundleDiscountPercent = json.getInt(BUNDLE_DISCOUNT_PERCENT);
-            subscriptionPeriod = Utils.getOrNull(json, SUBSCRIPTION_PERIOD);
-            subscriptionPrice = json.getInt(SUBSCRIPTION_PRICE);
+
+            int bundleCountTemp = 0;
+            int bundleDiscountPercentTemp = 0;
+            try {
+                bundleCountTemp = json.getInt(BUNDLE_COUNT);
+                bundleDiscountPercentTemp = json.getInt(BUNDLE_DISCOUNT_PERCENT);
+            } catch (JSONException e) { }
+            bundleCount = bundleCountTemp;
+            bundleDiscountPercent = bundleDiscountPercentTemp;
+
+            String subscriptionPeriodTemp = null;
+            int subscriptionPriceTemp = 0;
+            try {
+                subscriptionPeriodTemp = Utils.getOrNull(json, SUBSCRIPTION_PERIOD);
+                subscriptionPriceTemp = json.getInt(SUBSCRIPTION_PRICE);
+            } catch (JSONException e) { }
+            subscriptionPeriod = subscriptionPeriodTemp;
+            subscriptionPrice = subscriptionPriceTemp;
         }
 
         public int getBundleTotalPrice() {

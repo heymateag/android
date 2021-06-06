@@ -242,7 +242,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
     }
 
     private void showDetails() {
-        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), mParent,  0, mOffer, null);
+        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), 0, mOffer, null);
         AlertDialog dialog = detailsPopUp.create();
         detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
         mParent.showDialog(dialog);

@@ -223,6 +223,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.OfferMessageItem;
+import org.telegram.ui.Heymate.onlinemeeting.MeetingMessageItem;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -243,6 +244,7 @@ import java.util.regex.Pattern;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.core.reservation.ReservationUtils;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -21107,6 +21109,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 view = new OfferMessageItem(mContext);
                 ((OfferMessageItem) view).setParent(ChatActivity.this);
             }
+            else if (viewType == 11) {
+                view = new MeetingMessageItem(mContext);
+                ((MeetingMessageItem) view).setParent(ChatActivity.this);
+            }
             else if (viewType == 0) {
                 if (!chatMessageCellsCache.isEmpty()) {
                     view = chatMessageCellsCache.get(0);
@@ -21899,7 +21905,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     offerCell.setOffer(offer, phraseInfo.offerId != null);
                 }
-                if (view instanceof ChatMessageCell) {
+                else if (view instanceof MeetingMessageItem) {
+                    ReservationUtils.PhraseInfo phraseInfo = ReservationUtils.readBeautiful(message.messageText.toString());
+                    ((MeetingMessageItem) view).setReservation(phraseInfo.reservation);
+                }
+                else if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;
                     MessageObject.GroupedMessages groupedMessages = getValidGroupedMessage(message);
                     messageCell.isChat = currentChat != null || UserObject.isUserSelf(currentUser) || UserObject.isReplyUser(currentUser);
@@ -22179,6 +22189,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
                 if(OfferUtils.urlFromPhrase(finalMessage) != null) {
                     return 10;
+                }
+                if (ReservationUtils.urlFromPhrase(finalMessage) != null) {
+                    return 11;
                 }
                 return messages.get(position - messagesStartRow).contentType;
             } else if (position == botInfoRow) {

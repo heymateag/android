@@ -20,6 +20,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -41,6 +43,7 @@ import java.util.List;
 import java.util.UUID;
 
 import works.heymate.core.Texts;
+import works.heymate.core.reservation.ReservationUtils;
 import works.heymate.core.wallet.Wallet;
 
 public class MyOfferItem extends SequenceLayout implements View.OnClickListener {
@@ -65,6 +68,8 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
     private final ImageReceiver avatarImage = new ImageReceiver(this);
     private final AvatarDrawable avatarDrawable = new AvatarDrawable();
+
+    private int mCountDownSeconds = -1;
 
     public MyOfferItem(Context context, BaseFragment parent) {
         super(context);
@@ -172,6 +177,8 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void updateLayout() {
+        stopCountDown();
+
         if (mUserId != 0) {
             TLRPC.User user = MessagesController.getInstance(mParent.getCurrentAccount()).getUser(mUserId);
             onUserLoaded(user);
@@ -224,6 +231,8 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
             mTextInfo.setText("");
         }
 
+        enableRight();
+
         if (status != null) {
             switch (status) {
                 case BOOKED:
@@ -232,6 +241,18 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
                     setRightPositive();
                     mButtonRight.setText(Texts.get(mIsOnlineMeeting ? Texts.START_SESSION : Texts.START));
                     mButtonRight.setOnClickListener(v -> markAsStarted());
+
+                    if (mTimeSlot == null || mTimeSlot.getStartTime() == null) {
+                        disableRight();
+                    }
+                    else {
+                        int startTime = mTimeSlot.getStartTime();
+
+                        if (startTime > System.currentTimeMillis() / 1000) {
+                            disableRight();
+                            startCountDown((int) (startTime - System.currentTimeMillis() / 1000));
+                        }
+                    }
                     break;
                 case FINISHED:
                 case CANCELLED_BY_CONSUMER:
@@ -262,6 +283,56 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         else {
             mButtonLeft.setVisibility(GONE);
             mButtonRight.setVisibility(GONE);
+        }
+    }
+
+    private void startCountDown(int seconds) {
+        removeCallbacks(mCountDown);
+
+        mCountDownSeconds = seconds;
+
+        post(mCountDown);
+    }
+
+    private void stopCountDown() {
+        removeCallbacks(mCountDown);
+
+        mCountDownSeconds = -1;
+    }
+
+    private final Runnable mCountDown = new Runnable() {
+
+        @Override
+        public void run() {
+            setRemainingSeconds(mCountDownSeconds);
+
+            mCountDownSeconds--;
+
+            if (mCountDownSeconds == -1) {
+                updateLayout();
+            }
+            else {
+                postDelayed(mCountDown, 1000);
+            }
+        }
+
+    };
+
+    private void setRemainingSeconds(int seconds) {
+        int minutes = seconds / 60;
+        seconds %= 60;
+
+        int hours = minutes / 60;
+        minutes %= 60;
+
+        int days = hours / 24;
+        hours %= 24;
+
+        if (days > 0) {
+            mButtonRight.setText(days + "d " + hours + "h"); // TODO Centralize relative time
+        }
+        else {
+            mButtonRight.setText(fixDigits(hours) + ":" + fixDigits(minutes) + ":" + fixDigits(seconds));
         }
     }
 
@@ -297,6 +368,11 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     private void disableRight() {
         mButtonRight.setEnabled(false);
         mButtonRight.setAlpha(0.5f);
+    }
+
+    private void enableRight() {
+        mButtonRight.setEnabled(true);
+        mButtonRight.setAlpha(1);
     }
 
     private void disableLeft() {
@@ -437,7 +513,14 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         HtAmplify.getInstance(getContext()).updateReservation(reservation, statusToApply, meetingId);
 
         if (statusToApply == HtTimeSlotStatus.MARKED_AS_STARTED) {
-            // TODO Send in app message to consumer to join.
+            String sUserId = reservation.getConsumerId();
+
+            try {
+                int userId = Integer.parseInt(sUserId);
+
+                String message = ReservationUtils.serializeBeautiful(reservation, mOffer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
+                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
+            } catch (NumberFormatException e) { }
         }
 
         if (statusToApply == HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER) {
@@ -475,7 +558,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void showDetails() {
-        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), mParent,  0, mOffer, null);
+        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), 0, mOffer, null);
         AlertDialog dialog = detailsPopUp.create();
         detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
         mParent.showDialog(dialog);
@@ -512,6 +595,17 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         super.onDetachedFromWindow();
 
         avatarImage.onDetachedFromWindow();
+
+        stopCountDown();
+    }
+
+    private String fixDigits(int v) {
+        if (v < 10) {
+            return "0" + v;
+        }
+        else {
+            return String.valueOf(v);
+        }
     }
 
 }

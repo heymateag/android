@@ -43,15 +43,13 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
     private int idCounter = 1;
     public ImageView closeImage;
-    private BaseFragment parent;
 
     private Offer offer;
     private OfferUtils.PhraseInfo phraseInfo;
 
-    public HtOfferDetailsPopUp(Context context, BaseFragment parent, int progressStyle, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
+    public HtOfferDetailsPopUp(Context context, int progressStyle, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
         super(context, progressStyle);
         AlertDialog.Builder builder = this;
-        this.parent = parent;
 
         this.offer = offer;
         this.phraseInfo = phraseInfo;
@@ -207,7 +205,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         priceTextLayoutParams.setMargins(AndroidUtilities.dp(2), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(priceText, priceTextLayoutParams);
 
-        TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
+        TLRPC.User user = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
         String name;
 
         if (user.username != null) {
@@ -430,7 +428,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
-        TLRPC.User user = UserConfig.getInstance(parent.getCurrentAccount()).getCurrentUser();
+        TLRPC.User user = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
         String name;
 
         if (user.username != null) {
