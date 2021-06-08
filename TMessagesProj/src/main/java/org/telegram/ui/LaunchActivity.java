@@ -144,6 +144,7 @@ import org.telegram.ui.Heymate.EasterActivity;
 import org.telegram.ui.Heymate.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.HtSQLite;
+import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.OffersActivity;
 ///
@@ -234,6 +235,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     protected void onCreate(Bundle savedInstanceState) {
         HtSQLite.setInstance(this);
         DatabaseWatchDog.getInstance().config(currentAccount);
+        OnlineReservation.stabilizeOnlineMeetingStatuses(getApplicationContext());
 
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());

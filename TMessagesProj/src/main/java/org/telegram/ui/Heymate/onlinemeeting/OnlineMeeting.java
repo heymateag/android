@@ -63,12 +63,14 @@ public class OnlineMeeting {
     private Context mContext;
     private ZoomInstantSDK mSDK;
 
+    private String mHostId = null;
+
     private MeetingMember mSelf;
     private Map<String, MeetingMember> mMembers = new HashMap<>();
     private Map<String, MeetingMember> mMembersByZoomIds = new HashMap<>();
 
     private OnlineMeeting(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
 
         ZoomInstantSDKInitParams params = new ZoomInstantSDKInitParams();
         params.domain = "https://zoom.us"; // Required
@@ -92,7 +94,24 @@ public class OnlineMeeting {
      * @param sessionId
      * @return true if already is in the session.
      */
-    public boolean ensureSession(String sessionId) {
+    public boolean ensureSession(String sessionId, String timeSlotId, String reservationId) {
+        if (timeSlotId != null) {
+            HtAmplify.getInstance(mContext).getTimeSlot(timeSlotId, (success, result, exception) -> {
+                if (success) {
+                    mHostId = result.getUserId();
+                    ensureHost();
+                }
+            });
+        }
+        else if (reservationId != null) {
+            HtAmplify.getInstance(mContext).getReservation(reservationId, (success, result, exception) -> {
+                if (success) {
+                    mHostId = result.getServiceProviderId();
+                    ensureHost();
+                }
+            });
+        }
+
         if (mSDK.getSession() != null) {
             if (mSDK.getSession().getSessionName().equals(sessionId)) {
                 return true;
@@ -142,6 +161,7 @@ public class OnlineMeeting {
     public void leaveMeeting() {
         Utils.postOnUIThread(() -> {
             if (mSDK.getSession() != null) {
+                mHostId = null;
                 mSDK.leaveSession(true); // shouldEndSession = true
             }
         });
@@ -249,6 +269,18 @@ public class OnlineMeeting {
         call.doWithUser(session, meetingMember.getZoomUser());
     }
 
+    private void ensureHost() {
+        if (mHostId == null) {
+            return;
+        }
+
+        MeetingMember member = mMembers.get(mHostId);
+
+        if (member != null && mSelf != member && mSelf.getZoomUser().isHost()) {
+            mSDK.getUserHelper().makeHost(member.getZoomUser());
+        }
+    }
+
     private final ZoomInstantSDKDelegate mZoomDelegate = new ZoomInstantSDKDelegate() {
 
         @Override
@@ -311,6 +343,8 @@ public class OnlineMeeting {
 
                 mMembers.put(meetingMember.getUserId(), meetingMember);
                 mMembersByZoomIds.put(user.getUserId(), meetingMember);
+
+                ensureHost();
 
                 HeymateEvents.notify(HeymateEvents.USER_JOINED_MEETING, meetingMember.getUserId(), meetingMember);
             }

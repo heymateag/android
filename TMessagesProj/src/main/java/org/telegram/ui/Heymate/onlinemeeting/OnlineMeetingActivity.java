@@ -21,10 +21,12 @@ import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import works.heymate.beta.R;
@@ -33,14 +35,20 @@ import works.heymate.core.HeymateEvents;
 public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
     private static final String KEY_MEETING_ID = "meetingId";
+    private static final String KEY_TIME_SLOT_ID = "timeSlotId";
+    private static final String KEY_RESERVATION_ID = "reservationId";
 
-    private static Bundle createArgs(String meetingId) {
+    private static Bundle createArgs(String meetingId, String timeSlotId, String reservationId) {
         Bundle args = new Bundle();
         args.putString(KEY_MEETING_ID, meetingId);
+        args.putString(KEY_TIME_SLOT_ID, timeSlotId);
+        args.putString(KEY_RESERVATION_ID, reservationId);
         return args;
     }
 
     private String mMeetingId;
+    private String mTimeSlotId;
+    private String mReservationId;
 
     private AutoGridLayout mGrid;
     private TextView mLeave;
@@ -59,13 +67,15 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     private boolean mStarted = false;
 
-    public OnlineMeetingActivity(String meetingId) {
-        super(createArgs(meetingId));
+    public OnlineMeetingActivity(String meetingId, String timeSlotId, String reservationId) {
+        super(createArgs(meetingId, timeSlotId, reservationId));
     }
 
     @Override
     public boolean onFragmentCreate() {
         mMeetingId = getArguments().getString(KEY_MEETING_ID);
+        mTimeSlotId = getArguments().getString(KEY_TIME_SLOT_ID);
+        mReservationId = getArguments().getString(KEY_RESERVATION_ID);
 
         return super.onFragmentCreate();
     }
@@ -203,13 +213,28 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     private void checkSessionAndStart() {
         if (mStarted) {
+            ensureMemberViews();
             return;
         }
 
         mStarted = true;
 
-        if (OnlineMeeting.get().ensureSession(mMeetingId)) {
-            onHeymateEvent(HeymateEvents.USER_JOINED_MEETING);
+        if (OnlineMeeting.get().ensureSession(mMeetingId, mTimeSlotId, mReservationId)) {
+            onHeymateEvent(HeymateEvents.JOINED_MEETING);
+        }
+    }
+
+    private void ensureMemberViews() {
+        List<MeetingMember> members = new ArrayList<>(OnlineMeeting.get().getMembers());
+
+        for (int i = 0; i < mGrid.getChildCount(); i++) {
+            if (mGrid.getTag() instanceof MeetingMember) {
+                members.remove((MeetingMember) mGrid.getTag());
+            }
+        }
+
+        for (MeetingMember member: members) {
+            onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, member.getUserId(), member);
         }
     }
 
@@ -237,7 +262,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 finishFragment();
                 break;
             case HeymateEvents.LEFT_MEETING:
-                // Nothing to do.
+                OnlineReservation.stabilizeMyOrdersStatuses(getParentActivity());
                 break;
             case HeymateEvents.USER_JOINED_MEETING:
                 MeetingMember joinedMember = OnlineMeeting.get().getMember((String) args[0]);
@@ -296,6 +321,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     private void closeMeeting() {
         if (mStarted) {
             OnlineMeeting.get().leaveMeeting();
+            OnlineReservation.onlineMeetingClosed(getParentActivity(), mTimeSlotId, mReservationId);
         }
 
         finishFragment();

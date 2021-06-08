@@ -173,21 +173,7 @@ public class HeymatePayment {
         });
     }
 
-    private static void initSubscriptionPurchasePayment(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
-        // TODO
-    }
-
     public static void purchaseTimeSlot(BaseFragment fragment, Offer offer, PurchasedPlan purchasedPlan, Referral referral) {
-        JSONObject availabilitySlot;
-
-        try {
-            availabilitySlot = new JSONObject(offer.getAvailabilitySlot());
-        } catch (Throwable t) {
-            // TODO Wrong error
-            Toast.makeText(fragment.getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
-            return;
-        }
-
         TimeZone timeZone = TimeZone.getDefault();
 
 //        try {
@@ -265,10 +251,10 @@ public class HeymatePayment {
             return next;
         }
 
-//        return BuildConfig.DEBUG ?
-//                () -> alfajoresTopUp(fragment, next) :
-//                () -> checkBalanceBeforePayment(fragment, price, next);
-        return () -> checkBalanceBeforePayment(fragment, price, next);
+        return BuildConfig.DEBUG ?
+                () -> alfajoresTopUp(fragment, next) :
+                () -> checkBalanceBeforePayment(fragment, price, next);
+//        return () -> checkBalanceBeforePayment(fragment, price, next);
     }
 
     private static void alfajoresTopUp(BaseFragment fragment, Runnable next) {

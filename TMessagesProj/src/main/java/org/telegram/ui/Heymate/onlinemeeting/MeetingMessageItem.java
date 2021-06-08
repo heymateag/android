@@ -29,6 +29,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
+import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.ProfileActivity;
 
 import works.heymate.beta.R;
@@ -125,7 +126,7 @@ public class MeetingMessageItem extends SequenceLayout {
                 String meetingId = mReservation.getMeetingId();
 
                 if (meetingId != null) {
-                    mParent.presentFragment(new OnlineMeetingActivity(meetingId));
+                    mParent.presentFragment(new OnlineMeetingActivity(meetingId, null, mReservation.getId()));
                 }
             }
         });
@@ -200,6 +201,10 @@ public class MeetingMessageItem extends SequenceLayout {
     }
 
     private void updateLayout() {
+        if (mReservation != null && mOffer != null) {
+            OnlineReservation.stabilizeReservationStatus(getContext(), mReservation, mOffer);
+        }
+
         String userId = mReservation == null ? null : mReservation.getServiceProviderId();
 
         if (userId == null) {

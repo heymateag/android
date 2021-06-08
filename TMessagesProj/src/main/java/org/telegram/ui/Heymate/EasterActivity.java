@@ -16,6 +16,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.LayoutHelper;
 
+import works.heymate.celo.CeloContext;
 import works.heymate.core.wallet.Wallet;
 
 public class EasterActivity extends BaseFragment {
@@ -98,11 +99,15 @@ public class EasterActivity extends BaseFragment {
             }
         });
 
+        String text = Wallet.CELO_CONTEXT.networkAddress.equals(CeloContext.MAIN_NET.networkAddress) ? "Main net" : "Test net (Alfajores)";
+        text += "\nversion: 22\n\n";
+        text += "Your address is:\n" + (wallet.isCreated() ? wallet.getAddress() : "Wallet hasn't been created.");
+
         TextView address = new TextView(context);
         address.setPadding(0, 0, 0, AndroidUtilities.dp(24));
         address.setTextIsSelectable(true);
         address.setTextSize(12);
-        address.setText("Your address is:\n" + (wallet.isCreated() ? wallet.getAddress() : "Wallet hasn't been created."));
+        address.setText(text);
         address.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
         content.addView(address, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 0, 1f));
 

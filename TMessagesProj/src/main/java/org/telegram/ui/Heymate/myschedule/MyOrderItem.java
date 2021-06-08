@@ -32,6 +32,7 @@ import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
+import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.onlinemeeting.OnlineMeetingActivity;
 import org.telegram.ui.ProfileActivity;
@@ -139,6 +140,8 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
         }
 
         if (mOffer != null && mReservation != null) {
+            OnlineReservation.stabilizeReservationStatus(getContext(), mReservation, mOffer);
+
             String text;
 
             HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(mReservation.getStatus());
@@ -429,7 +432,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
         String meetingId = mReservation.getMeetingId();
 
-        mParent.presentFragment(new OnlineMeetingActivity(meetingId), true);
+        mParent.presentFragment(new OnlineMeetingActivity(meetingId, null, mReservation.getId()), true);
     }
 
     private void showDetails() {

@@ -20,6 +20,7 @@ import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.model.query.predicate.QueryField;
 import com.amplifyframework.core.model.query.predicate.QueryPredicate;
 import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
@@ -45,6 +46,7 @@ import org.telegram.messenger.UserConfig;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -278,7 +280,7 @@ public class HtAmplify {
                                 .userFcmToken(fcmToken)
                                 .maximumReservations(maximumReservations)
                                 .completedReservations(0)
-                                .remainingReservations(maximumReservations)
+                                .remainingReservations(maximumReservations == 0 ? Integer.MAX_VALUE : maximumReservations)
                                 .meetingType(newOffer.getMeetingType())
                                 .build();
 
@@ -445,7 +447,7 @@ public class HtAmplify {
 
                 TimeSlot newTimeSlot = timeSlot.copyOfBuilder()
                         .completedReservations(timeSlot.getCompletedReservations() + 1)
-                        .remainingReservations(timeSlot.getRemainingReservations() - 1)
+                        .remainingReservations(timeSlot.getMaximumReservations() == 0 ? Integer.MAX_VALUE : timeSlot.getRemainingReservations() - 1)
                         .build();
 
                 Amplify.API.mutate(ModelMutation.update(newTimeSlot), result2 -> {
@@ -546,6 +548,12 @@ public class HtAmplify {
         getReservations(Reservation.CONSUMER_ID.eq(userId), callback);
     }
 
+    public void getMyPendingOnlineReservations(APICallback<List<Reservation>> callback) {
+        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+        getReservations(Reservation.CONSUMER_ID.eq(userId).and(Reservation.MEETING_TYPE.eq(MeetingType.ONLINE_MEETING).and(Reservation.STATUS.ne(HtTimeSlotStatus.FINISHED.name()).and(Reservation.STATUS.ne(HtTimeSlotStatus.CANCELLED_BY_CONSUMER.name()).and(Reservation.STATUS.ne(HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER.name()))))), callback);
+    }
+
     public void getMyAcceptedOffers(APICallback<List<Reservation>> callback) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
         getReservations(Reservation.SERVICE_PROVIDER_ID.eq(userId), callback);
@@ -631,7 +639,7 @@ public class HtAmplify {
                         if (success && result1 != null) {
                             TimeSlot mutatedTimeSlot = result1.copyOfBuilder()
                                     .completedReservations(result1.getCompletedReservations() - 1)
-                                    .remainingReservations(result1.getRemainingReservations() + 1)
+                                    .remainingReservations(result1.getMaximumReservations() == 0 ? Integer.MAX_VALUE : result1.getRemainingReservations() + 1)
                                     .build();
 
                             Amplify.API.mutate(ModelMutation.update(mutatedTimeSlot), result2 -> {
@@ -742,39 +750,34 @@ public class HtAmplify {
         }
     }
 
-    public Offer getOffer(String offerUUID) {
-        Log.i(TAG, "Getting Offer");
+    public void getOffers(Collection<String> ids, APICallback<List<Offer>> callback) {
+        Amplify.API.query(ModelQuery.list(Offer.class, buildOneOfPredicate(ids, Offer.ID)), result -> {
+            List<Offer> offers = new ArrayList<>();
 
-        ExecutorService pool = Executors.newSingleThreadExecutor();
-        Future<Offer> future = pool.submit(new Callable<Offer>() {
-            @Override
-            public Offer call() throws Exception {
-                final Offer[] fetchedOffer = new Offer[1];
-                Amplify.API.query(
-                        ModelQuery.list(Offer.class, Offer.ID.eq(offerUUID)),
-                        response -> {
-                            if (response.getData() != null) {
-                                for (Offer offer : response.getData()) {
-                                    fetchedOffer[0] = offer;
-                                    HtSQLite.getInstance().addOffer(offer);
-                                }
-                            }
-                        },
-                        error -> Log.e(TAG, "Query failure", error)
-                );
-                return fetchedOffer[0];
+            for (Offer offer: result.getData()) {
+                offers.add(offer);
             }
-        });
 
-        try {
-            return future.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
+            Utils.runOnUIThread(() -> callback.onCallResult(true, offers, null));
+        }, error -> {
+            Log.e(TAG, "Failed to get offers.", error);
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
+    private QueryPredicate buildOneOfPredicate(Collection<String> ids, QueryField field) {
+        QueryPredicate predicate = null;
+
+        for (String id: ids) {
+            if (predicate == null) {
+                predicate = field.eq(id);
+            }
+            else {
+                predicate = predicate.or(field.eq(id));
+            }
         }
+
+        return predicate;
     }
 
     public void getReferralInfo(String referralId, APICallback<Referral> callback) {

@@ -34,6 +34,7 @@ import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
+import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.onlinemeeting.OnlineMeetingActivity;
 import org.telegram.ui.ProfileActivity;
@@ -152,30 +153,6 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         }
     }
 
-    private HtTimeSlotStatus concludeStatus() {
-        if (mReservations == null || mReservations.isEmpty()) {
-            return null;
-        }
-
-        if (mReservations.size() == 1) {
-            return HtTimeSlotStatus.valueOf(mReservations.get(0).getStatus());
-        }
-
-        HtTimeSlotStatus status = HtTimeSlotStatus.BOOKED;
-
-        for (Reservation reservation: mReservations) {
-            HtTimeSlotStatus reservationStatus = HtTimeSlotStatus.valueOf(reservation.getStatus());
-
-            if (reservationStatus.happensAfter(status)) {
-                status = reservationStatus;
-            }
-        }
-
-        ensureUniformStatus(status, false);
-
-        return status;
-    }
-
     private void updateLayout() {
         stopCountDown();
 
@@ -191,7 +168,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
             mTextName.setText(mReservations.size() + " customers."); // TODO Texts
         }
 
-        HtTimeSlotStatus status = concludeStatus();
+        HtTimeSlotStatus status = OnlineReservation.stabilizeTimeSlotStatuses(getContext(), mOffer, mTimeSlot, mReservations, false);
 
         if (mOffer != null && mTimeSlot != null && mReservations != null && status != null) {
             String text;
@@ -441,120 +418,29 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void markAsStarted() {
-        ensureUniformStatus(HtTimeSlotStatus.MARKED_AS_STARTED, true);
+        String meetingId = OnlineReservation.ensureUniformStatus(getContext(), mOffer, mTimeSlot, mReservations, HtTimeSlotStatus.MARKED_AS_STARTED, true);
+
+        if (mIsOnlineMeeting) {
+            joinSession(meetingId);
+        }
 
         disableLeft();
         disableRight();
     }
 
     private void markAsFinished() {
-        ensureUniformStatus(HtTimeSlotStatus.MARKED_AS_FINISHED, true);
+        OnlineReservation.ensureUniformStatus(getContext(), mOffer, mTimeSlot, mReservations, HtTimeSlotStatus.MARKED_AS_FINISHED, true);
 
         disableLeft();
         disableRight();
     }
 
-    private void ensureUniformStatus(HtTimeSlotStatus status, boolean showLoading) {
-        if (mReservations == null || mOffer == null) {
-            return;
-        }
-
-        String meetingId = mIsOnlineMeeting ? getMeetingId() : null;
-
-        if (status == HtTimeSlotStatus.MARKED_AS_STARTED && mIsOnlineMeeting && showLoading) {
-            joinSession(meetingId);
-        }
-
-        ArrayList<Reservation> reservations = new ArrayList<>(mReservations);
-
-        if (showLoading) {
-            LoadingUtil.onLoadingStarted(getContext());
-        }
-
-        ensureNextStatus(reservations, status, meetingId, showLoading);
-    }
-
-    private void ensureNextStatus(ArrayList<Reservation> reservations, HtTimeSlotStatus status, String meetingId, boolean hideLoading) {
-        if (reservations.isEmpty()) {
-            if (hideLoading) {
-                LoadingUtil.onLoadingFinished();
-            }
-            return;
-        }
-
-        Reservation reservation = reservations.remove(0);
-
-        HtTimeSlotStatus reservationStatus = HtTimeSlotStatus.valueOf(reservation.getStatus());
-
-        HtTimeSlotStatus statusToApply = status;
-
-        if (statusToApply == HtTimeSlotStatus.STARTED) {
-            if (reservationStatus == HtTimeSlotStatus.MARKED_AS_STARTED) {
-                ensureNextStatus(reservations, status, meetingId, hideLoading);
-                return;
-            }
-
-            statusToApply = HtTimeSlotStatus.MARKED_AS_STARTED;
-        }
-        else if (statusToApply == HtTimeSlotStatus.FINISHED) {
-            if (reservationStatus == HtTimeSlotStatus.MARKED_AS_FINISHED) {
-                ensureNextStatus(reservations, status, meetingId, hideLoading);
-                return;
-            }
-
-            statusToApply = HtTimeSlotStatus.MARKED_AS_FINISHED;
-        }
-
-        if (statusToApply == reservationStatus) {
-            ensureNextStatus(reservations, status, meetingId, hideLoading);
-            return;
-        }
-
-        HtAmplify.getInstance(getContext()).updateReservation(reservation, statusToApply, meetingId);
-
-        if (statusToApply == HtTimeSlotStatus.MARKED_AS_STARTED) {
-            String sUserId = reservation.getConsumerId();
-
-            try {
-                int userId = Integer.parseInt(sUserId);
-
-                String message = ReservationUtils.serializeBeautiful(reservation, mOffer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
-                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
-            } catch (NumberFormatException e) { }
-        }
-
-        if (statusToApply == HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER) {
-            Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
-
-            wallet.cancelOffer(mOffer, reservation, false, (success, errorCause) -> {
-                ensureNextStatus(reservations, status, meetingId, hideLoading);
-            });
-        }
-        else {
-            ensureNextStatus(reservations, status, meetingId, hideLoading);
-        }
-    }
-
     private void joinSession() {
-        joinSession(getMeetingId());
+        joinSession(OnlineReservation.getMeetingId(mReservations));
     }
 
     private void joinSession(String meetingId) {
-        mParent.presentFragment(new OnlineMeetingActivity(meetingId), true);
-    }
-
-    private String getMeetingId() {
-        if (mReservations == null) {
-            return null;
-        }
-
-        for (Reservation reservation: mReservations) {
-            if (reservation.getMeetingId() != null) {
-                return reservation.getMeetingId();
-            }
-        }
-
-        return UUID.randomUUID().toString();
+        mParent.presentFragment(new OnlineMeetingActivity(meetingId, mTimeSlot.getId(), null), true);
     }
 
     private void showDetails() {
