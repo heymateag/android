@@ -185,6 +185,7 @@ public class HtAmplify {
 
         try {
             Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.configure(context);
 
             AWSCredentials credentials = new BasicAWSCredentials(

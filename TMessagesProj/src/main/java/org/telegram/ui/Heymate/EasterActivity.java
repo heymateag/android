@@ -100,7 +100,7 @@ public class EasterActivity extends BaseFragment {
         });
 
         String text = Wallet.CELO_CONTEXT.networkAddress.equals(CeloContext.MAIN_NET.networkAddress) ? "Main net" : "Test net (Alfajores)";
-        text += "\nversion: 22\n\n";
+        text += "\nversion: 23\n\n";
         text += "Your address is:\n" + (wallet.isCreated() ? wallet.getAddress() : "Wallet hasn't been created.");
 
         TextView address = new TextView(context);

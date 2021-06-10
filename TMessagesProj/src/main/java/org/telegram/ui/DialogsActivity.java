@@ -6472,7 +6472,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public void onHeymateEvent(int event, Object... args) {
-        if (viewPages[0].dialogsType == Integer.MAX_VALUE - 1) {
+        if (viewPages != null && viewPages.length > 0 && viewPages[0].dialogsType == Integer.MAX_VALUE - 1) {
             viewPages[0].dialogsAdapter.notifyDataSetChanged();
         }
     }

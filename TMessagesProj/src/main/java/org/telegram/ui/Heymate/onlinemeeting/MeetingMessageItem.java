@@ -156,7 +156,7 @@ public class MeetingMessageItem extends SequenceLayout {
             String reservationIdToBeLoaded = mLoadingReservationId;
 
             HtAmplify.getInstance(getContext()).getReservation(mLoadingReservationId, (success, result, exception) -> {
-                if (success) {
+                if (success && result != null) {
                     if (result.getId().equals(mLoadingReservationId)) {
                         setReservation(result);
                     }
@@ -178,7 +178,7 @@ public class MeetingMessageItem extends SequenceLayout {
 
                     HtAmplify.getInstance(getContext()).getOffer(mReservation.getOfferId(), (success, data, exception) -> {
                         if (success) {
-                            if (reservation.getOfferId().equals(mLoadingOfferId)) {
+                            if (data.getId().equals(mLoadingOfferId)) {
                                 setOffer(data);
                             }
                         }
