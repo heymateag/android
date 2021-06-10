@@ -219,15 +219,17 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
                     mButtonRight.setText(Texts.get(mIsOnlineMeeting ? Texts.START_SESSION : Texts.START));
                     mButtonRight.setOnClickListener(v -> markAsStarted());
 
-                    if (mTimeSlot == null || mTimeSlot.getStartTime() == null) {
-                        disableRight();
-                    }
-                    else {
-                        int startTime = mTimeSlot.getStartTime();
-
-                        if (startTime > System.currentTimeMillis() / 1000) {
+                    if (mIsOnlineMeeting) {
+                        if (mTimeSlot == null || mTimeSlot.getStartTime() == null) {
                             disableRight();
-                            startCountDown((int) (startTime - System.currentTimeMillis() / 1000));
+                        }
+                        else {
+                            int startTime = mTimeSlot.getStartTime();
+
+                            if (startTime > System.currentTimeMillis() / 1000) {
+                                disableRight();
+                                startCountDown((int) (startTime - System.currentTimeMillis() / 1000));
+                            }
                         }
                     }
                     break;

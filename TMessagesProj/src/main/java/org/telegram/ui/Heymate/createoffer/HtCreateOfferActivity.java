@@ -513,6 +513,57 @@ public class HtCreateOfferActivity extends BaseFragment {
                 categoryInputCell.setError(true, 1);
                 errors.append(LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty)).append('\n');
             }
+            if (dateSlots.isEmpty() || dateSlots.size() % 2 != 0) {
+                errors.append("No time slot selected.").append('\n');
+            }
+            else {
+                long lastTimeSlot = 0;
+
+                boolean hasOverLapError = false;
+
+                for (int i = 0; i < dateSlots.size(); i += 2) {
+                    long start = dateSlots.get(i);
+                    long end = dateSlots.get(i + 1);
+
+                    if (end < start) {
+                        errors.append("Time slot start time is after the end time.").append('\n');
+                        break;
+                    }
+
+                    for (int j = 0; j < i; j += 2) {
+                        if (Math.max(start, dateSlots.get(j)) < Math.min(end, dateSlots.get(j + 1))) {
+                            if (!hasOverLapError) {
+                                errors.append("Time slots can not overlap.").append('\n');
+                            }
+
+                            hasOverLapError = true;
+                            break;
+                        }
+                    }
+
+                    lastTimeSlot = Math.max(lastTimeSlot, end);
+                }
+
+                if (lastTimeSlot > expireDate.getTime()) {
+                    errors.append("Time slots exceed the expire time.").append('\n');
+                }
+                else {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(lastTimeSlot);
+                    int timeSlotYear = calendar.get(Calendar.YEAR);
+                    int timeSlotMonth = calendar.get(Calendar.MONTH);
+                    int timeSlotDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    calendar.setTime(expireDate);
+                    int expireYear = calendar.get(Calendar.YEAR);
+                    int expireMonth = calendar.get(Calendar.MONTH);
+                    int expireDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    if (timeSlotYear == expireYear && timeSlotMonth == expireMonth && timeSlotDay == expireDay) {
+                        errors.append("Expire date can not be on the same day as the last time slot.").append('\n');
+                    }
+                }
+            }
             if (errors.length() > 0) {
                 undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors.toString(), null, () -> {
                     undoView.setVisibility(View.GONE);

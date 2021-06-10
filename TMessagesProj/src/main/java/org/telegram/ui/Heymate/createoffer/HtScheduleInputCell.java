@@ -112,15 +112,6 @@ public class HtScheduleInputCell extends LinearLayout {
 
     }
 
-    public void setRes(String arg, Object value, int position) {
-        paremetersValues.put(arg, value);
-    }
-
-    public String getRes(String arg){
-        return (String) paremetersValues.get(arg);
-    }
-
-
     public void setError(boolean error, int position){
         if(error)
             iconValues[position].setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inRedCall), PorterDuff.Mode.MULTIPLY));
