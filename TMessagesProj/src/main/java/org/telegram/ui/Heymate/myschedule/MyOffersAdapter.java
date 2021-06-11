@@ -162,7 +162,7 @@ public class MyOffersAdapter extends MyScheduleAdapter {
         }
 
         if (found) {
-            updateItem(timeSlot, false);
+            updateItem(timeSlot, true);
         }
     }
 

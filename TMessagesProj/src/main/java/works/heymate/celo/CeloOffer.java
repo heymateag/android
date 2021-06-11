@@ -183,60 +183,114 @@ public class CeloOffer {
         }
     }
 
-    public void startService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException {
+    public void startService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
-        // TODO
-//        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
-//
-//        try {
-//            mContract.startService(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
-//        } catch (Exception e) {
-//            if (e instanceof TransactionException) {
-//                throw new CeloException(null, e);
-//            }
-//            else {
-//                throw new CeloException(CeloError.NETWORK_ERROR, e);
-//            }
-//        }
+
+        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+
+        String purchasePlanType = reservation.getPurchasedPlanType();
+
+        int rate;
+
+        switch (purchasePlanType) {
+            case PurchasePlanTypes.SINGLE:
+                rate = pricingInfo.price;
+                break;
+            case PurchasePlanTypes.BUNDLE:
+            case PurchasePlanTypes.SUBSCRIPTION:
+                rate = 0;
+                break;
+            default:
+                throw new IllegalArgumentException("Purchase plan type not provided."); // TODO not runtime exception! (has repetitions in this class)
+        }
+
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
+
+        try {
+            mContract.startService(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
     }
 
-    public void finishService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException {
+    public void finishService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
-        // TODO
-//        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
-//
-//        try {
-//            mContract.release(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
-//        } catch (Exception e) {
-//            if (e instanceof TransactionException) {
-//                throw new CeloException(null, e);
-//            }
-//            else {
-//                throw new CeloException(CeloError.NETWORK_ERROR, e);
-//            }
-//        }
+
+        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+
+        String purchasePlanType = reservation.getPurchasedPlanType();
+
+        int rate;
+
+        switch (purchasePlanType) {
+            case PurchasePlanTypes.SINGLE:
+                rate = pricingInfo.price;
+                break;
+            case PurchasePlanTypes.BUNDLE:
+            case PurchasePlanTypes.SUBSCRIPTION:
+                rate = 0;
+                break;
+            default:
+                throw new IllegalArgumentException("Purchase plan type not provided."); // TODO not runtime exception! (has repetitions in this class)
+        }
+
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) rate * 100);
+
+        try {
+            mContract.release(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
     }
 
-    public void cancelService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress, boolean consumerCancelled) throws CeloException {
+    public void cancelService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress, boolean consumerCancelled) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
-        // TODO
-//        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (Double.parseDouble(offer.getRate()) * 100));
-//
-//        try {
-//            if (consumerCancelled) {
-//                mContract.consumerCancel(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
-//            }
-//            else {
-//                mContract.serviceProviderCancel(tradeId, offer.getServiceProviderAddress(), consumerAddress, amount, BigInteger.ONE).send();
-//            }
-//        } catch (Exception e) {
-//            if (e instanceof TransactionException) {
-//                throw new CeloException(null, e);
-//            }
-//            else {
-//                throw new CeloException(CeloError.NETWORK_ERROR, e);
-//            }
-//        }
+
+        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+
+        String purchasePlanType = reservation.getPurchasedPlanType();
+
+        int rate;
+
+        switch (purchasePlanType) {
+            case PurchasePlanTypes.SINGLE:
+                rate = pricingInfo.price;
+                break;
+            case PurchasePlanTypes.BUNDLE:
+            case PurchasePlanTypes.SUBSCRIPTION:
+                rate = 0;
+                break;
+            default:
+                throw new IllegalArgumentException("Purchase plan type not provided."); // TODO not runtime exception! (has repetitions in this class)
+        }
+
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) rate * 100);
+
+        try {
+            if (consumerCancelled) {
+                mContract.consumerCancel(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+            }
+            else {
+                mContract.serviceProviderCancel(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+            }
+        } catch (Exception e) {
+            if (e instanceof TransactionException) {
+                throw new CeloException(null, e);
+            }
+            else {
+                throw new CeloException(CeloError.NETWORK_ERROR, e);
+            }
+        }
     }
 
     private static List<BigInteger> getConfig(JSONObject configJSON) throws JSONException {

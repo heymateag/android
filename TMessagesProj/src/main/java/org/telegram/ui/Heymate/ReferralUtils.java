@@ -3,7 +3,7 @@ package org.telegram.ui.Heymate;
 import android.net.Uri;
 
 import com.amplifyframework.api.ApiException;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +68,7 @@ public class ReferralUtils {
 
         String userId = String.valueOf(user.id);
         String walletAddress = Wallet.get(ApplicationLoader.applicationContext, TG2HM.getCurrentPhoneNumber()).getAddress();
-        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+        String fcmToken = FirebaseMessaging.getInstance().getToken().getResult();
 
         Referrer me = new Referrer(userId, walletAddress, fcmToken);
 

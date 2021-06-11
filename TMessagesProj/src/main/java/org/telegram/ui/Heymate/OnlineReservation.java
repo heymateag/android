@@ -104,6 +104,7 @@ public class OnlineReservation {
         return status;
     }
 
+    // TODO Error handling is missing.
     public static String ensureUniformStatus(Context context, Offer offer, TimeSlot timeSlot, List<Reservation> reservations, HtTimeSlotStatus status, boolean withInterface) {
         String meetingId = getMeetingId(reservations);
 
@@ -132,21 +133,33 @@ public class OnlineReservation {
 
         HtTimeSlotStatus statusToApply = status;
 
-        if (statusToApply == HtTimeSlotStatus.STARTED) {
-            if (reservationStatus == HtTimeSlotStatus.MARKED_AS_STARTED) {
-                ensureNextStatus(context, reservations, offer, status, meetingId, hideLoading);
-                return;
-            }
+        boolean onlineMeeting = MeetingType.ONLINE_MEETING.equals(reservation.getMeetingType());
 
-            statusToApply = HtTimeSlotStatus.MARKED_AS_STARTED;
-        }
-        else if (statusToApply == HtTimeSlotStatus.FINISHED) {
-            if (reservationStatus == HtTimeSlotStatus.MARKED_AS_FINISHED) {
-                ensureNextStatus(context, reservations, offer, status, meetingId, hideLoading);
-                return;
-            }
-
-            statusToApply = HtTimeSlotStatus.MARKED_AS_FINISHED;
+        switch (reservationStatus) {
+            case CANCELLED_BY_CONSUMER:
+                statusToApply = reservationStatus;
+                break;
+            case BOOKED:
+            case MARKED_AS_STARTED:
+                statusToApply = status == HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER ? status : HtTimeSlotStatus.MARKED_AS_STARTED;
+                break;
+            case STARTED:
+                switch (status) {
+                    case MARKED_AS_FINISHED:
+                    case FINISHED:
+                        statusToApply = status;
+                        break;
+                    case CANCELLED_BY_SERVICE_PROVIDER:
+                    default:
+                        statusToApply = reservationStatus;
+                        break;
+                }
+                break;
+            case MARKED_AS_FINISHED:
+            case FINISHED:
+            case CANCELLED_BY_SERVICE_PROVIDER:
+                statusToApply = reservationStatus;
+                break;
         }
 
         if (statusToApply == reservationStatus) {
@@ -154,16 +167,14 @@ public class OnlineReservation {
             return;
         }
 
-        HtAmplify.getInstance(context).updateReservation(reservation, statusToApply, meetingId);
-
-        if (statusToApply == HtTimeSlotStatus.MARKED_AS_STARTED) {
+        if (onlineMeeting && reservationStatus == HtTimeSlotStatus.BOOKED && statusToApply == HtTimeSlotStatus.MARKED_AS_STARTED) {
             String sUserId = reservation.getConsumerId();
 
             try {
                 int userId = Integer.parseInt(sUserId);
-
-                String message = ReservationUtils.serializeBeautiful(reservation, offer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
-                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
+                // TODO uncomment
+//                String message = ReservationUtils.serializeBeautiful(reservation, offer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
+//                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
             } catch (NumberFormatException e) { }
         }
 
@@ -171,12 +182,14 @@ public class OnlineReservation {
             Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
             wallet.cancelOffer(offer, reservation, false, (success, errorCause) -> {
+                HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER, meetingId);
                 ensureNextStatus(context, reservations, offer, status, meetingId, hideLoading);
             });
+            return;
         }
-        else {
-            ensureNextStatus(context, reservations, offer, status, meetingId, hideLoading);
-        }
+
+        HtAmplify.getInstance(context).updateReservation(reservation, statusToApply, meetingId);
+        ensureNextStatus(context, reservations, offer, status, meetingId, hideLoading);
     }
 
     private static HtTimeSlotStatus concludeTimeSlotStatus(List<Reservation> reservations) {

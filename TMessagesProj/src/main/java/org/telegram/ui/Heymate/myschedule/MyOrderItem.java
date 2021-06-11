@@ -30,6 +30,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
+import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.OnlineReservation;
@@ -334,6 +335,8 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
                 else {
                     Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
                 }
+
+                updateLayout();
             }
         });
 
@@ -346,14 +349,12 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             return;
         }
 
-        AlertDialog loading = new AlertDialog(getContext(), 3);
-        loading.setCanCacnel(false);
-        loading.show();
+        LoadingUtil.onLoadingStarted(getContext());
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
         wallet.startOffer(mOffer, mReservation, (success, errorCause) -> {
-            loading.dismiss();
+            LoadingUtil.onLoadingFinished();
 
             if (success) {
                 HtAmplify.getInstance(getContext()).updateReservation(mReservation, HtTimeSlotStatus.STARTED);
@@ -375,6 +376,8 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
                 else {
                     Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
                 }
+
+                updateLayout();
             }
         });
 
@@ -387,14 +390,12 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             return;
         }
 
-        AlertDialog loading = new AlertDialog(getContext(), 3);
-        loading.setCanCacnel(false);
-        loading.show();
+        LoadingUtil.onLoadingStarted(getContext());
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
         wallet.finishOffer(mOffer, mReservation, (success, errorCause) -> {
-            loading.dismiss();
+            LoadingUtil.onLoadingFinished();
 
             if (success) {
                 HtAmplify.getInstance(getContext()).updateReservation(mReservation, HtTimeSlotStatus.FINISHED);
@@ -416,6 +417,8 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
                 else {
                     Toast.makeText(getContext(), Texts.get(Texts.UNKNOWN_ERROR), Toast.LENGTH_LONG).show();
                 }
+
+                updateLayout();
             }
         });
 

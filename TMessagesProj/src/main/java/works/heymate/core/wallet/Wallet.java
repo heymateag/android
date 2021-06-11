@@ -301,6 +301,9 @@ public class Wallet {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }
             }
+            else {
+                Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, errorCause));
+            }
         });
     }
 
@@ -324,6 +327,9 @@ public class Wallet {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }
             }
+            else {
+                Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, errorCause));
+            }
         });
     }
 
@@ -342,7 +348,12 @@ public class Wallet {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
+                } catch (JSONException e) {
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }
+            }
+            else {
+                Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, errorCause));
             }
         });
     }
@@ -362,7 +373,12 @@ public class Wallet {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
+                } catch (JSONException e) {
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }
+            }
+            else {
+                Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, errorCause));
             }
         });
     }
@@ -382,7 +398,12 @@ public class Wallet {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, exception));
+                } catch (JSONException e) {
+                    Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, new CeloException(CeloError.NETWORK_ERROR, e)));
                 }
+            }
+            else {
+                Utils.runOnUIThread(() -> callback.onOfferOperationResult(false, errorCause));
             }
         });
     }

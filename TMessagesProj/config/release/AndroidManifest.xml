@@ -30,7 +30,7 @@
         android:requestLegacyExternalStorage="true"
         tools:replace="android:supportsRtl">
 
-        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAuVwsnvudFVsjLbEf0O91cwjD-80fi4Fc" />
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCMXY3ymiiCERlH8UaqszWYGXyEC5TDtbQ" />
 
         <service
             android:name="org.telegram.messenger.GcmPushListenerService">

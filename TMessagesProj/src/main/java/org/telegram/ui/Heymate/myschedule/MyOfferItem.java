@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -240,6 +241,17 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
                     setRightAsDetails();
                     break;
                 case MARKED_AS_STARTED:
+                    mButtonLeft.setVisibility(GONE);
+                    if (mIsOnlineMeeting) {
+                        setRightPositive();
+                        mButtonRight.setText(Texts.get(Texts.JOIN_SESSION));
+                        mButtonRight.setOnClickListener(v -> joinSession());
+                    }
+                    else {
+                        setRightAsDetails();
+                        mButtonRight.setOnClickListener(v -> showDetails());
+                    }
+                    break;
                 case STARTED:
                     mButtonLeft.setVisibility(GONE);
                     if (mIsOnlineMeeting) {
@@ -392,15 +404,20 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
         ArrayList<Reservation> remainingReservations = new ArrayList<>(mReservations);
 
-        cancelReservations(remainingReservations, wallet);
+        cancelReservations(remainingReservations, wallet, true);
 
         disableLeft();
         disableRight();
     }
 
-    private void cancelReservations(List<Reservation> remainingReservations, Wallet wallet) {
+    private void cancelReservations(List<Reservation> remainingReservations, Wallet wallet, boolean noErrors) {
         if (remainingReservations.isEmpty()) {
             LoadingUtil.onLoadingFinished();
+
+            if (!noErrors) {
+                Toast.makeText(getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show(); // TODO Not very accurate.
+                updateLayout();
+            }
             return;
         }
 
@@ -409,13 +426,15 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         wallet.cancelOffer(mOffer, reservation, false, (success, errorCause) -> {
             if (success) {
                 HtAmplify.getInstance(getContext()).updateReservation(reservation, HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER);
+
+                cancelReservations(remainingReservations, wallet, noErrors);
             }
             else {
                 Log.e(TAG, "Failed to cancel offer", errorCause);
                 LogToGroup.log("Failed to cancel offer", errorCause, mParent);
-            }
 
-            cancelReservations(remainingReservations, wallet);
+                cancelReservations(remainingReservations, wallet, false);
+            }
         });
     }
 

@@ -1,11 +1,9 @@
 package org.telegram.ui.Heymate;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.internal.StaticCredentialsProvider;
@@ -24,17 +22,14 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 import com.amplifyframework.core.model.query.predicate.QueryPredicate;
 import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
-import com.amplifyframework.datastore.DataStoreException;
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
-import com.amplifyframework.hub.AWSHubPlugin;
-import com.amplifyframework.hub.HubChannel;
 import com.google.firebase.BuildConfig;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.telegram.messenger.AndroidUtilities;
 
@@ -265,7 +260,7 @@ public class HtAmplify {
 
                     Log.i(TAG, "Offer Created.");
 
-                    String fcmToken = FirebaseInstanceId.getInstance().getToken();
+                    String fcmToken = FirebaseMessaging.getInstance().getToken().getResult();
 
                     ArrayList<Long> times = dto.getDateSlots();
 
@@ -417,7 +412,7 @@ public class HtAmplify {
 
     public Reservation createReservation(TimeSlot timeSlot, PurchasedPlan purchasedPlan, Referral referral) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
-        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+        String fcmToken = FirebaseMessaging.getInstance().getToken().getResult();
 
         return Reservation.builder()
                 .consumerId(userId)

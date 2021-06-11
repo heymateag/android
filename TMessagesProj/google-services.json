@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "559020673422",
-    "firebase_url": "https://test-a36f9.firebaseio.com",
-    "project_id": "test-a36f9",
-    "storage_bucket": "test-a36f9.appspot.com"
+    "project_number": "312331163563",
+    "project_id": "heymate-telegram",
+    "storage_bucket": "heymate-telegram.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:559020673422:android:0bdcfb3033788771937cdf",
+        "mobilesdk_app_id": "1:312331163563:android:1e937094b53d9f17c224ee",
         "android_client_info": {
           "package_name": "works.heymate.beta"
         }
       },
       "oauth_client": [
         {
-          "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+          "client_id": "312331163563-0ul17hkll3tr9v5pg6vsm0il00u1r63t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-t0jLPjUt2FxrA8VPK2EiYHcYcboIR6k"
+          "current_key": "AIzaSyBT0r7nX58c_fp6UvWPWrQH_pV3fLLox8w"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "760348033671-2hh8ebmuflsnjoc0kldkfells9rhtfni.apps.googleusercontent.com",
+              "client_id": "312331163563-0ul17hkll3tr9v5pg6vsm0il00u1r63t.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,56 +36,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:559020673422:android:0bdcfb3033788771937cdf",
+        "mobilesdk_app_id": "1:312331163563:android:3e33fc46fbe07cc8c224ee",
         "android_client_info": {
           "package_name": "works.heymate.beta.beta"
         }
       },
       "oauth_client": [
         {
-          "client_id": "559020673422-e83nf8613q6kna85k38vmbutsj0avvcp.apps.googleusercontent.com",
+          "client_id": "312331163563-0ul17hkll3tr9v5pg6vsm0il00u1r63t.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAuVwsnvudFVsjLbEf0O91cwjD-80fi4Fc"
+          "current_key": "AIzaSyBT0r7nX58c_fp6UvWPWrQH_pV3fLLox8w"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "559020673422-e83nf8613q6kna85k38vmbutsj0avvcp.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:559020673422:android:138fbbcab3998931",
-        "android_client_info": {
-          "package_name": "com.org.ir"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "559020673422-e83nf8613q6kna85k38vmbutsj0avvcp.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAuVwsnvudFVsjLbEf0O91cwjD-80fi4Fc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "559020673422-e83nf8613q6kna85k38vmbutsj0avvcp.apps.googleusercontent.com",
+              "client_id": "312331163563-0ul17hkll3tr9v5pg6vsm0il00u1r63t.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
