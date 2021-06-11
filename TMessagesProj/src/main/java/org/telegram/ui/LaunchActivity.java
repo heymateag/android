@@ -139,7 +139,6 @@ import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 // Heymate
 import org.telegram.ui.Heymate.AttestationActivity;
-import org.telegram.ui.Heymate.DatabaseWatchDog;
 import org.telegram.ui.Heymate.EasterActivity;
 import org.telegram.ui.Heymate.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
@@ -234,7 +233,6 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         HtSQLite.setInstance(this);
-        DatabaseWatchDog.getInstance().config(currentAccount);
         OnlineReservation.stabilizeOnlineMeetingStatuses(getApplicationContext());
 
         ApplicationLoader.postInitApplication();

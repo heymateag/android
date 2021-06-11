@@ -62,7 +62,6 @@ public class OffersActivity extends BaseFragment {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View createView(Context context) {
-        DatabaseWatchDog.getInstance().config(currentAccount);
         this.context = context;
 
         actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
