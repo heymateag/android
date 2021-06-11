@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import works.heymate.beta.BuildConfig;
 import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
 import works.heymate.celo.CeloSDK;
@@ -251,10 +250,12 @@ public class HeymatePayment {
             return next;
         }
 
-        return BuildConfig.DEBUG ?
-                () -> alfajoresTopUp(fragment, next) :
-                () -> checkBalanceBeforePayment(fragment, price, next);
-//        return () -> checkBalanceBeforePayment(fragment, price, next);
+        if (HeymateConfig.MAIN_NET) {
+            return () -> checkBalanceBeforePayment(fragment, price, next);
+        }
+        else {
+            return () -> alfajoresTopUp(fragment, next);
+        }
     }
 
     private static void alfajoresTopUp(BaseFragment fragment, Runnable next) {

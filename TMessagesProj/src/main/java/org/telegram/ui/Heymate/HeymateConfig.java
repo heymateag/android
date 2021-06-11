@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class HeymateConfig {
 
+    public static final boolean MAIN_NET = false;
+
     private static final String PREFERENCES_PREFIX = "HeymateConfig_";
 
     private static final Map<String, HeymateConfig> sMap = new HashMap<>();

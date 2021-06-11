@@ -28,7 +28,7 @@ public class EasterActivity extends BaseFragment {
         content.setPadding(72, 72, 72, 72);
 
         TextView textAmount = new TextView(context);
-        textAmount.setText("Amount in cents - 10 cents less than the actual balance for gas safety.");
+        textAmount.setText("Amount in cents - 1 cent less than the actual balance for gas safety.");
         content.addView(textAmount, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         EditText editAmount = new EditText(context);
@@ -43,7 +43,7 @@ public class EasterActivity extends BaseFragment {
         else {
             wallet.getBalance((success, cents, errorCause) -> {
                 if (success) {
-                    editAmount.setText("" + cents);
+                    editAmount.setText("" + (cents  - 1));
                 }
                 else {
                     editAmount.setText("Failed to get balance!");
