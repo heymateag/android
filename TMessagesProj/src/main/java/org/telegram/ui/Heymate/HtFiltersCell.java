@@ -31,6 +31,8 @@ public class HtFiltersCell extends LinearLayout {
     private int statusSelect = 0;
     private ArrayList<String> subCategories = new ArrayList<String>();
 
+    private ArrayList<String> allSubCategories = new ArrayList<>();
+    
     public HtFiltersCell(@NonNull Context context) {
         super(context);
     }
@@ -48,8 +50,9 @@ public class HtFiltersCell extends LinearLayout {
         final Context context = getContext();
         Object[] categories =  DummyCategories.categories.keySet().stream().sorted().toArray();
         for(Object category: categories){
-            subCategories.addAll(DummyCategories.categories.get(category.toString()));
+            allSubCategories.addAll(DummyCategories.categories.get(category.toString()));
         }
+        subCategories.addAll(allSubCategories);
 
         if(!(parent instanceof DialogsActivity)){
             Button statusFilter = new Button(context, LocaleController.getString("HtStatus", works.heymate.beta.R.string.HtStatus)) {
@@ -126,14 +129,24 @@ public class HtFiltersCell extends LinearLayout {
             builder.setItems(items, icons, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    categoryFilter.setText(items[which]);
-                    categoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                     if(parent instanceof OffersActivity){
                         ((OffersActivity) parent).setCategoryFilter(items[which]);
                     }
+
                     subCategories.clear();
-                    subCategories.addAll(DummyCategories.categories.get(items[which]));
-                    subCategoryFilter.setText("All");
+
+                    if (which == 0) {
+                        categoryFilter.setText("Category");
+                        categoryFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
+                        subCategories.addAll(allSubCategories);
+                        subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
+                    }
+                    else {
+                        categoryFilter.setText(items[which]);
+                        categoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+                        subCategories.addAll(DummyCategories.categories.get(items[which]));
+                        subCategoryFilter.setText("All");
+                    }
                 }
             });
             AlertDialog alertDialog = builder.create();
