@@ -82,7 +82,9 @@ public class OfferInfo {
                 JSONArray jDateSlots = json.getJSONArray(DATE_SLOTS);
                 mDateSlots = new ArrayList<>(jDateSlots.length());
                 for (int i = 0; i < jDateSlots.length(); i++) {
-                    mDateSlots.add(jDateSlots.getLong(i));
+                    if (!jDateSlots.isNull(i)) {
+                        mDateSlots.add(jDateSlots.getLong(i));
+                    }
                 }
             }
         } catch (JSONException e) {
