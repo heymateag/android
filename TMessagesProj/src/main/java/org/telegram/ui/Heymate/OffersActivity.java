@@ -1,69 +1,67 @@
 package org.telegram.ui.Heymate;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.TimeSlot;
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.CombinedDrawable;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Heymate.createoffer.HtCreateOfferActivity;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import works.heymate.core.Texts;
-import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.wallet.Wallet;
 
 public class OffersActivity extends BaseFragment {
 
+    private static final int VIEW_TYPE_OFFER = 0;
+    private static final int VIEW_TYPE_LOADING = 1;
+
     private static final String ACTIVE_OFFERS_PLACE_HOLDER = "{active_offers}";
 
-    private boolean inited = false;
-    private LinearLayout offersLayout;
-    private Context context;
-
-    private String categoryFilter = "All";
-    private String subCategoryFilter = "All";
-    private OfferStatus statusFilter = OfferStatus.ALL;
+    private String categoryFilter = null;
+    private String subCategoryFilter = null;
+    private OfferStatus statusFilter = null;
 
     private TextView mTextStatus;
     private ImageView mButtonSchedule;
 
-    public OffersActivity(Context context){
-        ArrayList<Offer> fetchedOffers = HtAmplify.getInstance(context).getOffers(UserConfig.getInstance(currentAccount).clientUserId, currentAccount);
-        HtSQLite.getInstance().updateOffers(fetchedOffers, UserConfig.getInstance(currentAccount).clientUserId);
+    private OfferAdapter mAdapter;
+
+    public OffersActivity() {
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View createView(Context context) {
-        this.context = context;
-
         actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setTitle(LocaleController.getString("HtManageOffers", works.heymate.beta.R.string.HtManageOffers));
@@ -118,19 +116,15 @@ public class OffersActivity extends BaseFragment {
         HtFiltersCell filters = fragmentView.findViewById(works.heymate.beta.R.id.filters);
         filters.setBaseFragment(this);
 
-        offersLayout = fragmentView.findViewById(works.heymate.beta.R.id.list_offer);
-        offersLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        offersLayout.setOrientation(LinearLayout.VERTICAL);
+        RecyclerView listOffer = fragmentView.findViewById(works.heymate.beta.R.id.list_offer);
+        listOffer.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        listOffer.setLayoutManager(new LinearLayoutManager(getParentActivity()));
 
-        // ------------ DATABASE DEMO ----------------
-        ArrayList<OfferDto> offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
-        // --------------------------------------------
-
-        addOffersToLayout(offers);
+        mAdapter = new OfferAdapter();
+        listOffer.setAdapter(mAdapter);
 
         onActiveOffersUpdated(0);
 
-        inited = true;
         return fragmentView;
     }
 
@@ -176,97 +170,138 @@ public class OffersActivity extends BaseFragment {
 
     }
 
-    public void addOffersToLayout(ArrayList<OfferDto> offers) {
-        if(!inited)
-            return;
-        offersLayout.removeAllViews();
-        if (offers == null)
-            return;
-        for (OfferDto offerDto : offers) {
-            OfferMessageItem offerCell1 = new OfferMessageItem(context);
-            offerCell1.setOffer(offerDto.asOffer(), true);
-            offerCell1.setParent(this);
-            offersLayout.addView(offerCell1);
-        }
-
-    }
-
-
     @Override
     public void onResume() {
         super.onResume();
-        offersLayout.removeAllViews();
-        ArrayList<OfferDto> offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
-        addOffersToLayout(offers);
 
         checkBalance();
+
+        mAdapter.getData();
     }
 
     public void setStatusFilter(String status) {
-        statusFilter = OfferStatus.valueOf(status.toUpperCase());
-        setFilters();
+        statusFilter = status == null ? null : OfferStatus.valueOf(status.toUpperCase());
+        mAdapter.applyFilter();
     }
 
     public void setCategoryFilter(String category) {
         categoryFilter = category;
-        setFilters();
+        mAdapter.applyFilter();
     }
 
     public void setSubCategoryFilter(String subCategory) {
         subCategoryFilter = subCategory;
-        setFilters();
+        mAdapter.applyFilter();
     }
 
-    private void setFilters() {
-        ArrayList<OfferDto> offers;
-        if (categoryFilter.equalsIgnoreCase("all")) {
-            if (subCategoryFilter.equalsIgnoreCase("all")) {
-                if (statusFilter.ordinal() == 0) {
-                    offers = HtSQLite.getInstance().getAllOffers(UserConfig.getInstance(currentAccount).clientUserId);
-                } else {
-                    offers = HtSQLite.getInstance().getOffers(statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
-                }
-            } else {
-                if (statusFilter.ordinal() == 0) {
-                    offers = HtSQLite.getInstance().getOffers(subCategoryFilter, UserConfig.getInstance(currentAccount).clientUserId);
+    private class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-                } else {
-                    offers = HtSQLite.getInstance().getOffers(subCategoryFilter, statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
-                }
-            }
-        } else {
-            if (subCategoryFilter.equalsIgnoreCase("all")) {
-                if (statusFilter.ordinal() == 0) {
-                    offers = HtSQLite.getInstance().getOffers(categoryFilter, UserConfig.getInstance(currentAccount).clientUserId);
-                } else {
-                    offers = HtSQLite.getInstance().getOffers(categoryFilter, statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
-                }
-            } else {
-                if (statusFilter.ordinal() == 0) {
-                    offers = HtSQLite.getInstance().getOffers(categoryFilter, subCategoryFilter, UserConfig.getInstance(currentAccount).clientUserId);
+        private List<Offer> mOffers = null;
+        private List<Offer> mFilteredOffers = new ArrayList<>();
 
-                } else {
-                    offers = HtSQLite.getInstance().getOffers(categoryFilter, subCategoryFilter, statusFilter.ordinal(), UserConfig.getInstance(currentAccount).clientUserId);
+        private boolean mLoading = false;
+
+        public OfferAdapter() {
+
+        }
+
+        private boolean shouldShowLoading() {
+            return mLoading && mOffers == null;
+        }
+
+        public void getData() {
+            mLoading = true;
+
+            HtAmplify.getInstance(getParentActivity()).getMyOffers((success, result, exception) -> {
+                mLoading = false;
+
+                if (success) {
+                    if (mOffers == null) {
+                        mOffers = new ArrayList<>(result.size());
+                    }
+
+                    mOffers.clear();
+                    mOffers.addAll(result);
+
+                    applyFilter();
                 }
+                else if (mOffers == null) {
+                    notifyDataSetChanged();
+                }
+            });
+
+            if (mOffers == null) {
+                notifyDataSetChanged();
             }
         }
-        addOffersToLayout(offers);
-    }
 
-    @Override
-    public ArrayList<ThemeDescription> getThemeDescriptions() {
-        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
+        public void applyFilter() {
+            if (mOffers == null) {
+                return;
+            }
 
-        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
+            mFilteredOffers.clear();
 
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector));
+            for (Offer offer: mOffers) {
+                if (categoryFilter != null && !categoryFilter.equals(offer.getCategory())) {
+                    continue;
+                }
+                else if (subCategoryFilter != null && !subCategoryFilter.equals(offer.getSubCategory())) {
+                    continue;
+                }
+                else if (statusFilter != null && offer.getStatus() != null && statusFilter.ordinal() != offer.getStatus()) {
+                    continue;
+                }
 
-        return themeDescriptions;
-    }
+                mFilteredOffers.add(offer);
+            }
+
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return shouldShowLoading() ? VIEW_TYPE_LOADING : VIEW_TYPE_OFFER;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            switch (viewType) {
+                case VIEW_TYPE_OFFER:
+                    OfferMessageItem item = new OfferMessageItem(getParentActivity());
+                    item.setParent(OffersActivity.this);
+                    return new RecyclerView.ViewHolder(item) { };
+                case VIEW_TYPE_LOADING:
+                    FlickerLoadingView flickerLoadingView = new FlickerLoadingView(getParentActivity());
+                    flickerLoadingView.setIsSingleCell(true);
+                    flickerLoadingView.setViewType(FlickerLoadingView.OFFER_TYPE);
+                    flickerLoadingView.setItemsCount(4);
+                    flickerLoadingView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    return new RecyclerView.ViewHolder(flickerLoadingView) { };
+            }
+
+            throw new RuntimeException("Unknown view type.");
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            if (shouldShowLoading()) {
+                return;
+            }
+
+            Offer offer = mFilteredOffers.get(position);
+
+            OfferMessageItem item = (OfferMessageItem) holder.itemView;
+
+            item.setOffer(offer, true);
+        }
+
+        @Override
+        public int getItemCount() {
+            return shouldShowLoading() ? 1 : mFilteredOffers.size();
+        }
+
+    };
 
 }
-
-

@@ -1201,7 +1201,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 String host = intent.getData().getHost();
 
                 if ("myoffers".equals(host)) {
-                    presentFragment(new OffersActivity(this));
+                    presentFragment(new OffersActivity());
                 }
                 else if ("myschedule".equals(host)) {
                     presentFragment(new MyScheduleActivity());

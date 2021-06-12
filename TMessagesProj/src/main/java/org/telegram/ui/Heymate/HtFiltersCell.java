@@ -83,10 +83,17 @@ public class HtFiltersCell extends LinearLayout {
                 builder.setItems(items, icons, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        statusFilter.titleLabel.setText(items[which]);
-                        statusFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+                        if (which == 0) {
+                            statusFilter.titleLabel.setText(LocaleController.getString("HtStatus", works.heymate.beta.R.string.HtStatus));
+                            statusFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
+                        }
+                        else {
+                            statusFilter.titleLabel.setText(items[which]);
+                            statusFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+                        }
+
                         if(parent instanceof OffersActivity) {
-                            ((OffersActivity) parent).setStatusFilter(items[which]);
+                            ((OffersActivity) parent).setStatusFilter(which == 0 ? null : items[which]);
                         }
                     }
                 });
@@ -129,23 +136,38 @@ public class HtFiltersCell extends LinearLayout {
             builder.setItems(items, icons, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(parent instanceof OffersActivity){
-                        ((OffersActivity) parent).setCategoryFilter(items[which]);
-                    }
-
                     subCategories.clear();
 
                     if (which == 0) {
+                        if(parent instanceof OffersActivity){
+                            ((OffersActivity) parent).setCategoryFilter(null);
+                            ((OffersActivity) parent).setSubCategoryFilter(null);
+                        }
+
                         categoryFilter.setText("Category");
                         categoryFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
                         subCategories.addAll(allSubCategories);
                         subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
+                        subCategorySelect = null;
                     }
                     else {
+                        if(parent instanceof OffersActivity){
+                            ((OffersActivity) parent).setCategoryFilter(items[which]);
+                        }
+
                         categoryFilter.setText(items[which]);
                         categoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                         subCategories.addAll(DummyCategories.categories.get(items[which]));
                         subCategoryFilter.setText("All");
+
+                        if (!subCategories.contains(subCategorySelect)) {
+                            subCategorySelect = null;
+                            subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
+
+                            if(parent instanceof OffersActivity){
+                                ((OffersActivity) parent).setSubCategoryFilter(null);
+                            }
+                        }
                     }
                 }
             });
@@ -177,7 +199,7 @@ public class HtFiltersCell extends LinearLayout {
                     subCategoryFilter.setText(items[which]);
                     subCategoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                     if(parent instanceof OffersActivity){
-                        ((OffersActivity) parent).setSubCategoryFilter(items[which]);
+                        ((OffersActivity) parent).setSubCategoryFilter(which == 0 ? null : items[which]);
                     }
 
                 }

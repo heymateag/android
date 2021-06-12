@@ -711,39 +711,24 @@ public class HtAmplify {
         );
     }
 
-    public ArrayList<Offer> getOffers(int userId, int currentAccount) {
-        Log.i(TAG, "Getting Offers");
+    public void getMyOffers(APICallback<List<Offer>> callback) {
+        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
 
-        ExecutorService pool = Executors.newSingleThreadExecutor();
-        Future<ArrayList<Offer>> future = pool.submit(new Callable<ArrayList<Offer>>() {
-            @Override
-            public ArrayList<Offer> call() throws Exception {
-                ArrayList<Offer> offers = new ArrayList();
-                Amplify.API.query(
-                        ModelQuery.list(Offer.class, Offer.USER_ID.eq("" + userId)),
-                        response -> {
-                            if (response.getData() != null) {
-                                for (Offer offer : response.getData()) {
-                                    offers.add(offer);
-                                }
-                                HtSQLite.getInstance().updateOffers(offers, UserConfig.getInstance(currentAccount).clientUserId);
-                            }
-                        },
-                        error -> Log.e(TAG, "Query failure", error)
-                );
-                return offers;
+        Amplify.API.query(ModelQuery.list(Offer.class, Offer.USER_ID.eq(userId)), result -> {
+            List<Offer> offers = new ArrayList<>();
+
+            if (result.hasData()) {
+                for (Offer offer: result.getData()) {
+                    offers.add(offer);
+                }
             }
-        });
 
-        try {
-            return future.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+            Utils.runOnUIThread(() -> callback.onCallResult(true, offers, null));
+        }, error -> {
+            Log.e(TAG, "Failed to get my offers", error);
+
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
     }
 
     public void getOffers(Collection<String> ids, APICallback<List<Offer>> callback) {

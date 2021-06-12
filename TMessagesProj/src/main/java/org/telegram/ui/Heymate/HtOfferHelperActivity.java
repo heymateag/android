@@ -111,7 +111,7 @@ public class HtOfferHelperActivity extends BaseFragment {
         buyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presentFragment(new OffersActivity(context));
+                presentFragment(new OffersActivity());
                 finishFragment();
             }
         });

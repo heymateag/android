@@ -8,10 +8,10 @@
         <Span id="text_status" size="wrap"/>
         <Span size="12ph"/>
         <Span id="filters" size="wrap"/>
-        <Span id="scroll_offer" size="1w"/>
+        <Span id="list_offer" size="1w"/>
     </Vertical>
 
-<!--    <Vertical start="start@scroll_offer">-->
+<!--    <Vertical start="start@list_offer">-->
 <!--        <Span id="shadow" size="12dp"/>-->
 <!--    </Vertical>-->
 
@@ -44,7 +44,7 @@
     </Horizontal>
 
     <Horizontal>
-        <Span id="scroll_offer" size="100%"/>
+        <Span id="list_offer" size="100%"/>
     </Horizontal>
 
 <!--    <Horizontal>-->
