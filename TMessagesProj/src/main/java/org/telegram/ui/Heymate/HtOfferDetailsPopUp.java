@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import works.heymate.beta.R;
+
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -205,19 +207,36 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         priceTextLayoutParams.setMargins(AndroidUtilities.dp(2), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(priceText, priceTextLayoutParams);
 
-        TLRPC.User user = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
+        int userId = 0;
+
+        try {
+            userId = Integer.parseInt(offer.getUserId());
+        } catch (NumberFormatException e) { }
+
+        TLRPC.User user = null;
+
+        if (userId != 0) {
+            user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(userId);
+        }
+
         String name;
 
-        if (user.username != null) {
-            name = "@" + user.username;
-        }
-        else {
-            name = user.first_name;
+        if (user != null) {
+            if (user.username != null) {
+                name = "@" + user.username;
+            }
+            else {
+                name = user.first_name;
 
-            if (!TextUtils.isEmpty(user.last_name)) {
-                name = name + " " + user.last_name;
+                if (!TextUtils.isEmpty(user.last_name)) {
+                    name = name + " " + user.last_name;
+                }
             }
         }
+        else {
+            name = "Service provider"; // TODO Texts
+        }
+
         // TODO Make a clean text for offer details!
         String message = OfferUtils.serializeBeautiful(offer, null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
