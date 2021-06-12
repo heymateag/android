@@ -28,11 +28,10 @@ import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
-import com.google.firebase.BuildConfig;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.telegram.messenger.AndroidUtilities;
 
+import works.heymate.beta.BuildConfig;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.PurchasePlanTypes;
@@ -42,9 +41,7 @@ import org.telegram.messenger.UserConfig;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -260,7 +257,7 @@ public class HtAmplify {
 
                     Log.i(TAG, "Offer Created.");
 
-                    String fcmToken = FirebaseMessaging.getInstance().getToken().getResult();
+                    String fcmToken = TG2HM.getFCMToken();
 
                     ArrayList<Long> times = dto.getDateSlots();
 
@@ -412,7 +409,7 @@ public class HtAmplify {
 
     public Reservation createReservation(TimeSlot timeSlot, PurchasedPlan purchasedPlan, Referral referral) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
-        String fcmToken = FirebaseMessaging.getInstance().getToken().getResult();
+        String fcmToken = TG2HM.getFCMToken();
 
         return Reservation.builder()
                 .consumerId(userId)
