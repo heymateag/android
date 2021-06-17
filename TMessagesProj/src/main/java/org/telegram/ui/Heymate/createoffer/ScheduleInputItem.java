@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -54,12 +55,12 @@ public class ScheduleInputItem extends ExpandableItem {
         AppCompatImageView addIcon = new AppCompatImageView(getContext());
         addIcon.setImageDrawable(Theme.getThemedDrawable(getContext(), R.drawable.add, Theme.key_dialogFloatingIcon));
         addIcon.setPadding(AndroidUtilities.dp(6), AndroidUtilities.dp(6), AndroidUtilities.dp(6), AndroidUtilities.dp(6));
-        addIcon.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(20), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Theme.key_dialogFloatingButtonPressed)));
+        addIcon.setBackgroundDrawable(Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(20), ContextCompat.getColor(getContext(), R.color.ht_theme), ContextCompat.getColor(getContext(), R.color.ht_theme)));
         addNewSchedule.addView(addIcon, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, HEADER_LEFT_MARGIN + 8, 12, 16, 12));
 
         TextView addText = new TextView(getContext());
         addText.setTextSize(14);
-        addText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
+        addText.setTextColor(ContextCompat.getColor(getContext(), R.color.ht_theme));
         addText.setText("Add New Schedule");
         addNewSchedule.addView(addText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 
@@ -94,7 +95,7 @@ public class ScheduleInputItem extends ExpandableItem {
         TextView start = new TextView(getContext());
         start.setId(START_TIME);
         start.setTextSize(14);
-        start.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
+        start.setTextColor(ContextCompat.getColor(getContext(), R.color.ht_theme));
         start.setPadding(AndroidUtilities.dp(12), 0, AndroidUtilities.dp(12), 0);
         start.setGravity(Gravity.CENTER_VERTICAL);
         start.setOnClickListener(v -> {
@@ -132,7 +133,7 @@ public class ScheduleInputItem extends ExpandableItem {
         TextView end = new TextView(getContext());
         end.setId(END_TIME);
         end.setTextSize(14);
-        end.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
+        end.setTextColor(ContextCompat.getColor(getContext(), R.color.ht_theme));
         end.setPadding(AndroidUtilities.dp(12), 0, AndroidUtilities.dp(12), 0);
         end.setGravity(Gravity.CENTER_VERTICAL);
         end.setOnClickListener(v -> {
