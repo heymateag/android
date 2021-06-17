@@ -3,6 +3,7 @@ package org.telegram.ui.Heymate.myschedule;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,6 +55,8 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
     private final BaseFragment mParent;
 
+    private final Handler mHandler;
+
     private final ImageView mImageUser;
     private final TextView mTextName;
     private final TextView mTextInfo;
@@ -78,6 +81,8 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         setWillNotDraw(false);
 
         mParent = parent;
+
+        mHandler = new Handler();
 
         setPageWidth(140);
         setPageHeight(239.7f);
@@ -278,15 +283,15 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void startCountDown(int seconds) {
-        removeCallbacks(mCountDown);
+        mHandler.removeCallbacks(mCountDown);
 
         mCountDownSeconds = seconds;
 
-        post(mCountDown);
+        mHandler.post(mCountDown);
     }
 
     private void stopCountDown() {
-        removeCallbacks(mCountDown);
+        mHandler.removeCallbacks(mCountDown);
 
         mCountDownSeconds = -1;
     }
@@ -303,7 +308,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
                 updateLayout();
             }
             else {
-                postDelayed(mCountDown, 1000);
+                mHandler.postDelayed(mCountDown, 1000);
             }
         }
 
