@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 import com.yashoid.sequencelayout.Span;
 
@@ -116,7 +117,7 @@ public class PromotionDialog extends Dialog {
 
         mReferralMoreInfo.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         mReferralMoreInfo.setTextSize(14);
-        mReferralMoreInfo.setText("Many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose.");
+        mReferralMoreInfo.setText("Other users will be motivated to promote your offer and win the referral prize. Multiple people can form a referral chain.");
 
         mExpandDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_arrow_drop_down).mutate();
         mExpandDrawable.setColorFilter(themeColor, PorterDuff.Mode.SRC_IN);
@@ -160,7 +161,10 @@ public class PromotionDialog extends Dialog {
 
             mCollapsed = !mCollapsed;
 
-            mReferralMoreInfo.measure(mReferralDescription.getWidth(), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            mReferralMoreInfo.measure(
+                    View.MeasureSpec.makeMeasureSpec(mReferralDescription.getWidth(), View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            );
             int moreInfoHeight = mReferralMoreInfo.getMeasuredHeight();
 
             int startValue = (int) mMoreInfoSpan.size;
