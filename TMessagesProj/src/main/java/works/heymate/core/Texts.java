@@ -43,6 +43,7 @@ public class Texts {
     public static final String THURSDAY_SHORT = "thursday_short";
     public static final String FRIDAY_SHORT = "friday_short";
     public static final String SATURDAY_SHORT = "saturday_short";
+    public static final String[] WEEK_DAYS_SHORT = { SUNDAY_SHORT, MONDAY_SHORT, TUESDAY_SHORT, WEDNESDAY_SHORT, THURSDAY_SHORT, FRIDAY_SHORT, SATURDAY_SHORT };
 
     public static final String TIME_DIFF_DAY = "time_diff_day";
     public static final String TIME_DIFF_HOUR = "time_diff_hour";

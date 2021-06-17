@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import works.heymate.core.Texts;
@@ -83,7 +84,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private HtCategoryInputCell categoryInputCell;
     private LocationInputItem locationInputCell;
     private ParticipantsInputItem participantsInputCell;
-    private HtScheduleInputCell scheduleInputCell;
+    private ScheduleInputItem scheduleInputCell;
     private PriceInputItem priceInputCell;
     private HtExpireInputCell expireInputCell;
     private HtTermsInputCell termsInputCell;
@@ -94,7 +95,6 @@ public class HtCreateOfferActivity extends BaseFragment {
     private LinearLayout actionLayout;
     private String offerUUID;
     private Date expireDate;
-    private ArrayList<Long> dateSlots = new ArrayList<>();
 
     private Uri pickedImage;
 
@@ -312,7 +312,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         titleLayout.addView(titleInputLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         mainLayout.addView(titleLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        mainLayout.addView(new HtDividerCell(context), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 25, 0, 25));
+        mainLayout.addView(new Divider(context), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 25, 0, 25));
 
         TextView detailsLabel = new TextView(context);
         detailsLabel.setText(LocaleController.getString("HtDetails", works.heymate.beta.R.string.HtDetails));
@@ -350,7 +350,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         mainLayout.addView(participantsInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         HashMap<String, Runnable> scheduleArgs = new HashMap<>();
-        scheduleInputCell = new HtScheduleInputCell(context, LocaleController.getString("HtSchedule", works.heymate.beta.R.string.HtSchedule), scheduleArgs, works.heymate.beta.R.drawable.watch_later_24_px_1, canEdit, this);
+        scheduleInputCell = new ScheduleInputItem(context);
         mainLayout.addView(scheduleInputCell);
 
         priceInputCell = new PriceInputItem(context);
@@ -513,7 +513,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                 categoryInputCell.setError(true, 1);
                 errors.append(LocaleController.getString("HtSubCategoryEmpty", works.heymate.beta.R.string.HtSubCategoryEmpty)).append('\n');
             }
-            if (dateSlots.isEmpty() || dateSlots.size() % 2 != 0) {
+            List<Long> timeSlots = scheduleInputCell.getTimeSlots();
+            if (timeSlots.isEmpty() || timeSlots.size() % 2 != 0) {
                 errors.append("No time slot selected.").append('\n');
             }
             else {
@@ -521,9 +522,9 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                 boolean hasOverLapError = false;
 
-                for (int i = 0; i < dateSlots.size(); i += 2) {
-                    long start = dateSlots.get(i);
-                    long end = dateSlots.get(i + 1);
+                for (int i = 0; i < timeSlots.size(); i += 2) {
+                    long start = timeSlots.get(i);
+                    long end = timeSlots.get(i + 1);
 
                     if (end < start) {
                         errors.append("Time slot start time is after the end time.").append('\n');
@@ -531,7 +532,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                     }
 
                     for (int j = 0; j < i; j += 2) {
-                        if (Math.max(start, dateSlots.get(j)) < Math.min(end, dateSlots.get(j + 1))) {
+                        if (Math.max(start, timeSlots.get(j)) < Math.min(end, timeSlots.get(j + 1))) {
                             if (!hasOverLapError) {
                                 errors.append("Time slots can not overlap.").append('\n');
                             }
@@ -597,7 +598,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             String subCategory = categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY);
             Date expireDate = HtCreateOfferActivity.this.expireDate;
             PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
-            ArrayList<Long> dateSlots = HtCreateOfferActivity.this.dateSlots;
+            List<Long> timeSlots = scheduleInputCell.getTimeSlots();
 
             OfferInfo offerInfo = new OfferInfo();
             offerInfo.setLocationInfo(locationInfo);
@@ -611,7 +612,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             offerInfo.setSubCategory(subCategory);
             offerInfo.setExpireDate(expireDate);
             offerInfo.setPricingInfo(pricingInfo);
-            offerInfo.setDateSlots(dateSlots);
+            offerInfo.setDateSlots(timeSlots);
 
             HeymateConfig.getGeneral().set(KEY_SAVED_OFFER, offerInfo.asJSON().toString());
             Toast.makeText(context, Texts.get(Texts.CREATE_OFFER_SAVED), Toast.LENGTH_SHORT).show();
@@ -666,7 +667,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                         }
 
                         if (savedOfferInfo.getDateSlots() != null) {
-                            setDateSlots(new ArrayList<>(savedOfferInfo.getDateSlots()));
+                            setTimeSlots(new ArrayList<>(savedOfferInfo.getDateSlots()));
                         }
                     } catch (JSONException e) {
                         Log.e(TAG, "Failed to restore saved offer info", e);
@@ -755,7 +756,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 newOffer.setPricingInfo(pricingInfo);
                 newOffer.setLatitude(locationInfo == null ? 0 : locationInfo.latitude);
                 newOffer.setLongitude(locationInfo == null ? 0 : locationInfo.longitude);
-                newOffer.setDateSlots(dateSlots);
+                newOffer.setDateSlots(scheduleInputCell.getTimeSlots());
                 newOffer.setStatus(OfferStatus.ACTIVE);
                 newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
                 newOffer.setServerUUID(id);
@@ -817,9 +818,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         categoryInputCell.setRes(ARGUMENTS_SUB_CATEGORY, text, 1);
     }
 
-    public void setDateSlots(ArrayList<Long> dates) {
-        this.dateSlots = dates;
-        scheduleInputCell.setDateSlots(dateSlots);
+    public void setTimeSlots(ArrayList<Long> times) {
+        scheduleInputCell.setTimeSlots(times);
     }
 
     public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo) {
