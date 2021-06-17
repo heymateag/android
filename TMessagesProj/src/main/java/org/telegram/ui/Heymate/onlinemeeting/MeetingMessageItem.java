@@ -117,7 +117,7 @@ public class MeetingMessageItem extends SequenceLayout {
 
         mMoreDetails.setOnClickListener(v -> {
             if (mOffer != null) {
-                new HtOfferDetailsPopUp(getContext(), 0, mOffer, null).show();
+                new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null).show();
             }
         });
 

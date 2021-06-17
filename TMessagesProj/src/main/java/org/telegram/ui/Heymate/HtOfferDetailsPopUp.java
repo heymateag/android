@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -40,6 +41,8 @@ import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.core.offer.PurchasePlanInfo;
+import works.heymate.core.offer.PurchasePlanTypes;
 
 public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
@@ -49,8 +52,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     private Offer offer;
     private OfferUtils.PhraseInfo phraseInfo;
 
-    public HtOfferDetailsPopUp(Context context, int progressStyle, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
-        super(context, progressStyle);
+    public HtOfferDetailsPopUp(Context context, BaseFragment parent, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
+        super(context, 0);
         AlertDialog.Builder builder = this;
 
         this.offer = offer;
@@ -266,8 +269,13 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         buyButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         buyButtonLayout.setGravity(Gravity.CENTER);
-        // TODO Proper buy in details
-//        buyButtonLayout.setOnClickListener(v -> HeymatePayment.initPayment(parent, offer.getId(), phraseInfo == null ? null : phraseInfo.referralId));
+        buyButtonLayout.setOnClickListener(v -> {
+            try {
+                PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+                PurchasePlanInfo purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);
+                HeymatePayment.initPayment(parent, offer.getId(), purchasePlanInfo, phraseInfo == null ? null : phraseInfo.referralId);
+            } catch (JSONException e) { }
+        });
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
         buyButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         buyButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());

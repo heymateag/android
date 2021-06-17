@@ -193,7 +193,7 @@ public class OfferMessageItem extends SequenceLayout {
             }
 
             try {
-                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context,0, mOffer, mPhraseInfo);
+                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, mParent, mOffer, mPhraseInfo);
                 AlertDialog dialog = detailsPopUp.create();
                 detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
                     @Override
