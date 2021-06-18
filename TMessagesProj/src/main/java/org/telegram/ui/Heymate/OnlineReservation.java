@@ -141,7 +141,7 @@ public class OnlineReservation {
                 break;
             case BOOKED:
             case MARKED_AS_STARTED:
-                statusToApply = status == HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER ? status : HtTimeSlotStatus.MARKED_AS_STARTED;
+                statusToApply = (status == HtTimeSlotStatus.BOOKED || status == HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER) ? status : HtTimeSlotStatus.MARKED_AS_STARTED;
                 break;
             case STARTED:
                 switch (status) {
@@ -172,9 +172,9 @@ public class OnlineReservation {
 
             try {
                 int userId = Integer.parseInt(sUserId);
-                // TODO uncomment
-//                String message = ReservationUtils.serializeBeautiful(reservation, offer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
-//                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
+
+                String message = ReservationUtils.serializeBeautiful(reservation, offer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
+                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
             } catch (NumberFormatException e) { }
         }
 
@@ -255,7 +255,7 @@ public class OnlineReservation {
     }
 
     public static void stabilizeReservationStatus(Context context, Reservation reservation, Offer offer) {
-        if (HtTimeSlotStatus.MARKED_AS_STARTED.equals(reservation.getStatus())) {
+        if (HtTimeSlotStatus.MARKED_AS_STARTED.name().equals(reservation.getStatus())) {
             if (offer != null) {
                 confirmStarted(context, reservation, offer);
             }
@@ -270,7 +270,7 @@ public class OnlineReservation {
                 });
             }
         }
-        else if (HtTimeSlotStatus.MARKED_AS_FINISHED.equals(reservation.getStatus())) {
+        else if (HtTimeSlotStatus.MARKED_AS_FINISHED.name().equals(reservation.getStatus())) {
             if (offer != null) {
                 confirmFinished(context, reservation, offer);
             }
