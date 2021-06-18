@@ -119,60 +119,62 @@ public class HtFiltersCell extends LinearLayout {
         };
         categoryFilter.setEnabled(true);
         categoryFilter.setOnClickListener((v) -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("HtChooseCategory", works.heymate.beta.R.string.HtChooseCategory));
-            String[] items = new String[categories.length];
-            items[0] = "All";
-            int[] icons = new int[categories.length];
-            for (int i = 1; i < categories.length; i++) {
-                items[i] = categories[i - 1].toString();
-                icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
-            }
-            builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            LogToGroup.logIfCrashed(() -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(LocaleController.getString("HtChooseCategory", works.heymate.beta.R.string.HtChooseCategory));
+                String[] items = new String[categories.length];
+                items[0] = "All";
+                int[] icons = new int[categories.length];
+                for (int i = 1; i < categories.length; i++) {
+                    items[i] = categories[i - 1].toString();
+                    icons[i] = works.heymate.beta.R.drawable.msg_arrowright;
                 }
-            });
-            builder.setItems(items, icons, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    subCategories.clear();
-
-                    if (which == 0) {
-                        if(parent instanceof OffersActivity){
-                            ((OffersActivity) parent).setCategoryFilter(null);
-                            ((OffersActivity) parent).setSubCategoryFilter(null);
-                        }
-
-                        categoryFilter.setText("Category");
-                        categoryFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
-                        subCategories.addAll(allSubCategories);
-                        subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
-                        subCategorySelect = null;
+                builder.setNegativeButton(LocaleController.getString("HtCancel", works.heymate.beta.R.string.HtCancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                     }
-                    else {
-                        if(parent instanceof OffersActivity){
-                            ((OffersActivity) parent).setCategoryFilter(items[which]);
-                        }
+                });
+                builder.setItems(items, icons, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        subCategories.clear();
 
-                        categoryFilter.setText(items[which]);
-                        categoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
-                        subCategories.addAll(DummyCategories.categories.get(items[which]));
-                        subCategoryFilter.setText("All");
-
-                        if (!subCategories.contains(subCategorySelect)) {
-                            subCategorySelect = null;
-                            subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
-
+                        if (which == 0) {
                             if(parent instanceof OffersActivity){
+                                ((OffersActivity) parent).setCategoryFilter(null);
                                 ((OffersActivity) parent).setSubCategoryFilter(null);
+                            }
+
+                            categoryFilter.setText("Category");
+                            categoryFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
+                            subCategories.addAll(allSubCategories);
+                            subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
+                            subCategorySelect = null;
+                        }
+                        else {
+                            if(parent instanceof OffersActivity){
+                                ((OffersActivity) parent).setCategoryFilter(items[which]);
+                            }
+
+                            categoryFilter.setText(items[which]);
+                            categoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+                            subCategories.addAll(DummyCategories.categories.get(items[which]));
+                            subCategoryFilter.setText("All");
+
+                            if (!subCategories.contains(subCategorySelect)) {
+                                subCategorySelect = null;
+                                subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
+
+                                if(parent instanceof OffersActivity){
+                                    ((OffersActivity) parent).setSubCategoryFilter(null);
+                                }
                             }
                         }
                     }
-                }
+                });
+                AlertDialog alertDialog = builder.create();
+                parent.showDialog(alertDialog);
             });
-            AlertDialog alertDialog = builder.create();
-            parent.showDialog(alertDialog);
         });
 
         subCategoryFilter.setEnabled(true);
