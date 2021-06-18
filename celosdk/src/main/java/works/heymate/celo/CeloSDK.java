@@ -410,11 +410,16 @@ public class CeloSDK {
         try {
             ensureContractKit();
         } catch (CeloException e) {
+            List<ContractKitCallback> callbacks;
+
             synchronized (mContractKitCallbacks) {
-                for (ContractKitCallback callback: mContractKitCallbacks) {
-                    callback.onContractKitResult(false, null, e);
-                }
+                callbacks = new ArrayList<>(mContractKitCallbacks);
+
                 mContractKitCallbacks.clear();
+            }
+
+            for (ContractKitCallback callback: callbacks) {
+                callback.onContractKitResult(false, null, e);
             }
             return;
         }
