@@ -70,8 +70,9 @@ public class Shops {
                     }
                 }
 
+                updateDialogs(dialogList);
+
                 if (dialogsToLoad.isEmpty()) {
-                    updateDialogs(dialogList);
                     return;
                 }
 
