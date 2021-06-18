@@ -3,11 +3,19 @@
 
     <Vertical id="grid">
         <Span size="0px"/>
-        <Span id="grid" size="100%"/>
+        <Span id="grid" size="1w"/>
     </Vertical>
 
     <Horizontal>
         <Span id="grid" size="100%"/>
+    </Horizontal>
+
+    <Vertical start="start@grid" end="end@grid">
+        <Span id="overlay" size="100%"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span id="overlay" size="100%"/>
     </Horizontal>
 
     <Vertical start="start@grid">

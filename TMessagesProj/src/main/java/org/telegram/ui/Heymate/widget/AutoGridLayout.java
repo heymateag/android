@@ -5,11 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.telegram.ui.Components.Rect;
-
 public class AutoGridLayout extends ViewGroup {
-
-    private final Rect mRect = new Rect();
 
     public AutoGridLayout(Context context) {
         super(context);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
+import org.telegram.ui.Heymate.widget.DraggableOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     private String mReservationId;
 
     private AutoGridLayout mGrid;
+    private DraggableOverlay mOverlay;
     private TextView mLeave;
     private ImageView mMute;
     private ImageView mImageMic;
@@ -95,6 +98,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         content.setBackgroundColor(0xff292929);
 
         mGrid = content.findViewById(R.id.grid);
+        mOverlay = content.findViewById(R.id.overlay);
 
         mLeave = content.findViewById(R.id.leave);
         mLeave.setText("Leave");  // TODO Texts
@@ -254,7 +258,15 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     mLeave.setText("End");
                 }
 
-                mGrid.addView(myselfView);
+                DraggableOverlay.LayoutParams params = new DraggableOverlay.LayoutParams(
+                        AndroidUtilities.dp(120),
+                        AndroidUtilities.dp(180)
+                );
+                params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+                params.bottomMargin = AndroidUtilities.dp(80);
+                params.rightMargin = AndroidUtilities.dp(12);
+                params.leftMargin = params.rightMargin;
+                mOverlay.addView(myselfView, params);
                 break;
             case HeymateEvents.FAILED_TO_JOIN_MEETING:
                 mStarted = false;
@@ -303,6 +315,12 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 MeetingMember meetingMember = (MeetingMember) child.getTag();
                 meetingMember.releaseView(child);
             }
+        }
+
+        if (mOverlay.getChildCount() > 0) {
+            MeetingMember myself = (MeetingMember) mOverlay.getChildAt(0).getTag();
+
+            myself.releaseView(mOverlay.getChildAt(0));
         }
 
         ((ViewGroup) fragmentView).removeAllViews();
