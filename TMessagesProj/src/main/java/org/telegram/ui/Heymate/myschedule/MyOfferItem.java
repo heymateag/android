@@ -466,7 +466,9 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void joinSession(String meetingId) {
-        mParent.presentFragment(new OnlineMeetingActivity(meetingId, mTimeSlot.getId(), null), true);
+        LogToGroup.logIfCrashed(() -> {
+            mParent.presentFragment(new OnlineMeetingActivity(meetingId, mTimeSlot.getId(), null), true);
+        });
     }
 
     private void showDetails() {

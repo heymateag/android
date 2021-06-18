@@ -11,6 +11,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Heymate.HtAmplify;
+import org.telegram.ui.Heymate.LogToGroup;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -70,23 +71,25 @@ public class OnlineMeeting {
     private Map<String, MeetingMember> mMembersByZoomIds = new HashMap<>();
 
     private OnlineMeeting(Context context) {
-        mContext = context.getApplicationContext();
+        LogToGroup.logIfCrashed(() -> {
+            mContext = context.getApplicationContext();
 
-        ZoomInstantSDKInitParams params = new ZoomInstantSDKInitParams();
-        params.domain = "https://zoom.us"; // Required
-        params.enableLog = true; // Optional for debugging
+            ZoomInstantSDKInitParams params = new ZoomInstantSDKInitParams();
+            params.domain = "https://zoom.us"; // Required
+            params.enableLog = true; // Optional for debugging
 
-        mSDK = ZoomInstantSDK.getInstance();
+            mSDK = ZoomInstantSDK.getInstance();
 
-        int initResult = mSDK.initialize(context, params);
+            int initResult = mSDK.initialize(context, params);
 
-        if (initResult == ZoomInstantSDKErrors.Errors_Success) {
-            // You have successfully initialized the SDK
-            mSDK.addListener(mZoomDelegate);
-        } else {
-            // Something went wrong, see error code documentation
-            Log.e(TAG, "Failed to initialize Zoom SDK with error code: " + initResult);
-        }
+            if (initResult == ZoomInstantSDKErrors.Errors_Success) {
+                // You have successfully initialized the SDK
+                mSDK.addListener(mZoomDelegate);
+            } else {
+                // Something went wrong, see error code documentation
+                Log.e(TAG, "Failed to initialize Zoom SDK with error code: " + initResult);
+            }
+        });
     }
 
     /**
@@ -126,33 +129,35 @@ public class OnlineMeeting {
         UserInfo userInfo = new UserInfo();
 
         HtAmplify.getInstance(mContext).getZoomToken(userInfo.id, sessionId, System.currentTimeMillis() / 1000, (success, result, exception) -> {
-            if (success) {
-                // Setup audio options
-                ZoomInstantSDKAudioOption audioOptions = new ZoomInstantSDKAudioOption();
-                audioOptions.connect = true; // Auto connect to audio upon joining
-                audioOptions.mute = true; // Auto mute audio upon joining
-                // Setup video options
-                ZoomInstantSDKVideoOption videoOptions = new ZoomInstantSDKVideoOption();
-                videoOptions.localVideoOn = true; // Turn on local/self video upon joining
-                // Pass options into session
-                ZoomInstantSDKSessionContext params = new ZoomInstantSDKSessionContext();
-                params.audioOption = audioOptions;
-                params.videoOption = videoOptions;
-                params.sessionName = sessionId;
-                params.userName = userInfo.toString();
-                params.token = result;
+            LogToGroup.logIfCrashed(() -> {
+                if (success) {
+                    // Setup audio options
+                    ZoomInstantSDKAudioOption audioOptions = new ZoomInstantSDKAudioOption();
+                    audioOptions.connect = true; // Auto connect to audio upon joining
+                    audioOptions.mute = true; // Auto mute audio upon joining
+                    // Setup video options
+                    ZoomInstantSDKVideoOption videoOptions = new ZoomInstantSDKVideoOption();
+                    videoOptions.localVideoOn = true; // Turn on local/self video upon joining
+                    // Pass options into session
+                    ZoomInstantSDKSessionContext params = new ZoomInstantSDKSessionContext();
+                    params.audioOption = audioOptions;
+                    params.videoOption = videoOptions;
+                    params.sessionName = sessionId;
+                    params.userName = userInfo.toString();
+                    params.token = result;
 
-                ZoomInstantSDKSession session = mSDK.joinSession(params);
+                    ZoomInstantSDKSession session = mSDK.joinSession(params);
 
-                if (session == null) {
+                    if (session == null) {
+                        HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
+                    }
+                }
+                else {
+                    Log.e(TAG, "Failed to get token for video session.", exception);
+
                     HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
                 }
-            }
-            else {
-                Log.e(TAG, "Failed to get token for video session.", exception);
-
-                HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
-            }
+            });
         });
 
         return false;
@@ -242,15 +247,19 @@ public class OnlineMeeting {
     }
 
     public void startVideo() {
-        if (mSDK.isInSession()) {
-            mSDK.getVideoHelper().startVideo();
-        }
+        LogToGroup.logIfCrashed(() -> {
+            if (mSDK.isInSession()) {
+                mSDK.getVideoHelper().startVideo();
+            }
+        });
     }
 
     public void stopVideo() {
-        if (mSDK.isInSession()) {
-            mSDK.getVideoHelper().stopVideo();
-        }
+        LogToGroup.logIfCrashed(() -> {
+            if (mSDK.isInSession()) {
+                mSDK.getVideoHelper().stopVideo();
+            }
+        });
     }
 
     private void doWithUser(String userId, DoWithUserCall call) {
@@ -266,7 +275,9 @@ public class OnlineMeeting {
             return;
         }
 
-        call.doWithUser(session, meetingMember.getZoomUser());
+        LogToGroup.logIfCrashed(() -> {
+            call.doWithUser(session, meetingMember.getZoomUser());
+        });
     }
 
     private void ensureHost() {
@@ -274,31 +285,38 @@ public class OnlineMeeting {
             return;
         }
 
-        MeetingMember member = mMembers.get(mHostId);
+        LogToGroup.logIfCrashed(() -> {
+            MeetingMember member = mMembers.get(mHostId);
 
-        if (member != null && mSelf != member && mSelf.getZoomUser().isHost()) {
-            mSDK.getUserHelper().makeHost(member.getZoomUser());
-        }
+            if (member != null && mSelf != member && mSelf.getZoomUser().isHost()) {
+                mSDK.getUserHelper().makeHost(member.getZoomUser());
+            }
+        });
     }
 
     private final ZoomInstantSDKDelegate mZoomDelegate = new ZoomInstantSDKDelegate() {
 
         @Override
         public void onSessionJoin() {
-            mSelf = new MeetingMember(mSDK.getSession().getMySelf());
-            mMembers.put(mSelf.getUserId(), mSelf);
-            mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
+            LogToGroup.logIfCrashed(() -> {
+                mSelf = new MeetingMember(mSDK.getSession().getMySelf());
+                mMembers.put(mSelf.getUserId(), mSelf);
+                mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
 
-            HeymateEvents.notify(HeymateEvents.JOINED_MEETING);
+                HeymateEvents.notify(HeymateEvents.JOINED_MEETING);
+            });
         }
 
-        @Override public void onSessionLeave() {
-            HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
+        @Override
+        public void onSessionLeave() {
+            LogToGroup.logIfCrashed(() -> {
+                HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
-            Utils.postOnUIThread(() -> {
-                mMembers.remove(mSelf.getUserId());
-                mMembersByZoomIds.remove(mSelf.getZoomUser().getUserId());
-                mSelf = null;
+                Utils.postOnUIThread(() -> {
+                    mMembers.remove(mSelf.getUserId());
+                    mMembersByZoomIds.remove(mSelf.getZoomUser().getUserId());
+                    mSelf = null;
+                });
             });
         }
 
@@ -338,56 +356,64 @@ public class OnlineMeeting {
 
         @Override
         public void onUserJoin(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
-            for (ZoomInstantSDKUser user: userList) {
-                MeetingMember meetingMember = new MeetingMember(user);
+            LogToGroup.logIfCrashed(() -> {
+                for (ZoomInstantSDKUser user: userList) {
+                    MeetingMember meetingMember = new MeetingMember(user);
 
-                mMembers.put(meetingMember.getUserId(), meetingMember);
-                mMembersByZoomIds.put(user.getUserId(), meetingMember);
+                    mMembers.put(meetingMember.getUserId(), meetingMember);
+                    mMembersByZoomIds.put(user.getUserId(), meetingMember);
 
-                ensureHost();
+                    ensureHost();
 
-                HeymateEvents.notify(HeymateEvents.USER_JOINED_MEETING, meetingMember.getUserId(), meetingMember);
-            }
+                    HeymateEvents.notify(HeymateEvents.USER_JOINED_MEETING, meetingMember.getUserId(), meetingMember);
+                }
+            });
         }
 
         @Override
         public void onUserLeave(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
-            for (ZoomInstantSDKUser user: userList) {
-                MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
-                HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, meetingMember.getUserId(), meetingMember);
+            LogToGroup.logIfCrashed(() -> {
+                for (ZoomInstantSDKUser user: userList) {
+                    MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
+                    HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, meetingMember.getUserId(), meetingMember);
 
-                Utils.postOnUIThread(() -> {
-                    mMembersByZoomIds.remove(user.getUserId());
+                    Utils.postOnUIThread(() -> {
+                        mMembersByZoomIds.remove(user.getUserId());
 
-                    if (meetingMember != null) {
-                        mMembers.remove(meetingMember.getUserId());
+                        if (meetingMember != null) {
+                            mMembers.remove(meetingMember.getUserId());
 
-                        meetingMember.release();
-                    }
-                });
-            }
+                            meetingMember.release();
+                        }
+                    });
+                }
+            });
         }
 
         @Override
         public void onUserVideoStatusChanged(ZoomInstantSDKVideoHelper videoHelper, List<ZoomInstantSDKUser> userList) {
-            for (ZoomInstantSDKUser user: userList) {
-                MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
+            LogToGroup.logIfCrashed(() -> {
+                for (ZoomInstantSDKUser user: userList) {
+                    MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
-                if (meetingMember != null) {
-                    HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
+                    if (meetingMember != null) {
+                        HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
+                    }
                 }
-            }
+            });
         }
 
         @Override
         public void onUserAudioStatusChanged(ZoomInstantSDKAudioHelper audioHelper, List<ZoomInstantSDKUser> userList) {
-            for (ZoomInstantSDKUser user: userList) {
-                MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
+            LogToGroup.logIfCrashed(() -> {
+                for (ZoomInstantSDKUser user: userList) {
+                    MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
-                if (meetingMember != null) {
-                    HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
+                    if (meetingMember != null) {
+                        HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
+                    }
                 }
-            }
+            });
         }
 
         @Override
@@ -435,6 +461,8 @@ public class OnlineMeeting {
             } catch (JSONException e) {
                 tName = "[ERROR]";
                 tId = "0";
+
+                LogToGroup.log("Failed to read user info", e, null);
             }
 
             name = tName;

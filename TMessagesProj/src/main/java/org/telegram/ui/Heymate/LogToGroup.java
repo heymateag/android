@@ -1,9 +1,14 @@
 package org.telegram.ui.Heymate;
 
+import android.widget.Toast;
+
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 
@@ -96,6 +101,20 @@ public class LogToGroup {
         });
     }
 
+    public static void logIfCrashed(Runnable task) {
+        if (HeymateConfig.DEBUG) {
+            try {
+                task.run();
+            } catch (Throwable t) {
+                Toast.makeText(ApplicationLoader.applicationContext, "Crashing bug just occured. Consider the app closed!", Toast.LENGTH_LONG).show();
+                log("General crash", t, null);
+            }
+        }
+        else {
+            task.run();
+        }
+    }
+
     public static void log(String message, Throwable t, BaseFragment parent) {
         StringBuilder sb = new StringBuilder();
         if (message != null) {
@@ -115,12 +134,16 @@ public class LogToGroup {
     }
 
     public static void log(String message, BaseFragment parent) {
-        int currentAccount = parent.getCurrentAccount();
+        int currentAccount = parent == null ? UserConfig.selectedAccount : parent.getCurrentAccount();
 
         TLRPC.TL_contacts_resolveUsername req3 = new TLRPC.TL_contacts_resolveUsername();
         req3.username = NEW_MEMBER_ANNOUNCEMENT_GROUP;
 
-        parent.getConnectionsManager().sendRequest(req3, (response3, error3) -> {
+        UserConfig userConfig = parent == null ? UserConfig.getInstance(currentAccount) : parent.getUserConfig();
+        ConnectionsManager connectionsManager = parent == null ? ConnectionsManager.getInstance(currentAccount) : parent.getConnectionsManager();
+        MessagesController messagesController = parent == null ? MessagesController.getInstance(currentAccount) : parent.getMessagesController();
+
+        connectionsManager.sendRequest(req3, (response3, error3) -> {
             if (error3 == null) {
                 TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response3;
 
@@ -133,25 +156,25 @@ public class LogToGroup {
                     inputChat.channel_id = chat.id;
                     inputChat.access_hash = chat.access_hash;
                     req.channel = inputChat;
-                    parent.getConnectionsManager().sendRequest(req, (response, error) -> Utils.runOnUIThread(() -> {
+                    connectionsManager.sendRequest(req, (response, error) -> Utils.runOnUIThread(() -> {
                         if (error != null) {
                             return;
                         }
 
                         TLRPC.Updates updates = (TLRPC.Updates) response;
-                        parent.getMessagesController().processUpdates(updates, false);
+                        messagesController.processUpdates(updates, false);
 
                         TLRPC.TL_message newMsg = new TLRPC.TL_message();
                         newMsg.media = new TLRPC.TL_messageMediaEmpty();
                         newMsg.message = message.toString();
                         newMsg.attachPath = "";
-                        newMsg.local_id = newMsg.id = parent.getUserConfig().getNewMessageId();
+                        newMsg.local_id = newMsg.id = userConfig.getNewMessageId();
                         newMsg.out = true;
                         newMsg.from_id = new TLRPC.TL_peerUser();
                         newMsg.from_id.user_id = user.id;
                         newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
                         newMsg.random_id = SendMessagesHelper.getInstance(currentAccount).getNextRandomId();
-                        newMsg.date = parent.getConnectionsManager().getCurrentTime();
+                        newMsg.date = connectionsManager.getCurrentTime();
                         newMsg.unread = true;
                         newMsg.dialog_id = chat.id;
                         newMsg.peer_id = new TLRPC.TL_peerChannel();
@@ -165,13 +188,17 @@ public class LogToGroup {
                         reqSend.peer.channel_id = chat.id;
                         reqSend.peer.access_hash = chat.access_hash;
                         reqSend.random_id = newMsg.random_id;
-                        parent.getConnectionsManager().sendRequest(reqSend, (response1, error1) -> {
+                        connectionsManager.sendRequest(reqSend, (response1, error1) -> {
+                            if (HeymateConfig.DEBUG) {
+                                return;
+                            }
+
                             TLRPC.TL_channels_leaveChannel leaveChannel = new TLRPC.TL_channels_leaveChannel();
                             TLRPC.InputChannel inputChat3 = new TLRPC.TL_inputChannel();
                             inputChat3.channel_id = chat.id;
                             inputChat3.access_hash = chat.access_hash;
                             leaveChannel.channel = inputChat3;
-                            parent.getConnectionsManager().sendRequest(leaveChannel, (response2, error2) -> {
+                            connectionsManager.sendRequest(leaveChannel, (response2, error2) -> {
                                 AndroidUtilities.runOnUIThread(() -> {
                                     parent.getMessagesController().deleteDialog(chat.id, 1);
                                 }, 100);

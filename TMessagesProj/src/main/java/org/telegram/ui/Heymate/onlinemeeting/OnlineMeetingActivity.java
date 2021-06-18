@@ -22,6 +22,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
 import org.telegram.ui.Heymate.widget.DraggableOverlay;
@@ -244,59 +245,61 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     @Override
     public void onHeymateEvent(int event, Object... args) {
-        switch (event) {
-            case HeymateEvents.JOINING_MEETING:
-                // Nothing to do.
-                break;
-            case HeymateEvents.JOINED_MEETING:
-                MeetingMember myself = OnlineMeeting.get().getSelf();
-                View myselfView = myself.createView(getParentActivity());
-                myselfView.setTag(OnlineMeeting.get().getSelf());
-                mMemberViews.put(myself.getUserId(), myselfView);
+        LogToGroup.logIfCrashed(() -> {
+            switch (event) {
+                case HeymateEvents.JOINING_MEETING:
+                    // Nothing to do.
+                    break;
+                case HeymateEvents.JOINED_MEETING:
+                    MeetingMember myself = OnlineMeeting.get().getSelf();
+                    View myselfView = myself.createView(getParentActivity());
+                    myselfView.setTag(OnlineMeeting.get().getSelf());
+                    mMemberViews.put(myself.getUserId(), myselfView);
 
-                if (myself.isHost()) {
-                    mLeave.setText("End");
-                }
+                    if (myself.isHost()) {
+                        mLeave.setText("End");
+                    }
 
-                DraggableOverlay.LayoutParams params = new DraggableOverlay.LayoutParams(
-                        AndroidUtilities.dp(120),
-                        AndroidUtilities.dp(180)
-                );
-                params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-                params.bottomMargin = AndroidUtilities.dp(80);
-                params.rightMargin = AndroidUtilities.dp(12);
-                params.leftMargin = params.rightMargin;
-                mOverlay.addView(myselfView, params);
-                break;
-            case HeymateEvents.FAILED_TO_JOIN_MEETING:
-                mStarted = false;
-                Toast.makeText(getParentActivity(), "Failed to join to the meeting!", Toast.LENGTH_LONG).show(); // TODO Texts
-                finishFragment();
-                break;
-            case HeymateEvents.LEFT_MEETING:
-                OnlineReservation.stabilizeMyOrdersStatuses(getParentActivity());
-                break;
-            case HeymateEvents.USER_JOINED_MEETING:
-                MeetingMember joinedMember = OnlineMeeting.get().getMember((String) args[0]);
-                View joinedMemberView = joinedMember.createView(getParentActivity());
-                joinedMemberView.setTag(joinedMember);
-                mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
-                mGrid.addView(joinedMemberView);
-                break;
-            case HeymateEvents.USER_LEFT_MEETING:
-                MeetingMember leftMember = OnlineMeeting.get().getMember((String) args[0]);
-                View leftMemberView = mMemberViews.get(leftMember.getUserId());
+                    DraggableOverlay.LayoutParams params = new DraggableOverlay.LayoutParams(
+                            AndroidUtilities.dp(120),
+                            AndroidUtilities.dp(180)
+                    );
+                    params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+                    params.bottomMargin = AndroidUtilities.dp(80);
+                    params.rightMargin = AndroidUtilities.dp(12);
+                    params.leftMargin = params.rightMargin;
+                    mOverlay.addView(myselfView, params);
+                    break;
+                case HeymateEvents.FAILED_TO_JOIN_MEETING:
+                    mStarted = false;
+                    Toast.makeText(getParentActivity(), "Failed to join to the meeting!", Toast.LENGTH_LONG).show(); // TODO Texts
+                    finishFragment();
+                    break;
+                case HeymateEvents.LEFT_MEETING:
+                    OnlineReservation.stabilizeMyOrdersStatuses(getParentActivity());
+                    break;
+                case HeymateEvents.USER_JOINED_MEETING:
+                    MeetingMember joinedMember = OnlineMeeting.get().getMember((String) args[0]);
+                    View joinedMemberView = joinedMember.createView(getParentActivity());
+                    joinedMemberView.setTag(joinedMember);
+                    mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
+                    mGrid.addView(joinedMemberView);
+                    break;
+                case HeymateEvents.USER_LEFT_MEETING:
+                    MeetingMember leftMember = OnlineMeeting.get().getMember((String) args[0]);
+                    View leftMemberView = mMemberViews.get(leftMember.getUserId());
 
-                if (leftMemberView != null) {
-                    leftMember.releaseView(leftMemberView);
-                    mMemberViews.remove(leftMember.getUserId());
-                    mGrid.removeView(leftMemberView);
-                }
-                break;
-            case HeymateEvents.MEETING_USER_STATUS_CHANGED:
-                updateState();
-                break;
-        }
+                    if (leftMemberView != null) {
+                        leftMember.releaseView(leftMemberView);
+                        mMemberViews.remove(leftMember.getUserId());
+                        mGrid.removeView(leftMemberView);
+                    }
+                    break;
+                case HeymateEvents.MEETING_USER_STATUS_CHANGED:
+                    updateState();
+                    break;
+            }
+        });
     }
 
     @Override

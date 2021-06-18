@@ -435,7 +435,9 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
         String meetingId = mReservation.getMeetingId();
 
-        mParent.presentFragment(new OnlineMeetingActivity(meetingId, null, mReservation.getId()), true);
+        LogToGroup.logIfCrashed(() -> {
+            mParent.presentFragment(new OnlineMeetingActivity(meetingId, null, mReservation.getId()), true);
+        });
     }
 
     private void showDetails() {
