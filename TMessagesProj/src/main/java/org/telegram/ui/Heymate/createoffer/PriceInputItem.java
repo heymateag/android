@@ -13,6 +13,7 @@ import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.ReplacementSpan;
+import android.util.StateSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -41,7 +42,7 @@ import works.heymate.core.offer.PurchasePlanTypes;
 public class PriceInputItem extends ExpandableItem {
 
     private static final String[] CURRENCIES = { "US$", "€" };
-    private static final String[] RATE_TYPES = { "Per Item", "Per Hour" };
+    private static final String[] RATE_TYPES = { "Per Session", "Per Hour" };
     public static final String[] SUBSCRIPTION_PERIODS = { "Per month", "Per year" };
 
     private static final String PRICE = "price";
@@ -233,7 +234,10 @@ public class PriceInputItem extends ExpandableItem {
     }
 
     private void styleInput(TextView input, View neighbor, String suffix) {
-        input.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        int enabledColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlackText);
+        int disabledColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2);
+
+        input.setTextColor(getColorStateList(enabledColor, disabledColor));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             input.setBackgroundTintList(ColorStateList.valueOf(Theme.getColor(Theme.key_windowBackgroundWhiteHintText)));
@@ -284,7 +288,9 @@ public class PriceInputItem extends ExpandableItem {
     }
 
     private void styleMultiChoice(TextView input, String[] choices, int defaultChoice, Runnable extraWork) {
-        input.setTextColor(ContextCompat.getColor(getContext(), R.color.ht_theme));
+        int enabledColor = ContextCompat.getColor(getContext(), R.color.ht_theme);
+        int disabledColor = Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2);
+        input.setTextColor(getColorStateList(enabledColor, disabledColor));
         input.setTypeface(input.getTypeface(), Typeface.BOLD);
         input.setText(choices[defaultChoice]);
         MultiChoicePopup subscriptionPeriodPopup = new MultiChoicePopup(input, choices, (index, choice) -> {
@@ -378,6 +384,13 @@ public class PriceInputItem extends ExpandableItem {
             mSubscriptionPrice.setText(pricingInfo.subscriptionPrice == 0 ? "" : String.valueOf(pricingInfo.subscriptionPrice));
         }
         updateSubscriptionViews();
+    }
+
+    private static ColorStateList getColorStateList(int enabledColor, int disabledColor) {
+        int[] enabled = new int[] { android.R.attr.state_enabled };
+        int[] disabled = new int[0];
+
+        return new ColorStateList(new int[][] {enabled, disabled}, new int[] {enabledColor, disabledColor});
     }
 
     private static class BaseTextWatcher implements TextWatcher {
