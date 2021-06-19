@@ -140,6 +140,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 // Heymate
 import org.telegram.ui.Heymate.AttestationActivity;
 import org.telegram.ui.Heymate.EasterActivity;
+import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.HtSQLite;
@@ -530,7 +531,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                 }
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerManageOffersCell) {
-                presentFragment(new HtOfferHelperActivity());
+                presentFragment(HeymateConfig.getGeneral().get("offer_helper_presented") == null ? new HtOfferHelperActivity(): new OffersActivity());
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerMyScheduleCell) {
                 presentFragment(new MyScheduleActivity());
@@ -576,7 +577,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     presentFragment(new CallLogActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 102) {
-                    presentFragment(new HtOfferHelperActivity());
+                    presentFragment(HeymateConfig.getGeneral().get("offer_helper_presented") == null ? new HtOfferHelperActivity(): new OffersActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 103) {
                     presentFragment(new MyScheduleActivity());

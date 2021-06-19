@@ -1,7 +1,6 @@
 package org.telegram.ui.Heymate;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
@@ -31,10 +30,6 @@ public class HtOfferHelperActivity extends BaseFragment {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View createView(Context context) {
-
-        Configuration configuration = context.getResources().getConfiguration();
-        int dpWidth = configuration.screenWidthDp;
-        int dpHeight = configuration.screenHeightDp;
         nextBtn = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
@@ -111,7 +106,8 @@ public class HtOfferHelperActivity extends BaseFragment {
         buyLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presentFragment(new OffersActivity());
+                HeymateConfig.getGeneral().set("offer_helper_presented", "true");
+                presentFragment(new OffersActivity(), true);
                 finishFragment();
             }
         });
@@ -120,9 +116,4 @@ public class HtOfferHelperActivity extends BaseFragment {
         return fragmentView;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 }
