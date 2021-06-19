@@ -315,6 +315,8 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceSubscription.setVisibility(GONE);
                 mPriceInfoSubscription.setVisibility(GONE);
             }
+
+            mRadioFixedPrice.setVisibility((pricingInfo.bundleCount == 0 && pricingInfo.subscriptionPeriod == null) ? GONE : VISIBLE);
         } catch (JSONException | NullPointerException e) { }
     }
 

@@ -46,7 +46,7 @@
 
     <Vertical start="start@holder_bundle" end="end@holder_bundle">
         <Span size="1w"/>
-        <Span id="radio_bundle" size="100%radio_fixed_price"/>
+        <Span id="radio_bundle" size="20dp"/>
         <Span size="1w"/>
     </Vertical>
 
@@ -68,7 +68,7 @@
 
     <Vertical start="start@holder_subscription" end="end@holder_subscription">
         <Span size="1w"/>
-        <Span id="radio_subscription" size="100%radio_fixed_price"/>
+        <Span id="radio_subscription" size="20dp"/>
         <Span size="1w"/>
     </Vertical>
 
@@ -148,7 +148,7 @@
 
     <Horizontal start="start@title" end="end@title">
         <Span id="radio_fixed_price" size="20dp"/>
-        <Span size="12dp"/>
+        <Span size="12dp" visibleIf="radio_fixed_price"/>
         <Span id="title_fixed_price" size="wrap"/>
         <Span size="1w"/>
         <Span id="price_fixed_price" size="wrap"/>
@@ -161,7 +161,7 @@
     </Horizontal>
 
     <Horizontal start="start@title" end="end@title">
-        <Span id="radio_bundle" size="100%radio_fixed_price"/>
+        <Span id="radio_bundle" size="20dp"/>
         <Span size="12dp"/>
         <Span id="title_bundle" size="wrap"/>
         <Span size="1w"/>
@@ -175,7 +175,7 @@
     </Horizontal>
 
     <Horizontal start="start@title" end="end@title">
-        <Span id="radio_subscription" size="100%radio_fixed_price"/>
+        <Span id="radio_subscription" size="20dp"/>
         <Span size="12dp"/>
         <Span id="title_subscription" size="wrap"/>
         <Span size="1w"/>
