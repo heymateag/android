@@ -64,26 +64,6 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
         mainLayout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
         mainLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground)));
 
-        LinearLayout upperLayout = new LinearLayout(context);
-        upperLayout.setGravity(Gravity.RIGHT);
-
-        ImageView applyImage = new ImageView(context);
-        Drawable applyDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.ht_check_circle);
-        applyDrawable.setColorFilter(new PorterDuffColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY));
-        applyImage.setImageDrawable(applyDrawable);
-        applyImage.setEnabled(true);
-        applyImage.setHovered(true);
-        applyImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hide();
-            }
-        });
-
-        upperLayout.addView(applyImage, LayoutHelper.createLinear(45, 45, 15,35,15,15));
-
-        mainLayout.addView(upperLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-
         LinearLayout mainLayout2 = new LinearLayout(context);
 
         LinearLayout categoryMainLayout = new LinearLayout(context);
