@@ -103,13 +103,20 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
             @Override
             public void onTextChange(String text) {
                 super.onTextChange(text);
-                if(text.length() > 2) {
+                if(text.length() > 1) {
                     categories[1].clear();
                     for(HtTextCell category : categories[2]){
                         if(category.getText().toLowerCase().contains(text.toLowerCase())){
                             categories[1].add(category);
                         }
                     }
+                    updateCategories(categories[0], categories[1]);
+                    categories[0].clear();
+                    categories[0].addAll(categories[1]);
+                }
+                else {
+                    categories[1].clear();
+                    categories[1].addAll(categories[2]);
                     updateCategories(categories[0], categories[1]);
                     categories[0].clear();
                     categories[0].addAll(categories[1]);
@@ -167,7 +174,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
             @Override
             public void onTextChange(String text) {
                 super.onTextChange(text);
-                if(text.length() > 2) {
+                if(text.length() > 1) {
                     subCategories[1].clear();
                     for(HtTextCell category : subCategories[2]){
                         if(category.getText().toLowerCase().contains(text.toLowerCase())){
@@ -178,8 +185,15 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
                     subCategories[0].clear();
                     subCategories[0].addAll(subCategories[1]);
                 }
+                else {
+                    subCategories[1].clear();
+                    subCategories[1].addAll(subCategories[2]);
+                    updateSubCategories(subCategories[0], subCategories[1]);
+                    subCategories[0].clear();
+                    subCategories[0].addAll(subCategories[1]);
+                }
             }
-        };;
+        };
         subCategorySearch.setHint(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
         final HtTextCell[] previousSelectedSubCategory = {null};
         subCategoryMainLayout.addView(subCategorySearch, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 3,10,3,10));
