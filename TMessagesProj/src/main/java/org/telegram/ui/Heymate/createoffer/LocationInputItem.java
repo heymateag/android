@@ -104,7 +104,7 @@ public class LocationInputItem extends ExpandableItem {
     public LocationInputItem(@NonNull Context context) {
         super(context);
         setTitle(LocaleController.getString("HtLocation", works.heymate.beta.R.string.HtLocation));
-        setIcon(ResourcesCompat.getDrawable(getResources(), works.heymate.beta.R.drawable.location_on_24_px_1, null));
+        setIcon(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_location, null));
     }
 
     public LocationInfo getLocationInfo() {

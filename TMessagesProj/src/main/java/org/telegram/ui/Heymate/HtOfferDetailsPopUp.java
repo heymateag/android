@@ -21,6 +21,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
 import com.amplifyframework.datastore.generated.model.Offer;
 
 import org.json.JSONException;
@@ -141,7 +143,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView addressImage = new ImageView(context);
         addressImage.setId(idCounter++);
-        Drawable addressDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.location_on_24_px_1);
+        Drawable addressDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_location);
         addressDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray2), PorterDuff.Mode.MULTIPLY));
         addressImage.setImageDrawable(addressDrawable);
         RelativeLayout.LayoutParams addressImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
@@ -167,7 +169,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView expiryImage = new ImageView(context);
         expiryImage.setId(idCounter++);
-        Drawable expiryDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.watch_later_24_px_1);
+        Drawable expiryDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_schedule);
         expiryDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray2), PorterDuff.Mode.MULTIPLY));
         expiryImage.setImageDrawable(expiryDrawable);
         RelativeLayout.LayoutParams expiryImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));
@@ -188,7 +190,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView priceImage = new ImageView(context);
         priceImage.setId(idCounter++);
-        Drawable priceDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.money);
+        Drawable priceDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_pricing);
         priceDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextGray2), PorterDuff.Mode.MULTIPLY));
         priceImage.setImageDrawable(priceDrawable);
         RelativeLayout.LayoutParams priceImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(20), AndroidUtilities.dp(20));

@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -36,7 +38,7 @@ public class HtExpireInputCell extends LinearLayout {
 
         LinearLayout titleLayout = new LinearLayout(context);
         ImageView titleImage = new ImageView(context);
-        iconValue = context.getResources().getDrawable(icon);
+        iconValue = AppCompatResources.getDrawable(context, icon);
         iconValue.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
 
         titleImage.setImageDrawable(iconValue);

@@ -40,7 +40,7 @@ public class ScheduleInputItem extends ExpandableItem {
     public ScheduleInputItem(@NonNull Context context) {
         super(context);
         setTitle("Schedule"); // TODO Texts
-        setIcon(AppCompatResources.getDrawable(context, R.drawable.watch_later_24_px_1));
+        setIcon(AppCompatResources.getDrawable(context, R.drawable.ic_schedule));
     }
 
     @Override

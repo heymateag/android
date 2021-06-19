@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -55,7 +57,7 @@ public class HtPaymentConfigInputCell extends LinearLayout {
 
         LinearLayout titleLayout = new LinearLayout(context);
         ImageView titleImage = new ImageView(context);
-        Drawable titleDrawable = context.getResources().getDrawable(icon);
+        Drawable titleDrawable = AppCompatResources.getDrawable(context, icon);
         titleDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
         titleImage.setImageDrawable(titleDrawable);
         titleLayout.addView(titleImage, LayoutHelper.createLinear(20, 20, AndroidUtilities.dp(9), AndroidUtilities.dp(4), 15, 15));

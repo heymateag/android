@@ -147,7 +147,7 @@ public class PriceInputItem extends ExpandableItem {
     public PriceInputItem(@NonNull Context context) {
         super(context);
         setTitle("Pricing");
-        setIcon(ContextCompat.getDrawable(context, R.drawable.money));
+        setIcon(ContextCompat.getDrawable(context, R.drawable.ic_pricing));
     }
 
     @Override

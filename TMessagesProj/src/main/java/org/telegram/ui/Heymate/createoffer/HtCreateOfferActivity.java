@@ -340,7 +340,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 }
             }
         });
-        categoryInputCell = new HtCategoryInputCell(context, this, LocaleController.getString("HtCategory", works.heymate.beta.R.string.HtCategory), categoryArgs, works.heymate.beta.R.drawable.category, canEdit);
+        categoryInputCell = new HtCategoryInputCell(context, this, LocaleController.getString("HtCategory", works.heymate.beta.R.string.HtCategory), categoryArgs, works.heymate.beta.R.drawable.ic_category, canEdit);
         mainLayout.addView(categoryInputCell);
 
         locationInputCell = new LocationInputItem(context);
@@ -349,14 +349,13 @@ public class HtCreateOfferActivity extends BaseFragment {
         participantsInputCell = new ParticipantsInputItem(context);
         mainLayout.addView(participantsInputCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        HashMap<String, Runnable> scheduleArgs = new HashMap<>();
         scheduleInputCell = new ScheduleInputItem(context);
         mainLayout.addView(scheduleInputCell);
 
         priceInputCell = new PriceInputItem(context);
         mainLayout.addView(priceInputCell);
 
-        paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", works.heymate.beta.R.string.HtPaymentTerms), works.heymate.beta.R.drawable.pay, this, actionType);
+        paymentInputCell = new HtPaymentConfigInputCell(context, LocaleController.getString("HtPaymentTerms", works.heymate.beta.R.string.HtPaymentTerms), R.drawable.ic_payment_terms, this, actionType);
         mainLayout.addView(paymentInputCell);
 
         HashMap<String, Runnable> expireArgs = new HashMap<>();
@@ -366,8 +365,6 @@ public class HtCreateOfferActivity extends BaseFragment {
         int day1 = mcurrentTime.get(Calendar.DAY_OF_MONTH);
         if (day1 < day2)
             mcurrentTime.add(Calendar.MONTH, 1);
-        int year = mcurrentTime.get(Calendar.YEAR);
-        int month = mcurrentTime.get(Calendar.MONTH);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         expireArgs.put(ARGUMENTS_EXPIRE, new Runnable() {
             @Override
@@ -396,7 +393,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        expireInputCell = new HtExpireInputCell(context, this, LocaleController.getString("HtExpiration", works.heymate.beta.R.string.HtExpiration), expireArgs, works.heymate.beta.R.drawable.alarm_off_24_px, canEdit);
+        expireInputCell = new HtExpireInputCell(context, this, LocaleController.getString("HtExpiration", works.heymate.beta.R.string.HtExpiration), expireArgs, R.drawable.ic_expiry, canEdit);
         expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(mcurrentTime.getTime()), 0);
         expireDate = mcurrentTime.getTime();
         mainLayout.addView(expireInputCell);
@@ -447,7 +444,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
         });
 
-        termsInputCell = new HtTermsInputCell(context,this,  LocaleController.getString("HtTermsAndConditions", works.heymate.beta.R.string.HtTermsAndConditions), termsArgs, works.heymate.beta.R.drawable.ht_pplicy, canEdit);
+        termsInputCell = new HtTermsInputCell(context,this,  LocaleController.getString("HtTermsAndConditions", works.heymate.beta.R.string.HtTermsAndConditions), termsArgs, R.drawable.ic_terms, canEdit);
         termsInputCell.setRes(ARGUMENTS_TERMS, Texts.get(Texts.CREATE_OFFER_SERVICE_PROVIDER_TERMS), 0);
         mainLayout.addView(termsInputCell);
 
