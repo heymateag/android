@@ -79,7 +79,10 @@ public class ScheduleInputItem extends ExpandableItem {
         ImageView remove = new ImageView(getContext());
         remove.setId(REMOVE);
         remove.setImageDrawable(Theme.getThemedDrawable(getContext(), R.drawable.ic_close_white, Theme.key_windowBackgroundWhiteGrayText));
-        remove.setOnClickListener(v -> mContainerTimeSlot.removeView(timeSlotLayout));
+        remove.setOnClickListener(v -> {
+            mContainerTimeSlot.removeView(timeSlotLayout);
+            updateLayoutHeight();
+        });
         remove.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
         timeSlotLayout.addView(remove, LayoutHelper.createLinear(36, 36, Gravity.CENTER_VERTICAL));
 
@@ -164,6 +167,8 @@ public class ScheduleInputItem extends ExpandableItem {
         updateTimeSlot(timeSlotLayout);
 
         mContainerTimeSlot.addView(timeSlotLayout, 0, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 56, HEADER_LEFT_MARGIN, 0, HEADER_RIGHT_MARGIN, 0));
+
+        updateLayoutHeight();
     }
 
     private void updateTimeSlot(View view) {
