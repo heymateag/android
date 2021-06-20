@@ -2121,7 +2121,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             scrollToTop();
         });
 
-        if (true/*initialDialogsType == 0 && folderId == 0 && !onlySelect && TextUtils.isEmpty(searchString)*/) {
+        if (initialDialogsType == 0 && folderId == 0 && !onlySelect && TextUtils.isEmpty(searchString)) {
             scrimPaint = new Paint() {
                 @Override
                 public void setAlpha(int a) {
@@ -2161,8 +2161,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             };
 
-//            filterTabsView.setVisibility(View.GONE);
-//            canShowFilterTabsView = false;
             filterTabsView.setDelegate(new FilterTabsView.FilterTabsViewDelegate() {
 
                 private void showDeleteAlert(MessagesController.DialogFilter dialogFilter) {
@@ -2827,7 +2825,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             viewPage.htFiltersCell = new HtFiltersCell(context);
             viewPage.htFiltersCell.setBaseFragment(this);
-            viewPage.htFiltersCell.setVisibility(View.VISIBLE);
+            viewPage.htFiltersCell.setVisibility(View.INVISIBLE);
             viewPage.htFiltersCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             viewPage.addView(viewPage.htFiltersCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.TOP));
 
