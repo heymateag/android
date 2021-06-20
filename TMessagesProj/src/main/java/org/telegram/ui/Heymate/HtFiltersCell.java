@@ -103,14 +103,14 @@ public class HtFiltersCell extends LinearLayout {
             addView(statusFilter, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0.1f,10, 0, 0, 0));
         }
 
-        Button categoryFilter = new Button(context, LocaleController.getString("HtCategory", works.heymate.beta.R.string.HtCategory)) {
+        Button categoryFilter = new Button(context, context.getString(works.heymate.beta.R.string.HtCategory)) {
             @Override
             public void setEnabled(boolean enabled) {
                 super.setEnabled(enabled);
                 setAlpha(enabled ? 1.0f : 0.5f);
             }
         };
-        Button subCategoryFilter = new Button(context, LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory)) {
+        Button subCategoryFilter = new Button(context, context.getString(works.heymate.beta.R.string.HtSubCategory)) {
             @Override
             public void setEnabled(boolean enabled) {
                 super.setEnabled(enabled);
@@ -149,6 +149,7 @@ public class HtFiltersCell extends LinearLayout {
                             categoryFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
                             subCategories.addAll(allSubCategories);
                             subCategoryFilter.setText(LocaleController.getString("HtSubCategory", works.heymate.beta.R.string.HtSubCategory));
+                            subCategoryFilter.titleLabel.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
                             subCategorySelect = null;
                         }
                         else {
@@ -198,8 +199,8 @@ public class HtFiltersCell extends LinearLayout {
             builder.setItems(items, icons, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    subCategoryFilter.setText(items[which]);
-                    subCategoryFilter.titleLabel.setTextColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
+                    subCategoryFilter.setText(which == 0 ? context.getString(works.heymate.beta.R.string.HtSubCategory) : items[which]);
+                    subCategoryFilter.titleLabel.setTextColor(which == 0 ? Theme.getColor(Theme.key_dialogTextGray) : context.getResources().getColor(works.heymate.beta.R.color.ht_green));
                     if(parent instanceof OffersActivity){
                         ((OffersActivity) parent).setSubCategoryFilter(which == 0 ? null : items[which]);
                     }
