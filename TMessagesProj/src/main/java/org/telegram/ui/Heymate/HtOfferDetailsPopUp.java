@@ -108,9 +108,9 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
 
         ImageView archiveImage = new ImageView(context);
         archiveImage.setId(idCounter++);
-        Drawable archiveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.chats_archive);
-        archiveDrawable.setColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY);
-        archiveImage.setImageDrawable(archiveDrawable);
+//        Drawable archiveDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.chats_archive);
+//        archiveDrawable.setColorFilter(context.getResources().getColor(works.heymate.beta.R.color.ht_green), PorterDuff.Mode.MULTIPLY);
+//        archiveImage.setImageDrawable(archiveDrawable);
         RelativeLayout.LayoutParams archiveImageLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(25), AndroidUtilities.dp(25));
         archiveImageLayoutParams.addRule(RelativeLayout.BELOW, closeImage.getId());
         archiveImageLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
