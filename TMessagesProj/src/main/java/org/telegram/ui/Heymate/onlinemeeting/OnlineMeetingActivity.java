@@ -20,8 +20,11 @@ import com.yashoid.sequencelayout.SequenceLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Heymate.HtAmplify;
+import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.LogToGroup;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
@@ -105,7 +108,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mLeave.setText("Leave");  // TODO Texts
         mLeave.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), 0xffFE0000));
         mLeave.setTextColor(0xffffffff);
-        mLeave.setOnClickListener(v -> closeMeeting());
+        mLeave.setOnClickListener(v -> confirmCloseMeeting());
 
         mMute = content.findViewById(R.id.mute);
         mMute.setImageResource(R.drawable.ic_not_muted);
@@ -335,8 +338,43 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     @Override
     public boolean onBackPressed() {
-        closeMeeting();
+        confirmCloseMeeting();
         return true;
+    }
+
+    private void confirmCloseMeeting() {
+        LoadingUtil.onLoadingStarted(getParentActivity());
+
+        if (mTimeSlotId != null) {
+            HtAmplify.getInstance(getParentActivity()).getTimeSlot(mTimeSlotId, (success, result, exception) -> {
+                LoadingUtil.onLoadingFinished();
+
+                if (success) {
+                    confirmCloseMeeting(String.valueOf(getUserConfig().clientUserId).equals(result.getUserId()));
+                }
+            });
+        }
+        else if (mReservationId != null) {
+            HtAmplify.getInstance(getParentActivity()).getReservation(mReservationId, (success, result, exception) -> {
+                LoadingUtil.onLoadingFinished();
+
+                if (success) {
+                    confirmCloseMeeting(String.valueOf(getUserConfig().clientUserId).equals(result.getServiceProviderId()));
+                }
+            });
+        }
+    }
+
+    private void confirmCloseMeeting(boolean isServiceProvider) {
+        new AlertDialog.Builder(getParentActivity())
+                .setTitle(isServiceProvider ? "End meeting" : "Leave meeting")
+                .setMessage(isServiceProvider ? "Do you want to end the meeting and finish the offer?" : "Do you want to leave the meeting? You can join again as long as the offer has not finished.")
+                .setPositiveButton(isServiceProvider ? "Yes, end" : "Yes, leave", (dialog, which) -> {
+                    closeMeeting();
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void closeMeeting() {
