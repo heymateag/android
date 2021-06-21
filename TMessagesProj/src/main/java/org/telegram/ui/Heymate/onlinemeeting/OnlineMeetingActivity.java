@@ -279,14 +279,14 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     OnlineReservation.stabilizeMyOrdersStatuses(getParentActivity());
                     break;
                 case HeymateEvents.USER_JOINED_MEETING:
-                    MeetingMember joinedMember = OnlineMeeting.get().getMember((String) args[0]);
+                    MeetingMember joinedMember = (MeetingMember) args[1];
                     View joinedMemberView = joinedMember.createView(getParentActivity());
                     joinedMemberView.setTag(joinedMember);
                     mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
                     mGrid.addView(joinedMemberView);
                     break;
                 case HeymateEvents.USER_LEFT_MEETING:
-                    MeetingMember leftMember = OnlineMeeting.get().getMember((String) args[0]);
+                    MeetingMember leftMember = (MeetingMember) args[1];
                     View leftMemberView = mMemberViews.get(leftMember.getUserId());
 
                     if (leftMemberView != null) {
