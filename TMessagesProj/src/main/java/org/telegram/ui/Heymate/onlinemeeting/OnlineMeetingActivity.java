@@ -238,7 +238,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
         for (int i = 0; i < mOverlay.getChildCount(); i++) {
             if (mOverlay.getChildAt(i).getTag() instanceof MeetingMember) {
-                members.remove((MeetingMember) mGrid.getChildAt(i).getTag());
+                members.remove((MeetingMember) mOverlay.getChildAt(i).getTag());
             }
         }
 
