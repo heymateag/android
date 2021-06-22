@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,16 +25,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RadioButton;
+import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import works.heymate.beta.R;
 import works.heymate.core.Texts;
@@ -377,12 +384,85 @@ public class OfferMessageItem extends SequenceLayout {
             args.putInt("hasPoll", 0);
             DialogsActivity fragment = new DialogsActivity(args);
             fragment.setDelegate((fragment1, dids, message1, param) -> {
-                for(Long did : dids){
+                if (dids.size() > 1 || dids.get(0) == mParent.getUserConfig().getClientUserId()) {
+                    for (int a = 0; a < dids.size(); a++) {
+                        long did = dids.get(a);
+                        SendMessagesHelper.getInstance(mParent.getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0);
+                    }
+                    fragment1.finishFragment();
+
+                    UndoView undoView = findUndoView();
+
+                    if (undoView != null) {
+                        if (dids.size() == 1) {
+                            undoView.showWithAction(dids.get(0), UndoView.ACTION_FWD_MESSAGES, 1);
+                        } else {
+                            undoView.showWithAction(0, UndoView.ACTION_FWD_MESSAGES, 1, dids.size(), null, null);
+                        }
+                    }
+                } else {
+                    long did = dids.get(0);
+
                     SendMessagesHelper.getInstance(mParent.getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0);
+
+                    ChatActivity chatActivity = (mParent instanceof ChatActivity) ? (ChatActivity) mParent : null;
+
+                    if (chatActivity == null || did != chatActivity.getDialogId() || chatActivity.getChatMode() == ChatActivity.MODE_PINNED) {
+                        int lower_part = (int) did;
+                        int high_part = (int) (did >> 32);
+                        Bundle args1 = new Bundle();
+                        // args1.putBoolean("scrollToTopOnResume", scrollToTopOnResume);
+                        if (lower_part != 0) {
+                            if (lower_part > 0) {
+                                args1.putInt("user_id", lower_part);
+                            } else {
+                                args1.putInt("chat_id", -lower_part);
+                            }
+                        } else {
+                            args1.putInt("enc_id", high_part);
+                        }
+                        if (lower_part != 0) {
+                            if (!mParent.getMessagesController().checkCanOpenChat(args1, fragment1)) {
+                                return;
+                            }
+                        }
+                        if (mParent.presentFragment(new ChatActivity(args1), true)) {
+                            if (!AndroidUtilities.isTablet()) {
+                                mParent.removeSelfFromStack();
+                            }
+                        } else {
+                            fragment1.finishFragment();
+                        }
+                    } else {
+                        fragment1.finishFragment();
+                    }
                 }
             });
+
             mParent.presentFragment(fragment);
         }
+    }
+
+    private UndoView findUndoView() {
+        if (mParent == null) {
+            return null;
+        }
+
+        View view = mParent.getFragmentView();
+
+        if (!(view instanceof ViewGroup)) {
+            return null;
+        }
+
+        ViewGroup parent = (ViewGroup) view;
+
+        for (int i = parent.getChildCount() - 1; i >= 0; i--) {
+            if (parent.getChildAt(i) instanceof UndoView) {
+                return (UndoView) parent.getChildAt(i);
+            }
+        }
+
+        return null;
     }
 
     private void initPayment() {
