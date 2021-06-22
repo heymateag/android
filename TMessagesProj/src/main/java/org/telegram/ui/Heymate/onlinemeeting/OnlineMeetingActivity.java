@@ -19,6 +19,7 @@ import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -235,14 +236,27 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     private void ensureMemberViews() {
         List<MeetingMember> members = new ArrayList<>(OnlineMeeting.get().getMembers());
 
-        for (int i = 0; i < mGrid.getChildCount(); i++) {
-            if (mGrid.getTag() instanceof MeetingMember) {
-                members.remove((MeetingMember) mGrid.getTag());
+        for (int i = 0; i < mOverlay.getChildCount(); i++) {
+            if (mOverlay.getChildAt(i).getTag() instanceof MeetingMember) {
+                members.remove((MeetingMember) mGrid.getChildAt(i).getTag());
             }
         }
 
+        for (int i = 0; i < mGrid.getChildCount(); i++) {
+            if (mGrid.getChildAt(i).getTag() instanceof MeetingMember) {
+                members.remove((MeetingMember) mGrid.getChildAt(i).getTag());
+            }
+        }
+
+        String userId = String.valueOf(getUserConfig().clientUserId);
+
         for (MeetingMember member: members) {
-            onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, member.getUserId(), member);
+            if (userId.equals(member.getUserId())) {
+                onHeymateEvent(HeymateEvents.JOINED_MEETING, member.getUserId(), member);
+            }
+            else {
+                onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, member.getUserId(), member);
+            }
         }
     }
 
