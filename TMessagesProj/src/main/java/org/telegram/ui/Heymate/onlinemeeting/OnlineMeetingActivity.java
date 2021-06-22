@@ -194,7 +194,9 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     public void onResume() {
         super.onResume();
 
-        checkPermissionsAndStart();
+        LogToGroup.logIfCrashed(() -> {
+            checkPermissionsAndStart();
+        });
     }
 
     private void checkPermissionsAndStart() {

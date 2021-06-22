@@ -331,27 +331,29 @@ public class OnlineMeeting {
             // See error code documentation https://marketplace.zoom.us/docs/sdk/video/android/errors
             Log.e(TAG, "onError: " + errorCode);
 
-            switch (errorCode) {
-                case ZoomInstantSDKErrors.Errors_Auth_Disable_SDK:
-                case ZoomInstantSDKErrors.Errors_Auth_DoesNot_Support_SDK:
-                case ZoomInstantSDKErrors.Errors_Auth_Empty_Key_or_Secret:
-                case ZoomInstantSDKErrors.Errors_Auth_Error:
-                case ZoomInstantSDKErrors.Errors_Auth_Wrong_Key_or_Secret:
-                case ZoomInstantSDKErrors.Errors_Session_Join_Failed:
-                    HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, new Exception("Failed to join meeting with error code " + errorCode));
-                    return;
-                case ZoomInstantSDKErrors.Errors_Session_Disconnect:
-                    HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
+            LogToGroup.logIfCrashed(() -> {
+                switch (errorCode) {
+                    case ZoomInstantSDKErrors.Errors_Auth_Disable_SDK:
+                    case ZoomInstantSDKErrors.Errors_Auth_DoesNot_Support_SDK:
+                    case ZoomInstantSDKErrors.Errors_Auth_Empty_Key_or_Secret:
+                    case ZoomInstantSDKErrors.Errors_Auth_Error:
+                    case ZoomInstantSDKErrors.Errors_Auth_Wrong_Key_or_Secret:
+                    case ZoomInstantSDKErrors.Errors_Session_Join_Failed:
+                        HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, new Exception("Failed to join meeting with error code " + errorCode));
+                        return;
+                    case ZoomInstantSDKErrors.Errors_Session_Disconnect:
+                        HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
-                    Utils.postOnUIThread(() -> {
-                        for (MeetingMember meetingMember: mMembers.values()) {
-                            meetingMember.release();
-                        }
-                        mMembers.clear();
-                        mSelf = null;
-                    });
-                    return;
-            }
+                        Utils.postOnUIThread(() -> {
+                            for (MeetingMember meetingMember: mMembers.values()) {
+                                meetingMember.release();
+                            }
+                            mMembers.clear();
+                            mSelf = null;
+                        });
+                        return;
+                }
+            });
         }
 
         @Override
