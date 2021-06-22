@@ -34,6 +34,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.widget.MultiChoicePopup;
 
+import java.util.Arrays;
+
 import works.heymate.beta.R;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.PurchasePlanInfo;
@@ -364,7 +366,15 @@ public class PriceInputItem extends ExpandableItem {
     public void setPricingInfo(PricingInfo pricingInfo) {
         mFixedPrice.setText(pricingInfo.price == 0 ? "" : String.valueOf(pricingInfo.price));
         mCurrency.setText(pricingInfo.currency == null ? CURRENCIES[1] : pricingInfo.currency);
-        mRateType.setText(pricingInfo.rateType == null ? RATE_TYPES[0] : pricingInfo.rateType);
+
+        mRateType.setText(RATE_TYPES[0]);
+
+        for (String rateType: RATE_TYPES) {
+            if (rateType.equals(pricingInfo.rateType)) {
+                mRateType.setText(rateType);
+                break;
+            }
+        }
 
         if (pricingInfo.bundleCount > 0) {
             mCheckBundle.setChecked(true);
