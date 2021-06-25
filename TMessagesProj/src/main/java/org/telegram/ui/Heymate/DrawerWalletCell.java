@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package org.telegram.ui.Cells;
+package org.telegram.ui.Heymate;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -18,15 +18,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
-public class DrawerManageOffersCell extends FrameLayout {
+import works.heymate.beta.R;
+
+public class DrawerWalletCell extends FrameLayout {
 
     private TextView textView;
 
-    public DrawerManageOffersCell(Context context) {
+    public DrawerWalletCell(Context context) {
         super(context);
 
         textView = new TextView(context);
@@ -50,8 +51,8 @@ public class DrawerManageOffersCell extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
-        textView.setText("Manage Offers");
-        Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.offer);
+        textView.setText("Wallet");
+        Drawable drawable = getResources().getDrawable(R.drawable.menu_wallet);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
         textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }

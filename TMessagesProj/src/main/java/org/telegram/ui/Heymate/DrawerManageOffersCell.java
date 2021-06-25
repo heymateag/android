@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package org.telegram.ui.Cells;
+package org.telegram.ui.Heymate;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -22,11 +22,11 @@ import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
-public class DrawerMyScheduleCell extends FrameLayout {
+public class DrawerManageOffersCell extends FrameLayout {
 
     private TextView textView;
 
-    public DrawerMyScheduleCell(Context context) {
+    public DrawerManageOffersCell(Context context) {
         super(context);
 
         textView = new TextView(context);
@@ -50,8 +50,8 @@ public class DrawerMyScheduleCell extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
-        textView.setText("My Schedule");
-        Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.ht_calendar);
+        textView.setText("Manage Offers");
+        Drawable drawable = getResources().getDrawable(works.heymate.beta.R.drawable.offer);
         drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_inGreenCall), PorterDuff.Mode.MULTIPLY));
         textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }

@@ -9,7 +9,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.MetricAffectingSpan;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -21,13 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ChatObject;
-import works.heymate.beta.R;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -37,7 +29,6 @@ import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
-import works.heymate.core.Utils;
 import works.heymate.core.wallet.VerifiedStatus;
 import works.heymate.core.wallet.Wallet;
 
@@ -81,7 +72,7 @@ public class WalletActivity extends BaseFragment implements HeymateEvents.Heymat
 
     @Override
     public View createView(Context context) {
-        View content = LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.activity_wallet, null, false);
+        View content = LayoutInflater.from(context).inflate(works.heymate.beta.R.layout.activity_mywallet, null, false);
 
         mImageWallet = content.findViewById(works.heymate.beta.R.id.image_wallet);
         mTextTitle = content.findViewById(works.heymate.beta.R.id.text_title);

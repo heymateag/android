@@ -107,8 +107,8 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Cells.DrawerAddCell;
-import org.telegram.ui.Cells.DrawerManageOffersCell;
-import org.telegram.ui.Cells.DrawerMyScheduleCell;
+import org.telegram.ui.Heymate.DrawerManageOffersCell;
+import org.telegram.ui.Heymate.DrawerMyScheduleCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
@@ -139,6 +139,7 @@ import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 // Heymate
 import org.telegram.ui.Heymate.AttestationActivity;
+import org.telegram.ui.Heymate.DrawerWalletCell;
 import org.telegram.ui.Heymate.EasterActivity;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.HeymatePayment;
@@ -148,6 +149,7 @@ import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.OffersActivity;
 ///
+import org.telegram.ui.Heymate.wallet.WalletActivity;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 
 import java.io.BufferedReader;
@@ -530,6 +532,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     presentFragment(new LoginActivity(freeAccount));
                 }
                 drawerLayoutContainer.closeDrawer(false);
+            } else if (view instanceof DrawerWalletCell) {
+                presentFragment(new WalletActivity());
+                drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerManageOffersCell) {
                 presentFragment(HeymateConfig.getGeneral().get("offer_helper_presented") == null ? new HtOfferHelperActivity(): new OffersActivity());
                 drawerLayoutContainer.closeDrawer(false);
@@ -577,9 +582,12 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
                     presentFragment(new CallLogActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 102) {
-                    presentFragment(HeymateConfig.getGeneral().get("offer_helper_presented") == null ? new HtOfferHelperActivity(): new OffersActivity());
+                    presentFragment(new WalletActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 103) {
+                    presentFragment(HeymateConfig.getGeneral().get("offer_helper_presented") == null ? new HtOfferHelperActivity(): new OffersActivity());
+                    drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 104) {
                     presentFragment(new MyScheduleActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 }else if (id == 11) {

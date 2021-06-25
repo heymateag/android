@@ -17,19 +17,19 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerAddCell;
-import org.telegram.ui.Cells.DrawerManageOffersCell;
-import org.telegram.ui.Cells.DrawerMyScheduleCell;
+import org.telegram.ui.Heymate.DrawerManageOffersCell;
+import org.telegram.ui.Heymate.DrawerMyScheduleCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SideMenultItemAnimator;
+import org.telegram.ui.Heymate.DrawerWalletCell;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -133,9 +133,12 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 view = new DrawerAddCell(mContext);
                 break;
             case 102:
-                view = new DrawerManageOffersCell(mContext);
+                view = new DrawerWalletCell(mContext);
                 break;
             case 103:
+                view = new DrawerManageOffersCell(mContext);
+                break;
+            case 104:
                 view = new DrawerMyScheduleCell(mContext);
                 break;
             case 1:
@@ -255,6 +258,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int inviteIcon;
         int helpIcon;
         int peopleNearbyIcon;
+        int walletIcon = works.heymate.beta.R.drawable.menu_wallet;
         int manageOffersIcon = works.heymate.beta.R.drawable.offer;
         int myScheduleIcon = works.heymate.beta.R.drawable.ht_calendar;
         if (eventType == 0) {
@@ -303,8 +307,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             peopleNearbyIcon = works.heymate.beta.R.drawable.menu_nearby;
         }
         items.add(new Item(2, LocaleController.getString("NewGroup", works.heymate.beta.R.string.NewGroup), newGroupIcon));
-        items.add(new Item(102, "Manage Offers", manageOffersIcon));
-        items.add(new Item(103, "My Schedule", myScheduleIcon));
+        items.add(new Item(102, "Wallet", walletIcon));
+        items.add(new Item(103, "Manage Offers", manageOffersIcon));
+        items.add(new Item(104, "My Schedule", myScheduleIcon));
         //items.add(new Item(3, LocaleController.getString("NewSecretChat", works.heymate.beta.R.string.NewSecretChat), newSecretIcon));
         //items.add(new Item(4, LocaleController.getString("NewChannel", works.heymate.beta.R.string.NewChannel), newChannelIcon));
         items.add(new Item(6, LocaleController.getString("Contacts", works.heymate.beta.R.string.Contacts), contactsIcon));

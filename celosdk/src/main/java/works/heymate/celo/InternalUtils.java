@@ -6,7 +6,7 @@ import android.os.Looper;
 import java.io.IOException;
 import java.io.InputStream;
 
-class InternalUtils {
+public class InternalUtils {
 
     private static Handler mMainThreadHandler = null;
 

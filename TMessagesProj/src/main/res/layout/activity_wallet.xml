@@ -1,75 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.yashoid.sequencelayout.SequenceLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.yashoid.sequencelayout.SequenceLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    app:pageHeight="776"
-    app:pageWidth="420"
-    app:sequences="@xml/sequences_wallet">
-
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_wallet"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"/>
+        android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/text_title"
+        android:id="@+id/title_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/cashout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"/>
-
-    <TextView
-        android:id="@+id/text_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
         android:gravity="center"/>
 
-    <View
-        android:id="@+id/bottombar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <TextView
-        android:id="@+id/text_leftbutton"
+        android:id="@+id/add_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"/>
-
-    <ImageView
-        android:id="@+id/image_leftbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter"/>
-
-    <TextView
-        android:id="@+id/text_rightbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"/>
-
-    <ImageView
-        android:id="@+id/image_rightbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter"/>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:id="@+id/leftbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:id="@+id/rightbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:gravity="center"/>
 
 </com.yashoid.sequencelayout.SequenceLayout>
