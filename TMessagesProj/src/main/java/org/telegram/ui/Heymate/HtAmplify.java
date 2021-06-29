@@ -28,6 +28,7 @@ import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
+import com.google.android.exoplayer2.util.Util;
 
 import org.telegram.messenger.AndroidUtilities;
 
@@ -602,11 +603,15 @@ public class HtAmplify {
     }
 
     public void updateReservation(Reservation reservation, HtTimeSlotStatus status) {
+        updateReservation(reservation, status, (APICallback<Reservation>) null);
+    }
+
+    public void updateReservation(Reservation reservation, HtTimeSlotStatus status, APICallback<Reservation> callback) {
         Reservation mutatedReservation = reservation.copyOfBuilder()
                 .status(status.name())
                 .build();
 
-        updateReservation(mutatedReservation);
+        updateReservation(mutatedReservation, callback);
     }
 
     public void updateReservation(Reservation reservation, HtTimeSlotStatus status, String meetingId) {
@@ -615,10 +620,10 @@ public class HtAmplify {
                 .meetingId(meetingId)
                 .build();
 
-        updateReservation(mutatedReservation);
+        updateReservation(mutatedReservation, (APICallback<Reservation>) null);
     }
 
-    private void updateReservation(Reservation reservation) {
+    private void updateReservation(Reservation reservation, APICallback<Reservation> callback) {
         Amplify.API.mutate(ModelMutation.update(reservation), result -> {
             HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservation.getId());
 
@@ -628,6 +633,7 @@ public class HtAmplify {
                 if (HtTimeSlotStatus.CANCELLED_BY_CONSUMER.name().equals(reservation.getStatus()) ||
                         HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER.name().equals(reservation.getStatus())) {
                     Log.i(TAG, "Updating time slot.");
+
                     getTimeSlot(reservation.getTimeSlotId(), (success, result1, exception) -> {
                         if (success && result1 != null) {
                             TimeSlot mutatedTimeSlot = result1.copyOfBuilder()
@@ -637,59 +643,126 @@ public class HtAmplify {
 
                             Amplify.API.mutate(ModelMutation.update(mutatedTimeSlot), result2 -> {
                                 Log.i(TAG, "Time slot updated successfully.");
+
+                                resumeReservationUpdate(reservation, callback);
                             }, error -> {
                                 Log.e(TAG, "Failed to update time slot.", error);
+
+                                resumeReservationUpdate(reservation, callback);
                             });
                         }
+                        else {
+                            resumeReservationUpdate(reservation, callback);
+                        }
                     });
-
-                    if (reservation.getPurchasedPlanId() != null) {
-                        Amplify.API.query(ModelQuery.get(PurchasedPlan.class, reservation.getPurchasedPlanId()), result1 -> {
+                }
+                else if (HtTimeSlotStatus.FINISHED.name().equals(reservation.getStatus()) && reservation.getPurchasedPlanId() != null) {
+                    Amplify.API.query(ModelQuery.get(PurchasedPlan.class, reservation.getPurchasedPlanId()), result1 -> {
                             if (result1.hasData()) {
                                 PurchasedPlan purchasedPlan = result1.getData();
                                 PurchasedPlan modifiedPlan = purchasedPlan.copyOfBuilder()
+                                        .finishedReservationsCount(purchasedPlan.getFinishedReservationsCount() + 1)
                                         .pendingReservationsCount(purchasedPlan.getPendingReservationsCount() - 1)
                                         .build();
 
                                 Amplify.API.mutate(ModelMutation.update(modifiedPlan),
-                                        result2 -> Log.i(TAG, "Purchased plan updated."),
-                                        error -> Log.e(TAG, "Failed to update purchased plan.", error)
-                                        );
+                                        result2 -> {
+                                            Log.i(TAG, "Purchased plan updated.");
+
+                                            if (callback != null) {
+                                                Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                                            }
+                                        },
+                                        error -> {
+                                            Log.e(TAG, "Failed to update purchased plan.", error);
+
+                                            if (callback != null) {
+                                                Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                                            }
+                                        }
+                                );
                             }
                             else {
                                 Log.e(TAG, "Purchased plan with id " + reservation.getPurchasedPlanId() + " not found!");
+
+                                if (callback != null) {
+                                    Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                                }
                             }
                         },
-                        error -> Log.e(TAG, "Failed to get purchased plan", error));
-                    }
-                }
-                else if (HtTimeSlotStatus.FINISHED.name().equals(reservation.getStatus()) && reservation.getPurchasedPlanId() != null) {
-                    Amplify.API.query(ModelQuery.get(PurchasedPlan.class, reservation.getPurchasedPlanId()), result1 -> {
-                                if (result1.hasData()) {
-                                    PurchasedPlan purchasedPlan = result1.getData();
-                                    PurchasedPlan modifiedPlan = purchasedPlan.copyOfBuilder()
-                                            .finishedReservationsCount(purchasedPlan.getFinishedReservationsCount() + 1)
-                                            .pendingReservationsCount(purchasedPlan.getPendingReservationsCount() - 1)
-                                            .build();
+                        error -> {
+                            Log.e(TAG, "Failed to get purchased plan", error);
 
-                                    Amplify.API.mutate(ModelMutation.update(modifiedPlan),
-                                            result2 -> Log.i(TAG, "Purchased plan updated."),
-                                            error -> Log.e(TAG, "Failed to update purchased plan.", error)
-                                    );
-                                }
-                                else {
-                                    Log.e(TAG, "Purchased plan with id " + reservation.getPurchasedPlanId() + " not found!");
-                                }
-                            },
-                            error -> Log.e(TAG, "Failed to get purchased plan", error));
+                            if (callback != null) {
+                                Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                            }
+                        });
+                }
+                else if (callback != null) {
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, result.getData(), null));
                 }
             }
             else {
                 Log.i(TAG, "Reservation not found to be updated.");
+
+                if (callback != null) {
+                    Utils.runOnUIThread(() -> callback.onCallResult(false, null, null));
+                }
             }
         }, error -> {
             Log.e(TAG, "Failed to update reservation", error);
+
+            if (callback != null) {
+                Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+            }
         });
+    }
+
+    private void resumeReservationUpdate(Reservation reservation, APICallback<Reservation> callback) {
+        if (reservation.getPurchasedPlanId() != null) {
+            Amplify.API.query(ModelQuery.get(PurchasedPlan.class, reservation.getPurchasedPlanId()), result1 -> {
+                    if (result1.hasData()) {
+                        PurchasedPlan purchasedPlan = result1.getData();
+                        PurchasedPlan modifiedPlan = purchasedPlan.copyOfBuilder()
+                                .pendingReservationsCount(purchasedPlan.getPendingReservationsCount() - 1)
+                                .build();
+
+                        Amplify.API.mutate(ModelMutation.update(modifiedPlan),
+                                result2 -> {
+                                    Log.i(TAG, "Purchased plan updated.");
+
+                                    if (callback != null) {
+                                        Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                                    }
+                                },
+                                error -> {
+                                    if (callback != null) {
+                                        Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                                    }
+
+                                    Log.e(TAG, "Failed to update purchased plan.", error);
+                                }
+                        );
+                    }
+                    else {
+                        Log.e(TAG, "Purchased plan with id " + reservation.getPurchasedPlanId() + " not found!");
+
+                        if (callback != null) {
+                            Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                        }
+                    }
+            },
+            error -> {
+                Log.e(TAG, "Failed to get purchased plan", error);
+
+                if (callback != null) {
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+                }
+            });
+        }
+        else if (callback != null) {
+            Utils.runOnUIThread(() -> callback.onCallResult(true, reservation, null));
+        }
     }
 
     public void getOffer(String offerId, OfferCallback<Offer> callback) {

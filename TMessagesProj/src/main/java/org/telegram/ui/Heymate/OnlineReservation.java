@@ -12,9 +12,11 @@ import org.telegram.messenger.UserConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import works.heymate.core.reservation.ReservationUtils;
@@ -254,7 +256,15 @@ public class OnlineReservation {
         });
     }
 
+    private static final Set<String> sOnGoingReservationStabilizations = new HashSet<>();
+
     public static void stabilizeReservationStatus(Context context, Reservation reservation, Offer offer) {
+        if (sOnGoingReservationStabilizations.contains(reservation.getId())) {
+            return;
+        }
+
+        sOnGoingReservationStabilizations.add(reservation.getId());
+
         if (HtTimeSlotStatus.MARKED_AS_STARTED.name().equals(reservation.getStatus())) {
             if (offer != null) {
                 confirmStarted(context, reservation, offer);
@@ -265,6 +275,8 @@ public class OnlineReservation {
                         confirmStarted(context, reservation, data);
                     }
                     else {
+                        sOnGoingReservationStabilizations.remove(reservation.getId());
+
                         Log.e(TAG, "Failed to get offer to stabilize reservation.", exception);
                     }
                 });
@@ -280,10 +292,15 @@ public class OnlineReservation {
                         confirmFinished(context, reservation, data);
                     }
                     else {
+                        sOnGoingReservationStabilizations.remove(reservation.getId());
+
                         Log.e(TAG, "Failed to get offer to stabilize reservation.", exception);
                     }
                 });
             }
+        }
+        else {
+            sOnGoingReservationStabilizations.remove(reservation.getId());
         }
     }
 
@@ -292,9 +309,13 @@ public class OnlineReservation {
 
         wallet.startOffer(offer, reservation, (success, errorCause) -> {
             if (success) {
-                HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.STARTED);
+                HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.STARTED, (success1, result, exception) -> {
+                    sOnGoingReservationStabilizations.remove(reservation.getId());
+                });
             }
             else {
+                sOnGoingReservationStabilizations.remove(reservation.getId());
+
                 Log.e(TAG, "Failed to confirm started offer", errorCause);
             }
         });
@@ -305,9 +326,13 @@ public class OnlineReservation {
 
         wallet.finishOffer(offer, reservation, (success, errorCause) -> {
             if (success) {
-                HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.FINISHED);
+                HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.FINISHED, (success1, result, exception) -> {
+                    sOnGoingReservationStabilizations.remove(reservation.getId());
+                });
             }
             else {
+                sOnGoingReservationStabilizations.remove(reservation.getId());
+
                 Log.e(TAG, "Failed to confirm finished offer", errorCause);
             }
         });
