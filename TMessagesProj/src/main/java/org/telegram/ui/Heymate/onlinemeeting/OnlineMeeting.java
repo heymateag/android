@@ -310,6 +310,10 @@ public class OnlineMeeting {
         @Override
         public void onSessionLeave() {
             LogToGroup.logIfCrashed(() -> {
+                if (mSelf == null) { // TODO Loose handling. Need to figure out how mSelf can be null here.
+                    return;
+                }
+
                 HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
                 Utils.postOnUIThread(() -> {
