@@ -40,6 +40,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
@@ -47,6 +48,8 @@ import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
 
 public class HtOfferDetailsPopUp extends AlertDialog.Builder {
+
+    private static final int IMAGE_WIDTH_DP = 360 - 16 - 16;
 
     private int idCounter = 1;
     public ImageView closeImage;
@@ -117,15 +120,23 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         archiveImageLayoutParams.setMargins(0, 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(archiveImage, archiveImageLayoutParams);
 
-        BackupImageView offerImage = new BackupImageView(context);
+        RoundedCornersImageView offerImage = new RoundedCornersImageView(context);
         offerImage.setId(idCounter++);
-        // Bitmap imageBitmap = FileCache.get().getOfferImage(context, offer.getId());
-        //if(imageBitmap == null){
-            offerImage.setImageDrawable(context.getResources().getDrawable(works.heymate.beta.R.drawable.np));
-        //} else {
-        //    offerImage.setImageBitmap(imageBitmap);
-        //}
-        offerImage.setRoundRadius(AndroidUtilities.dp(4));
+
+        if (offer != null && offer.getHasImage() != null && offer.getHasImage()) {
+            offerImage.setImageDrawable(null);
+
+            String offerId = offer.getId();
+            int size = AndroidUtilities.dp(IMAGE_WIDTH_DP);
+
+            FileCache.get().getImage(offerId, size, (success, drawable, exception) -> {
+                offerImage.setImageDrawable(drawable);
+            });
+        }
+        else {
+            offerImage.setVisibility(View.GONE);
+        }
+        offerImage.setCornerRadius(AndroidUtilities.dp(4));
         RelativeLayout.LayoutParams offerImageLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(150));
         offerImageLayoutParams.addRule(RelativeLayout.BELOW, statusLayout.getId());
         offerImageLayoutParams.setMargins(AndroidUtilities.dp(20), AndroidUtilities.dp(5), AndroidUtilities.dp(20), AndroidUtilities.dp(20));
