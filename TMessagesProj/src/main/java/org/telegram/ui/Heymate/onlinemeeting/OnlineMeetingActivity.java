@@ -223,7 +223,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     }
 
     private void checkSessionAndStart() {
-        if (mStarted) {
+        if (mStarted && OnlineMeeting.get().getSelf() != null) { // TODO Weak handling. Session is ending somewhere we're not aware of! (probably in meeting members screen)
             ensureMemberViews();
             return;
         }
@@ -254,7 +254,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
         for (MeetingMember member: members) {
             if (userId.equals(member.getUserId())) {
-                onHeymateEvent(HeymateEvents.JOINED_MEETING, member.getUserId(), member);
+                onHeymateEvent(HeymateEvents.JOINED_MEETING, member.getUserId(), member, true);
             }
             else {
                 onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, member.getUserId(), member);
@@ -288,6 +288,14 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     params.rightMargin = AndroidUtilities.dp(12);
                     params.leftMargin = params.rightMargin;
                     mOverlay.addView(myselfView, params);
+
+                    if (args.length == 2) {
+                        for (MeetingMember existingMember: OnlineMeeting.get().getMembers()) {
+                            if (existingMember != myself) {
+                                onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, existingMember.getUserId(), existingMember);
+                            }
+                        }
+                    }
                     break;
                 case HeymateEvents.FAILED_TO_JOIN_MEETING:
                     mStarted = false;
