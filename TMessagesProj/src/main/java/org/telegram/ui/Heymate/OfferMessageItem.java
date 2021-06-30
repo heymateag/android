@@ -353,21 +353,7 @@ public class OfferMessageItem extends SequenceLayout {
     }
 
     private void doPromote(String referralId, boolean share) {
-        TLRPC.User user = UserConfig.getInstance(mParent.getCurrentAccount()).getCurrentUser();
-        String name;
-
-        if (user.username != null) {
-            name = "@" + user.username;
-        }
-        else {
-            name = user.first_name;
-
-            if (!TextUtils.isEmpty(user.last_name)) {
-                name = name + " " + user.last_name;
-            }
-        }
-
-        String message = OfferUtils.serializeBeautiful(mOffer, referralId, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        String message = OfferUtils.serializeBeautiful(mOffer, referralId, mOffer.getUserId(), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         if (share) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);

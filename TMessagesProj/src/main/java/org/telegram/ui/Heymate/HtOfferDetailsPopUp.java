@@ -32,6 +32,7 @@ import org.telegram.messenger.LocaleController;
 import works.heymate.beta.R;
 
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -225,38 +226,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         priceTextLayoutParams.setMargins(AndroidUtilities.dp(2), 0, AndroidUtilities.dp(20), AndroidUtilities.dp(10));
         mainLayout.addView(priceText, priceTextLayoutParams);
 
-        int userId = 0;
-
-        try {
-            userId = Integer.parseInt(offer.getUserId());
-        } catch (NumberFormatException e) { }
-
-        TLRPC.User user = null;
-
-        if (userId != 0) {
-            user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(userId);
-        }
-
-        String name;
-
-        if (user != null) {
-            if (user.username != null) {
-                name = "@" + user.username;
-            }
-            else {
-                name = user.first_name;
-
-                if (!TextUtils.isEmpty(user.last_name)) {
-                    name = name + " " + user.last_name;
-                }
-            }
-        }
-        else {
-            name = "Service provider"; // TODO Texts
-        }
-
         // TODO Make a clean text for offer details!
-        String message = OfferUtils.serializeBeautiful(offer, null, name , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        String message = OfferUtils.serializeBeautiful(offer, null, TG2HM.getUserName(offer.getUserId()) , OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         TextView delayText = new TextView(context);
         delayText.setId(idCounter++);
@@ -478,20 +449,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
-        TLRPC.User user = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
-        String name;
-
-        if (user.username != null) {
-            name = "@" + user.username;
-        }
-        else {
-            name = user.first_name;
-
-            if (!TextUtils.isEmpty(user.last_name)) {
-                name = name + " " + user.last_name;
-            }
-        }
-        String message = OfferUtils.serializeBeautiful(offer, referralId, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        String message = OfferUtils.serializeBeautiful(offer, referralId, TG2HM.getUserName(offer.getUserId()), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
         share.putExtra(Intent.EXTRA_TEXT, message);
         getContext().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteYourOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
     }

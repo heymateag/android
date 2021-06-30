@@ -774,22 +774,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                                 Intent share = new Intent(Intent.ACTION_SEND);
                                 share.setType("text/plain");
 
-                                TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-
-                                String name;
-
-                                if (user.username != null) {
-                                    name = "@" + user.username;
-                                }
-                                else {
-                                    name = user.first_name;
-
-                                    if (!TextUtils.isEmpty(user.last_name)) {
-                                        name = name + " " + user.last_name;
-                                    }
-                                }
-
-                                String message = OfferUtils.serializeBeautiful(createdOffer, null, name, OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                                String message = OfferUtils.serializeBeautiful(createdOffer, null, TG2HM.getSelfName(), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                                 share.putExtra(Intent.EXTRA_TEXT, message);
                                 getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
                                 finishFragment();
