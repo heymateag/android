@@ -303,7 +303,7 @@ public class OnlineMeeting {
                 mMembers.put(mSelf.getUserId(), mSelf);
                 mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
 
-                HeymateEvents.notify(HeymateEvents.JOINED_MEETING);
+                HeymateEvents.notify(HeymateEvents.JOINED_MEETING, mSelf.getUserId(), mSelf);
             });
         }
 
