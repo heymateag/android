@@ -288,7 +288,7 @@ public class OnlineMeeting {
         LogToGroup.logIfCrashed(() -> {
             MeetingMember member = mMembers.get(mHostId);
 
-            if (member != null && mSelf != member && mSelf.getZoomUser().isHost()) {
+            if (member != null && mSelf != null && mSelf != member && mSelf.getZoomUser().isHost()) {
                 mSDK.getUserHelper().makeHost(member.getZoomUser());
             }
         });

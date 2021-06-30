@@ -231,7 +231,11 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mStarted = true;
 
         if (OnlineMeeting.get().ensureSession(mMeetingId, mTimeSlotId, mReservationId)) {
-            onHeymateEvent(HeymateEvents.JOINED_MEETING);
+            MeetingMember self = OnlineMeeting.get().getSelf();
+
+            if (self != null) {
+                onHeymateEvent(HeymateEvents.JOINED_MEETING, self.getUserId(), self);
+            }
         }
     }
 
@@ -265,12 +269,16 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     @Override
     public void onHeymateEvent(int event, Object... args) {
         LogToGroup.logIfCrashed(() -> {
+            if (getParentActivity() == null) {
+                return; // TODO Why?!
+            }
+
             switch (event) {
                 case HeymateEvents.JOINING_MEETING:
                     // Nothing to do.
                     break;
                 case HeymateEvents.JOINED_MEETING:
-                    MeetingMember myself = OnlineMeeting.get().getSelf();
+                    MeetingMember myself = (MeetingMember) args[1];
                     View myselfView = myself.createView(getParentActivity());
                     myselfView.setTag(OnlineMeeting.get().getSelf());
                     mMemberViews.put(myself.getUserId(), myselfView);
