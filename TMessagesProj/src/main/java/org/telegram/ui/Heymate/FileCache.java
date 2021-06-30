@@ -367,8 +367,10 @@ public class FileCache {
         }
     }
 
-    public void trimMemory() {
-        for (String key: mBitmaps.keySet()) {
+    private void trimMemory() {
+        ArrayList<String> keys = new ArrayList<>(mBitmaps.keySet());
+
+        for (String key: keys) {
             List<WeakReference<BitmapWrapperDrawable>> referrers = getReferrers(key, false);
 
             if (referrers == null || referrers.isEmpty()) {
