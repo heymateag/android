@@ -476,6 +476,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             participantsInputCell.setError(false);
             categoryInputCell.setError(false, 0);
             categoryInputCell.setError(false, 1);
+            expireInputCell.setError(false, 0);
 
             UndoView undoView = new UndoView(context, this);
             undoView.setColors(Theme.getColor(Theme.key_chat_inRedCall), Theme.getColor(Theme.key_dialogTextBlack));
@@ -562,6 +563,23 @@ public class HtCreateOfferActivity extends BaseFragment {
                     }
                 }
             }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(expireDate.getTime());
+            int expireYear = calendar.get(Calendar.YEAR);
+            int expireMonth = calendar.get(Calendar.MONTH);
+            int expireDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            int currentYear = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            if (expireYear < currentYear || (expireYear == currentYear && expireMonth < currentMonth) || (expireYear == currentYear && expireMonth == currentMonth && expireDay <= currentDay)) {
+                expireInputCell.setError(true, 0);
+                errors.append("Expire date should be sometime in the future").append('\n');
+            }
+
             if (errors.length() > 0) {
                 undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors.toString(), null, () -> {
                     undoView.setVisibility(View.GONE);
