@@ -57,6 +57,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     private Offer offer;
     private OfferUtils.PhraseInfo phraseInfo;
 
+    private AlertDialog dialog = null;
+
     public HtOfferDetailsPopUp(Context context, BaseFragment parent, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
         super(context, 0);
         AlertDialog.Builder builder = this;
@@ -287,6 +289,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
                 PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
                 PurchasePlanInfo purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);
                 HeymatePayment.initPayment(parent, offer.getId(), purchasePlanInfo, phraseInfo == null ? null : phraseInfo.referralId);
+                dialog.dismiss();
             } catch (JSONException e) { }
         });
         RelativeLayout.LayoutParams buyButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
@@ -437,6 +440,13 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         scrollView.addView(holderLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         builder.setView(scrollView);
+    }
+
+    @Override
+    public AlertDialog create() {
+        dialog = super.create();
+
+        return dialog;
     }
 
     private void promote() {
