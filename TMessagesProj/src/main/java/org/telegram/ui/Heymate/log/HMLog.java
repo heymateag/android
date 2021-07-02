@@ -30,6 +30,7 @@ public class HMLog {
         Throwable t;
 
         String thread;
+        String trace;
         String time;
 
         public Log(String tag, String message, Throwable t) {
@@ -39,6 +40,9 @@ public class HMLog {
 
             thread = Thread.currentThread().getName();
 
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            trace = stackTrace[1].getClassName() + "." + stackTrace[1].getMethodName() + ":" + stackTrace[1].getLineNumber();
+
             mCalendar.setTimeInMillis(System.currentTimeMillis());
             time = mCalendar.get(Calendar.MINUTE) + ":" + mCalendar.get(Calendar.SECOND) + "." + mCalendar.get(Calendar.MILLISECOND);
         }
@@ -46,6 +50,9 @@ public class HMLog {
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
+
+//            sb.append(thread).append(':').append(' ').append("Called from:").append(' ').append(trace).append('\n');
+//            sb.append(tag).append(' ').append(time).append(" - ").append(message);
 
             sb.append(tag).append(' ').append(time).append(" - ").append(message).append(' ').append('(').append(thread).append(')');
 
@@ -83,7 +90,9 @@ public class HMLog {
 
         mLog.clear();
 
-        LogToGroup.log(message, fragment);
+        try {
+            LogToGroup.log(message, fragment);
+        } catch (Throwable t) { }
 
         try {
             OutputStream stream = new FileOutputStream(new File(ApplicationLoader.applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "special_log.txt"));
@@ -96,7 +105,7 @@ public class HMLog {
         StringBuilder sb = new StringBuilder();
 
         for (Log log: mLog) {
-            sb.append(log.toString()).append('\n');
+            sb.append(log.toString()).append('\n').append('\n');
         }
 
         return sb.toString();

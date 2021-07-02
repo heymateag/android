@@ -25,6 +25,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
+import org.telegram.ui.Heymate.log.HMLog;
 import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
@@ -39,6 +40,8 @@ import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
 
 public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
+
+    private static final String TAG = "OnlineMeetingActivity";
 
     private static final String KEY_MEETING_ID = "meetingId";
     private static final String KEY_TIME_SLOT_ID = "timeSlotId";
@@ -89,6 +92,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     @Override
     public View createView(Context context) {
+        HMLog.d(TAG, "createView");
         HeymateEvents.register(HeymateEvents.JOINING_MEETING, this);
         HeymateEvents.register(HeymateEvents.JOINED_MEETING, this);
         HeymateEvents.register(HeymateEvents.FAILED_TO_JOIN_MEETING, this);
@@ -222,16 +226,20 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     }
 
     private void checkSessionAndStart() {
+        HMLog.d(TAG, "checkSessionAndStart. Started=" + mStarted);
         if (mStarted && OnlineMeeting.get().getSelf() != null) { // TODO Weak handling. Session is ending somewhere we're not aware of! (probably in meeting members screen)
+            HMLog.d(TAG, "Self is not null. Ensuring member views.");
             ensureMemberViews();
             return;
         }
 
         mStarted = true;
 
+        HMLog.d(TAG, "About to ensure session");
         if (OnlineMeeting.get().ensureSession(mMeetingId, mTimeSlotId, mReservationId)) {
             MeetingMember self = OnlineMeeting.get().getSelf();
 
+            HMLog.d(TAG, "Already in session. Self exists: " + (self != null));
             if (self != null) {
                 onHeymateEvent(HeymateEvents.JOINED_MEETING, self.getUserId(), self);
             }
@@ -239,6 +247,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     }
 
     private void ensureMemberViews() {
+        HMLog.d(TAG, "ensureMemberViews");
         List<MeetingMember> members = new ArrayList<>(OnlineMeeting.get().getMembers());
 
         for (int i = 0; i < mOverlay.getChildCount(); i++) {
@@ -257,9 +266,11 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
         for (MeetingMember member: members) {
             if (userId.equals(member.getUserId())) {
+                HMLog.d(TAG, "ensureMemberViews: joined meeting");
                 onHeymateEvent(HeymateEvents.JOINED_MEETING, member.getUserId(), member, true);
             }
             else {
+                HMLog.d(TAG, "ensureMemberViews: user joined meeting");
                 onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, member.getUserId(), member);
             }
         }
@@ -269,14 +280,17 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     public void onHeymateEvent(int event, Object... args) {
         LogToGroup.logIfCrashed(() -> {
             if (getParentActivity() == null) {
+                HMLog.d(TAG, "RECEIVED EVENT WHILE THERE IS NO PARENT");
                 return; // TODO Why?!
             }
 
             switch (event) {
                 case HeymateEvents.JOINING_MEETING:
+                    HMLog.d(TAG, "Event: JOINING_MEETING");
                     // Nothing to do.
                     break;
                 case HeymateEvents.JOINED_MEETING:
+                    HMLog.d(TAG, "Event: JOINED_MEETING");
                     MeetingMember myself = (MeetingMember) args[1];
                     View myselfView = myself.createView(getParentActivity());
                     myselfView.setTag(OnlineMeeting.get().getSelf());
@@ -297,6 +311,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     mOverlay.addView(myselfView, params);
 
                     if (args.length == 2) {
+                        HMLog.d(TAG, "Event: JOINED_MEETING - Calling user joined for " + OnlineMeeting.get().getMembers().size() + " members.");
                         for (MeetingMember existingMember: OnlineMeeting.get().getMembers()) {
                             if (existingMember != myself) {
                                 onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, existingMember.getUserId(), existingMember);
@@ -305,14 +320,17 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     }
                     break;
                 case HeymateEvents.FAILED_TO_JOIN_MEETING:
+                    HMLog.d(TAG, "Event: FAILED_TO_JOIN_MEETING");
                     mStarted = false;
                     Toast.makeText(getParentActivity(), "Failed to join to the meeting!", Toast.LENGTH_LONG).show(); // TODO Texts
                     finishFragment();
                     break;
                 case HeymateEvents.LEFT_MEETING:
+                    HMLog.d(TAG, "Event: LEFT_MEETING");
                     OnlineReservation.stabilizeMyOrdersStatuses(getParentActivity());
                     break;
                 case HeymateEvents.USER_JOINED_MEETING:
+                    HMLog.d(TAG, "Event: USER_JOINED_MEETING");
                     MeetingMember joinedMember = (MeetingMember) args[1];
                     View joinedMemberView = joinedMember.createView(getParentActivity());
                     joinedMemberView.setTag(joinedMember);
@@ -322,6 +340,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 case HeymateEvents.USER_LEFT_MEETING:
                     MeetingMember leftMember = (MeetingMember) args[1];
                     View leftMemberView = mMemberViews.get(leftMember.getUserId());
+                    HMLog.d(TAG, "Event: USER_LEFT_MEETING - leftMemberView exists: " + (leftMemberView != null));
 
                     if (leftMemberView != null) {
                         leftMember.releaseView(leftMemberView);
@@ -330,6 +349,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     }
                     break;
                 case HeymateEvents.MEETING_USER_STATUS_CHANGED:
+                    HMLog.d(TAG, "Event: MEETING_USER_STATUS_CHANGED");
                     updateState();
                     break;
             }
@@ -338,6 +358,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     @Override
     protected void clearViews() {
+        HMLog.d(TAG, "clearViews");
         HeymateEvents.unregister(HeymateEvents.JOINING_MEETING, this);
         HeymateEvents.unregister(HeymateEvents.JOINED_MEETING, this);
         HeymateEvents.unregister(HeymateEvents.FAILED_TO_JOIN_MEETING, this);
@@ -369,11 +390,13 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     @Override
     public boolean onBackPressed() {
+        HMLog.d(TAG, "onBackPressed");
         confirmCloseMeeting();
         return false;
     }
 
     private void confirmCloseMeeting() {
+        HMLog.d(TAG, "confirmCloseMeeting");
         LoadingUtil.onLoadingStarted(getParentActivity());
 
         if (mTimeSlotId != null) {
@@ -397,6 +420,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     }
 
     private void confirmCloseMeeting(boolean isServiceProvider) {
+        HMLog.d(TAG, "confirmCloseMeeting. isServiceProvider=" + isServiceProvider);
         new AlertDialog.Builder(getParentActivity())
                 .setTitle(isServiceProvider ? "End meeting" : "Leave meeting")
                 .setMessage(isServiceProvider ? "Do you want to end the meeting and finish the offer?" : "Do you want to leave the meeting? You can join again as long as the offer has not finished.")
@@ -409,6 +433,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     }
 
     private void closeMeeting() {
+        HMLog.d(TAG, "closeMeeting. started=" + mStarted);
         if (mStarted) {
             OnlineMeeting.get().leaveMeeting();
             OnlineReservation.onlineMeetingClosed(getParentActivity(), mTimeSlotId, mReservationId);
@@ -469,5 +494,10 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         }
     }
 
+    @Override
+    public void finishFragment() {
+        HMLog.report(this);
+        super.finishFragment();
+    }
 
 }

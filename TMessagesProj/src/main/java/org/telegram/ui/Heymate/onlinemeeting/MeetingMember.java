@@ -3,6 +3,8 @@ package org.telegram.ui.Heymate.onlinemeeting;
 import android.content.Context;
 import android.view.View;
 
+import org.telegram.ui.Heymate.log.HMLog;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,7 @@ public class MeetingMember {
     }
 
     public View createView(Context context) {
+        HMLog.d("MeetingMember", "createView. context exists=" + (context != null));
         // Create a new VideoView within your Activity
         ZoomInstantSDKVideoView videoView = new ZoomInstantSDKVideoView(context);
 
@@ -71,6 +74,7 @@ public class MeetingMember {
     }
 
     public void releaseView(View view) {
+        HMLog.d("MeetingMember", "releaseView. View type is " + view.getClass().getSimpleName());
         if (view instanceof ZoomInstantSDKVideoView) {
             ZoomInstantSDKVideoCanvas canvas = mUser.getVideoCanvas();
 
@@ -82,6 +86,7 @@ public class MeetingMember {
 
     protected void release() {
         ZoomInstantSDKVideoCanvas canvas = mUser.getVideoCanvas();
+        HMLog.d("MeetingMember", "release. canvas exists=" + (canvas != null));
 
         if (canvas == null) {
             return;

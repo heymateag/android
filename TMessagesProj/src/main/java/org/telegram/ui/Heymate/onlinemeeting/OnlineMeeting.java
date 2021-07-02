@@ -11,6 +11,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Heymate.HtAmplify;
+import org.telegram.ui.Heymate.log.HMLog;
 import org.telegram.ui.Heymate.log.LogToGroup;
 
 import java.util.Collection;
@@ -98,8 +99,11 @@ public class OnlineMeeting {
      * @return true if already is in the session.
      */
     public boolean ensureSession(String sessionId, String timeSlotId, String reservationId) {
+        HMLog.d(TAG, "ensure session="+sessionId+" timeSlot="+timeSlotId+" reservation="+reservationId);
+
         if (timeSlotId != null) {
             HtAmplify.getInstance(mContext).getTimeSlot(timeSlotId, (success, result, exception) -> {
+                HMLog.d(TAG, "Host retrieved: " + result);
                 if (success) {
                     mHostId = result.getUserId();
                     ensureHost();
@@ -108,6 +112,7 @@ public class OnlineMeeting {
         }
         else if (reservationId != null) {
             HtAmplify.getInstance(mContext).getReservation(reservationId, (success, result, exception) -> {
+                HMLog.d(TAG, "Host retrieved: " + result);
                 if (success) {
                     mHostId = result.getServiceProviderId();
                     ensureHost();
@@ -117,19 +122,23 @@ public class OnlineMeeting {
 
         if (mSDK.getSession() != null) {
             if (mSDK.getSession().getSessionName().equals(sessionId)) {
+                HMLog.d(TAG, "Already has session with the id: " + sessionId);
                 return true;
             }
             else {
+                HMLog.d(TAG, "Had invalid session with the id: " + mSDK.getSession().getSessionName());
                 mSDK.leaveSession(true); // shouldEndSession = true
             }
         }
 
+        HMLog.d(TAG, "Notified joining meeting");
         HeymateEvents.notify(HeymateEvents.JOINING_MEETING, sessionId);
 
         UserInfo userInfo = new UserInfo();
 
         HtAmplify.getInstance(mContext).getZoomToken(userInfo.id, sessionId, System.currentTimeMillis() / 1000, (success, result, exception) -> {
             LogToGroup.logIfCrashed(() -> {
+                HMLog.d(TAG, "Received Zoom token: " + result);
                 if (success) {
                     // Setup audio options
                     ZoomInstantSDKAudioOption audioOptions = new ZoomInstantSDKAudioOption();
@@ -146,15 +155,18 @@ public class OnlineMeeting {
                     params.userName = userInfo.toString();
                     params.token = result;
 
+                    HMLog.d(TAG, "Called join session");
                     ZoomInstantSDKSession session = mSDK.joinSession(params);
 
                     if (session == null) {
+                        HMLog.d(TAG, "Notified failed to join meeting");
                         HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
                     }
                 }
                 else {
                     Log.e(TAG, "Failed to get token for video session.", exception);
 
+                    HMLog.d(TAG, "Notified failed to join meeting");
                     HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
                 }
             });
@@ -164,7 +176,9 @@ public class OnlineMeeting {
     }
 
     public void leaveMeeting() {
+        HMLog.d(TAG, "Leave meeting just been called");
         Utils.postOnUIThread(() -> {
+            HMLog.d(TAG, "Actually calling leave meeting. Has session: " + (mSDK.getSession() != null));
             if (mSDK.getSession() != null) {
                 mHostId = null;
                 mSDK.leaveSession(true); // shouldEndSession = true
@@ -282,13 +296,16 @@ public class OnlineMeeting {
 
     private void ensureHost() {
         if (mHostId == null) {
+            HMLog.d(TAG, "Dropping ensure host. No host id.");
             return;
         }
 
         LogToGroup.logIfCrashed(() -> {
+            HMLog.d(TAG, "About to ensure host");
             MeetingMember member = mMembers.get(mHostId);
 
             if (member != null && mSelf != null && mSelf != member && mSelf.getZoomUser().isHost()) {
+                HMLog.d(TAG, "Changing the host");
                 mSDK.getUserHelper().makeHost(member.getZoomUser());
             }
         });
@@ -299,10 +316,12 @@ public class OnlineMeeting {
         @Override
         public void onSessionJoin() {
             LogToGroup.logIfCrashed(() -> {
+                HMLog.d(TAG, "onSessionJoin");
                 mSelf = new MeetingMember(mSDK.getSession().getMySelf());
                 mMembers.put(mSelf.getUserId(), mSelf);
                 mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
 
+                HMLog.d(TAG, "Notified joined meeting");
                 HeymateEvents.notify(HeymateEvents.JOINED_MEETING, mSelf.getUserId(), mSelf);
             });
         }
@@ -310,13 +329,17 @@ public class OnlineMeeting {
         @Override
         public void onSessionLeave() {
             LogToGroup.logIfCrashed(() -> {
+                HMLog.d(TAG, "onSessionLeave");
                 if (mSelf == null) { // TODO Loose handling. Need to figure out how mSelf can be null here.
+                    HMLog.d(TAG, "SELF IS SOMEHOW NULL!");
                     return;
                 }
 
+                HMLog.d(TAG, "Notified left meeting");
                 HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
                 Utils.postOnUIThread(() -> {
+                    HMLog.d(TAG, "Clearing self");
                     mMembers.remove(mSelf.getUserId());
                     mMembersByZoomIds.remove(mSelf.getZoomUser().getUserId());
                     mSelf = null;
@@ -334,6 +357,7 @@ public class OnlineMeeting {
         public void onError(int errorCode) {
             // See error code documentation https://marketplace.zoom.us/docs/sdk/video/android/errors
             Log.e(TAG, "onError: " + errorCode);
+            HMLog.d(TAG, "onError: " + errorCode);
 
             LogToGroup.logIfCrashed(() -> {
                 switch (errorCode) {
@@ -343,12 +367,15 @@ public class OnlineMeeting {
                     case ZoomInstantSDKErrors.Errors_Auth_Error:
                     case ZoomInstantSDKErrors.Errors_Auth_Wrong_Key_or_Secret:
                     case ZoomInstantSDKErrors.Errors_Session_Join_Failed:
+                        HMLog.d(TAG, "Notified failed to join meeting");
                         HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, new Exception("Failed to join meeting with error code " + errorCode));
                         return;
                     case ZoomInstantSDKErrors.Errors_Session_Disconnect:
+                        HMLog.d(TAG, "Notified left meeting");
                         HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
                         Utils.postOnUIThread(() -> {
+                            HMLog.d(TAG, "Releasing members and clearing self");
                             for (MeetingMember meetingMember: mMembers.values()) {
                                 meetingMember.release();
                             }
@@ -363,6 +390,7 @@ public class OnlineMeeting {
         @Override
         public void onUserJoin(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
             LogToGroup.logIfCrashed(() -> {
+                HMLog.d(TAG, "onUserJoin");
                 for (ZoomInstantSDKUser user: userList) {
                     MeetingMember meetingMember = new MeetingMember(user);
 
@@ -371,6 +399,7 @@ public class OnlineMeeting {
 
                     ensureHost();
 
+                    HMLog.d(TAG, "Notified user joined meeting. user id: " + meetingMember.getUserId());
                     HeymateEvents.notify(HeymateEvents.USER_JOINED_MEETING, meetingMember.getUserId(), meetingMember);
                 }
             });
@@ -379,18 +408,21 @@ public class OnlineMeeting {
         @Override
         public void onUserLeave(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
             LogToGroup.logIfCrashed(() -> {
+                HMLog.d(TAG, "onUserLeave");
                 for (ZoomInstantSDKUser user: userList) {
                     MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
+
+                    HMLog.d(TAG, "Notified user left meeting. User id: " + meetingMember.getUserId());
                     HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, meetingMember.getUserId(), meetingMember);
 
                     Utils.postOnUIThread(() -> {
+                        HMLog.d(TAG, "Clearing user id: " + user.getUserId());
+
                         mMembersByZoomIds.remove(user.getUserId());
 
-                        if (meetingMember != null) {
-                            mMembers.remove(meetingMember.getUserId());
+                        mMembers.remove(meetingMember.getUserId());
 
-                            meetingMember.release();
-                        }
+                        meetingMember.release();
                     });
                 }
             });
@@ -424,7 +456,7 @@ public class OnlineMeeting {
 
         @Override
         public void onUserHostChanged(ZoomInstantSDKUserHelper userHelper, ZoomInstantSDKUser userInfo) {
-
+            HMLog.d(TAG, "onUserHostChanged");
         }
 
         @Override
