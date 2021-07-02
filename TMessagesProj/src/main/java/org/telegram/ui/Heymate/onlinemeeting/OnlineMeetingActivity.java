@@ -371,7 +371,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
     @Override
     public boolean onBackPressed() {
         confirmCloseMeeting();
-        return true;
+        return false;
     }
 
     private void confirmCloseMeeting() {
