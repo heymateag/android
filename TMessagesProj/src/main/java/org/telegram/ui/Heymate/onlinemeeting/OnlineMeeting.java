@@ -11,7 +11,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.LogToGroup;
+import org.telegram.ui.Heymate.log.LogToGroup;
 
 import java.util.Collection;
 import java.util.HashMap;

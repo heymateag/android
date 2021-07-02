@@ -22,8 +22,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -34,7 +32,7 @@ import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LoadingUtil;
-import org.telegram.ui.Heymate.LogToGroup;
+import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
@@ -43,10 +41,8 @@ import org.telegram.ui.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import works.heymate.core.Texts;
-import works.heymate.core.reservation.ReservationUtils;
 import works.heymate.core.wallet.Wallet;
 
 public class MyOfferItem extends SequenceLayout implements View.OnClickListener {

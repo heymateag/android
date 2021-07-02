@@ -19,14 +19,13 @@ import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
-import org.telegram.ui.Heymate.LogToGroup;
+import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.widget.AutoGridLayout;
 import org.telegram.ui.Heymate.widget.DraggableOverlay;

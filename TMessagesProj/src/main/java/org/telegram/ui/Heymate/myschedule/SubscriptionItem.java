@@ -7,14 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.amplifyframework.datastore.generated.model.PurchasedPlan;
-import com.amplifyframework.datastore.generated.model.Reservation;
-import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.json.JSONException;
@@ -30,20 +27,12 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HeymatePayment;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
-import org.telegram.ui.Heymate.HtTimeSlotStatus;
-import org.telegram.ui.Heymate.LogToGroup;
-import org.telegram.ui.Heymate.MeetingType;
-import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.telegram.ui.ProfileActivity;
 
-import works.heymate.beta.R;
-import works.heymate.celo.CeloError;
 import works.heymate.core.Texts;
 import works.heymate.core.offer.PurchasePlanTypes;
-import works.heymate.core.wallet.Wallet;
 
 public class SubscriptionItem extends SequenceLayout implements View.OnClickListener {
 

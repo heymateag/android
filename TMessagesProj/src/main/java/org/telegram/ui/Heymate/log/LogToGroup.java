@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.log;
 
 import android.widget.Toast;
 
@@ -11,6 +11,8 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Heymate.HeymateConfig;
+import org.telegram.ui.Heymate.TG2HM;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
