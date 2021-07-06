@@ -65,6 +65,10 @@ public class OnlineMeeting {
     private Context mContext;
     private ZoomInstantSDK mSDK;
 
+    private String mSessionId = null;
+    private String mTimeSlotId = null;
+    private String mReservationId = null;
+
     private String mHostId = null;
 
     private MeetingMember mSelf;
@@ -101,8 +105,24 @@ public class OnlineMeeting {
     public boolean ensureSession(String sessionId, String timeSlotId, String reservationId) {
         HMLog.d(TAG, "ensure session="+sessionId+" timeSlot="+timeSlotId+" reservation="+reservationId);
 
+        if (sessionId.equals(mSessionId)) {
+            return true;
+        }
+
+        if (mSessionId != null) {
+            mSDK.leaveSession(true); // shouldEndSession = true
+        }
+
+        mSessionId = sessionId;
+        mTimeSlotId = timeSlotId;
+        mReservationId = reservationId;
+
         if (timeSlotId != null) {
             HtAmplify.getInstance(mContext).getTimeSlot(timeSlotId, (success, result, exception) -> {
+                if (!timeSlotId.equals(mTimeSlotId)) {
+                    return;
+                }
+
                 HMLog.d(TAG, "Host retrieved: " + result);
                 if (success) {
                     mHostId = result.getUserId();
@@ -112,23 +132,16 @@ public class OnlineMeeting {
         }
         else if (reservationId != null) {
             HtAmplify.getInstance(mContext).getReservation(reservationId, (success, result, exception) -> {
+                if (!reservationId.equals(mReservationId)) {
+                    return;
+                }
+
                 HMLog.d(TAG, "Host retrieved: " + result);
                 if (success) {
                     mHostId = result.getServiceProviderId();
                     ensureHost();
                 }
             });
-        }
-
-        if (mSDK.getSession() != null) {
-            if (mSDK.getSession().getSessionName().equals(sessionId)) {
-                HMLog.d(TAG, "Already has session with the id: " + sessionId);
-                return true;
-            }
-            else {
-                HMLog.d(TAG, "Had invalid session with the id: " + mSDK.getSession().getSessionName());
-                mSDK.leaveSession(true); // shouldEndSession = true
-            }
         }
 
         HMLog.d(TAG, "Notified joining meeting");
@@ -138,6 +151,10 @@ public class OnlineMeeting {
 
         HtAmplify.getInstance(mContext).getZoomToken(userInfo.id, sessionId, System.currentTimeMillis() / 1000, (success, result, exception) -> {
             LogToGroup.logIfCrashed(() -> {
+                if (!sessionId.equals(mSessionId)) {
+                    return;
+                }
+
                 HMLog.d(TAG, "Received Zoom token: " + result);
                 if (success) {
                     // Setup audio options
@@ -179,10 +196,7 @@ public class OnlineMeeting {
         HMLog.d(TAG, "Leave meeting just been called");
         Utils.postOnUIThread(() -> {
             HMLog.d(TAG, "Actually calling leave meeting. Has session: " + (mSDK.getSession() != null));
-            if (mSDK.getSession() != null) {
-                mHostId = null;
-                mSDK.leaveSession(true); // shouldEndSession = true
-            }
+            mSDK.leaveSession(true); // shouldEndSession = true
         });
     }
 
@@ -311,6 +325,21 @@ public class OnlineMeeting {
         });
     }
 
+    private void leftSession() {
+        for (MeetingMember meetingMember: mMembers.values()) {
+            meetingMember.release();
+        }
+        mMembers.clear();
+        mMembersByZoomIds.clear();
+        mSelf = null;
+
+        mHostId = null;
+
+        mReservationId = null;
+        mTimeSlotId = null;
+        mSessionId = null;
+    }
+
     private final ZoomInstantSDKDelegate mZoomDelegate = new ZoomInstantSDKDelegate() {
 
         @Override
@@ -340,9 +369,7 @@ public class OnlineMeeting {
 
                 Utils.postOnUIThread(() -> {
                     HMLog.d(TAG, "Clearing self");
-                    mMembers.remove(mSelf.getUserId());
-                    mMembersByZoomIds.remove(mSelf.getZoomUser().getUserId());
-                    mSelf = null;
+                    leftSession();
                 });
             });
         }
@@ -369,6 +396,7 @@ public class OnlineMeeting {
                     case ZoomInstantSDKErrors.Errors_Session_Join_Failed:
                         HMLog.d(TAG, "Notified failed to join meeting");
                         HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, new Exception("Failed to join meeting with error code " + errorCode));
+                        leftSession();
                         return;
                     case ZoomInstantSDKErrors.Errors_Session_Disconnect:
                         HMLog.d(TAG, "Notified left meeting");
@@ -376,11 +404,7 @@ public class OnlineMeeting {
 
                         Utils.postOnUIThread(() -> {
                             HMLog.d(TAG, "Releasing members and clearing self");
-                            for (MeetingMember meetingMember: mMembers.values()) {
-                                meetingMember.release();
-                            }
-                            mMembers.clear();
-                            mSelf = null;
+                            leftSession();
                         });
                         return;
                 }
