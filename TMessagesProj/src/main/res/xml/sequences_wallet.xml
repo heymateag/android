@@ -2,101 +2,64 @@
 <Sequences>
 
     <Vertical>
-        <Span size="73ph"/>
+        <Span size="40dp"/>
+        <Span id="image_wallet" size="80dp"/>
+        <Span size="0dp"/>
+        <Span id="title_balance" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="balance" size="wrap"/>
+        <Span size="40dp"/>
+        <Span id="cashout" size="48dp"/>
+        <Span size="16dp"/>
+        <Span id="spacer" size="8dp"/>
+        <Span size="24dp"/>
+        <Span id="title_transactions" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="list_transaction" size="1w"/>
+        <Span size="24dp"/>
+    </Vertical>
+
+    <Vertical start="start@cashout">
+        <Span id="add_money" size="100%cashout"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="1w"/>
         <Span id="image_wallet" size="wrap"/>
-    </Vertical>
-
-    <Vertical start="start@image_wallet">
-        <Span size="121.5dp"/>
-        <Span size="32.3ph"/>
-        <Span id="text_title" size="wrap"/>
-        <Span size="18ph"/>
-        <Span id="text_status" size="wrap"/>
-        <Span size="1w"/>
-        <Span id="bottombar" size="49dp"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span size="1w"/>
-        <Span id="text_leftbutton" size="wrap"/>
-        <Span size="1w"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span size="1w"/>
-        <Span id="text_rightbutton" size="wrap"/>
-        <Span size="1w"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span size="1w"/>
-        <Span id="image_leftbutton" size="21dp"/>
-        <Span size="1w"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span size="1w"/>
-        <Span id="image_rightbutton" size="21dp"/>
-        <Span size="1w"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span size="6.5dp"/>
-        <Span id="divider" size="1w"/>
-        <Span size="6.5dp"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span id="leftbutton" size="100%"/>
-    </Vertical>
-
-    <Vertical start="start@bottombar" end="end@bottombar">
-        <Span id="rightbutton" size="100%"/>
-    </Vertical>
-
-    <Horizontal>
-        <Span size="1w"/>
-        <Span id="image_wallet" size="111.7dp"/>
         <Span size="1w"/>
     </Horizontal>
 
     <Horizontal>
         <Span size="1w"/>
-        <Span id="text_title" size="wrap"/>
+        <Span id="title_balance" size="wrap"/>
         <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="balance" size="wrap"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="cashout" size="160dp"/>
+        <Span size="8dp"/>
+        <Span id="add_money" size="160dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="spacer" size="100%"/>
     </Horizontal>
 
     <Horizontal>
         <Span size="16dp"/>
-        <Span id="text_status" size="1w"/>
-        <Span size="16dp"/>
+        <Span id="title_transactions" size="wrap"/>
     </Horizontal>
 
     <Horizontal>
-        <Span id="bottombar" size="100%"/>
+        <Span id="list_transaction" size="100%"/>
     </Horizontal>
-
-    <Horizontal>
-        <Span id="leftbutton" size="1w"/>
-        <Span id="divider" size="1dp"/>
-        <Span id="rightbutton" size="1w"/>
-    </Horizontal>
-
-    <Horizontal start="start@leftbutton" end="end@leftbutton">
-        <Span size="1w"/>
-        <Span id="text_leftbutton" size="wrap"/>
-        <Span size="6.6dp"/>
-        <Span id="image_leftbutton" size="21dp"/>
-        <Span size="1w"/>
-    </Horizontal>
-
-    <Horizontal start="start@rightbutton" end="end@rightbutton">
-        <Span size="1w"/>
-        <Span id="text_rightbutton" size="wrap"/>
-        <Span size="6.6dp"/>
-        <Span id="image_rightbutton" size="21dp"/>
-        <Span size="1w"/>
-    </Horizontal>
-
 
 </Sequences>

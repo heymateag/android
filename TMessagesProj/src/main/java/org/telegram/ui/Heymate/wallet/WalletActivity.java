@@ -1,10 +1,9 @@
 package org.telegram.ui.Heymate.wallet;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.TG2HM;
 
@@ -29,11 +28,10 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import works.heymate.beta.R;
 import works.heymate.celo.CurrencyUtil;
 import works.heymate.celo.InternalUtils;
 import works.heymate.core.Texts;
@@ -71,19 +69,33 @@ public class WalletActivity extends BaseFragment {
             }
         });
 
-        LinearLayout content = new LinearLayout(context);
-        content.setOrientation(LinearLayout.VERTICAL);
+        View content = LayoutInflater.from(context).inflate(R.layout.activity_wallet, null, false);
 
-        TextView title = new TextView(context);
+        TextView title = content.findViewById(R.id.title_balance);
+        title.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         title.setText("Total balance");
-        content.addView(title);
 
-        mTextBalance = new TextView(context);
-        content.addView(mTextBalance);
+        mTextBalance = content.findViewById(R.id.balance);
+        mTextBalance.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
 
-        RecyclerView transactionList = new RecyclerView(context);
+        TextView cashOut = content.findViewById(R.id.cashout);
+        cashOut.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton));
+        cashOut.setBackground(Theme.createBorderRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton)));
+        cashOut.setText("Cash Out");
+
+        TextView addMoney = content.findViewById(R.id.add_money);
+        addMoney.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        addMoney.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton)));
+        addMoney.setText("Add Money");
+
+        content.findViewById(R.id.spacer).setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+
+        TextView titleTransactions = content.findViewById(R.id.title_transactions);
+        titleTransactions.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+        titleTransactions.setText("Transaction");
+
+        RecyclerView transactionList = content.findViewById(R.id.list_transaction);
         transactionList.setLayoutManager(new LinearLayoutManager(context));
-        content.addView(transactionList, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 0, 1, Gravity.NO_GRAVITY));
 
         mAdapter = new TransactionAdapter();
         transactionList.setAdapter(mAdapter);
@@ -97,17 +109,17 @@ public class WalletActivity extends BaseFragment {
         Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
         if (!wallet.isCreated()) {
-            mTextBalance.setText("Current balance is: [No wallet detected]");
+            mTextBalance.setText("[No wallet detected]");
         }
         else {
-            mTextBalance.setText("Current balance is:");
+            mTextBalance.setText("");
 
             wallet.getBalance((success, cents, errorCause) -> {
                 if (success) {
-                    mTextBalance.setText("Current balance is: $" + (cents / 100f));
+                    mTextBalance.setText("$" + (cents / 100f));
                 }
                 else {
-                    mTextBalance.setText("Current balance is: [Connection problem]");
+                    mTextBalance.setText("[Connection problem]");
                 }
             });
         }
@@ -124,8 +136,10 @@ public class WalletActivity extends BaseFragment {
 
     @Override
     protected void clearViews() {
-        // TODO
         super.clearViews();
+
+        mTextBalance = null;
+        mAdapter = null;
     }
 
     private class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -142,7 +156,7 @@ public class WalletActivity extends BaseFragment {
                 @Override
                 public void run() {
                     String baseURL = HeymateConfig.MAIN_NET ? "https://explorer.celo.org/" : "https://alfajores-blockscout.celo-testnet.org/";
-                    String url = baseURL + "api?module=account&action=tokentx&page=0&offset=20&address=" + mWallet.getAddress();
+                    String url = baseURL + "api?module=account&action=tokentx&page=0&offset=30&address=" + mWallet.getAddress();
 
                     try {
                         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -156,7 +170,10 @@ public class WalletActivity extends BaseFragment {
                         List<JSONObject> transactions = new ArrayList<>(jTransactions.length());
 
                         for (int i = 0; i < jTransactions.length(); i++) {
-                            if (!new BigInteger(jTransactions.getJSONObject(i).getString("value")).equals(BigInteger.ZERO)) {
+                            BigInteger amount = new BigInteger(jTransactions.getJSONObject(i).getString("value"));
+                            long cents = CurrencyUtil.blockChainValueToCents(amount);
+
+                            if (cents > 0) {
                                 transactions.add(jTransactions.getJSONObject(i));
                             }
                         }
@@ -176,38 +193,16 @@ public class WalletActivity extends BaseFragment {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            TextView text = new TextView(parent.getContext());
-            text.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
-            return new RecyclerView.ViewHolder(text) { };
+            View view = new TransactionItem(parent.getContext());
+            return new RecyclerView.ViewHolder(view) { };
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            TextView text = (TextView) holder.itemView;
+            TransactionItem item = (TransactionItem) holder.itemView;
 
-            if (mTransactions.size() == 0) {
-                text.setText("No transactions");
-                return;
-            }
-
-            try {
-                JSONObject transaction = mTransactions.get(position);
-
-                String from = transaction.getString("from");
-                String to = transaction.getString("to");
-                long timestamp = Long.parseLong(transaction.getString("timeStamp")) * 1000L;
-                BigInteger value = new BigInteger(transaction.getString("value"));
-
-                boolean received = mWallet.getAddress().equals(to);
-                long amount = CurrencyUtil.blockChainValueToCents(value);
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
-
-                text.setText((received ? "Received: " : "Sent: ") + (amount / 100) + "." + (amount % 100) + " cUSD" + "\nTime: " + simpleDateFormat.format(new Date(timestamp)));
-            } catch (Exception e) {
-                text.setText("Error! " + e.getMessage());
-                Log.e("WalletActivity", "Item load failed", e);
-            }
+            JSONObject transaction = mTransactions.get(position);
+            item.setTransaction(transaction);
         }
 
         @Override

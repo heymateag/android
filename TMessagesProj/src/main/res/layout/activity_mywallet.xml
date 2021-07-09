@@ -6,7 +6,7 @@
 
     app:pageHeight="776"
     app:pageWidth="420"
-    app:sequences="@xml/sequences_wallet">
+    app:sequences="@xml/sequence_mywallet">
 
     <ImageView
         android:id="@+id/image_wallet"
