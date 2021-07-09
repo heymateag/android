@@ -58,7 +58,7 @@ public class TransactionItem extends SequenceLayout {
         mTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         mDescription.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         mTime.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
-        divider.setBackgroundColor(Theme.getColor(Theme.key_divider));
+        divider.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
         mAddress = Wallet.get(context, TG2HM.getCurrentPhoneNumber()).getAddress();
     }
@@ -75,7 +75,7 @@ public class TransactionItem extends SequenceLayout {
             long rawAmount = CurrencyUtil.blockChainValueToCents(value);
             long dollars = rawAmount / 100;
             long cents = rawAmount % 100;
-            String amount = dollars  + '.' + (cents < 10 ? "0" + cents : "" + cents);
+            String amount = dollars  + "." + (cents < 10 ? "0" + cents : "" + cents);
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM, dd HH:mm");
 
@@ -85,11 +85,11 @@ public class TransactionItem extends SequenceLayout {
 
             if (received) {
                 mAmount.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton));
-                mAmount.setText("+ $" + amount);
+                mAmount.setText("+$" + amount);
             }
             else {
                 mAmount.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
-                mAmount.setText("- $" + amount);
+                mAmount.setText("-$" + amount);
             }
         } catch (JSONException e) {
 

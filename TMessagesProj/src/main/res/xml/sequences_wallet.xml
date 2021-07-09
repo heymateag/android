@@ -2,20 +2,20 @@
 <Sequences>
 
     <Vertical>
-        <Span size="40dp"/>
-        <Span id="image_wallet" size="80dp"/>
+        <Span size="16dp"/>
+        <Span id="image_wallet" size="60dp"/>
         <Span size="0dp"/>
         <Span id="title_balance" size="wrap"/>
-        <Span size="4dp"/>
+        <Span size="0dp"/>
         <Span id="balance" size="wrap"/>
-        <Span size="40dp"/>
-        <Span id="cashout" size="48dp"/>
         <Span size="16dp"/>
+        <Span id="cashout" size="48dp"/>
+        <Span size="8dp"/>
         <Span id="spacer" size="8dp"/>
-        <Span size="24dp"/>
+        <Span size="8dp"/>
         <Span id="title_transactions" size="wrap"/>
         <Span size="8dp"/>
-        <Span id="list_transaction" size="1w"/>
+        <Span id="container_list" size="1w"/>
         <Span size="24dp"/>
     </Vertical>
 
@@ -59,7 +59,7 @@
     </Horizontal>
 
     <Horizontal>
-        <Span id="list_transaction" size="100%"/>
+        <Span id="container_list" size="100%"/>
     </Horizontal>
 
 </Sequences>

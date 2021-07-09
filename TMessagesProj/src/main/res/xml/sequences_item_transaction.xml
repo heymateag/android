@@ -2,11 +2,11 @@
 <Sequences>
 
     <Vertical>
-        <Span size="16dp"/>
+        <Span size="12dp"/>
         <Span id="title" size="wrap"/>
         <Span size="8dp"/>
         <Span id="description" size="wrap"/>
-        <Span size="16dp"/>
+        <Span size="12dp"/>
     </Vertical>
 
     <Vertical start="start@title" end="end@description">
@@ -17,7 +17,7 @@
         <Span size="1w"/>
     </Vertical>
 
-    <Vertical end="end@description">
+    <Vertical start="end@description">
         <Span size="15dp"/>
         <Span id="divider" size="1dp"/>
     </Vertical>

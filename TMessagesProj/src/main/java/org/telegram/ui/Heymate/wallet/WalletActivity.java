@@ -156,7 +156,7 @@ public class WalletActivity extends BaseFragment {
                 @Override
                 public void run() {
                     String baseURL = HeymateConfig.MAIN_NET ? "https://explorer.celo.org/" : "https://alfajores-blockscout.celo-testnet.org/";
-                    String url = baseURL + "api?module=account&action=tokentx&page=0&offset=30&address=" + mWallet.getAddress();
+                    String url = baseURL + "api?module=account&action=tokentx&page=0&offset=50&address=" + mWallet.getAddress();
 
                     try {
                         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
