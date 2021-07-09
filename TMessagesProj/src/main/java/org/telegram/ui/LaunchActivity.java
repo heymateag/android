@@ -32,6 +32,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StatFs;
 import android.os.SystemClock;
@@ -154,12 +155,14 @@ import org.webrtc.voiceengine.WebRtcAudioTrack;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -237,6 +240,56 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     protected void onCreate(Bundle savedInstanceState) {
         HtSQLite.setInstance(this);
         OnlineReservation.stabilizeOnlineMeetingStatuses(getApplicationContext());
+
+        boolean crashed;
+        File logFile;
+
+        File crashFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "heymate_log.txt");
+
+        if (!crashFile.exists() && HeymateConfig.DEBUG) {
+            crashed = false;
+            logFile = new File(ApplicationLoader.applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "special_log.txt");
+        }
+        else {
+            crashed = true;
+            logFile = crashFile;
+        }
+
+        if (logFile.exists()) {
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle(crashed ? "Report bug" : "Captured log")
+                    .setMessage((crashed ? "There is a bug report for the recent crash." : "A debug log has been captured.") + " Share it with developers?")
+                    .setCancelable(false)
+                    .setPositiveButton("Share", (dialog, which) -> {
+                        try {
+                            Scanner scanner = new Scanner(new FileInputStream(logFile));
+
+                            StringBuilder sb = new StringBuilder();
+
+                            while (scanner.hasNextLine()) {
+                                sb.append(scanner.nextLine());
+                            }
+
+                            scanner.close();
+
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType("text/plain");
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+                            startActivity(shareIntent);
+
+                            logFile.delete();
+                            dialog.dismiss();
+                        } catch (Throwable t) {
+                            logFile.delete();
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNeutralButton("Close", (dialog, which) -> {
+                        logFile.delete();
+                        dialog.dismiss();
+                    })
+                    .show();
+        }
 
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());
