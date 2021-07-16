@@ -26,9 +26,10 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Heymate.HeymatePayment;
+import org.telegram.ui.Heymate.payment.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.ProfileActivity;
 
 import works.heymate.core.Texts;
@@ -227,7 +228,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
             return;
         }
 
-        HeymatePayment.purchaseTimeSlot(mParent, mOffer, mPurchasedPlan, null);
+        PaymentController.get(getContext()).purchaseTimeSlot(mOffer.getId(), mPurchasedPlan.getId(), null);
     }
 
     private void showDetails() {

@@ -17,7 +17,7 @@ public class LoadingUtil {
             mLoadingCount++;
 
             if (mLoadingDialog == null) {
-                mLoadingDialog = new AlertDialog(context, 3);
+                mLoadingDialog = new AlertDialog(ActivityMonitor.get().getCurrentActivity(), 3);
                 mLoadingDialog.setCanCacnel(false);
             }
 

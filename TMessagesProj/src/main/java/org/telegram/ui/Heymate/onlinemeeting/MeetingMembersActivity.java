@@ -75,6 +75,8 @@ public class MeetingMembersActivity extends BaseFragment implements HeymateEvent
         HeymateEvents.register(HeymateEvents.USER_JOINED_MEETING, this);
         HeymateEvents.register(HeymateEvents.USER_LEFT_MEETING, this);
 
+        fragmentView = content;
+
         return content;
     }
 

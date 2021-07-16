@@ -21,6 +21,8 @@ import works.heymate.core.Texts;
 
 public class MyScheduleActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
+    public static final String HOST = "myschedule";
+
     private static final int MY_OFFERS = 0;
     private static final int MY_ORDERS = 1;
     private static final int SUBSCRIPTIONS = 2;

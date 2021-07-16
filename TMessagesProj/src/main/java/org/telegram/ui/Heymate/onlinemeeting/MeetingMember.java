@@ -67,6 +67,9 @@ public class MeetingMember {
         if (canvas != null) {
             canvas.subscribe(videoView, ZoomInstantSDKVideoAspect.ZoomInstantSDKVideoAspect_Original);
         }
+        else {
+            return null;
+        }
 
         mViews.add(new WeakReference<>(videoView));
 
@@ -93,7 +96,7 @@ public class MeetingMember {
         }
 
         for (WeakReference<ZoomInstantSDKVideoView> viewReference: mViews) {
-            if (viewReference != null) {
+            if (viewReference.get() != null) {
                 canvas.unSubscribe(viewReference.get());
             }
         }

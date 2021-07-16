@@ -297,10 +297,10 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
     }
 
     private final Runnable mTimeSlotRequester = () -> {
-        long timeRangeStart = mTimeSlotView.getVisibleTimeStart();
-        long timeRangeEnd = timeRangeStart + ONE_WEEK;
+        if (mAdapter != null && mTimeSlotView.getWidth() > 0) {
+            long timeRangeStart = mTimeSlotView.getVisibleTimeStart();
+            long timeRangeEnd = timeRangeStart + ONE_WEEK;
 
-        if (mAdapter != null) {
             mAdapter.getTimeSlotsForTimeRange(timeRangeStart, timeRangeEnd);
         }
     };

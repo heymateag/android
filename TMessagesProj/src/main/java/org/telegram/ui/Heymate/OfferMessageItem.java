@@ -35,6 +35,8 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.telegram.ui.Heymate.log.LogToGroup;
+import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import works.heymate.beta.R;
@@ -469,7 +471,7 @@ public class OfferMessageItem extends SequenceLayout {
             return;
         }
 
-        HeymatePayment.initPayment(mParent, mOffer.getId(), purchasePlanInfo, mPhraseInfo == null ? null : mPhraseInfo.referralId);
+        PaymentController.get(getContext()).initPayment(mOffer.getId(), purchasePlanInfo.type, mPhraseInfo == null ? null : mPhraseInfo.referralId);
     }
 
 }

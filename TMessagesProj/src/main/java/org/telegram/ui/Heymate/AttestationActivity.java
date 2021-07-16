@@ -181,6 +181,8 @@ public class AttestationActivity extends BaseFragment implements HeymateEvents.H
             mButtonNext.performClick();
         }
 
+        fragmentView = content;
+
         return content;
     }
 

@@ -54,7 +54,7 @@ public class CeloSDK {
             if (optionalReceipt.isPresent()) {
                 TransactionReceipt receipt = optionalReceipt.get();
 
-                if (receipt.getRevertReason().toLowerCase(Locale.US).contains("transfer value exceeded balance of sender")) {
+                if (receipt.getRevertReason() != null && receipt.getRevertReason().toLowerCase(Locale.US).contains("transfer value exceeded balance of sender")) {
                     return true;
                 }
             }

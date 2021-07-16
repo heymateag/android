@@ -168,6 +168,8 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
         updateState();
 
+        fragmentView = content;
+
         return content;
     }
 
@@ -293,22 +295,25 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     HMLog.d(TAG, "Event: JOINED_MEETING");
                     MeetingMember myself = (MeetingMember) args[1];
                     View myselfView = myself.createView(getParentActivity());
-                    myselfView.setTag(OnlineMeeting.get().getSelf());
-                    mMemberViews.put(myself.getUserId(), myselfView);
 
-                    if (myself.isHost()) {
-                        mLeave.setText("End");
+                    if (myselfView != null) {
+                        myselfView.setTag(OnlineMeeting.get().getSelf());
+                        mMemberViews.put(myself.getUserId(), myselfView);
+
+                        if (myself.isHost()) {
+                            mLeave.setText("End");
+                        }
+
+                        DraggableOverlay.LayoutParams params = new DraggableOverlay.LayoutParams(
+                                AndroidUtilities.dp(120),
+                                AndroidUtilities.dp(180)
+                        );
+                        params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+                        params.bottomMargin = AndroidUtilities.dp(80);
+                        params.rightMargin = AndroidUtilities.dp(12);
+                        params.leftMargin = params.rightMargin;
+                        mOverlay.addView(myselfView, params);
                     }
-
-                    DraggableOverlay.LayoutParams params = new DraggableOverlay.LayoutParams(
-                            AndroidUtilities.dp(120),
-                            AndroidUtilities.dp(180)
-                    );
-                    params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-                    params.bottomMargin = AndroidUtilities.dp(80);
-                    params.rightMargin = AndroidUtilities.dp(12);
-                    params.leftMargin = params.rightMargin;
-                    mOverlay.addView(myselfView, params);
 
                     if (args.length == 2) {
                         HMLog.d(TAG, "Event: JOINED_MEETING - Calling user joined for " + OnlineMeeting.get().getMembers().size() + " members.");
@@ -332,10 +337,18 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 case HeymateEvents.USER_JOINED_MEETING:
                     HMLog.d(TAG, "Event: USER_JOINED_MEETING");
                     MeetingMember joinedMember = (MeetingMember) args[1];
+
+                    if (mMemberViews.containsKey(joinedMember.getUserId())) {
+                        break;
+                    }
+
                     View joinedMemberView = joinedMember.createView(getParentActivity());
-                    joinedMemberView.setTag(joinedMember);
-                    mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
-                    mGrid.addView(joinedMemberView);
+
+                    if (joinedMemberView != null) {
+                        joinedMemberView.setTag(joinedMember);
+                        mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
+                        mGrid.addView(joinedMemberView);
+                    }
                     break;
                 case HeymateEvents.USER_LEFT_MEETING:
                     MeetingMember leftMember = (MeetingMember) args[1];
@@ -351,6 +364,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 case HeymateEvents.MEETING_USER_STATUS_CHANGED:
                     HMLog.d(TAG, "Event: MEETING_USER_STATUS_CHANGED");
                     updateState();
+                    ensureMemberViews();
                     break;
             }
         });

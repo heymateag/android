@@ -102,6 +102,8 @@ public class WalletActivity extends BaseFragment {
 
         mWallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
+        fragmentView = content;
+
         return content;
     }
 
@@ -116,7 +118,14 @@ public class WalletActivity extends BaseFragment {
 
             wallet.getBalance((success, cents, errorCause) -> {
                 if (success) {
-                    mTextBalance.setText("$" + (cents / 100f));
+                    String sDollars = String.valueOf(cents / 100);
+                    String sCents = String.valueOf(cents % 100);
+
+                    if (sCents.length() < 2) {
+                        sCents = "0" + sCents;
+                    }
+
+                    mTextBalance.setText("$" + sDollars + "." + sCents);
                 }
                 else {
                     mTextBalance.setText("[Connection problem]");
@@ -136,6 +145,8 @@ public class WalletActivity extends BaseFragment {
 
     @Override
     protected void clearViews() {
+        ((ViewGroup) fragmentView).removeAllViews();
+
         super.clearViews();
 
         mTextBalance = null;

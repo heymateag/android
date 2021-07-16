@@ -233,7 +233,7 @@ public class OnlineMeeting {
             return false;
         }
 
-        if (mSelf == null || !session.getUser(mSelf.getUserId()).isHost()) {
+        if (mSelf == null || !session.getUser(mSelf.getZoomUser().getUserId()).isHost()) {
             return false;
         }
 

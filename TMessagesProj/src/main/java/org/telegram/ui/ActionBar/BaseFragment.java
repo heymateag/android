@@ -44,7 +44,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Heymate.HeymatePayment;
+import org.telegram.ui.Heymate.payment.HeymatePayment;
 
 import java.util.ArrayList;
 
@@ -281,7 +281,6 @@ public abstract class BaseFragment {
 
     public void onResume() {
         isPaused = false;
-        HeymatePayment.resumePayment(this);
     }
 
     public void onPause() {

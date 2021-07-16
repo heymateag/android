@@ -41,6 +41,8 @@ import works.heymate.core.wallet.Wallet;
 
 public class OffersActivity extends BaseFragment {
 
+    public static final String HOST = "myoffers";
+
     private static final int VIEW_TYPE_OFFER = 0;
     private static final int VIEW_TYPE_LOADING = 1;
 

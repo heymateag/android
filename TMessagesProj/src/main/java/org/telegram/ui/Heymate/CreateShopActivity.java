@@ -149,6 +149,8 @@ public class CreateShopActivity extends BaseFragment {
 
         updateState();
 
+        fragmentView = container;
+
         return container;
     }
 

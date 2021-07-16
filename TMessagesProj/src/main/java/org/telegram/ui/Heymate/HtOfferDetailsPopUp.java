@@ -4,13 +4,11 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +29,14 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import works.heymate.beta.R;
 
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import works.heymate.core.Texts;
@@ -259,7 +255,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
             try {
                 PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
                 PurchasePlanInfo purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);
-                HeymatePayment.initPayment(parent, offer.getId(), purchasePlanInfo, phraseInfo == null ? null : phraseInfo.referralId);
+                PaymentController.get(getContext()).initPayment(offer.getId(), purchasePlanInfo.type, phraseInfo == null ? null : phraseInfo.referralId);
                 dialog.dismiss();
             } catch (JSONException e) { }
         });

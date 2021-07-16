@@ -371,6 +371,7 @@
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
+        <service android:name="works.heymate.ramp.PeymateService" android:enabled="true"/>
 
 		<receiver android:name="org.telegram.messenger.MusicPlayerReceiver" >
             <intent-filter>

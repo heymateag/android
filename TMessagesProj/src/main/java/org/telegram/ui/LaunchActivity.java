@@ -143,7 +143,8 @@ import org.telegram.ui.Heymate.AttestationActivity;
 import org.telegram.ui.Heymate.DrawerWalletCell;
 import org.telegram.ui.Heymate.EasterActivity;
 import org.telegram.ui.Heymate.HeymateConfig;
-import org.telegram.ui.Heymate.HeymatePayment;
+import org.telegram.ui.Heymate.HeymateRouter;
+import org.telegram.ui.Heymate.payment.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.OnlineReservation;
@@ -1254,25 +1255,8 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     }
 
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
-        if (intent != null && intent.getData() != null) {
-            if ("celo".equalsIgnoreCase(intent.getData().getScheme())) {
-                presentFragment(new AttestationActivity(intent.getData().toString()));
-                return true;
-            }
-            else if ("heymate".equalsIgnoreCase(intent.getData().getScheme())) {
-                String host = intent.getData().getHost();
-
-                if ("myoffers".equals(host)) {
-                    presentFragment(new OffersActivity());
-                }
-                else if ("myschedule".equals(host)) {
-                    presentFragment(new MyScheduleActivity());
-                }
-                return true;
-            }
-            if (HeymatePayment.RAMP_SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {
-                return true;
-            }
+        if (HeymateRouter.handleIntent(this, intent)) {
+            return true;
         }
 
         if (AndroidUtilities.handleProxyIntent(this, intent)) {

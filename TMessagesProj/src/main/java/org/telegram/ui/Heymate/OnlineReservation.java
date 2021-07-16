@@ -265,7 +265,9 @@ public class OnlineReservation {
 
         sOnGoingReservationStabilizations.add(reservation.getId());
 
-        if (HtTimeSlotStatus.MARKED_AS_STARTED.name().equals(reservation.getStatus())) {
+        boolean isOnlineMeeting = MeetingType.ONLINE_MEETING.equals(reservation.getMeetingType());
+
+        if (isOnlineMeeting && HtTimeSlotStatus.MARKED_AS_STARTED.name().equals(reservation.getStatus())) {
             if (offer != null) {
                 confirmStarted(context, reservation, offer);
             }
@@ -282,7 +284,7 @@ public class OnlineReservation {
                 });
             }
         }
-        else if (HtTimeSlotStatus.MARKED_AS_FINISHED.name().equals(reservation.getStatus())) {
+        else if (isOnlineMeeting && HtTimeSlotStatus.MARKED_AS_FINISHED.name().equals(reservation.getStatus())) {
             if (offer != null) {
                 confirmFinished(context, reservation, offer);
             }

@@ -36,6 +36,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
+import org.telegram.ui.Heymate.ActivityMonitor;
+import org.telegram.ui.Heymate.HeymateConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -189,7 +191,7 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
-        if (BuildConfig.DEBUG) {
+        if (HeymateConfig.DEBUG) {
             Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
 
             Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
@@ -206,6 +208,7 @@ public class ApplicationLoader extends Application {
             });
         }
 
+        registerActivityLifecycleCallbacks(ActivityMonitor.get());
         Texts.initialize(this);
 
         try {

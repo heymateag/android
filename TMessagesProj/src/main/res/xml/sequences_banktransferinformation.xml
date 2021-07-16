@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="16w"/>
+        <Span id="amount" size="wrap"/>
+        <Span size="16w"/>
+        <Span id="waiting_time" size="wrap"/>
+        <Span size="8w"/>
+        <Span size="24dp"/>
+        <Span id="title_iban" size="wrap"/>
+        <Span size="4w"/>
+        <Span id="iban" size="wrap"/>
+        <Span size="16w"/>
+        <Span id="title_bic" size="wrap"/>
+        <Span size="4w"/>
+        <Span id="bic" size="wrap"/>
+        <Span size="16w"/>
+        <Span id="title_holder" size="wrap"/>
+        <Span size="4w"/>
+        <Span id="holder" size="wrap"/>
+        <Span size="16w"/>
+        <Span id="title_description" size="wrap"/>
+        <Span size="4w"/>
+        <Span id="description" size="wrap"/>
+        <Span size="24dp"/>
+        <Span size="48w"/>
+        <Span id="transferred" size="wrap"/>
+        <Span size="8w"/>
+        <Span id="button_transferred" size="40dp"/>
+        <Span size="24w"/>
+    </Vertical>
+
+    <Vertical start="start@title_iban" end="end@description">
+        <Span size="-24dp"/>
+        <Span id="info_background" size="1w"/>
+        <Span size="-24dp"/>
+    </Vertical>
+
+    <Vertical start="start@iban" end="end@iban">
+        <Span size="1w"/>
+        <Span id="copy_iban" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bic" end="end@bic">
+        <Span size="1w"/>
+        <Span id="copy_bic" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@holder" end="end@holder">
+        <Span size="1w"/>
+        <Span id="copy_holder" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@description" end="end@description">
+        <Span size="1w"/>
+        <Span id="copy_description" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="amount" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="waiting_time" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="info_background" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="transferred" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="button_transferred" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="title_iban" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="iban" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="copy_iban" size="24dp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="title_bic" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="bic" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="copy_bic" size="24dp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="title_holder" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="holder" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="copy_holder" size="24dp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="title_description" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@info_background" end="end@info_background">
+        <Span size="16dp"/>
+        <Span id="description" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="copy_description" size="24dp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+</Sequences>

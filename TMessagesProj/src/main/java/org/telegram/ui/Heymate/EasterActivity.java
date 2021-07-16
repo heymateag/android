@@ -112,6 +112,8 @@ public class EasterActivity extends BaseFragment {
         address.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
         content.addView(address, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 0, 1f));
 
+        fragmentView = content;
+
         return content;
     }
 

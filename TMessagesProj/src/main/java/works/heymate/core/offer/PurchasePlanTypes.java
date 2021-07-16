@@ -13,11 +13,20 @@ public class PurchasePlanTypes {
     public static final String BUNDLE = "bundle";
     public static final String SUBSCRIPTION = "subscription";
 
-    public static int getPurchasedPlanTimeSlotPrice(Offer offer, PurchasedPlan purchasedPlan) {
+    public static int getPurchasedPlanPrice(Offer offer, String purchasedPlanType) {
+        try {
+            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+            return pricingInfo.getPurchasePlanInfo(purchasedPlanType).price;
+        } catch (JSONException e) { }
+
+        throw new IllegalArgumentException("Bad pricing info or unknown purchase plan type.");
+    }
+
+    public static int getPurchasedPlanTimeSlotPrice(Offer offer, String purchasedPlanType) {
         try {
             PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
 
-            switch (purchasedPlan.getPlanType()) {
+            switch (purchasedPlanType) {
                 case SINGLE:
                     return pricingInfo.price;
                 case BUNDLE:
