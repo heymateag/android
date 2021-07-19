@@ -22,6 +22,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.TG2HM;
+import org.telegram.ui.Heymate.log.HMLog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +40,8 @@ import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
 
 public class WalletActivity extends BaseFragment {
+
+    private static final String TAG = "WalletActivity";
 
     private TextView mTextBalance;
 
