@@ -38,7 +38,7 @@ public class Wallet {
 
     private static final String TAG = "Wallet";
 
-    private static final String OFFERS_ON_ALFAJORES = "0xfE471f3d98417603461E243425065fB0EFd5Ae3C";
+    private static final String OFFERS_ON_ALFAJORES = "0x361502b8138Dbaf5819401923f9446Fc01200C62";
     private static final String OFFERS_ON_MAINNET = "0x0B9080095D5f4660808acE315320e525c5d97812";
 
     public static final CeloContext CELO_CONTEXT = HeymateConfig.MAIN_NET ? CeloContext.MAIN_NET : CeloContext.ALFAJORES;
