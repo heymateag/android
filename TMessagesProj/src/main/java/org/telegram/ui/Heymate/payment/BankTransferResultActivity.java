@@ -92,6 +92,10 @@ public class BankTransferResultActivity extends BaseFragment implements Peymate.
     }
 
     private void setStatus(String status) {
+        if (getParentActivity() == null) {
+            return;
+        }
+
         Drawable icon = AppCompatResources.getDrawable(getParentActivity(), R.drawable.hm_ic_check).mutate();
 
         switch (status) {
