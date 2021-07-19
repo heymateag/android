@@ -442,6 +442,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     }
 
     private void doPromote(String referralId) {
+        dialog.dismiss();
+
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
