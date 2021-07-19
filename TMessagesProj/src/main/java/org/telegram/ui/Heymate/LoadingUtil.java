@@ -21,7 +21,9 @@ public class LoadingUtil {
                 mLoadingDialog.setCanCacnel(false);
             }
 
-            mLoadingDialog.show();
+            if (mLoadingCount == 1) {
+                mLoadingDialog.show();
+            }
         });
     }
 

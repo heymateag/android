@@ -278,7 +278,10 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         promoteButtonLayout.setBackgroundColor(context.getResources().getColor(works.heymate.beta.R.color.ht_green));
         promoteButtonLayout.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(4), context.getResources().getColor(works.heymate.beta.R.color.ht_green)));
         promoteButtonLayout.setGravity(Gravity.CENTER);
-        promoteButtonLayout.setOnClickListener(v -> HeymatePayment.ensureWalletExistence(context, this::promote));
+        promoteButtonLayout.setOnClickListener(v -> {
+            dialog.dismiss();
+            HeymatePayment.ensureWalletExistence(context, this::promote);
+        });
         RelativeLayout.LayoutParams promoteButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
         promoteButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         promoteButtonLayoutParams.addRule(RelativeLayout.BELOW, termsLinkText.getId());
@@ -442,8 +445,6 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     }
 
     private void doPromote(String referralId) {
-        dialog.dismiss();
-
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("text/plain");
 
