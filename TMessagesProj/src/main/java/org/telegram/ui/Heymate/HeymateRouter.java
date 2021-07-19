@@ -10,6 +10,7 @@ import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.payment.BankTransferInformationActivity;
 import org.telegram.ui.Heymate.payment.BankTransferResultActivity;
 import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.PaymentInvoiceActivity;
 import org.telegram.ui.Heymate.payment.PaymentMethodSelectionActivity;
 import org.telegram.ui.LaunchActivity;
 
@@ -29,6 +30,7 @@ public class HeymateRouter {
         HOST_MAP.put(OffersActivity.HOST, OffersActivity.class);
         HOST_MAP.put(MyScheduleActivity.HOST, MyScheduleActivity.class);
         HOST_MAP.put(TimeSlotSelectionActivity.HOST, TimeSlotSelectionActivity.class);
+        HOST_MAP.put(PaymentInvoiceActivity.HOST, PaymentInvoiceActivity.class);
         HOST_MAP.put(PaymentMethodSelectionActivity.HOST, PaymentMethodSelectionActivity.class);
         HOST_MAP.put(BankTransferInformationActivity.HOST, BankTransferInformationActivity.class);
         HOST_MAP.put(BankTransferResultActivity.HOST, BankTransferResultActivity.class);

@@ -40,6 +40,8 @@ public class PaymentController {
 
     private static final String TAG = "PaymentController";
 
+    public static final int GAS_ADJUST_CENTS = 10;
+
     private static PaymentController mInstance = null;
 
     public static PaymentController get(Context context) {
@@ -76,7 +78,7 @@ public class PaymentController {
                             .putString(Constants.REFERRAL_ID, referralId)
                             .apply();
 
-                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentMethodSelectionActivity.getIntent(mContext, Money.create((int) (price - balance + 10), Currency.EUR)));
+                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, Money.create((int) balance, Currency.USD)));
                 }
             }));
         }
@@ -162,7 +164,7 @@ public class PaymentController {
                         .putString(Constants.TIMESLOT_ID, timeSlot.getId())
                         .apply();
 
-                ActivityMonitor.get().getCurrentActivity().startActivity(PaymentMethodSelectionActivity.getIntent(mContext, Money.create((int) (price - balance + 10), Currency.EUR)));
+                ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, Money.create((int) balance, Currency.USD)));
             }
         }));
     }

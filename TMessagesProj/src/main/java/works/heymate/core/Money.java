@@ -32,6 +32,18 @@ public class Money implements Parcelable {
         return mCents;
     }
 
+    public Money plus(Money money) {
+        return Money.create(mCents + money.mCents, mCurrency);
+    }
+
+    public Money minus(Money money) {
+        return Money.create(mCents - money.mCents, mCurrency);
+    }
+
+    public Money multiplyBy(float multiplicand) {
+        return Money.create((int) (mCents * multiplicand), mCurrency);
+    }
+
     @Override
     public String toString() {
         return mCents / 100 + "." + mCents % 100 + " " + mCurrency;
