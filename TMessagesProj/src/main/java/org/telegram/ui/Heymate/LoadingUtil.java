@@ -38,6 +38,7 @@ public class LoadingUtil {
             if (mLoadingCount <= 0) {
                 mLoadingCount = 0;
                 mLoadingDialog.dismiss();
+                mLoadingDialog = null;
             }
         });
     }
