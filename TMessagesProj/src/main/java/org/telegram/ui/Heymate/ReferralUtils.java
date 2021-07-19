@@ -142,7 +142,7 @@ public class ReferralUtils {
         public Referrer(JSONObject json) throws JSONException {
             userId = json.getString(USER_ID);
             walletAddress = json.getString(WALLET_ADDRESS);
-            fcmToken = json.getString(FCM_TOKEN);
+            fcmToken = json.has(FCM_TOKEN) ? json.getString(FCM_TOKEN) : null;
 
             if (json.has(REFERRAL_ID) && !json.isNull(REFERRAL_ID)) {
                 referralId = json.getString(REFERRAL_ID);
