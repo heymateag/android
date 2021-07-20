@@ -177,12 +177,12 @@ public class OfferMessageItem extends SequenceLayout {
         mBook.setTypeface(mBook.getTypeface(), Typeface.BOLD);
         mBook.setText("Book Now");
 
-        mShare.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(32), 0x33294A66));
+        mShare.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(32), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText)));
         Drawable shareDrawable = AppCompatResources.getDrawable(context, R.drawable.share).mutate();
         shareDrawable.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.SRC_IN);
         mShare.setImageDrawable(shareDrawable);
 
-        mForward.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(32), 0x33294A66));
+        mForward.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(32), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText)));
         Drawable forwardDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_ab_forward).mutate();
         forwardDrawable.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhite), PorterDuff.Mode.SRC_IN);
         mForward.setImageDrawable(forwardDrawable);

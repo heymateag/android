@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 import com.yashoid.sequencelayout.Span;
 
@@ -74,6 +74,7 @@ public class PromotionDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Theme.getColor(Theme.key_dialogBackground)));
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         SequenceLayout root = (SequenceLayout) getLayoutInflater().inflate(R.layout.dialog_promotion, null, false);
@@ -101,21 +102,21 @@ public class PromotionDialog extends Dialog {
         mRadioShare.setSize(AndroidUtilities.dp(20));
         mRadioShare.setColor(Theme.getColor(Theme.key_radioBackground), themeColor);
 
-        mReferralTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        mReferralTitle.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         mReferralTitle.setTextSize(18);
         mReferralTitle.setTypeface(mReferralTitle.getTypeface(), Typeface.BOLD);
         mReferralTitle.setText("Referral Sharing"); // TODO Move string constants to Texts
 
-        mShareTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        mShareTitle.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         mShareTitle.setTextSize(18);
         mShareTitle.setTypeface(mShareTitle.getTypeface(), Typeface.BOLD);
         mShareTitle.setText("Simple Share");
 
-        mReferralDescription.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        mReferralDescription.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         mReferralDescription.setTextSize(14);
         mReferralDescription.setText("Improve the chances of buying by 80% more than simple sharing.");
 
-        mReferralMoreInfo.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+        mReferralMoreInfo.setTextColor(Theme.getColor(Theme.key_dialogTextGray));
         mReferralMoreInfo.setTextSize(14);
         mReferralMoreInfo.setText("Other users will be motivated to promote your offer and win the referral prize. Multiple people can form a referral chain.");
 
@@ -131,20 +132,20 @@ public class PromotionDialog extends Dialog {
         mReferralInfoToggle.setText("more info");
         mReferralInfoToggle.setCompoundDrawablesWithIntrinsicBounds(mExpandDrawable, null, null, null);
 
-        mPercentageInfo.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        mPercentageInfo.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         mPercentageInfo.setTextSize(14);
         mPercentageInfo.setText("Define % you pay in total when someone buys.");
 
-        mEditPercentage.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        mEditPercentage.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        mEditPercentage.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        mEditPercentage.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
         mEditPercentage.setTextSize(13);
         mEditPercentage.setHint("00");
 
-        mTextPercent.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        mTextPercent.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         mTextPercent.setTextSize(13);
         mTextPercent.setText("%");
 
-        mButtonCancel.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        mButtonCancel.setTextColor(Theme.getColor(Theme.key_dialogTextGray2));
         mButtonCancel.setTextSize(14);
         mButtonCancel.setText("Cancel");
 
