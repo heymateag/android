@@ -276,6 +276,42 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 onHeymateEvent(HeymateEvents.USER_JOINED_MEETING, member.getUserId(), member);
             }
         }
+
+        ensureSelfOnTop();
+    }
+
+    private void ensureSelfOnTop() {
+        MeetingMember myself = OnlineMeeting.get().getSelf();
+
+        if (myself == null) {
+            return;
+        }
+
+        if (mOverlay.getChildCount() > 0) {
+            myself.releaseView(mOverlay.getChildAt(0));
+            mOverlay.removeAllViews();
+        }
+
+        View myselfView = myself.createView(getParentActivity());
+
+        if (myselfView != null) {
+            myselfView.setTag(OnlineMeeting.get().getSelf());
+            mMemberViews.put(myself.getUserId(), myselfView);
+
+            if (myself.isHost()) {
+                mLeave.setText("End");
+            }
+
+            DraggableOverlay.LayoutParams params = new DraggableOverlay.LayoutParams(
+                    AndroidUtilities.dp(120),
+                    AndroidUtilities.dp(180)
+            );
+            params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+            params.bottomMargin = AndroidUtilities.dp(80);
+            params.rightMargin = AndroidUtilities.dp(12);
+            params.leftMargin = params.rightMargin;
+            mOverlay.addView(myselfView, params);
+        }
     }
 
     @Override
@@ -348,6 +384,8 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                         joinedMemberView.setTag(joinedMember);
                         mMemberViews.put(joinedMember.getUserId(), joinedMemberView);
                         mGrid.addView(joinedMemberView);
+
+                        ensureSelfOnTop();
                     }
                     break;
                 case HeymateEvents.USER_LEFT_MEETING:
