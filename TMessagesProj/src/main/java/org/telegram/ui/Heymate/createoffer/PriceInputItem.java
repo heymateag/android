@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.widget.MultiChoicePopup;
 
 import java.util.Arrays;
@@ -43,8 +44,16 @@ import works.heymate.core.offer.PurchasePlanTypes;
 
 public class PriceInputItem extends ExpandableItem {
 
-    private static final String[] CURRENCIES = { "US$", "€" };
-    private static final String[] RATE_TYPES = { "Per Session", "Per Hour" };
+    private static final String[] DEMO_CURRENCIES = { "US$", "€" };
+    private static final String[] REAL_CURRENCIES = { "US$" };
+
+    private static final int DEFAULT_CURRENCY_CHOICE = HeymateConfig.DEMO ? 1 : 0;
+
+    private static final String[] DEMO_RATE_TYPES = { "Per Session", "Per Hour" };
+    private static final String[] REAL_RATE_TYPES = { "Per Session" };
+
+    private static final String[] CURRENCIES = HeymateConfig.DEMO ? DEMO_CURRENCIES : REAL_CURRENCIES;
+    private static final String[] RATE_TYPES = HeymateConfig.DEMO ? DEMO_RATE_TYPES : REAL_RATE_TYPES;
     public static final String[] SUBSCRIPTION_PERIODS = { "Per month", "Per year" };
 
     private static final String PRICE = "price";
@@ -184,7 +193,7 @@ public class PriceInputItem extends ExpandableItem {
         styleInput(mFixedPrice, null, null);
         mFixedPrice.addTextChangedListener(new BaseTextWatcher(this::updateBundleCalculatedPrice));
 
-        styleMultiChoice(mCurrency, CURRENCIES, 1, this::updateBundleCalculatedPrice);
+        styleMultiChoice(mCurrency, CURRENCIES, DEFAULT_CURRENCY_CHOICE, this::updateBundleCalculatedPrice);
         styleMultiChoice(mRateType, RATE_TYPES, 0, null);
 
         mCheckBundle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
