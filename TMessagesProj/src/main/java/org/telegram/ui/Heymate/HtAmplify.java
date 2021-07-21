@@ -7,7 +7,6 @@ import android.util.Log;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -22,9 +21,9 @@ import com.amplifyframework.api.graphql.SimpleGraphQLRequest;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.AmplifyConfiguration;
 import com.amplifyframework.core.model.query.predicate.QueryField;
 import com.amplifyframework.core.model.query.predicate.QueryPredicate;
-import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.amplifyframework.datastore.generated.model.PurchasedPlan;
@@ -39,6 +38,7 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 
 import works.heymate.beta.BuildConfig;
+import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.PurchasePlanTypes;
@@ -50,7 +50,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,17 +109,16 @@ public class HtAmplify {
         try {
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.addPlugin(new AWSDataStorePlugin());
-            Amplify.configure(context);
+            Amplify.configure(AmplifyConfiguration.fromConfigFile(context, HeymateConfig.PRODUCTION ? R.raw.amplifyconfiguration_production : R.raw.amplifyconfiguration_staging), context);
 
             AWSCredentials credentials = new BasicAWSCredentials(
                     "AKIATNEPMKIM2UIPWSPC",
                     "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"
             );
 
+            // new AWSConfiguration(context, R.raw.awsconfiguration);
+
             amazonS3Client = new AmazonS3Client(credentials);
-
-            StaticCredentialsProvider credentialsProvider = new StaticCredentialsProvider(credentials);
-
             amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 

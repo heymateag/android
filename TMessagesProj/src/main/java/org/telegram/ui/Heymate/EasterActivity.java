@@ -99,8 +99,10 @@ public class EasterActivity extends BaseFragment {
             }
         });
 
-        String text = Wallet.CELO_CONTEXT.networkAddress.equals(CeloContext.MAIN_NET.networkAddress) ? "Main net" : "Test net (Alfajores)";
-        text += "\ndebug mode: " + HeymateConfig.DEBUG;
+        String text = HeymateConfig.PRODUCTION ? "Production" : "Staging";
+        text += HeymateConfig.MAIN_NET ? "\nMain net" : "\nTest net (Alfajores)";
+        text += "\ndebug: " + HeymateConfig.DEBUG;
+        text += "\ndemo: " + HeymateConfig.DEMO;
         text += "\nversion: " + HeymateConfig.INTERNAL_VERSION + "\n\n";
         text += "Your address is:\n" + (wallet.isCreated() ? wallet.getAddress() : "Wallet hasn't been created.");
 

@@ -1,0 +1,61 @@
+{
+    "UserAgent": "aws-amplify-cli/2.0",
+    "Version": "1.0",
+    "api": {
+        "plugins": {
+            "awsAPIPlugin": {
+                "heymate": {
+                    "endpointType": "GraphQL",
+                    "endpoint": "https://2tma6ttcxnbuvozuhfxeyf3mpy.appsync-api.eu-central-1.amazonaws.com/graphql",
+                    "region": "eu-central-1",
+                    "authorizationType": "API_KEY",
+                    "apiKey": "da2-yqfz2zpwnbbntcvbsrmpavjwhy"
+                }
+            }
+        }
+    },
+    "auth": {
+        "plugins": {
+            "awsCognitoAuthPlugin": {
+                "UserAgent": "aws-amplify-cli/0.1.0",
+                "Version": "0.1.0",
+                "IdentityManager": {
+                    "Default": {}
+                },
+                "AppSync": {
+                    "Default": {
+                        "ApiUrl": "https://2tma6ttcxnbuvozuhfxeyf3mpy.appsync-api.eu-central-1.amazonaws.com/graphql",
+                        "Region": "eu-central-1",
+                        "AuthMode": "API_KEY",
+                        "ApiKey": "da2-yqfz2zpwnbbntcvbsrmpavjwhy",
+                        "ClientDatabasePrefix": "heymate_API_KEY"
+                    }
+                },
+                "CredentialsProvider": {
+                    "CognitoIdentity": {
+                        "Default": {
+                            "PoolId": "eu-central-1:dd53174a-5204-49c8-a78f-dad94e425fd0",
+                            "Region": "eu-central-1"
+                        }
+                    }
+                },
+                "Auth": {
+                    "Default": {
+                        "authenticationFlowType": "USER_SRP_AUTH"
+                    }
+                },
+                "PinpointAnalytics": {
+                    "Default": {
+                        "AppId": "5961b602cf184d5aa1b995a4ce9fa0b3",
+                        "Region": "eu-central-1"
+                    }
+                },
+                "PinpointTargeting": {
+                    "Default": {
+                        "Region": "eu-central-1"
+                    }
+                }
+            }
+        }
+    }
+}
