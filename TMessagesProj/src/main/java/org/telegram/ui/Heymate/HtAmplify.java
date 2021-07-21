@@ -1,6 +1,7 @@
 package org.telegram.ui.Heymate;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.amazonaws.AmazonClientException;
@@ -11,10 +12,13 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.mobileconnectors.lambdainvoker.*;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.aws.GsonVariablesSerializer;
+import com.amplifyframework.api.graphql.GraphQLRequest;
+import com.amplifyframework.api.graphql.OperationType;
+import com.amplifyframework.api.graphql.SimpleGraphQLRequest;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
@@ -28,8 +32,10 @@ import com.amplifyframework.datastore.generated.model.Referral;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.amplifyframework.datastore.generated.model.Shop;
 import com.amplifyframework.datastore.generated.model.TimeSlot;
-import com.google.android.exoplayer2.util.Util;
+import com.amplifyframework.util.Wrap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 
 import works.heymate.beta.BuildConfig;
@@ -41,8 +47,13 @@ import org.telegram.messenger.UserConfig;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -79,85 +90,6 @@ public class HtAmplify {
 
     }
 
-    public static class GetJWTRequest {
-
-        int version;
-        long iat;
-        long exp;
-        String user_identity;
-        String session_name;
-
-        public GetJWTRequest(long startTime, String userName, String sessionName) {
-            version = BuildConfig.VERSION_CODE;
-            iat = startTime;
-            exp = startTime + 48L * 60L * 60L;
-            user_identity = userName;
-            session_name = sessionName;
-        }
-
-        public int getVersion() {
-            return version;
-        }
-
-        public void setVersion(int version) {
-            this.version = version;
-        }
-
-        public long getIat() {
-            return iat;
-        }
-
-        public void setIat(long iat) {
-            this.iat = iat;
-        }
-
-        public long getExp() {
-            return exp;
-        }
-
-        public void setExp(long exp) {
-            this.exp = exp;
-        }
-
-        public String getUser_identity() {
-            return user_identity;
-        }
-
-        public void setUser_identity(String user_identity) {
-            this.user_identity = user_identity;
-        }
-
-        public String getSession_name() {
-            return session_name;
-        }
-
-        public void setSession_name(String session_name) {
-            this.session_name = session_name;
-        }
-
-    }
-
-    public static class GetJWTResponse {
-
-        String token;
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-
-    }
-
-    public interface LambdaFunctions {
-
-        @LambdaFunction(functionName = "getZoomJWT-staging")
-        GetJWTResponse getZoomJWT(GetJWTRequest request);
-
-    }
-
     public static HtAmplify getInstance(Context context) {
         if (instance == null)
             instance = new HtAmplify(context.getApplicationContext());
@@ -167,7 +99,6 @@ public class HtAmplify {
     private Context context;
 
     public AmazonS3Client amazonS3Client;
-    private LambdaFunctions mFunctions;
 
     public Context getContext(){
         return context;
@@ -193,24 +124,6 @@ public class HtAmplify {
             amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 
-//            AWSLambda lambda = new AWSLambdaClient(credentialsProvider);
-//            lambda.setRegion(Region.getRegion(Regions.US_EAST_1));
-//            lambda.setEndpoint("getZoomJWT-staging");
-//            lambda.invoke(new InvokeRequest());
-
-
-            // Create an instance of CognitoCachingCredentialsProvider
-//            CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(
-//                    context, "us-east-1:883d9973-a1d4-4bc0-aa34-55ad8a2cc6c3", Regions.US_EAST_1);
-
-            // Create LambdaInvokerFactory, to be used to instantiate the Lambda proxy.
-            LambdaInvokerFactory factory = new LambdaInvokerFactory(context, Regions.US_EAST_1, credentialsProvider);
-
-            // Create the Lambda proxy object with a default Json data binder.
-            // You can provide your own data binder by implementing
-            // LambdaDataBinder.
-            mFunctions = factory.build(LambdaFunctions.class);
-
             Log.i(TAG, "Initialized Amplify.");
         } catch (AmplifyException error) {
             Log.e(TAG, "Could not initialize Amplify.", error);
@@ -222,60 +135,34 @@ public class HtAmplify {
         MarketPlace
     }
 
-    public void createOffer(OfferDto dto, String address, String priceSignature, String bundleSignature, String subscriptionSignature, APICallback<Offer> callback) {
-        int maximumReservations = dto.getMaximumReservations();
-
-        Offer newOffer = Offer.builder()
-                .userId("" + dto.getUserId())
-                .hasImage(dto.hasImage())
-                .title(dto.getTitle())
-                .category(dto.getCategory())
-                .subCategory(dto.getSubCategory())
-                .pricingInfo(dto.getPricingInfo() == null ? null : dto.getPricingInfo().asJSON().toString())
-                .description(dto.getDescription())
-                .expiry(new Temporal.Date(dto.getExpire()))
-                .id(dto.getServerUUID())
-                .availabilitySlot(dto.getTimeSlotsAsJson())
-                .locationData(dto.getLocation())
-                .meetingType(dto.getMeetingType())
-                .maximumReservations(maximumReservations)
-                .terms(dto.getTerms())
-                .termsConfig(dto.getConfigText())
-                .latitude("" + dto.getLatitude())
-                .longitude("" + dto.getLongitude())
-                .walletAddress(address)
-                .priceSignature(priceSignature)
-                .bundleSignature(bundleSignature)
-                .subscriptionSignature(subscriptionSignature)
-                .status(dto.getStatus().ordinal())
-                .createdAt(dto.getCreatedAt())
-                .editedAt(dto.getEditedAt())
-                .build();
-
-        Amplify.API.mutate(ModelMutation.create(newOffer),
+    public void createOffer(Offer.BuildStep offerBuilder, List<Long> times, APICallback<Offer> callback) {
+        Amplify.API.mutate(ModelMutation.create(offerBuilder.build()),
                 response -> {
-                    HtSQLite.getInstance().addOffer(newOffer);
+                    Offer offer = response.getData();
 
-                    Log.i(TAG, "Offer Created.");
+                    if (offer == null) {
+                        Utils.runOnUIThread(() -> callback.onCallResult(false, null, null));
+                        return;
+                    }
 
                     String fcmToken = TG2HM.getFCMToken();
 
-                    ArrayList<Long> times = dto.getDateSlots();
-
                     String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+                    int maximumReservations = offer.getMaximumReservations();
 
                     // TODO Request in a for?
                     for (int i = 0; i < times.size(); i += 2) {
                         TimeSlot timeSlot = TimeSlot.builder()
                                 .startTime((int) (times.get(i) / 1000))
                                 .endTime((int) (times.get(i + 1) / 1000))
-                                .offerId(newOffer.getId())
+                                .offerId(offer.getId())
                                 .userId(userId)
                                 .userFcmToken(fcmToken)
                                 .maximumReservations(maximumReservations)
                                 .completedReservations(0)
                                 .remainingReservations(maximumReservations == 0 ? Integer.MAX_VALUE : maximumReservations)
-                                .meetingType(newOffer.getMeetingType())
+                                .meetingType(offer.getMeetingType())
                                 .build();
 
                         Amplify.API.mutate(ModelMutation.create(timeSlot),
@@ -286,7 +173,7 @@ public class HtAmplify {
                         );
                     }
 
-                    Utils.runOnUIThread(() -> callback.onCallResult(true, newOffer, null));
+                    Utils.runOnUIThread(() -> callback.onCallResult(true, offer, null));
                 },
                 error -> {
                     Log.e(TAG, "Create failed", error);
@@ -870,6 +757,61 @@ public class HtAmplify {
         });
     }
 
+    public void getZoomToken(String userName, String sessionName, long startTimeInSeconds, APICallback<String> callback) {
+        Map<String, String> variableTypes = new HashMap<>();
+        variableTypes.put("exp", "Float");
+        variableTypes.put("iat", "Float");
+        variableTypes.put("session_name", "String");
+        variableTypes.put("user_identity", "String");
+        variableTypes.put("version", "Int");
+
+        List<String> inputKeys = Arrays.asList("exp", "iat", "session_name", "user_identity", "version");
+        Collections.sort(inputKeys);
+
+        List<String> inputTypes = new ArrayList<>();
+        List<String> inputParameters = new ArrayList<>();
+        for (String key : inputKeys) {
+            inputTypes.add("$" + key + ": " + variableTypes.get(key));
+            inputParameters.add(key + ": $" + key);
+        }
+
+        String inputTypeString = Wrap.inParentheses(TextUtils.join(", ", inputTypes));
+        String inputParameterString = Wrap.inParentheses(TextUtils.join(", ", inputParameters));
+
+        String operationString =
+                "getZoomJWTQuery" +
+                        inputParameterString;
+
+        String document = OperationType.QUERY.getName() + " " +
+                "getZoomJWTQuery" + inputTypeString +
+                Wrap.inPrettyBraces(operationString, "", "  ") + "\n";
+
+        int version = BuildConfig.VERSION_CODE;
+        long iat = startTimeInSeconds;
+        long exp = startTimeInSeconds + 48L * 60L * 60L;
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("exp", exp);
+        variables.put("iat", iat);
+        variables.put("session_name", sessionName);
+        variables.put("user_identity", userName);
+        variables.put("version", version);
+
+        GraphQLRequest<String> request = new SimpleGraphQLRequest<>(document, variables, String.class, new GsonVariablesSerializer());
+
+        Amplify.API.query(request, result -> {
+            try {
+                JSONObject response = new JSONObject(result.getData());
+
+                String token = response.getString("getZoomJWTQuery");
+
+                Utils.runOnUIThread(() -> callback.onCallResult(true, token, null));
+            } catch (JSONException e) {
+                Utils.runOnUIThread(() -> callback.onCallResult(false, null, new ApiException(e.getMessage(), e, "")));
+            }
+        }, error -> Utils.runOnUIThread(() -> callback.onCallResult(false, null, error)));
+    }
+
     public void uploadFile(String id, File file) throws AmazonClientException {
         amazonS3Client.putObject("offerdocuments", id, file);
     }
@@ -900,24 +842,6 @@ public class HtAmplify {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public void getZoomToken(String userName, String sessionName, long startTimeInSeconds, APICallback<String> callback) {
-        new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    GetJWTRequest request = new GetJWTRequest(startTimeInSeconds, userName, sessionName);
-                    GetJWTResponse response = mFunctions.getZoomJWT(request);
-
-                    Utils.runOnUIThread(() -> callback.onCallResult(true, response.token, null));
-                } catch (LambdaFunctionException e) {
-                    Utils.runOnUIThread(() -> callback.onCallResult(false, null, new ApiException(String.valueOf(e.getMessage()), e, e.getDetails())));
-                }
-            }
-
-        }.start();
     }
 
 }

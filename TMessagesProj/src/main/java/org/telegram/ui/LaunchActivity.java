@@ -146,7 +146,6 @@ import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.payment.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
-import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.OffersActivity;
@@ -239,7 +238,6 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        HtSQLite.setInstance(this);
         OnlineReservation.stabilizeOnlineMeetingStatuses(getApplicationContext());
 
         boolean crashed;

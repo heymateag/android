@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
@@ -42,11 +44,9 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.payment.HeymatePayment;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.HtSQLite;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
-import org.telegram.ui.Heymate.OfferDto;
 import org.telegram.ui.Heymate.OfferStatus;
 import org.telegram.ui.Heymate.PromotionDialog;
 import org.telegram.ui.Heymate.TG2HM;
@@ -57,6 +57,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import works.heymate.core.Texts;
@@ -754,39 +755,41 @@ public class HtCreateOfferActivity extends BaseFragment {
 
                 int maximumParticipants = participantsInputCell.getMaximumParticipants();
 
-                OfferDto newOffer = new OfferDto();
-                newOffer.setHasImage(pickedImage != null);
-                newOffer.setTitle(titleTextField.getText().toString());
-                newOffer.setDescription(descriptionTextField.getText().toString());
-                newOffer.setTerms(termsInputCell.getRes(ARGUMENTS_TERMS));
-                newOffer.setConfigText(config.toString());
-                newOffer.setCategory(categoryInputCell.getRes(ARGUMENTS_CATEGORY));
-                newOffer.setSubCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY));
-                newOffer.setExpire(expireDate);
-                newOffer.setLocation(locationInfo == null ? null : locationInfo.address);
-                newOffer.setMeetingType(locationInputCell.getMeetingType());
-                newOffer.setMaximumReservations(maximumParticipants);
-                newOffer.setPricingInfo(pricingInfo);
-                newOffer.setLatitude(locationInfo == null ? 0 : locationInfo.latitude);
-                newOffer.setLongitude(locationInfo == null ? 0 : locationInfo.longitude);
-                newOffer.setDateSlots(scheduleInputCell.getTimeSlots());
-                newOffer.setStatus(OfferStatus.ACTIVE);
-                newOffer.setUserId(UserConfig.getInstance(currentAccount).clientUserId);
-                newOffer.setServerUUID(id);
-                int currentTime = (int) ((new Date()).toInstant().getEpochSecond() / 1000);
-                newOffer.setCreatedAt(currentTime);
-                newOffer.setEditedAt(currentTime);
+                List<Long> timeSlots = scheduleInputCell.getTimeSlots();
+
+                int timeOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
+
+                Offer.BuildStep offerBuilder = Offer.builder()
+                        .userId("" + UserConfig.getInstance(currentAccount).clientUserId)
+                        .hasImage(pickedImage != null)
+                        .title(titleTextField.getText().toString())
+                        .category(categoryInputCell.getRes(ARGUMENTS_CATEGORY))
+                        .subCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY))
+                        .pricingInfo(pricingInfo.asJSON().toString())
+                        .description(descriptionTextField.getText().toString())
+                        .expiry(new Temporal.Date(expireDate))
+                        .locationData(locationInfo == null ? null : locationInfo.address)
+                        .meetingType(locationInputCell.getMeetingType())
+                        .maximumReservations(maximumParticipants)
+                        .terms(termsInputCell.getRes(ARGUMENTS_TERMS))
+                        .termsConfig(config.toString())
+                        .latitude("" + (locationInfo == null ? 0 : locationInfo.latitude))
+                        .longitude("" + (locationInfo == null ? 0 : locationInfo.longitude))
+                        .walletAddress(wallet.getAddress())
+                        .priceSignature(priceSignature)
+                        .bundleSignature(bundleSignature)
+                        .subscriptionSignature(subscriptionSignature)
+                        .status(OfferStatus.ACTIVE.ordinal())
+                        .createdAt(new Temporal.DateTime(new Date(), timeOffset));
+//                        .editedAt(new Temporal.DateTime(new Date(), timeOffset));
 
                 LoadingUtil.onLoadingStarted(getParentActivity());
 
-                HtAmplify.getInstance(context).createOffer(newOffer, wallet.getAddress(),
-                        priceSignature, bundleSignature, subscriptionSignature,
+                HtAmplify.getInstance(context).createOffer(offerBuilder, timeSlots,
                         (success, createdOffer, exception1) -> {
                             LoadingUtil.onLoadingFinished();
 
                             if (success) {
-                                HtSQLite.getInstance().addOffer(createdOffer);
-
                                 Intent share = new Intent(Intent.ACTION_SEND);
                                 share.setType("text/plain");
 

@@ -53,10 +53,10 @@ public final class Offer implements Model {
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="AWSJSON") String availabilitySlot;
   private final @ModelField(targetType="String") String category;
-  private final @ModelField(targetType="Int") Integer createdAt;
+  private final @ModelField(targetType="AWSDateTime") Temporal.DateTime createdAt;
   private final @ModelField(targetType="String") String pricingInfo;
   private final @ModelField(targetType="String") String description;
-  private final @ModelField(targetType="Int") Integer editedAt;
+  private final @ModelField(targetType="AWSDateTime") Temporal.DateTime editedAt;
   private final @ModelField(targetType="AWSDate") Temporal.Date expiry;
   private final @ModelField(targetType="String") String latitude;
   private final @ModelField(targetType="String") String locationData;
@@ -86,7 +86,7 @@ public final class Offer implements Model {
       return category;
   }
   
-  public Integer getCreatedAt() {
+  public Temporal.DateTime getCreatedAt() {
       return createdAt;
   }
   
@@ -98,7 +98,7 @@ public final class Offer implements Model {
       return description;
   }
   
-  public Integer getEditedAt() {
+  public Temporal.DateTime getEditedAt() {
       return editedAt;
   }
   
@@ -170,7 +170,7 @@ public final class Offer implements Model {
       return userID;
   }
   
-  private Offer(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, Boolean hasImage, String userID) {
+  private Offer(String id, String availabilitySlot, String category, Temporal.DateTime createdAt, String pricingInfo, String description, Temporal.DateTime editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, Boolean hasImage, String userID) {
     this.id = id;
     this.availabilitySlot = availabilitySlot;
     this.category = category;
@@ -382,10 +382,10 @@ public final class Offer implements Model {
     BuildStep id(String id) throws IllegalArgumentException;
     BuildStep availabilitySlot(String availabilitySlot);
     BuildStep category(String category);
-    BuildStep createdAt(Integer createdAt);
+    BuildStep createdAt(Temporal.DateTime createdAt);
     BuildStep pricingInfo(String pricingInfo);
     BuildStep description(String description);
-    BuildStep editedAt(Integer editedAt);
+    BuildStep editedAt(Temporal.DateTime editedAt);
     BuildStep expiry(Temporal.Date expiry);
     BuildStep latitude(String latitude);
     BuildStep locationData(String locationData);
@@ -410,10 +410,10 @@ public final class Offer implements Model {
     private String userID;
     private String availabilitySlot;
     private String category;
-    private Integer createdAt;
+    private Temporal.DateTime createdAt;
     private String pricingInfo;
     private String description;
-    private Integer editedAt;
+    private Temporal.DateTime editedAt;
     private Temporal.Date expiry;
     private String latitude;
     private String locationData;
@@ -481,7 +481,7 @@ public final class Offer implements Model {
     }
     
     @Override
-     public BuildStep createdAt(Integer createdAt) {
+     public BuildStep createdAt(Temporal.DateTime createdAt) {
         this.createdAt = createdAt;
         return this;
     }
@@ -499,7 +499,7 @@ public final class Offer implements Model {
     }
     
     @Override
-     public BuildStep editedAt(Integer editedAt) {
+     public BuildStep editedAt(Temporal.DateTime editedAt) {
         this.editedAt = editedAt;
         return this;
     }
@@ -623,7 +623,7 @@ public final class Offer implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String availabilitySlot, String category, Integer createdAt, String pricingInfo, String description, Integer editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, Boolean hasImage, String userId) {
+    private CopyOfBuilder(String id, String availabilitySlot, String category, Temporal.DateTime createdAt, String pricingInfo, String description, Temporal.DateTime editedAt, Temporal.Date expiry, String latitude, String locationData, String longitude, String meetingType, Integer maximumReservations, String walletAddress, String priceSignature, String bundleSignature, String subscriptionSignature, Integer status, String subCategory, String terms, String termsConfig, String title, Boolean hasImage, String userId) {
       super.id(id);
       super.userId(userId)
         .availabilitySlot(availabilitySlot)
@@ -666,7 +666,7 @@ public final class Offer implements Model {
     }
     
     @Override
-     public CopyOfBuilder createdAt(Integer createdAt) {
+     public CopyOfBuilder createdAt(Temporal.DateTime createdAt) {
       return (CopyOfBuilder) super.createdAt(createdAt);
     }
     
@@ -681,7 +681,7 @@ public final class Offer implements Model {
     }
     
     @Override
-     public CopyOfBuilder editedAt(Integer editedAt) {
+     public CopyOfBuilder editedAt(Temporal.DateTime editedAt) {
       return (CopyOfBuilder) super.editedAt(editedAt);
     }
     

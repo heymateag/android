@@ -1,6 +1,7 @@
 package org.telegram.ui.Heymate.wallet;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +21,6 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.TG2HM;
-import org.telegram.ui.Heymate.log.HMLog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -197,7 +195,7 @@ public class WalletActivity extends BaseFragment {
                             notifyDataSetChanged();
                         });
                     } catch (IOException | JSONException e) {
-                        Log.e("WalletActivity", "Failed to get transactions", e);
+                        Log.e(TAG, "Failed to get transactions", e);
                     }
                 }
 
