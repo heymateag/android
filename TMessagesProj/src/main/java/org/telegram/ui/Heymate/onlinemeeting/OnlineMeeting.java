@@ -1,6 +1,7 @@
 package org.telegram.ui.Heymate.onlinemeeting;
 
 import android.content.Context;
+import android.util.Base64;
 
 import com.google.android.exoplayer2.util.Log;
 
@@ -516,6 +517,10 @@ public class OnlineMeeting {
             String tName;
             String tId;
             try {
+                try {
+                    userInfo = new String(Base64.decode(userInfo, Base64.URL_SAFE));
+                } catch (Throwable t) { }
+
                 JSONObject jUserInfo = new JSONObject(userInfo);
 
                 tName = jUserInfo.getString("n");
@@ -538,7 +543,7 @@ public class OnlineMeeting {
                 jUserInfo.put("n", name);
                 jUserInfo.put("i", id);
             } catch (JSONException e) { }
-            return jUserInfo.toString();
+            return Base64.encodeToString(jUserInfo.toString().getBytes(), Base64.NO_WRAP | Base64.URL_SAFE);
         }
 
     }
