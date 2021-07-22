@@ -529,7 +529,7 @@ public class OnlineMeeting {
                 tName = "[ERROR]";
                 tId = "0";
 
-                LogToGroup.log("Failed to read user info", e, null);
+                LogToGroup.log("Failed to read user info", e);
             }
 
             name = tName;

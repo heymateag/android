@@ -20,6 +20,7 @@ import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.Constants;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
+import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.TimeSlotSelectionActivity;
 
@@ -29,7 +30,6 @@ import java.util.List;
 import works.heymate.celo.CeloError;
 import works.heymate.celo.CeloException;
 import works.heymate.celo.CeloSDK;
-import works.heymate.core.APICallback;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.Texts;
@@ -97,15 +97,15 @@ public class PaymentController {
                 .reservationIds("[]")
                 .build();
 
-        List<String> referrers = HeymatePayment.getReferrersFromReferral(referral);
+        List<String> referrers = ReferralUtils.getReferrersFromReferral(referral);
 
-        LoadingUtil.onLoadingStarted(mContext);
+        LoadingUtil.onLoadingStarted();
 
         wallet.createPaymentPlan(offer, purchasedPlan, referrers, (success, errorCause) -> {
             LoadingUtil.onLoadingFinished();
 
             if (success) {
-                LoadingUtil.onLoadingStarted(mContext);
+                LoadingUtil.onLoadingStarted();
 
                 HtAmplify.getInstance(mContext).createPurchasedPlan(purchasedPlan, (success1, result, exception) -> {
                     LoadingUtil.onLoadingFinished();
@@ -181,9 +181,9 @@ public class PaymentController {
     }
 
     private void purchaseTimeSlot(Offer offer, PurchasedPlan purchasedPlan, Referral referral, TimeSlot timeSlot) {
-        LoadingUtil.onLoadingStarted(mContext);
+        LoadingUtil.onLoadingStarted();
 
-        List<String> referrers = HeymatePayment.getReferrersFromReferral(referral);
+        List<String> referrers = ReferralUtils.getReferrersFromReferral(referral);
 
         Reservation reservation = HtAmplify.getInstance(mContext).createReservation(timeSlot, purchasedPlan, referral);
 
@@ -193,7 +193,7 @@ public class PaymentController {
             LoadingUtil.onLoadingFinished();
 
             if (success1) {
-                LoadingUtil.onLoadingStarted(mContext);
+                LoadingUtil.onLoadingStarted();
 
                 HtAmplify.getInstance(mContext).bookTimeSlot(reservation, timeSlot, (success, result, exception) -> {
                     LoadingUtil.onLoadingFinished();
@@ -253,7 +253,7 @@ public class PaymentController {
         }
         else {
             getOffer(offerId, offer -> {
-                LoadingUtil.onLoadingStarted(mContext);
+                LoadingUtil.onLoadingStarted();
 
                 HtAmplify.getInstance(mContext).getTimeSlot(timeSlotId, (success, timeSlot, exception) -> {
                     LoadingUtil.onLoadingFinished();
@@ -272,9 +272,9 @@ public class PaymentController {
     }
 
     private void getBalance(GetBalanceCallback callback) {
-        LoadingUtil.onLoadingStarted(mContext);
+        LoadingUtil.onLoadingStarted();
 
-        HeymatePayment.ensureWalletExistence(mContext, () -> {
+        WalletExistence.ensure(() -> {
             String phoneNumber = TG2HM.getCurrentPhoneNumber();
             Wallet wallet = Wallet.get(mContext, phoneNumber);
 
@@ -294,7 +294,7 @@ public class PaymentController {
     }
 
     private void getOffer(String offerId, GetOfferCallback callback) {
-        LoadingUtil.onLoadingStarted(mContext);
+        LoadingUtil.onLoadingStarted();
 
         HtAmplify amplify = HtAmplify.getInstance(mContext);
 
@@ -318,7 +318,7 @@ public class PaymentController {
             return;
         }
 
-        LoadingUtil.onLoadingStarted(mContext);
+        LoadingUtil.onLoadingStarted();
 
         HtAmplify amplify = HtAmplify.getInstance(mContext);
 
@@ -337,7 +337,7 @@ public class PaymentController {
     }
 
     private void getPurchasedPlan(String purchasedPlanId, GetPurchasedPlanCallback callback) {
-        LoadingUtil.onLoadingStarted(mContext);
+        LoadingUtil.onLoadingStarted();
 
         HtAmplify amplify = HtAmplify.getInstance(mContext);
 

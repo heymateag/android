@@ -35,7 +35,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
-import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
@@ -280,7 +280,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         promoteButtonLayout.setGravity(Gravity.CENTER);
         promoteButtonLayout.setOnClickListener(v -> {
             dialog.dismiss();
-            HeymatePayment.ensureWalletExistence(context, this::promote);
+            WalletExistence.ensure(this::promote);
         });
         RelativeLayout.LayoutParams promoteButtonLayoutParams = new RelativeLayout.LayoutParams(AndroidUtilities.dp(120), AndroidUtilities.dp(50));
         promoteButtonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -429,7 +429,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
             return;
         }
 
-        LoadingUtil.onLoadingStarted(getContext());
+        LoadingUtil.onLoadingStarted();
 
         ReferralUtils.getReferralId(phraseInfo, (success, referralId, exception) -> {
             LoadingUtil.onLoadingFinished();

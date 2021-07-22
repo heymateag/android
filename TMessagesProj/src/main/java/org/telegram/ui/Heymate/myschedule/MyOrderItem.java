@@ -319,7 +319,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             }
             else {
                 Log.e(TAG, "Failed to cancel offer", errorCause);
-                LogToGroup.log("Failed to cancel offer", errorCause, mParent);
+                LogToGroup.log("Failed to cancel offer", errorCause);
 
                 if (errorCause != null) {
                     CeloError coreError = errorCause.getMainCause().getError();
@@ -348,7 +348,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             return;
         }
 
-        LoadingUtil.onLoadingStarted(getContext());
+        LoadingUtil.onLoadingStarted();
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
@@ -360,7 +360,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             }
             else {
                 Log.e(TAG, "Failed to confirm started offer", errorCause);
-                LogToGroup.log("Failed to confirm started offer", errorCause, mParent);
+                LogToGroup.log("Failed to confirm started offer", errorCause);
 
                 if (errorCause != null) {
                     CeloError coreError = errorCause.getMainCause().getError();
@@ -389,7 +389,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             return;
         }
 
-        LoadingUtil.onLoadingStarted(getContext());
+        LoadingUtil.onLoadingStarted();
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
@@ -401,7 +401,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
             }
             else {
                 Log.e(TAG, "Failed to confirm finished offer", errorCause);
-                LogToGroup.log("Failed to confirm finished offer", errorCause, mParent);
+                LogToGroup.log("Failed to confirm finished offer", errorCause);
 
                 if (errorCause != null) {
                     CeloError coreError = errorCause.getMainCause().getError();

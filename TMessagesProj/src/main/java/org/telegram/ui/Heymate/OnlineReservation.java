@@ -113,7 +113,7 @@ public class OnlineReservation {
         ArrayList<Reservation> reservationsCopy = new ArrayList<>(reservations);
 
         if (withInterface) {
-            LoadingUtil.onLoadingStarted(context);
+            LoadingUtil.onLoadingStarted();
         }
 
         ensureNextStatus(context, reservationsCopy, offer, status, meetingId, withInterface);

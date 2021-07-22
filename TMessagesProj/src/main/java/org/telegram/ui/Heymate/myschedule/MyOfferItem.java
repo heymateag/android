@@ -399,7 +399,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
             return;
         }
 
-        LoadingUtil.onLoadingStarted(getContext());
+        LoadingUtil.onLoadingStarted();
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
@@ -432,7 +432,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
             }
             else {
                 Log.e(TAG, "Failed to cancel offer", errorCause);
-                LogToGroup.log("Failed to cancel offer", errorCause, mParent);
+                LogToGroup.log("Failed to cancel offer", errorCause);
 
                 cancelReservations(remainingReservations, wallet, false);
             }

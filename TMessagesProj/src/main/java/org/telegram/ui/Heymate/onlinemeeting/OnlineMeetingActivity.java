@@ -449,7 +449,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     private void confirmCloseMeeting() {
         HMLog.d(TAG, "confirmCloseMeeting");
-        LoadingUtil.onLoadingStarted(getParentActivity());
+        LoadingUtil.onLoadingStarted();
 
         if (mTimeSlotId != null) {
             HtAmplify.getInstance(getParentActivity()).getTimeSlot(mTimeSlotId, (success, result, exception) -> {
@@ -544,12 +544,6 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                 }
             }
         }
-    }
-
-    @Override
-    public void finishFragment() {
-        HMLog.report(this);
-        super.finishFragment();
     }
 
 }

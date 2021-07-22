@@ -35,7 +35,7 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.telegram.ui.Heymate.log.LogToGroup;
-import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
@@ -207,15 +207,15 @@ public class OfferMessageItem extends SequenceLayout {
                 });
                 detailsPopUp.show();
             } catch (Throwable t) {
-                LogToGroup.log("Fail on details dialog", t, mParent);
+                LogToGroup.log("Fail on details dialog", t);
                 Toast.makeText(getContext(), "Failure! Log sent to group.", Toast.LENGTH_SHORT).show();
             }
         });
 
         mBook.setOnClickListener(v -> initPayment());
 
-        mShare.setOnClickListener(v-> HeymatePayment.ensureWalletExistence(context, () -> promote(true)));
-        mForward.setOnClickListener(v-> HeymatePayment.ensureWalletExistence(context, () -> promote(false)));
+        mShare.setOnClickListener(v-> WalletExistence.ensure(() -> promote(true)));
+        mForward.setOnClickListener(v-> WalletExistence.ensure(() -> promote(false)));
     }
 
     private void setSelectedPurchasePlan(RadioButton radio) {
@@ -334,7 +334,7 @@ public class OfferMessageItem extends SequenceLayout {
             return;
         }
 
-        LoadingUtil.onLoadingStarted(getContext());
+        LoadingUtil.onLoadingStarted();
 
         ReferralUtils.getReferralId(mPhraseInfo, (success, referralId, exception) -> {
             LoadingUtil.onLoadingFinished();

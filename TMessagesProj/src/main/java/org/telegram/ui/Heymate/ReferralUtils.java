@@ -3,6 +3,8 @@ package org.telegram.ui.Heymate;
 import android.net.Uri;
 
 import com.amplifyframework.api.ApiException;
+import com.amplifyframework.datastore.generated.model.Referral;
+import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +22,8 @@ import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.wallet.Wallet;
 
 public class ReferralUtils {
+
+    private static final String TAG = "ReferralUtils";
 
     public static void getReferralId(OfferUtils.PhraseInfo phraseInfo, HtAmplify.APICallback<String> callback) {
         if (phraseInfo == null) {
@@ -40,6 +44,32 @@ public class ReferralUtils {
                 callback.onCallResult(false, null, new ApiException("Invalid URL", null, null));
             });
         }
+    }
+
+    public static List<String> getReferrersFromReferral(Referral referral) {
+        List<String> referrers = new ArrayList<>();
+
+        if (referral != null) {
+            String sReferrers = referral.getReferrers();
+
+            if (sReferrers != null) {
+                try {
+                    JSONArray jReferrers = new JSONArray(sReferrers);
+
+                    for (int i = 0; i < jReferrers.length(); i++) {
+                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
+
+                        if (referrer.walletAddress != null) {
+                            referrers.add(referrer.walletAddress);
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
+                }
+            }
+        }
+
+        return referrers;
     }
 
     private static void getReferralLinkFromOfferUrl(OfferUtils.PhraseInfo phraseInfo, HtAmplify.APICallback<String> callback) {

@@ -141,7 +141,7 @@ public class BankTransferInformationActivity extends BaseFragment implements Pey
 
             mCheckRequested = true;
 
-            LoadingUtil.onLoadingStarted(getParentActivity());
+            LoadingUtil.onLoadingStarted();
 
             Peymate.get(getParentActivity()).testClear();
             Peymate.get(getParentActivity()).check();
@@ -150,7 +150,7 @@ public class BankTransferInformationActivity extends BaseFragment implements Pey
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
         Wallet wallet = Wallet.get(context, phoneNumber);
 
-        LoadingUtil.onLoadingStarted(context);
+        LoadingUtil.onLoadingStarted();
 
         Money amount = getArguments().getParcelable(Constants.MONEY);
 

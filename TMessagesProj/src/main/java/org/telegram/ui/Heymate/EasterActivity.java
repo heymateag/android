@@ -13,17 +13,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Heymate.log.HMLog;
 
 import works.heymate.celo.CeloContext;
+import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
 
 public class EasterActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackButtonDrawable(new BackDrawable(false));
+        actionBar.setTitle("Heymate Status");
+        actionBar.createMenu().addItem(1, "Report");
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                switch (id) {
+                    case -1:
+                        finishFragment();
+                        return;
+                    case 1:
+                        HMLog.report();
+                        Toast.makeText(getParentActivity(), "Done", Toast.LENGTH_LONG).show();
+                        return;
+                }
+            }
+        });
+
         LinearLayout content = new LinearLayout(context);
+        content.setBackgroundColor(0xFFFFFFFF);
         content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(72, 72, 72, 72);
 
@@ -77,7 +101,7 @@ public class EasterActivity extends BaseFragment {
                     return;
                 }
 
-                LoadingUtil.onLoadingStarted(context);
+                LoadingUtil.onLoadingStarted();
 
                 wallet.transfer(amount, destination, (success, error) -> {
                     LoadingUtil.onLoadingFinished();

@@ -42,7 +42,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.HeymateConfig;
-import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
@@ -584,7 +584,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                     undoView.setVisibility(View.GONE);
                 });
             } else {
-                HeymatePayment.ensureWalletExistence(getParentActivity(), this::acquirePromotionPlan);
+                WalletExistence.ensure(this::acquirePromotionPlan);
             }
         });
 
@@ -714,7 +714,7 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     private void createOffer(int promotionPercentage) {
         if (pickedImage != null) {
-            LoadingUtil.onLoadingStarted(getParentActivity());
+            LoadingUtil.onLoadingStarted();
 
             FileCache.get().uploadImage(id, (success, exception) -> {
                 LoadingUtil.onLoadingFinished();
@@ -745,7 +745,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             config.put(OfferUtils.PROMOTION_RATE, promotionPercentage);
         } catch (JSONException e) { }
 
-        LoadingUtil.onLoadingStarted(getParentActivity());
+        LoadingUtil.onLoadingStarted();
 
         wallet.signOffer(pricingInfo, config, (successful, priceSignature, bundleSignature, subscriptionSignature, exception) -> {
             LoadingUtil.onLoadingFinished();
@@ -783,7 +783,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                         .createdAt(new Temporal.DateTime(new Date(), timeOffset));
 //                        .editedAt(new Temporal.DateTime(new Date(), timeOffset));
 
-                LoadingUtil.onLoadingStarted(getParentActivity());
+                LoadingUtil.onLoadingStarted();
 
                 HtAmplify.getInstance(context).createOffer(offerBuilder, timeSlots,
                         (success, createdOffer, exception1) -> {

@@ -9,7 +9,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.payment.BankTransferInformationActivity;
 import org.telegram.ui.Heymate.payment.BankTransferResultActivity;
-import org.telegram.ui.Heymate.payment.HeymatePayment;
+import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentInvoiceActivity;
 import org.telegram.ui.Heymate.payment.PaymentMethodSelectionActivity;
 import org.telegram.ui.LaunchActivity;
@@ -78,7 +78,7 @@ public class HeymateRouter {
                 return true;
             }
 
-            if (HeymatePayment.RAMP_SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {
+            if (WalletExistence.RAMP_SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {
                 return true;
             }
         }

@@ -139,12 +139,10 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.voip.VoIPHelper;
 // Heymate
-import org.telegram.ui.Heymate.AttestationActivity;
 import org.telegram.ui.Heymate.DrawerWalletCell;
 import org.telegram.ui.Heymate.EasterActivity;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.HeymateRouter;
-import org.telegram.ui.Heymate.payment.HeymatePayment;
 import org.telegram.ui.Heymate.HtOfferHelperActivity;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;

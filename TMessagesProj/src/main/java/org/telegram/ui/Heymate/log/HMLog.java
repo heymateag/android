@@ -74,14 +74,26 @@ public class HMLog {
     }
 
     public static void d(String tag, String message, Throwable t) {
+        android.util.Log.d(tag, message, t);
+        recordLog(tag, message, t);
+    }
+
+    public static void e(String tag, String message) {
+        e(tag, message, null);
+    }
+
+    public static void e(String tag, String message, Throwable t) {
+        android.util.Log.e(tag, message, t);
+        recordLog(tag, message, t);
+    }
+
+    private static void recordLog(String tag, String message, Throwable t) {
         if (HeymateConfig.DEBUG) {
             mLog.add(new Log(tag, message, t));
         }
-
-        android.util.Log.d(tag, message, t);
     }
 
-    public static void report(BaseFragment fragment) {
+    public static void report() {
         if (mLog.isEmpty()) {
             return;
         }
@@ -91,7 +103,7 @@ public class HMLog {
         mLog.clear();
 
         try {
-            LogToGroup.log(message, fragment);
+            LogToGroup.log(message);
         } catch (Throwable t) { }
 
         try {

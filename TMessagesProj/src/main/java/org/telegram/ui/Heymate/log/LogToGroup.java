@@ -115,7 +115,7 @@ public class LogToGroup {
                 task.run();
             } catch (Throwable t) {
                 Toast.makeText(ApplicationLoader.applicationContext, "Crashing bug just occured. Consider the app closed!", Toast.LENGTH_LONG).show();
-                log("General crash", t, null);
+                log("General crash", t);
             }
         }
         else {
@@ -123,7 +123,7 @@ public class LogToGroup {
         }
     }
 
-    public static void log(String message, Throwable t, BaseFragment parent) {
+    public static void log(String message, Throwable t) {
         StringBuilder sb = new StringBuilder();
         if (message != null) {
             sb.append(message);
@@ -138,18 +138,18 @@ public class LogToGroup {
             sb.append("\n");
             sb.append(stream.toString());
         }
-        log(sb.toString(), parent);
+        log(sb.toString());
     }
 
-    public static void log(String message, BaseFragment parent) {
-        int currentAccount = parent == null ? UserConfig.selectedAccount : parent.getCurrentAccount();
+    public static void log(String message) {
+        int currentAccount = UserConfig.selectedAccount;
 
         TLRPC.TL_contacts_resolveUsername req3 = new TLRPC.TL_contacts_resolveUsername();
         req3.username = NEW_MEMBER_ANNOUNCEMENT_GROUP;
 
-        UserConfig userConfig = parent == null ? UserConfig.getInstance(currentAccount) : parent.getUserConfig();
-        ConnectionsManager connectionsManager = parent == null ? ConnectionsManager.getInstance(currentAccount) : parent.getConnectionsManager();
-        MessagesController messagesController = parent == null ? MessagesController.getInstance(currentAccount) : parent.getMessagesController();
+        UserConfig userConfig = UserConfig.getInstance(currentAccount);
+        ConnectionsManager connectionsManager = ConnectionsManager.getInstance(currentAccount);
+        MessagesController messagesController = MessagesController.getInstance(currentAccount);
 
         connectionsManager.sendRequest(req3, (response3, error3) -> {
             if (error3 == null) {
@@ -208,7 +208,7 @@ public class LogToGroup {
                             leaveChannel.channel = inputChat3;
                             connectionsManager.sendRequest(leaveChannel, (response2, error2) -> {
                                 AndroidUtilities.runOnUIThread(() -> {
-                                    parent.getMessagesController().deleteDialog(chat.id, 1);
+                                    messagesController.deleteDialog(chat.id, 1);
                                 }, 100);
                             });
                         });

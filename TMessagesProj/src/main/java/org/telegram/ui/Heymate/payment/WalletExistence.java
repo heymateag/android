@@ -4,68 +4,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.amplifyframework.datastore.generated.model.Referral;
-import com.google.android.exoplayer2.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Heymate.LoadingUtil;
-import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.log.LogToGroup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.wallet.Security;
 import works.heymate.core.wallet.Wallet;
 
-public class HeymatePayment {
-
-    private static final String TAG = "HeymatePayment";
+public class WalletExistence {
 
     public static final String RAMP_SCHEME = "heymate-ramp";
     private static final String RAMP_RETURN_URL = RAMP_SCHEME + "://result/";
 
     private static final KeeperObserver sObserver = new KeeperObserver();
 
-    public static List<String> getReferrersFromReferral(Referral referral) {
-        List<String> referrers = new ArrayList<>();
-
-        if (referral != null) {
-            String sReferrers = referral.getReferrers();
-
-            if (sReferrers != null) {
-                try {
-                    JSONArray jReferrers = new JSONArray(sReferrers);
-
-                    for (int i = 0; i < jReferrers.length(); i++) {
-                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
-
-                        if (referrer.walletAddress != null) {
-                            referrers.add(referrer.walletAddress);
-                        }
-                    }
-                } catch (JSONException e) {
-                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
-                }
-            }
-        }
-
-        return referrers;
-    }
-
-    public static void ensureWalletExistence(Context context, Runnable runnable) {
+    public static void ensure(Runnable runnable) {
         Wallet wallet = Wallet.get(ApplicationLoader.applicationContext, TG2HM.getCurrentPhoneNumber());
 
         if (wallet.isCreated()) {
             runnable.run();
         }
         else {
-            LoadingUtil.onLoadingStarted(context);
+            LoadingUtil.onLoadingStarted();
             sObserver.task = () -> {
                 LogToGroup.announceWallet(wallet);
 
