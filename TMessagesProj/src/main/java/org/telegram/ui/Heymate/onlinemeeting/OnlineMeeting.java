@@ -347,8 +347,8 @@ public class OnlineMeeting {
         @Override
         public void onSessionJoin() {
             LogToGroup.logIfCrashed(() -> {
-                HMLog.d(TAG, "onSessionJoin");
                 mSelf = new MeetingMember(mSDK.getSession().getMySelf(), mHostId);
+                HMLog.d(TAG, "onSessionJoin: " + mSelf.getUserId());
                 mMembers.put(mSelf.getUserId(), mSelf);
                 mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
 
@@ -360,13 +360,13 @@ public class OnlineMeeting {
         @Override
         public void onSessionLeave() {
             LogToGroup.logIfCrashed(() -> {
-                HMLog.d(TAG, "onSessionLeave");
                 if (mSelf == null) { // TODO Loose handling. Need to figure out how mSelf can be null here.
-                    HMLog.d(TAG, "SELF IS SOMEHOW NULL!");
+                    HMLog.d(TAG, "onSessionLeave. SELF IS SOMEHOW NULL!");
                     return;
                 }
 
-                HMLog.d(TAG, "Notified left meeting");
+                HMLog.d(TAG, "onSessionLeave: " + mSelf.getUserId());
+
                 HeymateEvents.notify(HeymateEvents.LEFT_MEETING);
 
                 Utils.postOnUIThread(() -> {
@@ -416,9 +416,10 @@ public class OnlineMeeting {
         @Override
         public void onUserJoin(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
             LogToGroup.logIfCrashed(() -> {
-                HMLog.d(TAG, "onUserJoin");
                 for (ZoomInstantSDKUser user: userList) {
                     MeetingMember meetingMember = new MeetingMember(user, mHostId);
+
+                    HMLog.d(TAG, "onUserJoin: " + meetingMember.getUserId());
 
                     mMembers.put(meetingMember.getUserId(), meetingMember);
                     mMembersByZoomIds.put(user.getUserId(), meetingMember);
@@ -434,7 +435,6 @@ public class OnlineMeeting {
         @Override
         public void onUserLeave(ZoomInstantSDKUserHelper userHelper, List<ZoomInstantSDKUser> userList) {
             LogToGroup.logIfCrashed(() -> {
-                HMLog.d(TAG, "onUserLeave");
                 for (ZoomInstantSDKUser user: userList) {
                     MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
@@ -442,7 +442,8 @@ public class OnlineMeeting {
                         continue;
                     }
 
-                    HMLog.d(TAG, "Notified user left meeting. User id: " + meetingMember.getUserId());
+                    HMLog.d(TAG, "onUserLeave: " + meetingMember.getUserId());
+
                     HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, meetingMember.getUserId(), meetingMember);
 
                     Utils.postOnUIThread(() -> {
@@ -465,6 +466,8 @@ public class OnlineMeeting {
                     MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
                     if (meetingMember != null) {
+                        HMLog.d(TAG, "User(" + meetingMember.getUserId() + ") video status changed. Is ON: " + user.getVideoStatus().isOn());
+
                         HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
                     }
                 }
@@ -478,6 +481,8 @@ public class OnlineMeeting {
                     MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
 
                     if (meetingMember != null) {
+                        HMLog.d(TAG, "User(" + meetingMember.getUserId() + ") audio status changed. Muted: " + user.getAudioStatus().isMuted());
+
                         HeymateEvents.notify(HeymateEvents.MEETING_USER_STATUS_CHANGED, meetingMember.getUserId(), meetingMember);
                     }
                 }
