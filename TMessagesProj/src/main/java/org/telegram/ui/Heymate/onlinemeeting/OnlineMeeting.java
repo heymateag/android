@@ -1,6 +1,7 @@
 package org.telegram.ui.Heymate.onlinemeeting;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Base64;
 
 import com.google.android.exoplayer2.util.Log;
@@ -436,6 +437,10 @@ public class OnlineMeeting {
                 HMLog.d(TAG, "onUserLeave");
                 for (ZoomInstantSDKUser user: userList) {
                     MeetingMember meetingMember = mMembersByZoomIds.get(user.getUserId());
+
+                    if (meetingMember == null || mSelf == null || TextUtils.equals(mSelf.getUserId(), meetingMember.getUserId())) {
+                        continue;
+                    }
 
                     HMLog.d(TAG, "Notified user left meeting. User id: " + meetingMember.getUserId());
                     HeymateEvents.notify(HeymateEvents.USER_LEFT_MEETING, meetingMember.getUserId(), meetingMember);
