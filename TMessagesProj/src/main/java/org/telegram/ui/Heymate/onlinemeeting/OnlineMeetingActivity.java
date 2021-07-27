@@ -298,7 +298,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
             myselfView.setTag(OnlineMeeting.get().getSelf());
             mMemberViews.put(myself.getUserId(), myselfView);
 
-            if (myself.isHost()) {
+            if (myself.isServiceProvider()) {
                 mLeave.setText("End");
             }
 
@@ -336,7 +336,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                         myselfView.setTag(OnlineMeeting.get().getSelf());
                         mMemberViews.put(myself.getUserId(), myselfView);
 
-                        if (myself.isHost()) {
+                        if (myself.isServiceProvider()) {
                             mLeave.setText("End");
                         }
 

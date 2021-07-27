@@ -20,15 +20,19 @@ public class MeetingMember {
     private final String mName;
     private final String mUserId;
 
+    private final boolean mIsServiceProvider;
+
     private final List<WeakReference<ZoomInstantSDKVideoView>> mViews = new ArrayList<>();
 
-    protected MeetingMember(ZoomInstantSDKUser user) {
+    protected MeetingMember(ZoomInstantSDKUser user, String serviceProviderId) {
         mUser = user;
 
         OnlineMeeting.UserInfo userInfo = new OnlineMeeting.UserInfo(user.getUserName());
 
         mName = userInfo.name;
         mUserId = userInfo.id;
+
+        mIsServiceProvider = mUserId != null && mUserId.equals(serviceProviderId);
     }
 
     protected ZoomInstantSDKUser getZoomUser() {
@@ -43,8 +47,8 @@ public class MeetingMember {
         return mUserId;
     }
 
-    public boolean isHost() {
-        return mUser.isHost();
+    public boolean isServiceProvider() {
+        return mIsServiceProvider;
     }
 
     public boolean isMuted() {

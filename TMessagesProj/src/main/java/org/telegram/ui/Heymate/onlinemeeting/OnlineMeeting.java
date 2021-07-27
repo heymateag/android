@@ -347,7 +347,7 @@ public class OnlineMeeting {
         public void onSessionJoin() {
             LogToGroup.logIfCrashed(() -> {
                 HMLog.d(TAG, "onSessionJoin");
-                mSelf = new MeetingMember(mSDK.getSession().getMySelf());
+                mSelf = new MeetingMember(mSDK.getSession().getMySelf(), mHostId);
                 mMembers.put(mSelf.getUserId(), mSelf);
                 mMembersByZoomIds.put(mSelf.getZoomUser().getUserId(), mSelf);
 
@@ -417,7 +417,7 @@ public class OnlineMeeting {
             LogToGroup.logIfCrashed(() -> {
                 HMLog.d(TAG, "onUserJoin");
                 for (ZoomInstantSDKUser user: userList) {
-                    MeetingMember meetingMember = new MeetingMember(user);
+                    MeetingMember meetingMember = new MeetingMember(user, mHostId);
 
                     mMembers.put(meetingMember.getUserId(), meetingMember);
                     mMembersByZoomIds.put(user.getUserId(), meetingMember);

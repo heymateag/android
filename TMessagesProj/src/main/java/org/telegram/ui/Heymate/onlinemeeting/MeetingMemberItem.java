@@ -3,7 +3,6 @@ package org.telegram.ui.Heymate.onlinemeeting;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -17,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.yashoid.sequencelayout.SequenceLayout;
@@ -95,7 +93,7 @@ public class MeetingMemberItem extends SequenceLayout implements HeymateEvents.H
         mAudio.setOnClickListener(v -> toggleMute());
 
         setOnClickListener(v -> {
-            if (OnlineMeeting.get().getSelf() != null && OnlineMeeting.get().getSelf().isHost()) {
+            if (OnlineMeeting.get().getSelf() != null && OnlineMeeting.get().getSelf().isServiceProvider()) {
                 showOptionsPopup();
             }
         });
@@ -204,7 +202,7 @@ public class MeetingMemberItem extends SequenceLayout implements HeymateEvents.H
     }
 
     private void showOptionsPopup() {
-        if (mMeetingMember == null || OnlineMeeting.get().getSelf() == null || !OnlineMeeting.get().getSelf().isHost()) {
+        if (mMeetingMember == null || OnlineMeeting.get().getSelf() == null || !OnlineMeeting.get().getSelf().isServiceProvider()) {
             return;
         }
 
