@@ -24,7 +24,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
+
+import java8.util.Optional;
 
 public class CeloSDK {
 

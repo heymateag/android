@@ -219,7 +219,7 @@ public class WalletActivity extends BaseFragment {
 
         @Override
         public int getItemCount() {
-            return mTransactions == null ? 0 : Math.max(1, mTransactions.size());
+            return mTransactions == null ? 0 : mTransactions.size();
         }
 
     }

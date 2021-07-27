@@ -58,7 +58,12 @@ dependencies {
     implementation "androidx.biometric:biometric:1.1.0"
 
     implementation 'com.yashoid:sequencelayout:2.0.3'
-    implementation ('org.celo:contractkit:0.0.1')
+
+    implementation ('org.web3j:core:4.6.0-android') {
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    }
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.65'
+    implementation files('libs/celo-sdk-java.jar')
     implementation project(':celosdk')
 
     implementation project(':zoommobilertc')
