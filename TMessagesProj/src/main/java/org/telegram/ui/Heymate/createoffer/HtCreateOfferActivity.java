@@ -48,7 +48,6 @@ import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.OfferStatus;
-import org.telegram.ui.Heymate.PromotionDialog;
 import org.telegram.ui.Heymate.TG2HM;
 
 import java.text.SimpleDateFormat;

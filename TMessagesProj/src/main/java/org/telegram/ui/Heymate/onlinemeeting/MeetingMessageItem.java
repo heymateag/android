@@ -27,10 +27,11 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
+import org.telegram.ui.Heymate.offer.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.OnlineReservation;
+import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.ProfileActivity;
 
 import works.heymate.beta.R;
@@ -118,7 +119,10 @@ public class MeetingMessageItem extends SequenceLayout {
 
         mMoreDetails.setOnClickListener(v -> {
             if (mOffer != null) {
-                new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null).show();
+                OfferDetailsActivity offerDetails = new OfferDetailsActivity();
+                offerDetails.setOffer(mOffer, null);
+                mParent.presentFragment(offerDetails);
+//                new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null).show();
             }
         });
 

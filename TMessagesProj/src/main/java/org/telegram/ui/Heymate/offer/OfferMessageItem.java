@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.offer;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,10 +33,14 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.RadioButton;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.Heymate.FileCache;
+import org.telegram.ui.Heymate.LoadingUtil;
+import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
+import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import works.heymate.beta.R;
@@ -196,20 +200,9 @@ public class OfferMessageItem extends SequenceLayout {
                 return;
             }
 
-            try {
-                HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(context, mParent, mOffer, mPhraseInfo);
-                AlertDialog dialog = detailsPopUp.create();
-                detailsPopUp.closeImage.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                detailsPopUp.show();
-            } catch (Throwable t) {
-                LogToGroup.log("Fail on details dialog", t);
-                Toast.makeText(getContext(), "Failure! Log sent to group.", Toast.LENGTH_SHORT).show();
-            }
+            OfferDetailsActivity offerDetails = new OfferDetailsActivity();
+            offerDetails.setOffer(mOffer, mPhraseInfo);
+            mParent.presentFragment(offerDetails);
         });
 
         mBook.setOnClickListener(v -> initPayment());
@@ -255,16 +248,20 @@ public class OfferMessageItem extends SequenceLayout {
                         return;
                     }
 
-                    mImage.setVisibility(VISIBLE);
-                    mImage.setImageDrawable(drawable);
+                    if (drawable != null) {
+                        mImage.setImageDrawable(drawable);
+                    }
+                    else {
+                        mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
+                    }
                 });
             }
             else {
-                mImage.setVisibility(GONE);
+                mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
             }
         }
         else {
-            mImage.setVisibility(GONE);
+            mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
         }
 
         mTitle.setText(offer.getTitle());

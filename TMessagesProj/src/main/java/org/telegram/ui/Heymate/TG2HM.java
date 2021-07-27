@@ -1,10 +1,15 @@
 package org.telegram.ui.Heymate;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
@@ -56,6 +61,19 @@ public class TG2HM {
         } catch (Throwable t) { }
 
         return name;
+    }
+
+    public static Drawable getThemedDrawable(int resId, int color) {
+        Drawable drawable = AppCompatResources.getDrawable(ApplicationLoader.applicationContext, resId);
+
+        if (drawable == null) {
+            return null;
+        }
+
+        drawable = drawable.mutate();
+        drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+        return drawable;
     }
 
 }

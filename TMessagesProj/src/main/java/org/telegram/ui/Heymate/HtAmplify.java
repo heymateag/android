@@ -112,13 +112,13 @@ public class HtAmplify {
             Amplify.configure(AmplifyConfiguration.fromConfigFile(context, HeymateConfig.PRODUCTION ? R.raw.amplifyconfiguration_production : R.raw.amplifyconfiguration_staging), context);
 
             AWSCredentials credentials = new BasicAWSCredentials(
-                    "AKIATNEPMKIM2UIPWSPC",
-                    "y2qEASauUedSjUyLrbDZZ6qTZ4uzIG02y/z/Boco"
+                    "AKIATNEPMKIM4PV225S6",
+                    "xVYv+bzX/EAO16yRwT5Qs+Cr4JLNdcv9cmw9zBbp"
             );
 
             // new AWSConfiguration(context, R.raw.awsconfiguration);
 
-            amazonS3Client = new AmazonS3Client(credentials);
+            amazonS3Client = new AmazonS3Client(credentials, Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 

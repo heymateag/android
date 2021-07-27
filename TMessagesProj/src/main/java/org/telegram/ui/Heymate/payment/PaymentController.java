@@ -40,7 +40,7 @@ public class PaymentController {
 
     private static final String TAG = "PaymentController";
 
-    public static final int GAS_ADJUST_CENTS = 10;
+    public static final int GAS_ADJUST_CENTS = 30;
 
     private static PaymentController mInstance = null;
 

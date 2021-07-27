@@ -26,8 +26,9 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
+import org.telegram.ui.Heymate.offer.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.ProfileActivity;
 
@@ -231,10 +232,13 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
     }
 
     private void showDetails() {
-        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null);
-        AlertDialog dialog = detailsPopUp.create();
-        detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
-        mParent.showDialog(dialog);
+        OfferDetailsActivity offerDetails = new OfferDetailsActivity();
+        offerDetails.setOffer(mOffer, null);
+        mParent.presentFragment(offerDetails);
+//        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null);
+//        AlertDialog dialog = detailsPopUp.create();
+//        detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
+//        mParent.showDialog(dialog);
     }
 
     @Override

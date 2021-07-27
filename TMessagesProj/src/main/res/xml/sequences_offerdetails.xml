@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical id="image">
+        <Span id="offer_image" size="0px"/>
+        <Span size="1w"/>
+        <Span id="promote" size="52dp"/>
+        <Span size="16dp"/>
+    </Vertical>
+
+    <Vertical id="toolbar">
+        <Span id="toolbar_header" size="0px"/>
+        <Span id="toolbar" size="0px"/>
+    </Vertical>
+
+    <Vertical id="forward_height" start="end@offer_image" end="end@offer_image">
+        <Span size="1w"/>
+        <Span id="forward" size="40dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal id="forward_width">
+        <Span size="1w"/>
+        <Span id="forward" size="40dp"/>
+        <Span size="0dp"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Vertical start="start@toolbar" end="end@toolbar">
+        <Span size="1w"/>
+        <Span id="back" size="36dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@toolbar" end="end@toolbar">
+        <Span size="1w"/>
+        <Span id="more" size="36dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@toolbar" end="end@toolbar">
+        <Span size="1w"/>
+        <Span id="title" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@promote">
+        <Span id="book" size="100%promote"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span id="offer_image" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="12dp"/>
+        <Span id="back" size="36dp"/>
+        <Span size="20dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="more" size="36dp"/>
+        <Span size="12dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="promote" size="1w"/>
+        <Span size="8dp"/>
+        <Span id="book" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Vertical>
+        <Span id="list" size="100%"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span id="list" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="toolbar_header" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="toolbar" size="100%"/>
+    </Horizontal>
+
+</Sequences>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="16dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="24dp"/>
+        <Span id="title_delay" size="wrap"/>
+        <Span size="16dp"/>
+        <Span id="divider_delay" size="1dp"/>
+        <Span size="-1dp"/>
+        <Span size="16dp"/>
+        <Span id="title_cancel" size="wrap"/>
+        <Span size="16dp"/>
+        <Span id="divider_cancel" size="1dp"/>
+        <Span size="-1dp"/>
+        <Span size="16dp"/>
+        <Span id="title_cancel2" size="wrap"/>
+        <Span size="16dp"/>
+        <Span id="divider_cancel2" size="1dp"/>
+        <Span size="-1dp"/>
+        <Span size="16dp"/>
+        <Span id="title_deposit" size="wrap"/>
+        <Span size="16dp"/>
+        <Span size="8dp"/>
+    </Vertical>
+
+    <Vertical start="start@title_delay">
+        <Span id="value_delay" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@title_cancel">
+        <Span id="value_cancel" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@title_cancel2">
+        <Span id="value_cancel2" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@title_deposit">
+        <Span id="value_deposit" size="wrap"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="title" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title">
+        <Span id="title_delay" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="value_delay" size="wrap"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@title">
+        <Span id="divider_delay" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@value_delay">
+        <Span id="title_cancel" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="value_cancel" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title">
+        <Span id="divider_cancel" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@value_delay">
+        <Span id="title_cancel2" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="value_cancel2" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title">
+        <Span id="divider_cancel2" size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@title" end="end@value_delay">
+        <Span id="title_deposit" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="value_deposit" size="wrap"/>
+    </Horizontal>
+
+</Sequences>

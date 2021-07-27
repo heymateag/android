@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="16dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="24dp"/>
+        <Span id="address" size="wrap"/>
+        <Span size="16dp"/>
+            <Span id="map_container" size="148dp"/>
+        <Span size="16dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="title" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="address" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="map_container" size="1w"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+</Sequences>

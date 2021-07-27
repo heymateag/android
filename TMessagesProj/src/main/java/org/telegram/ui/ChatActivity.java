@@ -94,7 +94,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -117,7 +116,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
@@ -221,7 +219,7 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewHelper;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.OfferMessageItem;
+import org.telegram.ui.Heymate.offer.OfferMessageItem;
 import org.telegram.ui.Heymate.onlinemeeting.MeetingMessageItem;
 
 import java.io.BufferedWriter;
@@ -230,7 +228,6 @@ import java.io.FileWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -240,7 +237,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.reservation.ReservationUtils;

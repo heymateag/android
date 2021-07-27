@@ -27,13 +27,14 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.HtOfferDetailsPopUp;
+import org.telegram.ui.Heymate.offer.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
+import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.Heymate.onlinemeeting.OnlineMeetingActivity;
 import org.telegram.ui.ProfileActivity;
 
@@ -440,10 +441,13 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void showDetails() {
-        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(),mParent, mOffer, null);
-        AlertDialog dialog = detailsPopUp.create();
-        detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
-        mParent.showDialog(dialog);
+        OfferDetailsActivity offerDetails = new OfferDetailsActivity();
+        offerDetails.setOffer(mOffer, null);
+        mParent.presentFragment(offerDetails);
+//        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(),mParent, mOffer, null);
+//        AlertDialog dialog = detailsPopUp.create();
+//        detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
+//        mParent.showDialog(dialog);
     }
 
     @Override

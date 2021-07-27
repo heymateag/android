@@ -5,28 +5,35 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 
-public class RoundedCornersImageView extends AppCompatImageView {
+public class RoundedCornersContainer extends FrameLayout {
 
     private float[] mCornerRadius = new float[8];
 
     private final RectF mClipRect = new RectF();
     private final Path mClipPath = new Path();
 
-    public RoundedCornersImageView(@NonNull Context context) {
+    public RoundedCornersContainer(@NonNull Context context) {
         super(context);
+        initialize(context, null, 0);
     }
 
-    public RoundedCornersImageView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public RoundedCornersContainer(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initialize(context, attrs, 0);
     }
 
-    public RoundedCornersImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public RoundedCornersContainer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initialize(context, attrs, defStyleAttr);
+    }
+
+    private void initialize(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        setWillNotDraw(false);
     }
 
     public void setCornerRadius(float... radius) {
@@ -63,11 +70,11 @@ public class RoundedCornersImageView extends AppCompatImageView {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.save();
         canvas.clipPath(mClipPath);
 
-        super.onDraw(canvas);
+        super.draw(canvas);
 
         canvas.restore();
     }

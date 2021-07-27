@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="8dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="8dp"/>
+    </Vertical>
+
+    <Vertical start="start@title" end="end@title">
+        <Span id="icon" size="16dp"/>
+    </Vertical>
+
+    <Vertical start="start@title" end="end@title">
+        <Span id="time" size="wrap"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="icon" size="16dp"/>
+        <Span size="12dp"/>
+        <Span id="title" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="time" size="wrap"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+</Sequences>

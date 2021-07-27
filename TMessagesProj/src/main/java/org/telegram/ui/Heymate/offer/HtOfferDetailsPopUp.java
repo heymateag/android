@@ -1,4 +1,4 @@
-package org.telegram.ui.Heymate;
+package org.telegram.ui.Heymate.offer;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -34,6 +34,11 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Heymate.FileCache;
+import org.telegram.ui.Heymate.LoadingUtil;
+import org.telegram.ui.Heymate.MeetingType;
+import org.telegram.ui.Heymate.ReferralUtils;
+import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;

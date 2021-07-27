@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical id="spine">
+        <Span size="16dp"/>
+        <Span id="single" size="wrap"/>
+        <Span size="2dp"/>
+        <Span id="single_info" size="wrap"/>
+        <Span size="16dp" visibleIf="bundle"/>
+        <Span id="bundle" size="wrap"/>
+        <Span size="2dp" visibleIf="bundle"/>
+        <Span id="bundle_info" size="wrap"/>
+        <Span size="16dp" visibleIf="subscription"/>
+        <Span id="subscription" size="wrap"/>
+        <Span size="2dp" visibleIf="subscription"/>
+        <Span id="subscription_info" size="wrap"/>
+        <Span size="16dp"/>
+    </Vertical>
+
+    <Vertical start="start@single" end="end@single_info">
+        <Span size="-8dp"/>
+        <Span id="button_single" size="1w"/>
+        <Span size="-8dp"/>
+    </Vertical>
+
+    <Vertical start="start@bundle" end="end@bundle_info">
+        <Span size="-8dp"/>
+        <Span id="button_bundle" size="1w"/>
+        <Span size="-8dp"/>
+    </Vertical>
+
+    <Vertical start="start@subscription" end="end@subscription_info">
+        <Span size="-8dp"/>
+        <Span id="button_subscription" size="1w"/>
+        <Span size="-8dp"/>
+    </Vertical>
+
+    <Vertical start="start@single" end="end@single">
+        <Span size="1w"/>
+        <Span id="single_radio" size="20dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@single" end="end@single">
+        <Span size="1w"/>
+        <Span id="single_price" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bundle" end="end@bundle">
+        <Span size="1w"/>
+        <Span id="bundle_radio" size="20dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bundle" end="end@bundle">
+        <Span size="1w"/>
+        <Span id="bundle_price" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@bundle" end="end@bundle">
+        <Span size="1w"/>
+        <Span id="bundle_discount" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@subscription" end="end@subscription">
+        <Span size="1w"/>
+        <Span id="subscription_radio" size="20dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@subscription" end="end@subscription">
+        <Span size="1w"/>
+        <Span id="subscription_price" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="single_radio" size="20dp"/>
+        <Span size="12dp" visibleIf="single_radio"/>
+        <Span id="single" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="single_price" size="wrap"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@single">
+        <Span id="single_info" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="bundle_radio" size="20dp"/>
+        <Span size="12dp" visibleIf="bundle_radio"/>
+        <Span id="bundle" size="wrap"/>
+        <Span size="8dp"/>
+        <Span id="bundle_discount" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="bundle_price" size="wrap"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@bundle">
+        <Span id="bundle_info" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="16dp"/>
+        <Span id="subscription_radio" size="20dp"/>
+        <Span size="12dp" visibleIf="subscription_radio"/>
+        <Span id="subscription" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="subscription_price" size="wrap"/>
+        <Span size="16dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@subscription">
+        <Span id="subscription_info" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="button_single" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="button_bundle" size="100%"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span id="button_subscription" size="100%"/>
+    </Horizontal>
+
+</Sequences>

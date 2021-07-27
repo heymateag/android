@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.telegram.ui.Components.RadioButton
+        android:id="@+id/single_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/single"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/single_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/single_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="16sp"/>
+
+    <View
+        android:id="@+id/button_single"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <org.telegram.ui.Components.RadioButton
+        android:id="@+id/bundle_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/bundle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/bundle_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/bundle_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/bundle_discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="4dp"
+        android:textSize="10sp"/>
+
+    <View
+        android:id="@+id/button_bundle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <org.telegram.ui.Components.RadioButton
+        android:id="@+id/subscription_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/subscription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/subscription_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/subscription_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textSize="16sp"/>
+
+    <View
+        android:id="@+id/button_subscription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</merge>
