@@ -102,7 +102,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
         SequenceLayout content = (SequenceLayout) LayoutInflater.from(context).inflate(R.layout.activity_onlinemeeting, null, false);
 
-        content.findSequenceById("grid").getSpans().get(0).size = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+        content.findSequenceById("spine").getSpans().get(0).size = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
         content.setBackgroundColor(0xff292929);
 
         mGrid = content.findViewById(R.id.grid);
@@ -307,7 +307,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
                     AndroidUtilities.dp(180)
             );
             params.gravity = Gravity.RIGHT | Gravity.BOTTOM;
-            params.bottomMargin = AndroidUtilities.dp(80);
+            params.bottomMargin = AndroidUtilities.dp(12);
             params.rightMargin = AndroidUtilities.dp(12);
             params.leftMargin = params.rightMargin;
             mOverlay.addView(myselfView, params);

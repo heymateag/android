@@ -65,7 +65,7 @@ public class MeetingMember {
 
         // Subscribe to a user’s video
         if (canvas != null) {
-            canvas.subscribe(videoView, ZoomInstantSDKVideoAspect.ZoomInstantSDKVideoAspect_Original);
+            canvas.subscribe(videoView, ZoomInstantSDKVideoAspect.ZoomInstantSDKVideoAspect_PanAndScan);
         }
         else {
             return null;

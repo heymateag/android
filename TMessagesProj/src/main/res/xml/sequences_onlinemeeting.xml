@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Sequences>
 
-    <Vertical id="grid">
+    <Vertical id="spine">
         <Span size="0px"/>
+        <Span size="8dp"/>
+        <Span id="mute" size="wrap"/>
+        <Span size="1w"/>
+        <Span id="mic" size="76dp"/>
+    </Vertical>
+
+    <Vertical start="end@mute" end="start@mic">
+        <Span size="12dp"/>
         <Span id="grid" size="1w"/>
+        <Span size="12dp"/>
     </Vertical>
 
     <Horizontal>
@@ -18,15 +27,8 @@
         <Span id="overlay" size="100%"/>
     </Horizontal>
 
-    <Vertical start="start@grid">
+    <Vertical start="start@mute">
         <Span size="8dp"/>
-        <Span id="mute" size="wrap"/>
-        <Span size="1w"/>
-        <Span id="mic" size="76dp"/>
-    </Vertical>
-
-    <Vertical start="start@grid">
-        <Span size="16dp"/>
         <Span id="leave" size="32dp"/>
     </Vertical>
 
