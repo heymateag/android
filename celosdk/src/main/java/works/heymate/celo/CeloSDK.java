@@ -247,14 +247,16 @@ public class CeloSDK {
             BigInteger one = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger();
 
             long cUSD = balanceInfo.cUSD.divide(one.divide(BigInteger.valueOf(100L))).longValue();
-            double gold = balanceInfo.gold.divide(one.divide(BigInteger.valueOf(10_000L))).longValue() / 10_000d;
+            long cEUR = balanceInfo.cEUR.divide(one.divide(BigInteger.valueOf(100L))).longValue();
+
+            // double gold = balanceInfo.gold.divide(one.divide(BigInteger.valueOf(10_000L))).longValue() / 10_000d;
 
             List<BalanceCallback> callbacks = new ArrayList<>(mBalanceCallbacks);
             mBalanceCallbacks.clear();
 
             InternalUtils.runOnMainThread(() -> {
                 for (BalanceCallback callback: callbacks) {
-                    callback.onBalanceResult(true, balanceInfo.cUSD, balanceInfo.gold, cUSD, gold, null);
+                    callback.onBalanceResult(true, balanceInfo.cUSD, balanceInfo.cEUR, cUSD, cEUR, null);
                 }
             });
         } catch (CeloException e) {
@@ -278,9 +280,10 @@ public class CeloSDK {
 
         try {
             BigInteger cUSD = mContractKit.contracts.getStableToken().balanceOf(mContractKit.getAddress()).send();
-            BigInteger gold = mContractKit.contracts.getGoldToken().balanceOf(mContractKit.getAddress());
+            BigInteger cEUR = mContractKit.contracts.getStableTokenEUR().balanceOf(mContractKit.getAddress()).send();
+            // BigInteger gold = mContractKit.contracts.getGoldToken().balanceOf(mContractKit.getAddress());
 
-            return new BalanceInfo(cUSD, gold);
+            return new BalanceInfo(cUSD, cEUR);
         } catch (Exception e) {
             throw new CeloException(CeloError.NETWORK_ERROR, e);
         }
@@ -481,11 +484,11 @@ public class CeloSDK {
     private static class BalanceInfo {
 
         final BigInteger cUSD;
-        final BigInteger gold;
+        final BigInteger cEUR;
 
-        BalanceInfo(BigInteger cUSD, BigInteger gold) {
+        BalanceInfo(BigInteger cUSD, BigInteger cEUR) {
             this.cUSD = cUSD;
-            this.gold = gold;
+            this.cEUR = cEUR;
         }
 
     }

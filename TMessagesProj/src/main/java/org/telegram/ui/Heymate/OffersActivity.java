@@ -34,6 +34,7 @@ import org.telegram.ui.Heymate.offer.OfferMessageItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import works.heymate.core.Money;
 import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
 
@@ -132,14 +133,14 @@ public class OffersActivity extends BaseFragment {
         Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
         if (!wallet.isCreated()) {
-            mTextStatus.setText("Current balance is: [No wallet detected]");
+            mTextStatus.setText("Current balance is: " + Money.create(0, TG2HM.getDefaultCurrency()));
         }
         else {
             mTextStatus.setText("Current balance is:");
 
-            wallet.getBalance((success, cents, errorCause) -> {
+            wallet.getBalance((success, usd, eur, errorCause) -> {
                 if (success) {
-                    mTextStatus.setText("Current balance is: $" + (cents / 100f));
+                    mTextStatus.setText("Current balance is: " + TG2HM.pickTheRightMoney(usd, eur));
                 }
                 else {
                     mTextStatus.setText("Current balance is: [Connection problem]");

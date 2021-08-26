@@ -9,13 +9,10 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
+import works.heymate.core.Currency;
 import works.heymate.core.Texts;
 import works.heymate.core.URLs;
 import works.heymate.core.Utils;
@@ -227,10 +224,10 @@ public class OfferUtils {
         }
 
         if (additionalFields.length > 0) {
-            PriceInputItem.PricingInfo pricingInfo = null;
+            PricingInfo pricingInfo = null;
 
             try {
-                pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+                pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
             } catch (Throwable t) { }
 
             JSONObject termsConfig;
@@ -263,7 +260,7 @@ public class OfferUtils {
                         Utils.putValues(data, PRICE, pricingInfo != null ? String.valueOf(pricingInfo.price) : null);
                         continue;
                     case CURRENCY:
-                        Utils.putValues(data, CURRENCY, pricingInfo != null ? pricingInfo.currency : null);
+                        Utils.putValues(data, CURRENCY, pricingInfo != null ? pricingInfo.currency.name() : null);
                         continue;
                     case PAYMENT_TYPE:
                         Utils.putValues(data, PAYMENT_TYPE, pricingInfo != null ? pricingInfo.rateType : null);
@@ -410,9 +407,9 @@ public class OfferUtils {
                     }
 
                     if (price != null && currency != null && rateType != null) {
-                        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(
+                        PricingInfo pricingInfo = new PricingInfo(
                                 Integer.parseInt(price),
-                                currency,
+                                Currency.forName(currency),
                                 rateType,
                                 0,
                                 0,

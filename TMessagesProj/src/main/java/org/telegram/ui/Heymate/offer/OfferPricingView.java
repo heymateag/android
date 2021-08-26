@@ -11,7 +11,9 @@ import com.yashoid.sequencelayout.Span;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadioButton;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+
+import works.heymate.core.Money;
+import works.heymate.core.offer.PricingInfo;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class OfferPricingView extends SequenceLayout {
     private TextView mSubscriptionInfo;
     private TextView mSubscriptionPrice;
 
-    private PriceInputItem.PricingInfo mPricingInfo = null;
+    private PricingInfo mPricingInfo = null;
     private boolean mOnlySinglePrice = true;
 
     private String mSelectedPlan = null;
@@ -115,7 +117,7 @@ public class OfferPricingView extends SequenceLayout {
         mOnPlanChangedListener = listener;
     }
 
-    public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo, String selectedPlan) {
+    public void setPricingInfo(PricingInfo pricingInfo, String selectedPlan) {
         mPricingInfo = pricingInfo;
 
         if (mPricingInfo == null) {
@@ -123,7 +125,7 @@ public class OfferPricingView extends SequenceLayout {
         }
 
         mSingleInfo.setText("1 session");
-        mSinglePrice.setText(mPricingInfo.price + " " + mPricingInfo.currency);
+        mSinglePrice.setText(Money.create(mPricingInfo.price * 100, mPricingInfo.currency).toString());
 
         mOnlySinglePrice = true;
 
@@ -136,7 +138,7 @@ public class OfferPricingView extends SequenceLayout {
             mBundlePrice.setVisibility(VISIBLE);
 
             mBundleInfo.setText(mPricingInfo.bundleCount + " sessions");
-            mBundlePrice.setText(mPricingInfo.getBundleTotalPrice() + " " + mPricingInfo.currency);
+            mBundlePrice.setText(Money.create(mPricingInfo.getBundleTotalPrice() * 100, mPricingInfo.currency).toString());
 
             if (mPricingInfo.bundleDiscountPercent > 0) {
                 mBundleDiscount.setVisibility(VISIBLE);
@@ -163,7 +165,7 @@ public class OfferPricingView extends SequenceLayout {
             mSubscriptionPrice.setVisibility(VISIBLE);
 
             mSubscriptionInfo.setText(mPricingInfo.subscriptionPeriod + " - Unlimited sessions");
-            mSubscriptionPrice.setText(mPricingInfo.subscriptionPrice + " " + mPricingInfo.currency);
+            mSubscriptionPrice.setText(Money.create(mPricingInfo.subscriptionPrice * 100, mPricingInfo.currency).toString());
         }
         else {
             mSubscriptionRadio.setVisibility(GONE);
@@ -174,7 +176,7 @@ public class OfferPricingView extends SequenceLayout {
 
         mSingleRadio.setVisibility(mOnlySinglePrice ? GONE : VISIBLE);
 
-        setSelectedPlan(selectedPlan == null ? PurchasePlanTypes.SINGLE : selectedPlan, false);
+        setSelectedPlan(selectedPlan == null ? PurchasePlanTypes.SINGLE : selectedPlan, selectedPlan == null);
     }
 
     public void setSelectedPlan(String plan) {

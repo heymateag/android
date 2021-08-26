@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import works.heymate.core.APICallback;
+import works.heymate.core.Currency;
 import works.heymate.core.Money;
 
 public class Peymate {
@@ -58,7 +59,7 @@ public class Peymate {
     }
 
     public void initiate(Money money, String address, APICallback<HTLC> callback) {
-        Nimiq.createRequest(money.getCents() / 100d, Nimiq.ASSET_EUR, address, (success, result, exception) -> {
+        Nimiq.createRequest(money.getCents() / 100d, Nimiq.ASSET_EUR, Currency.getNimiqCurrency(money.getCurrency()), address, (success, result, exception) -> {
             if (success) {
                 mPreferences.edit()
                         .putString(KEY_CONTRACT_ID, result.id)

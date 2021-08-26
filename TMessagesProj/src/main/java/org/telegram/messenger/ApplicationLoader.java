@@ -191,22 +191,20 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
-        if (HeymateConfig.DEBUG) {
-            Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
 
-            Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-                try {
-                    OutputStream stream = new FileOutputStream(new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "heymate_log.txt"));
-                    PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
-                    e.printStackTrace(writer);
-                    writer.flush();
-                } catch (Throwable x) {
-                    x.printStackTrace();
-                }
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            try {
+                OutputStream stream = new FileOutputStream(new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "heymate_log.txt"));
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(stream));
+                e.printStackTrace(writer);
+                writer.flush();
+            } catch (Throwable x) {
+                x.printStackTrace();
+            }
 
-                defaultHandler.uncaughtException(t, e);
-            });
-        }
+            defaultHandler.uncaughtException(t, e);
+        });
 
         registerActivityLifecycleCallbacks(ActivityMonitor.get());
         Texts.initialize(this);

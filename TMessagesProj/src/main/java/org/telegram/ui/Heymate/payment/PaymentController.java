@@ -65,10 +65,11 @@ public class PaymentController {
             purchaseTimeSlot(offerId, null, referralId);
         }
         else {
-            getOffer(offerId, offer -> getBalance((wallet, balance) -> {
-                long price = PurchasePlanTypes.getPurchasedPlanPrice(offer, purchasedPlanType) * 100;
-
-                if (price <= balance) {
+            getOffer(offerId, offer -> getBalance((wallet, usdBalance, eurBalance) -> {
+                Money price = PurchasePlanTypes.getPurchasedPlanPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
+                Money balance = getBalance(usdBalance, eurBalance, price.getCurrency());
+                
+                if (balance.compareTo(price) >= 0) {
                     getReferral(referralId, referral -> initPlanPurchasePayment(offer, purchasedPlanType, referral, wallet));
                 }
                 else {
@@ -78,7 +79,7 @@ public class PaymentController {
                             .putString(Constants.REFERRAL_ID, referralId)
                             .apply();
 
-                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, Money.create((int) balance, Currency.USD)));
+                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
                 }
             }));
         }
@@ -153,10 +154,11 @@ public class PaymentController {
             return;
         }
 
-        getOffer(offerId, offer -> getBalance((wallet, balance) -> {
-            long price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType) * 100L;
+        getOffer(offerId, offer -> getBalance((wallet, usd, eur) -> {
+            Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType);
+            Money balance = getBalance(usd, eur, price.getCurrency());
 
-            if (price <= balance) {
+            if (balance.compareTo(price) >= 0) {
                 purchaseTimeSlot(offer, purchasedPlanId, referralId, timeSlot);
             }
             else {
@@ -164,7 +166,7 @@ public class PaymentController {
                         .putString(Constants.TIMESLOT_ID, timeSlot.getId())
                         .apply();
 
-                ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, Money.create((int) balance, Currency.USD)));
+                ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
             }
         }));
     }
@@ -278,11 +280,11 @@ public class PaymentController {
             String phoneNumber = TG2HM.getCurrentPhoneNumber();
             Wallet wallet = Wallet.get(mContext, phoneNumber);
 
-            wallet.getBalance((success, cents, errorCause) -> {
+            wallet.getBalance((success, usdBalance, eurBalance, errorCause) -> {
                 LoadingUtil.onLoadingFinished();
 
                 if (success || CeloSDK.isErrorCausedByInsufficientFunds(errorCause)) {
-                    callback.onBalanceReceived(wallet, cents);
+                    callback.onBalanceReceived(wallet, usdBalance, eurBalance);
                 }
                 else {
                     Log.e(TAG, "Failed to check balance", errorCause);
@@ -291,6 +293,18 @@ public class PaymentController {
                 }
             });
         });
+    }
+
+    private Money getBalance(Money usd, Money eur, Currency currency) {
+        if (Currency.USD.equals(currency)) {
+            return usd;
+        }
+
+        if (Currency.EUR.equals(currency)) {
+            return eur;
+        }
+
+        return Money.create(0, currency);
     }
 
     private void getOffer(String offerId, GetOfferCallback callback) {
@@ -376,7 +390,7 @@ public class PaymentController {
 
     private interface GetBalanceCallback {
 
-        void onBalanceReceived(Wallet wallet, long cents);
+        void onBalanceReceived(Wallet wallet, Money usd, Money eur);
 
     }
 

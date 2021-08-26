@@ -23,7 +23,7 @@ import org.telegram.ui.Heymate.Constants;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import works.heymate.beta.R;
@@ -123,10 +123,10 @@ public class PaymentInvoiceActivity extends BaseFragment {
             mOfferTitle.setText(offer.getTitle());
             mOfferCategory.setText(offer.getCategory());
 
-            PriceInputItem.PricingInfo pricingInfo;
+            PricingInfo pricingInfo;
 
             try {
-                pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+                pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
             } catch (JSONException e) {
                 finishFragment();
                 return;
@@ -151,10 +151,10 @@ public class PaymentInvoiceActivity extends BaseFragment {
             }
 
             PurchasePlanInfo planInfo = pricingInfo.getPurchasePlanInfo(purchasedPlanType);
-            Money servicePrice = Money.create(planInfo.price * 100, Currency.USD);
+            Money servicePrice = planInfo.price;
 
             if (PurchasePlanTypes.BUNDLE.equals(purchasedPlanType)) {
-                Money realPrice = Money.create(pricingInfo.price * 100, Currency.USD).multiplyBy(pricingInfo.bundleCount);
+                Money realPrice = Money.create(pricingInfo.price * 100, pricingInfo.currency).multiplyBy(pricingInfo.bundleCount);
                 Money discount = realPrice.minus(servicePrice);
 
                 addInvoiceRow("Service Price", realPrice);
@@ -164,7 +164,7 @@ public class PaymentInvoiceActivity extends BaseFragment {
                 addInvoiceRow("Service Price", servicePrice);
             }
 
-            Money fee = Money.create(PaymentController.GAS_ADJUST_CENTS, Currency.USD);
+            Money fee = Money.create(PaymentController.GAS_ADJUST_CENTS, pricingInfo.currency);
 
             addInvoiceRow("Fee", fee);
             addInvoiceRow("Wallet Balance", walletBalance);

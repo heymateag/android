@@ -26,7 +26,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -36,8 +35,9 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.ReferralUtils;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
-import org.telegram.ui.Heymate.log.LogToGroup;
+
+import works.heymate.core.Money;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
@@ -271,9 +271,9 @@ public class OfferMessageItem extends SequenceLayout {
         setSelectedPurchasePlan(mRadioFixedPrice);
 
         try {
-            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+            PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
 
-            mPriceFixedPrice.setText(pricingInfo.price + " " + pricingInfo.currency);
+            mPriceFixedPrice.setText(Money.create(pricingInfo.price * 100, pricingInfo.currency).toString());
             mPriceInfoFixedPrice.setText(pricingInfo.rateType);
 
             if (pricingInfo.bundleCount > 0) {
@@ -285,7 +285,7 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceInfoBundle.setVisibility(VISIBLE);
 
                 mInfoBundle.setText(pricingInfo.bundleDiscountPercent + "% Off");
-                mPriceBundle.setText(pricingInfo.getBundleTotalPrice() + " " + pricingInfo.currency);
+                mPriceBundle.setText(Money.create(pricingInfo.getBundleTotalPrice() * 100, pricingInfo.currency).toString());
                 mPriceInfoBundle.setText("per " + pricingInfo.bundleCount + " reservations");
             }
             else {
@@ -305,7 +305,7 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceSubscription.setVisibility(VISIBLE);
                 mPriceInfoSubscription.setVisibility(VISIBLE);
 
-                mPriceSubscription.setText(pricingInfo.subscriptionPrice + " " + pricingInfo.currency);
+                mPriceSubscription.setText(Money.create(pricingInfo.subscriptionPrice * 100, pricingInfo.currency).toString());
                 mPriceInfoSubscription.setText(pricingInfo.subscriptionPeriod.toLowerCase()); // TODO Cheating?
             }
             else {
@@ -453,7 +453,7 @@ public class OfferMessageItem extends SequenceLayout {
         PurchasePlanInfo purchasePlanInfo;
 
         try {
-            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(mOffer.getPricingInfo()));
+            PricingInfo pricingInfo = new PricingInfo(new JSONObject(mOffer.getPricingInfo()));
 
             if (mSelectedPurchasePlan == mRadioFixedPrice) {
                 purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);

@@ -33,6 +33,8 @@ import java.util.List;
 import works.heymate.beta.R;
 import works.heymate.celo.CurrencyUtil;
 import works.heymate.celo.InternalUtils;
+import works.heymate.core.Currency;
+import works.heymate.core.Money;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
@@ -46,6 +48,9 @@ public class WalletActivity extends BaseFragment {
     private TransactionAdapter mAdapter;
 
     private Wallet mWallet;
+
+    private String mUSDAddress;
+    private String mEURAddress;
 
     @Override
     public boolean onFragmentCreate() {
@@ -112,21 +117,14 @@ public class WalletActivity extends BaseFragment {
         Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
         if (!wallet.isCreated()) {
-            mTextBalance.setText("[No wallet detected]");
+            mTextBalance.setText(Money.create(0, Currency.USD).toString());
         }
         else {
             mTextBalance.setText("");
 
-            wallet.getBalance((success, cents, errorCause) -> {
+            wallet.getBalance((success, usd, eur, errorCause) -> {
                 if (success) {
-                    String sDollars = String.valueOf(cents / 100);
-                    String sCents = String.valueOf(cents % 100);
-
-                    if (sCents.length() < 2) {
-                        sCents = "0" + sCents;
-                    }
-
-                    mTextBalance.setText("$" + sDollars + "." + sCents);
+                    mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur).toString());
                 }
                 else {
                     mTextBalance.setText("[Connection problem]");
@@ -163,49 +161,60 @@ public class WalletActivity extends BaseFragment {
                 return;
             }
 
-            new Thread() {
-
-                @Override
-                public void run() {
-                    String baseURL = HeymateConfig.MAIN_NET ? "https://explorer.celo.org/" : "https://alfajores-blockscout.celo-testnet.org/";
-                    String url = baseURL + "api?module=account&action=tokentx&page=0&offset=50&address=" + mWallet.getAddress();
-
-                    try {
-                        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-                        connection.setDoOutput(true);
-                        InputStream input = connection.getInputStream();
-                        String sData = InternalUtils.streamToString(input);
-                        connection.disconnect();
-                        JSONObject data = new JSONObject(sData);
-                        JSONArray jTransactions = data.getJSONArray("result");
-
-                        List<JSONObject> transactions = new ArrayList<>(jTransactions.length());
-
-                        for (int i = 0; i < jTransactions.length(); i++) {
-                            BigInteger amount = new BigInteger(jTransactions.getJSONObject(i).getString("value"));
-                            long cents = CurrencyUtil.blockChainValueToCents(amount);
-
-                            if (cents > 0) {
-                                transactions.add(jTransactions.getJSONObject(i));
-                            }
-                        }
-
-                        Utils.postOnUIThread(() -> {
-                            mTransactions = transactions;
-                            notifyDataSetChanged();
-                        });
-                    } catch (IOException | JSONException e) {
-                        Log.e(TAG, "Failed to get transactions", e);
-                    }
+            mWallet.getContractKit((success, contractKit, errorCause) -> {
+                if (!success) {
+                    // TODO Feedback?
+                    return;
                 }
 
-            }.start();
+                mUSDAddress = contractKit.contracts.getStableToken().getContractAddress();
+                mEURAddress = contractKit.contracts.getStableTokenEUR().getContractAddress();
+
+                new Thread() {
+
+                    @Override
+                    public void run() {
+                        String baseURL = HeymateConfig.MAIN_NET ? "https://explorer.celo.org/" : "https://alfajores-blockscout.celo-testnet.org/";
+                        String url = baseURL + "api?module=account&action=tokentx&page=0&offset=50&address=" + mWallet.getAddress();
+
+                        try {
+                            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                            connection.setDoOutput(true);
+                            InputStream input = connection.getInputStream();
+                            String sData = InternalUtils.streamToString(input);
+                            connection.disconnect();
+                            JSONObject data = new JSONObject(sData);
+                            JSONArray jTransactions = data.getJSONArray("result");
+
+                            List<JSONObject> transactions = new ArrayList<>(jTransactions.length());
+
+                            for (int i = 0; i < jTransactions.length(); i++) {
+                                BigInteger amount = new BigInteger(jTransactions.getJSONObject(i).getString("value"));
+                                long cents = CurrencyUtil.blockChainValueToCents(amount);
+
+                                if (cents > 0) {
+                                    transactions.add(jTransactions.getJSONObject(i));
+                                }
+                            }
+
+                            Utils.postOnUIThread(() -> {
+                                mTransactions = transactions;
+                                notifyDataSetChanged();
+                            });
+                        } catch (IOException | JSONException e) {
+                            Log.e(TAG, "Failed to get transactions", e);
+                        }
+                    }
+
+                }.start();
+            });
         }
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = new TransactionItem(parent.getContext());
+            TransactionItem view = new TransactionItem(parent.getContext());
+            view.setCurrencyAddresses(mUSDAddress, mEURAddress);
             return new RecyclerView.ViewHolder(view) { };
         }
 

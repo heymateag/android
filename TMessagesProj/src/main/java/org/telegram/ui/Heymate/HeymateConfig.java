@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class HeymateConfig {
 
-    public static final boolean MAIN_NET = false;
-    public static final boolean PRODUCTION = false;
+    public static final boolean MAIN_NET = true;
+    public static final boolean PRODUCTION = true;
     public static final boolean DEBUG = false;
     public static final boolean DEMO = true;
 
-    public static final int INTERNAL_VERSION = 46;
+    public static final int INTERNAL_VERSION = 56;
 
     private static final String PREFERENCES_PREFIX = "HeymateConfig_";
 

@@ -44,7 +44,7 @@ import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
@@ -111,7 +111,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     private Offer mOffer = null;
     private OfferUtils.PhraseInfo mPhraseInfo = null;
 
-    private PriceInputItem.PricingInfo mPricingInfo = null;
+    private PricingInfo mPricingInfo = null;
     private JSONObject mPaymentTerms = null;
 
     private int[] mRows = null;
@@ -262,7 +262,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         checkPhoto();
 
         try {
-            mPricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+            mPricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
             mPaymentTerms = new JSONObject(offer.getTermsConfig());
         } catch (JSONException e) {
             mPricingInfo = null;
@@ -657,7 +657,8 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     }
 
     private void bindPricing(View view) {
-        ((OfferPricingView) view).setPricingInfo(mPricingInfo, mSelectedPlan);
+        OfferPricingView offerPricingView = (OfferPricingView) view;
+        offerPricingView.setPricingInfo(mPricingInfo, mSelectedPlan);
     }
 
     private View createLocation(ViewGroup parent) {

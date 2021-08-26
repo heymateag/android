@@ -18,7 +18,23 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debugAsan {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        HA {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        standalone {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -30,6 +46,86 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    flavorDimensions "minApi"
+
+    productFlavors {
+        armv7 {
+            ndk {
+            }
+            ext {
+                abiVersionCode = 1
+            }
+        }
+        x86 {
+            ndk {
+            }
+            ext {
+                abiVersionCode = 2
+            }
+        }
+        armv7_SDK23 {
+            ndk {
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 3
+            }
+        }
+        x86_SDK23 {
+            ndk {
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 4
+            }
+        }
+        arm64 {
+            ndk {
+            }
+            ext {
+                abiVersionCode = 5
+            }
+        }
+        x64 {
+            ndk {
+            }
+            ext {
+                abiVersionCode = 6
+            }
+        }
+        arm64_SDK23 {
+            ndk {
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 7
+            }
+        }
+        x64_SDK23 {
+            ndk {
+            }
+            minSdkVersion 23
+            ext {
+                abiVersionCode = 8
+            }
+        }
+        afat {
+            ndk {
+            }
+            ext {
+                abiVersionCode = 9
+            }
+        }
+    }
+
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (variant.buildType.name != "release" && !names.contains("afat")) {
+            setIgnore(true)
+        }
+    }
+
 }
 
 repositories {

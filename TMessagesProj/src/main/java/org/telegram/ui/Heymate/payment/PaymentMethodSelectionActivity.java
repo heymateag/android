@@ -53,15 +53,17 @@ public class PaymentMethodSelectionActivity extends BaseFragment {
         content.setOrientation(LinearLayout.VERTICAL);
 
         for (PaymentMethod paymentMethod: PaymentMethod.PAYMENT_METHODS) {
-            View view = paymentMethod.createView(context);
+            if (paymentMethod.supportedCurrencies.contains(amount.getCurrency())) {
+                View view = paymentMethod.createView(context, amount.getCurrency());
 
-            view.setOnClickListener(v -> {
-                if (paymentMethod.execute(context, amount)) {
-                    finishFragment();
-                }
-            });
+                view.setOnClickListener(v -> {
+                    if (paymentMethod.execute(context, amount)) {
+                        finishFragment();
+                    }
+                });
 
-            content.addView(view);
+                content.addView(view);
+            }
         }
 
         fragmentView = content;

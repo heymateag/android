@@ -19,6 +19,8 @@ import java.util.Date;
 
 import works.heymate.beta.R;
 import works.heymate.celo.CurrencyUtil;
+import works.heymate.core.Currency;
+import works.heymate.core.Money;
 import works.heymate.core.wallet.Wallet;
 
 public class TransactionItem extends SequenceLayout {
@@ -27,6 +29,9 @@ public class TransactionItem extends SequenceLayout {
     private TextView mDescription;
     private TextView mAmount;
     private TextView mTime;
+
+    private String mUSDAddress;
+    private String mEURAddress;
 
     private String mAddress;
 
@@ -63,19 +68,25 @@ public class TransactionItem extends SequenceLayout {
         mAddress = Wallet.get(context, TG2HM.getCurrentPhoneNumber()).getAddress();
     }
 
+    public void setCurrencyAddresses(String usdAddress, String eurAddress) {
+        mUSDAddress = usdAddress;
+        mEURAddress = eurAddress;
+    }
+
     public void setTransaction(JSONObject transaction) {
         try {
             String from = transaction.getString("from");
             String to = transaction.getString("to");
             long timestamp = Long.parseLong(transaction.getString("timeStamp")) * 1000L;
             BigInteger value = new BigInteger(transaction.getString("value"));
+            String contract = transaction.getString("contractAddress");
+
+            Currency currency = mEURAddress.equals(contract) ? Currency.EUR : Currency.USD;
 
             boolean received = mAddress.equals(to);
 
             long rawAmount = CurrencyUtil.blockChainValueToCents(value);
-            long dollars = rawAmount / 100;
-            long cents = rawAmount % 100;
-            String amount = dollars  + "." + (cents < 10 ? "0" + cents : "" + cents);
+            Money amount = Money.create(rawAmount, currency);
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM, dd HH:mm");
 
@@ -85,11 +96,11 @@ public class TransactionItem extends SequenceLayout {
 
             if (received) {
                 mAmount.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton));
-                mAmount.setText("+$" + amount);
+                mAmount.setText("+" + amount);
             }
             else {
                 mAmount.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
-                mAmount.setText("-$" + amount);
+                mAmount.setText("-" + amount);
             }
         } catch (JSONException e) {
 

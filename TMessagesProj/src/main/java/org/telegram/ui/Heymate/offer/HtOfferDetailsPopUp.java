@@ -39,7 +39,9 @@ import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+
+import works.heymate.core.Money;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
@@ -216,8 +218,8 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         TextView priceText = new TextView(context);
         priceText.setId(idCounter++);
         try {
-            PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
-            priceText.setText(pricingInfo.price + pricingInfo.currency + " " + pricingInfo.rateType);
+            PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+            priceText.setText(Money.create(pricingInfo.price * 100, pricingInfo.currency).toString() + " " + pricingInfo.rateType);
         } catch (Throwable t) { }
         priceText.setTextSize(14);
         priceText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -258,7 +260,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
         buyButtonLayout.setGravity(Gravity.CENTER);
         buyButtonLayout.setOnClickListener(v -> {
             try {
-                PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(offer.getPricingInfo()));
+                PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
                 PurchasePlanInfo purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);
                 PaymentController.get(getContext()).initPayment(offer.getId(), purchasePlanInfo.type, phraseInfo == null ? null : phraseInfo.referralId);
                 dialog.dismiss();

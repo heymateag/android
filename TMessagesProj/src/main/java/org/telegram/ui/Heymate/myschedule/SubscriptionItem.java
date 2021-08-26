@@ -22,12 +22,10 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Heymate.offer.HtOfferDetailsPopUp;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.ProfileActivity;
@@ -137,7 +135,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
             if (PurchasePlanTypes.BUNDLE.equals(mPurchasedPlan.getPlanType())) {
                 if (mOffer != null) {
                     try {
-                        PriceInputItem.PricingInfo pricingInfo = new PriceInputItem.PricingInfo(new JSONObject(mOffer.getPricingInfo()));
+                        PricingInfo pricingInfo = new PricingInfo(new JSONObject(mOffer.getPricingInfo()));
 
                         int remainingSessions = pricingInfo.bundleCount - mPurchasedPlan.getFinishedReservationsCount() - mPurchasedPlan.getPendingReservationsCount();
 

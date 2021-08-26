@@ -1,7 +1,6 @@
 package works.heymate.ramp;
 
 import android.util.Base64;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +23,10 @@ import works.heymate.core.Utils;
 public class Nimiq {
 
     public static final String ASSET_EUR = "EUR";
+
+    public static final String TOKEN_CEUR = "cEUR";
+    public static final String TOKEN_CUSD = "cUSD";
+
 
     static final String TIMESTAMP_PATTERN = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
@@ -60,7 +63,7 @@ public class Nimiq {
         }.start();
     }
 
-    public static void createRequest(double amount, String asset, String address, APICallback<HTLC> callback) {
+    public static void createRequest(double amount, String asset, String currency, String address, APICallback<HTLC> callback) {
         new Thread() {
 
             @Override
@@ -74,7 +77,7 @@ public class Nimiq {
 
                 try {
                     HTLC htlc = prepare(amount, asset, bPreImage, expire);
-                    reveal(htlc.id, preImage, address);
+                    reveal(htlc.id, preImage, currency, address);
 
                     Utils.runOnUIThread(() -> callback.onAPICallResult(true, htlc, null));
                 } catch (Exception exception) {
@@ -185,12 +188,13 @@ public class Nimiq {
         return result;
     }
 
-    private static void reveal(String contractId, String preimage, String address) throws Exception {
+    private static void reveal(String contractId, String preimage, String currency, String address) throws Exception {
         JSONObject jBody = new JSONObject();
 
         try {
             jBody.put("contractId", contractId);
             jBody.put("preimage", preimage);
+            jBody.put("currency", currency);
             jBody.put("userAddress", address);
         } catch (JSONException e) { }
 

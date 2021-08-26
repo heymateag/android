@@ -22,6 +22,11 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.TG2HM;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import works.heymate.beta.R;
 import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.Currency;
@@ -31,76 +36,84 @@ import works.heymate.ramp.Ramp;
 
 public abstract class PaymentMethod {
 
-    public static final PaymentMethod BANK_TRANSFER = new PaymentMethod(R.drawable.hm_ic_bank_transfer, "Bank Transfer", Money.create(25, Currency.EUR)) {
+    public static final PaymentMethod BANK_TRANSFER;
+    public static final PaymentMethod CREDIT_CARD;
+    public static final PaymentMethod PAYPAL;
+    public static final PaymentMethod APPLE_PAY;
+    public static final PaymentMethod ALFAJORES;
 
-        @Override
-        public boolean execute(Context context, Money amount) {
-            context.startActivity(BankTransferInformationActivity.getIntent(context, amount));
-            return true;
-        }
+    static {
+        BANK_TRANSFER = new PaymentMethod(R.drawable.hm_ic_bank_transfer, "Bank Transfer", createFeeMap(0), Currency.EUR, Currency.USD) {
 
-    };
+            @Override
+            public boolean execute(Context context, Money amount) {
+                context.startActivity(BankTransferInformationActivity.getIntent(context, amount));
+                return true;
+            }
 
-    public static final PaymentMethod CREDIT_CARD = new PaymentMethod(R.drawable.hm_ic_credit_card, "Credit Card", Money.create(0, Currency.EUR)) {
+        };
 
-        @Override
-        public boolean execute(Context context, Money amount) {
-            String topUpAmount = CurrencyUtil.centsToBlockChainValue(amount.getCents()).toString();
+        CREDIT_CARD = new PaymentMethod(R.drawable.hm_ic_credit_card, "Credit Card", createFeeMap(0), Currency.EUR, Currency.USD) {
 
-            String phoneNumber = TG2HM.getCurrentPhoneNumber();
-            Wallet wallet = Wallet.get(context, phoneNumber);
+            @Override
+            public boolean execute(Context context, Money amount) {
+                String topUpAmount = CurrencyUtil.centsToBlockChainValue(amount.getCents()).toString();
 
-            Ramp.getDialog(context, wallet.getAddress(), topUpAmount, () -> PaymentController.get(context).resumePayment()).show();
+                String phoneNumber = TG2HM.getCurrentPhoneNumber();
+                Wallet wallet = Wallet.get(context, phoneNumber);
 
-            return true;
-        }
+                Ramp.getDialog(context, wallet.getAddress(), topUpAmount, () -> PaymentController.get(context).resumePayment()).show();
 
-    };
+                return true;
+            }
 
-    public static final PaymentMethod PAYPAL = new PaymentMethod(R.drawable.hm_ic_paypal, "Paypal", Money.create(400, Currency.EUR)) {
+        };
 
-        @Override
-        public boolean execute(Context context, Money amount) {
-            return false;
-        }
+        PAYPAL = new PaymentMethod(R.drawable.hm_ic_paypal, "Paypal", createFeeMap(400), Currency.EUR, Currency.USD) {
 
-    };
+            @Override
+            public boolean execute(Context context, Money amount) {
+                return false;
+            }
 
-    public static final PaymentMethod APPLE_PAY = new PaymentMethod(R.drawable.hm_ic_apple_pay, "Apple Pay", Money.create(400, Currency.EUR)) {
+        };
 
-        @Override
-        public boolean execute(Context context, Money amount) {
-            return false;
-        }
+        APPLE_PAY = new PaymentMethod(R.drawable.hm_ic_apple_pay, "Apple Pay", createFeeMap(400), Currency.EUR, Currency.USD) {
 
-    };
+            @Override
+            public boolean execute(Context context, Money amount) {
+                return false;
+            }
 
-    public static final PaymentMethod ALFAJORES = new PaymentMethod(R.drawable.menu_wallet, "Alfajores Testnet", Money.create(0, Currency.EUR)) {
+        };
 
-        @Override
-        public boolean execute(Context context, Money amount) {
-            String phoneNumber = TG2HM.getCurrentPhoneNumber();
-            Wallet wallet = Wallet.get(context, phoneNumber);
+        ALFAJORES = new PaymentMethod(R.drawable.menu_wallet, "Alfajores Testnet", createFeeMap(0), Currency.EUR, Currency.USD) {
 
-            TextView addressView = new TextView(context);
-            addressView.setText(wallet.getAddress() + "\nhttps://celo.org/developers/faucet");
-            addressView.setAutoLinkMask(Linkify.WEB_URLS);
-            addressView.setTextIsSelectable(true);
-            addressView.setMovementMethod(LinkMovementMethod.getInstance());
+            @Override
+            public boolean execute(Context context, Money amount) {
+                String phoneNumber = TG2HM.getCurrentPhoneNumber();
+                Wallet wallet = Wallet.get(context, phoneNumber);
 
-            new AlertDialog.Builder(context)
-                    .setTitle("Initiate payment?")
-                    .setView(addressView)
-                    .setPositiveButton("Go", (dialog, which) -> {
-                        dialog.dismiss();
-                        PaymentController.get(ApplicationLoader.applicationContext).resumePayment();
-                    })
-                    .show();
+                TextView addressView = new TextView(context);
+                addressView.setText(wallet.getAddress() + "\nhttps://celo.org/developers/faucet");
+                addressView.setAutoLinkMask(Linkify.WEB_URLS);
+                addressView.setTextIsSelectable(true);
+                addressView.setMovementMethod(LinkMovementMethod.getInstance());
 
-            return true;
-        }
+                new AlertDialog.Builder(context)
+                        .setTitle("Initiate payment?")
+                        .setView(addressView)
+                        .setPositiveButton("Go", (dialog, which) -> {
+                            dialog.dismiss();
+                            PaymentController.get(ApplicationLoader.applicationContext).resumePayment();
+                        })
+                        .show();
 
-    };
+                return true;
+            }
+
+        };
+    }
 
     private static final PaymentMethod[] DEMO_MAIN = { BANK_TRANSFER, CREDIT_CARD, PAYPAL, APPLE_PAY };
     private static final PaymentMethod[] DEMO_ALFAJORES = { BANK_TRANSFER, CREDIT_CARD, PAYPAL, APPLE_PAY, ALFAJORES };
@@ -113,15 +126,19 @@ public abstract class PaymentMethod {
 
     private final int mIconResId;
     private final String mTitle;
-    private final Money mFee;
+    private final Map<Currency, Money> mFee;
 
-    PaymentMethod(int iconResId, String title, Money fee) {
+    public final List<Currency> supportedCurrencies;
+
+    PaymentMethod(int iconResId, String title, Map<Currency, Money> fee, Currency... supportedCurrencies) {
         mIconResId = iconResId;
         mTitle = title;
         mFee = fee;
+
+        this.supportedCurrencies = Arrays.asList(supportedCurrencies);
     }
 
-    public View createView(Context context) {
+    public View createView(Context context, Currency currency) {
         FrameLayout view = new FrameLayout(context);
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(56)));
 
@@ -140,7 +157,7 @@ public abstract class PaymentMethod {
         TextView fee = new TextView(context);
         fee.setTextSize(12);
         fee.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        fee.setText("Fee: " + mFee.toString());
+        fee.setText("Fee: " + mFee.get(currency).toString());
         view.addView(fee, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 16, 0));
 
         View divider = new View(context);
@@ -151,5 +168,14 @@ public abstract class PaymentMethod {
     }
 
     abstract public boolean execute(Context context, Money amount);
+
+    private static Map<Currency, Money> createFeeMap(long amount) {
+        Map<Currency, Money> map = new HashMap<>();
+
+        map.put(Currency.USD, Money.create(amount, Currency.USD));
+        map.put(Currency.EUR, Money.create(amount, Currency.EUR));
+
+        return map;
+    }
 
 }

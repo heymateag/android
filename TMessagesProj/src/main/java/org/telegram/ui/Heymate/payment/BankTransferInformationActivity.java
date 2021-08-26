@@ -166,7 +166,7 @@ public class BankTransferInformationActivity extends BaseFragment implements Pey
 
                 HTLC.Option option = htlc.clearing.options[0];
 
-                int oAmount;
+                long oAmount;
                 String oIBAN;
                 String oBIC;
                 String oHolder;

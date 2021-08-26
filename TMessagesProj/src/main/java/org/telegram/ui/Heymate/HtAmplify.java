@@ -53,11 +53,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class HtAmplify {
     
@@ -65,27 +60,9 @@ public class HtAmplify {
 
     private static HtAmplify instance;
 
-    public interface OfferCallback<T> {
-
-        void onOfferQueryResult(boolean success, T data, ApiException exception);
-
-    }
-
     public interface APICallback<T> {
 
         void onCallResult(boolean success, T result, ApiException exception);
-
-    }
-
-    public interface ShopCallback {
-
-        void onShopQueryResult(boolean success, Shop shop, ApiException exception);
-
-    }
-
-    public interface ShopsCallback {
-
-        void onShopsQueryResult(boolean success, ArrayList<Shop> shop, ApiException exception);
 
     }
 
@@ -116,10 +93,7 @@ public class HtAmplify {
                     "xVYv+bzX/EAO16yRwT5Qs+Cr4JLNdcv9cmw9zBbp"
             );
 
-            // new AWSConfiguration(context, R.raw.awsconfiguration);
-
             amazonS3Client = new AmazonS3Client(credentials, Region.getRegion(Regions.EU_CENTRAL_1));
-            amazonS3Client.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
             amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 
             Log.i(TAG, "Initialized Amplify.");
@@ -197,24 +171,7 @@ public class HtAmplify {
         return newShop;
     }
 
-    public void isShop(int tgId, ShopCallback callback){
-        Amplify.API.query(
-                ModelQuery.list(Shop.class, Shop.TG_ID.eq(tgId)),
-                response -> {
-                    if (response.getData() != null) {
-                        for (Shop shop : response.getData()) {
-                            callback.onShopQueryResult(true, shop, null);
-                        }
-                        if(!response.getData().hasNextResult()){
-                            callback.onShopQueryResult(false, null, null);
-                        }
-                    }
-                },
-                error -> {}
-        );
-    }
-
-    public void getShops(ShopsCallback callback){
+    public void getShops(APICallback<List<Shop>> callback){
         Amplify.API.query(
                 ModelQuery.list(Shop.class),
                 response -> {
@@ -224,10 +181,10 @@ public class HtAmplify {
                             shops.add(shop);
                         }
                     }
-                    callback.onShopsQueryResult(true, shops, null);
+                    callback.onCallResult(true, shops, null);
                 },
                 error -> {
-                    callback.onShopsQueryResult(false, null, error);
+                    callback.onCallResult(false, null, error);
                 }
         );
     }
@@ -650,19 +607,19 @@ public class HtAmplify {
         }
     }
 
-    public void getOffer(String offerId, OfferCallback<Offer> callback) {
+    public void getOffer(String offerId, APICallback<Offer> callback) {
         Amplify.API.query(
                 ModelQuery.get(Offer.class, offerId),
                 response -> {
                     AndroidUtilities.runOnUIThread(() -> {
                         if (response.hasData()) {
-                            callback.onOfferQueryResult(true, response.getData(), null);
+                            callback.onCallResult(true, response.getData(), null);
                         } else {
-                            callback.onOfferQueryResult(false, null, null);
+                            callback.onCallResult(false, null, null);
                         }
                     });
                 },
-                error -> AndroidUtilities.runOnUIThread(() -> callback.onOfferQueryResult(false, null, error))
+                error -> AndroidUtilities.runOnUIThread(() -> callback.onCallResult(false, null, error))
         );
     }
 
@@ -816,30 +773,6 @@ public class HtAmplify {
 
     public S3Object downloadFile(String id) throws AmazonClientException {
         return amazonS3Client.getObject("offerdocuments", id);
-    }
-
-    public S3Object getOfferImage(String offerUUID) {
-        ExecutorService pool = Executors.newSingleThreadExecutor();
-        Future<S3Object> future = pool.submit(new Callable<S3Object>() {
-            @Override
-            public S3Object call() throws Exception {
-                if(amazonS3Client.doesObjectExist("offerdocuments", offerUUID)) {
-                    return amazonS3Client.getObject("offerdocuments", offerUUID);
-                } else {
-                    return null;
-                }
-            }
-        });
-
-        try {
-            return future.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
 }

@@ -174,7 +174,7 @@ public class OnlineMeeting {
                     params.userName = userInfo.toString();
                     params.token = result;
 
-                    HMLog.d(TAG, "Called join session");
+                    HMLog.d(TAG, "Called join session with user name: " + params.userName);
                     ZoomInstantSDKSession session = mSDK.joinSession(params);
 
                     if (session == null) {

@@ -3,50 +3,78 @@ package works.heymate.core;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Money implements Parcelable {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    public static Money create(int cents, Currency currency) {
+public class Money implements Parcelable, Comparable<Money> {
+
+    private static final String AMOUNT = "amount";
+    private static final String CURRENCY = "currency";
+
+    public static Money create(long cents, Currency currency) {
         Money money = new Money();
-        money.mCents = cents;
+        money.mAmount = cents;
         money.mCurrency = currency;
         return money;
     }
 
-    private Currency mCurrency;
-    private int mCents;
+    public static Money create(JSONObject jMoney) throws JSONException {
+        Money money = new Money();
+        money.mAmount = jMoney.getInt(AMOUNT);
+        money.mCurrency = Currency.forName(jMoney.getString(CURRENCY));
+        return money;
+    }
 
-    public Money() {
+    private Currency mCurrency;
+    private long mAmount;
+
+    private Money() {
 
     }
 
     protected Money(Parcel in) {
-        mCurrency = Currency.valueOf(in.readString());
-        mCents = in.readInt();
+        mCurrency = Currency.forName(in.readString());
+        mAmount = in.readLong();
     }
 
     public Currency getCurrency() {
         return mCurrency;
     }
 
-    public int getCents() {
-        return mCents;
+    public long getCents() {
+        return mAmount;
     }
 
     public Money plus(Money money) {
-        return Money.create(mCents + money.mCents, mCurrency);
+        return Money.create(mAmount + money.mAmount, mCurrency);
+    }
+
+    public Money plus(long cents) {
+        return Money.create(mAmount + cents, mCurrency);
     }
 
     public Money minus(Money money) {
-        return Money.create(mCents - money.mCents, mCurrency);
+        return Money.create(mAmount - money.mAmount, mCurrency);
     }
 
     public Money multiplyBy(float multiplicand) {
-        return Money.create((int) (mCents * multiplicand), mCurrency);
+        return Money.create((long) (mAmount * multiplicand), mCurrency);
+    }
+
+    public JSONObject asJSON() {
+        JSONObject jMoney = new JSONObject();
+
+        try {
+            jMoney.put(AMOUNT, mAmount);
+            jMoney.put(CURRENCY, mCurrency.name());
+        } catch (JSONException e) { }
+
+        return jMoney;
     }
 
     @Override
     public String toString() {
-        return mCents / 100 + "." + mCents % 100 + " " + mCurrency;
+        return mCurrency.format(mAmount / 100 + "." + mAmount % 100);
     }
 
     @Override
@@ -57,7 +85,7 @@ public class Money implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mCurrency.name());
-        dest.writeInt(mCents);
+        dest.writeLong(mAmount);
     }
 
     public static final Creator<Money> CREATOR = new Creator<Money>() {
@@ -71,5 +99,14 @@ public class Money implements Parcelable {
             return new Money[size];
         }
     };
+
+    @Override
+    public int compareTo(Money o) {
+        if (!mCurrency.equals(o.mCurrency)) {
+            throw new IllegalArgumentException("Moneys should be of the same currency.");
+        }
+
+        return (int) (mAmount - o.mAmount);
+    }
 
 }

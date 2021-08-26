@@ -7,13 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextWatcher;
-import android.text.style.MetricAffectingSpan;
 import android.text.style.ReplacementSpan;
-import android.util.StateSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -27,121 +23,31 @@ import androidx.core.content.ContextCompat;
 
 import com.yashoid.sequencelayout.SequenceLayout;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.HeymateConfig;
+
+import works.heymate.core.Currency;
+import works.heymate.core.Money;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.widget.MultiChoicePopup;
 
-import java.util.Arrays;
-
 import works.heymate.beta.R;
-import works.heymate.core.Utils;
-import works.heymate.core.offer.PurchasePlanInfo;
-import works.heymate.core.offer.PurchasePlanTypes;
 
 public class PriceInputItem extends ExpandableItem {
 
-    private static final String[] DEMO_CURRENCIES = { "US$", "€" };
-    private static final String[] REAL_CURRENCIES = { "US$" };
+    private static final Currency[] DEMO_CURRENCIES = { Currency.USD, Currency.EUR };
+    private static final Currency[] REAL_CURRENCIES = { Currency.EUR };
 
     private static final int DEFAULT_CURRENCY_CHOICE = HeymateConfig.DEMO ? 1 : 0;
 
     private static final String[] DEMO_RATE_TYPES = { "Per Session", "Per Hour" };
     private static final String[] REAL_RATE_TYPES = { "Per Session" };
 
-    private static final String[] CURRENCIES = HeymateConfig.DEMO ? DEMO_CURRENCIES : REAL_CURRENCIES;
+    private static final Currency[] CURRENCIES = HeymateConfig.DEMO ? DEMO_CURRENCIES : REAL_CURRENCIES;
     private static final String[] RATE_TYPES = HeymateConfig.DEMO ? DEMO_RATE_TYPES : REAL_RATE_TYPES;
     public static final String[] SUBSCRIPTION_PERIODS = { "Per month", "Per year" };
-
-    private static final String PRICE = "price";
-    private static final String CURRENCY = "currency";
-    private static final String RATE_TYPE = "rate_type";
-    private static final String BUNDLE_COUNT = "bundle_count";
-    private static final String BUNDLE_DISCOUNT_PERCENT = "bundle_discount_percent";
-    private static final String SUBSCRIPTION_PERIOD = "subscription_period";
-    private static final String SUBSCRIPTION_PRICE = "subscription_price";
-
-    public static class PricingInfo {
-
-        public final int price;
-        public final String currency;
-        public final String rateType;
-        public final int bundleCount;
-        public final int bundleDiscountPercent;
-        public final String subscriptionPeriod;
-        public final int subscriptionPrice;
-
-        public PricingInfo(int price, String currency, String rateType, int bundleCount, int bundleDiscountPercent, String subscriptionPeriod, int subscriptionPrice) {
-            this.price = price;
-            this.currency = currency;
-            this.rateType = rateType;
-            this.bundleCount = bundleCount;
-            this.bundleDiscountPercent = bundleDiscountPercent;
-            this.subscriptionPeriod = subscriptionPeriod;
-            this.subscriptionPrice = subscriptionPrice;
-        }
-
-        public PricingInfo(JSONObject json) throws JSONException {
-            price = json.getInt(PRICE);
-            currency = json.getString(CURRENCY);
-            rateType = json.getString(RATE_TYPE);
-
-            int bundleCountTemp = 0;
-            int bundleDiscountPercentTemp = 0;
-            try {
-                bundleCountTemp = json.getInt(BUNDLE_COUNT);
-                bundleDiscountPercentTemp = json.getInt(BUNDLE_DISCOUNT_PERCENT);
-            } catch (JSONException e) { }
-            bundleCount = bundleCountTemp;
-            bundleDiscountPercent = bundleDiscountPercentTemp;
-
-            String subscriptionPeriodTemp = null;
-            int subscriptionPriceTemp = 0;
-            try {
-                subscriptionPeriodTemp = Utils.getOrNull(json, SUBSCRIPTION_PERIOD);
-                subscriptionPriceTemp = json.getInt(SUBSCRIPTION_PRICE);
-            } catch (JSONException e) { }
-            subscriptionPeriod = subscriptionPeriodTemp;
-            subscriptionPrice = subscriptionPriceTemp;
-        }
-
-        public int getBundleTotalPrice() {
-            return price * bundleCount * (100 - bundleDiscountPercent) / 100;
-        }
-
-        public PurchasePlanInfo getPurchasePlanInfo(String purchasePlanType) {
-            switch (purchasePlanType) {
-                case PurchasePlanTypes.SINGLE:
-                    return new PurchasePlanInfo(PurchasePlanTypes.SINGLE, price);
-                case PurchasePlanTypes.BUNDLE:
-                    return bundleCount == 0 ? null : new PurchasePlanInfo(PurchasePlanTypes.BUNDLE, getBundleTotalPrice());
-                case PurchasePlanTypes.SUBSCRIPTION:
-                    return subscriptionPeriod == null ? null : new PurchasePlanInfo(PurchasePlanTypes.SUBSCRIPTION, subscriptionPrice);
-            }
-
-            throw new RuntimeException("Unknown purchase plan type.");
-        }
-
-        public JSONObject asJSON() {
-            JSONObject json = new JSONObject();
-
-            try {
-                json.put(PRICE, price);
-                json.put(CURRENCY, currency);
-                json.put(RATE_TYPE, rateType);
-                json.put(BUNDLE_COUNT, bundleCount);
-                json.put(BUNDLE_DISCOUNT_PERCENT, bundleDiscountPercent);
-                json.put(SUBSCRIPTION_PERIOD, subscriptionPeriod);
-                json.put(SUBSCRIPTION_PRICE, subscriptionPrice);
-            } catch (JSONException e) { }
-
-            return json;
-        }
-
-    }
 
     private EditText mFixedPrice;
     private TextView mCurrency;
@@ -193,7 +99,15 @@ public class PriceInputItem extends ExpandableItem {
         styleInput(mFixedPrice, null, null);
         mFixedPrice.addTextChangedListener(new BaseTextWatcher(this::updateBundleCalculatedPrice));
 
-        styleMultiChoice(mCurrency, CURRENCIES, DEFAULT_CURRENCY_CHOICE, this::updateBundleCalculatedPrice);
+        String[] currencies = new String[CURRENCIES.length];
+        for (int i = 0; i < CURRENCIES.length; i++) {
+            currencies[i] = CURRENCIES[i].name();
+        }
+
+        styleMultiChoice(mCurrency, currencies, DEFAULT_CURRENCY_CHOICE, () -> {
+            updateBundleCalculatedPrice();
+            updateSubscriptionPer();
+        });
         styleMultiChoice(mRateType, RATE_TYPES, 0, null);
 
         mCheckBundle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -331,9 +245,9 @@ public class PriceInputItem extends ExpandableItem {
         int totalPrice = calculateBundlePrice();
 
         if (totalPrice >= 0) {
-            String currency = mCurrency.getText().toString();
+            Currency currency = Currency.forName(mCurrency.getText().toString());
 
-            mBundleCalculatedPrice.setText(totalPrice + " " + currency);
+            mBundleCalculatedPrice.setText(Money.create(totalPrice * 100, currency).toString());
         }
         else {
             mBundleCalculatedPrice.setText("");
@@ -341,7 +255,8 @@ public class PriceInputItem extends ExpandableItem {
     }
 
     private void updateSubscriptionPer() {
-        mSubscriptionPer.setText(mCurrency.getText().toString() + " " + mSubscriptionPeriod.getText().toString());
+        Currency currency = Currency.forName(mCurrency.getText().toString());
+        mSubscriptionPer.setText(currency.symbol() + " " + mSubscriptionPeriod.getText().toString());
     }
 
     private int calculateBundlePrice() {
@@ -359,7 +274,7 @@ public class PriceInputItem extends ExpandableItem {
     public PricingInfo getPricingInfo() {
         try {
             int price = Integer.parseInt(mFixedPrice.getText().toString());
-            String currency = mCurrency.getText().toString();
+            Currency currency = Currency.forName(mCurrency.getText().toString());
             String rateType = mRateType.getText().toString();
             int bundleCount = mCheckBundle.isChecked() ? Integer.parseInt(mBundleSessionCount.getText().toString()) : 0;
             int bundleDiscountPercent = bundleCount == 0 ? 0 : Integer.parseInt(mBundleDiscountPercent.getText().toString());
@@ -374,7 +289,7 @@ public class PriceInputItem extends ExpandableItem {
 
     public void setPricingInfo(PricingInfo pricingInfo) {
         mFixedPrice.setText(pricingInfo.price == 0 ? "" : String.valueOf(pricingInfo.price));
-        mCurrency.setText(pricingInfo.currency == null ? CURRENCIES[1] : pricingInfo.currency);
+        mCurrency.setText(pricingInfo.currency == null ? CURRENCIES[DEFAULT_CURRENCY_CHOICE].name() : pricingInfo.currency.name());
 
         mRateType.setText(RATE_TYPES[0]);
 

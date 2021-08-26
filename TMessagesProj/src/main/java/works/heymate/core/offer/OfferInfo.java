@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.createoffer.LocationInputItem;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +35,7 @@ public class OfferInfo {
     private String mCategory;
     private String mSubCategory;
     private long mExpireDate;
-    private PriceInputItem.PricingInfo mPricingInfo;
+    private PricingInfo mPricingInfo;
     private List<Long> mDateSlots;
 
     public OfferInfo() {
@@ -76,7 +75,7 @@ public class OfferInfo {
                 mExpireDate = json.getLong(EXPIRE_DATE);
             }
             if (hasProperty(json, PRICING_INFO)) {
-                mPricingInfo = new PriceInputItem.PricingInfo(json.getJSONObject(PRICING_INFO));
+                mPricingInfo = new PricingInfo(json.getJSONObject(PRICING_INFO));
             }
             if (hasProperty(json, DATE_SLOTS)) {
                 JSONArray jDateSlots = json.getJSONArray(DATE_SLOTS);
@@ -132,7 +131,7 @@ public class OfferInfo {
         return mExpireDate == 0 ? null : new Date(mExpireDate);
     }
 
-    public PriceInputItem.PricingInfo getPricingInfo() {
+    public PricingInfo getPricingInfo() {
         return mPricingInfo;
     }
 
@@ -180,7 +179,7 @@ public class OfferInfo {
         mExpireDate = expireDate == null ? 0 : expireDate.getTime();
     }
 
-    public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo) {
+    public void setPricingInfo(PricingInfo pricingInfo) {
         mPricingInfo = pricingInfo;
     }
 

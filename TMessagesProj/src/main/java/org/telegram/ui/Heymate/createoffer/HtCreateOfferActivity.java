@@ -42,6 +42,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.HeymateConfig;
+import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.FileCache;
@@ -610,7 +611,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             String category = categoryInputCell.getRes(ARGUMENTS_CATEGORY);
             String subCategory = categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY);
             Date expireDate = HtCreateOfferActivity.this.expireDate;
-            PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
+            PricingInfo pricingInfo = priceInputCell.getPricingInfo();
             List<Long> timeSlots = scheduleInputCell.getTimeSlots();
 
             OfferInfo offerInfo = new OfferInfo();
@@ -736,7 +737,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private void createOfferImageDone(int promotionPercentage) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
-        PriceInputItem.PricingInfo pricingInfo = priceInputCell.getPricingInfo();
+        PricingInfo pricingInfo = priceInputCell.getPricingInfo();
 
         JSONObject config = paymentInputCell.getConfig();
 
@@ -822,7 +823,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         scheduleInputCell.setTimeSlots(times);
     }
 
-    public void setPricingInfo(PriceInputItem.PricingInfo pricingInfo) {
+    public void setPricingInfo(PricingInfo pricingInfo) {
         priceInputCell.setPricingInfo(pricingInfo);
     }
 
