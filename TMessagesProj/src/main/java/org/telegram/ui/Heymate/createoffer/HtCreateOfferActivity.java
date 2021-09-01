@@ -216,8 +216,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         titleTextField.setBackgroundDrawable(Theme.createEditTextDrawable(context, false));
         titleTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
         titleTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        titleTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        titleTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        titleTextField.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         titleTextField.setMinHeight(AndroidUtilities.dp(36));
         titleTextField.setHint(LocaleController.getString("HtShortTitle", works.heymate.beta.R.string.HtShortTitle));
         titleTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -226,6 +225,7 @@ public class HtCreateOfferActivity extends BaseFragment {
         titleTextField.setMaxLines(1);
         titleTextField.setLines(1);
         titleTextField.setSingleLine(true);
+        titleTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         titleTextField.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_DONE || event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION)) {
                 titleTextField.hideActionMode();
@@ -260,7 +260,6 @@ public class HtCreateOfferActivity extends BaseFragment {
         descriptionTextField.setMaxLines(4);
         descriptionTextField.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 24 : 0), 0, AndroidUtilities.dp(LocaleController.isRTL ? 0 : 24), AndroidUtilities.dp(6));
         descriptionTextField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        descriptionTextField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         descriptionTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         descriptionTextField.setImeOptions(EditorInfo.IME_ACTION_DONE);
         descriptionTextField.setMinHeight(AndroidUtilities.dp(36));
@@ -423,8 +422,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 feeTextField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                 feeTextField.setCursorSize(AndroidUtilities.dp(15));
                 feeTextField.setCursorWidth(1.5f);
-                feeTextField.setLines(1);
-                feeTextField.setSingleLine(true);
+                feeTextField.setMaxLines(7);
                 feeTextField.setOnEditorActionListener((v, actionId, event) -> {
                     if (event != null && (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_SEARCH || event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
                         feeTextField.hideActionMode();
