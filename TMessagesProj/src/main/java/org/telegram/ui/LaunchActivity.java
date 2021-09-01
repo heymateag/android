@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StatFs;
 import android.os.SystemClock;
@@ -41,6 +42,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -148,6 +150,8 @@ import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.OffersActivity;
 ///
+import org.telegram.ui.Heymate.payment.PaymentController;
+import org.telegram.ui.Heymate.payment.PendingPaymentHeader;
 import org.telegram.ui.Heymate.wallet.WalletActivity;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 
@@ -208,6 +212,9 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
     private AlertDialog proxyErrorDialog;
     private RecyclerListView sideMenu;
     private SideMenultItemAnimator itemAnimator;
+
+    private LinearLayout header;
+    private View statusBarBackground;
 
     private AlertDialog localeDialog;
     private boolean loadingLocaleDialog;
@@ -375,7 +382,22 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
         };
 
         frameLayout = new FrameLayout(this);
-        setContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setContentView(frameLayout, LayoutHelper.createFrame(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        header = new LinearLayout(this);
+        header.setOrientation(LinearLayout.VERTICAL);
+        statusBarBackground = null;
+        if (Build.VERSION.SDK_INT >= 21) {
+            statusBarBackground = new View(this);
+            statusBarBackground.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
+            header.addView(statusBarBackground, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, (int) (AndroidUtilities.statusBarHeight / AndroidUtilities.density)));
+        }
+        addContentView(header, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48 + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight / AndroidUtilities.density : 0), Gravity.TOP));
+
+        if (PaymentController.get(this).isDoingPayment()) {
+            showHeader(new PendingPaymentHeader(this));
+        }
+
         if (Build.VERSION.SDK_INT >= 21) {
             themeSwitchImageView = new ImageView(this);
             themeSwitchImageView.setVisibility(View.GONE);
@@ -950,6 +972,24 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
         MediaController.getInstance().setBaseActivity(this, true);
         AndroidUtilities.startAppCenter(this);
         //FileLog.d("UI create time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
+    }
+
+    public void showHeader(View content) {
+        ((ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams()).topMargin = AndroidUtilities.dp(48);
+
+        while (header.getChildCount() > 1) {
+            header.removeViewAt(header.getChildCount() - 1);
+        }
+
+        header.addView(content, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+    }
+
+    public void hideHeader() {
+        ((ViewGroup.MarginLayoutParams) frameLayout.getLayoutParams()).topMargin = 0;
+
+        while (header.getChildCount() > 1) {
+            header.removeViewAt(header.getChildCount() - 1);
+        }
     }
 
     private void openSettings(boolean expanded) {
@@ -4290,6 +4330,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             fragment.showDialog(dialog);
             dialog.setCanceledOnTouchOutside(false);
         } else if (id == NotificationCenter.didSetNewTheme) {
+            statusBarBackground.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
             Boolean nightTheme = (Boolean) args[0];
             if (!nightTheme) {
                 if (sideMenu != null) {
@@ -4309,6 +4350,7 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
             drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             checkSystemBarColors();
         } else if (id == NotificationCenter.needSetDayNightTheme) {
+            statusBarBackground.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
             boolean instant = false;
             if (Build.VERSION.SDK_INT >= 21 && args[2] != null) {
                 if (themeSwitchImageView.getVisibility() == View.VISIBLE) {

@@ -1,5 +1,6 @@
 package org.telegram.ui.Heymate.payment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.TimeSlotSelectionActivity;
+import org.telegram.ui.LaunchActivity;
 
 import java.util.Date;
 import java.util.List;
@@ -55,9 +57,39 @@ public class PaymentController {
     private Context mContext;
     private SharedPreferences mPreferences;
 
+    private boolean mDoingPayment = false;
+
     private PaymentController(Context context) {
         mContext = context;
         mPreferences = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
+    }
+
+    public boolean isDoingPayment() {
+        return mDoingPayment;
+    }
+
+    private void onPaymentStarted() {
+        mDoingPayment = true;
+
+        PaymentNotifierService.start(mContext);
+
+        Activity activity = ActivityMonitor.get().getCurrentActivity();
+
+        if (activity instanceof LaunchActivity) {
+            ((LaunchActivity) activity).showHeader(new PendingPaymentHeader(mContext));
+        }
+    }
+
+    private void onPaymentFinished() {
+        mDoingPayment = false;
+
+        PaymentNotifierService.stop(mContext);
+
+        Activity activity = ActivityMonitor.get().getCurrentActivity();
+
+        if (activity instanceof LaunchActivity) {
+            ((LaunchActivity) activity).hideHeader();
+        }
     }
 
     public void initPayment(String offerId, String purchasedPlanType, String referralId) {
@@ -100,33 +132,35 @@ public class PaymentController {
 
         List<String> referrers = ReferralUtils.getReferrersFromReferral(referral);
 
-        LoadingUtil.onLoadingStarted();
+        onPaymentStarted();
 
         wallet.createPaymentPlan(offer, purchasedPlan, referrers, (success, errorCause) -> {
-            LoadingUtil.onLoadingFinished();
-
             if (success) {
                 LoadingUtil.onLoadingStarted();
 
                 HtAmplify.getInstance(mContext).createPurchasedPlan(purchasedPlan, (success1, result, exception) -> {
-                    LoadingUtil.onLoadingFinished();
+                    onPaymentFinished();
 
                     if (success1) {
-                        new AlertDialog.Builder(mContext) // TODO Text resource
-                                .setTitle(PurchasePlanTypes.BUNDLE.equals(purchasedPlan.getPlanType()) ? "Bundle purchased" : "subscription purchased")
-                                .setMessage("You can check the state of your purchase in My Schedule.")
-                                .setCancelable(false)
-                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                .show();
+                        Toast.makeText(mContext, "Plan purchase successful", Toast.LENGTH_LONG).show();
+//                        new AlertDialog.Builder(mContext) // TODO Text resource
+//                                .setTitle(PurchasePlanTypes.BUNDLE.equals(purchasedPlan.getPlanType()) ? "Bundle purchased" : "subscription purchased")
+//                                .setMessage("You can check the state of your purchase in My Schedule.")
+//                                .setCancelable(false)
+//                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+//                                .show();
                     }
                     else {
                         Log.e("TAG", "Failed to create bundle on the back-end.", exception);
+
                         Toast.makeText(mContext, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
                     }
                 });
             }
             else {
                 Log.e(TAG, "Failed to create bundle on blockchain", errorCause);
+
+                onPaymentFinished();
 
                 handleBlockChainError(errorCause);
             }
@@ -183,7 +217,7 @@ public class PaymentController {
     }
 
     private void purchaseTimeSlot(Offer offer, PurchasedPlan purchasedPlan, Referral referral, TimeSlot timeSlot) {
-        LoadingUtil.onLoadingStarted();
+        onPaymentStarted();
 
         List<String> referrers = ReferralUtils.getReferrersFromReferral(referral);
 
@@ -192,13 +226,9 @@ public class PaymentController {
         Wallet wallet = Wallet.get(mContext, TG2HM.getCurrentPhoneNumber());
 
         wallet.createAcceptedOffer(offer, reservation, purchasedPlan, referrers, (success1, errorCause) -> {
-            LoadingUtil.onLoadingFinished();
-
             if (success1) {
-                LoadingUtil.onLoadingStarted();
-
                 HtAmplify.getInstance(mContext).bookTimeSlot(reservation, timeSlot, (success, result, exception) -> {
-                    LoadingUtil.onLoadingFinished();
+                    onPaymentFinished();
 
                     if (success) {
                         if (purchasedPlan != null) {
@@ -216,21 +246,24 @@ public class PaymentController {
                             HtAmplify.getInstance(mContext).createOrUpdatePurchasedPlan(modifiedPurchasedPlan.build(), null);
                         }
 
-                        new AlertDialog.Builder(ActivityMonitor.get().getCurrentActivity()) // TODO Text resource
-                                .setTitle("Offer accepted")
-                                .setMessage("You can check the state of your offer in My Schedule.")
-                                .setCancelable(false)
-                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                .show();
+                        Toast.makeText(mContext, "Offer purchase successful", Toast.LENGTH_LONG).show();
+//                        new AlertDialog.Builder(ActivityMonitor.get().getCurrentActivity()) // TODO Text resource
+//                                .setTitle("Offer accepted")
+//                                .setMessage("You can check the state of your offer in My Schedule.")
+//                                .setCancelable(false)
+//                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+//                                .show();
                     }
                     else {
-                        Log.e("TAG", "Failed to book time slot on the back-end.", exception);
+                        Log.e(TAG, "Failed to book time slot on the back-end.", exception);
                         Toast.makeText(mContext, Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show();
                     }
                 });
             }
             else {
                 Log.e(TAG, "Failed to create offer on blockchain", errorCause);
+
+                onPaymentFinished();
 
                 handleBlockChainError(errorCause);
             }
