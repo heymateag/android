@@ -25,6 +25,17 @@ public class DummyCategories {
             add("Nail art");
             add("Waxing");
         }});
+        categories.put("Entertainment", new ArrayList<String>() {{
+            add("Theatrical");
+            add("Storytelling");
+            add("Online tour");
+            add("Music performance");
+            add("Pawel's magic show ✨");
+            add("Normal magic show");
+            add("Dance performance");
+            add("Light show");
+            add("Charades");
+        }});
         categories.put("Handyman & Repair", new ArrayList<String>() {{
             add("Painting");
             add("Lawn mowing");
