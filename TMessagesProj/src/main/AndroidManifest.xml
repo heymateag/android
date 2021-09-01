@@ -372,6 +372,8 @@
             </intent-filter>
         </service>
         <service android:name="works.heymate.ramp.PeymateService" android:enabled="true"/>
+        <service android:name="org.telegram.ui.Heymate.payment.PaymentNotifierService" android:enabled="true"
+            android:foregroundServiceType="dataSync"/>
 
 		<receiver android:name="org.telegram.messenger.MusicPlayerReceiver" >
             <intent-filter>

@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import works.heymate.beta.R;
+
 public class PaymentNotifierService extends Service {
 
     private static final String CHANNEL_ID = "PaymentNotifier";
@@ -48,6 +50,7 @@ public class PaymentNotifierService extends Service {
                 .setNotificationSilent()
                 .setPriority(Notification.PRIORITY_MAX)
                 .setOngoing(true)
+                .setSmallIcon(R.drawable.notification)
                 .build();
 
         notificationManager.notify(NOTIFICATION_ID, notification);
