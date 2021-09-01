@@ -383,7 +383,7 @@ public class TimeSlotPicker extends ViewGroup implements TimeSlotPickerAdapter.T
         mTextDay.layout(0, 0, timeAreaWidth, timeAreaHeight);
 
         int timeSlotHeight = (height - timeAreaHeight) / 24;
-        int top = timeAreaHeight;
+        int top = timeAreaHeight - timeSlotHeight / 2;
 
         for (int i = 0; i < mTextsHour.length; i++) {
             mTextsHour[i].measure(
