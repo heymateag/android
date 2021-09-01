@@ -340,26 +340,45 @@ public class OnlineReservation {
         });
     }
 
-    public static void onlineMeetingClosed(Context context, String timeSlotId, String reservationId) {
+    public static void onlineMeetingClosed(Context context, String timeSlotId, String reservationId, HtAmplify.APICallback<Void> callback) {
         if (timeSlotId != null) {
             HtAmplify.getInstance(context).getTimeSlotReservations(timeSlotId, (success, result, exception) -> {
                 if (success) {
                     if (result.isEmpty()) {
+                        callback.onCallResult(true, null, null);
                         return;
                     }
 
                     String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+                    class PendingCallbacks {
+
+                        int count = 0;
+
+                    }
+
+                    PendingCallbacks pendingCallbacks = new PendingCallbacks();
 
                     for (Reservation reservation: result) {
                         if (!userId.equals(reservation.getServiceProviderId())) {
                             return;
                         }
 
-                        HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.MARKED_AS_FINISHED);
+                        pendingCallbacks.count++;
+
+                        HtAmplify.getInstance(context).updateReservation(reservation, HtTimeSlotStatus.MARKED_AS_FINISHED, (success1, result1, exception1) -> {
+                            pendingCallbacks.count--;
+
+                            if (pendingCallbacks.count == 0) {
+                                callback.onCallResult(true, null, null);
+                            }
+                        });
                     }
                 }
                 else {
                     Log.e(TAG, "Failed to get time slot reservations.", exception);
+
+                    callback.onCallResult(false, null, exception);
                 }
             });
         }

@@ -214,6 +214,12 @@ public class OnlineMeeting {
         return mMembers.values();
     }
 
+    public void switchCamera() {
+        try {
+            mSDK.getVideoHelper().switchCamera();
+        } catch (Throwable t) { }
+    }
+
     public void mute(String userId) {
         doWithUser(userId, (session, user) -> {
             ZoomInstantSDKAudioHelper audioHelper = mSDK.getAudioHelper();

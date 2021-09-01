@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -115,7 +116,8 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mLeave.setOnClickListener(v -> confirmCloseMeeting());
 
         mMute = content.findViewById(R.id.mute);
-        mMute.setImageResource(R.drawable.ic_not_muted);
+        mMute.setImageResource(R.drawable.hm_ic_switch_camera);
+        mMute.setOnClickListener(v -> OnlineMeeting.get().switchCamera()); // TODO Name doesn't match behavior and icon
 
         mImageMic = content.findViewById(R.id.image_mic);
         mTextMic = content.findViewById(R.id.text_mic);
@@ -486,12 +488,22 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     private void closeMeeting() {
         HMLog.d(TAG, "closeMeeting. started=" + mStarted);
-        if (mStarted) {
-            OnlineMeeting.get().leaveMeeting();
-            OnlineReservation.onlineMeetingClosed(getParentActivity(), mTimeSlotId, mReservationId);
-        }
 
-        finishFragment();
+        if (mStarted) {
+            LoadingUtil.onLoadingStarted();
+
+            OnlineReservation.onlineMeetingClosed(getParentActivity(), mTimeSlotId, mReservationId, (success, result, exception) -> {
+                LoadingUtil.onLoadingFinished();
+
+                if (success) {
+                    OnlineMeeting.get().leaveMeeting();
+                    finishFragment();
+                }
+                else {
+                    Toast.makeText(ApplicationLoader.applicationContext, "Call failed. Please try again.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     private String[] getMissingPermissions() {
