@@ -92,12 +92,12 @@ public class HtCreateOfferActivity extends BaseFragment {
     private boolean canEdit = true;
     private ActionType actionType = ActionType.CREATE;
     private LinearLayout actionLayout;
-    private String offerUUID;
     private Date expireDate;
 
     private Uri pickedImage;
 
     private String id;
+    private Offer.BuildStep offerBuilder;
 
     public enum ActionType {
         CREATE,
@@ -711,6 +711,31 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     private void createOffer(int promotionPercentage) {
+        LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+
+        int maximumParticipants = participantsInputCell.getMaximumParticipants();
+
+        int timeOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
+
+        offerBuilder = Offer.builder()
+                .userId("" + UserConfig.getInstance(currentAccount).clientUserId)
+                .id(id)
+                .hasImage(pickedImage != null)
+                .title(titleTextField.getText().toString())
+                .category(categoryInputCell.getRes(ARGUMENTS_CATEGORY))
+                .subCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY))
+                .description(descriptionTextField.getText().toString())
+                .expiry(new Temporal.Date(expireDate))
+                .locationData(locationInfo == null ? null : locationInfo.address)
+                .meetingType(locationInputCell.getMeetingType())
+                .maximumReservations(maximumParticipants)
+                .terms(termsInputCell.getRes(ARGUMENTS_TERMS))
+                .latitude("" + (locationInfo == null ? 0 : locationInfo.latitude))
+                .longitude("" + (locationInfo == null ? 0 : locationInfo.longitude))
+                .status(OfferStatus.ACTIVE.ordinal())
+                .createdAt(new Temporal.DateTime(new Date(), timeOffset));
+//                        .editedAt(new Temporal.DateTime(new Date(), timeOffset));
+
         if (pickedImage != null) {
             LoadingUtil.onLoadingStarted();
 
@@ -748,38 +773,16 @@ public class HtCreateOfferActivity extends BaseFragment {
         wallet.signOffer(pricingInfo, config, (successful, priceSignature, bundleSignature, subscriptionSignature, exception) -> {
             LoadingUtil.onLoadingFinished();
 
+            offerBuilder
+                    .pricingInfo(pricingInfo.asJSON().toString())
+                    .termsConfig(config.toString())
+                    .walletAddress(wallet.getAddress())
+                    .priceSignature(priceSignature)
+                    .bundleSignature(bundleSignature)
+                    .subscriptionSignature(subscriptionSignature);
+
             if (successful) {
-                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
-
-                int maximumParticipants = participantsInputCell.getMaximumParticipants();
-
                 List<Long> timeSlots = scheduleInputCell.getTimeSlots();
-
-                int timeOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
-
-                Offer.BuildStep offerBuilder = Offer.builder()
-                        .userId("" + UserConfig.getInstance(currentAccount).clientUserId)
-                        .hasImage(pickedImage != null)
-                        .title(titleTextField.getText().toString())
-                        .category(categoryInputCell.getRes(ARGUMENTS_CATEGORY))
-                        .subCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY))
-                        .pricingInfo(pricingInfo.asJSON().toString())
-                        .description(descriptionTextField.getText().toString())
-                        .expiry(new Temporal.Date(expireDate))
-                        .locationData(locationInfo == null ? null : locationInfo.address)
-                        .meetingType(locationInputCell.getMeetingType())
-                        .maximumReservations(maximumParticipants)
-                        .terms(termsInputCell.getRes(ARGUMENTS_TERMS))
-                        .termsConfig(config.toString())
-                        .latitude("" + (locationInfo == null ? 0 : locationInfo.latitude))
-                        .longitude("" + (locationInfo == null ? 0 : locationInfo.longitude))
-                        .walletAddress(wallet.getAddress())
-                        .priceSignature(priceSignature)
-                        .bundleSignature(bundleSignature)
-                        .subscriptionSignature(subscriptionSignature)
-                        .status(OfferStatus.ACTIVE.ordinal())
-                        .createdAt(new Temporal.DateTime(new Date(), timeOffset));
-//                        .editedAt(new Temporal.DateTime(new Date(), timeOffset));
 
                 LoadingUtil.onLoadingStarted();
 
@@ -843,11 +846,6 @@ public class HtCreateOfferActivity extends BaseFragment {
 
     public void setTitle(String title) {
         titleTextField.setText(title);
-    }
-
-    public void setOfferUUID(String offerUUID) {
-        this.offerUUID = offerUUID;
-        // TODO Image setup.
     }
 
     public void setDescription(String description) {
