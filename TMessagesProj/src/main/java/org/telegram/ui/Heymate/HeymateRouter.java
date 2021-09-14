@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
+import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.Heymate.payment.BankTransferInformationActivity;
 import org.telegram.ui.Heymate.payment.BankTransferResultActivity;
 import org.telegram.ui.Heymate.payment.WalletExistence;
@@ -15,16 +16,21 @@ import org.telegram.ui.Heymate.payment.PaymentMethodSelectionActivity;
 import org.telegram.ui.LaunchActivity;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import works.heymate.core.Utils;
 
 public class HeymateRouter {
 
-    private static final String SCHEME = "heymate";
+    private static final String INTERNAL_SCHEME = "heymate";
+
+    private static final String EXTERNAL_HOST = "heymate.works";
 
     private static final Map<String, Class<? extends BaseFragment>> HOST_MAP = new HashMap<>();
+    private static final Map<String, Class<? extends BaseFragment>> EXTERNAL_PATH_MAP = new HashMap<>();
 
     static {
         HOST_MAP.put(OffersActivity.HOST, OffersActivity.class);
@@ -34,12 +40,14 @@ public class HeymateRouter {
         HOST_MAP.put(PaymentMethodSelectionActivity.HOST, PaymentMethodSelectionActivity.class);
         HOST_MAP.put(BankTransferInformationActivity.HOST, BankTransferInformationActivity.class);
         HOST_MAP.put(BankTransferResultActivity.HOST, BankTransferResultActivity.class);
+
+        EXTERNAL_PATH_MAP.put(OfferDetailsActivity.PATH, OfferDetailsActivity.class);
     }
 
     public static Intent createIntent(Context context, String host, Bundle args) {
         Intent intent = new Intent(context, LaunchActivity.class);
 
-        Uri data = Uri.parse(SCHEME + "://" + host + "/");
+        Uri data = Uri.parse(INTERNAL_SCHEME + "://" + host + "/");
         intent.setData(data);
 
         if (args != null) {
@@ -51,13 +59,15 @@ public class HeymateRouter {
 
     public static boolean handleIntent(LaunchActivity activity, Intent intent) {
         if (intent != null && intent.getData() != null) {
-            if ("celo".equalsIgnoreCase(intent.getData().getScheme())) {
-                activity.presentFragment(new AttestationActivity(intent.getData().toString()));
+            Uri uri = intent.getData();
+
+            if ("celo".equalsIgnoreCase(uri.getScheme())) {
+                activity.presentFragment(new AttestationActivity(uri.toString()));
                 return true;
             }
 
-            if (SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {
-                String host = intent.getData().getHost();
+            if (INTERNAL_SCHEME.equalsIgnoreCase(uri.getScheme())) {
+                String host = uri.getHost();
 
                 Class<? extends BaseFragment> clazz = HOST_MAP.get(host);
                 Bundle args = intent.getExtras();
@@ -76,6 +86,24 @@ public class HeymateRouter {
                 }
 
                 return true;
+            }
+
+            if (EXTERNAL_HOST.equalsIgnoreCase(uri.getHost()) && ("http".equalsIgnoreCase(uri.getScheme()) || "https".equalsIgnoreCase(uri.getScheme()))) {
+                List<String> pathSegments = new ArrayList<>(uri.getPathSegments());
+
+                if (!pathSegments.isEmpty()) {
+                    String path = pathSegments.remove(0);
+
+                    Class<? extends BaseFragment> clazz = EXTERNAL_PATH_MAP.get(path);
+
+                    BaseFragment fragment = newFragmentInstance(clazz, pathSegments);
+
+                    if (fragment != null) {
+                        Utils.postOnUIThread(() -> activity.presentFragment(fragment, false, true));
+                    }
+
+                    return true;
+                }
             }
 
             if (WalletExistence.RAMP_SCHEME.equalsIgnoreCase(intent.getData().getScheme())) {
@@ -99,6 +127,16 @@ public class HeymateRouter {
             Constructor<? extends BaseFragment> constructor = clazz.getConstructor(Bundle.class);
 
             return constructor.newInstance(args);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private static BaseFragment newFragmentInstance(Class<? extends BaseFragment> clazz, List<String> pathSegments) {
+        try {
+            Constructor<? extends BaseFragment> constructor = clazz.getConstructor(List.class);
+
+            return constructor.newInstance(pathSegments);
         } catch (Throwable t) {
             return null;
         }
