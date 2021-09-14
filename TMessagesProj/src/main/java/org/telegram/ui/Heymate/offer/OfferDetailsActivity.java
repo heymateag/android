@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SendMessagesHelper;
@@ -39,7 +40,9 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.FileCache;
+import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.ReferralUtils;
@@ -51,6 +54,7 @@ import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 import works.heymate.beta.R;
@@ -61,6 +65,10 @@ import works.heymate.core.offer.PurchasePlanInfo;
 public class OfferDetailsActivity extends BaseFragment implements OfferPricingView.OnPlanChangedListener {
 
     private static final long ANIMATION_DURATION = 200;
+
+    public static final String PATH = "offer";
+
+    private static final String EXTRA_OFFER_ID = "offer_id";
 
     private static final int BASIC_INFO = 0;
     private static final int CREATION_TIME = 1;
@@ -117,6 +125,53 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     private int[] mRows = null;
 
     private String mSelectedPlan = null;
+
+    private static Bundle argsFromPathSegments(List<String> pathSegments) {
+        if (pathSegments.isEmpty()) {
+            throw new IllegalArgumentException("Offer id is required.");
+        }
+
+        Bundle args = new Bundle();
+        args.putString(EXTRA_OFFER_ID, pathSegments.get(0));
+
+        return args;
+    }
+
+    public OfferDetailsActivity(List<String> pathSegments) {
+        super(argsFromPathSegments(pathSegments));
+    }
+
+    public OfferDetailsActivity() {
+
+    }
+
+    @Override
+    public boolean onFragmentCreate() {
+        Bundle args = getArguments();
+
+        if (args != null && args.containsKey(EXTRA_OFFER_ID)) {
+            String offerId = args.getString(EXTRA_OFFER_ID);
+
+            HtAmplify.getInstance(ApplicationLoader.applicationContext).getOffer(offerId, (success, result, exception) -> {
+                if (success) {
+                    if (result != null) {
+                        setOffer(result, null);
+                        return;
+                    }
+                    else {
+                        Toast.makeText(ActivityMonitor.get().getCurrentActivity(), "Offer not found", Toast.LENGTH_LONG).show(); // TODO Texts
+                    }
+                }
+                else {
+                    Toast.makeText(ActivityMonitor.get().getCurrentActivity(), "Error getting the offer", Toast.LENGTH_LONG).show(); // TODO Texts
+                }
+
+                finishFragment();
+            });
+        }
+
+        return super.onFragmentCreate();
+    }
 
     @Override
     public View createView(Context context) {
@@ -638,14 +693,20 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         TextView time = view.findViewById(R.id.time);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d y", Locale.getDefault());
-        time.setText(dateFormat.format(mOffer.getCreatedAt().toDate()));
+
+        if (mOffer.getCreatedAt() != null) {
+            time.setText(dateFormat.format(mOffer.getCreatedAt().toDate()));
+        }
     }
 
     private void bindExpirationTime(View view) {
         TextView time = view.findViewById(R.id.time);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d y", Locale.getDefault());
-        time.setText(dateFormat.format(mOffer.getExpiry().toDate()));
+
+        if (mOffer.getExpiry() != null) {
+            time.setText(dateFormat.format(mOffer.getExpiry().toDate()));
+        }
     }
 
     private View createPricing(ViewGroup parent) {
@@ -676,7 +737,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
             double longitude = Double.parseDouble(mOffer.getLongitude());
 
             locationView.setLocation(latitude, longitude);
-        } catch (NumberFormatException e) { }
+        } catch (NumberFormatException | NullPointerException e) { }
     }
 
     private View createPaymentTerms(ViewGroup parent) {

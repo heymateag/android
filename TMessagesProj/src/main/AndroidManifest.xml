@@ -166,6 +166,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="heymate-ramp" android:host="result" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="heymate.works" />
+                <data android:scheme="https" android:host="heymate.works" />
+            </intent-filter>
 
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
