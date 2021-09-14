@@ -180,7 +180,7 @@ public class ScheduleInputItem extends ExpandableItem {
         StringBuilder date = new StringBuilder();
         date.append(Texts.get(Texts.WEEK_DAYS_SHORT[calendar.get(Calendar.DAY_OF_WEEK) - 1]))
                 .append(", ")
-                .append(calendar.get(Calendar.MONTH))
+                .append(calendar.get(Calendar.MONTH) + 1)
                 .append(".")
                 .append(calendar.get(Calendar.DAY_OF_MONTH))
                 .append(".")

@@ -136,8 +136,6 @@ public class PaymentController {
 
         wallet.createPaymentPlan(offer, purchasedPlan, referrers, (success, errorCause) -> {
             if (success) {
-                LoadingUtil.onLoadingStarted();
-
                 HtAmplify.getInstance(mContext).createPurchasedPlan(purchasedPlan, (success1, result, exception) -> {
                     onPaymentFinished();
 
@@ -189,7 +187,7 @@ public class PaymentController {
         }
 
         getOffer(offerId, offer -> getBalance((wallet, usd, eur) -> {
-            Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType);
+            Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
             Money balance = getBalance(usd, eur, price.getCurrency());
 
             if (balance.compareTo(price) >= 0) {

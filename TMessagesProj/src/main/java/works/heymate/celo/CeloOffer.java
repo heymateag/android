@@ -79,7 +79,7 @@ public class CeloOffer {
                 getCurrencyAddress(pricingInfo.currency)
                 );
 
-        long cents = pricingInfo.getBundleTotalPrice() * 100L;
+        long cents =  isBundle ? pricingInfo.getBundleTotalPrice() * 100L : pricingInfo.subscriptionPrice * 100L;
         Currency currency = pricingInfo.currency;
 
         adjustGasPayment(currency);
