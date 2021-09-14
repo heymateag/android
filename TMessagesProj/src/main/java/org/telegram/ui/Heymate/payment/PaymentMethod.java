@@ -62,7 +62,12 @@ public abstract class PaymentMethod {
                 String phoneNumber = TG2HM.getCurrentPhoneNumber();
                 Wallet wallet = Wallet.get(context, phoneNumber);
 
-                Ramp.getDialog(context, wallet.getAddress(), topUpAmount, () -> PaymentController.get(context).resumePayment()).show();
+                // Ramp.getDialog(context, wallet.getAddress(), topUpAmount, () -> PaymentController.get(context).resumePayment()).show();
+                Ramp.init(wallet.getAddress(), amount, successful -> {
+                    if (successful) {
+                        PaymentController.get(context).resumePayment();
+                    }
+                });
 
                 return true;
             }

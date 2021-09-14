@@ -17,6 +17,8 @@ allprojects {
     repositories {
         maven { url "https://raw.githubusercontent.com/yasharpm/repo/master/" }
         google()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://button.passbase.com/__android' }
     }
 }
 

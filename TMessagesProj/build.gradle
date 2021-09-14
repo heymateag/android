@@ -42,6 +42,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:18.1.3'
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
+
     //AppSync SDK
     implementation 'com.amplifyframework:aws-api:1.16.11'
     implementation 'com.amplifyframework:aws-datastore:1.16.11'
@@ -56,6 +57,8 @@ dependencies {
 
     //
     implementation "androidx.biometric:biometric:1.1.0"
+
+    implementation 'com.github.RampNetwork:ramp-sdk-android:1.+'
 
     implementation 'com.yashoid:sequencelayout:2.0.3'
 
@@ -331,7 +334,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2293 * 56 // HeymateConfig
+    defaultConfig.versionCode = 2293 * 61 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
