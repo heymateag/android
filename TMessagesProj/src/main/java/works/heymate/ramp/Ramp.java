@@ -78,7 +78,7 @@ public class Ramp {
 
             @Override
             public void onWidgetClose() {
-                // Nohting to do: Called when Ramp finishes the flow and can be closed, or user closed it manually.
+                // Nothing to do: Called when Ramp finishes the flow and can be closed, or user closed it manually.
             }
 
         });
