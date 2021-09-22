@@ -361,7 +361,7 @@ public class OnlineReservation {
 
                     for (Reservation reservation: result) {
                         if (!userId.equals(reservation.getServiceProviderId())) {
-                            return;
+                            continue;
                         }
 
                         pendingCallbacks.count++;
@@ -374,6 +374,10 @@ public class OnlineReservation {
                             }
                         });
                     }
+
+                    if (pendingCallbacks.count == 0) {
+                        callback.onCallResult(true, null, null);
+                    }
                 }
                 else {
                     Log.e(TAG, "Failed to get time slot reservations.", exception);
@@ -381,6 +385,9 @@ public class OnlineReservation {
                     callback.onCallResult(false, null, exception);
                 }
             });
+        }
+        else {
+            callback.onCallResult(false, null, null);
         }
     }
 

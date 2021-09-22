@@ -88,6 +88,14 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mTimeSlotId = getArguments().getString(KEY_TIME_SLOT_ID);
         mReservationId = getArguments().getString(KEY_RESERVATION_ID);
 
+        if (mTimeSlotId == null && mReservationId != null) {
+            HtAmplify.getInstance(getParentActivity()).getReservation(mReservationId, (success, result, exception) -> {
+                if (result != null) {
+                    mTimeSlotId = result.getTimeSlotId();
+                }
+            });
+        }
+
         return super.onFragmentCreate();
     }
 
