@@ -428,11 +428,16 @@ public class CeloSDK {
             return;
         }
 
+        List<ContractKitCallback> callbacks;
+
         synchronized (mContractKitCallbacks) {
-            for (ContractKitCallback callback: mContractKitCallbacks) {
-                callback.onContractKitResult(true, mContractKit, null);
-            }
+            callbacks = new ArrayList<>(mContractKitCallbacks);
+
             mContractKitCallbacks.clear();
+        }
+
+        for (ContractKitCallback callback: callbacks) {
+            callback.onContractKitResult(true, mContractKit, null);
         }
     }
 
