@@ -29,11 +29,14 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Heymate.log.HMLog;
 
 import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
 
 public class MeetingMemberItem extends SequenceLayout implements HeymateEvents.HeymateEventObserver {
+
+    private static final String TAG = "MeetingMemberItem";
 
     private ImageView mImage;
     private TextView mName;
@@ -80,13 +83,20 @@ public class MeetingMemberItem extends SequenceLayout implements HeymateEvents.H
                 return;
             }
 
+            HMLog.d(TAG, "videoToggle clicked");
+
             if (mMeetingMember == OnlineMeeting.get().getSelf()) {
+                HMLog.d(TAG, "videoToggle item user is current user");
+
                 if (mMeetingMember.isVideoOn()) {
                     OnlineMeeting.get().stopVideo();
                 }
                 else {
                     OnlineMeeting.get().startVideo();
                 }
+            }
+            else {
+                HMLog.d(TAG, "videoToggle users differ: " + mMeetingMember + " != " + OnlineMeeting.get().getSelf());
             }
         });
 
@@ -103,6 +113,8 @@ public class MeetingMemberItem extends SequenceLayout implements HeymateEvents.H
         if (mMeetingMember == null) {
             return;
         }
+
+        HMLog.d(TAG, "muteToggle user id is " + mMeetingMember.getUserId());
 
         if (mMeetingMember.isMuted()) {
             OnlineMeeting.get().unMute(mMeetingMember.getUserId());

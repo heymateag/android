@@ -222,6 +222,7 @@ public class OnlineMeeting {
 
     public void mute(String userId) {
         doWithUser(userId, (session, user) -> {
+            HMLog.d(TAG, "About to call mute on " + userId + " " + user);
             ZoomInstantSDKAudioHelper audioHelper = mSDK.getAudioHelper();
             audioHelper.muteAudio(user);
         });
@@ -229,19 +230,24 @@ public class OnlineMeeting {
 
     public void unMute(String userId) {
         doWithUser(userId, (session, user) -> {
+            HMLog.d(TAG, "About to call unmute on " + userId + " " + user);
             ZoomInstantSDKAudioHelper audioHelper = mSDK.getAudioHelper();
             audioHelper.unMuteAudio(user);
         });
     }
 
     public boolean muteAll() {
+        HMLog.d(TAG, "muteAll called");
+
         ZoomInstantSDKSession session = mSDK.getSession();
 
         if (session == null) {
+            HMLog.d(TAG, "muteAll session is null");
             return false;
         }
 
         if (mSelf == null || !session.getUser(mSelf.getZoomUser().getUserId()).isHost()) {
+            HMLog.d(TAG, "muteAll user is not host. user=" + mSelf);
             return false;
         }
 
@@ -250,6 +256,7 @@ public class OnlineMeeting {
                 mSDK.getAudioHelper().muteAudio(user);
             }
         }
+        HMLog.d(TAG, "muteAll success for " + session.getAllUsers().size() + " members in the meeting.");
 
         return true;
     }
