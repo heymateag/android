@@ -13,6 +13,7 @@ import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 import works.heymate.core.Currency;
 import works.heymate.core.offer.PricingInfo;
 import org.web3j.crypto.Sign;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
@@ -163,7 +164,7 @@ public class CeloOffer {
         }
 
         try {
-            mContract.createOffer(
+            TransactionReceipt receipt = mContract.createOffer(
                     tradeId,
                     planId,
                     amount,
@@ -177,6 +178,10 @@ public class CeloOffer {
                     new ArrayList<>(0),
                     Numeric.hexStringToByteArray(offer.getPriceSignature())
             ).send();
+
+            String transactionHash = receipt.getTransactionHash();
+
+            System.out.println(transactionHash); // TODO To be returned for the new back-end.
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(null, e);
