@@ -89,7 +89,21 @@ public class TG2HM {
     }
 
     public static String getFCMToken() {
+        final Object localLock = new Object();
+
         Task<String> tokenTask = FirebaseMessaging.getInstance().getToken();
+
+        tokenTask.addOnCompleteListener(task -> {
+            synchronized (localLock) {
+                localLock.notify();
+            }
+        });
+
+        synchronized (localLock) {
+            try {
+                localLock.wait(1000);
+            } catch (InterruptedException e) { }
+        }
 
         if (tokenTask.isComplete() && tokenTask.isSuccessful()) {
             return tokenTask.getResult();
