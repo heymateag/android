@@ -88,6 +88,8 @@ public class Wallet {
     private final SharedPreferences mPreferences;
     private final String mPhoneNumber;
 
+    private WalletConnection mConnection = null;
+
     private boolean mCreating = false;
 
     private CeloSDK mCeloSDK = null;
@@ -105,6 +107,14 @@ public class Wallet {
 
     SharedPreferences getPreferences() {
         return mPreferences;
+    }
+
+    public WalletConnection getConnection() {
+        if (mConnection == null) {
+//            mConnection = new WalletConnection(this);
+        }
+
+        return mConnection;
     }
 
     public boolean isCreated() {

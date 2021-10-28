@@ -1,3 +1,4 @@
 include ':zoommobilertc'
 include ':celosdk'
 include ':TMessagesProj'
+include ':walletconnect'
