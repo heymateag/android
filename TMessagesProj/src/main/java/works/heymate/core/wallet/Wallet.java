@@ -111,7 +111,7 @@ public class Wallet {
 
     public WalletConnection getConnection() {
         if (mConnection == null) {
-//            mConnection = new WalletConnection(this);
+            mConnection = new WalletConnection(this);
         }
 
         return mConnection;

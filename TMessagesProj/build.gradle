@@ -68,7 +68,7 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk15on:1.65'
     implementation files('libs/celo-sdk-java.jar')
     implementation project(':celosdk')
-    // implementation project(':walletconnect')
+    implementation project(':walletconnect')
 
     implementation project(':zoommobilertc')
     implementation "com.google.crypto.tink:tink-android:1.5.0" // Goes with Zoom
@@ -353,7 +353,8 @@ android {
 
     defaultConfig {
         minSdkVersion 21 // 21 Only for Zoom SDK
-        targetSdkVersion 30
+        targetSdkVersion 31
+        compileSdkVersion 31
         versionName "7.7.2"
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
