@@ -12,6 +12,7 @@ import network.ramp.sdk.events.model.Purchase;
 import network.ramp.sdk.facade.Config;
 import network.ramp.sdk.facade.RampCallback;
 import network.ramp.sdk.facade.RampSDK;
+import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.Texts;
@@ -53,7 +54,7 @@ public class Ramp {
                 Texts.get(Texts.LOGO_URL).toString(),
                 URL,
                 currency,
-                String.valueOf((float) money.getCents() / 100),
+                CurrencyUtil.centsToBlockChainValue(money.getCents()).toString(),
                 "",
                 "",
                 userAddress,
