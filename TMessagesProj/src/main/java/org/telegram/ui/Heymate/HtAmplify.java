@@ -154,7 +154,7 @@ public class HtAmplify {
         );
     }
 
-    public Shop createShop(int tgId, String title, ShopType shopType) {
+    public Shop createShop(long tgId, String title, ShopType shopType) {
         Shop newShop = Shop.builder()
                 .tgId(tgId)
                 .title(title)

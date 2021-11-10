@@ -128,7 +128,7 @@ public class MeetingMemberItem extends SequenceLayout implements HeymateEvents.H
         mMeetingMember = meetingMember;
 
         try {
-            int userId = Integer.parseInt(meetingMember.getUserId());
+            long userId = Long.parseLong(meetingMember.getUserId());
             TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(userId);
 
             mName.setText(user == null ? "" : UserObject.getUserName(user));

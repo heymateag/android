@@ -113,7 +113,7 @@ public class ProxySettingsActivity extends BaseFragment {
 
     private static final int done_button = 1;
 
-    public class TypeCell extends FrameLayout {
+    public static class TypeCell extends FrameLayout {
 
         private TextView textView;
         private ImageView checkImage;
@@ -272,9 +272,9 @@ public class ProxySettingsActivity extends BaseFragment {
             typeCell[a].setBackground(Theme.getSelectorDrawable(true));
             typeCell[a].setTag(a);
             if (a == 0) {
-                typeCell[a].setText(LocaleController.getString("UseProxySocks5", works.heymate.beta.R.string.UseProxySocks5), a == currentType, true);
-            } else if (a == 1) {
-                typeCell[a].setText(LocaleController.getString("UseProxyTelegram", works.heymate.beta.R.string.UseProxyTelegram), a == currentType, false);
+                typeCell[a].setText(LocaleController.getString("UseProxySocks5", R.string.UseProxySocks5), a == currentType, true);
+            } else {
+                typeCell[a].setText(LocaleController.getString("UseProxyTelegram", R.string.UseProxyTelegram), a == currentType, false);
             }
             linearLayout2.addView(typeCell[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
             typeCell[a].setOnClickListener(typeCellClickListener);
@@ -373,7 +373,7 @@ public class ProxySettingsActivity extends BaseFragment {
                             }
                         } else {
                             if (start >= 0) {
-                                phoneField.setSelection(start <= phoneField.length() ? start : phoneField.length());
+                                phoneField.setSelection(Math.min(start, phoneField.length()));
                             }
                         }
                         ignoreOnTextChange = false;
@@ -435,9 +435,9 @@ public class ProxySettingsActivity extends BaseFragment {
             bottomCells[i] = new TextInfoPrivacyCell(context);
             bottomCells[i].setBackground(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             if (i == 0) {
-                bottomCells[i].setText(LocaleController.getString("UseProxyInfo", works.heymate.beta.R.string.UseProxyInfo));
-            } else if (i == 1) {
-                bottomCells[i].setText(LocaleController.getString("UseProxyTelegramInfo", works.heymate.beta.R.string.UseProxyTelegramInfo) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", works.heymate.beta.R.string.UseProxyTelegramInfo2));
+                bottomCells[i].setText(LocaleController.getString("UseProxyInfo", R.string.UseProxyInfo));
+            } else {
+                bottomCells[i].setText(LocaleController.getString("UseProxyTelegramInfo", R.string.UseProxyTelegramInfo) + "\n\n" + LocaleController.getString("UseProxyTelegramInfo2", R.string.UseProxyTelegramInfo2));
                 bottomCells[i].setVisibility(View.GONE);
             }
             linearLayout2.addView(bottomCells[i], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));

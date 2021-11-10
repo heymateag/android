@@ -22,6 +22,7 @@ import com.yashoid.sequencelayout.SequenceLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
@@ -122,22 +123,20 @@ public class ShopDialogCell extends SequenceLayout {
         long dialogId = dialog.id;
 
         if (dialogId != 0) {
-            int lower_id = (int) dialogId;
-            int high_id = (int) (dialogId >> 32);
-            if (lower_id != 0) {
-                if (lower_id < 0) {
-                    chat = MessagesController.getInstance(0).getChat(-lower_id);
-                    if (chat != null && chat.migrated_to != null) {
-                        TLRPC.Chat chat2 = MessagesController.getInstance(0).getChat(chat.migrated_to.channel_id);
-                        if (chat2 != null) {
-                            chat = chat2;
-                        }
+            if (DialogObject.isChatDialog(dialogId)) {
+                chat = MessagesController.getInstance(0).getChat(-dialogId);
+                if (chat != null && chat.migrated_to != null) {
+                    TLRPC.Chat chat2 = MessagesController.getInstance(0).getChat(chat.migrated_to.channel_id);
+                    if (chat2 != null) {
+                        chat = chat2;
                     }
-                } else {
-                    user = MessagesController.getInstance(0).getUser(lower_id);
                 }
-            } else {
-                encryptedChat = MessagesController.getInstance(0).getEncryptedChat(high_id);
+            }
+            else if (DialogObject.isUserDialog(dialogId)) {
+                user = MessagesController.getInstance(0).getUser(dialogId);
+            }
+            else if (DialogObject.isEncryptedDialog(dialogId)) {
+                encryptedChat = MessagesController.getInstance(0).getEncryptedChat(DialogObject.getEncryptedChatId(dialogId));
                 if (encryptedChat != null) {
                     user = MessagesController.getInstance(0).getUser(encryptedChat.user_id);
                 }
@@ -258,7 +257,7 @@ public class ShopDialogCell extends SequenceLayout {
             } else {
                 TLRPC.User fromUser = null;
                 TLRPC.Chat fromChat = null;
-                int fromId = message.getFromChatId();
+                long fromId = message.getFromChatId();
                 if (fromId > 0) {
                     fromUser = MessagesController.getInstance(currentAccount).getUser(fromId);
                 } else {
@@ -370,7 +369,7 @@ public class ShopDialogCell extends SequenceLayout {
                         }
                         messageString = Emoji.replaceEmoji(stringBuilder, mTextMessage.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
                         if (message.hasHighlightedWords()) {
-                            CharSequence messageH = AndroidUtilities.highlightText(messageString, message.highlightedWords);
+                            CharSequence messageH = AndroidUtilities.highlightText(messageString, message.highlightedWords, null);
                             if (messageH != null) {
                                 messageString = messageH;
                             }
@@ -423,7 +422,7 @@ public class ShopDialogCell extends SequenceLayout {
                                 } else {
                                     messageString = message.messageText;
                                 }
-                                AndroidUtilities.highlightText(messageString, message.highlightedWords);
+                                AndroidUtilities.highlightText(messageString, message.highlightedWords, null);
                             }
                         }
                     }
@@ -490,7 +489,7 @@ public class ShopDialogCell extends SequenceLayout {
             }
             messageString = Emoji.replaceEmoji(mess, mTextMessage.getPaint().getFontMetricsInt(), AndroidUtilities.dp(17), false);
             if (message != null) {
-                CharSequence s = AndroidUtilities.highlightText(messageString, message.highlightedWords);
+                CharSequence s = AndroidUtilities.highlightText(messageString, message.highlightedWords, null);
                 if (s != null) {
                     messageString = s;
                 }
@@ -499,7 +498,7 @@ public class ShopDialogCell extends SequenceLayout {
         if ((SharedConfig.useThreeLinesLayout) && messageNameString != null) {
             try {
                 if (message != null && message.hasHighlightedWords()) {
-                    CharSequence s = AndroidUtilities.highlightText(messageNameString, message.highlightedWords);
+                    CharSequence s = AndroidUtilities.highlightText(messageNameString, message.highlightedWords, null);
                     if (s != null) {
                         messageNameString = s;
                     }

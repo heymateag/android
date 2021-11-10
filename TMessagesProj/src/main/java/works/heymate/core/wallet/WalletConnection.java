@@ -22,6 +22,14 @@ public class WalletConnection extends WCClient {
             return null;
         });
 
+        setOnSignTransaction((aLong, wcSignTransaction) -> {
+            return null;
+        });
+
+        setOnEthSignTransaction((aLong, wcEthereumTransaction) -> {
+            return null;
+        });
+
         setOnEthSign((requestId, wcEthereumSignMessage) -> {
 
             return null;

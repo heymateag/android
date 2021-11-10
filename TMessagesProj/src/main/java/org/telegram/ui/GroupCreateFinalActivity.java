@@ -107,7 +107,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     private TLRPC.InputFile inputVideo;
     private String inputVideoPath;
     private double videoTimestamp;
-    private ArrayList<Integer> selectedContacts;
+    private ArrayList<Long> selectedContacts;
     private boolean createAfterUpload;
     private boolean donePressed;
     private ImageUpdater imageUpdater;
@@ -129,7 +129,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public interface GroupCreateFinalActivityDelegate {
         void didStartChatCreation();
-        void didFinishChatCreation(GroupCreateFinalActivity fragment, int chatId);
+        void didFinishChatCreation(GroupCreateFinalActivity fragment, long chatId);
         void didFailChatCreation();
     }
 
@@ -154,10 +154,16 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         imageUpdater = new ImageUpdater(true);
         imageUpdater.parentFragment = this;
         imageUpdater.setDelegate(this);
-        selectedContacts = getArguments().getIntegerArrayList("result");
-        final ArrayList<Integer> usersToLoad = new ArrayList<>();
+        long[] contacts = getArguments().getLongArray("result");
+        if (contacts != null) {
+            selectedContacts = new ArrayList<>(contacts.length);
+            for (int a = 0; a < contacts.length; a++) {
+                selectedContacts.add(contacts[a]);
+            }
+        }
+        final ArrayList<Long> usersToLoad = new ArrayList<>();
         for (int a = 0; a < selectedContacts.size(); a++) {
-            Integer uid = selectedContacts.get(a);
+            Long uid = selectedContacts.get(a);
             if (getMessagesController().getUser(uid) == null) {
                 usersToLoad.add(uid);
             }
@@ -477,8 +483,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 avatarEditor.setAnimation(cameraDrawable);
                 cameraDrawable.setCurrentFrame(0);
             }, dialog -> {
-                cameraDrawable.setCustomEndFrame(86);
-                avatarEditor.playAnimation();
+                if (!imageUpdater.isUploadingImage()) {
+                    cameraDrawable.setCustomEndFrame(86);
+                    avatarEditor.playAnimation();
+                } else {
+                    cameraDrawable.setCurrentFrame(0, false);
+                }
             });
             cameraDrawable.setCurrentFrame(0);
             cameraDrawable.setCustomEndFrame(43);
@@ -761,7 +771,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
         if (editText != null) {
             String text = editText.getText().toString();
-            if (text != null && text.length() != 0) {
+            if (text.length() != 0) {
                 args.putString("nameTextView", text);
             }
         }
@@ -817,17 +827,17 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             }
         } else if (id == NotificationCenter.chatDidCreated) {
             reqId = 0;
-            int chat_id = (Integer) args[0];
+            long chatId = (Long) args[0];
             if (delegate != null) {
-                delegate.didFinishChatCreation(this, chat_id);
+                delegate.didFinishChatCreation(this, chatId);
             } else {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
                 Bundle args2 = new Bundle();
-                args2.putInt("chat_id", chat_id);
+                args2.putLong("chat_id", chatId);
                 presentFragment(new ChatActivity(args2), true);
             }
             if (inputPhoto != null || inputVideo != null) {
-                getMessagesController().changeChatAvatar(chat_id, null, inputPhoto, inputVideo, videoTimestamp, inputVideoPath, avatar, avatarBig, null);
+                getMessagesController().changeChatAvatar(chatId, null, inputPhoto, inputVideo, videoTimestamp, inputVideoPath, avatar, avatarBig, null);
             }
 
             String username = UUID.randomUUID().toString().replaceAll("-", "");
@@ -837,15 +847,15 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                     // Nothing to do.
                     return;
                 case CreateShopActivity.TYPE_MARKETPLACE:
-                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, username, HtAmplify.ShopType.MarketPlace);
+                    HtAmplify.getInstance(getParentActivity()).createShop(chatId, username, HtAmplify.ShopType.MarketPlace);
                     break;
                 case CreateShopActivity.TYPE_SHOP:
-                    HtAmplify.getInstance(getParentActivity()).createShop(chat_id, username, HtAmplify.ShopType.Shop);
+                    HtAmplify.getInstance(getParentActivity()).createShop(chatId, username, HtAmplify.ShopType.Shop);
                     break;
             }
 
-            TLRPC.Chat chat = getMessagesController().getChat(chat_id);
-            getMessagesController().updateChannelUserName(chat_id, username);
+            TLRPC.Chat chat = getMessagesController().getChat(chatId);
+            getMessagesController().updateChannelUserName(chatId, username);
             chat.username = username;
         }
     }

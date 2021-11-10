@@ -202,7 +202,7 @@ public class MyOffersAdapter extends MyScheduleAdapter {
     }
 
     @Override
-    public boolean isEnabled(int section, int row) {
+    public boolean isEnabled(RecyclerView.ViewHolder holder, int section, int row) {
         return row != 0;
     }
 

@@ -517,13 +517,13 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
                 if (dids.size() > 1 || dids.get(0) == getUserConfig().getClientUserId()) {
                     for (int a = 0; a < dids.size(); a++) {
                         long did = dids.get(a);
-                        SendMessagesHelper.getInstance(getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0);
+                        SendMessagesHelper.getInstance(getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0, null);
                     }
                     fragment1.finishFragment();
                 } else {
                     long did = dids.get(0);
 
-                    SendMessagesHelper.getInstance(getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0);
+                    SendMessagesHelper.getInstance(getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0, null);
 
                     int lower_part = (int) did;
                     int high_part = (int) (did >> 32);

@@ -52,7 +52,7 @@ public class MeetingMessageItem extends SequenceLayout {
 
     private Offer mOffer = null;
     private Reservation mReservation = null;
-    private int mUserId;
+    private long mUserId;
 
     private String mLoadingOfferId = null;
     private String mLoadingReservationId = null;
@@ -112,7 +112,7 @@ public class MeetingMessageItem extends SequenceLayout {
         mImageUser.setOnClickListener(v -> {
             if (mUserId != 0) {
                 Bundle args = new Bundle();
-                args.putInt("user_id", mUserId);
+                args.putLong("user_id", mUserId);
                 mParent.presentFragment(new ProfileActivity(args));
             }
         });
@@ -220,7 +220,7 @@ public class MeetingMessageItem extends SequenceLayout {
 
         if (userId != null) {
             try {
-                mUserId = Integer.parseInt(userId);
+                mUserId = Long.parseLong(userId);
                 TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(mUserId);
                 avatarDrawable.setInfo(user);
                 avatarImage.setImage(ImageLocation.getForUser(user, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, null, user, 0);
