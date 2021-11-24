@@ -5,7 +5,7 @@ import org.celo.contractkit.ContractKit;
 public class CeloContext {
 
     public static CeloContext MAIN_NET = new CeloContext(
-            ContractKit.MAINNET,
+            "https://forno.celo.org",
             42220,  // https://github.com/celo-org/celo-blockchain/blob/079f42f05036ae961f0f8f8f8360b904159d3e5e/params/config.go#L36-L38
             "https://us-central1-celo-pgpnp-mainnet.cloudfunctions.net",
             "FvreHfLmhBjwxHxsxeyrcOLtSonC9j7K3WrS4QapYsQH6LdaDTaNGmnlQMfFY04Bp/K4wAvqQwO9/bqPVCKf8Ze8OZo8Frmog4JY4xAiwrsqOXxug11+htjEe1pj4uMA"

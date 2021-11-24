@@ -20,7 +20,6 @@ import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.offer.PricingInfo;
 
-import org.telegram.ui.Heymate.log.LogToGroup;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.IOException;
@@ -39,6 +38,7 @@ import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.walletconnect.WalletConnection;
 
 public class Wallet {
 
@@ -483,7 +483,7 @@ public class Wallet {
         }
     }
 
-    private CeloAccount getAccount() {
+    public CeloAccount getAccount() {
         if (!isCreated()) {
             throw new IllegalStateException("Wallet does not exist.");
         }
