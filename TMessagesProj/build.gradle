@@ -318,7 +318,7 @@ android {
         }
         afat {
             ndk {
-                abiFilters "armeabi-v7a", "arm64-v8a"//, "x86", "x86_64"
+                abiFilters "armeabi-v7a","arm64-v8a" //, "x86", "x86_64"
             }
             sourceSets.debug {
                 manifest.srcFile 'config/debug/AndroidManifest_SDK23.xml'
@@ -335,7 +335,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2428 * 68 // HeymateConfig
+    defaultConfig.versionCode = 2428 * 69 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -360,7 +360,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                version '3.18.1'
+                version '3.10.2'
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', "-j=21"
             }
         }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.trustwallet.walletconnect.models.session.WCSession;
+
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import works.heymate.core.Utils;
+import works.heymate.core.wallet.Wallet;
+import works.heymate.walletconnect.WalletConnection;
 
 public class HeymateRouter {
 
@@ -60,6 +64,13 @@ public class HeymateRouter {
     public static boolean handleIntent(LaunchActivity activity, Intent intent) {
         if (intent != null && intent.getData() != null) {
             Uri uri = intent.getData();
+
+            WCSession session = WalletConnection.sessionFromUri(uri.toString());
+
+            if (session != null) {
+                Wallet.get(activity, TG2HM.getCurrentPhoneNumber()).getConnection().connect(session);
+                return true;
+            }
 
             if ("celo".equalsIgnoreCase(uri.getScheme())) {
                 activity.presentFragment(new AttestationActivity(uri.toString()));
