@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
 import androidx.collection.LongSparseArray;
 
@@ -874,6 +875,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                     }
                                     case "CHAT_JOINED": {
                                         messageText = LocaleController.formatString("NotificationGroupAddSelfMega", works.heymate.beta.R.string.NotificationGroupAddSelfMega, args[0], args[1]);
+                                        break;
+                                    }
+                                    case "CHAT_REQ_JOINED": {
+                                        messageText = LocaleController.formatString("UserAcceptedToGroupPushWithGroup", R.string.UserAcceptedToGroupPushWithGroup, args[0], args[1]);
                                         break;
                                     }
                                     case "CHAT_MESSAGE_FWDS": {
