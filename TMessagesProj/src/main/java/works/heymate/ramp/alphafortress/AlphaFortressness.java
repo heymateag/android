@@ -1,5 +1,6 @@
 package works.heymate.ramp.alphafortress;
 
+import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.Heymate.HeymateConfig;
@@ -11,7 +12,7 @@ import java.math.BigInteger;
 import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.APICallback;
 import works.heymate.core.Currency;
-import works.heymate.core.Money;
+import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
 
 /**
@@ -88,30 +89,30 @@ public class AlphaFortressness {
         AlphaTransaction.clearPendingTransaction();
     }
 
-    public static void sell(Currency currency, BigInteger amount, float rate, BeneficiaryModel model) {
+    public static void sell(Currency currency, BigInteger amount, float rate, BeneficiaryModel model, APICallback<AlphaTransaction.Transaction> callback) {
         BeneficiaryModel.get(currency, (success, previousModel, exception) -> {
             if (previousModel != null) {
                 if (previousModel.hasChanges(model)) {
                     BeneficiaryModel.createBeneficiary(currency, model, (success1, result, exception1) -> {
-                        if (success) {
-                            sellWithBeneficiary(currency, amount, rate, model);
+                        if (success1) {
+                            sellWithBeneficiary(currency, amount, rate, model, callback);
                         }
                         else {
-                            // TODO
+                            callback.onAPICallResult(false, null, exception1);
                         }
                     });
                 }
                 else {
-                    sellWithBeneficiary(currency, amount, rate, model);
+                    sellWithBeneficiary(currency, amount, rate, model, callback);
                 }
             }
             else {
-                // TODO
+                callback.onAPICallResult(false, null, exception);
             }
         });
     }
 
-    private static void sellWithBeneficiary(Currency currency, BigInteger amount, float rate, BeneficiaryModel model) {
+    private static void sellWithBeneficiary(Currency currency, BigInteger amount, float rate, BeneficiaryModel model, APICallback<AlphaTransaction.Transaction> callback) {
         long beneficiaryId = BeneficiaryModel.getBeneficiaryId(currency);
 
         AlphaWallet.getWalletAddress(currency, (success, walletInfo, exception) -> {
@@ -129,14 +130,16 @@ public class AlphaFortressness {
 
                                 if (Currency.USD.equals(currency)) {
                                     token = contractKit.contracts.getStableToken();
+                                    contractKit.setFeeCurrency(CeloContract.StableToken);
                                 }
                                 else if (Currency.EUR.equals(currency)) {
                                     token = contractKit.contracts.getStableTokenEUR();
+                                    contractKit.setFeeCurrency(CeloContract.StableTokenEUR);
                                 }
                                 else {
                                     AlphaTransaction.clearPendingTransaction();
 
-                                    // TODO CAUTION THREAD
+                                    Utils.postOnUIThread(() -> callback.onAPICallResult(false, null, null));
                                     return;
                                 }
 
@@ -145,32 +148,33 @@ public class AlphaFortressness {
 
                                     AlphaTransaction.completeTransaction(wallet.getAddress(), receipt.getTransactionHash(), (success3, transaction, exception2) -> {
                                         if (transaction != null) {
-                                            // TODO SUCCESS
+                                            callback.onAPICallResult(true, transaction, null);
                                         }
                                         else {
-                                            // TODO
+                                            // TODO ULTIMATE FAILURE IS HERE
+                                            callback.onAPICallResult(false, null, null);
                                         }
                                     });
                                 } catch (Exception e) {
                                     AlphaTransaction.clearPendingTransaction();
 
-                                    // TODO CAUTION THREAD
+                                    Utils.postOnUIThread(() -> callback.onAPICallResult(false, null, e));
                                 }
                             }
                             else {
                                 AlphaTransaction.clearPendingTransaction();
 
-                                // TODO CAUTION THREAD
+                                Utils.postOnUIThread(() -> callback.onAPICallResult(false, null, errorCause));
                             }
                         });
                     }
                     else {
-                        // TODO
+                        callback.onAPICallResult(false, null, exception1);
                     }
                 });
             }
             else {
-                // TODO
+                callback.onAPICallResult(false, null, exception);
             }
         });
     }

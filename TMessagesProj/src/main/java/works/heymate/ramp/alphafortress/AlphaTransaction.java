@@ -21,14 +21,14 @@ public class AlphaTransaction {
         public final String transactionHash;
         public final long sourceAmount;
         public final long destinationAmount;
-        public final boolean isPaid;
+        public final Boolean isPaid;
 
         private Transaction(JSONObject jTransaction) throws JSONException {
             id = jTransaction.getLong("id");
-            transactionHash = jTransaction.getString("txnHash");
+            transactionHash = jTransaction.isNull("txnHash") ? null : jTransaction.getString("txnHash");
             sourceAmount = jTransaction.getLong("sourceAmount");
             destinationAmount = jTransaction.getLong("destinationAmount");
-            isPaid = !jTransaction.isNull("isPaid") && jTransaction.getBoolean("isPaid");
+            isPaid = jTransaction.isNull("isPaid") ? null : jTransaction.getBoolean("isPaid");
         }
 
     }
@@ -54,9 +54,18 @@ public class AlphaTransaction {
                 String url = TRANSACTION_URL + "?id=" + transactionId;
 
                 SimpleNetworkCall.callAsync(result -> {
-                    if (result.response != null) {
+                    if (result.arrayResponse != null) {
                         try {
-                            callback.onAPICallResult(true, new Transaction(result.response), null);
+                            for (int i = 0; i < result.arrayResponse.length(); i++) {
+                                JSONObject jTransaction = result.arrayResponse.getJSONObject(i);
+
+                                if (Long.parseLong(transactionId) == jTransaction.getLong("id")) {
+                                    callback.onAPICallResult(true, new Transaction(jTransaction), null);
+                                    return;
+                                }
+                            }
+
+                            callback.onAPICallResult(true, null, null);
                         } catch (JSONException e) {
                             callback.onAPICallResult(false, null, e);
                         }
@@ -125,7 +134,6 @@ public class AlphaTransaction {
                     body.put("fromAddress", walletAddress);
                 } catch (JSONException e) { }
 
-                // TODO Method
                 SimpleNetworkCall.callAsync(result -> {
                     if (result.response != null) {
                         try {
@@ -139,7 +147,7 @@ public class AlphaTransaction {
                     else {
                         callback.onAPICallResult(false, null, result.exception);
                     }
-                }, url, body, "Authorization", "Bearer " + token);
+                }, "PUT", url, body, "Authorization", "Bearer " + token);
             }
             else {
                 callback.onAPICallResult(false, null, exception);

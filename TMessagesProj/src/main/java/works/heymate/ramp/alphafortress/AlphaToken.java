@@ -11,8 +11,8 @@ import works.heymate.util.SimpleNetworkCall;
 class AlphaToken {
 
     private static final String TOKEN_URL = AlphaFortressness.BASE_URL + "auth/local";
-    private static final String AUTH_IDENTIFIER = "";
-    private static final String AUTH_PASSWORD = "";
+    private static final String AUTH_IDENTIFIER = "yapukico@altmails.com";
+    private static final String AUTH_PASSWORD = "thisisnotarealpassword";
 
     private static final String TOKEN = "alphafortress_token";
     private static final String TOKEN_EXPIRY = "alphafortress_token_expiry";

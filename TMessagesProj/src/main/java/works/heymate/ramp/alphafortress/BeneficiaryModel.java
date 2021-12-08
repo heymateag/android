@@ -31,7 +31,7 @@ public class BeneficiaryModel {
 
             Utils.postOnUIThread(() -> callback.onAPICallResult(true, model, null));
             return;
-        } catch (JSONException e) { }
+        } catch (JSONException | NullPointerException e) { }
 
         AlphaToken.get().getToken((success, token, exception) -> {
             if (success) {
@@ -138,7 +138,16 @@ public class BeneficiaryModel {
             }
 
             title = jModel.getString("Title");
-            placeholder = jModel.getString("Placeholder");
+
+            if (jModel.has("Placeholder")) {
+                placeholder = jModel.getString("Placeholder");
+            }
+            else if (jModel.has("Plaseholder")) {
+                placeholder = jModel.getString("Plaseholder");
+            }
+            else {
+                placeholder = null;
+            }
 
             JSONObject jValidations = jModel.getJSONObject("validations");
             required = jValidations.getBoolean("required");
@@ -187,6 +196,16 @@ public class BeneficiaryModel {
 
             fields.add(new Field(key, jMetadata.getJSONObject(key)));
         }
+    }
+
+    public boolean validate() {
+        for (Field field: fields) {
+            if (field.required && TextUtils.isEmpty(field.value)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     boolean hasChanges(BeneficiaryModel that) {

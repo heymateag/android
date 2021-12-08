@@ -34,7 +34,20 @@ public class SimpleNetworkCall {
 
             @Override
             public void run() {
-                NetworkCallResult result = call(url, body);
+                NetworkCallResult result = call(url, body, headers);
+
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
+            }
+
+        }.start();
+    }
+
+    public static void callAsync(NetworkCallCallback callback, String method, String url, JSONObject body, String... headers) {
+        new Thread() {
+
+            @Override
+            public void run() {
+                NetworkCallResult result = call(method, url, body, headers);
 
                 Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
             }
@@ -43,18 +56,24 @@ public class SimpleNetworkCall {
     }
 
     public static NetworkCallResult call(String url, JSONObject body, String... headers) {
+        return call(body == null ? "GET" : "POST", url, body, headers);
+    }
+
+    public static NetworkCallResult call(String method, String url, JSONObject body, String... headers) {
         NetworkCallResult result = new NetworkCallResult();
 
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+
+            connection.setRequestMethod(method);
 
             for (int i = 0; i < headers.length; i += 2) {
                 connection.setRequestProperty(headers[i], headers[i + 1]);
             }
 
             if (body != null) {
+                connection.setRequestProperty("Content-Type", "application/json");
                 connection.setDoOutput(true);
-                connection.setRequestMethod("POST");
                 connection.getOutputStream().write(body.toString().getBytes());
             }
 
