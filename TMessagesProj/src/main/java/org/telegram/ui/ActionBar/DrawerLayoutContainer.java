@@ -25,10 +25,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import androidx.annotation.Keep;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.DisplayCutout;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -39,6 +35,10 @@ import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+
+import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -91,6 +91,8 @@ public class DrawerLayoutContainer extends FrameLayout {
     private PreviewForegroundDrawable previewForegroundDrawable;
     private boolean drawCurrentPreviewFragmentAbove;
     private float startY;
+    private boolean keyboardVisibility;
+    private int imeHeight;
 
     public DrawerLayoutContainer(Context context) {
         super(context);
@@ -102,6 +104,15 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (Build.VERSION.SDK_INT >= 21) {
             setFitsSystemWindows(true);
             setOnApplyWindowInsetsListener((v, insets) -> {
+                if (Build.VERSION.SDK_INT >= 30) {
+                    boolean newKeyboardVisibility = insets.isVisible(WindowInsets.Type.ime());
+                    int imeHeight = insets.getInsets(WindowInsets.Type.ime()).bottom;
+                    if (keyboardVisibility != newKeyboardVisibility || this.imeHeight != imeHeight) {
+                        keyboardVisibility = newKeyboardVisibility;
+                        this.imeHeight = imeHeight;
+                        requestLayout();
+                    }
+                }
                 final DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) v;
                 if (AndroidUtilities.statusBarHeight != insets.getSystemWindowInsetTop()) {
                     drawerLayoutContainer.requestLayout();
@@ -193,13 +204,15 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (drawerLayout.getVisibility() != newVisibility) {
             drawerLayout.setVisibility(newVisibility);
         }
-        BaseFragment currentFragment = parentActionBarLayout.fragmentsStack.get(0);
-        if (drawerPosition == drawerLayout.getMeasuredWidth()) {
-            currentFragment.setProgressToDrawerOpened(1f);
-        } else if (drawerPosition == 0){
-            currentFragment.setProgressToDrawerOpened(0);
-        } else {
-            currentFragment.setProgressToDrawerOpened(drawerPosition / drawerLayout.getMeasuredWidth());
+        if (!parentActionBarLayout.fragmentsStack.isEmpty()) {
+            BaseFragment currentFragment = parentActionBarLayout.fragmentsStack.get(0);
+            if (drawerPosition == drawerLayout.getMeasuredWidth()) {
+                currentFragment.setProgressToDrawerOpened(1f);
+            } else if (drawerPosition == 0) {
+                currentFragment.setProgressToDrawerOpened(0);
+            } else {
+                currentFragment.setProgressToDrawerOpened(drawerPosition / drawerLayout.getMeasuredWidth());
+            }
         }
         setScrimOpacity(drawerPosition / (float) drawerLayout.getMeasuredWidth());
     }
@@ -315,6 +328,10 @@ public class DrawerLayoutContainer extends FrameLayout {
                 closeDrawer(true);
             }
         }
+    }
+
+    public boolean isAllowOpenDrawer() {
+        return allowOpenDrawer;
     }
 
     public void setAllowOpenDrawerBySwipe(boolean value) {

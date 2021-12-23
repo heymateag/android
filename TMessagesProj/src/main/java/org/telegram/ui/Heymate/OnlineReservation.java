@@ -176,7 +176,7 @@ public class OnlineReservation {
                 int userId = Integer.parseInt(sUserId);
 
                 String message = ReservationUtils.serializeBeautiful(reservation, offer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
-                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0);
+                SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0, null);
             } catch (NumberFormatException e) { }
         }
 

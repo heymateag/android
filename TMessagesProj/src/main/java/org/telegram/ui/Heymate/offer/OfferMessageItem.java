@@ -367,7 +367,7 @@ public class OfferMessageItem extends SequenceLayout {
                 if (dids.size() > 1 || dids.get(0) == mParent.getUserConfig().getClientUserId()) {
                     for (int a = 0; a < dids.size(); a++) {
                         long did = dids.get(a);
-                        SendMessagesHelper.getInstance(mParent.getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0);
+                        SendMessagesHelper.getInstance(mParent.getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0, null);
                     }
                     fragment1.finishFragment();
 
@@ -383,7 +383,7 @@ public class OfferMessageItem extends SequenceLayout {
                 } else {
                     long did = dids.get(0);
 
-                    SendMessagesHelper.getInstance(mParent.getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0);
+                    SendMessagesHelper.getInstance(mParent.getCurrentAccount()).sendMessage(message, did, null, null, null, false, null, null, null, true, 0, null);
 
                     ChatActivity chatActivity = (mParent instanceof ChatActivity) ? (ChatActivity) mParent : null;
 

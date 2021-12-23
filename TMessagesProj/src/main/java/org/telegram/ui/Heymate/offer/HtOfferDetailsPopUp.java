@@ -64,7 +64,7 @@ public class HtOfferDetailsPopUp extends AlertDialog.Builder {
     private AlertDialog dialog = null;
 
     public HtOfferDetailsPopUp(Context context, BaseFragment parent, Offer offer, OfferUtils.PhraseInfo phraseInfo) {
-        super(context, 0);
+        super(context, 0, null);
         AlertDialog.Builder builder = this;
 
         this.offer = offer;

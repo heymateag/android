@@ -17,8 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.util.LongSparseArray;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -31,6 +29,10 @@ import org.telegram.ui.EditWidgetActivity;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import androidx.collection.LongSparseArray;
+
+import works.heymate.beta.R;
 
 public class ChatsWidgetService extends RemoteViewsService {
     @Override
@@ -101,8 +103,8 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         TLRPC.FileLocation photoPath = null;
         TLRPC.User user = null;
         TLRPC.Chat chat = null;
-        if (id > 0) {
-            user = accountInstance.getMessagesController().getUser((int) (long) id);
+        if (DialogObject.isUserDialog(id)) {
+            user = accountInstance.getMessagesController().getUser(id);
             if (user != null) {
                 if (UserObject.isUserSelf(user)) {
                     name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
@@ -113,12 +115,12 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 } else {
                     name = ContactsController.formatName(user.first_name, user.last_name);
                 }
-                if (!UserObject.isReplyUser(user) && !UserObject.isUserSelf(user) && user != null && user.photo != null && user.photo.photo_small != null && user.photo.photo_small.volume_id != 0 && user.photo.photo_small.local_id != 0) {
+                if (!UserObject.isReplyUser(user) && !UserObject.isUserSelf(user) && user.photo != null && user.photo.photo_small != null && user.photo.photo_small.volume_id != 0 && user.photo.photo_small.local_id != 0) {
                     photoPath = user.photo.photo_small;
                 }
             }
         } else {
-            chat = accountInstance.getMessagesController().getChat(-(int) (long) id);
+            chat = accountInstance.getMessagesController().getChat(-id);
             if (chat != null) {
                 name = chat.title;
                 if (chat.photo != null && chat.photo.photo_small != null && chat.photo.photo_small.volume_id != 0 && chat.photo.photo_small.local_id != 0) {
@@ -179,8 +181,8 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         if (message != null) {
             TLRPC.User fromUser = null;
             TLRPC.Chat fromChat = null;
-            int fromId = message.getFromChatId();
-            if (fromId > 0) {
+            long fromId = message.getFromChatId();
+            if (DialogObject.isUserDialog(fromId)) {
                 fromUser = accountInstance.getMessagesController().getUser(fromId);
             } else {
                 fromChat = accountInstance.getMessagesController().getChat(-fromId);
@@ -198,7 +200,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 textColor = mContext.getResources().getColor(works.heymate.beta.R.color.widget_action_text);
             } else {
                 boolean needEmoji = true;
-                if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
+                if (chat != null && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                     if (message.isOutOwner()) {
                         messageNameString = LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou);
                     } else if (fromUser != null) {
@@ -303,7 +305,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                             messageString = String.format("\uD83C\uDFA7 %s - %s", message.getMusicAuthor(), message.getMusicTitle());
                         } else {
                             messageString = message.messageText;
-                            AndroidUtilities.highlightText(messageString, message.highlightedWords);
+                            AndroidUtilities.highlightText(messageString, message.highlightedWords, null);
                         }
                         if (message.messageOwner.media != null && !message.isMediaEmpty()) {
                             textColor = mContext.getResources().getColor(works.heymate.beta.R.color.widget_action_text);
@@ -327,9 +329,11 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             rv.setTextViewText(works.heymate.beta.R.id.shortcut_widget_item_badge, String.format("%d", dialog.unread_count));
             rv.setViewVisibility(works.heymate.beta.R.id.shortcut_widget_item_badge, View.VISIBLE);
             if (accountInstance.getMessagesController().isDialogMuted(dialog.id)) {
-                rv.setInt(works.heymate.beta.R.id.shortcut_widget_item_badge, "setBackgroundResource", works.heymate.beta.R.drawable.widget_counter_muted);
+                rv.setBoolean(R.id.shortcut_widget_item_badge, "setEnabled", false);
+                rv.setInt(R.id.shortcut_widget_item_badge, "setBackgroundResource", R.drawable.widget_badge_muted_background);
             } else {
-                rv.setInt(works.heymate.beta.R.id.shortcut_widget_item_badge, "setBackgroundResource", works.heymate.beta.R.drawable.widget_counter);
+                rv.setBoolean(R.id.shortcut_widget_item_badge, "setEnabled", true);
+                rv.setInt(R.id.shortcut_widget_item_badge, "setBackgroundResource", R.drawable.widget_badge_background);
             }
         } else {
             rv.setViewVisibility(works.heymate.beta.R.id.shortcut_widget_item_badge, View.GONE);
@@ -337,10 +341,10 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         Bundle extras = new Bundle();
 
-        if (id > 0) {
-            extras.putInt("userId", (int) (long) id);
+        if (DialogObject.isUserDialog(id)) {
+            extras.putLong("userId", id);
         } else {
-            extras.putInt("chatId", -(int) (long) id);
+            extras.putLong("chatId", -id);
         }
         extras.putInt("currentAccount", accountInstance.getCurrentAccount());
 
@@ -383,7 +387,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         accountInstance.getMessagesController().putChats(chats, true);
         messageObjects.clear();
         for (int a = 0, N = messages.size(); a < N; a++) {
-            MessageObject messageObject = new MessageObject(accountInstance.getCurrentAccount(), messages.valueAt(a), (SparseArray<TLRPC.User>) null, null, false, true);
+            MessageObject messageObject = new MessageObject(accountInstance.getCurrentAccount(), messages.valueAt(a), (LongSparseArray<TLRPC.User>) null, null, false, true);
             messageObjects.put(messages.keyAt(a), messageObject);
         }
     }

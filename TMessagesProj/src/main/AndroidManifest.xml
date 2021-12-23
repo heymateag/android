@@ -80,8 +80,8 @@
         android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity"
         android:supportsRtl="false"
         android:requestLegacyExternalStorage="true"
-        tools:replace="android:name">
-        <!--tools:replace="android:supportsRtl"-->
+        android:allowAudioPlaybackCapture="true"
+        tools:replace="android:name,android:supportsRtl">
 
         <activity
             android:name="org.telegram.ui.LaunchActivity"
@@ -147,13 +147,18 @@
                 <data android:scheme="tg" />
                 <data android:scheme="ht" />
             </intent-filter>
-            <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:priority="1">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="ton" />
+            <intent-filter>
+                <action android:name="org.telegram.messenger.CREATE_STICKER_PACK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*/*"/>
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="wc"/>
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -355,22 +360,12 @@
         <service android:name="org.telegram.messenger.LocationSharingService"
             android:foregroundServiceType="location"
             android:enabled="true"/>
-        <service android:name="org.telegram.messenger.voip.VoIPService" android:enabled="true"/>
+        <service android:name="org.telegram.messenger.voip.VoIPService" android:enabled="true" android:foregroundServiceType="mediaProjection|camera|microphone|mediaPlayback"/>
         <service android:name="org.telegram.messenger.GoogleVoiceClientService"/>
-        <service android:name="org.telegram.messenger.MusicPlayerService" android:exported="true" android:enabled="true"/>
+        <service android:name="org.telegram.messenger.MusicPlayerService" android:exported="true" android:enabled="true" android:foregroundServiceType="mediaPlayback"/>
         <service android:name="org.telegram.messenger.MusicBrowserService" android:exported="true">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService"/>
-            </intent-filter>
-        </service>
-        <service android:name="org.telegram.messenger.WearDataLayerListenerService">
-            <intent-filter>
-                <!-- listeners receive events that match the action and data filters -->
-                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
-                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-                <action android:name="com.google.android.gms.wearable.CAPABILITY_CHANGED" />
-                <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />
-                <data android:scheme="wear" android:host="*" />
             </intent-filter>
         </service>
         <service android:name="org.telegram.messenger.voip.TelegramConnectionService" android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
@@ -449,7 +444,7 @@
             android:name="org.telegram.messenger.voip.CallNotificationSoundProvider"
             android:exported="true"/>
 
-        <receiver android:name="org.telegram.messenger.ChatsWidgetProvider">
+        <receiver android:name="org.telegram.messenger.ChatsWidgetProvider" android:exported="false">
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/chats_widget_info" />
             <intent-filter>
@@ -461,7 +456,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="false" />
 
-        <receiver android:name="org.telegram.messenger.ContactsWidgetProvider">
+        <receiver android:name="org.telegram.messenger.ContactsWidgetProvider" android:exported="false">
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/contacts_widget_info" />
             <intent-filter>

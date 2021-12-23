@@ -29,14 +29,14 @@ public final class Shop implements Model {
   public static final QueryField TITLE = field("Shop", "title");
   public static final QueryField TYPE = field("Shop", "type");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="Int", isRequired = true) Integer tgId;
+  private final @ModelField(targetType="Int", isRequired = true) Long tgId;
   private final @ModelField(targetType="String", isRequired = true) String title;
   private final @ModelField(targetType="Int", isRequired = true) Integer type;
   public String getId() {
       return id;
   }
   
-  public Integer getTgId() {
+  public Long getTgId() {
       return tgId;
   }
   
@@ -48,7 +48,7 @@ public final class Shop implements Model {
       return type;
   }
   
-  private Shop(String id, Integer tgId, String title, Integer type) {
+  private Shop(String id, Long tgId, String title, Integer type) {
     this.id = id;
     this.tgId = tgId;
     this.title = title;
@@ -131,7 +131,7 @@ public final class Shop implements Model {
       type);
   }
   public interface TgIdStep {
-    TitleStep tgId(Integer tgId);
+    TitleStep tgId(Long tgId);
   }
   
 
@@ -153,7 +153,7 @@ public final class Shop implements Model {
 
   public static class Builder implements TgIdStep, TitleStep, TypeStep, BuildStep {
     private String id;
-    private Integer tgId;
+    private Long tgId;
     private String title;
     private Integer type;
     @Override
@@ -168,7 +168,7 @@ public final class Shop implements Model {
     }
     
     @Override
-     public TitleStep tgId(Integer tgId) {
+     public TitleStep tgId(Long tgId) {
         Objects.requireNonNull(tgId);
         this.tgId = tgId;
         return this;
@@ -211,7 +211,7 @@ public final class Shop implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, Integer tgId, String title, Integer type) {
+    private CopyOfBuilder(String id, Long tgId, String title, Integer type) {
       super.id(id);
       super.tgId(tgId)
         .title(title)
@@ -219,7 +219,7 @@ public final class Shop implements Model {
     }
     
     @Override
-     public CopyOfBuilder tgId(Integer tgId) {
+     public CopyOfBuilder tgId(Long tgId) {
       return (CopyOfBuilder) super.tgId(tgId);
     }
     

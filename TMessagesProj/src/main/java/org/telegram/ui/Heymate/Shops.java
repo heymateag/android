@@ -33,7 +33,7 @@ public class Shops {
                 ArrayList<TLRPC.Dialog> dialogList = new ArrayList<>((shops == null ? 0 : shops.size()) + OLD_SHOP_IDS.size());
 
                 List<String> dialogsToLoad = new ArrayList<>();
-                List<Integer> dialogIdsToLoad = new ArrayList<>();
+                List<Long> dialogIdsToLoad = new ArrayList<>();
 
                 for (long id: OLD_SHOP_IDS) {
                     TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
@@ -42,14 +42,14 @@ public class Shops {
                         dialogList.add(dialog);
                     }
                     else {
-                        dialogIdsToLoad.add((int) id);
+                        dialogIdsToLoad.add(id);
                         // TODO
                     }
                 }
 
                 if (shops != null) {
                     for (Shop shop: shops) {
-                        int id = shop.getTgId();
+                        long id = shop.getTgId();
 
                         TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
 
@@ -80,7 +80,7 @@ public class Shops {
 
                 TLRPC.TL_messages_getPeerDialogs req = new TLRPC.TL_messages_getPeerDialogs();
 
-                for (int id: dialogIdsToLoad) {
+                for (long id: dialogIdsToLoad) {
                     TLRPC.TL_inputDialogPeer peer = new TLRPC.TL_inputDialogPeer();
                     if (id < 0) {
                         peer.peer = new TLRPC.TL_inputPeerChannel();

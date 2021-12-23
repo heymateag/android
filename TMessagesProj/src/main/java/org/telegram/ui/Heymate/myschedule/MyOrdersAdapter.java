@@ -178,7 +178,7 @@ public class MyOrdersAdapter extends MyScheduleAdapter {
     }
 
     @Override
-    public boolean isEnabled(int section, int row) {
+    public boolean isEnabled(RecyclerView.ViewHolder holder, int section, int row) {
         return row != 0;
     }
 
@@ -216,8 +216,8 @@ public class MyOrdersAdapter extends MyScheduleAdapter {
     }
 
     @Override
-    public int getPositionForScrollProgress(float progress) {
-        return 0;
+    public void getPositionForScrollProgress(RecyclerListView listView, float progress, int[] position) {
+
     }
 
     private CharSequence getTitleForDayDifference(int dayDiff) {

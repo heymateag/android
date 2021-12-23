@@ -49,7 +49,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
     private PurchasedPlan mPurchasedPlan = null;
     private Offer mOffer = null;
 
-    private int mUserId = 0;
+    private long mUserId = 0;
 
     private ImageReceiver avatarImage = new ImageReceiver(this);
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -94,7 +94,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
         mPurchasedPlan = purchasedPlan;
 
         try {
-            mUserId = Integer.parseInt(purchasedPlan.getServiceProviderId());
+            mUserId = Long.parseLong(purchasedPlan.getServiceProviderId());
         } catch (Throwable t) {
             mUserId = 0;
         }
@@ -110,7 +110,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
         mOffer = offer;
 
         try {
-            mUserId = Integer.parseInt(offer.getUserId());
+            mUserId = Long.parseLong(offer.getUserId());
         } catch (Throwable t) {
             mUserId = 0;
         }
@@ -209,7 +209,7 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
         if (v == mImageUser || v == mTextName) {
             if (mUserId != 0) {
                 Bundle args = new Bundle();
-                args.putInt("user_id", mUserId);
+                args.putLong("user_id", mUserId);
                 mParent.presentFragment(new ProfileActivity(args));
             }
             return;

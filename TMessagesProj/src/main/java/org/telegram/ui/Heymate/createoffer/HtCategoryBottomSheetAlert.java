@@ -79,7 +79,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
         final ArrayList<HtTextCell>[] subCategories = new ArrayList[]{new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
         final HashMap<String, ArrayList<HtTextCell>> subCategoriesBase = new HashMap<>();
 
-        SearchField categorySearch = new SearchField(context){
+        SearchField categorySearch = new SearchField(context, true, null){
             @Override
             public void onTextChange(String text) {
                 super.onTextChange(text);
@@ -150,7 +150,7 @@ public class HtCategoryBottomSheetAlert extends BottomSheet implements Notificat
         ScrollView subCategoryScroll = new ScrollView(context);
         subCategoryLayout = new LinearLayout(context);
         subCategoryLayout.setOrientation(LinearLayout.VERTICAL);
-        SearchField subCategorySearch = new SearchField(context){
+        SearchField subCategorySearch = new SearchField(context, true, null){
             @Override
             public void onTextChange(String text) {
                 super.onTextChange(text);

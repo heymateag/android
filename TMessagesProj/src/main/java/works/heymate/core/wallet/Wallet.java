@@ -10,6 +10,7 @@ import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.google.android.exoplayer2.util.Log;
 
+import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +21,6 @@ import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.offer.PricingInfo;
 
-import org.telegram.ui.Heymate.log.LogToGroup;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.IOException;
@@ -39,6 +39,7 @@ import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.walletconnect.WalletConnection;
 
 public class Wallet {
 
@@ -88,6 +89,8 @@ public class Wallet {
     private final SharedPreferences mPreferences;
     private final String mPhoneNumber;
 
+    private WalletConnection mConnection = null;
+
     private boolean mCreating = false;
 
     private CeloSDK mCeloSDK = null;
@@ -105,6 +108,14 @@ public class Wallet {
 
     SharedPreferences getPreferences() {
         return mPreferences;
+    }
+
+    public WalletConnection getConnection() {
+        if (mConnection == null) {
+            mConnection = new WalletConnection(this);
+        }
+
+        return mConnection;
     }
 
     public boolean isCreated() {
@@ -443,7 +454,17 @@ public class Wallet {
 
             new Handler(mCeloSDK.getLooper()).post(() -> {
                 try {
-                    StableTokenWrapper contract = amount.getCurrency().equals(Currency.USD) ? contractKit.contracts.getStableToken() : contractKit.contracts.getStableTokenEUR();
+                    StableTokenWrapper contract;
+
+                    if (amount.getCurrency().equals(Currency.USD)) {
+                        contract = contractKit.contracts.getStableToken();
+                        contractKit.setFeeCurrency(CeloContract.StableToken);
+                    }
+                    else {
+                        contract = contractKit.contracts.getStableTokenEUR();
+                        contractKit.setFeeCurrency(CeloContract.StableTokenEUR);
+                    }
+
                     TransactionReceipt receipt = contract.transfer(destination, value).send();
 
                     Utils.runOnUIThread(() -> {
@@ -473,7 +494,7 @@ public class Wallet {
         }
     }
 
-    private CeloAccount getAccount() {
+    public CeloAccount getAccount() {
         if (!isCreated()) {
             throw new IllegalStateException("Wallet does not exist.");
         }

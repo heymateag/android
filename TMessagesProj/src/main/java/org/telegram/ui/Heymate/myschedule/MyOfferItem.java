@@ -66,7 +66,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     private List<Reservation> mReservations = null;
     private Offer mOffer = null;
 
-    private int mUserId = 0;
+    private long mUserId = 0;
 
     private final ImageReceiver avatarImage = new ImageReceiver(this);
     private final AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -124,7 +124,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
         if (reservations != null && reservations.size() == 1) {
             try {
-                mUserId = Integer.parseInt(reservations.get(0).getConsumerId());
+                mUserId = Long.parseLong(reservations.get(0).getConsumerId());
             } catch (Throwable t) {
                 mUserId = 0;
             }
@@ -383,7 +383,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         if (v == mImageUser || v == mTextName) {
             if (mUserId != 0) {
                 Bundle args = new Bundle();
-                args.putInt("user_id", mUserId);
+                args.putLong("user_id", mUserId);
                 mParent.presentFragment(new ProfileActivity(args));
             }
             return;

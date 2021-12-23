@@ -9,6 +9,7 @@
 package org.telegram.ui.Components;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -45,8 +47,10 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,8 +65,8 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -82,6 +86,7 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -123,7 +128,7 @@ public class AlertsCreator {
             TLRPC.InputPeer peer;
             if (request instanceof TLRPC.TL_messages_initHistoryImport) {
                 peer = ((TLRPC.TL_messages_initHistoryImport) request).peer;
-            } else  if (request instanceof TLRPC.TL_messages_startHistoryImport) {
+            } else if (request instanceof TLRPC.TL_messages_startHistoryImport) {
                 peer = ((TLRPC.TL_messages_startHistoryImport) request).peer;
             } else {
                 peer = null;
@@ -484,9 +489,8 @@ public class AlertsCreator {
     }
 
     public static boolean checkSlowMode(Context context, int currentAccount, long did, boolean few) {
-        int lowerId = (int) did;
-        if (lowerId < 0) {
-            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-lowerId);
+        if (DialogObject.isChatDialog(did)) {
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-did);
             if (chat != null && chat.slowmode_enabled && !ChatObject.hasAdminRights(chat)) {
                 if (!few) {
                     TLRPC.ChatFull chatFull = MessagesController.getInstance(currentAccount).getChatFull(chat.id);
@@ -511,6 +515,10 @@ public class AlertsCreator {
     }
 
     public static AlertDialog.Builder createSimpleAlert(Context context, final String title, final String text) {
+        return createSimpleAlert(context, title, text, null);
+    }
+
+    public static AlertDialog.Builder createSimpleAlert(Context context, final String title, final String text, Theme.ResourcesProvider resourcesProvider) {
         if (context == null || text == null) {
             return null;
         }
@@ -526,16 +534,20 @@ public class AlertsCreator {
     }
 
     public static Dialog showSimpleAlert(BaseFragment baseFragment, final String title, final String text) {
+        return showSimpleAlert(baseFragment, title, text, null);
+    }
+
+    public static Dialog showSimpleAlert(BaseFragment baseFragment, final String title, final String text, Theme.ResourcesProvider resourcesProvider) {
         if (text == null || baseFragment == null || baseFragment.getParentActivity() == null) {
             return null;
         }
-        AlertDialog.Builder builder = createSimpleAlert(baseFragment.getParentActivity(), title, text);
+        AlertDialog.Builder builder = createSimpleAlert(baseFragment.getParentActivity(), title, text, resourcesProvider);
         Dialog dialog = builder.create();
         baseFragment.showDialog(dialog);
         return dialog;
     }
 
-    public static void showBlockReportSpamReplyAlert(ChatActivity fragment, MessageObject messageObject, int peerId) {
+    public static void showBlockReportSpamReplyAlert(ChatActivity fragment, MessageObject messageObject, long peerId, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null || messageObject == null) {
             return;
         }
@@ -546,7 +558,7 @@ public class AlertsCreator {
         if (user == null && chat == null) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
 
         builder.setTitle(LocaleController.getString("BlockUser", works.heymate.beta.R.string.BlockUser));
         if (user != null) {
@@ -559,7 +571,7 @@ public class AlertsCreator {
         LinearLayout linearLayout = new LinearLayout(fragment.getParentActivity());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        cells[0] = new CheckBoxCell(fragment.getParentActivity(), 1);
+        cells[0] = new CheckBoxCell(fragment.getParentActivity(), 1, resourcesProvider);
         cells[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
         cells[0].setTag(0);
         cells[0].setText(LocaleController.getString("DeleteReportSpam", works.heymate.beta.R.string.DeleteReportSpam), "", true, false);
@@ -576,9 +588,9 @@ public class AlertsCreator {
 
         builder.setPositiveButton(LocaleController.getString("BlockAndDeleteReplies", works.heymate.beta.R.string.BlockAndDeleteReplies), (dialogInterface, i) -> {
             if (user != null) {
-                accountInstance.getMessagesStorage().deleteUserChatHistory(fragment.getDialogId(), 0, user.id);
+                accountInstance.getMessagesStorage().deleteUserChatHistory(fragment.getDialogId(), user.id);
             } else {
-                accountInstance.getMessagesStorage().deleteUserChatHistory(fragment.getDialogId(), 0, -chat.id);
+                accountInstance.getMessagesStorage().deleteUserChatHistory(fragment.getDialogId(), -chat.id);
             }
             TLRPC.TL_contacts_blockFromReplies request = new TLRPC.TL_contacts_blockFromReplies();
             request.msg_id = messageObject.getId();
@@ -590,7 +602,7 @@ public class AlertsCreator {
                     if (fragment instanceof ChatActivity) {
                         fragment.getUndoView().showWithAction(0, UndoView.ACTION_REPORT_SENT, null);
                     } else if (fragment != null) {
-                        BulletinFactory.of(fragment).createReportSent().show();
+                        BulletinFactory.of(fragment).createReportSent(resourcesProvider).show();
                     } else {
                         Toast.makeText(fragment.getParentActivity(), LocaleController.getString("ReportChatSent", works.heymate.beta.R.string.ReportChatSent), Toast.LENGTH_SHORT).show();
                     }
@@ -611,12 +623,12 @@ public class AlertsCreator {
         }
     }
 
-    public static void showBlockReportSpamAlert(BaseFragment fragment, long dialog_id, TLRPC.User currentUser, TLRPC.Chat currentChat, TLRPC.EncryptedChat encryptedChat, boolean isLocation, TLRPC.ChatFull chatInfo, MessagesStorage.IntCallback callback) {
+    public static void showBlockReportSpamAlert(BaseFragment fragment, long dialog_id, TLRPC.User currentUser, TLRPC.Chat currentChat, TLRPC.EncryptedChat encryptedChat, boolean isLocation, TLRPC.ChatFull chatInfo, MessagesStorage.IntCallback callback, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
         AccountInstance accountInstance = fragment.getAccountInstance();
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
         CharSequence reportText;
         CheckBoxCell[] cells;
         SharedPreferences preferences = MessagesController.getNotificationsSettings(fragment.getCurrentAccount());
@@ -633,7 +645,7 @@ public class AlertsCreator {
                 if (a == 0 && !showReport) {
                     continue;
                 }
-                cells[a] = new CheckBoxCell(fragment.getParentActivity(), 1);
+                cells[a] = new CheckBoxCell(fragment.getParentActivity(), 1, resourcesProvider);
                 cells[a].setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 cells[a].setTag(a);
                 if (a == 0) {
@@ -682,7 +694,7 @@ public class AlertsCreator {
                     if (ChatObject.isNotInChat(currentChat)) {
                         accountInstance.getMessagesController().deleteDialog(dialog_id, 0);
                     } else {
-                        accountInstance.getMessagesController().deleteParticipantFromChat((int) -dialog_id, accountInstance.getMessagesController().getUser(accountInstance.getUserConfig().getClientUserId()), null);
+                        accountInstance.getMessagesController().deleteParticipantFromChat(-dialog_id, accountInstance.getMessagesController().getUser(accountInstance.getUserConfig().getClientUserId()), null);
                     }
                 } else {
                     accountInstance.getMessagesController().deleteDialog(dialog_id, 0);
@@ -858,7 +870,7 @@ public class AlertsCreator {
                     setting = NotificationsController.SETTING_MUTE_HOUR;
                 } else if (i == 2) {
                     setting = NotificationsController.SETTING_MUTE_2_DAYS;
-                } else if (i == 4){
+                } else if (i == 4) {
                     setting = NotificationsController.SETTING_MUTE_FOREVER;
                 }
                 if (setting >= 0) {
@@ -873,7 +885,7 @@ public class AlertsCreator {
         parentFragment.showDialog(builder.create());
     }
 
-    public static AlertDialog showSecretLocationAlert(Context context, int currentAccount, final Runnable onSelectRunnable, boolean inChat) {
+    public static AlertDialog showSecretLocationAlert(Context context, int currentAccount, final Runnable onSelectRunnable, boolean inChat, Theme.ResourcesProvider resourcesProvider) {
         ArrayList<String> arrayList = new ArrayList<>();
         ArrayList<Integer> types = new ArrayList<>();
         int providers = MessagesController.getInstance(currentAccount).availableMapProviders;
@@ -892,14 +904,14 @@ public class AlertsCreator {
         arrayList.add(LocaleController.getString("MapPreviewProviderNobody", works.heymate.beta.R.string.MapPreviewProviderNobody));
         types.add(2);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("MapPreviewProviderTitle", works.heymate.beta.R.string.MapPreviewProviderTitle));
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
+        builder.setTitle(LocaleController.getString("MapPreviewProviderTitle", R.string.MapPreviewProviderTitle));
         final LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         builder.setView(linearLayout);
 
         for (int a = 0; a < arrayList.size(); a++) {
-            RadioColorCell cell = new RadioColorCell(context);
+            RadioColorCell cell = new RadioColorCell(context, resourcesProvider);
             cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
             cell.setTag(a);
             cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
@@ -959,10 +971,14 @@ public class AlertsCreator {
     }
 
     public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean ask) {
-        showOpenUrlAlert(fragment, url, punycode, true, ask);
+        showOpenUrlAlert(fragment, url, punycode, true, ask, null);
     }
 
-    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask) {
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean ask, Theme.ResourcesProvider resourcesProvider) {
+        showOpenUrlAlert(fragment, url, punycode, true, ask, resourcesProvider);
+    }
+
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
@@ -983,9 +999,9 @@ public class AlertsCreator {
             } else {
                 urlFinal = url;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("OpenUrlTitle", works.heymate.beta.R.string.OpenUrlTitle));
-            String format = LocaleController.getString("OpenUrlAlert2", works.heymate.beta.R.string.OpenUrlAlert2);
+            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
+            builder.setTitle(LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle));
+            String format = LocaleController.getString("OpenUrlAlert2", R.string.OpenUrlAlert2);
             int index = format.indexOf("%");
             SpannableStringBuilder stringBuilder = new SpannableStringBuilder(String.format(format, urlFinal));
             if (index >= 0) {
@@ -1039,7 +1055,7 @@ public class AlertsCreator {
     private static void performAskAQuestion(BaseFragment fragment) {
         int currentAccount = fragment.getCurrentAccount();
         final SharedPreferences preferences = MessagesController.getMainSettings(currentAccount);
-        int uid = preferences.getInt("support_id", 0);
+        long uid = AndroidUtilities.getPrefIntOrLong(preferences, "support_id2", 0);
         TLRPC.User supportUser = null;
         if (uid != 0) {
             supportUser = MessagesController.getInstance(currentAccount).getUser(uid);
@@ -1073,7 +1089,7 @@ public class AlertsCreator {
                     final TLRPC.TL_help_support res = (TLRPC.TL_help_support) response;
                     AndroidUtilities.runOnUIThread(() -> {
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("support_id", res.user.id);
+                        editor.putLong("support_id2", res.user.id);
                         SerializedData data = new SerializedData();
                         res.user.serializeToStream(data);
                         editor.putString("support_user", Base64.encodeToString(data.toByteArray(), Base64.DEFAULT));
@@ -1089,7 +1105,7 @@ public class AlertsCreator {
                         MessagesStorage.getInstance(currentAccount).putUsersAndChats(users, null, true, true);
                         MessagesController.getInstance(currentAccount).putUser(res.user, false);
                         Bundle args = new Bundle();
-                        args.putInt("user_id", res.user.id);
+                        args.putLong("user_id", res.user.id);
                         fragment.presentFragment(new ChatActivity(args));
                     });
                 } else {
@@ -1105,7 +1121,7 @@ public class AlertsCreator {
         } else {
             MessagesController.getInstance(currentAccount).putUser(supportUser, true);
             Bundle args = new Bundle();
-            args.putInt("user_id", supportUser.id);
+            args.putLong("user_id", supportUser.id);
             fragment.presentFragment(new ChatActivity(args));
         }
     }
@@ -1118,7 +1134,7 @@ public class AlertsCreator {
 
         Context context = fragment.getParentActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        int selfUserId = UserConfig.getInstance(account).getClientUserId();
+        long selfUserId = UserConfig.getInstance(account).getClientUserId();
 
         TextView messageTextView = new TextView(context);
         messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
@@ -1194,22 +1210,26 @@ public class AlertsCreator {
     }
 
     public static void createClearOrDeleteDialogAlert(BaseFragment fragment, boolean clear, TLRPC.Chat chat, TLRPC.User user, boolean secret, MessagesStorage.BooleanCallback onProcessRunnable) {
-        createClearOrDeleteDialogAlert(fragment, clear, false, false, chat, user, secret, false, onProcessRunnable);
+        createClearOrDeleteDialogAlert(fragment, clear, false, false, chat, user, secret, false, onProcessRunnable, null);
     }
 
     public static void createClearOrDeleteDialogAlert(BaseFragment fragment, boolean clear, TLRPC.Chat chat, TLRPC.User user, boolean secret, boolean checkDeleteForAll, MessagesStorage.BooleanCallback onProcessRunnable) {
-        createClearOrDeleteDialogAlert(fragment, clear, chat != null && chat.creator, false, chat, user, secret, checkDeleteForAll, onProcessRunnable);
+        createClearOrDeleteDialogAlert(fragment, clear, chat != null && chat.creator, false, chat, user, secret, checkDeleteForAll, onProcessRunnable, null);
     }
 
-    public static void createClearOrDeleteDialogAlert(BaseFragment fragment, boolean clear, boolean admin, boolean second, TLRPC.Chat chat, TLRPC.User user, boolean secret, boolean checkDeleteForAll, MessagesStorage.BooleanCallback onProcessRunnable) {
+    public static void createClearOrDeleteDialogAlert(BaseFragment fragment, boolean clear, TLRPC.Chat chat, TLRPC.User user, boolean secret, boolean checkDeleteForAll, MessagesStorage.BooleanCallback onProcessRunnable, Theme.ResourcesProvider resourcesProvider) {
+        createClearOrDeleteDialogAlert(fragment, clear, chat != null && chat.creator, false, chat, user, secret, checkDeleteForAll, onProcessRunnable, resourcesProvider);
+    }
+
+    public static void createClearOrDeleteDialogAlert(BaseFragment fragment, boolean clear, boolean admin, boolean second, TLRPC.Chat chat, TLRPC.User user, boolean secret, boolean checkDeleteForAll, MessagesStorage.BooleanCallback onProcessRunnable, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null || chat == null && user == null) {
             return;
         }
         int account = fragment.getCurrentAccount();
 
         Context context = fragment.getParentActivity();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        int selfUserId = UserConfig.getInstance(account).getClientUserId();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
+        long selfUserId = UserConfig.getInstance(account).getClientUserId();
 
         CheckBoxCell[] cell = new CheckBoxCell[1];
 
@@ -1295,7 +1315,7 @@ public class AlertsCreator {
         boolean deleteChatForAll = false;
 
         if (!second && (secret && !clear || canDeleteInbox) && !UserObject.isDeleted(user) || (deleteChatForAll = checkDeleteForAll && !clear && chat != null && chat.creator)) {
-            cell[0] = new CheckBoxCell(context, 1);
+            cell[0] = new CheckBoxCell(context, 1, resourcesProvider);
             cell[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (deleteChatForAll) {
                 if (ChatObject.isChannel(chat) && !chat.megagroup) {
@@ -1439,12 +1459,12 @@ public class AlertsCreator {
         builder.setPositiveButton(actionText, (dialogInterface, i) -> {
             if (!clearingCache && !second && !secret) {
                 if (UserObject.isUserSelf(user)) {
-                    createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, false, checkDeleteForAll, onProcessRunnable);
+                    createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, false, checkDeleteForAll, onProcessRunnable, resourcesProvider);
                     return;
                 } else if (user != null && deleteForAll[0]) {
                     MessagesStorage.getInstance(fragment.getCurrentAccount()).getMessagesCount(user.id, (count) -> {
                         if (count >= 50) {
-                            createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, false, checkDeleteForAll, onProcessRunnable);
+                            createClearOrDeleteDialogAlert(fragment, clear, admin, true, chat, user, false, checkDeleteForAll, onProcessRunnable, resourcesProvider);
                         } else {
                             if (onProcessRunnable != null) {
                                 onProcessRunnable.run(deleteForAll[0]);
@@ -1525,7 +1545,7 @@ public class AlertsCreator {
         fragment.showDialog(dialog);
     }
 
-    public static void createChangeBioAlert(String currentBio, int peerId, Context context, int currentAccount) {
+    public static void createChangeBioAlert(String currentBio, long peerId, Context context, int currentAccount) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(peerId > 0 ? LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio) : LocaleController.getString("DescriptionPlaceholder", works.heymate.beta.R.string.DescriptionPlaceholder));
         builder.setMessage(peerId > 0 ? LocaleController.getString("VoipGroupBioEditAlertText", works.heymate.beta.R.string.VoipGroupBioEditAlertText) : LocaleController.getString("DescriptionInfo", works.heymate.beta.R.string.DescriptionInfo));
@@ -1573,7 +1593,7 @@ public class AlertsCreator {
         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
         checkTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         dialogView.addView(checkTextView, LayoutHelper.createFrame(20, 20, LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT, 0, 14, 21, 0));
-        editTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(24) : 0,  AndroidUtilities.dp(8), LocaleController.isRTL ? 0 : AndroidUtilities.dp(24), AndroidUtilities.dp(8));
+        editTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(24) : 0, AndroidUtilities.dp(8), LocaleController.isRTL ? 0 : AndroidUtilities.dp(24), AndroidUtilities.dp(8));
         editTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1587,7 +1607,7 @@ public class AlertsCreator {
 
             @Override
             public void afterTextChanged(Editable s) {
-                int count = maxSymbolsCount -  Character.codePointCount(s, 0, s.length());
+                int count = maxSymbolsCount - Character.codePointCount(s, 0, s.length());
                 if (count < 30) {
                     checkTextView.setNumber(count, checkTextView.getVisibility() == View.VISIBLE);
                     AndroidUtilities.updateViewVisibilityAnimated(checkTextView, true);
@@ -1669,10 +1689,10 @@ public class AlertsCreator {
 
     }
 
-    public static void createChangeNameAlert(int peerId, Context context, int currentAccount) {
+    public static void createChangeNameAlert(long peerId, Context context, int currentAccount) {
         String currentName;
         String currentLastName = null;
-        if (peerId > 0) {
+        if (DialogObject.isUserDialog(peerId)) {
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(peerId);
             currentName = user.first_name;
             currentLastName = user.last_name;
@@ -2023,11 +2043,11 @@ public class AlertsCreator {
             int diff = (int) ((time - systemTime) / 1000);
             String t;
             if (diff > 24 * 60 * 60) {
-                t = LocaleController.formatPluralString("DaysSchedule", diff / (24 * 60 * 60));
+                t = LocaleController.formatPluralString("DaysSchedule", Math.round(diff / (24 * 60 * 60.0f)));
             } else if (diff >= 60 * 60) {
-                t = LocaleController.formatPluralString("HoursSchedule", diff / (60 * 60));
+                t = LocaleController.formatPluralString("HoursSchedule", Math.round(diff / (60 * 60.0f)));
             } else if (diff >= 60) {
-                t = LocaleController.formatPluralString("MinutesSchedule", diff / 60);
+                t = LocaleController.formatPluralString("MinutesSchedule", Math.round(diff / 60.0f));
             } else {
                 t = LocaleController.formatPluralString("SecondsSchedule", diff);
             }
@@ -2056,15 +2076,32 @@ public class AlertsCreator {
         public final int subMenuBackgroundColor;
         public final int subMenuSelectorColor;
 
-        public final int buttonTextColor = Theme.getColor(Theme.key_featuredStickers_buttonText);
-        public final int buttonBackgroundColor = Theme.getColor(Theme.key_featuredStickers_addButton);
-        public final int buttonBackgroundPressedColor = Theme.getColor(Theme.key_featuredStickers_addButtonPressed);
+        public final int buttonTextColor;
+        public final int buttonBackgroundColor;
+        public final int buttonBackgroundPressedColor;
 
         private ScheduleDatePickerColors() {
-            this(Theme.getColor(Theme.key_dialogTextBlack), Theme.getColor(Theme.key_dialogBackground), Theme.getColor(Theme.key_sheet_other), Theme.getColor(Theme.key_player_actionBarSelector), Theme.getColor(Theme.key_actionBarDefaultSubmenuItem), Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground), Theme.getColor(Theme.key_listSelector));
+            this(null);
+        }
+
+        private ScheduleDatePickerColors(Theme.ResourcesProvider rp) {
+            this(rp != null ? rp.getColorOrDefault(Theme.key_dialogTextBlack) : Theme.getColor(Theme.key_dialogTextBlack),
+                    rp != null ? rp.getColorOrDefault(Theme.key_dialogBackground) : Theme.getColor(Theme.key_dialogBackground),
+                    rp != null ? rp.getColorOrDefault(Theme.key_sheet_other) : Theme.getColor(Theme.key_sheet_other),
+                    rp != null ? rp.getColorOrDefault(Theme.key_player_actionBarSelector) : Theme.getColor(Theme.key_player_actionBarSelector),
+                    rp != null ? rp.getColorOrDefault(Theme.key_actionBarDefaultSubmenuItem) : Theme.getColor(Theme.key_actionBarDefaultSubmenuItem),
+                    rp != null ? rp.getColorOrDefault(Theme.key_actionBarDefaultSubmenuBackground) : Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground),
+                    rp != null ? rp.getColorOrDefault(Theme.key_listSelector) : Theme.getColor(Theme.key_listSelector),
+                    rp != null ? rp.getColorOrDefault(Theme.key_featuredStickers_buttonText) : Theme.getColor(Theme.key_featuredStickers_buttonText),
+                    rp != null ? rp.getColorOrDefault(Theme.key_featuredStickers_addButton) : Theme.getColor(Theme.key_featuredStickers_addButton),
+                    rp != null ? rp.getColorOrDefault(Theme.key_featuredStickers_addButtonPressed) : Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
         }
 
         public ScheduleDatePickerColors(int textColor, int backgroundColor, int iconColor, int iconSelectorColor, int subMenuTextColor, int subMenuBackgroundColor, int subMenuSelectorColor) {
+            this(textColor, backgroundColor, iconColor, iconSelectorColor, subMenuTextColor, subMenuBackgroundColor, subMenuSelectorColor, Theme.getColor(Theme.key_featuredStickers_buttonText), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
+        }
+
+        public ScheduleDatePickerColors(int textColor, int backgroundColor, int iconColor, int iconSelectorColor, int subMenuTextColor, int subMenuBackgroundColor, int subMenuSelectorColor, int buttonTextColor, int buttonBackgroundColor, int buttonBackgroundPressedColor) {
             this.textColor = textColor;
             this.backgroundColor = backgroundColor;
             this.iconColor = iconColor;
@@ -2072,6 +2109,9 @@ public class AlertsCreator {
             this.subMenuTextColor = subMenuTextColor;
             this.subMenuBackgroundColor = subMenuBackgroundColor;
             this.subMenuSelectorColor = subMenuSelectorColor;
+            this.buttonTextColor = buttonTextColor;
+            this.buttonBackgroundColor = buttonBackgroundColor;
+            this.buttonBackgroundPressedColor = buttonBackgroundPressedColor;
         }
     }
 
@@ -2079,33 +2119,41 @@ public class AlertsCreator {
         return createScheduleDatePickerDialog(context, dialogId, -1, datePickerDelegate, null);
     }
 
-    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, final ScheduleDatePickerDelegate datePickerDelegate, final ScheduleDatePickerColors datePickerColors) {
-        return createScheduleDatePickerDialog(context, dialogId, -1, datePickerDelegate, null, datePickerColors);
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, final ScheduleDatePickerDelegate datePickerDelegate, Theme.ResourcesProvider resourcesProvider) {
+        return createScheduleDatePickerDialog(context, dialogId, -1, datePickerDelegate, null, resourcesProvider);
     }
 
-    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, final ScheduleDatePickerDelegate datePickerDelegate, final Runnable cancelRunnable) {
-        return createScheduleDatePickerDialog(context, dialogId, -1, datePickerDelegate, cancelRunnable);
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, final ScheduleDatePickerDelegate datePickerDelegate, final ScheduleDatePickerColors datePickerColors) {
+        return createScheduleDatePickerDialog(context, dialogId, -1, datePickerDelegate, null, datePickerColors, null);
+    }
+
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, final ScheduleDatePickerDelegate datePickerDelegate, final Runnable cancelRunnable, Theme.ResourcesProvider resourcesProvider) {
+        return createScheduleDatePickerDialog(context, dialogId, -1, datePickerDelegate, cancelRunnable, resourcesProvider);
     }
 
     public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, long currentDate, final ScheduleDatePickerDelegate datePickerDelegate, final Runnable cancelRunnable) {
-        return createScheduleDatePickerDialog(context, dialogId, currentDate, datePickerDelegate, cancelRunnable, new ScheduleDatePickerColors());
+        return createScheduleDatePickerDialog(context, dialogId, currentDate, datePickerDelegate, cancelRunnable, new ScheduleDatePickerColors(), null);
     }
 
-    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, long currentDate, final ScheduleDatePickerDelegate datePickerDelegate, final Runnable cancelRunnable, final ScheduleDatePickerColors datePickerColors) {
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, long currentDate, final ScheduleDatePickerDelegate datePickerDelegate, final Runnable cancelRunnable, Theme.ResourcesProvider resourcesProvider) {
+        return createScheduleDatePickerDialog(context, dialogId, currentDate, datePickerDelegate, cancelRunnable, new ScheduleDatePickerColors(resourcesProvider), resourcesProvider);
+    }
+
+    public static BottomSheet.Builder createScheduleDatePickerDialog(Context context, long dialogId, long currentDate, final ScheduleDatePickerDelegate datePickerDelegate, final Runnable cancelRunnable, final ScheduleDatePickerColors datePickerColors, Theme.ResourcesProvider resourcesProvider) {
         if (context == null) {
             return null;
         }
 
-        int selfUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        long selfUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(context, false);
+        BottomSheet.Builder builder = new BottomSheet.Builder(context, false, resourcesProvider);
         builder.setApplyBottomPadding(false);
 
-        final NumberPicker dayPicker = new NumberPicker(context);
+        final NumberPicker dayPicker = new NumberPicker(context, resourcesProvider);
         dayPicker.setTextColor(datePickerColors.textColor);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
         dayPicker.setItemCount(5);
-        final NumberPicker hourPicker = new NumberPicker(context) {
+        final NumberPicker hourPicker = new NumberPicker(context, resourcesProvider) {
             @Override
             protected CharSequence getContentDescription(int value) {
                 return LocaleController.formatPluralString("Hours", value);
@@ -2114,7 +2162,7 @@ public class AlertsCreator {
         hourPicker.setItemCount(5);
         hourPicker.setTextColor(datePickerColors.textColor);
         hourPicker.setTextOffset(-AndroidUtilities.dp(10));
-        final NumberPicker minutePicker = new NumberPicker(context) {
+        final NumberPicker minutePicker = new NumberPicker(context, resourcesProvider) {
             @Override
             protected CharSequence getContentDescription(int value) {
                 return LocaleController.formatPluralString("Minutes", value);
@@ -2172,15 +2220,15 @@ public class AlertsCreator {
         titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
         titleView.setOnTouchListener((v, event) -> true);
 
-        if ((int) dialogId > 0 && dialogId != selfUserId) {
-            TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser((int) dialogId);
+        if (DialogObject.isUserDialog(dialogId) && dialogId != selfUserId) {
+            TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);
             if (user != null && !user.bot && user.status != null && user.status.expires > 0) {
                 String name = UserObject.getFirstName(user);
                 if (name.length() > 10) {
                     name = name.substring(0, 10) + "\u2026";
                 }
 
-                ActionBarMenuItem optionsButton = new ActionBarMenuItem(context, null, 0, datePickerColors.iconColor);
+                ActionBarMenuItem optionsButton = new ActionBarMenuItem(context, null, 0, datePickerColors.iconColor, false, resourcesProvider);
                 optionsButton.setLongClickEnabled(false);
                 optionsButton.setSubMenuOpenSide(2);
                 optionsButton.setIcon(works.heymate.beta.R.drawable.ic_ab_other);
@@ -2545,21 +2593,21 @@ public class AlertsCreator {
         }
     }
 
-    public static BottomSheet.Builder createCalendarPickerDialog(Context context, long minDate, final MessagesStorage.IntCallback callback) {
+    public static BottomSheet.Builder createCalendarPickerDialog(Context context, long minDate, final MessagesStorage.IntCallback callback, Theme.ResourcesProvider resourcesProvider) {
         if (context == null) {
             return null;
         }
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(context, false);
+        BottomSheet.Builder builder = new BottomSheet.Builder(context, false, resourcesProvider);
         builder.setApplyBottomPadding(false);
 
-        final NumberPicker dayPicker = new NumberPicker(context);
+        final NumberPicker dayPicker = new NumberPicker(context, resourcesProvider);
         dayPicker.setTextOffset(AndroidUtilities.dp(10));
         dayPicker.setItemCount(5);
-        final NumberPicker monthPicker = new NumberPicker(context);
+        final NumberPicker monthPicker = new NumberPicker(context, resourcesProvider);
         monthPicker.setItemCount(5);
         monthPicker.setTextOffset(-AndroidUtilities.dp(10));
-        final NumberPicker yearPicker = new NumberPicker(context);
+        final NumberPicker yearPicker = new NumberPicker(context, resourcesProvider);
         yearPicker.setItemCount(5);
         yearPicker.setTextOffset(-AndroidUtilities.dp(24));
 
@@ -2600,8 +2648,8 @@ public class AlertsCreator {
         container.addView(titleLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 22, 0, 0, 4));
 
         TextView titleView = new TextView(context);
-        titleView.setText(LocaleController.getString("ChooseDate", works.heymate.beta.R.string.ChooseDate));
-        titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        titleView.setText(LocaleController.getString("ChooseDate", R.string.ChooseDate));
+        titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack, resourcesProvider));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         titleLayout.addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 12, 0, 0));
@@ -2704,11 +2752,11 @@ public class AlertsCreator {
 
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         buttonTextView.setGravity(Gravity.CENTER);
-        buttonTextView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
+        buttonTextView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText, resourcesProvider));
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        buttonTextView.setText(LocaleController.getString("JumpToDate", works.heymate.beta.R.string.JumpToDate));
-        buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
+        buttonTextView.setText(LocaleController.getString("JumpToDate", R.string.JumpToDate));
+        buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton, resourcesProvider), Theme.getColor(Theme.key_featuredStickers_addButtonPressed, resourcesProvider)));
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
         buttonTextView.setOnClickListener(v -> {
             checkCalendarDate(minDate, dayPicker, monthPicker, yearPicker);
@@ -2726,13 +2774,13 @@ public class AlertsCreator {
         return builder;
     }
 
-    public static BottomSheet createMuteAlert(BaseFragment fragment, final long dialog_id) {
+    public static BottomSheet createMuteAlert(BaseFragment fragment, final long dialog_id, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return null;
         }
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("Notifications", works.heymate.beta.R.string.Notifications), true);
+        BottomSheet.Builder builder = new BottomSheet.Builder(fragment.getParentActivity(), false, resourcesProvider);
+        builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications), true);
         CharSequence[] items = new CharSequence[]{
                 LocaleController.formatString("MuteFor", works.heymate.beta.R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
                 LocaleController.formatString("MuteFor", works.heymate.beta.R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
@@ -2752,7 +2800,7 @@ public class AlertsCreator {
                     }
                     NotificationsController.getInstance(UserConfig.selectedAccount).setDialogNotificationsSettings(dialog_id, setting);
                     if (BulletinFactory.canShowBulletin(fragment)) {
-                        BulletinFactory.createMuteBulletin(fragment, setting).show();
+                        BulletinFactory.createMuteBulletin(fragment, setting, resourcesProvider).show();
                     }
                 }
         );
@@ -2783,12 +2831,16 @@ public class AlertsCreator {
     }
 
     public static void createReportAlert(final Context context, final long dialog_id, final int messageId, final BaseFragment parentFragment) {
+        createReportAlert(context, dialog_id, messageId, parentFragment, null);
+    }
+
+    public static void createReportAlert(final Context context, final long dialog_id, final int messageId, final BaseFragment parentFragment, Theme.ResourcesProvider resourcesProvider) {
         if (context == null || parentFragment == null) {
             return;
         }
 
-        BottomSheet.Builder builder = new BottomSheet.Builder(context);
-        builder.setTitle(LocaleController.getString("ReportChat", works.heymate.beta.R.string.ReportChat), true);
+        BottomSheet.Builder builder = new BottomSheet.Builder(context, true, resourcesProvider);
+        builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat), true);
         CharSequence[] items;
         int[] icons;
         if (messageId != 0) {
@@ -2848,7 +2900,7 @@ public class AlertsCreator {
                         if (messageId != 0) {
                             ids.add(messageId);
                         }
-                        TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) dialog_id);
+                        TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(dialog_id);
                         sendReport(peer, type, message, ids);
                         if (parentFragment instanceof ChatActivity) {
                             ((ChatActivity) parentFragment).getUndoView().showWithAction(0, UndoView.ACTION_REPORT_SENT, null);
@@ -2858,7 +2910,7 @@ public class AlertsCreator {
                 return;
             }
             TLObject req;
-            TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer((int) dialog_id);
+            TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(dialog_id);
             if (messageId != 0) {
                 TLRPC.TL_messages_report request = new TLRPC.TL_messages_report();
                 request.peer = peer;
@@ -2897,7 +2949,7 @@ public class AlertsCreator {
             if (parentFragment instanceof ChatActivity) {
                 ((ChatActivity) parentFragment).getUndoView().showWithAction(0, UndoView.ACTION_REPORT_SENT, null);
             } else {
-                BulletinFactory.of(parentFragment).createReportSent().show();
+                BulletinFactory.of(parentFragment).createReportSent(resourcesProvider).show();
             }
         });
         BottomSheet sheet = builder.create();
@@ -2934,12 +2986,12 @@ public class AlertsCreator {
         fragment.showDialog(builder.create(), true, null);
     }
 
-    public static void showSendMediaAlert(int result, final BaseFragment fragment) {
+    public static void showSendMediaAlert(int result, final BaseFragment fragment, Theme.ResourcesProvider resourcesProvider) {
         if (result == 0) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         if (result == 1) {
             builder.setMessage(LocaleController.getString("ErrorSendRestrictedStickers", works.heymate.beta.R.string.ErrorSendRestrictedStickers));
         } else if (result == 2) {
@@ -3073,7 +3125,7 @@ public class AlertsCreator {
             if (preferences.contains("color_" + dialog_id)) {
                 currentColor = preferences.getInt("color_" + dialog_id, 0xff0000ff);
             } else {
-                if ((int) dialog_id < 0) {
+                if (DialogObject.isChatDialog(dialog_id)) {
                     currentColor = preferences.getInt("GroupLed", 0xff0000ff);
                 } else {
                     currentColor = preferences.getInt("MessagesLed", 0xff0000ff);
@@ -3274,7 +3326,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    public static Dialog createLocationUpdateDialog(final Activity parentActivity, TLRPC.User user, final MessagesStorage.IntCallback callback) {
+    public static Dialog createLocationUpdateDialog(final Activity parentActivity, TLRPC.User user, final MessagesStorage.IntCallback callback, Theme.ResourcesProvider resourcesProvider) {
         final int[] selected = new int[1];
 
         String[] descriptions = new String[]{
@@ -3292,16 +3344,19 @@ public class AlertsCreator {
         } else {
             titleTextView.setText(LocaleController.getString("LiveLocationAlertGroup", works.heymate.beta.R.string.LiveLocationAlertGroup));
         }
-        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+        int textColor = resourcesProvider != null ? resourcesProvider.getColorOrDefault(Theme.key_dialogTextBlack) : Theme.getColor(Theme.key_dialogTextBlack);
+        titleTextView.setTextColor(textColor);
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         titleTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         linearLayout.addView(titleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, 8));
 
         for (int a = 0; a < descriptions.length; a++) {
-            RadioColorCell cell = new RadioColorCell(parentActivity);
+            RadioColorCell cell = new RadioColorCell(parentActivity, resourcesProvider);
             cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
             cell.setTag(a);
-            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
+            int color1 = resourcesProvider != null ? resourcesProvider.getColorOrDefault(Theme.key_radioBackground) : Theme.getColor(Theme.key_radioBackground);
+            int color2 = resourcesProvider != null ? resourcesProvider.getColorOrDefault(Theme.key_dialogRadioBackgroundChecked) : Theme.getColor(Theme.key_dialogRadioBackgroundChecked);
+            cell.setCheckColor(color1, color2);
             cell.setTextAndValue(descriptions[a], selected[0] == a);
             linearLayout.addView(cell);
             cell.setOnClickListener(v -> {
@@ -3316,8 +3371,9 @@ public class AlertsCreator {
                 }
             });
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-        builder.setTopImage(new ShareLocationDrawable(parentActivity, 0), Theme.getColor(Theme.key_dialogTopBackground));
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity, resourcesProvider);
+        int topImageColor = resourcesProvider != null ? resourcesProvider.getColorOrDefault(Theme.key_dialogTopBackground) : Theme.getColor(Theme.key_dialogTopBackground);
+        builder.setTopImage(new ShareLocationDrawable(parentActivity, 0), topImageColor);
         builder.setView(linearLayout);
         builder.setPositiveButton(LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile), (dialog, which) -> {
             int time;
@@ -3335,13 +3391,13 @@ public class AlertsCreator {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public static AlertDialog.Builder createBackgroundLocationPermissionDialog(Activity activity, TLRPC.User selfUser, Runnable cancelRunnable) {
+    public static AlertDialog.Builder createBackgroundLocationPermissionDialog(Activity activity, TLRPC.User selfUser, Runnable cancelRunnable, Theme.ResourcesProvider resourcesProvider) {
         if (activity == null || Build.VERSION.SDK_INT < 29) {
             return null;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        String svg = RLottieDrawable.readRes(null, Theme.getCurrentTheme().isDark() ? works.heymate.beta.R.raw.permission_map_dark : works.heymate.beta.R.raw.permission_map);
-        String pinSvg = RLottieDrawable.readRes(null, Theme.getCurrentTheme().isDark() ? works.heymate.beta.R.raw.permission_pin_dark : works.heymate.beta.R.raw.permission_pin);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, resourcesProvider);
+        String svg = RLottieDrawable.readRes(null, Theme.getCurrentTheme().isDark() ? R.raw.permission_map_dark : R.raw.permission_map);
+        String pinSvg = RLottieDrawable.readRes(null, Theme.getCurrentTheme().isDark() ? R.raw.permission_pin_dark : R.raw.permission_pin);
         FrameLayout frameLayout = new FrameLayout(activity);
         frameLayout.setClipToOutline(true);
         frameLayout.setOutlineProvider(new ViewOutlineProvider() {
@@ -3430,7 +3486,11 @@ public class AlertsCreator {
         builder.setPositiveButton(LocaleController.getString("Enable", works.heymate.beta.R.string.Enable), (dialogInterface, i) -> {
             if (activity != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    activity.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())));
+                    try {
+                        activity.startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
                 }
             }
         });
@@ -3470,7 +3530,7 @@ public class AlertsCreator {
         background.setBackground(new BitmapDrawable(SvgHelper.getBitmap(svg, AndroidUtilities.dp(320), AndroidUtilities.dp(320 * aspectRatio), false)));
         frameLayout.addView(background, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, -1, -1, -1, -1));
 
-        frameLayout.addView(button, LayoutHelper.createFrame(117,117));
+        frameLayout.addView(button, LayoutHelper.createFrame(117, 117));
 
         builder.setTopView(frameLayout);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCallTitle", works.heymate.beta.R.string.PermissionDrawAboveOtherAppsGroupCallTitle));
@@ -3767,9 +3827,9 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    public static AlertDialog.Builder createTTLAlert(final Context context, final TLRPC.EncryptedChat encryptedChat) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("MessageLifetime", works.heymate.beta.R.string.MessageLifetime));
+    public static AlertDialog.Builder createTTLAlert(final Context context, final TLRPC.EncryptedChat encryptedChat, Theme.ResourcesProvider resourcesProvider) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
+        builder.setTitle(LocaleController.getString("MessageLifetime", R.string.MessageLifetime));
         final NumberPicker numberPicker = new NumberPicker(context);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(20);
@@ -3911,7 +3971,7 @@ public class AlertsCreator {
         void didPressedNewCard();
     }
 
-    public static void createDeleteMessagesAlert(BaseFragment fragment, TLRPC.User user, TLRPC.Chat chat, TLRPC.EncryptedChat encryptedChat, TLRPC.ChatFull chatInfo, long mergeDialogId, MessageObject selectedMessage, SparseArray<MessageObject>[] selectedMessages, MessageObject.GroupedMessages selectedGroup, boolean scheduled, int loadParticipant, Runnable onDelete) {
+    public static void createDeleteMessagesAlert(BaseFragment fragment, TLRPC.User user, TLRPC.Chat chat, TLRPC.EncryptedChat encryptedChat, TLRPC.ChatFull chatInfo, long mergeDialogId, MessageObject selectedMessage, SparseArray<MessageObject>[] selectedMessages, MessageObject.GroupedMessages selectedGroup, boolean scheduled, int loadParticipant, Runnable onDelete, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || user == null && chat == null && encryptedChat == null) {
             return;
         }
@@ -3921,7 +3981,7 @@ public class AlertsCreator {
         }
         int currentAccount = fragment.getCurrentAccount();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, resourcesProvider);
         int count;
         if (selectedGroup != null) {
             count = selectedGroup.messages.size();
@@ -3933,7 +3993,7 @@ public class AlertsCreator {
 
         long dialogId;
         if (encryptedChat != null) {
-            dialogId = ((long) encryptedChat.id) << 32;
+            dialogId = DialogObject.makeEncryptedDialogId(encryptedChat.id);
         } else if (user != null) {
             dialogId = user.id;
         } else {
@@ -3984,9 +4044,9 @@ public class AlertsCreator {
                     myMessagesCount++;
                 }
             } else {
-                int from_id = -1;
+                long from_id = -1;
                 for (int a = 1; a >= 0; a--) {
-                    int channelId = 0;
+                    long channelId = 0;
                     for (int b = 0; b < selectedMessages[a].size(); b++) {
                         MessageObject msg = selectedMessages[a].valueAt(b);
                         if (from_id == -1) {
@@ -4040,7 +4100,7 @@ public class AlertsCreator {
                         } else if (error != null && "USER_NOT_PARTICIPANT".equals(error.text)) {
                             loadType = 0;
                         }
-                        createDeleteMessagesAlert(fragment, user, chat, encryptedChat, chatInfo, mergeDialogId, selectedMessage, selectedMessages, selectedGroup, scheduled, loadType, onDelete);
+                        createDeleteMessagesAlert(fragment, user, chat, encryptedChat, chatInfo, mergeDialogId, selectedMessage, selectedMessages, selectedGroup, scheduled, loadType, onDelete, resourcesProvider);
                     }));
                     AndroidUtilities.runOnUIThread(() -> {
                         if (progressDialog[0] == null) {
@@ -4057,7 +4117,7 @@ public class AlertsCreator {
                     if ((loadParticipant == 2 || !canBan) && a == 0) {
                         continue;
                     }
-                    CheckBoxCell cell = new CheckBoxCell(activity, 1);
+                    CheckBoxCell cell = new CheckBoxCell(activity, 1, resourcesProvider);
                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     cell.setTag(a);
                     if (a == 0) {
@@ -4084,7 +4144,7 @@ public class AlertsCreator {
             } else if (!hasNotOut && myMessagesCount > 0 && hasNonDiceMessages) {
                 hasDeleteForAllCheck = true;
                 FrameLayout frameLayout = new FrameLayout(activity);
-                CheckBoxCell cell = new CheckBoxCell(activity, 1);
+                CheckBoxCell cell = new CheckBoxCell(activity, 1, resourcesProvider);
                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 if (chat != null && hasNotOut) {
                     cell.setText(LocaleController.getString("DeleteForAll", works.heymate.beta.R.string.DeleteForAll), "", false, false);
@@ -4111,7 +4171,8 @@ public class AlertsCreator {
                                     selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionEmpty ||
                                     selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionPhoneCall ||
                                     selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionPinMessage ||
-                                    selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionGeoProximityReached) && (selectedMessage.isOut() || canRevokeInbox || ChatObject.hasAdminRights(chat)) && (currentDate - selectedMessage.messageOwner.date) <= revokeTimeLimit;
+                                    selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionGeoProximityReached ||
+                                    selectedMessage.messageOwner.action instanceof TLRPC.TL_messageActionSetChatTheme) && (selectedMessage.isOut() || canRevokeInbox || ChatObject.hasAdminRights(chat)) && (currentDate - selectedMessage.messageOwner.date) <= revokeTimeLimit;
                     if (hasOutgoing) {
                         myMessagesCount++;
                     }
@@ -4142,7 +4203,7 @@ public class AlertsCreator {
             if (myMessagesCount > 0 && hasNonDiceMessages && (user == null || !UserObject.isDeleted(user))) {
                 hasDeleteForAllCheck = true;
                 FrameLayout frameLayout = new FrameLayout(activity);
-                CheckBoxCell cell = new CheckBoxCell(activity, 1);
+                CheckBoxCell cell = new CheckBoxCell(activity, 1, resourcesProvider);
                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 if (canDeleteInbox) {
                     cell.setText(LocaleController.formatString("DeleteMessagesOptionAlso", works.heymate.beta.R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", false, false);
@@ -4186,7 +4247,7 @@ public class AlertsCreator {
                         random_ids.add(selectedMessage.messageOwner.random_id);
                     }
                 }
-                MessagesController.getInstance(currentAccount).deleteMessages(ids, random_ids, encryptedChat, dialogId, selectedMessage.messageOwner.peer_id.channel_id, deleteForAll[0], scheduled);
+                MessagesController.getInstance(currentAccount).deleteMessages(ids, random_ids, encryptedChat, dialogId, deleteForAll[0], scheduled);
             } else {
                 for (int a = 1; a >= 0; a--) {
                     ids = new ArrayList<>();
@@ -4194,7 +4255,7 @@ public class AlertsCreator {
                         ids.add(selectedMessages[a].keyAt(b));
                     }
                     ArrayList<Long> random_ids = null;
-                    int channelId = 0;
+                    long channelId = 0;
                     if (!ids.isEmpty()) {
                         MessageObject msg = selectedMessages[a].get(ids.get(0));
                         if (msg.messageOwner.peer_id.channel_id != 0) {
@@ -4210,7 +4271,7 @@ public class AlertsCreator {
                             }
                         }
                     }
-                    MessagesController.getInstance(currentAccount).deleteMessages(ids, random_ids, encryptedChat, dialogId, channelId, deleteForAll[0], scheduled);
+                    MessagesController.getInstance(currentAccount).deleteMessages(ids, random_ids, encryptedChat, dialogId, deleteForAll[0], scheduled);
                     selectedMessages[a].clear();
                 }
             }
@@ -4725,5 +4786,52 @@ public class AlertsCreator {
             result = minKey + " " + subjectives.get(Utilities.random.nextInt(subjectives.size()));
         }
         return result;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public static ActionBarPopupWindow showPopupMenu(ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout, View anchorView, int offsetX, int offsetY) {
+        Rect rect = new Rect();
+        ActionBarPopupWindow popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
+        if (Build.VERSION.SDK_INT >= 19) {
+            popupWindow.setAnimationStyle(0);
+        } else {
+            popupWindow.setAnimationStyle(R.style.PopupAnimation);
+        }
+
+        popupWindow.setAnimationEnabled(true);
+
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setClippingEnabled(true);
+
+        popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        popupWindow.setFocusable(true);
+        popupLayout.setFocusableInTouchMode(true);
+        popupLayout.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_MENU && event.getRepeatCount() == 0 && event.getAction() == KeyEvent.ACTION_UP && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+                return true;
+            }
+            return false;
+        });
+
+        popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x - AndroidUtilities.dp(40), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, View.MeasureSpec.AT_MOST));
+        popupWindow.showAsDropDown(anchorView, offsetX, offsetY);
+
+        popupLayout.updateRadialSelectors();
+        popupWindow.startAnimation();
+
+        popupLayout.setOnTouchListener((v, event) -> {
+            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    v.getHitRect(rect);
+                    if (!rect.contains((int) event.getX(), (int) event.getY())) {
+                        popupWindow.dismiss();
+                    }
+                }
+            }
+            return false;
+        });
+        return popupWindow;
     }
 }
