@@ -69,7 +69,7 @@ public class HeymateRouter {
 
             if (session != null) {
                 Wallet.get(activity, TG2HM.getCurrentPhoneNumber()).getConnection().connect(session);
-                return true;
+                return false;
             }
 
             if ("celo".equalsIgnoreCase(uri.getScheme())) {

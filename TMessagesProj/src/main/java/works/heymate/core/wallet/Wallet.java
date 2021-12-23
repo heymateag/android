@@ -10,6 +10,7 @@ import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.amplifyframework.datastore.generated.model.Reservation;
 import com.google.android.exoplayer2.util.Log;
 
+import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -453,7 +454,17 @@ public class Wallet {
 
             new Handler(mCeloSDK.getLooper()).post(() -> {
                 try {
-                    StableTokenWrapper contract = amount.getCurrency().equals(Currency.USD) ? contractKit.contracts.getStableToken() : contractKit.contracts.getStableTokenEUR();
+                    StableTokenWrapper contract;
+
+                    if (amount.getCurrency().equals(Currency.USD)) {
+                        contract = contractKit.contracts.getStableToken();
+                        contractKit.setFeeCurrency(CeloContract.StableToken);
+                    }
+                    else {
+                        contract = contractKit.contracts.getStableTokenEUR();
+                        contractKit.setFeeCurrency(CeloContract.StableTokenEUR);
+                    }
+
                     TransactionReceipt receipt = contract.transfer(destination, value).send();
 
                     Utils.runOnUIThread(() -> {

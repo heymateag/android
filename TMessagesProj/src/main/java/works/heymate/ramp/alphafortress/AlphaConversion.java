@@ -39,7 +39,7 @@ public class AlphaConversion {
                     try {
                         float rate = (float) result.arrayResponse.getJSONObject(0).getDouble("rate");
 
-                        callback.onAPICallResult(true, rate / 100f, null);
+                        callback.onAPICallResult(true, rate, null);
                     } catch (JSONException e) {
                         callback.onAPICallResult(false, -1F, e);
                     }

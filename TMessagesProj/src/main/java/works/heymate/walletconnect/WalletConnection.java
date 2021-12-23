@@ -17,10 +17,14 @@ import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.TG2HM;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Sign;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -108,9 +112,13 @@ public class WalletConnection extends WCClient {
                         .setMessage("Sign a transaction for the connected DAPP?")
                         .setPositiveButton("Accept", (dialogInterface, i) -> mWallet.getContractKit((success, contractKit, errorCause) -> {
                             if (success) {
-                                CeloRawTransaction transaction = wcTransactionToCeloTransaction(contractKit, wcEthereumTransaction);
-                                String signature = contractKit.transactionManager.sign(transaction);
-                                approveRequest(requestId, signature);
+                                try {
+                                    CeloRawTransaction transaction = wcTransactionToCeloTransaction(contractKit, wcEthereumTransaction);
+                                    String signature = contractKit.transactionManager.sign(transaction);
+                                    approveRequest(requestId, signature);
+                                } catch (IOException e) {
+                                    rejectRequest(requestId, "Failed to sign the transaction: " + e.getMessage());
+                                }
                             }
                             else {
                                 rejectRequest(requestId, "Blockchain network error.");
@@ -133,13 +141,13 @@ public class WalletConnection extends WCClient {
                 }
 
                 new AlertDialog.Builder(activity)
-                        .setTitle("Sign a transaction")
+                        .setTitle("Send a transaction")
                         .setMessage("Send a transaction for the connected DAPP?")
                         .setPositiveButton("Accept", (dialogInterface, i) -> mWallet.getContractKit((success, contractKit, errorCause) -> {
                             if (success) {
-                                CeloRawTransaction transaction = wcTransactionToCeloTransaction(contractKit, wcEthereumTransaction);
-
                                 try {
+                                    CeloRawTransaction transaction = wcTransactionToCeloTransaction(contractKit, wcEthereumTransaction);
+
                                     EthSendTransaction result = contractKit.transactionManager.signAndSend(transaction);
 
                                     if (result.hasError()) {
@@ -185,18 +193,23 @@ public class WalletConnection extends WCClient {
         return Numeric.toHexString(signatureData.getR()) + Numeric.toHexStringNoPrefix(signatureData.getS()) + Numeric.toHexStringNoPrefix(signatureData.getV());
     }
 
-    private CeloRawTransaction wcTransactionToCeloTransaction(ContractKit contractKit, WCEthereumTransaction wcEthereumTransaction) {
+    private CeloRawTransaction wcTransactionToCeloTransaction(ContractKit contractKit, WCEthereumTransaction wcEthereumTransaction) throws IOException {
         return new CeloRawTransaction(
-                Numeric.toBigInt(wcEthereumTransaction.getNonce()),
-                Numeric.toBigInt(wcEthereumTransaction.getGasPrice()),
-                Numeric.toBigInt(wcEthereumTransaction.getGasLimit()),
+                wcEthereumTransaction.getNonce() == null ? getNonce(contractKit) : Numeric.toBigInt(wcEthereumTransaction.getNonce()),
+                wcEthereumTransaction.getGasPrice() == null ? DefaultGasProvider.GAS_PRICE : Numeric.toBigInt(wcEthereumTransaction.getGasPrice()),
+                wcEthereumTransaction.getGasLimit() == null ? DefaultGasProvider.GAS_LIMIT : Numeric.toBigInt(wcEthereumTransaction.getGasLimit()),
                 wcEthereumTransaction.getTo(),
-                Numeric.toBigInt(wcEthereumTransaction.getValue()),
+                wcEthereumTransaction.getValue() == null ? null : Numeric.toBigInt(wcEthereumTransaction.getValue()),
                 wcEthereumTransaction.getData(),
                 getGasCurrency(contractKit),
                 null,
                 null
         );
+    }
+
+    private BigInteger getNonce(ContractKit contractKit) throws IOException {
+        EthGetTransactionCount ethGetTransactionCount = (EthGetTransactionCount)contractKit.web3j.ethGetTransactionCount(contractKit.getAddress(), DefaultBlockParameterName.PENDING).send();
+        return ethGetTransactionCount.getTransactionCount();
     }
 
     public void connect(WCSession session) {

@@ -104,6 +104,11 @@ public class EasterActivity extends BaseFragment {
         content.addView(buttonTransfer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 12, 0, 0, 0));
 
         buttonTransfer.setOnClickListener(v -> {
+            if (!wallet.isCreated()) {
+                Toast.makeText(getParentActivity(), "Wallet not created", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             try {
                 long amount = Long.parseLong(editAmount.getText().toString());
                 String destination = editDestination.getText().toString();

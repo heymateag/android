@@ -335,7 +335,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2462 * 72 // HeymateConfig
+    defaultConfig.versionCode = 2462 * 75 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -354,7 +354,7 @@ android {
     defaultConfig {
         minSdkVersion 21 // 21 Only for Zoom SDK
         targetSdkVersion 30
-        versionName "8.2.1"
+        versionName "8.2.1 - 75"
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 

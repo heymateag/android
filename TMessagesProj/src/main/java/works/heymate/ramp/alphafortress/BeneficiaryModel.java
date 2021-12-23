@@ -52,7 +52,7 @@ public class BeneficiaryModel {
                     else {
                         callback.onAPICallResult(false, null, result.exception);
                     }
-                }, MODEL_URL + currency.name(), null, "Authorization", "Bearer " + token);
+                }, MODEL_URL + currency.name(), null);
             }
             else {
                 callback.onAPICallResult(false, null, exception);
