@@ -321,11 +321,15 @@ public class WalletActivity extends BaseFragment {
 
     private void addFieldView(BeneficiaryModel.Field field, ViewGroup parent) {
         TextView title = new TextView(parent.getContext());
+        title.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         title.setText(field.title);
         title.setPadding(0, AndroidUtilities.dp(4), 0, 0);
         parent.addView(title, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         EditText input = new EditText(parent.getContext());
+        input.setBackground(Theme.createEditTextDrawable(parent.getContext(), false));
+        input.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        input.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         input.setHint(field.placeholder);
         input.setText(field.value);
 
