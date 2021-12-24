@@ -102,7 +102,18 @@ public class SimpleNetworkCall {
 
         StringBuilder sb = new StringBuilder();
 
-        while (scanner.hasNext()) sb.append(scanner.next());
+        boolean first = true;
+
+        while (scanner.hasNext()) {
+            if (first) {
+                first = false;
+            }
+            else {
+                sb.append(" ");
+            }
+
+            sb.append(scanner.next());
+        }
 
         return sb.toString();
     }
