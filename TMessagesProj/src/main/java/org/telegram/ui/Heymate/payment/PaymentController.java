@@ -3,6 +3,7 @@ package org.telegram.ui.Heymate.payment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
@@ -19,11 +20,13 @@ import org.json.JSONException;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.Constants;
+import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.TimeSlotSelectionActivity;
+import org.telegram.ui.Heymate.myschedule.MyScheduleActivity;
 import org.telegram.ui.LaunchActivity;
 
 import java.util.Date;
@@ -245,12 +248,11 @@ public class PaymentController {
                         }
 
                         Toast.makeText(mContext, "Offer purchase successful", Toast.LENGTH_LONG).show();
-//                        new AlertDialog.Builder(ActivityMonitor.get().getCurrentActivity()) // TODO Text resource
-//                                .setTitle("Offer accepted")
-//                                .setMessage("You can check the state of your offer in My Schedule.")
-//                                .setCancelable(false)
-//                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-//                                .show();
+
+                        if (ActivityMonitor.get().getCurrentActivity() != null) {
+                            Intent intent = HeymateRouter.createIntent(mContext, MyScheduleActivity.HOST, MyScheduleActivity.createBundle(MyScheduleActivity.MY_ORDERS));
+                            ActivityMonitor.get().getCurrentActivity().startActivity(intent);
+                        }
                     }
                     else {
                         Log.e(TAG, "Failed to book time slot on the back-end.", exception);
