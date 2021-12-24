@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.Constants;
@@ -38,6 +39,7 @@ import works.heymate.celo.CeloSDK;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.Texts;
+import works.heymate.core.offer.PricingInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
 import works.heymate.core.wallet.Wallet;
 
@@ -100,23 +102,52 @@ public class PaymentController {
             purchaseTimeSlot(offerId, null, referralId);
         }
         else {
-            getOffer(offerId, offer -> getBalance((wallet, usdBalance, eurBalance) -> {
-                Money price = PurchasePlanTypes.getPurchasedPlanPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
-                Money balance = getBalance(usdBalance, eurBalance, price.getCurrency());
-                
-                if (balance.compareTo(price) >= 0) {
-                    getReferral(referralId, referral -> initPlanPurchasePayment(offer, purchasedPlanType, referral, wallet));
-                }
-                else {
-                    mPreferences.edit()
-                            .putString(Constants.OFFER_ID, offerId)
-                            .putString(Constants.PURCHASED_PLAN_TYPE, purchasedPlanType)
-                            .putString(Constants.REFERRAL_ID, referralId)
-                            .apply();
+            getOffer(offerId, offer -> getPurchasedPlan(offerId, purchasedPlanType, purchasedPlan -> {
+                    if (purchasedPlan != null) {
+                        if (PurchasePlanTypes.SUBSCRIPTION.equals(purchasedPlan.getPlanType())) {
+                            // TODO Must be checked with the latest subscription of the user not the first one in the server return order.
+                            if (System.currentTimeMillis() - purchasedPlan.getPurchaseTime().toDate().getTime() < 30L * 24L * 60L * 60L * 1000L) {
+                                Toast.makeText(mContext, "You already have a subscription plan for this offer", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                        else if (PurchasePlanTypes.BUNDLE.equals(purchasedPlan.getPlanType())) {
+                            int doneReservations = purchasedPlan.getPendingReservationsCount() + purchasedPlan.getFinishedReservationsCount();
 
-                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
-                }
-            }));
+                            int totalReservations;
+                            try {
+                                totalReservations = new PricingInfo(new JSONObject(offer.getPricingInfo())).bundleCount;
+                            } catch (JSONException e) {
+                                totalReservations = 0;
+                            }
+
+                            int remainingReservations = totalReservations - doneReservations;
+
+                            if (remainingReservations > 0) {
+                                Toast.makeText(mContext, "You already have " + remainingReservations + " bundle reservations remaining for this offer", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+
+                        getBalance((wallet, usdBalance, eurBalance) -> {
+                            Money price = PurchasePlanTypes.getPurchasedPlanPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
+                            Money balance = getBalance(usdBalance, eurBalance, price.getCurrency());
+
+                            if (balance.compareTo(price) >= 0) {
+                                getReferral(referralId, referral -> initPlanPurchasePayment(offer, purchasedPlanType, referral, wallet));
+                            }
+                            else {
+                                mPreferences.edit()
+                                        .putString(Constants.OFFER_ID, offerId)
+                                        .putString(Constants.PURCHASED_PLAN_TYPE, purchasedPlanType)
+                                        .putString(Constants.REFERRAL_ID, referralId)
+                                        .apply();
+
+                                ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
+                            }
+                        });
+                    }
+                }));
         }
     }
 
@@ -189,21 +220,28 @@ public class PaymentController {
             return;
         }
 
-        getOffer(offerId, offer -> getBalance((wallet, usd, eur) -> {
-            Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
-            Money balance = getBalance(usd, eur, price.getCurrency());
-
-            if (balance.compareTo(price) >= 0) {
-                purchaseTimeSlot(offer, purchasedPlanId, referralId, timeSlot);
+        getReservation(offerId, timeSlot.getId(), reservation -> {
+            if (reservation != null) {
+                Toast.makeText(mContext, "You have already reserved this time slot.", Toast.LENGTH_LONG).show();
+                return;
             }
-            else {
-                mPreferences.edit()
-                        .putString(Constants.TIMESLOT_ID, timeSlot.getId())
-                        .apply();
 
-                ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
-            }
-        }));
+            getOffer(offerId, offer -> getBalance((wallet, usd, eur) -> {
+                Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
+                Money balance = getBalance(usd, eur, price.getCurrency());
+
+                if (balance.compareTo(price) >= 0) {
+                    purchaseTimeSlot(offer, purchasedPlanId, referralId, timeSlot);
+                }
+                else {
+                    mPreferences.edit()
+                            .putString(Constants.TIMESLOT_ID, timeSlot.getId())
+                            .apply();
+
+                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
+                }
+            }));
+        });
     }
 
     private void purchaseTimeSlot(Offer offer, String purchasedPlanId, String referralId, TimeSlot timeSlot) {
@@ -402,6 +440,51 @@ public class PaymentController {
         }));
     }
 
+    private void getPurchasedPlan(String offerId, String type, GetPurchasedPlanCallback callback) {
+        LoadingUtil.onLoadingStarted();
+
+        HtAmplify amplify = HtAmplify.getInstance(mContext);
+
+        amplify.getPurchasedPlans(offerId, (success, result, exception) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (result != null) {
+                PurchasedPlan target = null;
+
+                for (PurchasedPlan purchasedPlan: result) {
+                    if (type.equals(purchasedPlan.getPlanType())) {
+                        target = purchasedPlan;
+                        break;
+                    }
+                }
+
+                callback.onPurchasedPlanReady(target);
+            }
+            else {
+                Log.e(TAG, "Failed to get purchased plans for offer id " + offerId, exception);
+
+                Toast.makeText(mContext, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getReservation(String offerId, String timeSlotId, GetReservationCallback callback) {
+        LoadingUtil.onLoadingStarted();
+
+        HtAmplify.getInstance(mContext).getReservation(offerId, timeSlotId, (success, result, exception) -> {
+            LoadingUtil.onLoadingFinished();
+
+            if (success) {
+                callback.onReservationReady(result);
+            }
+            else {
+                Log.e(TAG, "Failed to query specific reservation", exception);
+
+                Toast.makeText(mContext, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void handleBlockChainError(CeloException errorCause) {
         if (errorCause != null) {
             CeloError coreError = errorCause.getMainCause().getError();
@@ -442,6 +525,12 @@ public class PaymentController {
     private interface GetPurchasedPlanCallback {
 
         void onPurchasedPlanReady(PurchasedPlan purchasedPlan);
+
+    }
+
+    private interface GetReservationCallback {
+
+        void onReservationReady(Reservation reservation);
 
     }
 

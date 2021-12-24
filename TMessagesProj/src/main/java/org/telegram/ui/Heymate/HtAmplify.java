@@ -379,6 +379,27 @@ public class HtAmplify {
         });
     }
 
+    public void getPurchasedPlans(String offerId, APICallback<List<PurchasedPlan>> callback) {
+        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+        Amplify.API.query(ModelQuery.list(PurchasedPlan.class, PurchasedPlan.CONSUMER_ID.eq(userId).and(PurchasedPlan.OFFER_ID.eq(offerId))), response -> {
+            if (response.hasData()) {
+                List<PurchasedPlan> result = new ArrayList<>(10);
+
+                for (PurchasedPlan purchasedPlan: response.getData()) {
+                    result.add(purchasedPlan);
+                }
+
+                Utils.runOnUIThread(() -> callback.onCallResult(true, result, null));
+            }
+            else {
+                Utils.runOnUIThread(() -> callback.onCallResult(false, null, null));
+            }
+        }, error -> {
+            Utils.runOnUIThread(() -> callback.onCallResult(false, null, error));
+        });
+    }
+
     public void getMyOrders(APICallback<List<Reservation>> callback) {
         String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
         getReservations(Reservation.CONSUMER_ID.eq(userId), callback);
@@ -416,6 +437,27 @@ public class HtAmplify {
                     Log.e(TAG, "Failed to get reservations.", error);
                     AndroidUtilities.runOnUIThread(() -> callback.onCallResult(false, null, error));
                 });
+    }
+
+    public void getReservation(String offerId, String timeSlotId, APICallback<Reservation> callback) {
+        String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+
+        Amplify.API.query(ModelQuery.list(Reservation.class, Reservation.TIME_SLOT_ID.eq(timeSlotId).and(Reservation.CONSUMER_ID.eq(userId).and(Reservation.OFFER_ID.eq(offerId)))), response -> {
+            if (response.hasData()) {
+                Reservation reservation = null;
+
+                for (Reservation r: response.getData()) {
+                    reservation = r;
+                }
+
+                Reservation finalReservation = reservation;
+
+                AndroidUtilities.runOnUIThread(() -> callback.onCallResult(true, finalReservation, null));
+            }
+            else {
+                AndroidUtilities.runOnUIThread(() -> callback.onCallResult(false, null, null));
+            }
+        }, error -> AndroidUtilities.runOnUIThread(() -> callback.onCallResult(false, null, error)));
     }
 
     public void getReservation(String id, APICallback<Reservation> callback) {
