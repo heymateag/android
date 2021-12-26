@@ -34,6 +34,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.TG2HM;
+import org.telegram.ui.Heymate.payment.WalletExistence;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,114 +105,116 @@ public class WalletActivity extends BaseFragment {
         cashOut.setBackground(Theme.createBorderRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton)));
         cashOut.setText("Cash Out");
         cashOut.setOnClickListener(view -> {
-            if (AlphaFortressness.hasPendingTransaction()) {
-                LoadingUtil.onLoadingStarted();
+            WalletExistence.ensure(() -> {
+                if (AlphaFortressness.hasPendingTransaction()) {
+                    LoadingUtil.onLoadingStarted();
 
-                AlphaFortressness.getPendingTransaction((success, transaction, exception) -> {
-                    LoadingUtil.onLoadingFinished();
+                    AlphaFortressness.getPendingTransaction((success, transaction, exception) -> {
+                        LoadingUtil.onLoadingFinished();
 
-                    if (transaction != null) {
-                        if (transaction.transactionHash == null) {
-                            new AlertDialog.Builder(context)
-                                    .setTitle("Cash out error")
-                                    .setMessage("There has been an unexpected error during the cash out. Please contact heymate to follow up.")
-                                    .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-                                    .setNegativeButton("Issue resolved", (dialogInterface, i) -> {
-                                        AlphaFortressness.clearPendingTransaction();
-                                        dialogInterface.dismiss();
-                                    })
-                                    .show();
-                        }
-                        else if (transaction.isPaid == null) {
-                            new AlertDialog.Builder(context)
-                                    .setTitle("Cash out in progress")
-                                    .setMessage("Cash out is in progress.")
-                                    .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-                                    .show();
-                        } else if (transaction.isPaid) {
-                            new AlertDialog.Builder(context)
-                                    .setTitle("Cash out completed")
-                                    .setMessage("The cash out has been completed. The money is in your account.")
-                                    .setNeutralButton("OK", (dialogInterface, i) -> {
-                                        AlphaFortressness.clearPendingTransaction();
-                                        dialogInterface.dismiss();
-                                    })
-                                    .show();
+                        if (transaction != null) {
+                            if (transaction.transactionHash == null) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("Cash out error")
+                                        .setMessage("There has been an unexpected error during the cash out. Please contact heymate to follow up.")
+                                        .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+                                        .setNegativeButton("Issue resolved", (dialogInterface, i) -> {
+                                            AlphaFortressness.clearPendingTransaction();
+                                            dialogInterface.dismiss();
+                                        })
+                                        .show();
+                            }
+                            else if (transaction.isPaid == null) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("Cash out in progress")
+                                        .setMessage("Cash out is in progress.")
+                                        .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+                                        .show();
+                            } else if (transaction.isPaid) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("Cash out completed")
+                                        .setMessage("The cash out has been completed. The money is in your account.")
+                                        .setNeutralButton("OK", (dialogInterface, i) -> {
+                                            AlphaFortressness.clearPendingTransaction();
+                                            dialogInterface.dismiss();
+                                        })
+                                        .show();
+                            }
+                            else {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("Cash out failed")
+                                        .setMessage("There has been a problem with the cash out. Please contact heymate to follow up.")
+                                        .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+                                        .setNegativeButton("Issue resolved", (dialogInterface, i) -> {
+                                            AlphaFortressness.clearPendingTransaction();
+                                            dialogInterface.dismiss();
+                                        })
+                                        .show();
+                            }
                         }
                         else {
                             new AlertDialog.Builder(context)
-                                    .setTitle("Cash out failed")
-                                    .setMessage("There has been a problem with the cash out. Please contact heymate to follow up.")
+                                    .setTitle("Error")
+                                    .setMessage("Failed to retrieve the ongoing cash out.")
                                     .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-                                    .setNegativeButton("Issue resolved", (dialogInterface, i) -> {
-                                        AlphaFortressness.clearPendingTransaction();
-                                        dialogInterface.dismiss();
-                                    })
                                     .show();
                         }
-                    }
-                    else {
-                        new AlertDialog.Builder(context)
-                                .setTitle("Error")
-                                .setMessage("Failed to retrieve the ongoing cash out.")
-                                .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-                                .show();
-                    }
-                });
-            }
-            else {
-                LoadingUtil.onLoadingStarted();
+                    });
+                }
+                else {
+                    LoadingUtil.onLoadingStarted();
 
-                AlphaFortressness.getConversionRate(TG2HM.getDefaultCurrency(), (success, rate, exception) -> {
-                    LoadingUtil.onLoadingFinished();
+                    AlphaFortressness.getConversionRate(TG2HM.getDefaultCurrency(), (success, rate, exception) -> {
+                        LoadingUtil.onLoadingFinished();
 
-                    if (rate != null && rate > 0) {
-                        Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
+                        if (rate != null && rate > 0) {
+                            Wallet wallet = Wallet.get(getParentActivity(), TG2HM.getCurrentPhoneNumber());
 
-                        LoadingUtil.onLoadingStarted();
+                            LoadingUtil.onLoadingStarted();
 
-                        wallet.getContractKit((success1, contractKit, errorCause) -> {
-                            LoadingUtil.onLoadingFinished();
+                            wallet.getContractKit((success1, contractKit, errorCause) -> {
+                                LoadingUtil.onLoadingFinished();
 
-                            if (contractKit != null) {
-                                StableTokenWrapper token;
+                                if (contractKit != null) {
+                                    StableTokenWrapper token;
 
-                                if (Currency.USD.equals(TG2HM.getDefaultCurrency())) {
-                                    token = contractKit.contracts.getStableToken();
-                                }
-                                else if (Currency.EUR.equals(TG2HM.getDefaultCurrency())) {
-                                    token = contractKit.contracts.getStableTokenEUR();
-                                }
-                                else {
-                                    Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Unsupported currency", Toast.LENGTH_LONG).show());
-                                    return;
-                                }
-
-                                try {
-                                    BigInteger balance = token.balanceOf(contractKit.getAddress()).send();
-
-                                    BigInteger maximumAmount = AlphaFortressness.getConvertibleAmount(balance, rate);
-
-                                    if (maximumAmount.compareTo(BigInteger.ZERO) <= 0) {
-                                        Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Balance is not enough for cash out", Toast.LENGTH_LONG).show());
+                                    if (Currency.USD.equals(TG2HM.getDefaultCurrency())) {
+                                        token = contractKit.contracts.getStableToken();
+                                    }
+                                    else if (Currency.EUR.equals(TG2HM.getDefaultCurrency())) {
+                                        token = contractKit.contracts.getStableTokenEUR();
+                                    }
+                                    else {
+                                        Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Unsupported currency", Toast.LENGTH_LONG).show());
                                         return;
                                     }
 
-                                    Utils.runOnUIThread(() -> cashOutConfirmAmount(maximumAmount, rate));
-                                } catch (Exception e) {
-                                    Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Failed to talk to node", Toast.LENGTH_LONG).show());
+                                    try {
+                                        BigInteger balance = token.balanceOf(contractKit.getAddress()).send();
+
+                                        BigInteger maximumAmount = AlphaFortressness.getConvertibleAmount(balance, rate);
+
+                                        if (maximumAmount.compareTo(BigInteger.ZERO) <= 0) {
+                                            Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Balance is not enough for cash out", Toast.LENGTH_LONG).show());
+                                            return;
+                                        }
+
+                                        Utils.runOnUIThread(() -> cashOutConfirmAmount(maximumAmount, rate));
+                                    } catch (Exception e) {
+                                        Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Failed to talk to node", Toast.LENGTH_LONG).show());
+                                    }
                                 }
-                            }
-                            else {
-                                Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Failed to connect to node", Toast.LENGTH_LONG).show());
-                            }
-                        });
-                    }
-                    else {
-                        Toast.makeText(getParentActivity(), "Failed to query conversion rate", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+                                else {
+                                    Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Failed to connect to node", Toast.LENGTH_LONG).show());
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(getParentActivity(), "Failed to query conversion rate", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
         });
 
         TextView addMoney = content.findViewById(R.id.add_money);
