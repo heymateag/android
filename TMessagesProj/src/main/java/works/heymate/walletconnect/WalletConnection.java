@@ -114,6 +114,16 @@ public class WalletConnection {
     }
 
     public void connect(WCSession session) {
+        WCClient client = mClients.get(session.toUri());
+
+        if (client != null) {
+            if (!client.isConnected()) {
+                client.connect(session, mPeerMeta, mPeerId, null);
+            }
+
+            return;
+        }
+
         new Thread() {
 
             @Override
@@ -284,7 +294,8 @@ public class WalletConnection {
     private CeloRawTransaction wcTransactionToCeloTransaction(ContractKit contractKit, WCEthereumTransaction wcEthereumTransaction) throws IOException {
         return new CeloRawTransaction(
                 wcEthereumTransaction.getNonce() == null ? getNonce(contractKit) : Numeric.toBigInt(wcEthereumTransaction.getNonce()),
-                wcEthereumTransaction.getGasPrice() == null ? DefaultGasProvider.GAS_PRICE : Numeric.toBigInt(wcEthereumTransaction.getGasPrice()),
+                //wcEthereumTransaction.getGasPrice() == null ? DefaultGasProvider.GAS_PRICE : Numeric.toBigInt(wcEthereumTransaction.getGasPrice()),
+                DefaultGasProvider.GAS_PRICE,
                 wcEthereumTransaction.getGasLimit() == null ? DefaultGasProvider.GAS_LIMIT : Numeric.toBigInt(wcEthereumTransaction.getGasLimit()),
                 wcEthereumTransaction.getTo(),
                 wcEthereumTransaction.getValue() == null ? null : Numeric.toBigInt(wcEthereumTransaction.getValue()),
@@ -320,7 +331,7 @@ public class WalletConnection {
 
         try {
             JSONArray jSessions = new JSONArray(mWallet.getPreferences().getString(KEY_SESSIONS, "[]"));
-            jSessions.put(jSessions);
+            jSessions.put(jSession);
 
             mWallet.getPreferences().edit().putString(KEY_SESSIONS, jSessions.toString()).apply();
         } catch (JSONException e) { }
