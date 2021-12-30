@@ -1,10 +1,11 @@
 package org.telegram.ui.Heymate.myschedule;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -23,16 +24,44 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
     public static final String HOST = "myschedule";
 
-    private static final int MY_OFFERS = 0;
-    private static final int MY_ORDERS = 1;
-    private static final int SUBSCRIPTIONS = 2;
+    public static final int MY_OFFERS = 0;
+    public static final int MY_ORDERS = 1;
+    public static final int SUBSCRIPTIONS = 2;
+
+    public static Bundle createBundle(int tab) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("tab", tab);
+        return bundle;
+    }
+
+    private int mDefaultTab = MY_OFFERS;
+    private boolean mDefaultTabApplied = false;
+
+    private ViewPagerFixed mViewPager;
+    private ViewPagerFixed.TabsView mTabsView;
 
     private MyOffersAdapter mMyOffersAdapter;
     private MyOrdersAdapter mMyOrdersAdapter;
     private SubscriptionsAdapter mSubscriptionsAdapter;
 
+    public MyScheduleActivity() {
+
+    }
+
+    public MyScheduleActivity(Bundle args) {
+        super(args);
+    }
+
     @Override
     public boolean onFragmentCreate() {
+        Bundle args = getArguments();
+
+        if (args != null) {
+            if (args.containsKey("tab")) {
+                mDefaultTab = args.getInt("tab");
+            }
+        }
+
         HeymateEvents.register(HeymateEvents.RESERVATION_STATUS_UPDATED, this);
 
         return super.onFragmentCreate();
@@ -66,8 +95,8 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
         LinearLayout content = new LinearLayout(context);
         content.setOrientation(LinearLayout.VERTICAL);
 
-        ViewPagerFixed viewPager = new ViewPagerFixed(context);
-        viewPager.setAdapter(new ViewPagerFixed.Adapter() {
+        mViewPager = new ViewPagerFixed(context);
+        mViewPager.setAdapter(new ViewPagerFixed.Adapter() {
 
             @Override
             public int getItemCount() {
@@ -102,14 +131,24 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
 
         });
 
-        ViewPagerFixed.TabsView tabsView = viewPager.createTabsView();
+        mTabsView = mViewPager.createTabsView();
 
-        content.addView(tabsView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 44));
-        content.addView(viewPager, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        content.addView(mTabsView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 44));
+        content.addView(mViewPager, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         fragmentView = content;
 
         return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mDefaultTabApplied) {
+            mDefaultTabApplied = true;
+            mTabsView.scrollToTab(mDefaultTab, mDefaultTab);
+        }
     }
 
     @Override

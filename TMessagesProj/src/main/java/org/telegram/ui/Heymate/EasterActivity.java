@@ -140,7 +140,10 @@ public class EasterActivity extends BaseFragment {
             }
         });
 
-        String text = HeymateConfig.PRODUCTION ? "Production" : "Staging";
+//        String text = "Private key:\n" + wallet.getMnemonic() + "\n\n";
+        String text = "";
+
+        text += HeymateConfig.PRODUCTION ? "Production" : "Staging";
         text += HeymateConfig.MAIN_NET ? "\nMain net" : "\nTest net (Alfajores)";
         text += "\ndebug: " + HeymateConfig.DEBUG;
         text += "\ndemo: " + HeymateConfig.DEMO;

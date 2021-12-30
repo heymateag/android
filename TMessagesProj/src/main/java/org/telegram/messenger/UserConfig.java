@@ -109,6 +109,8 @@ public class UserConfig extends BaseController {
                     SharedPreferences.Editor editor = getPreferences().edit();
                     if (currentAccount == 0) {
                         editor.putInt("selectedAccount", selectedAccount);
+
+                        ApplicationLoader.startWalletConnection();
                     }
                     editor.putBoolean("registeredForPush", registeredForPush);
                     editor.putInt("lastSendMessageId", lastSendMessageId);
