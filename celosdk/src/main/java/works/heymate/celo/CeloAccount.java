@@ -1,5 +1,7 @@
 package works.heymate.celo;
 
+import org.web3j.crypto.Bip32ECKeyPair;
+import org.web3j.crypto.Bip39Wallet;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.MnemonicUtils;
 import org.web3j.utils.Numeric;
@@ -53,6 +55,16 @@ public class CeloAccount {
     }
 
     public String getMnemonic() {
+//        byte[] entropy = new byte[32];
+//        new SecureRandom().nextBytes(entropy);
+//        String mnemonic = MnemonicUtils.generateMnemonic(entropy);
+//        byte[] seed = MnemonicUtils.generateSeed(mnemonic, null);
+//        String CELO_DERIVATION_PATH_BASE = "m/44'/52752'/0'";
+        // https://github.com/bitcoinjs/bip39/blob/master/src/index.js
+        // https://github.com/celo-org/celo-monorepo/blob/master/packages/sdk/utils/package.json
+//        Bip32ECKeyPair..generateKeyPair(seed);
+        // https://github.com/celo-org/celo-monorepo/blob/master/packages/sdk/utils/src/account.ts
+
         return MnemonicUtils.generateMnemonic(Numeric.hexStringToByteArray(privateKey));
     }
 
