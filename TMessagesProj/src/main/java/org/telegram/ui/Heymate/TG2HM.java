@@ -81,11 +81,28 @@ public class TG2HM {
 
     public static String getCurrentPhoneNumber() {
         String phoneNumber = getPhoneNumber(UserConfig.selectedAccount);
+
+        if (phoneNumber == null) {
+            return null;
+        }
+
         return phoneNumber.startsWith("+") ? phoneNumber : ("+" + phoneNumber);
     }
 
     public static String getPhoneNumber(int num) {
-        return UserConfig.getInstance(num).getCurrentUser().phone;
+        UserConfig userConfig = UserConfig.getInstance(num);
+
+        if (userConfig == null) {
+            return null;
+        }
+
+        TLRPC.User user = userConfig.getCurrentUser();
+
+        if (user == null) {
+            return null;
+        }
+
+        return user.phone;
     }
 
     public static String getFCMToken() {

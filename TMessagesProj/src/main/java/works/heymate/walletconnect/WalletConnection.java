@@ -12,6 +12,9 @@ import com.trustwallet.walletconnect.models.session.WCSession;
 import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.ContractKit;
 import org.celo.contractkit.protocol.CeloRawTransaction;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.TG2HM;
@@ -26,15 +29,25 @@ import org.web3j.utils.Numeric;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 import okhttp3.OkHttpClient;
 import works.heymate.celo.CeloAccount;
 import works.heymate.core.Currency;
 import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
 
-public class WalletConnection extends WCClient {
+public class WalletConnection {
+
+    private static final String KEY_PEER_ID = "wc_peer_id";
+    private static final String KEY_SESSIONS = "wc_sessions";
+
+    private static final String SESSION_SESSION = "session";
+    private static final String SESSION_PEER_ID = "peer_id";
 
     public static WCSession sessionFromUri(String uri) {
         return WCSession.Companion.from(uri);
@@ -42,55 +55,128 @@ public class WalletConnection extends WCClient {
 
     private final Wallet mWallet;
 
-    public WalletConnection(Wallet wallet) {
-        super(new GsonBuilder(), new OkHttpClient.Builder().build());
+    private final String mPeerId;
+    private final WCPeerMeta mPeerMeta;
 
+    private final GsonBuilder mGson;
+    private final OkHttpClient mOkHttpClient;
+
+    private final Map<String, WCClient> mClients = new HashMap<>();
+
+    public WalletConnection(Wallet wallet) {
         mWallet = wallet;
 
-        setOnSessionRequest((requestId, wcPeerMeta) -> {
+        String peerId = mWallet.getPreferences().getString(KEY_PEER_ID, null);
+
+        if (peerId == null) {
+            peerId = UUID.randomUUID().toString();
+
+            mWallet.getPreferences().edit().putString(KEY_PEER_ID, peerId).apply();
+        }
+
+        mPeerId = peerId;
+
+        mPeerMeta = new WCPeerMeta("heymate wallet", "https://works.heymate.beta", "heymate wallet operates on the Celo blockchain only.", Arrays.asList());
+
+        mGson = new GsonBuilder();
+        mOkHttpClient = new OkHttpClient.Builder().build();
+    }
+
+    public void start() {
+        try {
+            JSONArray jSessions = new JSONArray(mWallet.getPreferences().getString(KEY_SESSIONS, "[]"));
+
+            for (int i = 0; i < jSessions.length(); i++) {
+                JSONObject jSession = jSessions.getJSONObject(i);
+
+                String sSession = jSession.getString(SESSION_SESSION);
+                String remotePeerId = jSession.getString(SESSION_PEER_ID);
+
+                WCSession session = sessionFromUri(sSession);
+
+                if (session == null) {
+                    continue;
+                }
+
+                WCClient client = mClients.get(sSession);
+
+                if (client == null) {
+                    client = newClient(sSession);
+
+                    mClients.put(sSession, client);
+                }
+
+                if (!client.isConnected()) {
+                    client.connect(session, mPeerMeta, mPeerId, remotePeerId);
+                }
+            }
+        } catch (JSONException e) { }
+    }
+
+    public void connect(WCSession session) {
+        new Thread() {
+
+            @Override
+            public void run() {
+                newClient(session.toUri()).connect(session, mPeerMeta, mPeerId, null);
+            }
+
+        }.start();
+    }
+
+    private WCClient newClient(String sSession) {
+        WCClient client = new WCClient(mGson, mOkHttpClient);
+
+        client.setOnSessionRequest((requestId, wcPeerMeta) -> {
             Utils.postOnUIThread(() -> {
                 Activity activity = ActivityMonitor.get().getCurrentActivity();
 
                 if (activity == null) {
-                    rejectSession("App is not open");
+                    client.rejectSession("App is not open");
                     return;
                 }
 
                 new AlertDialog.Builder(activity)
                         .setTitle("Connection request")
                         .setMessage(wcPeerMeta.component1() + " wants to connect to your heymate wallet.")
-                        .setPositiveButton("Accept", (dialogInterface, i) -> approveSession(Arrays.asList(wallet.getAddress()), Wallet.CELO_CONTEXT.chainId))
-                        .setNegativeButton("Reject", (dialogInterface, i) -> rejectSession("Session request rejected by user."))
-                        .setOnCancelListener(dialogInterface -> rejectSession("Session request rejected by user."))
+                        .setPositiveButton("Accept", (dialogInterface, i) -> {
+                            client.approveSession(Arrays.asList(mWallet.getAddress()), Wallet.CELO_CONTEXT.chainId);
+
+                            mClients.put(sSession, client);
+
+                            addSessionToSessions(sSession, client.getRemotePeerId());
+                        })
+                        .setNegativeButton("Reject", (dialogInterface, i) -> client.rejectSession("Session request rejected by user."))
+                        .setOnCancelListener(dialogInterface -> client.rejectSession("Session request rejected by user."))
                         .show();
             });
 
             return null;
         });
 
-        setOnGetAccounts(requestId -> {
-            approveRequest(requestId, Arrays.asList(wallet.getAddress()));
+        client.setOnGetAccounts(requestId -> {
+            client.approveRequest(requestId, Arrays.asList(mWallet.getAddress()));
             return null;
         });
 
         // personal_sign
         // eth_sign
         // eth_signTypedData
-        setOnEthSign((requestId, wcEthereumSignMessage) -> {
+        client.setOnEthSign((requestId, wcEthereumSignMessage) -> {
             Utils.postOnUIThread(() -> {
                 Activity activity = ActivityMonitor.get().getCurrentActivity();
 
                 if (activity == null) {
-                    rejectSession("App is not open");
+                    client.rejectSession("App is not open");
                     return;
                 }
 
                 new AlertDialog.Builder(activity)
                         .setTitle("Sign a message")
                         .setMessage("Sign a message for the connected DAPP?")
-                        .setPositiveButton("Accept", (dialogInterface, i) -> processRequest(requestId, wcEthereumSignMessage))
-                        .setNegativeButton("Reject", (dialogInterface, i) -> rejectRequest(requestId, "Session request rejected by user."))
-                        .setOnCancelListener(dialogInterface -> rejectRequest(requestId, "Session request rejected by user."))
+                        .setPositiveButton("Accept", (dialogInterface, i) -> processRequest(client, requestId, wcEthereumSignMessage))
+                        .setNegativeButton("Reject", (dialogInterface, i) -> client.rejectRequest(requestId, "Session request rejected by user."))
+                        .setOnCancelListener(dialogInterface -> client.rejectRequest(requestId, "Session request rejected by user."))
                         .show();
             });
 
@@ -98,12 +184,12 @@ public class WalletConnection extends WCClient {
         });
 
         // eth_signTransaction
-        setOnEthSignTransaction((requestId, wcEthereumTransaction) -> {
+        client.setOnEthSignTransaction((requestId, wcEthereumTransaction) -> {
             Utils.postOnUIThread(() -> {
                 Activity activity = ActivityMonitor.get().getCurrentActivity();
 
                 if (activity == null) {
-                    rejectSession("App is not open");
+                    client.rejectSession("App is not open");
                     return;
                 }
 
@@ -115,28 +201,28 @@ public class WalletConnection extends WCClient {
                                 try {
                                     CeloRawTransaction transaction = wcTransactionToCeloTransaction(contractKit, wcEthereumTransaction);
                                     String signature = contractKit.transactionManager.sign(transaction);
-                                    approveRequest(requestId, signature);
+                                    client.approveRequest(requestId, signature);
                                 } catch (IOException e) {
-                                    rejectRequest(requestId, "Failed to sign the transaction: " + e.getMessage());
+                                    client.rejectRequest(requestId, "Failed to sign the transaction: " + e.getMessage());
                                 }
                             }
                             else {
-                                rejectRequest(requestId, "Blockchain network error.");
+                                client.rejectRequest(requestId, "Blockchain network error.");
                             }
                         }))
-                        .setNegativeButton("Reject", (dialogInterface, i) -> rejectRequest(requestId, "Session request rejected by user."))
-                        .setOnCancelListener(dialogInterface -> rejectRequest(requestId, "Session request rejected by user."))
+                        .setNegativeButton("Reject", (dialogInterface, i) -> client.rejectRequest(requestId, "Session request rejected by user."))
+                        .setOnCancelListener(dialogInterface -> client.rejectRequest(requestId, "Session request rejected by user."))
                         .show();
             });
             return null;
         });
 
-        setOnEthSendTransaction((requestId, wcEthereumTransaction) -> {
+        client.setOnEthSendTransaction((requestId, wcEthereumTransaction) -> {
             Utils.postOnUIThread(() -> {
                 Activity activity = ActivityMonitor.get().getCurrentActivity();
 
                 if (activity == null) {
-                    rejectSession("App is not open");
+                    client.rejectSession("App is not open");
                     return;
                 }
 
@@ -151,32 +237,34 @@ public class WalletConnection extends WCClient {
                                     EthSendTransaction result = contractKit.transactionManager.signAndSend(transaction);
 
                                     if (result.hasError()) {
-                                        rejectRequest(requestId, result.getError().getMessage());
+                                        client.rejectRequest(requestId, result.getError().getMessage());
                                     }
                                     else {
-                                        approveRequest(requestId, result.getTransactionHash());
+                                        client.approveRequest(requestId, result.getTransactionHash());
                                     }
                                 } catch (IOException e) {
-                                    rejectRequest(requestId, "Failed to send the transaction: " + e.getMessage());
+                                    client.rejectRequest(requestId, "Failed to send the transaction: " + e.getMessage());
                                 }
                             }
                             else {
-                                rejectRequest(requestId, "Blockchain network error.");
+                                client.rejectRequest(requestId, "Blockchain network error.");
                             }
                         }))
-                        .setNegativeButton("Reject", (dialogInterface, i) -> rejectRequest(requestId, "Session request rejected by user."))
-                        .setOnCancelListener(dialogInterface -> rejectRequest(requestId, "Session request rejected by user."))
+                        .setNegativeButton("Reject", (dialogInterface, i) -> client.rejectRequest(requestId, "Session request rejected by user."))
+                        .setOnCancelListener(dialogInterface -> client.rejectRequest(requestId, "Session request rejected by user."))
                         .show();
             });
             return null;
         });
+
+        return client;
     }
 
-    private void processRequest(long requestId, WCEthereumSignMessage request) {
+    private void processRequest(WCClient client, long requestId, WCEthereumSignMessage request) {
         switch (request.getType()) {
             case MESSAGE:
             case PERSONAL_MESSAGE:
-                approveRequest(requestId, sign(request.getData()));
+                client.approveRequest(requestId, sign(request.getData()));
                 return;
             case TYPED_MESSAGE:
                 // TODO
@@ -212,18 +300,6 @@ public class WalletConnection extends WCClient {
         return ethGetTransactionCount.getTransactionCount();
     }
 
-    public void connect(WCSession session) {
-        new Thread() {
-
-            @Override
-            public void run() {
-                WCPeerMeta peerMeta = new WCPeerMeta("heymate wallet", "https://works.heymate.beta", "heymate wallet operates on the Celo blockchain only.", Arrays.asList());
-                connect(session, peerMeta, UUID.randomUUID().toString(), null);
-            }
-
-        }.start();
-    }
-
     private String getGasCurrency(ContractKit contractKit) {
         Currency currency = TG2HM.getDefaultCurrency();
 
@@ -233,6 +309,21 @@ public class WalletConnection extends WCClient {
         else {
             return contractKit.contracts.addressFor(CeloContract.StableTokenEUR);
         }
+    }
+
+    private void addSessionToSessions(String sSession, String remotePeerId) {
+        JSONObject jSession = new JSONObject();
+        try {
+            jSession.put(SESSION_SESSION, sSession);
+            jSession.put(SESSION_PEER_ID, remotePeerId);
+        } catch (JSONException e) { }
+
+        try {
+            JSONArray jSessions = new JSONArray(mWallet.getPreferences().getString(KEY_SESSIONS, "[]"));
+            jSessions.put(jSessions);
+
+            mWallet.getPreferences().edit().putString(KEY_SESSIONS, jSessions.toString()).apply();
+        } catch (JSONException e) { }
     }
 
 }

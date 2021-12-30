@@ -38,21 +38,19 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Heymate.ActivityMonitor;
-import org.telegram.ui.Heymate.HeymateConfig;
+import org.telegram.ui.Heymate.TG2HM;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
-import works.heymate.beta.BuildConfig;
+import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
+import works.heymate.core.wallet.Wallet;
 
 public class ApplicationLoader extends Application {
 
@@ -183,7 +181,27 @@ public class ApplicationLoader extends Application {
             DownloadController.getInstance(a);
         }
         ChatThemeController.init();
+
+        HeymateEvents.register(HeymateEvents.WALLET_CREATED, sWalletCreatedObserver);
+        startWalletConnection();
     }
+
+    public static void startWalletConnection() {
+        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+
+        Wallet wallet = Wallet.get(applicationContext, phoneNumber);
+
+        if (!wallet.isCreated()) {
+            wallet.createNew();
+            return;
+        }
+
+        wallet.getConnection().start();
+    }
+
+    private static final HeymateEvents.HeymateEventObserver sWalletCreatedObserver = (event, args) -> {
+        startWalletConnection();
+    };
 
     public ApplicationLoader() {
         super();

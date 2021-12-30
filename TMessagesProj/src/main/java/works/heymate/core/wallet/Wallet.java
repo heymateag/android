@@ -106,7 +106,7 @@ public class Wallet {
         mPhoneNumber = phoneNumber;
     }
 
-    SharedPreferences getPreferences() {
+    public SharedPreferences getPreferences() {
         return mPreferences;
     }
 
