@@ -8,6 +8,8 @@ import works.heymate.core.offer.PricingInfo;
 
 public interface IHeymateAPI {
 
+    // TODO getServiceProviderSchedule
+
     void updatePushToken(String deviceId, String pushId, APICallback callback);
 
     void updateUserInfo(String fullName, String username, String avatarHash, String telegramId, APICallback callback);
@@ -21,8 +23,6 @@ public interface IHeymateAPI {
                      List<Long> timeSlots, APICallback callback);
 
     void getOffer(String id, APICallback callback);
-
-    void deleteOffer(String id, APICallback callback);
 
     void getMyOffers(APICallback callback);
 

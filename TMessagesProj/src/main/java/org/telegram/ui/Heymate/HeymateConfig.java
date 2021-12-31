@@ -17,6 +17,8 @@ public class HeymateConfig {
 
     public static final int INTERNAL_VERSION = 76;
 
+    public static final String API_BASE_URL = "https://lar9nm8ay9.execute-api.us-east-1.amazonaws.com/dev";
+
     private static final String PREFERENCES_PREFIX = "HeymateConfig_";
 
     private static final Map<String, HeymateConfig> sMap = new HashMap<>();

@@ -2,8 +2,14 @@ package works.heymate.api;
 
 public class APIs {
 
+    private static IHeymateAPI sAPI = null;
+
     public static IHeymateAPI get() {
-        return null;
+        if (sAPI == null) {
+            sAPI = new HeymateAPIImpl();
+        }
+
+        return sAPI;
     }
 
 }
