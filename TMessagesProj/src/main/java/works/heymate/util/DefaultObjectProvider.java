@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import works.heymate.api.APIObject;
+
 abstract public class DefaultObjectProvider implements Template.ObjectProvider {
 
     @Override
@@ -26,6 +28,10 @@ abstract public class DefaultObjectProvider implements Template.ObjectProvider {
 
         if (from instanceof JSONObject) {
             json = (JSONObject) from;
+        }
+
+        if (from instanceof APIObject) {
+            json = ((APIObject) from).asJSON();
         }
 
         if (json != null) {

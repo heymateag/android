@@ -17,15 +17,12 @@ import android.widget.Toast;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.datastore.generated.model.Offer;
 import com.yashoid.sequencelayout.SequenceLayout;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -36,8 +33,9 @@ import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.ReferralUtils;
 
+import works.heymate.api.APIObject;
+import works.heymate.core.Currency;
 import works.heymate.core.Money;
-import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
@@ -48,6 +46,10 @@ import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.model.Offer;
+import works.heymate.model.Pricing;
+import works.heymate.model.User;
+import works.heymate.model.Users;
 
 public class OfferMessageItem extends SequenceLayout {
 
@@ -84,7 +86,7 @@ public class OfferMessageItem extends SequenceLayout {
 
     private BaseFragment mParent;
 
-    private Offer mOffer = null;
+    private APIObject mOffer = null;
     private boolean mFullyLoaded = false;
 
     private OfferUtils.PhraseInfo mPhraseInfo = null;
@@ -231,52 +233,53 @@ public class OfferMessageItem extends SequenceLayout {
         mPhraseInfo = phraseInfo;
     }
 
-    public void setOffer(Offer offer, boolean fullyLoaded) {
+    public void setOffer(APIObject offer, boolean fullyLoaded) {
         mOffer = offer;
         mFullyLoaded = fullyLoaded;
 
-        if (fullyLoaded) {
-            if (offer != null && offer.getHasImage() != null && offer.getHasImage()) {
-                mImage.setVisibility(VISIBLE);
-                mImage.setImageDrawable(null);
-
-                String offerId = offer.getId();
-                int size = AndroidUtilities.dp(IMAGE_WIDTH_DP);
-
-                FileCache.get().getImage(offerId, size, (success, drawable, exception) -> {
-                    if (mOffer == null || !mOffer.getId().equals(offerId)) {
-                        return;
-                    }
-
-                    if (drawable != null) {
-                        mImage.setImageDrawable(drawable);
-                    }
-                    else {
-                        mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
-                    }
-                });
-            }
-            else {
+        if (fullyLoaded) { // TODO offer image
+//            if (offer != null && offer.getHasImage() != null && offer.getHasImage()) {
+//                mImage.setVisibility(VISIBLE);
+//                mImage.setImageDrawable(null);
+//
+//                String offerId = offer.getId();
+//                int size = AndroidUtilities.dp(IMAGE_WIDTH_DP);
+//
+//                FileCache.get().getImage(offerId, size, (success, drawable, exception) -> {
+//                    if (mOffer == null || !mOffer.getId().equals(offerId)) {
+//                        return;
+//                    }
+//
+//                    if (drawable != null) {
+//                        mImage.setImageDrawable(drawable);
+//                    }
+//                    else {
+//                        mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
+//                    }
+//                });
+//            }
+//            else {
                 mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
-            }
+//            }
         }
         else {
             mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
         }
 
-        mTitle.setText(offer.getTitle());
-        mSubCategory.setText(offer.getSubCategory());
-        mDescription.setText(offer.getDescription());
+        mTitle.setText(offer.getString(Offer.TITLE));
+        mSubCategory.setText(offer.getString(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY));
+        mDescription.setText(offer.getString(Offer.DESCRIPTION));
 
         setSelectedPurchasePlan(mRadioFixedPrice);
 
         try {
-            PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+            Pricing pricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
+            Currency currency = Currency.forName(pricing.getCurrency());
 
-            mPriceFixedPrice.setText(Money.create(pricingInfo.price * 100, pricingInfo.currency).toString());
-            mPriceInfoFixedPrice.setText(pricingInfo.rateType);
+            mPriceFixedPrice.setText(Money.create(pricing.getPrice() * 100, currency).toString());
+            mPriceInfoFixedPrice.setText(pricing.getRateType());
 
-            if (pricingInfo.bundleCount > 0) {
+            if (pricing.getBundleCount() > 0) {
                 mHolderBundle.setVisibility(VISIBLE);
                 mRadioBundle.setVisibility(VISIBLE);
                 mTitleBundle.setVisibility(VISIBLE);
@@ -284,9 +287,9 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceBundle.setVisibility(VISIBLE);
                 mPriceInfoBundle.setVisibility(VISIBLE);
 
-                mInfoBundle.setText(pricingInfo.bundleDiscountPercent + "% Off");
-                mPriceBundle.setText(Money.create(pricingInfo.getBundleTotalPrice() * 100, pricingInfo.currency).toString());
-                mPriceInfoBundle.setText("per " + pricingInfo.bundleCount + " reservations");
+                mInfoBundle.setText(pricing.getBundleDiscountPercent() + "% Off");
+                mPriceBundle.setText(Money.create(pricing.getBundleTotalPrice() * 100, currency).toString());
+                mPriceInfoBundle.setText("per " + pricing.getBundleCount() + " reservations");
             }
             else {
                 mHolderBundle.setVisibility(GONE);
@@ -297,7 +300,7 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceInfoBundle.setVisibility(GONE);
             }
 
-            if (pricingInfo.subscriptionPeriod != null) {
+            if (pricing.getSubscriptionPeriod() != null) {
                 mHolderSubscription.setVisibility(VISIBLE);
                 mRadioSubscription.setVisibility(VISIBLE);
                 mTitleSubscription.setVisibility(VISIBLE);
@@ -305,8 +308,8 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceSubscription.setVisibility(VISIBLE);
                 mPriceInfoSubscription.setVisibility(VISIBLE);
 
-                mPriceSubscription.setText(Money.create(pricingInfo.subscriptionPrice * 100, pricingInfo.currency).toString());
-                mPriceInfoSubscription.setText(pricingInfo.subscriptionPeriod.toLowerCase()); // TODO Cheating?
+                mPriceSubscription.setText(Money.create(pricing.getSubscriptionPrice() * 100, currency).toString());
+                mPriceInfoSubscription.setText(pricing.getSubscriptionPeriod().toLowerCase()); // TODO Cheating?
             }
             else {
                 mHolderSubscription.setVisibility(GONE);
@@ -317,8 +320,8 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceInfoSubscription.setVisibility(GONE);
             }
 
-            mRadioFixedPrice.setVisibility((pricingInfo.bundleCount == 0 && pricingInfo.subscriptionPeriod == null) ? GONE : VISIBLE);
-        } catch (JSONException | NullPointerException e) { }
+            mRadioFixedPrice.setVisibility((pricing.getBundleCount() == 0 && pricing.getSubscriptionPeriod() == null) ? GONE : VISIBLE);
+        } catch (NullPointerException e) { }
     }
 
     private void promote(boolean share) {
@@ -326,28 +329,30 @@ public class OfferMessageItem extends SequenceLayout {
             return;
         }
 
-        if (mPhraseInfo == null || mOffer.getUserId() != null && mOffer.getUserId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId))) {
+        if (mPhraseInfo == null || mOffer.getString(Offer.USER_ID) != null && mOffer.getString(Offer.USER_ID).equals(Users.currentUser.getString(User.ID))) {
             doPromote(null, share);
             return;
         }
 
-        LoadingUtil.onLoadingStarted();
-
-        ReferralUtils.getReferralId(mPhraseInfo, (success, referralId, exception) -> {
-            LoadingUtil.onLoadingFinished();
-
-            if (!success) {
-                // TODO Organize error messages
-                Toast.makeText(getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            doPromote(referralId, share);
-        });
+        doPromote(null, share);
+        // TODO referral
+//        LoadingUtil.onLoadingStarted();
+//
+//        ReferralUtils.getReferralId(mPhraseInfo, (success, referralId, exception) -> {
+//            LoadingUtil.onLoadingFinished();
+//
+//            if (!success) {
+//                // TODO Organize error messages
+//                Toast.makeText(getContext(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            doPromote(referralId, share);
+//        });
     }
 
     private void doPromote(String referralId, boolean share) {
-        String message = OfferUtils.serializeBeautiful(mOffer, referralId, mOffer.getUserId(), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        String message = OfferUtils.serializeBeautiful(mOffer, referralId, mOffer.getString(Offer.USER_ID), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         if (share) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -452,23 +457,19 @@ public class OfferMessageItem extends SequenceLayout {
 
         PurchasePlanInfo purchasePlanInfo;
 
-        try {
-            PricingInfo pricingInfo = new PricingInfo(new JSONObject(mOffer.getPricingInfo()));
+        Pricing pricing = new Pricing(mOffer.getObject(Offer.PRICING).asJSON());
 
-            if (mSelectedPurchasePlan == mRadioFixedPrice) {
-                purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);
-            }
-            else if (mSelectedPurchasePlan == mRadioBundle) {
-                purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.BUNDLE);
-            }
-            else {
-                purchasePlanInfo = pricingInfo.getPurchasePlanInfo(PurchasePlanTypes.SUBSCRIPTION);
-            }
-        } catch (JSONException e) {
-            return;
+        if (mSelectedPurchasePlan == mRadioFixedPrice) {
+            purchasePlanInfo = pricing.getPurchasePlanInfo(PurchasePlanTypes.SINGLE);
+        }
+        else if (mSelectedPurchasePlan == mRadioBundle) {
+            purchasePlanInfo = pricing.getPurchasePlanInfo(PurchasePlanTypes.BUNDLE);
+        }
+        else {
+            purchasePlanInfo = pricing.getPurchasePlanInfo(PurchasePlanTypes.SUBSCRIPTION);
         }
 
-        PaymentController.get(getContext()).initPayment(mOffer.getId(), purchasePlanInfo.type, mPhraseInfo == null ? null : mPhraseInfo.referralId);
+        PaymentController.get(getContext()).initPayment(mOffer.getString(Offer.ID), purchasePlanInfo.type, mPhraseInfo == null ? null : mPhraseInfo.referralId);
     }
 
 }

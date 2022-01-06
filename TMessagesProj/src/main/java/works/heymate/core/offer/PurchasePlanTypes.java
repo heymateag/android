@@ -1,11 +1,10 @@
 package works.heymate.core.offer;
 
-import com.amplifyframework.datastore.generated.model.Offer;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import works.heymate.api.APIObject;
+import works.heymate.core.Currency;
 import works.heymate.core.Money;
+import works.heymate.model.Offer;
+import works.heymate.model.Pricing;
 
 public class PurchasePlanTypes {
 
@@ -13,27 +12,23 @@ public class PurchasePlanTypes {
     public static final String BUNDLE = "bundle";
     public static final String SUBSCRIPTION = "subscription";
 
-    public static Money getPurchasedPlanPrice(Offer offer, String purchasedPlanType) {
-        try {
-            PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
-            return pricingInfo.getPurchasePlanInfo(purchasedPlanType).price;
-        } catch (JSONException e) { }
-
-        throw new IllegalArgumentException("Bad pricing info or unknown purchase plan type.");
+    public static Money getPurchasedPlanPrice(APIObject offer, String purchasedPlanType) {
+        Pricing pricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
+        return pricing.getPurchasePlanInfo(purchasedPlanType).price;
     }
 
-    public static Money getPurchasedPlanTimeSlotPrice(Offer offer, String purchasedPlanType) {
-        try {
-            PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+    public static Money getPurchasedPlanTimeSlotPrice(APIObject offer, String purchasedPlanType) {
+        Pricing pricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
 
-            switch (purchasedPlanType) {
-                case SINGLE:
-                    return Money.create(pricingInfo.price * 100, pricingInfo.currency);
-                case BUNDLE:
-                case SUBSCRIPTION:
-                    return Money.create(0, pricingInfo.currency);
-            }
-        } catch (JSONException e) { }
+        Currency currency = Currency.forName(pricing.getCurrency());
+
+        switch (purchasedPlanType) {
+            case SINGLE:
+                return Money.create(pricing.getPrice() * 100, currency);
+            case BUNDLE:
+            case SUBSCRIPTION:
+                return Money.create(0, currency);
+        }
 
         throw new IllegalArgumentException("Bad pricing info or unknown purchase plan type.");
     }

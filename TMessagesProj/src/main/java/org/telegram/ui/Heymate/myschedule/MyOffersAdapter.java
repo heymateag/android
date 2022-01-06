@@ -12,10 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.api.ApiException;
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.Reservation;
-import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -28,10 +24,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.core.Texts;
+import works.heymate.model.Offer;
+import works.heymate.model.TimeSlot;
 
 public class MyOffersAdapter extends MyScheduleAdapter {
 
@@ -41,10 +43,10 @@ public class MyOffersAdapter extends MyScheduleAdapter {
     private BaseFragment mParent;
     private final RecyclerListView mListView;
 
-    private SparseArray<List<TimeSlot>> mSections = new SparseArray<>();
+    private SparseArray<List<APIObject>> mSections = new SparseArray<>();
 
-    private Map<String, Offer> mOffers = new HashMap<>();
-    private Map<String, List<Reservation>> mTimeSlotReservations = new HashMap<>();
+    private Map<String, APIObject> mOffers = new HashMap<>();
+    private Map<String, List<APIObject>> mTimeSlotReservations = new HashMap<>();
 
     public MyOffersAdapter(RecyclerListView listView, BaseFragment parent) {
         mContext = listView.getContext();
@@ -54,72 +56,80 @@ public class MyOffersAdapter extends MyScheduleAdapter {
 
     @Override
     public void getData() {
-        HtAmplify.getInstance(mContext).getMyReservedTimeSlots(this::onReservedTimeSlotsQueryResult);
-    }
-
-    private void onReservedTimeSlotsQueryResult(boolean success, List<TimeSlot> timeSlots, ApiException exception) {
-        if (!success) {
-            return;
-        }
-
-//        while (timeSlots.size() > 1) {
-//            timeSlots.remove(1);
-//        }
-        // TODO Sort with some context
-        // Collections.sort(reservations, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        long baseTime = calendar.getTimeInMillis();
-
-        mSections.clear();
-
-        for (TimeSlot timeSlot: timeSlots) {
-            long slotTime = timeSlot.getStartTime() * 1000L;
-
-            int dayDiff;
-
-            if (baseTime > slotTime) {
-                dayDiff = (int) ((baseTime - slotTime) / MyScheduleUtils.ONE_DAY + 1);
-            }
-            else {
-                dayDiff = (int) -((slotTime - baseTime) / MyScheduleUtils.ONE_DAY);
+        APIs.get().getMyOffers(result -> {
+            if (!result.success) {
+                return;
             }
 
-            List<TimeSlot> list = mSections.get(dayDiff);
+            List<APIObject> timeSlots = new LinkedList<>();
 
-            if (list == null) {
-                list = new ArrayList<>();
-                mSections.put(dayDiff, list);
-            }
+            APIArray offers = result.response.getArray("data");
 
-            list.add(timeSlot);
+            for (int i = 0; i < offers.size(); i++) {
+                APIObject offer = offers.getObject(i);
 
-            if (!mOffers.containsKey(timeSlot.getId())) {
-                HtAmplify.getInstance(mContext).getOffer(timeSlot.getOfferId(), (success1, data, exception1) -> {
-                    if (success1) {
-                        mOffers.put(timeSlot.getId(), data);
-                        updateItem(timeSlot, true);
+                APIArray offerSchedule = offer.getArray(Offer.TIMESLOTS);
+
+                for (int j = 0; j < offerSchedule.size(); j++) {
+                    APIObject timeSlot = offerSchedule.getObject(j);
+
+                    if (timeSlot.getInt(TimeSlot.COMPLETED_RESERVATIONS) > 0) {
+                        timeSlots.add(timeSlot);
+
+                        mOffers.put(timeSlot.getString(TimeSlot.ID), offer);
                     }
-                });
+                }
             }
-        }
 
-        notifyDataSetChanged();
+            // TODO Sort with some context
+            // Collections.sort(reservations, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            long baseTime = calendar.getTimeInMillis();
+
+            mSections.clear();
+
+            for (APIObject timeSlot: timeSlots) {
+                long slotTime = timeSlot.getLong(TimeSlot.FROM_TIME) * 1000L;
+
+                int dayDiff;
+
+                if (baseTime > slotTime) {
+                    dayDiff = (int) ((baseTime - slotTime) / MyScheduleUtils.ONE_DAY + 1);
+                }
+                else {
+                    dayDiff = (int) -((slotTime - baseTime) / MyScheduleUtils.ONE_DAY);
+                }
+
+                List<APIObject> list = mSections.get(dayDiff);
+
+                if (list == null) {
+                    list = new ArrayList<>();
+                    mSections.put(dayDiff, list);
+                }
+
+                list.add(timeSlot);
+
+                updateItem(timeSlot, true);
+            }
+
+            notifyDataSetChanged();
+        });
     }
 
-    private void updateItem(TimeSlot timeSlot, boolean queryReservations) {
+    private void updateItem(APIObject timeSlot, boolean queryReservations) {
         for (int i = 0; i < mListView.getChildCount(); i++) {
             if (mListView.getChildAt(i) instanceof MyOfferItem) {
                 MyOfferItem item = (MyOfferItem) mListView.getChildAt(i);
 
-                if (timeSlot.getId().equals(item.getTimeSlotId())) {
+                if (timeSlot.getString(TimeSlot.ID).equals(item.getTimeSlotId())) {
                     item.setTimeSlot(timeSlot);
-                    item.setOffer(mOffers.get(timeSlot.getId()));
-                    item.setReservations(mTimeSlotReservations.get(timeSlot.getId()));
+                    item.setOffer(mOffers.get(timeSlot.getString(TimeSlot.ID)));
+                    item.setReservations(mTimeSlotReservations.get(timeSlot.getString(TimeSlot.ID)));
                 }
             }
         }
@@ -128,26 +138,28 @@ public class MyOffersAdapter extends MyScheduleAdapter {
             return;
         }
 
-        HtAmplify.getInstance(mContext).getTimeSlotReservations(timeSlot.getId(), (success, result, exception) -> {
-            if (!success) {
-                Log.e(TAG, "Failed to get reservations for time lost.", exception);
+        APIs.get().getTimeSlotReservations(timeSlot.getString(TimeSlot.ID), result -> {
+            if (!result.success) {
+                Log.e(TAG, "Failed to get reservations for time lost.", result.error);
                 return;
             }
 
-            mTimeSlotReservations.put(timeSlot.getId(), result);
+            APIArray reservations = result.response.getArray("data");
+
+            mTimeSlotReservations.put(timeSlot.getString(TimeSlot.ID), reservations.asObjectList());
             updateItem(timeSlot, false);
         });
     }
 
-    protected void updateTimeSlot(TimeSlot timeSlot) {
+    protected void updateTimeSlot(APIObject timeSlot) {
         boolean found = false;
 
         for (int i = 0; i < mSections.size(); i++) {
-            List<TimeSlot> timeSlots = mSections.get(mSections.keyAt(i));
+            List<APIObject> timeSlots = mSections.get(mSections.keyAt(i));
 
             if (timeSlots != null) {
                 for (int index = 0; index < timeSlots.size(); index++) {
-                    if (timeSlot.getId().equals(timeSlots.get(index).getId())) {
+                    if (timeSlot.getString(TimeSlot.ID).equals(timeSlots.get(index).getString(TimeSlot.ID))) {
                         found = true;
 
                         timeSlots.set(index, timeSlot);
@@ -228,11 +240,11 @@ public class MyOffersAdapter extends MyScheduleAdapter {
     public void onBindViewHolder(int section, int position, RecyclerView.ViewHolder holder) {
         MyOfferItem item = (MyOfferItem) holder.itemView;
 
-        TimeSlot timeSlot = (TimeSlot) getItem(section, position);
+        APIObject timeSlot = (APIObject) getItem(section, position);
 
         item.setTimeSlot(timeSlot);
-        item.setOffer(mOffers.get(timeSlot.getId()));
-        item.setReservations(mTimeSlotReservations.get(timeSlot.getId()));
+        item.setOffer(mOffers.get(timeSlot.getString(TimeSlot.ID)));
+        item.setReservations(mTimeSlotReservations.get(timeSlot.getString(TimeSlot.ID)));
     }
 
     @Override
@@ -252,13 +264,13 @@ public class MyOffersAdapter extends MyScheduleAdapter {
             case 1:
                 return Texts.get(Texts.YESTERDAY);
             default:
-                List<TimeSlot> reservations = mSections.get(dayDiff);
+                List<APIObject> timeSlots = mSections.get(dayDiff);
 
-                if (reservations == null || reservations.isEmpty()) {
+                if (timeSlots == null || timeSlots.isEmpty()) {
                     return "";
                 }
 
-                return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(reservations.get(0).getStartTime() * 1000L);
+                return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(timeSlots.get(0).getLong(TimeSlot.FROM_TIME) * 1000L);
         }
     }
 

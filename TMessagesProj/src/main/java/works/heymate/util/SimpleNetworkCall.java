@@ -8,9 +8,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import works.heymate.core.Utils;
 
@@ -31,47 +34,30 @@ public class SimpleNetworkCall {
 
     }
 
-    public static void callMapAsync(NetworkCallCallback callback, String method, String url, Map<String, Object> body, String... headers) {
-        try {
-            callAsync(callback, method, url, mapToObject(body), headers);
-        } catch (JSONException e) {
-            if (callback != null) {
-                NetworkCallResult result = new NetworkCallResult();
-                result.exception = e;
+    private static final Executor sExecutor = new ThreadPoolExecutor(2, 5, 5000, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
 
-                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
-            }
-        }
+    public static void callMapAsync(NetworkCallCallback callback, String method, String url, Map<String, Object> body, String... headers) {
+        callAsync(callback, method, url, Utils.mapToJSON(body), headers);
     }
 
     public static void callAsync(NetworkCallCallback callback, String url, JSONObject body, String... headers) {
-        new Thread() {
+        sExecutor.execute(() -> {
+            NetworkCallResult result = call(url, body, headers);
 
-            @Override
-            public void run() {
-                NetworkCallResult result = call(url, body, headers);
-
-                if (callback != null) {
-                    Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
-                }
+            if (callback != null) {
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
             }
-
-        }.start();
+        });
     }
 
     public static void callAsync(NetworkCallCallback callback, String method, String url, JSONObject body, String... headers) {
-        new Thread() {
+        sExecutor.execute(() -> {
+            NetworkCallResult result = call(method, url, body, headers);
 
-            @Override
-            public void run() {
-                NetworkCallResult result = call(method, url, body, headers);
-
-                if (callback != null) {
-                    Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
-                }
+            if (callback != null) {
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
             }
-
-        }.start();
+        });
     }
 
     public static NetworkCallResult call(String url, JSONObject body, String... headers) {
@@ -114,43 +100,6 @@ public class SimpleNetworkCall {
         }
 
         return result;
-    }
-
-    private static JSONObject mapToObject(Map<String, Object> map) throws JSONException {
-        JSONObject json = new JSONObject();
-
-        for (Map.Entry<String, Object> entry: map.entrySet()) {
-            json.put(entry.getKey(), objectToJsonCompatible(entry.getValue()));
-        }
-
-        return json;
-    }
-
-    private static Object objectToJsonCompatible(Object object) throws JSONException {
-        if (object instanceof JSONObject) {
-            return object;
-        }
-        else if (object instanceof JSONArray) {
-            return object;
-        }
-        else if (object instanceof Map) {
-            return mapToObject((Map) object);
-        }
-        else if (object instanceof Collection) {
-            JSONArray jArray = new JSONArray();
-
-            for (Object obj: (Collection) object) {
-                jArray.put(objectToJsonCompatible(obj));
-            }
-
-            return jArray;
-        }
-        else if (object == null) {
-            return JSONObject.NULL;
-        }
-        else {
-            return object;
-        }
     }
 
     private static String readStream(InputStream stream) throws IOException {

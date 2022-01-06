@@ -97,14 +97,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.beta.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
@@ -261,6 +262,7 @@ import works.heymate.beta.R;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.reservation.ReservationUtils;
+import works.heymate.model.Offer;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -23364,30 +23366,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
                     OfferUtils.PhraseInfo phraseInfo = OfferUtils.readBeautiful(finalMessage);
                     offerCell.setPhraseInfo(phraseInfo);
-                    Offer offer = phraseInfo.offer;
+                    APIObject offer = phraseInfo.offer;
                     if (phraseInfo.offerId != null) {
-                        HtAmplify.getInstance(mContext).getOffer(offer.getId(), ((success, fetchedOffer, exception) -> {
-                            if (success) {
+                        APIs.get().getOffer(offer.getString(Offer.ID), result -> {
+                            if (result.success) {
                                 Utils.runOnUIThread(() -> {
-                                    offerCell.setOffer(fetchedOffer, true);
-                                });
-                            }
-                        }));
-                    }
-                    else if (phraseInfo.referralId != null) {
-                        HtAmplify.getInstance(mContext).getReferralInfo(phraseInfo.referralId, (success, result, exception) -> {
-                            if (success) {
-                                HtAmplify.getInstance(mContext).getOffer(result.getOfferId(), (success1, fetchedOffer, exception1) -> {
-                                    if (success1) {
-                                        Utils.runOnUIThread(() -> {
-                                            offerCell.setOffer(fetchedOffer, true);
-                                        });
-                                    }
+                                    offerCell.setOffer(result.response, true);
                                 });
                             }
                         });
                     }
-                    offerCell.setOffer(offer, phraseInfo.offerId != null);
+                    else if (phraseInfo.referralId != null) {
+                        // TODO referral here!
+//                        HtAmplify.getInstance(mContext).getReferralInfo(phraseInfo.referralId, (success, result, exception) -> {
+//                            if (success) {
+//                                HtAmplify.getInstance(mContext).getOffer(result.getOfferId(), (success1, fetchedOffer, exception1) -> {
+//                                    if (success1) {
+//                                        Utils.runOnUIThread(() -> {
+//                                            offerCell.setOffer(fetchedOffer, true);
+//                                        });
+//                                    }
+//                                });
+//                            }
+//                        });
+                    }
+                    offerCell.setOffer(offer, false);
                 }
                 else if (view instanceof MeetingMessageItem) {
                     ReservationUtils.PhraseInfo phraseInfo = ReservationUtils.readBeautiful(message.messageText.toString());

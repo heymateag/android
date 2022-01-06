@@ -24,16 +24,17 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.core.model.temporal.Temporal;
-import com.amplifyframework.datastore.generated.model.Offer;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.beta.R;
-import org.telegram.messenger.UserConfig;
+
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -42,13 +43,10 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Heymate.HeymateConfig;
-import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.WalletExistence;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
-import org.telegram.ui.Heymate.OfferStatus;
 import org.telegram.ui.Heymate.TG2HM;
 
 import java.text.SimpleDateFormat;
@@ -64,6 +62,7 @@ import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferInfo;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.model.Pricing;
 
 public class HtCreateOfferActivity extends BaseFragment {
 
@@ -97,7 +96,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private Uri pickedImage;
 
     private String id;
-    private Offer.BuildStep offerBuilder;
+    // TODO
 
     public enum ActionType {
         CREATE,
@@ -488,7 +487,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                 descriptionTextField.setHighlightColor(Theme.getColor(Theme.key_chat_inRedCall));
                 errors.append(LocaleController.getString("HtDescriptionEmpty", works.heymate.beta.R.string.HtDescriptionEmpty)).append('\n');
             }
-            if (priceInputCell.getPricingInfo() == null) {
+            if (priceInputCell.getPricing() == null) {
                 priceInputCell.setError(true);
                 errors.append(LocaleController.getString("HtPriceEmpty", works.heymate.beta.R.string.HtPriceEmpty)).append('\n');
             }
@@ -602,28 +601,28 @@ public class HtCreateOfferActivity extends BaseFragment {
         saveLayout.setOnClickListener(v -> {
             LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
             int maximumParticipants = participantsInputCell.getMaximumParticipants();
-            JSONObject config = paymentInputCell.getConfig();
+            APIObject paymentTerms = paymentInputCell.getConfig();
             String title = titleTextField.getText().toString();
             String description = descriptionTextField.getText().toString();
             String terms = termsInputCell.getRes(ARGUMENTS_TERMS);
             String category = categoryInputCell.getRes(ARGUMENTS_CATEGORY);
             String subCategory = categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY);
             Date expireDate = HtCreateOfferActivity.this.expireDate;
-            PricingInfo pricingInfo = priceInputCell.getPricingInfo();
+            Pricing pricing = priceInputCell.getPricing();
             List<Long> timeSlots = scheduleInputCell.getTimeSlots();
 
             OfferInfo offerInfo = new OfferInfo();
             offerInfo.setLocationInfo(locationInfo);
             offerInfo.setMeetingType(locationInputCell.getMeetingType());
             offerInfo.setMaximumParticipants(maximumParticipants);
-            offerInfo.setConfig(config);
+            offerInfo.setConfig(paymentTerms.asJSON());
             offerInfo.setTitle(title);
             offerInfo.setDescription(description);
             offerInfo.setTerms(terms);
             offerInfo.setCategory(category);
             offerInfo.setSubCategory(subCategory);
             offerInfo.setExpireDate(expireDate);
-            offerInfo.setPricingInfo(pricingInfo);
+            offerInfo.setPricing(pricing);
             offerInfo.setDateSlots(timeSlots);
 
             HeymateConfig.getGeneral().set(KEY_SAVED_OFFER, offerInfo.asJSON().toString());
@@ -674,8 +673,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                             expireInputCell.setRes(ARGUMENTS_EXPIRE, simpleDateFormat.format(expireDate.getTime()), 0);
                         }
 
-                        if (savedOfferInfo.getPricingInfo() != null) {
-                            setPricingInfo(savedOfferInfo.getPricingInfo());
+                        if (savedOfferInfo.getPricing() != null) {
+                            setPricing(savedOfferInfo.getPricing());
                         }
 
                         if (savedOfferInfo.getDateSlots() != null) {
@@ -684,6 +683,10 @@ public class HtCreateOfferActivity extends BaseFragment {
                     } catch (JSONException e) {
                         Log.e(TAG, "Failed to restore saved offer info", e);
                     }
+                }
+                else {
+                    locationInputCell.setMeetingType(MeetingType.ONLINE_MEETING);
+                    participantsInputCell.setMaximumParticipants(0);
                 }
             }
         }
@@ -711,31 +714,6 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     private void createOffer(int promotionPercentage) {
-        LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
-
-        int maximumParticipants = participantsInputCell.getMaximumParticipants();
-
-        int timeOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000;
-
-        offerBuilder = Offer.builder()
-                .userId("" + UserConfig.getInstance(currentAccount).clientUserId)
-                .id(id)
-                .hasImage(pickedImage != null)
-                .title(titleTextField.getText().toString())
-                .category(categoryInputCell.getRes(ARGUMENTS_CATEGORY))
-                .subCategory(categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY))
-                .description(descriptionTextField.getText().toString())
-                .expiry(new Temporal.Date(expireDate))
-                .locationData(locationInfo == null ? null : locationInfo.address)
-                .meetingType(locationInputCell.getMeetingType())
-                .maximumReservations(maximumParticipants)
-                .terms(termsInputCell.getRes(ARGUMENTS_TERMS))
-                .latitude("" + (locationInfo == null ? 0 : locationInfo.latitude))
-                .longitude("" + (locationInfo == null ? 0 : locationInfo.longitude))
-                .status(OfferStatus.ACTIVE.ordinal())
-                .createdAt(new Temporal.DateTime(new Date(), timeOffset));
-//                        .editedAt(new Temporal.DateTime(new Date(), timeOffset));
-
         if (pickedImage != null) {
             LoadingUtil.onLoadingStarted();
 
@@ -760,41 +738,48 @@ public class HtCreateOfferActivity extends BaseFragment {
     private void createOfferImageDone(int promotionPercentage) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
-        PricingInfo pricingInfo = priceInputCell.getPricingInfo();
+        Pricing pricing = priceInputCell.getPricing();
 
-        JSONObject config = paymentInputCell.getConfig();
+        APIObject paymentTerms = paymentInputCell.getConfig();
 
-        try {
-            config.put(OfferUtils.PROMOTION_RATE, promotionPercentage);
-        } catch (JSONException e) { }
+        // TODO Dropping promotion percentage
 
         LoadingUtil.onLoadingStarted();
 
-        wallet.signOffer(pricingInfo, config, (successful, priceSignature, bundleSignature, subscriptionSignature, exception) -> {
+        wallet.signOffer(pricing, paymentTerms, (successful, exception) -> {
             LoadingUtil.onLoadingFinished();
-
-            offerBuilder
-                    .pricingInfo(pricingInfo.asJSON().toString())
-                    .termsConfig(config.toString())
-                    .walletAddress(wallet.getAddress())
-                    .priceSignature(priceSignature)
-                    .bundleSignature(bundleSignature)
-                    .subscriptionSignature(subscriptionSignature);
 
             if (successful) {
                 List<Long> timeSlots = scheduleInputCell.getTimeSlots();
 
                 LoadingUtil.onLoadingStarted();
 
-                HtAmplify.getInstance(context).createOffer(offerBuilder, timeSlots,
-                        (success, createdOffer, exception1) -> {
+                LocationInputItem.LocationInfo locationInfo = locationInputCell.getLocationInfo();
+
+                APIs.get().createOffer(
+                        titleTextField.getText().toString(),
+                        descriptionTextField.getText().toString(),
+                        categoryInputCell.getRes(ARGUMENTS_CATEGORY),
+                        categoryInputCell.getRes(ARGUMENTS_SUB_CATEGORY),
+                        expireDate.getTime(),
+                        locationInfo == null ? null : locationInfo.address,
+                        locationInfo == null ? null : String.valueOf(locationInfo.latitude),
+                        locationInfo == null ? null : String.valueOf(locationInfo.longitude),
+                        locationInputCell.getMeetingType(),
+                        participantsInputCell.getMaximumParticipants(),
+                        termsInputCell.getRes(ARGUMENTS_TERMS),
+                        pricing,
+                        paymentTerms,
+                        wallet.getAddress(),
+                        timeSlots,
+                        result -> {
                             LoadingUtil.onLoadingFinished();
 
-                            if (success) {
+                            if (result.success) {
                                 Intent share = new Intent(Intent.ACTION_SEND);
                                 share.setType("text/plain");
 
-                                String message = OfferUtils.serializeBeautiful(createdOffer, null, TG2HM.getSelfName(), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+                                String message = OfferUtils.serializeBeautiful(result.response, null, TG2HM.getSelfName(), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
                                 share.putExtra(Intent.EXTRA_TEXT, message);
                                 getParentActivity().startActivity(Intent.createChooser(share, LocaleController.getString("HtPromoteOffer", works.heymate.beta.R.string.HtPromoteYourOffer)));
                                 finishFragment();
@@ -803,7 +788,8 @@ public class HtCreateOfferActivity extends BaseFragment {
                                 // TODO Organize error messages
                                 Toast.makeText(context, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
                             }
-                        });
+                        }
+                );
             }
             else {
                 // TODO Organize error messages
@@ -824,8 +810,8 @@ public class HtCreateOfferActivity extends BaseFragment {
         scheduleInputCell.setTimeSlots(times);
     }
 
-    public void setPricingInfo(PricingInfo pricingInfo) {
-        priceInputCell.setPricingInfo(pricingInfo);
+    public void setPricing(Pricing pricing) {
+        priceInputCell.setPricing(pricing);
     }
 
     public void setLocation(String address, double latitude, double longitude) {
@@ -862,7 +848,9 @@ public class HtCreateOfferActivity extends BaseFragment {
     }
 
     public void setTerms(String terms) {
-        termsInputCell.setRes(ARGUMENTS_TERMS, terms, 0);
+        if (terms != null) {
+            termsInputCell.setRes(ARGUMENTS_TERMS, terms, 0);
+        }
     }
 
     public void setActionType(ActionType actionType) {

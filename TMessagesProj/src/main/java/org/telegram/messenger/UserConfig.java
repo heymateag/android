@@ -16,7 +16,6 @@ import android.util.Base64;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 
-import java.io.File;
 import java.util.Arrays;
 
 public class UserConfig extends BaseController {
@@ -110,7 +109,7 @@ public class UserConfig extends BaseController {
                     if (currentAccount == 0) {
                         editor.putInt("selectedAccount", selectedAccount);
 
-                        ApplicationLoader.startWalletConnection();
+                        ApplicationLoader.onUserChanged();
                     }
                     editor.putBoolean("registeredForPush", registeredForPush);
                     editor.putInt("lastSendMessageId", lastSendMessageId);

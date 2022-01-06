@@ -1,22 +1,22 @@
 package works.heymate.api;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.telegram.ui.Heymate.HeymateConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import works.heymate.core.Utils;
-import works.heymate.core.offer.OfferUtils;
-import works.heymate.core.offer.PricingInfo;
+import works.heymate.model.Pricing;
 import works.heymate.util.SimpleNetworkCall;
+
+import static works.heymate.core.Utils.quickJSON;
+import static works.heymate.core.Utils.quickMap;
 
 class HeymateAPIImpl implements IHeymateAPI {
 
+    private static final String GET_USER_INFO_URL = HeymateConfig.API_BASE_URL + "/users/getUserById";
     private static final String UPDATE_PUSH_TOKEN_URL = HeymateConfig.API_BASE_URL + "/users/putPushToken";
     private static final String UPDATE_USER_INFO_URL = HeymateConfig.API_BASE_URL + "/users/updateUserInfo";
     private static final String CREATE_OFFER_URL = HeymateConfig.API_BASE_URL + "/offer";
@@ -29,8 +29,23 @@ class HeymateAPIImpl implements IHeymateAPI {
     private static final String GET_PURCHASED_PLAN_URL = HeymateConfig.API_BASE_URL + "/purchase-plan/";
     private static final String CREATE_RESERVATION_URL = HeymateConfig.API_BASE_URL + "/reservation";
     private static final String GET_MY_ORDERS_URL = HeymateConfig.API_BASE_URL + "/reservation/myOrders";
+    private static final String GET_TIMESLOT_RESERVATIONS_URL = HeymateConfig.API_BASE_URL + "/offer/{timeslotId}/offerParticipant";
     private static final String GET_RESERVATION_URL = HeymateConfig.API_BASE_URL + "/reservation/";
     private static final String UPDATE_RESERVATION_URL = HeymateConfig.API_BASE_URL + "/reservation/";
+
+    @Override
+    public void getUserInfo(String userId, APICallback callback) {
+        String url = GET_USER_INFO_URL + (userId != null ? "/" + userId : "");
+
+        authorizedCall(result -> {
+            if (result.responseCode == 200) {
+                callback.onAPIResult(new APIResult(new APIObject(result.response).getObject("data")));
+            }
+            else {
+                callback.onAPIResult(new APIResult(result.exception));
+            }
+        }, callback, "GET", url);
+    }
 
     @Override
     public void updatePushToken(String deviceId, String pushId, APICallback callback) {
@@ -47,69 +62,33 @@ class HeymateAPIImpl implements IHeymateAPI {
             if (callback != null) {
                 callback.onAPIResult(new APIResult(result.responseCode >= 200 && result.responseCode < 300, result.exception));
             }
-        }, callback, "POST", UPDATE_USER_INFO_URL, "fullName", fullName, "userName", username, "avatarHash", avatarHash, "telegramId", telegramId);
+        }, callback, "PATCH", UPDATE_USER_INFO_URL, "fullName", fullName, "userName", username, "avatarHash", avatarHash, "telegramId", telegramId);
     }
 
     @Override
-    public void createOffer(String title, String description, String category, String subcategory, long expiration, String address, String latitude, String longitude, String meetingType, int participants, String terms, PricingInfo pricingInfo, JSONObject termsConfig, String walletAddress, String singleSignature, String bundleSignature, String subscriptionSignature, List<Long> timeSlots, APICallback callback) {
+    public void createOffer(String title, String description, String category, String subcategory, long expiration, String address, String latitude, String longitude, String meetingType, int participants, String terms, Pricing pricing, APIObject paymentTerms, String walletAddress, List<Long> timeSlots, APICallback callback) {
         Map<String, Object> body;
 
-        try {
-            body = quickMap(
-                    "location", quickMap("lat", latitude, "long", longitude, "address", address),
-                    "participants", participants,
-                    "meeting_type", meetingType,
-                    "payment_terms", quickMap(
-                            "deposit", termsConfig.get(OfferUtils.INITIAL_DEPOSIT),
-                            "delay_in_start", quickMap(
-                                    "duration", termsConfig.get(OfferUtils.DELAY_TIME),
-                                    "deposit", termsConfig.get(OfferUtils.DELAY_PERCENT)
-                            ),
-                            "cancellation", Arrays.asList(
-                                    quickMap(
-                                            "range", termsConfig.get(OfferUtils.CANCEL_HOURS1),
-                                            "penalty", termsConfig.get(OfferUtils.CANCEL_PERCENT1)
-                                    ),
-                                    quickMap(
-                                            "range", termsConfig.get(OfferUtils.CANCEL_HOURS2),
-                                            "penalty", termsConfig.get(OfferUtils.CANCEL_PERCENT2)
-                                    )
-                            )
-                    ),
-                    "schedules", createSchedules(timeSlots),
-                    "referral_plan", "REF",
-                    "category", quickMap(
-                            "main_cat", category,
-                            "sub_cat", subcategory
-                    ),
-                    "simple_share", "simple or referral ? skip for now",
-                    "term_condition", terms,
-                    "description", description,
-                    "pricing", quickMap(
-                            "rate_type", pricingInfo.rateType,
-                            "currency", pricingInfo.currency.name(),
-                            "subscription", quickMap(
-                                    "signature", subscriptionSignature,
-                                    "period", pricingInfo.subscriptionPeriod,
-                                    "subscription_price", pricingInfo.subscriptionPrice
-                            ),
-                            "signature", singleSignature,
-                            "bundle", quickMap(
-                                    "count", pricingInfo.bundleCount,
-                                    "discount_percent", pricingInfo.bundleDiscountPercent,
-                                    "signature", bundleSignature
-                            ),
-                            "price", pricingInfo.price
-                    ),
-                    "expiration", expiration / 1000,
-                    "sp_wallet_address", walletAddress,
-                    "title", title,
-                    "media", Arrays.asList()
-            );
-        } catch (JSONException e) {
-            Utils.postOnUIThread(() -> callback.onAPIResult(new APIResult(e)));
-            return;
-        }
+        body = quickMap(
+                "location", quickMap("lat", latitude, "long", longitude, "address", address),
+                "participants", participants,
+                "meeting_type", meetingType,
+                "payment_terms", paymentTerms.asJSON(),
+                "schedules", createSchedules(timeSlots),
+                "referral_plan", "REF",
+                "category", quickMap(
+                        "main_cat", category,
+                        "sub_cat", subcategory
+                ),
+                "simple_share", "simple or referral ? skip for now",
+                "term_condition", terms,
+                "description", description,
+                "pricing", pricing.asJSON(),
+                "expiration", expiration / 1000,
+                "sp_wallet_address", walletAddress,
+                "title", title,
+                "media", Arrays.asList()
+        );
 
         authorizedCallWithPreparedBody(result -> {
             if (result.responseCode == 201) {
@@ -127,8 +106,8 @@ class HeymateAPIImpl implements IHeymateAPI {
         for (int i = 0; i < timeSlots.size(); i += 2) {
             schedules.add(
                     quickMap(
-                            "form_time", timeSlots.get(i),
-                            "to_time", timeSlots.get(i + 1)
+                            "form_time", String.valueOf(timeSlots.get(i) / 1000),
+                            "to_time", String.valueOf(timeSlots.get(i + 1) / 1000)
                     )
             );
         }
@@ -201,7 +180,7 @@ class HeymateAPIImpl implements IHeymateAPI {
             else {
                 callback.onAPIResult(new APIResult(result.exception));
             }
-        }, callback, "PUT", url, quickMap("status", status, "meetingId", meetingId, "sessionPassword", sessionPassword));
+        }, callback, "PUT", url, "status", status, "meetingId", meetingId, "sessionPassword", sessionPassword);
     }
 
     @Override
@@ -231,7 +210,7 @@ class HeymateAPIImpl implements IHeymateAPI {
     }
 
     @Override
-    public void createReservation(String offerId, String serviceProviderId, String timeSlotId, APICallback callback) {
+    public void createReservation(String offerId, String serviceProviderId, String timeSlotId, String tradeId, APICallback callback) {
         authorizedCall(result -> {
             if (result.responseCode == 201) {
                 callback.onAPIResult(new APIResult(new APIObject(result.response).getObject("data")));
@@ -239,7 +218,7 @@ class HeymateAPIImpl implements IHeymateAPI {
             else {
                 callback.onAPIResult(new APIResult(result.exception));
             }
-        }, callback, "POST", CREATE_RESERVATION_URL, "offerId", offerId, "serviceProviderId", serviceProviderId, "timeSlotId", timeSlotId);
+        }, callback, "POST", CREATE_RESERVATION_URL, "offerId", offerId, "serviceProviderId", serviceProviderId, "timeSlotId", timeSlotId, "tradeId", tradeId);
     }
 
     @Override
@@ -252,6 +231,23 @@ class HeymateAPIImpl implements IHeymateAPI {
                 callback.onAPIResult(new APIResult(result.exception));
             }
         }, callback, "GET", GET_MY_ORDERS_URL);
+    }
+
+    @Override
+    public void getTimeSlotReservations(String timeSlotId, APICallback callback) {
+        String url = GET_TIMESLOT_RESERVATIONS_URL.replace("{timeslotId}", timeSlotId);
+
+        authorizedCall(result -> {
+            if (result.responseCode == 200) {
+                callback.onAPIResult(new APIResult(new APIObject(result.response)));
+            }
+            else if (result.responseCode == 404) { // TODO This should actually return an error
+                callback.onAPIResult(new APIResult(new APIObject(quickJSON("data", new LinkedList<>()))));
+            }
+            else {
+                callback.onAPIResult(new APIResult(result.exception));
+            }
+        }, callback, "GET", url);
     }
 
     @Override
@@ -279,11 +275,11 @@ class HeymateAPIImpl implements IHeymateAPI {
             else {
                 callback.onAPIResult(new APIResult(result.exception));
             }
-        }, callback, "PUT", url, quickMap("status", status));
+        }, callback, "PUT", url, "status", status);
     }
 
     private void authorizedCall(SimpleNetworkCall.NetworkCallCallback networkCallback, APICallback callback, String method, String url, Object... body) {
-        authorizedCallWithPreparedBody(networkCallback, callback, method, url, quickMap(body));
+        authorizedCallWithPreparedBody(networkCallback, callback, method, url, "GET".equals(method) ? null : quickMap(body));
     }
 
     private void authorizedCallWithPreparedBody(SimpleNetworkCall.NetworkCallCallback networkCallback, APICallback callback, String method, String url, Map<String, Object> body) {
@@ -291,20 +287,10 @@ class HeymateAPIImpl implements IHeymateAPI {
             if (token != null) {
                 SimpleNetworkCall.callMapAsync(networkCallback, method, url, body, "Authorization", "Bearer " + token);
             }
-            else {
+            else if (callback != null) {
                 callback.onAPIResult(new APIResult(exception));
             }
         });
-    }
-
-    private static Map<String, Object> quickMap(Object... keyValues) {
-        Map<String, Object> map = new HashMap<>();
-
-        for (int i = 0; i < keyValues.length; i += 2) {
-            map.put(keyValues[i].toString(), keyValues[i + 1]);
-        }
-
-        return map;
     }
 
 }

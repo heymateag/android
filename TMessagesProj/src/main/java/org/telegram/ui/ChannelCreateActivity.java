@@ -1045,7 +1045,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             presentFragment(new ChannelCreateActivity(bundle), true);
 
             if (shop) {
-                HtAmplify.getInstance(getParentActivity()).createShop(chat_id, nameTextView.getText().toString(), HtAmplify.ShopType.Shop);
+                // TODO create shop
+//                HtAmplify.getInstance(getParentActivity()).createShop(chat_id, nameTextView.getText().toString(), HtAmplify.ShopType.Shop);
             }
         }
     }

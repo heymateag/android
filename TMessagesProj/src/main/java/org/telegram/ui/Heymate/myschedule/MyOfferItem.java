@@ -12,9 +12,6 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.Reservation;
-import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 import com.yashoid.sequencelayout.SequenceLayout;
 
@@ -22,19 +19,17 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.offer.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.MeetingType;
-import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.Heymate.onlinemeeting.OnlineMeetingActivity;
@@ -42,9 +37,19 @@ import org.telegram.ui.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.core.Texts;
+import works.heymate.core.reservation.ReservationUtils;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.model.Offer;
+import works.heymate.model.TSReservation;
+import works.heymate.model.TimeSlot;
+import works.heymate.model.User;
+import works.heymate.model.Users;
 
 public class MyOfferItem extends SequenceLayout implements View.OnClickListener {
 
@@ -62,11 +67,12 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
     private boolean mIsOnlineMeeting;
 
-    private TimeSlot mTimeSlot = null;
-    private List<Reservation> mReservations = null;
-    private Offer mOffer = null;
+    private APIObject mTimeSlot = null;
+    private List<APIObject> mReservations = null;
+    private APIObject mOffer = null;
 
-    private long mUserId = 0;
+    private String mUserId = null;
+    private long mTelegramId = 0;
 
     private final ImageReceiver avatarImage = new ImageReceiver(this);
     private final AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -106,38 +112,66 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         avatarImage.setRoundRadius(AndroidUtilities.dp(28));
     }
 
-    public void setTimeSlot(TimeSlot timeSlot) {
-        boolean timeSlotChanged = mTimeSlot == null || timeSlot == null || !mTimeSlot.getId().equals(timeSlot.getId());
+    public void setTimeSlot(APIObject timeSlot) {
+        boolean timeSlotChanged = mTimeSlot == null || timeSlot == null || !mTimeSlot.getString(TimeSlot.ID).equals(timeSlot.getString(TimeSlot.ID));
 
         mTimeSlot = timeSlot;
 
         if (timeSlotChanged) {
-            mUserId = 0;
+            mUserId = null;
         }
 
         updateIsOnlineMeeting();
         updateLayout();
     }
 
-    public void setReservations(List<Reservation> reservations) {
+    public void setReservations(List<APIObject> reservations) {
         mReservations = reservations;
 
         if (reservations != null && reservations.size() == 1) {
-            try {
-                mUserId = Long.parseLong(reservations.get(0).getConsumerId());
-            } catch (Throwable t) {
-                mUserId = 0;
-            }
+            // TODO fix this! User object is returned instead of reservation.
+            mUserId = reservations.get(0).getString(TSReservation.USER_ID);
+            mTelegramId = reservations.get(0).getLong(TSReservation.TELEGRAM_ID);
+        }
+        else {
+            mUserId = null;
+            mTelegramId = 0;
+        }
+
+        if (mTelegramId != 0) {
+            TLRPC.User user = MessagesController.getInstance(mParent.getCurrentAccount()).getUser(mTelegramId);
+            onUserLoaded(user);
+        }
+        else if (mUserId != null) {
+            Users.getUser(mUserId, result -> {
+                if (result.response != null && result.response.getString(User.ID).equals(mUserId)) {
+                    mTelegramId = result.response.getLong(User.TELEGRAM_ID);
+
+                    if (mTelegramId != 0) {
+                        TLRPC.User user = MessagesController.getInstance(mParent.getCurrentAccount()).getUser(mTelegramId);
+                        onUserLoaded(user);
+                    }
+                    else {
+                        onUserLoaded(null);
+                    }
+                }
+                else {
+                    onUserLoaded(null);
+                }
+            });
+        }
+        else {
+            onUserLoaded(null);
         }
 
         updateLayout();
     }
 
     public String getTimeSlotId() {
-        return mTimeSlot == null ? null : mTimeSlot.getId();
+        return mTimeSlot == null ? null : mTimeSlot.getString(TimeSlot.ID);
     }
 
-    public void setOffer(Offer offer) {
+    public void setOffer(APIObject offer) {
         mOffer = offer;
 
         updateIsOnlineMeeting();
@@ -145,12 +179,12 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void updateIsOnlineMeeting() {
-        if (mTimeSlot != null) {
-            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mTimeSlot.getMeetingType());
+        if (mOffer != null) {
+            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getString(Offer.MEETING_TYPE));
         }
-        else if (mOffer != null) {
-            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getMeetingType());
-        }
+//        else if (mTimeSlot != null) { // TODO
+//            mIsOnlineMeeting = MeetingType.ONLINE_MEETING.equals(mTimeSlot.getMeetingType());
+//        }
         else {
             mIsOnlineMeeting = false;
         }
@@ -159,21 +193,13 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     private void updateLayout() {
         stopCountDown();
 
-        if (mUserId != 0) {
-            TLRPC.User user = MessagesController.getInstance(mParent.getCurrentAccount()).getUser(mUserId);
-            onUserLoaded(user);
-        }
-        else {
-            onUserLoaded(null);
-        }
-
         if (mReservations != null && mReservations.size() > 1) {
             mTextName.setText(mReservations.size() + " customers."); // TODO Texts
         }
 
-        HtTimeSlotStatus status = OnlineReservation.stabilizeTimeSlotStatuses(getContext(), mOffer, mTimeSlot, mReservations, false);
+        HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(mTimeSlot.getString(TimeSlot.STATUS));
 
-        if (mOffer != null && mTimeSlot != null && mReservations != null && status != null) {
+        if (mOffer != null && mTimeSlot != null) {
             String text;
 
             switch (status) {
@@ -202,8 +228,8 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
             }
 
             text = text
-                    .replace(MyScheduleUtils.PLACEHOLDER_SUB_CATEGORY, mOffer.getSubCategory())
-                    .replace(MyScheduleUtils.PLACEHOLDER_TIME_DIFF, MyScheduleUtils.getTimeDiff(mTimeSlot.getStartTime() * 1000L));
+                    .replace(MyScheduleUtils.PLACEHOLDER_SUB_CATEGORY, mOffer.getString(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY))
+                    .replace(MyScheduleUtils.PLACEHOLDER_TIME_DIFF, MyScheduleUtils.getTimeDiff(mTimeSlot.getLong(TimeSlot.FROM_TIME) * 1000L));
 
             mTextInfo.setText(text);
         }
@@ -223,11 +249,11 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
                     mButtonRight.setOnClickListener(v -> markAsStarted());
 
                     if (mIsOnlineMeeting) {
-                        if (mTimeSlot == null || mTimeSlot.getStartTime() == null) {
+                        if (mTimeSlot == null || mTimeSlot.getString(TimeSlot.FROM_TIME) == null) {
                             disableRight();
                         }
                         else {
-                            int startTime = mTimeSlot.getStartTime();
+                            long startTime = mTimeSlot.getLong(TimeSlot.FROM_TIME);
 
                             if (startTime > System.currentTimeMillis() / 1000) {
                                 disableRight();
@@ -381,9 +407,9 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         if (v == mImageUser || v == mTextName) {
-            if (mUserId != 0) {
+            if (mTelegramId != 0) {
                 Bundle args = new Bundle();
-                args.putLong("user_id", mUserId);
+                args.putLong("user_id", mTelegramId);
                 mParent.presentFragment(new ProfileActivity(args));
             }
             return;
@@ -404,7 +430,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-        ArrayList<Reservation> remainingReservations = new ArrayList<>(mReservations);
+        ArrayList<APIObject> remainingReservations = new ArrayList<>(mReservations);
 
         cancelReservations(remainingReservations, wallet, true);
 
@@ -412,23 +438,26 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
         disableRight();
     }
 
-    private void cancelReservations(List<Reservation> remainingReservations, Wallet wallet, boolean noErrors) {
+    private void cancelReservations(List<APIObject> remainingReservations, Wallet wallet, boolean noErrors) {
         if (remainingReservations.isEmpty()) {
             LoadingUtil.onLoadingFinished();
 
-            if (!noErrors) {
+            if (noErrors) {
+                APIs.get().updateTimeSlot(mTimeSlot.getString(TimeSlot.ID), HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER.name(), mTimeSlot.getString(TimeSlot.MEETING_ID), mTimeSlot.getString(TimeSlot.MEETING_PASSWORD), result -> {
+                    // Ignoring this.
+                });
+            }
+            else {
                 Toast.makeText(getContext(), Texts.get(Texts.NETWORK_BLOCKCHAIN_ERROR), Toast.LENGTH_LONG).show(); // TODO Not very accurate.
                 updateLayout();
             }
             return;
         }
 
-        Reservation reservation = remainingReservations.remove(0);
+        APIObject reservation = remainingReservations.remove(0);
 
-        wallet.cancelOffer(mOffer, reservation, false, (success, errorCause) -> {
+        wallet.cancelOffer(mOffer, null, reservation, false, (success, errorCause) -> {
             if (success) {
-                HtAmplify.getInstance(getContext()).updateReservation(reservation, HtTimeSlotStatus.CANCELLED_BY_SERVICE_PROVIDER);
-
                 cancelReservations(remainingReservations, wallet, noErrors);
             }
             else {
@@ -441,41 +470,78 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
     }
 
     private void markAsStarted() {
-        String meetingId = OnlineReservation.ensureUniformStatus(getContext(), mOffer, mTimeSlot, mReservations, HtTimeSlotStatus.MARKED_AS_STARTED, true);
+        String meetingId = UUID.randomUUID().toString();
+        String meetingPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
 
         if (mIsOnlineMeeting) {
-            joinSession(meetingId);
-        }
+            LoadingUtil.onLoadingStarted();
 
-        disableLeft();
-        disableRight();
+            APIs.get().updateTimeSlot(mTimeSlot.getString(TimeSlot.ID), HtTimeSlotStatus.MARKED_AS_STARTED.name(), meetingId, meetingPassword, result -> {
+                LoadingUtil.onLoadingFinished();
+
+                if (result.success) {
+                    APIs.get().getTimeSlotReservations(mTimeSlot.getString(TimeSlot.ID), reservationsResult -> {
+                        if (reservationsResult.success) {
+                            APIArray reservations = reservationsResult.response.getArray("data");
+
+                            for (int i = 0; i < reservations.size(); i++) {
+                                APIObject tsReservation = reservations.getObject(i);
+
+                                String reservationId = tsReservation.getString(TSReservation.RESERVATION_ID);
+                                long telegramId = tsReservation.getLong(TSReservation.TELEGRAM_ID);
+
+                                APIs.get().getReservation(reservationId, reservationResult -> {
+                                    if (reservationResult.success) {
+                                        String message = ReservationUtils.serializeBeautiful(reservationResult.response, mTimeSlot, mOffer, ReservationUtils.OFFER_ID, ReservationUtils.MEETING_ID, ReservationUtils.MEETING_TYPE, ReservationUtils.START_TIME, ReservationUtils.SERVICE_PROVIDER_ID);
+                                        SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(message, telegramId, null, null, null, false, null, null, null, true, 0, null);
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    joinSession(meetingId, meetingPassword);
+                }
+                else {
+                    Toast.makeText(getContext(), "Network error: " + (result.error == null ? "" : result.error.getMessage()), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        else {
+            APIs.get().updateTimeSlot(mTimeSlot.getString(TimeSlot.ID), HtTimeSlotStatus.MARKED_AS_STARTED.name(), meetingId, meetingPassword, result -> {
+                // Ignoring the result
+            });
+
+            disableLeft();
+            disableRight();
+        }
     }
 
     private void markAsFinished() {
-        OnlineReservation.ensureUniformStatus(getContext(), mOffer, mTimeSlot, mReservations, HtTimeSlotStatus.MARKED_AS_FINISHED, true);
+        String meetingId = mTimeSlot.getString(TimeSlot.MEETING_ID);
+        String meetingPassword = mTimeSlot.getString(TimeSlot.MEETING_PASSWORD);
+        APIs.get().updateTimeSlot(mTimeSlot.getString(TimeSlot.ID), HtTimeSlotStatus.MARKED_AS_FINISHED.name(), meetingId, meetingPassword, result -> {
+            // Ignoring
+        });
 
         disableLeft();
         disableRight();
     }
 
     private void joinSession() {
-        joinSession(OnlineReservation.getMeetingId(mReservations));
+        joinSession(mTimeSlot.getString(TimeSlot.MEETING_ID), mTimeSlot.getString(TimeSlot.MEETING_PASSWORD));
     }
 
-    private void joinSession(String meetingId) {
-        LogToGroup.logIfCrashed(() -> {
-            mParent.presentFragment(new OnlineMeetingActivity(meetingId, mTimeSlot.getId(), null), true);
-        });
+    private void joinSession(String meetingId, String meetingPassword) {
+        LogToGroup.logIfCrashed(() ->
+            mParent.presentFragment(new OnlineMeetingActivity(meetingId, meetingPassword, mTimeSlot.getString(TimeSlot.ID), null), true)
+        );
     }
 
     private void showDetails() {
         OfferDetailsActivity offerDetails = new OfferDetailsActivity();
         offerDetails.setOffer(mOffer, null);
         mParent.presentFragment(offerDetails);
-//        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null);
-//        AlertDialog dialog = detailsPopUp.create();
-//        detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
-//        mParent.showDialog(dialog);
     }
 
     @Override

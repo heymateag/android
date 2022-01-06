@@ -38,6 +38,8 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Heymate.ActivityMonitor;
+import org.telegram.ui.Heymate.HeymateConfig;
+import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
 
 import java.io.File;
@@ -45,12 +47,17 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.UUID;
 
 import androidx.multidex.MultiDex;
 
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.model.User;
+import works.heymate.model.Users;
 
 public class ApplicationLoader extends Application {
 
@@ -183,11 +190,49 @@ public class ApplicationLoader extends Application {
         ChatThemeController.init();
 
         HeymateEvents.register(HeymateEvents.WALLET_CREATED, sWalletCreatedObserver);
+        onUserChanged();
+    }
+
+    public static void onUserChanged() {
         startWalletConnection();
+
+        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+
+        if (phoneNumber == null) {
+            return;
+        }
+
+        TLRPC.User telegramUser = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();;
+
+        if (telegramUser == null) {
+            return;
+        }
+
+        boolean theCallIsNew = Users.onCurrentUserChanged(null);
+
+        if (theCallIsNew) {
+            long telegramId = telegramUser.id;
+            String username = telegramUser.username;
+            String fullName = UserObject.getUserName(telegramUser);
+
+            if (Users.currentUser == null || Users.currentUser.getLong(User.TELEGRAM_ID) != telegramId ||
+                    !TextUtils.equals(username, Users.currentUser.getString(User.USERNAME)) ||
+                    !TextUtils.equals(fullName, Users.currentUser.getString(User.FULL_NAME))) {
+                APIs.get().updateUserInfo(fullName, username, null, String.valueOf(telegramId), result -> {
+                    if (result.success) {
+                        Users.onCurrentUserChanged(null);
+                    }
+                });
+            }
+        }
     }
 
     public static void startWalletConnection() {
         String phoneNumber = TG2HM.getCurrentPhoneNumber();
+
+        if (phoneNumber == null) {
+            return;
+        }
 
         Wallet wallet = Wallet.get(applicationContext, phoneNumber);
 
@@ -328,6 +373,16 @@ public class ApplicationLoader extends Application {
                                     String token = task.getResult();
                                     if (!TextUtils.isEmpty(token)) {
                                         GcmPushListenerService.sendRegistrationToServer(token);
+
+                                        String deviceId = HeymateConfig.getGeneral().get("deviceId");
+
+                                        if (deviceId == null) {
+                                            deviceId = UUID.randomUUID().toString();
+
+                                            HeymateConfig.getGeneral().set("deviceId", deviceId);
+                                        }
+
+                                        APIs.get().updatePushToken(deviceId, token, null);
                                     }
                                 });
                     } catch (Throwable e) {

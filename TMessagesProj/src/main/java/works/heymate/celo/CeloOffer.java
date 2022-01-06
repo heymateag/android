@@ -1,31 +1,34 @@
 package works.heymate.celo;
 
-import com.amplifyframework.datastore.generated.model.PurchasedPlan;
-import com.amplifyframework.datastore.generated.model.Reservation;
-
 import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.ContractKit;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
 import works.heymate.core.Currency;
-import works.heymate.core.offer.PricingInfo;
 import org.web3j.crypto.Sign;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import works.heymate.celo.contract.Offer;
-import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.model.Pricing;
+import works.heymate.model.PurchasedPlan;
+import works.heymate.model.Reservation;
+import works.heymate.model.TimeSlot;
 
 public class CeloOffer {
 
@@ -39,49 +42,48 @@ public class CeloOffer {
         mContract = Offer.load(address, contractKit.web3j, contractKit.transactionManager, new DefaultGasProvider());
     }
 
-    public String createOfferSignature(PricingInfo pricingInfo, JSONObject termsConfig) throws Exception {
+    public void createOfferSignature(Pricing pricing, APIObject paymentTerms) throws Exception {
         byte[] serviceProviderAddress = Numeric.hexStringToByteArray(mContractKit.getAddress());
 
-        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (pricingInfo.price * 100));
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (pricing.getPrice() * 100));
 
-        BigInteger initialDeposit = new BigInteger(termsConfig.getString(OfferUtils.INITIAL_DEPOSIT));
-        List<BigInteger> config = getConfig(termsConfig, pricingInfo);
+        BigInteger initialDeposit = BigInteger.valueOf(paymentTerms.getLong(works.heymate.model.Offer.PaymentTerms.DEPOSIT));
+        List<BigInteger> config = getConfig(paymentTerms, pricing);
 
-        return sign(serviceProviderAddress, amount, initialDeposit, config);
+        pricing.setSignature(sign(serviceProviderAddress, amount, initialDeposit, config));
     }
 
-    public String createBundleSignature(PricingInfo pricingInfo, int promotionPercent) {
+    public void createBundleSignature(Pricing pricing, int promotionPercent) {
         byte[] address = Numeric.hexStringToByteArray(mContractKit.getAddress());
-        List<BigInteger> config = getBundleConfig(pricingInfo, promotionPercent);
-        return sign(address, config);
+        List<BigInteger> config = getBundleConfig(pricing, promotionPercent);
+        pricing.setBundleSignature(sign(address, config));
     }
 
-    public String createSubscriptionSignature(PricingInfo pricingInfo, int promotionPercent) {
+    public void createSubscriptionSignature(Pricing pricing, int promotionPercent) {
         byte[] address = Numeric.hexStringToByteArray(mContractKit.getAddress());
-        List<BigInteger> config = getSubscriptionConfig(pricingInfo, promotionPercent);
-        return sign(address, config);
+        List<BigInteger> config = getSubscriptionConfig(pricing, promotionPercent);
+        pricing.setSubscriptionSignature(sign(address, config));
     }
 
-    public void createPaymentPlan(com.amplifyframework.datastore.generated.model.Offer offer,
-                                  PurchasedPlan purchasePlan, List<String> referrers) throws JSONException, CeloException {
-        PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+    public void createPaymentPlan(APIObject offer,
+                                  APIObject purchasePlan, List<String> referrers) throws JSONException, CeloException {
+        Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
+        Currency currency = Currency.forName(pricing.getCurrency());
 
-        JSONObject configJSON = new JSONObject(offer.getTermsConfig());
-        int promotionPercent = configJSON.getInt(OfferUtils.PROMOTION_RATE);
+        int promotionPercent = 0; // TODO
 
-        boolean isBundle = PurchasePlanTypes.BUNDLE.equals(purchasePlan.getPlanType());
+        boolean isBundle = PurchasePlanTypes.BUNDLE.equals(purchasePlan.getString(PurchasedPlan.PLAN_TYPE));
 
-        byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
+        byte[] planId = Numeric.hexStringToByteArray(purchasePlan.getString(PurchasedPlan.ID).replaceAll("-", ""));
         BigInteger planType = isBundle ? BigInteger.ONE : BigInteger.valueOf(2L);
-        List<BigInteger> config = isBundle ? getBundleConfig(pricingInfo, promotionPercent) : getSubscriptionConfig(pricingInfo, promotionPercent);
+        List<BigInteger> config = isBundle ? getBundleConfig(pricing, promotionPercent) : getSubscriptionConfig(pricing, promotionPercent);
         List<String> userAddresses = Arrays.asList(
-                offer.getWalletAddress(),
+                offer.getString(works.heymate.model.Offer.WALLET_ADDRESS),
                 mContractKit.getAddress(),
-                getCurrencyAddress(pricingInfo.currency)
+                getCurrencyAddress(currency)
                 );
 
-        long cents =  isBundle ? pricingInfo.getBundleTotalPrice() * 100L : pricingInfo.subscriptionPrice * 100L;
-        Currency currency = pricingInfo.currency;
+        long cents =  isBundle ? pricing.getBundleTotalPrice() * 100L : pricing.getSubscriptionPrice() * 100L;
 
         adjustGasPayment(currency);
         transfer(cents, currency);
@@ -92,7 +94,10 @@ public class CeloOffer {
                     planType,
                     config,
                     userAddresses,
-                    Numeric.hexStringToByteArray(isBundle ? offer.getBundleSignature() : offer.getSubscriptionSignature())).send();
+                    Numeric.hexStringToByteArray(isBundle ?
+                            pricing.getString(Pricing.BUNDLE + "." + Pricing.Bundle.SIGNATURE) :
+                            pricing.getString(Pricing.SUBSCRIPTION + "." + Pricing.Subscription.SIGNATURE))
+            ).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(null, e);
@@ -119,20 +124,21 @@ public class CeloOffer {
     serviceProviderAddress: string
     serviceProviderSignature: string
      */
-    public void create(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation,
-                       PurchasedPlan purchasePlan, List<String> referrers) throws CeloException, JSONException {
-        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
-        byte[] planId = purchasePlan == null ? null : Numeric.hexStringToByteArray(purchasePlan.getId().replaceAll("-", ""));
+    public void create(APIObject offer, APIObject timeSlot, String sTradeId,
+                       APIObject purchasePlan, List<String> referrers) throws CeloException, JSONException {
+        byte[] tradeId = Numeric.hexStringToByteArray(sTradeId.replaceAll("-", ""));
+        byte[] planId = purchasePlan == null ? null : Numeric.hexStringToByteArray(purchasePlan.getString(PurchasedPlan.ID).replaceAll("-", ""));
 
-        PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+        Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
+        Currency currency = Currency.forName(pricing.getCurrency());
 
-        String purchasePlanType = reservation.getPurchasedPlanType();
+        String purchasePlanType = purchasePlan == null ? PurchasePlanTypes.SINGLE : purchasePlan.getString(PurchasedPlan.PLAN_TYPE);
 
-        int rate;
+        long rate;
 
         switch (purchasePlanType) {
             case PurchasePlanTypes.SINGLE:
-                rate = pricingInfo.price;
+                rate = pricing.getPrice();
                 planId = new byte[16];
                 break;
             case PurchasePlanTypes.BUNDLE:
@@ -148,19 +154,17 @@ public class CeloOffer {
         BigInteger initialDeposit;
 
         List<String> userAddresses = Arrays.asList(
-                offer.getWalletAddress(),
+                offer.getString(works.heymate.model.Offer.WALLET_ADDRESS),
                 mContractKit.getAddress(),
-                getCurrencyAddress(pricingInfo.currency));
+                getCurrencyAddress(currency));
 
-        JSONObject configJSON = new JSONObject(offer.getTermsConfig());
+        initialDeposit = new BigInteger(String.valueOf(offer.getLong(works.heymate.model.Offer.PAYMENT_TERMS + "." + works.heymate.model.Offer.PaymentTerms.DEPOSIT)));
+        List<BigInteger> config = getConfig(offer.getObject(works.heymate.model.Offer.PAYMENT_TERMS), pricing);
 
-        initialDeposit = new BigInteger(configJSON.getString(OfferUtils.INITIAL_DEPOSIT));
-        List<BigInteger> config = getConfig(configJSON, pricingInfo);
-
-        adjustGasPayment(pricingInfo.currency);
+        adjustGasPayment(currency);
 
         if (rate > 0) {
-            transfer(rate * 100, pricingInfo.currency);
+            transfer(rate * 100, currency);
         }
 
         try {
@@ -169,14 +173,14 @@ public class CeloOffer {
                     planId,
                     amount,
                     BigInteger.ONE, // fee
-                    BigInteger.valueOf(offer.getExpiry().toDate().getTime() / 1000),
-                    BigInteger.valueOf(reservation.getStartTime()),
+                    BigInteger.valueOf(offer.getLong(works.heymate.model.Offer.EXPIRATION)),
+                    BigInteger.valueOf(timeSlot.getLong(TimeSlot.FROM_TIME)),
                     initialDeposit,
                     userAddresses,
                     config,
                     referrers,
                     new ArrayList<>(0),
-                    Numeric.hexStringToByteArray(offer.getPriceSignature())
+                    Numeric.hexStringToByteArray(pricing.getString(Pricing.SIGNATURE))
             ).send();
 
             String transactionHash = receipt.getTransactionHash();
@@ -220,7 +224,7 @@ public class CeloOffer {
         }
 
         try {
-            token.approve(mContract.getContractAddress(), amount).send();
+            // token.approve(mContract.getContractAddress(), amount).send();
             token.transfer(mContract.getContractAddress(), amount).send();
         } catch (Exception e) {
             if (CeloSDK.isErrorCausedByInsufficientFunds(e)) {
@@ -231,18 +235,19 @@ public class CeloOffer {
         }
     }
 
-    public void startService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException, JSONException {
-        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
+    public void startService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress) throws CeloException, JSONException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getString(Reservation.TRADE_ID).replaceAll("-", ""));
 
-        PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+        Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
+        Currency currency = Currency.forName(pricing.getCurrency());
 
-        String purchasePlanType = reservation.getPurchasedPlanType();
+        String purchasePlanType = purchasedPlan == null ? PurchasePlanTypes.SINGLE : purchasedPlan.getString(PurchasedPlan.PLAN_TYPE);
 
-        int rate;
+        long rate;
 
         switch (purchasePlanType) {
             case PurchasePlanTypes.SINGLE:
-                rate = pricingInfo.price;
+                rate = pricing.getPrice();
                 break;
             case PurchasePlanTypes.BUNDLE:
             case PurchasePlanTypes.SUBSCRIPTION:
@@ -254,10 +259,10 @@ public class CeloOffer {
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        adjustGasPayment(pricingInfo.currency);
+        adjustGasPayment(currency);
 
         try {
-            mContract.startService(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+            mContract.startService(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(null, e);
@@ -268,18 +273,19 @@ public class CeloOffer {
         }
     }
 
-    public void finishService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress) throws CeloException, JSONException {
-        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
+    public void finishService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress) throws CeloException, JSONException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getString(Reservation.TRADE_ID).replaceAll("-", ""));
 
-        PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+        Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
+        Currency currency = Currency.forName(pricing.getCurrency());
 
-        String purchasePlanType = reservation.getPurchasedPlanType();
+        String purchasePlanType = purchasedPlan == null ? PurchasePlanTypes.SINGLE : purchasedPlan.getString(PurchasedPlan.PLAN_TYPE);
 
-        int rate;
+        long rate;
 
         switch (purchasePlanType) {
             case PurchasePlanTypes.SINGLE:
-                rate = pricingInfo.price;
+                rate = pricing.getPrice();
                 break;
             case PurchasePlanTypes.BUNDLE:
             case PurchasePlanTypes.SUBSCRIPTION:
@@ -289,12 +295,12 @@ public class CeloOffer {
                 throw new IllegalArgumentException("Purchase plan type not provided."); // TODO not runtime exception! (has repetitions in this class)
         }
 
-        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) rate * 100);
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        adjustGasPayment(pricingInfo.currency);
+        adjustGasPayment(currency);
 
         try {
-            mContract.release(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+            mContract.release(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
         } catch (Exception e) {
             if (e instanceof TransactionException) {
                 throw new CeloException(null, e);
@@ -305,18 +311,19 @@ public class CeloOffer {
         }
     }
 
-    public void cancelService(com.amplifyframework.datastore.generated.model.Offer offer, Reservation reservation, String consumerAddress, boolean consumerCancelled) throws CeloException, JSONException {
-        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getId().replaceAll("-", ""));
+    public void cancelService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress, boolean consumerCancelled) throws CeloException, JSONException {
+        byte[] tradeId = Numeric.hexStringToByteArray(reservation.getString(Reservation.TRADE_ID).replaceAll("-", ""));
 
-        PricingInfo pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+        Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
+        Currency currency = Currency.forName(pricing.getCurrency());
 
-        String purchasePlanType = reservation.getPurchasedPlanType();
+        String purchasePlanType = purchasedPlan == null ? PurchasePlanTypes.SINGLE : purchasedPlan.getString(PurchasedPlan.PLAN_TYPE);
 
-        int rate;
+        long rate;
 
         switch (purchasePlanType) {
             case PurchasePlanTypes.SINGLE:
-                rate = pricingInfo.price;
+                rate = pricing.getPrice();
                 break;
             case PurchasePlanTypes.BUNDLE:
             case PurchasePlanTypes.SUBSCRIPTION:
@@ -326,16 +333,16 @@ public class CeloOffer {
                 throw new IllegalArgumentException("Purchase plan type not provided."); // TODO not runtime exception! (has repetitions in this class)
         }
 
-        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) rate * 100);
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        adjustGasPayment(pricingInfo.currency);
+        adjustGasPayment(currency);
 
         try {
             if (consumerCancelled) {
-                mContract.consumerCancel(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+                mContract.consumerCancel(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
             }
             else {
-                mContract.serviceProviderCancel(tradeId, offer.getWalletAddress(), consumerAddress, amount, BigInteger.ONE).send();
+                mContract.serviceProviderCancel(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
             }
         } catch (Exception e) {
             if (e instanceof TransactionException) {
@@ -347,15 +354,20 @@ public class CeloOffer {
         }
     }
 
-    private static List<BigInteger> getConfig(JSONObject configJSON, PricingInfo pricingInfo) throws JSONException {
+    private static List<BigInteger> getConfig(APIObject paymentTerms, Pricing pricing) throws JSONException {
+        APIObject delay = paymentTerms.getObject(works.heymate.model.Offer.PaymentTerms.DELAY_IN_START);
+        APIArray cancellation = paymentTerms.getArray(works.heymate.model.Offer.PaymentTerms.CANCELLATION);
+        APIObject cancel1 = cancellation.getObject(0);
+        APIObject cancel2 = cancellation.getObject(1);
+
         List<BigInteger> config = new ArrayList<>(8);
 
-        BigInteger hours1 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_HOURS1)).multiply(SIXTY);
-        BigInteger percent1 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_PERCENT1));
-        BigInteger hours2 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_HOURS2)).multiply(SIXTY);
-        BigInteger percent2 = new BigInteger(configJSON.getString(OfferUtils.CANCEL_PERCENT2));
-        BigInteger delayTime = new BigInteger(configJSON.getString(OfferUtils.DELAY_TIME));
-        BigInteger delayPercent = new BigInteger(configJSON.getString(OfferUtils.DELAY_PERCENT));
+        BigInteger hours1 = BigInteger.valueOf(cancel1.getLong(works.heymate.model.Offer.PaymentTerms.Cancellation.RANGE)).multiply(SIXTY);
+        BigInteger percent1 = BigInteger.valueOf(cancel1.getLong(works.heymate.model.Offer.PaymentTerms.Cancellation.PENALTY));
+        BigInteger hours2 = BigInteger.valueOf(cancel2.getLong(works.heymate.model.Offer.PaymentTerms.Cancellation.RANGE)).multiply(SIXTY);
+        BigInteger percent2 = BigInteger.valueOf(cancel2.getLong(works.heymate.model.Offer.PaymentTerms.Cancellation.PENALTY));
+        BigInteger delayTime = BigInteger.valueOf(delay.getLong(works.heymate.model.Offer.PaymentTerms.DelayInStart.DURATION));
+        BigInteger delayPercent = BigInteger.valueOf(delay.getLong(works.heymate.model.Offer.PaymentTerms.DelayInStart.PENALTY));
 
         if (hours1.compareTo(hours2) > 0) {
             config.add(hours1);
@@ -373,28 +385,28 @@ public class CeloOffer {
         config.add(delayTime);
         config.add(delayPercent);
         config.add(BigInteger.valueOf(4)); // Linear config
-        config.add(new BigInteger(configJSON.getString(OfferUtils.PROMOTION_RATE)));
+        config.add(BigInteger.valueOf(0)); // TODO promotion rate
 
         return config;
     }
 
-    private static List<BigInteger> getBundleConfig(PricingInfo pricingInfo, int promotionPercent) {
-        BigInteger price = BigInteger.valueOf(pricingInfo.price * (100 - pricingInfo.bundleDiscountPercent))
+    private static List<BigInteger> getBundleConfig(Pricing pricing, int promotionPercent) {
+        BigInteger price = BigInteger.valueOf(pricing.getPrice() * (100 - pricing.getBundleDiscountPercent()))
                 .multiply(CurrencyUtil.WEI).divide(CurrencyUtil.ONE_HUNDRED);
 
         return Arrays.asList(
                 price,
                 BigInteger.valueOf(0),
-                BigInteger.valueOf(pricingInfo.bundleCount),
+                BigInteger.valueOf(pricing.getBundleCount()),
                 BigInteger.valueOf(4),
                 BigInteger.ZERO //BigInteger.valueOf(promotionPercent)
         );
     }
 
-    private static List<BigInteger> getSubscriptionConfig(PricingInfo pricingInfo, int promotionPercent) {
+    private static List<BigInteger> getSubscriptionConfig(Pricing pricing, int promotionPercent) {
         return Arrays.asList(
                 BigInteger.ZERO,
-                BigInteger.valueOf(pricingInfo.subscriptionPeriod == null ? 0 : (pricingInfo.subscriptionPeriod.equals(PriceInputItem.SUBSCRIPTION_PERIODS[0]) ? 1 : 2)),
+                BigInteger.valueOf(pricing.getSubscriptionPeriod() == null ? 0 : (pricing.getSubscriptionPeriod().equals(PriceInputItem.SUBSCRIPTION_PERIODS[0]) ? 1 : 2)),
                 BigInteger.valueOf(0),
                 BigInteger.valueOf(4),
                 BigInteger.ZERO //BigInteger.valueOf(promotionPercent)

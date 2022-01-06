@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import works.heymate.model.Pricing;
+
 public class OfferInfo {
 
     private static final String LOCATION_INFO = "location_info";
@@ -22,7 +24,7 @@ public class OfferInfo {
     private static final String CATEGORY = "category";
     private static final String SUB_CATEGORY = "sub_Category";
     private static final String EXPIRE_DATE = "expire_date";
-    private static final String PRICING_INFO = "pricing_info";
+    private static final String PRICING = "pricing";
     private static final String DATE_SLOTS = "date_slots";
 
     private LocationInputItem.LocationInfo mLocationInfo;
@@ -35,7 +37,7 @@ public class OfferInfo {
     private String mCategory;
     private String mSubCategory;
     private long mExpireDate;
-    private PricingInfo mPricingInfo;
+    private Pricing mPricing;
     private List<Long> mDateSlots;
 
     public OfferInfo() {
@@ -74,8 +76,8 @@ public class OfferInfo {
             if (hasProperty(json, EXPIRE_DATE)) {
                 mExpireDate = json.getLong(EXPIRE_DATE);
             }
-            if (hasProperty(json, PRICING_INFO)) {
-                mPricingInfo = new PricingInfo(json.getJSONObject(PRICING_INFO));
+            if (hasProperty(json, PRICING)) {
+                mPricing = new Pricing(json.getJSONObject(PRICING));
             }
             if (hasProperty(json, DATE_SLOTS)) {
                 JSONArray jDateSlots = json.getJSONArray(DATE_SLOTS);
@@ -131,8 +133,8 @@ public class OfferInfo {
         return mExpireDate == 0 ? null : new Date(mExpireDate);
     }
 
-    public PricingInfo getPricingInfo() {
-        return mPricingInfo;
+    public Pricing getPricing() {
+        return mPricing;
     }
 
     public List<Long> getDateSlots() {
@@ -179,8 +181,8 @@ public class OfferInfo {
         mExpireDate = expireDate == null ? 0 : expireDate.getTime();
     }
 
-    public void setPricingInfo(PricingInfo pricingInfo) {
-        mPricingInfo = pricingInfo;
+    public void setPricing(Pricing pricing) {
+        mPricing = pricing;
     }
 
     public void setDateSlots(List<Long> dateSlots) {
@@ -201,7 +203,7 @@ public class OfferInfo {
             json.put(CATEGORY, mCategory);
             json.put(SUB_CATEGORY, mSubCategory);
             json.put(EXPIRE_DATE, mExpireDate);
-            json.put(PRICING_INFO, mPricingInfo == null ? JSONObject.NULL : mPricingInfo.asJSON());
+            json.put(PRICING, mPricing == null ? JSONObject.NULL : mPricing.asJSON());
 
             if (mDateSlots != null) {
                 JSONArray jDateSlots = new JSONArray();

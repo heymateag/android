@@ -6,6 +6,18 @@ public class APIResult {
     public final APIObject response;
     public final Exception error;
 
+    public APIResult(boolean success) {
+        this.success = success;
+        this.response = null;
+        this.error = null;
+    }
+
+    public APIResult(APIObject response) {
+        success = true;
+        this.response = response;
+        error = null;
+    }
+
     APIResult(Exception error) {
         success = false;
         response = null;
@@ -16,12 +28,6 @@ public class APIResult {
         this.success = success;
         response = null;
         this.error = success ? null : error;
-    }
-
-    APIResult(APIObject response) {
-        success = true;
-        this.response = response;
-        error = null;
     }
 
 }

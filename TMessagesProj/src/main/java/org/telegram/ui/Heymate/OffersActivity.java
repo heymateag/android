@@ -18,8 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.datastore.generated.model.Offer;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -34,9 +32,13 @@ import org.telegram.ui.Heymate.offer.OfferMessageItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.core.Money;
 import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.model.Offer;
 
 public class OffersActivity extends BaseFragment {
 
@@ -197,8 +199,8 @@ public class OffersActivity extends BaseFragment {
 
     private class OfferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private List<Offer> mOffers = null;
-        private List<Offer> mFilteredOffers = new ArrayList<>();
+        private List<APIObject> mOffers = null;
+        private List<APIObject> mFilteredOffers = new ArrayList<>();
 
         private boolean mLoading = false;
 
@@ -213,16 +215,21 @@ public class OffersActivity extends BaseFragment {
         public void getData() {
             mLoading = true;
 
-            HtAmplify.getInstance(getParentActivity()).getMyOffers((success, result, exception) -> {
+            APIs.get().getMyOffers(result -> {
                 mLoading = false;
 
-                if (success) {
+                if (result.response != null) {
+                    APIArray offers = result.response.getArray("data");
+
                     if (mOffers == null) {
-                        mOffers = new ArrayList<>(result.size());
+                        mOffers = new ArrayList<>(offers.size());
                     }
 
                     mOffers.clear();
-                    mOffers.addAll(result);
+
+                    for (int i = 0; i < offers.size(); i++) {
+                        mOffers.add(offers.getObject(i));
+                    }
 
                     applyFilter();
                 }
@@ -243,16 +250,16 @@ public class OffersActivity extends BaseFragment {
 
             mFilteredOffers.clear();
 
-            for (Offer offer: mOffers) {
-                if (categoryFilter != null && !categoryFilter.equals(offer.getCategory())) {
+            for (APIObject offer: mOffers) {
+                if (categoryFilter != null && !categoryFilter.equals(offer.getString(Offer.CATEGORY + "." + Offer.Category.MAIN_CATEGORY))) {
                     continue;
                 }
-                else if (subCategoryFilter != null && !subCategoryFilter.equals(offer.getSubCategory())) {
+                else if (subCategoryFilter != null && !subCategoryFilter.equals(offer.getString(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY))) {
                     continue;
                 }
-                else if (statusFilter != null && offer.getStatus() != null && statusFilter.ordinal() != offer.getStatus()) {
-                    continue;
-                }
+//                else if (statusFilter != null && offer.getStatus() != null && statusFilter.ordinal() != offer.getStatus()) {
+//                    continue;
+//                } // TODO no more statuses?
 
                 mFilteredOffers.add(offer);
             }
@@ -291,7 +298,7 @@ public class OffersActivity extends BaseFragment {
                 return;
             }
 
-            Offer offer = mFilteredOffers.get(position);
+            APIObject offer = mFilteredOffers.get(position);
 
             OfferMessageItem item = (OfferMessageItem) holder.itemView;
 

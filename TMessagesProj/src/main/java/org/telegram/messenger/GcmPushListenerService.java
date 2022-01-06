@@ -39,8 +39,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
+import works.heymate.model.Reservation;
+import works.heymate.model.User;
+import works.heymate.model.Users;
+
 import androidx.collection.LongSparseArray;
 
 public class GcmPushListenerService extends FirebaseMessagingService {
@@ -61,16 +67,22 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                 HeymateEvents.notify(HeymateEvents.RESERVATION_STATUS_UPDATED, reservationId);
 
                 AndroidUtilities.runOnUIThread(() -> {
-                    HtAmplify.getInstance(getApplicationContext()).getReservation(reservationId, (success, result, exception) -> {
-                        if (success && result != null) {
+                    APIs.get().getReservation(reservationId, result -> {
+                        if (result.success && result.response != null) {
                             try {
-                                String userId = String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId);
+                                APIObject reservation = result.response;
 
-                                boolean isConsumer = userId.equals(result.getConsumerId());
+                                if (Users.currentUser == null) {
+                                    return;
+                                }
+
+                                String userId = Users.currentUser.getString(User.ID);
+
+                                boolean isConsumer = userId.equals(reservation.getString(Reservation.CONSUMER_ID));
 
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
 
-                                HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(result.getStatus());
+                                HtTimeSlotStatus status = HtTimeSlotStatus.valueOf(reservation.getString(Reservation.STATUS));
 
                                 switch (status) {
                                     case BOOKED:
@@ -134,6 +146,7 @@ public class GcmPushListenerService extends FirebaseMessagingService {
                                 NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(new Random().nextInt(213), builder.build());
                             } catch (Throwable t) { }
                         }
+
                     });
                 });
             }

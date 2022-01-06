@@ -27,7 +27,12 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
+import java.util.Arrays;
+
+import works.heymate.api.APIObject;
+import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
+import works.heymate.model.Offer;
 
 public class HtPaymentConfigInputCell extends LinearLayout {
 
@@ -555,20 +560,24 @@ public class HtPaymentConfigInputCell extends LinearLayout {
         updateValues();
     }
 
-    public JSONObject getConfig() {
-        JSONObject json = new JSONObject();
-
-        try {
-            json.put(OfferUtils.DELAY_TIME, delayMinutes);
-            json.put(OfferUtils.DELAY_PERCENT, delayPercent);
-            json.put(OfferUtils.INITIAL_DEPOSIT, initialDeposit);
-            json.put(OfferUtils.CANCEL_HOURS1, cancelHours1);
-            json.put(OfferUtils.CANCEL_PERCENT1, cancelPercent1);
-            json.put(OfferUtils.CANCEL_HOURS2, cancelHours2);
-            json.put(OfferUtils.CANCEL_PERCENT2, cancelPercent2);
-        } catch (JSONException e) { }
-
-        return json;
+    public APIObject getConfig() {
+        return new APIObject(Utils.quickJSON(
+                Offer.PaymentTerms.DEPOSIT, initialDeposit,
+                Offer.PaymentTerms.DELAY_IN_START, Utils.quickJSON(
+                        Offer.PaymentTerms.DelayInStart.DURATION, delayMinutes,
+                        Offer.PaymentTerms.DelayInStart.PENALTY, delayPercent
+                ),
+                Offer.PaymentTerms.CANCELLATION, Arrays.asList(
+                        Utils.quickJSON(
+                                Offer.PaymentTerms.Cancellation.RANGE, cancelHours1,
+                                Offer.PaymentTerms.Cancellation.PENALTY, cancelPercent1
+                        ),
+                        Utils.quickJSON(
+                                Offer.PaymentTerms.Cancellation.RANGE, cancelHours2,
+                                Offer.PaymentTerms.Cancellation.PENALTY, cancelPercent2
+                        )
+                )
+        ));
     }
 
     public void setActionType(HtCreateOfferActivity.ActionType actionType){

@@ -23,14 +23,17 @@ import org.telegram.ui.Heymate.Constants;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.HtAmplify;
-import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.beta.R;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.model.Offer;
+import works.heymate.model.Pricing;
 
 public class PaymentInvoiceActivity extends BaseFragment {
 
@@ -107,30 +110,26 @@ public class PaymentInvoiceActivity extends BaseFragment {
         Bundle args = getArguments();
         String offerId = args.getString(Constants.OFFER_ID);
 
-        HtAmplify.getInstance(getParentActivity()).getOffer(offerId, (success, offer, exception) -> {
-            if (offer == null) {
+        APIs.get().getOffer(offerId, result -> {
+            if (result.response == null) {
                 finishFragment();
                 return;
             }
 
-            if (offer.getHasImage() != null && offer.getHasImage()) {
-                FileCache.get().getImage(offer.getId(), AndroidUtilities.dp(80), (success1, drawable, exception1) -> mOfferImage.setImageDrawable(drawable));
-            }
-            else {
+            APIObject offer = result.response;
+
+            // TODO offer image
+//            if (offer.getHasImage() != null && offer.getHasImage()) {
+//                FileCache.get().getImage(offer.getId(), AndroidUtilities.dp(80), (success1, drawable, exception1) -> mOfferImage.setImageDrawable(drawable));
+//            }
+//            else {
                 mOfferImage.setVisibility(View.GONE);
-            }
+//            }
 
-            mOfferTitle.setText(offer.getTitle());
-            mOfferCategory.setText(offer.getCategory());
+            mOfferTitle.setText(offer.getString(Offer.TITLE));
+            mOfferCategory.setText(offer.getString(Offer.CATEGORY + "." + Offer.Category.MAIN_CATEGORY));
 
-            PricingInfo pricingInfo;
-
-            try {
-                pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
-            } catch (JSONException e) {
-                finishFragment();
-                return;
-            }
+            Pricing pricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
 
             String purchasedPlanType = args.getString(Constants.PURCHASED_PLAN_TYPE);
             Money walletBalance = args.getParcelable(Constants.MONEY);
@@ -142,19 +141,21 @@ public class PaymentInvoiceActivity extends BaseFragment {
                     break;
                 case PurchasePlanTypes.BUNDLE:
                     mPurchasedPlanType.setText("Bundle");
-                    mPurchasedPlanDescription.setText(" - " + pricingInfo.bundleCount + " sessions");
+                    mPurchasedPlanDescription.setText(" - " + pricing.getBundleCount() + " sessions");
                     break;
                 case PurchasePlanTypes.SUBSCRIPTION:
                     mPurchasedPlanType.setText("Subscription");
-                    mPurchasedPlanDescription.setText(" - unlimited sessions " + pricingInfo.subscriptionPeriod);
+                    mPurchasedPlanDescription.setText(" - unlimited sessions " + pricing.getSubscriptionPeriod());
                     break;
             }
 
-            PurchasePlanInfo planInfo = pricingInfo.getPurchasePlanInfo(purchasedPlanType);
+            PurchasePlanInfo planInfo = pricing.getPurchasePlanInfo(purchasedPlanType);
             Money servicePrice = planInfo.price;
 
+            Currency currency = Currency.forName(pricing.getCurrency());
+
             if (PurchasePlanTypes.BUNDLE.equals(purchasedPlanType)) {
-                Money realPrice = Money.create(pricingInfo.price * 100, pricingInfo.currency).multiplyBy(pricingInfo.bundleCount);
+                Money realPrice = Money.create(pricing.getPrice() * 100, currency).multiplyBy(pricing.getBundleCount());
                 Money discount = realPrice.minus(servicePrice);
 
                 addInvoiceRow("Service Price", realPrice);
@@ -164,7 +165,7 @@ public class PaymentInvoiceActivity extends BaseFragment {
                 addInvoiceRow("Service Price", servicePrice);
             }
 
-            Money fee = Money.create(PaymentController.GAS_ADJUST_CENTS, pricingInfo.currency);
+            Money fee = Money.create(PaymentController.GAS_ADJUST_CENTS, currency);
 
             addInvoiceRow("Fee", fee);
             addInvoiceRow("Wallet Balance", walletBalance);

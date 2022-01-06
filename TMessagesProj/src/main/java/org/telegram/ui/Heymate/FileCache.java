@@ -170,15 +170,17 @@ public class FileCache {
                 }
             }
 
-            try {
-                HtAmplify.getInstance(mContext).uploadFile(id, file);
-
-                if (callback != null) {
-                    Utils.runOnUIThread(() -> callback.onResult(true, null));
-                }
-            } catch (AmazonClientException e) {
-                reportError("Failed to update image file", e, callback);
-            }
+            // TODO fix file upload
+            Utils.runOnUIThread(() -> callback.onResult(true, null));
+//            try {
+//                HtAmplify.getInstance(mContext).uploadFile(id, file);
+//
+//                if (callback != null) {
+//                    Utils.runOnUIThread(() -> callback.onResult(true, null));
+//                }
+//            } catch (AmazonClientException e) {
+//                reportError("Failed to update image file", e, callback);
+//            }
         });
     }
 
@@ -225,37 +227,39 @@ public class FileCache {
             InputStream inputStream = null;
             OutputStream outputStream = null;
 
-            try {
-                S3Object imageObject = HtAmplify.getInstance(mContext).downloadFile(id);
-
-                inputStream = imageObject.getObjectContent();
-                outputStream = new FileOutputStream(originalFile);
-
-                byte[] buffer = new byte[1024];
-                int readSize = 0;
-
-                while (readSize != -1) {
-                    readSize = inputStream.read(buffer);
-
-                    if (readSize > 0) {
-                        outputStream.write(buffer, 0, readSize);
-                    }
-                }
-
-                outputStream.close();
-
-                getImageFromOriginalFile(id, size, originalFile, handle, callback);
-            } catch (Exception e) {
-                if (e instanceof AmazonS3Exception && ((AmazonS3Exception) e).getStatusCode() == 404) {
-                    notifyGetImageResult(true, null, null, callback);
-                    return;
-                }
-
-                notifyGetImageResult(false, null, e, callback);
-            } finally {
-                try { inputStream.close(); } catch (Throwable t) { }
-                try { outputStream.close(); } catch (Throwable t) { }
-            }
+            // TODO actually download file
+            notifyGetImageResult(false, null, null, callback);
+//            try {
+//                S3Object imageObject = HtAmplify.getInstance(mContext).downloadFile(id);
+//
+//                inputStream = imageObject.getObjectContent();
+//                outputStream = new FileOutputStream(originalFile);
+//
+//                byte[] buffer = new byte[1024];
+//                int readSize = 0;
+//
+//                while (readSize != -1) {
+//                    readSize = inputStream.read(buffer);
+//
+//                    if (readSize > 0) {
+//                        outputStream.write(buffer, 0, readSize);
+//                    }
+//                }
+//
+//                outputStream.close();
+//
+//                getImageFromOriginalFile(id, size, originalFile, handle, callback);
+//            } catch (Exception e) {
+//                if (e instanceof AmazonS3Exception && ((AmazonS3Exception) e).getStatusCode() == 404) {
+//                    notifyGetImageResult(true, null, null, callback);
+//                    return;
+//                }
+//
+//                notifyGetImageResult(false, null, e, callback);
+//            } finally {
+//                try { inputStream.close(); } catch (Throwable t) { }
+//                try { outputStream.close(); } catch (Throwable t) { }
+//            }
         });
     }
 

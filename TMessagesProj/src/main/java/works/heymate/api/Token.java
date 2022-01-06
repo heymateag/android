@@ -12,7 +12,7 @@ import java.util.Map;
 import works.heymate.core.Utils;
 import works.heymate.util.SimpleNetworkCall;
 
-class Token {
+public class Token {
 
     private static final String REFRESH_TOKEN_URL = HeymateConfig.API_BASE_URL + "/";// TODO
     private static final String REGISTER_URL = HeymateConfig.API_BASE_URL + "/auth/register";
@@ -24,7 +24,7 @@ class Token {
     private static final String KEY_TOKEN_EXPIRY = "api_token_expiry";
     private static final String KEY_REFRESH_TOKEN = "api_refresh_token";
 
-    interface TokenCallback {
+    public interface TokenCallback {
 
         void onToken(String token, Exception exception);
 
@@ -33,7 +33,7 @@ class Token {
     private static final List<TokenCallback> sCallbacks = new LinkedList<>();
     private static boolean sGettingToken = false;
 
-    synchronized static void get(TokenCallback callback) {
+    synchronized public static void get(TokenCallback callback) {
         if (sGettingToken) {
             sCallbacks.add(callback);
             return;
@@ -48,12 +48,13 @@ class Token {
 
         HeymateConfig config = HeymateConfig.getForAccount(phoneNumber);
 
+        String userId = config.get(HeymateConfig.KEY_USER_ID);
         String token = config.get(KEY_TOKEN);
 
-        if (token != null) {
+        if (userId != null && token != null) {
             long tokenExpiry = Long.parseLong(config.get(KEY_TOKEN_EXPIRY));
 
-            if (tokenExpiry < System.currentTimeMillis() / 1000 - 5 * 60) {
+            if (tokenExpiry > System.currentTimeMillis() / 1000 - 5 * 60) {
                 Utils.runOnUIThread(() -> callback.onToken(token, null));
                 return;
             }
@@ -126,11 +127,13 @@ class Token {
             if (result.responseCode == 201 && result.response != null) {
                 APIObject response = new APIObject(result.response);
 
-                String token = response.getObject("idToken").getString("jwtToken");
-                long tokenExpiry = response.getObject("idToken").getObject("payload").getLong("exp");
-                String refreshToken = response.getObject("refreshToken").getString("token");
+                String userId = response.getString("idToken.payload.sub");
+                String token = response.getString("idToken.jwtToken");
+                long tokenExpiry = response.getLong("idToken.payload.exp");
+                String refreshToken = response.getString("refreshToken.token");
 
                 HeymateConfig config = HeymateConfig.getForAccount(phoneNumber);
+                config.set(HeymateConfig.KEY_USER_ID, userId);
                 config.set(KEY_TOKEN, token);
                 config.set(KEY_TOKEN_EXPIRY, String.valueOf(tokenExpiry));
                 config.set(KEY_REFRESH_TOKEN, refreshToken);

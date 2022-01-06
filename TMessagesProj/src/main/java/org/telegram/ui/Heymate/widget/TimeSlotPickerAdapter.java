@@ -33,7 +33,7 @@ public interface TimeSlotPickerAdapter {
 
         @Override
         public int compareTo(TimeSlot o) {
-            return (int) (startTime - o.startTime);
+            return (int) Math.signum(startTime - o.startTime);
         }
 
     }

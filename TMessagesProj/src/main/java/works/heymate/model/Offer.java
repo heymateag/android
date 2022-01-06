@@ -23,7 +23,7 @@ public interface Offer {
         }
 
         String DEPOSIT = "deposit";
-        String DELEY_IN_START = "delay_in_start";
+        String DELAY_IN_START = "delay_in_start";
         String CANCELLATION = "cancellation";
 
     }
@@ -32,33 +32,6 @@ public interface Offer {
 
         String MAIN_CATEGORY = "main_cat";
         String SUB_CATEGORY = "sub_cat";
-
-    }
-
-    interface Pricing {
-
-        interface Subscription {
-
-            String SIGNATURE = "signature";
-            String PERIOD = "period";
-            String PRICE = "subscription_price";
-
-        }
-
-        interface Bundle {
-
-            String COUNT = "count";
-            String DISCOUNT_PERCENT = "discount_percent";
-            String SIGNATURE = "signature";
-
-        }
-
-        String RATE_TYPE = "rate_type";
-        String CURRENCY = "currency";
-        String SUBSCRIPTION = "subscription";
-        String SIGNATURE = "signature";
-        String BUNDLE = "bundle";
-        String PRICE = "price";
 
     }
 

@@ -2,7 +2,6 @@ package org.telegram.ui.Heymate.myschedule;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -15,10 +14,11 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ViewPagerFixed;
-import org.telegram.ui.Heymate.HtAmplify;
 
+import works.heymate.api.APIs;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
+import works.heymate.model.Reservation;
 
 public class MyScheduleActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
@@ -201,23 +201,24 @@ public class MyScheduleActivity extends BaseFragment implements HeymateEvents.He
     public void onHeymateEvent(int event, Object... args) {
         String id = (String) args[0];
 
-        HtAmplify.getInstance(getParentActivity()).getReservation(id, (success, result, exception) -> {
-            if (success && result != null) {
+        APIs.get().getReservation(id, result -> {
+            if (result.response != null) {
                 if (mMyOrdersAdapter != null) {
-                    mMyOrdersAdapter.updateReservation(result);
+                    mMyOrdersAdapter.updateReservation(result.response);
                 }
 
-                HtAmplify.getInstance(getParentActivity()).getTimeSlot(result.getTimeSlotId(), (success1, result1, exception1) -> {
-                    if (success1 && result1 != null && mMyOffersAdapter != null) {
-                        mMyOffersAdapter.updateTimeSlot(result1);
+                APIs.get().getTimeSlot(result.response.getString(Reservation.TIMESLOT_ID), timeSlotResult -> {
+                    if (timeSlotResult.response != null && mMyOffersAdapter != null) {
+                        mMyOffersAdapter.updateTimeSlot(timeSlotResult.response);
                     }
                 });
 
-                HtAmplify.getInstance(getParentActivity()).getPurchasedPlan(result.getPurchasedPlanId(), (success1, result1, exception1) -> {
-                    if (success1 && result1 != null && mSubscriptionsAdapter != null) {
-                        mSubscriptionsAdapter.updatePurchasedPlan(result1);
-                    }
-                });
+                // TODO purchased plan
+//                HtAmplify.getInstance(getParentActivity()).getPurchasedPlan(result.getPurchasedPlanId(), (success1, result1, exception1) -> {
+//                    if (success1 && result1 != null && mSubscriptionsAdapter != null) {
+//                        mSubscriptionsAdapter.updatePurchasedPlan(result1);
+//                    }
+//                });
             }
         });
     }

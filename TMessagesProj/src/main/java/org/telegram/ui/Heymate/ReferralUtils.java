@@ -3,8 +3,6 @@ package org.telegram.ui.Heymate;
 import android.net.Uri;
 
 import com.amplifyframework.api.ApiException;
-import com.amplifyframework.datastore.generated.model.Referral;
-import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +14,7 @@ import org.telegram.tgnet.TLRPC;
 import java.util.ArrayList;
 import java.util.List;
 
+import works.heymate.api.APIObject;
 import works.heymate.core.URLs;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
@@ -46,27 +45,27 @@ public class ReferralUtils {
         }
     }
 
-    public static List<String> getReferrersFromReferral(Referral referral) {
+    public static List<String> getReferrersFromReferral(APIObject referral) {
         List<String> referrers = new ArrayList<>();
 
-        if (referral != null) {
-            String sReferrers = referral.getReferrers();
-
-            if (sReferrers != null) {
-                try {
-                    JSONArray jReferrers = new JSONArray(sReferrers);
-
-                    for (int i = 0; i < jReferrers.length(); i++) {
-                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
-
-                        if (referrer.walletAddress != null) {
-                            referrers.add(referrer.walletAddress);
-                        }
-                    }
-                } catch (JSONException e) {
-                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
-                }
-            }
+        if (referral != null) { // TODO referral
+//            String sReferrers = referral.getReferrers();
+//
+//            if (sReferrers != null) {
+//                try {
+//                    JSONArray jReferrers = new JSONArray(sReferrers);
+//
+//                    for (int i = 0; i < jReferrers.length(); i++) {
+//                        ReferralUtils.Referrer referrer = new ReferralUtils.Referrer(jReferrers.getJSONObject(i));
+//
+//                        if (referrer.walletAddress != null) {
+//                            referrers.add(referrer.walletAddress);
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    Log.e(TAG, "Failed to read the referrers from the referral.", e);
+//                }
+//            }
         }
 
         return referrers;
@@ -77,15 +76,17 @@ public class ReferralUtils {
     }
 
     private static void getReferralLinkFromReferralUrl(OfferUtils.PhraseInfo phraseInfo, HtAmplify.APICallback<String> callback) {
-        HtAmplify.getInstance(ApplicationLoader.applicationContext)
-                .getReferralInfo(phraseInfo.referralId, (success, data, exception) -> {
-                    if (success) {
-                        getReferralId(data.getOfferId(), phraseInfo.referralId, decodeReferrers(data.getReferrers()), callback);
-                    }
-                    else {
-                        callback.onCallResult(false, null, exception);
-                    }
-                });
+        // TODO
+        callback.onCallResult(false, null, new ApiException("not implemented", "not implemented"));
+//        HtAmplify.getInstance(ApplicationLoader.applicationContext)
+//                .getReferralInfo(phraseInfo.referralId, (success, data, exception) -> {
+//                    if (success) {
+//                        getReferralId(data.getOfferId(), phraseInfo.referralId, decodeReferrers(data.getReferrers()), callback);
+//                    }
+//                    else {
+//                        callback.onCallResult(false, null, exception);
+//                    }
+//                });
     }
 
     private static void getReferralId(String offerId, String referralId, List<Referrer> referrers, HtAmplify.APICallback<String> callback) {
@@ -114,15 +115,17 @@ public class ReferralUtils {
 
         referrers.add(me);
 
-        HtAmplify.getInstance(ApplicationLoader.applicationContext)
-                .createReferral(offerId, encodeReferrers(referrers), (success, data, exception) -> {
-                    if (success) {
-                        callback.onCallResult(true, data.getId(), null);
-                    }
-                    else {
-                        callback.onCallResult(false, null, exception);
-                    }
-                });
+        // TODO
+        callback.onCallResult(false, null, new ApiException("not implemented", "not implemented"));
+//        HtAmplify.getInstance(ApplicationLoader.applicationContext)
+//                .createReferral(offerId, encodeReferrers(referrers), (success, data, exception) -> {
+//                    if (success) {
+//                        callback.onCallResult(true, data.getId(), null);
+//                    }
+//                    else {
+//                        callback.onCallResult(false, null, exception);
+//                    }
+//                });
     }
 
     private static List<Referrer> decodeReferrers(String referrersString) {

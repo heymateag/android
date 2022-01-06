@@ -41,8 +41,11 @@ import us.zoom.sdk.ZoomInstantSDKUser;
 import us.zoom.sdk.ZoomInstantSDKUserHelper;
 import us.zoom.sdk.ZoomInstantSDKVideoHelper;
 import us.zoom.sdk.ZoomInstantSDKVideoOption;
+import works.heymate.api.APIs;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
+import works.heymate.model.Reservation;
+import works.heymate.model.TimeSlot;
 
 public class OnlineMeeting {
 
@@ -104,7 +107,7 @@ public class OnlineMeeting {
      * @param sessionId
      * @return true if already is in the session.
      */
-    public boolean ensureSession(String sessionId, String timeSlotId, String reservationId) {
+    public boolean ensureSession(String sessionId, String sessionPassword, String timeSlotId, String reservationId) {
         HMLog.d(TAG, "ensure session="+sessionId+" timeSlot="+timeSlotId+" reservation="+reservationId);
 
         if (sessionId.equals(mSessionId)) {
@@ -120,27 +123,25 @@ public class OnlineMeeting {
         mReservationId = reservationId;
 
         if (timeSlotId != null) {
-            HtAmplify.getInstance(mContext).getTimeSlot(timeSlotId, (success, result, exception) -> {
+            APIs.get().getTimeSlot(timeSlotId, result -> {
                 if (!timeSlotId.equals(mTimeSlotId)) {
                     return;
                 }
 
-                HMLog.d(TAG, "Host retrieved: " + result);
-                if (success) {
-                    mHostId = result.getUserId();
-                    ensureHost();
+                if (result.success) {
+//                    mHostId = result.response.getString(TimeSlot.) TODO Host id from time slot
+//                    ensureHost();
                 }
             });
         }
         else if (reservationId != null) {
-            HtAmplify.getInstance(mContext).getReservation(reservationId, (success, result, exception) -> {
+            APIs.get().getReservation(reservationId, result -> {
                 if (!reservationId.equals(mReservationId)) {
                     return;
                 }
 
-                HMLog.d(TAG, "Host retrieved: " + result);
-                if (success) {
-                    mHostId = result.getServiceProviderId();
+                if (result.success) {
+                    mHostId = result.response.getString(Reservation.SERVICE_PROVIDER_ID);
                     ensureHost();
                 }
             });
@@ -171,6 +172,7 @@ public class OnlineMeeting {
                     params.audioOption = audioOptions;
                     params.videoOption = videoOptions;
                     params.sessionName = sessionId;
+                    params.sessionPassword = sessionPassword;
                     params.userName = userInfo.toString();
                     params.token = result;
 
@@ -183,7 +185,7 @@ public class OnlineMeeting {
                     }
                 }
                 else {
-                    Log.e(TAG, "Failed to get token for video session.", exception);
+                    Log.e(TAG, "Failed to get token for video session.");
 
                     HMLog.d(TAG, "Notified failed to join meeting");
                     HeymateEvents.notify(HeymateEvents.FAILED_TO_JOIN_MEETING, sessionId);
