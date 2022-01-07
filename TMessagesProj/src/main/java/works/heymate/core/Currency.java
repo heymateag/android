@@ -8,6 +8,7 @@ public class Currency {
 
     public static final Currency USD = new Currency("USD", "$");
     public static final Currency EUR = new Currency("EUR", "€");
+    public static final Currency REAL = new Currency("REAL", "R$");
 
     public static Currency forName(String name) {
         if (USD.name.equals(name)) {
@@ -16,6 +17,10 @@ public class Currency {
 
         if (EUR.name.equals(name)) {
             return EUR;
+        }
+
+        if (REAL.name.equals(name)) {
+            return REAL;
         }
 
         return new Currency(name, name);
@@ -73,6 +78,9 @@ public class Currency {
         }
         else if (EUR.equals(currency)) {
             return Nimiq.TOKEN_CEUR;
+        }
+        else if (REAL.equals(currency)) {
+            return Nimiq.TOKEN_CREAL;
         }
 
         return currency.name;

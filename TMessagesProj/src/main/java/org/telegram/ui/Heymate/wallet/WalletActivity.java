@@ -67,6 +67,7 @@ public class WalletActivity extends BaseFragment {
 
     private String mUSDAddress;
     private String mEURAddress;
+    private String mREALAddress;
 
     @Override
     public boolean onFragmentCreate() {
@@ -376,9 +377,9 @@ public class WalletActivity extends BaseFragment {
         else {
             mTextBalance.setText("");
 
-            wallet.getBalance((success, usd, eur, errorCause) -> {
+            wallet.getBalance((success, usd, eur, real, errorCause) -> {
                 if (success) {
-                    mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur).toString());
+                    mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur, real).toString());
                 }
                 else {
                     mTextBalance.setText("[Connection problem]");
@@ -423,6 +424,7 @@ public class WalletActivity extends BaseFragment {
 
                 mUSDAddress = contractKit.contracts.getStableToken().getContractAddress();
                 mEURAddress = contractKit.contracts.getStableTokenEUR().getContractAddress();
+                mREALAddress = contractKit.contracts.getStableTokenBRL().getContractAddress();
 
                 new Thread() {
 
@@ -468,7 +470,7 @@ public class WalletActivity extends BaseFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             TransactionItem view = new TransactionItem(parent.getContext());
-            view.setCurrencyAddresses(mUSDAddress, mEURAddress);
+            view.setCurrencyAddresses(mUSDAddress, mEURAddress, mREALAddress);
             return new RecyclerView.ViewHolder(view) { };
         }
 

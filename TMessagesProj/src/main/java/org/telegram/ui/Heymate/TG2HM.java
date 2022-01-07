@@ -28,6 +28,8 @@ import works.heymate.core.Money;
 
 public class TG2HM {
 
+    private static final String BRASIL = "BR"; // Brasil
+
     private static final List<String> EUROPEAN_UNION_COUNTRIES = Arrays.asList(
             "AT", // Austria
             "BE", // Belgium
@@ -68,12 +70,15 @@ public class TG2HM {
         return defaultCurrency;
     }
 
-    public static Money pickTheRightMoney(Money usd, Money eur) {
+    public static Money pickTheRightMoney(Money usd, Money eur, Money real) {
         if (getDefaultCurrency().equals(Currency.USD)) {
             return usd;
         }
         else if (getDefaultCurrency().equals(Currency.EUR)) {
             return eur;
+        }
+        else if (getDefaultCurrency().equals(Currency.REAL)) {
+            return real;
         }
 
         return usd;
@@ -172,6 +177,10 @@ public class TG2HM {
 
     private static Currency getCurrencyForPhoneNumber(String phoneNumber) {
         String country = getCountryForPhoneNumber(phoneNumber);
+
+        if (BRASIL.equals(country)) {
+            return Currency.REAL;
+        }
 
         return EUROPEAN_UNION_COUNTRIES.contains(country) ? Currency.EUR : Currency.USD;
     }

@@ -33,6 +33,9 @@ public class AlphaWallet {
         else if (Currency.EUR.equals(currency)) {
             currencyName = "cEUR";
         }
+        else if (Currency.REAL.equals(currency)) {
+            currencyName = "cREAL";
+        }
         else {
             Utils.postOnUIThread(() -> callback.onAPICallResult(false, null, null));
             return;

@@ -24,6 +24,7 @@ public class Nimiq {
 
     public static final String ASSET_EUR = "EUR";
 
+    public static final String TOKEN_CREAL = "cREAL"; // TODO does it work?
     public static final String TOKEN_CEUR = "cEUR";
     public static final String TOKEN_CUSD = "cUSD";
 

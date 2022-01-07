@@ -203,6 +203,9 @@ public class CeloOffer {
         else if (currency == Currency.EUR) {
             mContractKit.setFeeCurrency(CeloContract.StableTokenEUR);
         }
+        else if (currency == Currency.REAL) {
+            mContractKit.setFeeCurrency(CeloContract.StableTokenBRL);
+        }
         else {
             throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Unknown currency: " + currency)); // TODO Unrelated error
         }
@@ -218,6 +221,9 @@ public class CeloOffer {
         }
         else if (currency == Currency.EUR) {
             token = mContractKit.contracts.getStableTokenEUR();
+        }
+        else if (currency == Currency.REAL) {
+            token = mContractKit.contracts.getStableTokenBRL();
         }
         else {
             throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Unknown currency: " + currency)); // TODO Unrelated error
@@ -469,6 +475,10 @@ public class CeloOffer {
 
         if (Currency.EUR.equals(currency)) {
             return mContractKit.contracts.getStableTokenEUR().getContractAddress();
+        }
+
+        if (Currency.REAL.equals(currency)) {
+            return mContractKit.contracts.getStableTokenBRL().getContractAddress();
         }
 
         return null;

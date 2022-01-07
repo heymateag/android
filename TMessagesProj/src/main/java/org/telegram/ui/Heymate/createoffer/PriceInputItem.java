@@ -30,6 +30,8 @@ import org.telegram.ui.Heymate.HeymateConfig;
 
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
+
+import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.widget.MultiChoicePopup;
 
 import works.heymate.beta.R;
@@ -37,10 +39,8 @@ import works.heymate.model.Pricing;
 
 public class PriceInputItem extends ExpandableItem {
 
-    private static final Currency[] DEMO_CURRENCIES = { Currency.USD, Currency.EUR };
-    private static final Currency[] REAL_CURRENCIES = { Currency.EUR };
-
-    private static final int DEFAULT_CURRENCY_CHOICE = HeymateConfig.DEMO ? 1 : 0;
+    private static final Currency[] DEMO_CURRENCIES = { Currency.REAL, Currency.EUR, Currency.USD };
+    private static final Currency[] REAL_CURRENCIES = { Currency.REAL, Currency.EUR };
 
     private static final String[] DEMO_RATE_TYPES = { "Per Session", "Per Hour" };
     private static final String[] REAL_RATE_TYPES = { "Per Session" };
@@ -61,6 +61,8 @@ public class PriceInputItem extends ExpandableItem {
     private EditText mSubscriptionPrice;
     private TextView mSubscriptionPer;
 
+    private int mDefaultCurrencyChoice = 0;
+
     public PriceInputItem(@NonNull Context context) {
         super(context);
         setTitle("Pricing");
@@ -69,6 +71,15 @@ public class PriceInputItem extends ExpandableItem {
 
     @Override
     protected View createContent() {
+        Currency currency = TG2HM.getDefaultCurrency();
+
+        for (int i = 0; i < CURRENCIES.length; i++) {
+            if (currency.equals(CURRENCIES[i])) {
+                mDefaultCurrencyChoice = i;
+                break;
+            }
+        }
+
         FrameLayout frame = new FrameLayout(getContext());
 
         SequenceLayout content = (SequenceLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_priceinput, null, false);
@@ -104,7 +115,7 @@ public class PriceInputItem extends ExpandableItem {
             currencies[i] = CURRENCIES[i].name();
         }
 
-        styleMultiChoice(mCurrency, currencies, DEFAULT_CURRENCY_CHOICE, () -> {
+        styleMultiChoice(mCurrency, currencies, mDefaultCurrencyChoice, () -> {
             updateBundleCalculatedPrice();
             updateSubscriptionPer();
         });
@@ -289,7 +300,7 @@ public class PriceInputItem extends ExpandableItem {
 
     public void setPricing(Pricing pricing) {
         mFixedPrice.setText(pricing.getPrice() == 0 ? "" : String.valueOf(pricing.getPrice()));
-        mCurrency.setText(pricing.getCurrency() == null ? CURRENCIES[DEFAULT_CURRENCY_CHOICE].name() : pricing.getCurrency());
+        mCurrency.setText(pricing.getCurrency() == null ? CURRENCIES[mDefaultCurrencyChoice].name() : pricing.getCurrency());
 
         mRateType.setText(RATE_TYPES[0]);
 

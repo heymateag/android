@@ -430,12 +430,12 @@ public class Wallet {
     public void getBalance(BalanceCallback callback) {
         ensureCeloSDK();
 
-        mCeloSDK.getBalance((success, rawCUSD, rawCEUR, cUSDCents, cEURCents, errorCause) -> {
+        mCeloSDK.getBalance((success, rawCUSD, rawCEUR, rawCREAL, cUSDCents, cEURCents, cREALCents, errorCause) -> {
             if (success) {
-                callback.onBalanceQueryResult(true, Money.create(cUSDCents, Currency.USD), Money.create(cEURCents, Currency.EUR), null);
+                callback.onBalanceQueryResult(true, Money.create(cUSDCents, Currency.USD), Money.create(cEURCents, Currency.EUR), Money.create(cREALCents, Currency.REAL), null);
             }
             else {
-                callback.onBalanceQueryResult(false, null, null, errorCause);
+                callback.onBalanceQueryResult(false, null, null, null, errorCause);
             }
         });
     }

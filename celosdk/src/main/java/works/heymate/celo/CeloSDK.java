@@ -248,6 +248,7 @@ public class CeloSDK {
 
             long cUSD = balanceInfo.cUSD.divide(one.divide(BigInteger.valueOf(100L))).longValue();
             long cEUR = balanceInfo.cEUR.divide(one.divide(BigInteger.valueOf(100L))).longValue();
+            long cREAL = balanceInfo.cREAL.divide(one.divide(BigInteger.valueOf(100L))).longValue();
 
             // double gold = balanceInfo.gold.divide(one.divide(BigInteger.valueOf(10_000L))).longValue() / 10_000d;
 
@@ -256,7 +257,7 @@ public class CeloSDK {
 
             InternalUtils.runOnMainThread(() -> {
                 for (BalanceCallback callback: callbacks) {
-                    callback.onBalanceResult(true, balanceInfo.cUSD, balanceInfo.cEUR, cUSD, cEUR, null);
+                    callback.onBalanceResult(true, balanceInfo.cUSD, balanceInfo.cEUR, balanceInfo.cREAL, cUSD, cEUR, cREAL, null);
                 }
             });
         } catch (CeloException e) {
@@ -265,7 +266,7 @@ public class CeloSDK {
 
             InternalUtils.runOnMainThread(() -> {
                 for (BalanceCallback callback: callbacks) {
-                    callback.onBalanceResult(false, null, null, 0, 0, e);
+                    callback.onBalanceResult(false, null, null, null, 0, 0, 0, e);
                 }
             });
         }
@@ -281,9 +282,10 @@ public class CeloSDK {
         try {
             BigInteger cUSD = mContractKit.contracts.getStableToken().balanceOf(mContractKit.getAddress()).send();
             BigInteger cEUR = mContractKit.contracts.getStableTokenEUR().balanceOf(mContractKit.getAddress()).send();
+            BigInteger cREAL = mContractKit.contracts.getStableTokenBRL().balanceOf(mContractKit.getAddress()).send();
             // BigInteger gold = mContractKit.contracts.getGoldToken().balanceOf(mContractKit.getAddress());
 
-            return new BalanceInfo(cUSD, cEUR);
+            return new BalanceInfo(cUSD, cEUR, cREAL);
         } catch (Exception e) {
             throw new CeloException(CeloError.NETWORK_ERROR, e);
         }
@@ -490,10 +492,12 @@ public class CeloSDK {
 
         final BigInteger cUSD;
         final BigInteger cEUR;
+        final BigInteger cREAL;
 
-        BalanceInfo(BigInteger cUSD, BigInteger cEUR) {
+        BalanceInfo(BigInteger cUSD, BigInteger cEUR, BigInteger cREAL) {
             this.cUSD = cUSD;
             this.cEUR = cEUR;
+            this.cREAL = cREAL;
         }
 
     }

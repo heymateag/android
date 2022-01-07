@@ -1,7 +1,6 @@
 package org.telegram.ui.Heymate.payment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.widget.Toast;
 
 import com.google.android.exoplayer2.util.Log;
 
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.Constants;
 import org.telegram.ui.Heymate.HeymateRouter;
@@ -130,9 +128,9 @@ public class PaymentController {
 //                            }
                         }
 
-                        getBalance((wallet, usdBalance, eurBalance) -> {
+                        getBalance((wallet, usdBalance, eurBalance, realBalance) -> {
                             Money price = PurchasePlanTypes.getPurchasedPlanPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
-                            Money balance = getBalance(usdBalance, eurBalance, price.getCurrency());
+                            Money balance = getBalance(usdBalance, eurBalance, realBalance, price.getCurrency());
 
                             if (balance.compareTo(price) >= 0) {
                                 getReferral(referralId, referral -> initPlanPurchasePayment(offer, purchasedPlanType, referral, wallet));
@@ -228,9 +226,9 @@ public class PaymentController {
                 return;
             }
 
-            getOffer(offerId, offer -> getBalance((wallet, usd, eur) -> {
+            getOffer(offerId, offer -> getBalance((wallet, usd, eur, real) -> {
                 Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
-                Money balance = getBalance(usd, eur, price.getCurrency());
+                Money balance = getBalance(usd, eur, real, price.getCurrency());
 
                 if (balance.compareTo(price) >= 0) {
                     purchaseTimeSlot(offer, purchasedPlanId, referralId, timeSlot);
@@ -353,11 +351,11 @@ public class PaymentController {
             String phoneNumber = TG2HM.getCurrentPhoneNumber();
             Wallet wallet = Wallet.get(mContext, phoneNumber);
 
-            wallet.getBalance((success, usdBalance, eurBalance, errorCause) -> {
+            wallet.getBalance((success, usdBalance, eurBalance, realBalance, errorCause) -> {
                 LoadingUtil.onLoadingFinished();
 
                 if (success || CeloSDK.isErrorCausedByInsufficientFunds(errorCause)) {
-                    callback.onBalanceReceived(wallet, usdBalance, eurBalance);
+                    callback.onBalanceReceived(wallet, usdBalance, eurBalance, realBalance);
                 }
                 else {
                     Log.e(TAG, "Failed to check balance", errorCause);
@@ -368,13 +366,17 @@ public class PaymentController {
         });
     }
 
-    private Money getBalance(Money usd, Money eur, Currency currency) {
+    private Money getBalance(Money usd, Money eur, Money real, Currency currency) {
         if (Currency.USD.equals(currency)) {
             return usd;
         }
 
         if (Currency.EUR.equals(currency)) {
             return eur;
+        }
+
+        if (Currency.REAL.equals(currency)) {
+            return real;
         }
 
         return Money.create(0, currency);
@@ -524,7 +526,7 @@ public class PaymentController {
 
     private interface GetBalanceCallback {
 
-        void onBalanceReceived(Wallet wallet, Money usd, Money eur);
+        void onBalanceReceived(Wallet wallet, Money usd, Money eur, Money real);
 
     }
 

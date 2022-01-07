@@ -140,9 +140,9 @@ public class OffersActivity extends BaseFragment {
         else {
             mTextStatus.setText("Current balance is:");
 
-            wallet.getBalance((success, usd, eur, errorCause) -> {
+            wallet.getBalance((success, usd, eur, real, errorCause) -> {
                 if (success) {
-                    mTextStatus.setText("Current balance is: " + TG2HM.pickTheRightMoney(usd, eur));
+                    mTextStatus.setText("Current balance is: " + TG2HM.pickTheRightMoney(usd, eur, real));
                 }
                 else {
                     mTextStatus.setText("Current balance is: [Connection problem]");

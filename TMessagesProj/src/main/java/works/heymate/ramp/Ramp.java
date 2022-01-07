@@ -44,6 +44,9 @@ public class Ramp {
         else if (money.getCurrency().equals(Currency.EUR)) {
             currency = "CEUR";
         }
+        else if (money.getCurrency().equals(Currency.REAL)) {
+            currency = "CREAL"; // TODO Really?
+        }
         else {
             callback.onRampDone(false);
             return;
