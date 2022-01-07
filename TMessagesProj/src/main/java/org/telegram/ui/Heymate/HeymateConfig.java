@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class HeymateConfig {
 
-    public static final boolean MAIN_NET = true;
-    public static final boolean PRODUCTION = true;
+    public static final boolean MAIN_NET = false;
+    public static final boolean PRODUCTION = false;
     public static final boolean DEBUG = true;
     public static final boolean DEMO = true;
 

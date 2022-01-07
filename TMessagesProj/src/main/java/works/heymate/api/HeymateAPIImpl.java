@@ -1,12 +1,18 @@
 package works.heymate.api;
 
+import org.json.JSONException;
 import org.telegram.ui.Heymate.HeymateConfig;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import works.heymate.model.Pricing;
 import works.heymate.util.SimpleNetworkCall;
@@ -19,6 +25,8 @@ class HeymateAPIImpl implements IHeymateAPI {
     private static final String GET_USER_INFO_URL = HeymateConfig.API_BASE_URL + "/users/getUserById";
     private static final String UPDATE_PUSH_TOKEN_URL = HeymateConfig.API_BASE_URL + "/users/putPushToken";
     private static final String UPDATE_USER_INFO_URL = HeymateConfig.API_BASE_URL + "/users/updateUserInfo";
+    private static final String UPLOAD_FILE_URL = HeymateConfig.API_BASE_URL + "/upload-file/getUploadUrl";
+    private static final String DOWNLOAD_FILE_URL = HeymateConfig.API_BASE_URL + "/upload-file?fileKey=";
     private static final String CREATE_OFFER_URL = HeymateConfig.API_BASE_URL + "/offer";
     private static final String GET_OFFER_URL = HeymateConfig.API_BASE_URL + "/offer/";
     private static final String GET_MY_OFFERS_URL = HeymateConfig.API_BASE_URL + "/offer/me";
@@ -66,7 +74,67 @@ class HeymateAPIImpl implements IHeymateAPI {
     }
 
     @Override
-    public void createOffer(String title, String description, String category, String subcategory, long expiration, String address, String latitude, String longitude, String meetingType, int participants, String terms, Pricing pricing, APIObject paymentTerms, String walletAddress, List<Long> timeSlots, APICallback callback) {
+    public void uploadFile(File file, APICallback callback) {
+        String originalFileName = file.getName();
+        int extensionIndex = originalFileName.lastIndexOf(".");
+        String extension = extensionIndex == -1 ? "" : originalFileName.substring(extensionIndex);
+        String fileName = UUID.randomUUID().toString().replaceAll("-", "") + extension;
+
+        authorizedCall(result -> {
+            if (result.response != null && result.response.has("res") && !result.response.isNull("res")) {
+                try {
+                    String uploadURL = result.response.getString("res");
+
+                    try {
+                        InputStream body = new FileInputStream(file);
+
+                        SimpleNetworkCall.rawCallAsync(uploadResult -> {
+                            if (callback != null) {
+                                if (uploadResult.responseCode >= 200 && uploadResult.responseCode < 300) {
+                                    callback.onAPIResult(new APIResult(new APIObject(quickJSON("fileName", fileName))));
+                                } else {
+                                    callback.onAPIResult(new APIResult(uploadResult.exception));
+                                }
+                            }
+                        }, "PUT", uploadURL, body, "image/*");
+                    } catch (FileNotFoundException e) {
+                        if (callback != null) {
+                            callback.onAPIResult(new APIResult(e));
+                        }
+                    }
+                } catch (JSONException e) { }
+            }
+            else if (callback != null) {
+                callback.onAPIResult(new APIResult(result.exception));
+            }
+        }, callback, "POST", UPLOAD_FILE_URL, "file", fileName);
+    }
+
+    @Override
+    public void downloadFile(String fileName, File destination, APICallback callback) {
+        authorizedCall(result -> {
+            if (result.response != null && result.response.has("res") && !result.response.isNull("res")) {
+                try {
+                    String fileUrl = result.response.getString("res");
+
+                    SimpleNetworkCall.downloadAsync(networkResult -> {
+                        if (networkResult.responseCode >= 200 && networkResult.responseCode < 300) {
+                            callback.onAPIResult(new APIResult(true));
+                        }
+                        else {
+                            callback.onAPIResult(new APIResult(networkResult.exception));
+                        }
+                    }, fileUrl, destination);
+                } catch (JSONException e) { }
+            }
+            else {
+                callback.onAPIResult(new APIResult(result.exception));
+            }
+        }, callback, "GET", DOWNLOAD_FILE_URL + fileName);
+    }
+
+    @Override
+    public void createOffer(String title, String description, String category, String subcategory, long expiration, String address, String latitude, String longitude, String meetingType, int participants, String terms, Pricing pricing, APIObject paymentTerms, String walletAddress, List<Long> timeSlots, List<String> images, APICallback callback) {
         Map<String, Object> body;
 
         body = quickMap(
@@ -87,7 +155,7 @@ class HeymateAPIImpl implements IHeymateAPI {
                 "expiration", expiration / 1000,
                 "sp_wallet_address", walletAddress,
                 "title", title,
-                "media", Arrays.asList()
+                "media", createImages(images == null ? Arrays.asList() : images)
         );
 
         authorizedCallWithPreparedBody(result -> {
@@ -113,6 +181,21 @@ class HeymateAPIImpl implements IHeymateAPI {
         }
 
         return schedules;
+    }
+
+    private List<Object> createImages(List<String> images) {
+        List<Object> result = new ArrayList<>(images.size());
+
+        for (String image: images) {
+            result.add(
+                    quickMap(
+                            "key", image,
+                            "type", "image"
+                    )
+            );
+        }
+
+        return result;
     }
 
     @Override

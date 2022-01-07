@@ -45,7 +45,7 @@ public class Users {
             currentUser = null;
 
             if (callback != null) {
-                Utils.postOnUIThread(() -> callback.onAPIResult(new APIResult(null)));
+                Utils.postOnUIThread(() -> callback.onAPIResult(new APIResult(new Exception("User not logged in"))));
             }
 
             return false;

@@ -1,7 +1,6 @@
 package works.heymate.api;
 
-import org.json.JSONObject;
-
+import java.io.File;
 import java.util.List;
 
 import works.heymate.model.Pricing;
@@ -16,11 +15,15 @@ public interface IHeymateAPI {
 
     void updateUserInfo(String fullName, String username, String avatarHash, String telegramId, APICallback callback);
 
+    void uploadFile(File file, APICallback callback);
+
+    void downloadFile(String fileName, File destination, APICallback callback);
+
     void createOffer(String title, String description, String category, String subcategory,
                      long expiration, String address, String latitude, String longitude,
                      String meetingType, int participants, String terms,
                      Pricing pricing, APIObject paymentTerms,
-                     String walletAddress, List<Long> timeSlots,
+                     String walletAddress, List<Long> timeSlots, List<String> images,
                      APICallback callback);
 
     void getOffer(String id, APICallback callback);

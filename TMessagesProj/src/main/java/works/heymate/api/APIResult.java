@@ -18,7 +18,7 @@ public class APIResult {
         error = null;
     }
 
-    APIResult(Exception error) {
+    public APIResult(Exception error) {
         success = false;
         response = null;
         this.error = error;

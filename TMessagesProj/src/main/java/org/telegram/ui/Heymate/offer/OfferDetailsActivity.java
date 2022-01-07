@@ -37,6 +37,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.ActivityMonitor;
+import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.ReferralUtils;
@@ -57,6 +58,7 @@ import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.model.Offer;
+import works.heymate.model.Offers;
 import works.heymate.model.Pricing;
 import works.heymate.model.User;
 import works.heymate.model.Users;
@@ -338,20 +340,21 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
             return;
         }
 
-        // TODO offer image
-//        if (mOffer.getHasImage() != null && mOffer.getHasImage()) {
-//            FileCache.get().getImage(mOffer.getId(), AndroidUtilities.displaySize.x, (success, drawable, exception) -> {
-//                if (drawable != null) {
-//                    mImage.setImageDrawable(drawable);
-//                }
-//                else {
-//                    mImage.setImageDrawable(getImagePlaceHolder());
-//                }
-//            });
-//        }
-//        else {
+        String imageFileName = Offers.getImageFileName(mOffer);
+
+        if (imageFileName != null) {
+            FileCache.get().getImage(mOffer.getString(Offer.ID), imageFileName, AndroidUtilities.displaySize.x, (success, drawable, exception) -> {
+                if (drawable != null) {
+                    mImage.setImageDrawable(drawable);
+                }
+                else {
+                    mImage.setImageDrawable(getImagePlaceHolder());
+                }
+            });
+        }
+        else {
             mImage.setImageDrawable(getImagePlaceHolder());
-//        }
+        }
     }
 
     private Drawable getImagePlaceHolder() {

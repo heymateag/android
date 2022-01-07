@@ -47,6 +47,7 @@ import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
 import works.heymate.model.Offer;
+import works.heymate.model.Offers;
 import works.heymate.model.Pricing;
 import works.heymate.model.User;
 import works.heymate.model.Users;
@@ -237,30 +238,32 @@ public class OfferMessageItem extends SequenceLayout {
         mOffer = offer;
         mFullyLoaded = fullyLoaded;
 
-        if (fullyLoaded) { // TODO offer image
-//            if (offer != null && offer.getHasImage() != null && offer.getHasImage()) {
-//                mImage.setVisibility(VISIBLE);
-//                mImage.setImageDrawable(null);
-//
-//                String offerId = offer.getId();
-//                int size = AndroidUtilities.dp(IMAGE_WIDTH_DP);
-//
-//                FileCache.get().getImage(offerId, size, (success, drawable, exception) -> {
-//                    if (mOffer == null || !mOffer.getId().equals(offerId)) {
-//                        return;
-//                    }
-//
-//                    if (drawable != null) {
-//                        mImage.setImageDrawable(drawable);
-//                    }
-//                    else {
-//                        mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
-//                    }
-//                });
-//            }
-//            else {
+        if (fullyLoaded) {
+            String imageFileName = Offers.getImageFileName(offer);
+
+            if (imageFileName != null) {
+                mImage.setVisibility(VISIBLE);
+                mImage.setImageDrawable(null);
+
+                String offerId = offer.getString(Offer.ID);
+                int size = AndroidUtilities.dp(IMAGE_WIDTH_DP);
+
+                FileCache.get().getImage(offerId, imageFileName, size, (success, drawable, exception) -> {
+                    if (mOffer == null || !mOffer.getString(Offer.ID).equals(offerId)) {
+                        return;
+                    }
+
+                    if (drawable != null) {
+                        mImage.setImageDrawable(drawable);
+                    }
+                    else {
+                        mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
+                    }
+                });
+            }
+            else {
                 mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));
-//            }
+            }
         }
         else {
             mImage.setImageDrawable(new OfferImagePlaceHolderDrawable(false));

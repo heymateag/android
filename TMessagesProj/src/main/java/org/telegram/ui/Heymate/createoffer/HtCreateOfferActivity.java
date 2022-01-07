@@ -51,11 +51,11 @@ import org.telegram.ui.Heymate.TG2HM;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.UUID;
 
 import works.heymate.core.Texts;
@@ -94,6 +94,7 @@ public class HtCreateOfferActivity extends BaseFragment {
     private Date expireDate;
 
     private Uri pickedImage;
+    private String imageFileName = null;
 
     private String id;
     // TODO
@@ -717,14 +718,16 @@ public class HtCreateOfferActivity extends BaseFragment {
         if (pickedImage != null) {
             LoadingUtil.onLoadingStarted();
 
-            FileCache.get().uploadImage(id, (success, exception) -> {
+            FileCache.get().uploadImage(id, result -> {
                 LoadingUtil.onLoadingFinished();
 
-                if (success) {
+                if (result.response != null) {
+                    imageFileName = result.response.getString("fileName");
+
                     createOfferImageDone(promotionPercentage);
                 }
                 else {
-                    Log.e(TAG, "Failed to upload offer image", exception);
+                    Log.e(TAG, "Failed to upload offer image", result.error);
 
                     Toast.makeText(context, Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
                 }
@@ -772,6 +775,7 @@ public class HtCreateOfferActivity extends BaseFragment {
                         paymentTerms,
                         wallet.getAddress(),
                         timeSlots,
+                        imageFileName == null ? null : Arrays.asList(imageFileName),
                         result -> {
                             LoadingUtil.onLoadingFinished();
 
