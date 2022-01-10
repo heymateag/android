@@ -25,6 +25,7 @@ import java.util.Map;
 
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
+import works.heymate.core.wallet.Wallet;
 
 public class TG2HM {
 
@@ -108,6 +109,16 @@ public class TG2HM {
         }
 
         return user.phone;
+    }
+
+    public static Wallet getWallet() {
+        String phoneNumber = getCurrentPhoneNumber();
+
+        if (phoneNumber == null) {
+            return null;
+        }
+
+        return Wallet.get(ApplicationLoader.applicationContext, phoneNumber);
     }
 
     public static String getFCMToken() {

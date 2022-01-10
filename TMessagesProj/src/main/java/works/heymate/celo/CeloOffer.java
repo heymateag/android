@@ -2,6 +2,7 @@ package works.heymate.celo;
 
 import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.ContractKit;
+import org.celo.contractkit.wrapper.ExchangeWrapper;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.json.JSONException;
 import org.telegram.ui.Heymate.createoffer.PriceInputItem;
@@ -125,7 +126,7 @@ public class CeloOffer {
     serviceProviderSignature: string
      */
     public void create(APIObject offer, APIObject timeSlot, String sTradeId,
-                       APIObject purchasePlan, List<String> referrers) throws CeloException, JSONException {
+                       APIObject purchasePlan, List<String> referrers, Currency nativeCurrency) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(sTradeId.replaceAll("-", ""));
         byte[] planId = purchasePlan == null ? null : Numeric.hexStringToByteArray(purchasePlan.getString(PurchasedPlan.ID).replaceAll("-", ""));
 
@@ -161,9 +162,29 @@ public class CeloOffer {
         initialDeposit = new BigInteger(String.valueOf(offer.getLong(works.heymate.model.Offer.PAYMENT_TERMS + "." + works.heymate.model.Offer.PaymentTerms.DEPOSIT)));
         List<BigInteger> config = getConfig(offer.getObject(works.heymate.model.Offer.PAYMENT_TERMS), pricing);
 
-        adjustGasPayment(currency);
+        adjustGasPayment(nativeCurrency);
 
         if (rate > 0) {
+            if (!currency.equals(nativeCurrency)) {
+                ExchangeWrapper currencyExchange = getExchange(currency);
+                ExchangeWrapper nativeCurrencyExchange = getExchange(nativeCurrency);
+
+                try {
+                    BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(2000));
+
+                    BigInteger goldToSell = currencyExchange.getSellTokenAmount(amount.add(cautionAmount), true).send();
+                    BigInteger nativeToSell = nativeCurrencyExchange.getSellTokenAmount(goldToSell, false).send();
+
+                    getToken(nativeCurrency).approve(nativeCurrencyExchange.getContractAddress(), nativeToSell.add(cautionAmount)).send();
+                    nativeCurrencyExchange.buy(goldToSell, nativeToSell.add(cautionAmount), true).send();
+
+                    mContractKit.contracts.getGoldToken().approve(currencyExchange.getContractAddress(), goldToSell.add(cautionAmount)).send();
+                    currencyExchange.buy(amount, goldToSell.add(cautionAmount), false).send();
+                } catch (Exception e) {
+                    throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Failed to convert the currency", e));
+                }
+            }
+
             transfer(rate * 100, currency);
         }
 
@@ -214,18 +235,9 @@ public class CeloOffer {
     private void transfer(long cents, Currency currency) throws CeloException {
         BigInteger amount = CurrencyUtil.centsToBlockChainValue(cents);
 
-        StableTokenWrapper token;
+        StableTokenWrapper token = getToken(currency);
 
-        if (currency == Currency.USD) {
-            token = mContractKit.contracts.getStableToken();
-        }
-        else if (currency == Currency.EUR) {
-            token = mContractKit.contracts.getStableTokenEUR();
-        }
-        else if (currency == Currency.REAL) {
-            token = mContractKit.contracts.getStableTokenBRL();
-        }
-        else {
+        if (token == null) {
             throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Unknown currency: " + currency)); // TODO Unrelated error
         }
 
@@ -479,6 +491,38 @@ public class CeloOffer {
 
         if (Currency.REAL.equals(currency)) {
             return mContractKit.contracts.getStableTokenBRL().getContractAddress();
+        }
+
+        return null;
+    }
+
+    private StableTokenWrapper getToken(Currency currency) {
+        if (Currency.USD.equals(currency)) {
+            return mContractKit.contracts.getStableToken();
+        }
+
+        if (Currency.EUR.equals(currency)) {
+            return mContractKit.contracts.getStableTokenEUR();
+        }
+
+        if (Currency.REAL.equals(currency)) {
+            return mContractKit.contracts.getStableTokenBRL();
+        }
+
+        return null;
+    }
+
+    private ExchangeWrapper getExchange(Currency currency) {
+        if (Currency.USD.equals(currency)) {
+            return mContractKit.contracts.getExchange();
+        }
+
+        if (Currency.EUR.equals(currency)) {
+            return mContractKit.contracts.getExchangeEUR();
+        }
+
+        if (Currency.REAL.equals(currency)) {
+            return mContractKit.contracts.getExchangeBRL();
         }
 
         return null;

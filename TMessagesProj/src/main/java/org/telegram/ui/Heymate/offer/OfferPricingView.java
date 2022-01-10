@@ -1,6 +1,7 @@
 package org.telegram.ui.Heymate.offer;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.TextView;
@@ -11,14 +12,19 @@ import com.yashoid.sequencelayout.Span;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadioButton;
+import org.telegram.ui.Heymate.TG2HM;
 
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import works.heymate.beta.R;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.core.wallet.Prices;
+import works.heymate.core.wallet.Wallet;
 import works.heymate.model.Pricing;
 
 public class OfferPricingView extends SequenceLayout {
@@ -51,6 +57,8 @@ public class OfferPricingView extends SequenceLayout {
     private boolean mOnlySinglePrice = true;
 
     private String mSelectedPlan = null;
+
+    private final Map<Object, Money> mMoneyMap = new HashMap<>();
 
     public OfferPricingView(Context context) {
         super(context);
@@ -126,7 +134,7 @@ public class OfferPricingView extends SequenceLayout {
         }
 
         mSingleInfo.setText("1 session");
-        mSinglePrice.setText(Money.create(mPricing.getPrice() * 100, Currency.forName(mPricing.getCurrency())).toString());
+        assignPrice(mSinglePrice, Money.create(mPricing.getPrice() * 100, Currency.forName(mPricing.getCurrency())));
 
         mOnlySinglePrice = true;
 
@@ -139,7 +147,7 @@ public class OfferPricingView extends SequenceLayout {
             mBundlePrice.setVisibility(VISIBLE);
 
             mBundleInfo.setText(mPricing.getBundleCount() + " sessions");
-            mBundlePrice.setText(Money.create(mPricing.getBundleTotalPrice() * 100, Currency.forName(mPricing.getCurrency())).toString());
+            assignPrice(mBundlePrice, Money.create(mPricing.getBundleTotalPrice() * 100, Currency.forName(mPricing.getCurrency())));
 
             if (mPricing.getBundleDiscountPercent() > 0) {
                 mBundleDiscount.setVisibility(VISIBLE);
@@ -166,7 +174,7 @@ public class OfferPricingView extends SequenceLayout {
             mSubscriptionPrice.setVisibility(VISIBLE);
 
             mSubscriptionInfo.setText(mPricing.getSubscriptionPeriod() + " - Unlimited sessions");
-            mSubscriptionPrice.setText(Money.create(mPricing.getSubscriptionPrice() * 100, Currency.forName(mPricing.getCurrency())).toString());
+            assignPrice(mSubscriptionPrice, Money.create(mPricing.getSubscriptionPrice() * 100, Currency.forName(mPricing.getCurrency())));
         }
         else {
             mSubscriptionRadio.setVisibility(GONE);
@@ -178,6 +186,22 @@ public class OfferPricingView extends SequenceLayout {
         mSingleRadio.setVisibility(mOnlySinglePrice ? GONE : VISIBLE);
 
         setSelectedPlan(selectedPlan == null ? PurchasePlanTypes.SINGLE : selectedPlan, selectedPlan == null);
+    }
+
+    private void assignPrice(TextView text, Money money) {
+        text.setText(money.toString());
+
+        Wallet wallet = TG2HM.getWallet();
+
+        mMoneyMap.put(text, money);
+
+        Prices.get(wallet, money, TG2HM.getDefaultCurrency(), convertedMoney -> {
+            if (!money.equals(mMoneyMap.get(text))) {
+                return;
+            }
+
+            text.setText(convertedMoney.toString());
+        });
     }
 
     public void setSelectedPlan(String plan) {

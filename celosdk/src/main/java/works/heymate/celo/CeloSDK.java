@@ -10,8 +10,11 @@ import org.celo.contractkit.ContractKit;
 import org.celo.contractkit.ContractKitOptions;
 import org.celo.contractkit.Utils;
 import org.celo.contractkit.wrapper.AttestationsWrapper;
+import org.celo.contractkit.wrapper.BaseWrapper;
+import org.celo.contractkit.wrapper.ExchangeWrapper;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
@@ -26,6 +29,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import java8.util.Optional;
+import jnr.ffi.annotations.In;
 
 public class CeloSDK {
 
@@ -238,6 +242,113 @@ public class CeloSDK {
         }
 
         mLocalHandler.sendEmptyMessage(MESSAGE_GET_BALANCE);
+    }
+
+    public void howMuchToBuy(Money money, Currency fromCurrency, AmountCallback callback) {
+        if (money.currency == fromCurrency) {
+            InternalUtils.runOnMainThread(() -> callback.onAmountResult(true, money.amount, null));
+            return;
+        }
+
+        getContractKit((success, contractKit, errorCause) -> {
+            if (success) {
+                try {
+                    int exchangeTimes = 0;
+
+                    BigInteger value;
+
+                    if (money.currency == Currency.GOLD) {
+                        ExchangeWrapper exchange = fromCurrency.getExchange(contractKit);
+                        exchangeTimes++;
+
+                        value = exchange.getSellTokenAmount(money.amount.blockchainValue(), false).send();
+                    }
+                    else {
+                        ExchangeWrapper exchange = money.currency.getExchange(contractKit);
+                        exchangeTimes++;
+
+                        value = exchange.getSellTokenAmount(money.amount.blockchainValue(), true).send();
+
+                        if (fromCurrency != Currency.GOLD) {
+                            exchange = fromCurrency.getExchange(contractKit);
+                            exchangeTimes++;
+
+                            value = exchange.getSellTokenAmount(value, false).send();
+                        }
+                    }
+
+                    BigInteger gasCost = estimateExchangeGasCost(contractKit, fromCurrency, exchangeTimes);
+
+                    Amount amount = Amount.fromBlockchainValue(value.add(gasCost));
+
+                    InternalUtils.runOnMainThread(() -> callback.onAmountResult(true, amount, null));
+                } catch (Exception e) {
+                    InternalUtils.runOnMainThread(() -> callback.onAmountResult(false, null, new CeloException(CeloError.NETWORK_ERROR, e)));
+                }
+            }
+            else {
+                InternalUtils.runOnMainThread(() ->callback.onAmountResult(false, null, errorCause));
+            }
+        });
+    }
+
+    public void howMuchFromSale(Money money, Currency toCurrency, AmountCallback callback) {
+        if (money.currency == toCurrency) {
+            InternalUtils.runOnMainThread(() -> callback.onAmountResult(true, money.amount, null));
+            return;
+        }
+
+        getContractKit((success, contractKit, errorCause) -> {
+            if (success) {
+                try {
+                    int exchangeTimes = 0;
+
+                    BigInteger value;
+
+                    if (money.currency == Currency.GOLD) {
+                        ExchangeWrapper exchange = toCurrency.getExchange(contractKit);
+                        exchangeTimes++;
+
+                        value = exchange.getBuyTokenAmount(money.amount.blockchainValue(), true).send();
+                    }
+                    else {
+                        ExchangeWrapper exchange = money.currency.getExchange(contractKit);
+                        exchangeTimes++;
+
+                        value = exchange.getBuyTokenAmount(money.amount.blockchainValue(), false).send();
+
+                        if (toCurrency != Currency.GOLD) {
+                            exchange = toCurrency.getExchange(contractKit);
+                            exchangeTimes++;
+
+                            value = exchange.getBuyTokenAmount(value, true).send();
+                        }
+                    }
+
+                    BigInteger gasCost = estimateExchangeGasCost(contractKit, money.currency, exchangeTimes);
+
+                    Amount amount = Amount.fromBlockchainValue(value.add(gasCost));
+
+                    InternalUtils.runOnMainThread(() -> callback.onAmountResult(true, amount, null));
+                } catch (Exception e) {
+                    InternalUtils.runOnMainThread(() -> callback.onAmountResult(false, null, new CeloException(CeloError.NETWORK_ERROR, e)));
+                }
+            }
+            else {
+                InternalUtils.runOnMainThread(() ->callback.onAmountResult(false, null, errorCause));
+            }
+        });
+    }
+
+    private BigInteger estimateExchangeGasCost(ContractKit contractKit, Currency currency, int times) throws Exception {
+        BigInteger gasPrice = contractKit.getGasPriceMinimum(((BaseWrapper) currency.getToken(contractKit)).getContractAddress(), BigInteger.ZERO);
+
+        String data = contractKit.contracts.getExchange().getSellTokenAmount(BigInteger.TEN, false).encodeFunctionCall();
+        Transaction transaction = Transaction.createEthCallTransaction(null, contractKit.contracts.getExchange().getContractAddress(), data);
+        BigInteger gas = contractKit.web3j.ethEstimateGas(transaction).send().getAmountUsed();
+        gas = BigDecimal.valueOf(gas.doubleValue() * contractKit.config.gasInflationFactor).toBigInteger();
+
+        return gasPrice.multiply(gas).multiply(BigInteger.valueOf(times));
     }
 
     private void getBalanceInternal() {

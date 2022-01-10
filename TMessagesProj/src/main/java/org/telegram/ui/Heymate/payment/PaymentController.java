@@ -32,6 +32,7 @@ import works.heymate.core.Money;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.core.wallet.Prices;
 import works.heymate.core.wallet.Wallet;
 import works.heymate.model.Offer;
 import works.heymate.model.PurchasedPlan;
@@ -227,19 +228,28 @@ public class PaymentController {
             }
 
             getOffer(offerId, offer -> getBalance((wallet, usd, eur, real) -> {
-                Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType).plus(GAS_ADJUST_CENTS);
-                Money balance = getBalance(usd, eur, real, price.getCurrency());
+                Money price = PurchasePlanTypes.getPurchasedPlanTimeSlotPrice(offer, purchasedPlanType);
 
-                if (balance.compareTo(price) >= 0) {
-                    purchaseTimeSlot(offer, purchasedPlanId, referralId, timeSlot);
-                }
-                else {
-                    mPreferences.edit()
-                            .putString(Constants.TIMESLOT_ID, timeSlot.getString(TimeSlot.ID))
-                            .apply();
+                LoadingUtil.onLoadingStarted();
 
-                    ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
-                }
+                Prices.get(wallet, price, TG2HM.getDefaultCurrency(), convertedPrice -> {
+                    LoadingUtil.onLoadingFinished();
+
+                    convertedPrice = convertedPrice.plus(GAS_ADJUST_CENTS);
+
+                    Money balance = getBalance(usd, eur, real, convertedPrice.getCurrency());
+
+                    if (balance.compareTo(convertedPrice) >= 0) {
+                        purchaseTimeSlot(offer, purchasedPlanId, referralId, timeSlot);
+                    }
+                    else {
+                        mPreferences.edit()
+                                .putString(Constants.TIMESLOT_ID, timeSlot.getString(TimeSlot.ID))
+                                .apply();
+
+                        ActivityMonitor.get().getCurrentActivity().startActivity(PaymentInvoiceActivity.getIntent(mContext, offerId, purchasedPlanType, balance));
+                    }
+                });
             }));
         });
     }
@@ -264,7 +274,7 @@ public class PaymentController {
 
         Wallet wallet = Wallet.get(mContext, TG2HM.getCurrentPhoneNumber());
 
-        wallet.createAcceptedOffer(offer, timeSlot, tradeId, purchasedPlan, referrers, (success1, errorCause) -> {
+        wallet.createAcceptedOffer(offer, timeSlot, tradeId, purchasedPlan, referrers, TG2HM.getDefaultCurrency(), (success1, errorCause) -> {
             if (success1) {
                 APIs.get().createReservation(offer.getString(Offer.ID), offer.getString(Offer.USER_ID), timeSlot.getString(TimeSlot.ID), tradeId, result -> {
                     onPaymentFinished();

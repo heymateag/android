@@ -23,6 +23,7 @@ import org.telegram.ui.Heymate.Constants;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.HtAmplify;
+import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
 import works.heymate.api.APIObject;
@@ -32,7 +33,9 @@ import works.heymate.core.Currency;
 import works.heymate.core.Money;
 import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.core.wallet.Prices;
 import works.heymate.model.Offer;
+import works.heymate.model.Offers;
 import works.heymate.model.Pricing;
 
 public class PaymentInvoiceActivity extends BaseFragment {
@@ -118,13 +121,14 @@ public class PaymentInvoiceActivity extends BaseFragment {
 
             APIObject offer = result.response;
 
-            // TODO offer image
-//            if (offer.getHasImage() != null && offer.getHasImage()) {
-//                FileCache.get().getImage(offer.getId(), AndroidUtilities.dp(80), (success1, drawable, exception1) -> mOfferImage.setImageDrawable(drawable));
-//            }
-//            else {
+            String offerImageFile = Offers.getImageFileName(offer);
+
+            if (offerImageFile != null) {
+                FileCache.get().getImage(offerId, offerImageFile, AndroidUtilities.dp(80), (success1, drawable, exception1) -> mOfferImage.setImageDrawable(drawable));
+            }
+            else {
                 mOfferImage.setVisibility(View.GONE);
-//            }
+            }
 
             mOfferTitle.setText(offer.getString(Offer.TITLE));
             mOfferCategory.setText(offer.getString(Offer.CATEGORY + "." + Offer.Category.MAIN_CATEGORY));
@@ -150,30 +154,31 @@ public class PaymentInvoiceActivity extends BaseFragment {
             }
 
             PurchasePlanInfo planInfo = pricing.getPurchasePlanInfo(purchasedPlanType);
-            Money servicePrice = planInfo.price;
 
-            Currency currency = Currency.forName(pricing.getCurrency());
+            Prices.get(TG2HM.getWallet(), planInfo.price, TG2HM.getDefaultCurrency(), servicePrice -> {
+                Currency currency = servicePrice.getCurrency();
 
-            if (PurchasePlanTypes.BUNDLE.equals(purchasedPlanType)) {
-                Money realPrice = Money.create(pricing.getPrice() * 100, currency).multiplyBy(pricing.getBundleCount());
-                Money discount = realPrice.minus(servicePrice);
+                if (PurchasePlanTypes.BUNDLE.equals(purchasedPlanType)) {
+                    Money realPrice = Money.create(pricing.getPrice() * 100, currency).multiplyBy(pricing.getBundleCount());
+                    Money discount = realPrice.minus(servicePrice);
 
-                addInvoiceRow("Service Price", realPrice);
-                addInvoiceRow("Discount", discount);
-            }
-            else {
-                addInvoiceRow("Service Price", servicePrice);
-            }
+                    addInvoiceRow("Service Price", realPrice);
+                    addInvoiceRow("Discount", discount);
+                }
+                else {
+                    addInvoiceRow("Service Price", servicePrice);
+                }
 
-            Money fee = Money.create(PaymentController.GAS_ADJUST_CENTS, currency);
+                Money fee = Money.create(PaymentController.GAS_ADJUST_CENTS, currency);
 
-            addInvoiceRow("Fee", fee);
-            addInvoiceRow("Wallet Balance", walletBalance);
+                addInvoiceRow("Fee", fee);
+                addInvoiceRow("Wallet Balance", walletBalance);
 
-            mTotalPayment = servicePrice.plus(fee).minus(walletBalance);
-            addInvoiceRow("Total Payment", mTotalPayment);
+                mTotalPayment = servicePrice.plus(fee).minus(walletBalance);
+                addInvoiceRow("Total Payment", mTotalPayment);
 
-            mPay.setText("Pay " + mTotalPayment.toString());
+                mPay.setText("Pay " + mTotalPayment.toString());
+            });
         });
 
         fragmentView = content;

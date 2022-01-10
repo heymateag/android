@@ -42,6 +42,18 @@ public class Currency {
         return symbol == null ? name : symbol;
     }
 
+    public works.heymate.celo.Currency celoCurrency() {
+        if (this.equals(REAL)) {
+            return works.heymate.celo.Currency.REAL;
+        }
+
+        if (this.equals(EUR)) {
+            return works.heymate.celo.Currency.EUR;
+        }
+
+        return works.heymate.celo.Currency.USD;
+    }
+
     public String format(String amount) {
         if (symbol.length() == 1) {
             return symbol + amount;

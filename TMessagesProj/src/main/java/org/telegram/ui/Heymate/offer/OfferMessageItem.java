@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,16 +37,23 @@ import org.telegram.ui.Heymate.ReferralUtils;
 import works.heymate.api.APIObject;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
+
+import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import works.heymate.beta.R;
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.offer.PurchasePlanInfo;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.core.wallet.Prices;
+import works.heymate.core.wallet.Wallet;
 import works.heymate.model.Offer;
 import works.heymate.model.Offers;
 import works.heymate.model.Pricing;
@@ -91,6 +99,8 @@ public class OfferMessageItem extends SequenceLayout {
     private boolean mFullyLoaded = false;
 
     private OfferUtils.PhraseInfo mPhraseInfo = null;
+
+    private final Map<Object, Money> mMoneyMap = new HashMap<>();
 
     public OfferMessageItem(Context context) {
         super(context);
@@ -279,7 +289,7 @@ public class OfferMessageItem extends SequenceLayout {
             Pricing pricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
             Currency currency = Currency.forName(pricing.getCurrency());
 
-            mPriceFixedPrice.setText(Money.create(pricing.getPrice() * 100, currency).toString());
+            assignPrice(mPriceFixedPrice, Money.create(pricing.getPrice() * 100, currency));
             mPriceInfoFixedPrice.setText(pricing.getRateType());
 
             if (pricing.getBundleCount() > 0) {
@@ -291,7 +301,7 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceInfoBundle.setVisibility(VISIBLE);
 
                 mInfoBundle.setText(pricing.getBundleDiscountPercent() + "% Off");
-                mPriceBundle.setText(Money.create(pricing.getBundleTotalPrice() * 100, currency).toString());
+                assignPrice(mPriceBundle, Money.create(pricing.getBundleTotalPrice() * 100, currency));
                 mPriceInfoBundle.setText("per " + pricing.getBundleCount() + " reservations");
             }
             else {
@@ -311,7 +321,7 @@ public class OfferMessageItem extends SequenceLayout {
                 mPriceSubscription.setVisibility(VISIBLE);
                 mPriceInfoSubscription.setVisibility(VISIBLE);
 
-                mPriceSubscription.setText(Money.create(pricing.getSubscriptionPrice() * 100, currency).toString());
+                assignPrice(mPriceSubscription, Money.create(pricing.getSubscriptionPrice() * 100, currency));
                 mPriceInfoSubscription.setText(pricing.getSubscriptionPeriod().toLowerCase()); // TODO Cheating?
             }
             else {
@@ -325,6 +335,22 @@ public class OfferMessageItem extends SequenceLayout {
 
             mRadioFixedPrice.setVisibility((pricing.getBundleCount() == 0 && pricing.getSubscriptionPeriod() == null) ? GONE : VISIBLE);
         } catch (NullPointerException e) { }
+    }
+
+    private void assignPrice(TextView text, Money money) {
+        text.setText(money.toString());
+
+        Wallet wallet = TG2HM.getWallet();
+
+        mMoneyMap.put(text, money);
+
+        Prices.get(wallet, money, TG2HM.getDefaultCurrency(), convertedMoney -> {
+            if (!money.equals(mMoneyMap.get(text))) {
+                return;
+            }
+
+            text.setText(convertedMoney.toString());
+        });
     }
 
     private void promote(boolean share) {

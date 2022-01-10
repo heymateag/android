@@ -8,19 +8,23 @@ import android.os.HandlerThread;
 import com.google.android.exoplayer2.util.Log;
 
 import org.celo.contractkit.CeloContract;
+import org.celo.contractkit.ContractKit;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.ui.Heymate.HeymateConfig;
 
 import works.heymate.api.APIObject;
+import works.heymate.celo.AmountCallback;
 import works.heymate.celo.ContractKitCallback;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
 
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Hashtable;
 import java.util.List;
@@ -270,6 +274,12 @@ public class Wallet {
         });
     }
 
+    public void calculatePrice(Money money, Currency targetCurrency, AmountCallback callback) {
+        ensureCeloSDK();
+
+        mCeloSDK.howMuchToBuy(works.heymate.celo.Money.get(money.getCents(), money.getCurrency().celoCurrency()), targetCurrency.celoCurrency(), callback);
+    }
+
     public void signOffer(Pricing pricing, APIObject paymentTerms, SignatureCallback callback) {
         ensureCeloSDK();
 
@@ -327,7 +337,8 @@ public class Wallet {
     }
 
     public void createAcceptedOffer(APIObject offer, APIObject timeSlot, String tradeId, APIObject purchasedPlan,
-                                    List<String> referrers, OfferOperationCallback callback) {
+                                    List<String> referrers, Currency nativeCurrency,
+                                    OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -337,7 +348,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.create(offer, timeSlot, tradeId, purchasedPlan, referrers);
+                    mCeloOffer.create(offer, timeSlot, tradeId, purchasedPlan, referrers, nativeCurrency);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {

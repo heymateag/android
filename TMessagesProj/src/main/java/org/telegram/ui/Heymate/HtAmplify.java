@@ -4,11 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.ApiException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
@@ -18,7 +13,6 @@ import com.amplifyframework.api.graphql.OperationType;
 import com.amplifyframework.api.graphql.SimpleGraphQLRequest;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.core.AmplifyConfiguration;
-import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.util.Wrap;
 
 import org.json.JSONException;
@@ -55,8 +49,6 @@ public class HtAmplify {
 
     private Context context;
 
-    public AmazonS3Client amazonS3Client;
-
     public Context getContext(){
         return context;
     }
@@ -66,16 +58,7 @@ public class HtAmplify {
 
         try {
             Amplify.addPlugin(new AWSApiPlugin());
-            //Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.configure(AmplifyConfiguration.fromConfigFile(context, HeymateConfig.PRODUCTION ? R.raw.amplifyconfiguration_production : R.raw.amplifyconfiguration_staging), context);
-
-            AWSCredentials credentials = new BasicAWSCredentials(
-                    "AKIATNEPMKIM4PV225S6",
-                    "xVYv+bzX/EAO16yRwT5Qs+Cr4JLNdcv9cmw9zBbp"
-            );
-
-            amazonS3Client = new AmazonS3Client(credentials, Region.getRegion(Regions.EU_CENTRAL_1));
-            amazonS3Client.setEndpoint("https://s3-eu-central-1.amazonaws.com/");
 
             Log.i(TAG, "Initialized Amplify.");
         } catch (AmplifyException error) {
