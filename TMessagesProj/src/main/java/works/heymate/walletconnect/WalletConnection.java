@@ -48,7 +48,7 @@ public class WalletConnection {
     private static final String SESSION_PEER_ID = "peer_id";
 
     public static WCSession sessionFromUri(String uri) {
-        return WCSession.Companion.from(uri);
+        return uri == null ? null : WCSession.Companion.from(uri);
     }
 
     private final Wallet mWallet;
