@@ -1,6 +1,7 @@
 package works.heymate.walletconnect;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.trustwallet.walletconnect.WCClient;
@@ -116,7 +117,14 @@ public class WalletConnection {
 
         if (client != null) {
             if (!client.isConnected()) {
-                client.connect(session, mPeerMeta, mPeerId, null);
+                new Thread() {
+
+                    @Override
+                    public void run() {
+                        client.connect(session, mPeerMeta, mPeerId, null);
+                    }
+
+                }.start();
             }
 
             return;
@@ -134,6 +142,14 @@ public class WalletConnection {
 
     private WCClient newClient(String sSession) {
         WCClient client = new WCClient(mGson, mOkHttpClient);
+
+        client.setOnFailure(throwable -> {
+            Utils.runOnUIThread(() -> {
+                Activity activity = ActivityMonitor.get().getCurrentActivity();
+                Toast.makeText(activity, throwable.getMessage(), Toast.LENGTH_LONG).show();
+            });
+            return null;
+        });
 
         client.setOnSessionRequest((requestId, wcPeerMeta) -> {
             Utils.postOnUIThread(() -> {
