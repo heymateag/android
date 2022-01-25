@@ -12,10 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.api.ApiException;
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.Reservation;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -29,7 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.core.Texts;
+import works.heymate.model.Reservation;
 
 public class MyOrdersAdapter extends MyScheduleAdapter {
 
@@ -37,9 +37,9 @@ public class MyOrdersAdapter extends MyScheduleAdapter {
     private final BaseFragment mParent;
     private final RecyclerListView mListView;
 
-    private SparseArray<List<Reservation>> mSections = new SparseArray<>();
+    private SparseArray<List<APIObject>> mSections = new SparseArray<>();
 
-    private Map<String, Offer> mOffers = new HashMap<>();
+    private Map<String, APIObject> mOffers = new HashMap<>();
 
     public MyOrdersAdapter(RecyclerListView listView, BaseFragment parent) {
         mContext = listView.getContext();
@@ -49,81 +49,93 @@ public class MyOrdersAdapter extends MyScheduleAdapter {
 
     @Override
     public void getData() {
-        HtAmplify.getInstance(mContext).getMyOrders(this::onReservationsQueryResult);
-    }
-
-    private void onReservationsQueryResult(boolean success, List<Reservation> reservations, ApiException exception) {
-        if (!success) {
-            return;
-        }
-
-        Collections.sort(reservations, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        long baseTime = calendar.getTimeInMillis();
-
-        mSections.clear();
-
-        for (Reservation reservation: reservations) {
-            long slotTime = reservation.getStartTime() * 1000L;
-
-            int dayDiff;
-
-            if (baseTime > slotTime) {
-                dayDiff = (int) ((baseTime - slotTime) / MyScheduleUtils.ONE_DAY + 1);
-            }
-            else {
-                dayDiff = (int) -((slotTime - baseTime) / MyScheduleUtils.ONE_DAY);
+        APIs.get().getMyOrders(result -> {
+            if (!result.success) {
+                return;
             }
 
-            List<Reservation> list = mSections.get(dayDiff);
+            List<APIObject> reservations = result.response.getArray("data").asObjectList();
 
-            if (list == null) {
-                list = new ArrayList<>();
-                mSections.put(dayDiff, list);
-            }
+            // TODO sort
+//            Collections.sort(reservations, (o1, o2) -> o2.getStartTime() - o1.getStartTime());
 
-            list.add(reservation);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            long baseTime = calendar.getTimeInMillis();
 
-            if (!mOffers.containsKey(reservation.getId())) {
-                HtAmplify.getInstance(mContext).getOffer(reservation.getOfferId(), (success1, data, exception1) -> {
-                    if (success1) {
-                        mOffers.put(reservation.getId(), data);
-                        updateItem(reservation);
+            mSections.clear();
+
+            for (APIObject reservation: reservations) {
+                long slotTime = 0;//reservation.getStartTime() * 1000L;
+
+                int dayDiff;
+
+                if (baseTime > slotTime) {
+                    dayDiff = (int) ((baseTime - slotTime) / MyScheduleUtils.ONE_DAY + 1);
+                }
+                else {
+                    dayDiff = (int) -((slotTime - baseTime) / MyScheduleUtils.ONE_DAY);
+                }
+
+                List<APIObject> list = mSections.get(dayDiff);
+
+                if (list == null) {
+                    list = new ArrayList<>();
+                    mSections.put(dayDiff, list);
+                }
+
+                list.add(reservation);
+
+                if (!mOffers.containsKey(reservation.getString(Reservation.ID))) {
+                    APIObject offer = reservation.getObject(Reservation.OFFER);
+
+                    if (offer != null) {
+                        mOffers.put(reservation.getString(Reservation.ID), offer);
                     }
-                });
-            }
-        }
+                    else {
+                        String offerId = reservation.getString(Reservation.OFFER_ID);
 
-        notifyDataSetChanged();
+                        if (offerId != null) {
+                            APIs.get().getOffer(offerId, offerResult -> {
+                                if (offerResult.success) {
+                                    mOffers.put(reservation.getString(Reservation.ID), offerResult.response);
+                                    updateItem(reservation);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            notifyDataSetChanged();
+        });
     }
 
-    private void updateItem(Reservation reservation) {
+    private void updateItem(APIObject reservation) {
         for (int i = 0; i < mListView.getChildCount(); i++) {
             if (mListView.getChildAt(i) instanceof MyOrderItem) {
                 MyOrderItem item = (MyOrderItem) mListView.getChildAt(i);
 
-                if (reservation.getId().equals(item.getReservationId())) {
+                if (reservation.getString(Reservation.ID).equals(item.getReservationId())) {
                     item.setReservation(reservation);
-                    item.setOffer(mOffers.get(reservation.getId()));
+                    item.setOffer(mOffers.get(reservation.getString(Reservation.ID)));
                 }
             }
         }
     }
 
-    protected void updateReservation(Reservation reservation) {
+    protected void updateReservation(APIObject reservation) {
         boolean found = false;
 
         for (int i = 0; i < mSections.size(); i++) {
-            List<Reservation> reservations = mSections.get(mSections.keyAt(i));
+            List<APIObject> reservations = mSections.get(mSections.keyAt(i));
 
             if (reservations != null) {
                 for (int index = 0; index < reservations.size(); index++) {
-                    if (reservation.getId().equals(reservations.get(index).getId())) {
+                    if (reservation.getString(Reservation.ID).equals(reservations.get(index).getString(Reservation.ID))) {
                         found = true;
 
                         reservations.set(index, reservation);
@@ -204,10 +216,10 @@ public class MyOrdersAdapter extends MyScheduleAdapter {
     public void onBindViewHolder(int section, int position, RecyclerView.ViewHolder holder) {
         MyOrderItem item = (MyOrderItem) holder.itemView;
 
-        Reservation reservation = (Reservation) getItem(section, position);
+        APIObject reservation = (APIObject) getItem(section, position);
 
         item.setReservation(reservation);
-        item.setOffer(mOffers.get(reservation.getId()));
+        item.setOffer(mOffers.get(reservation.getString(Reservation.ID)));
     }
 
     @Override
@@ -227,13 +239,13 @@ public class MyOrdersAdapter extends MyScheduleAdapter {
             case 1:
                 return Texts.get(Texts.YESTERDAY);
             default:
-                List<Reservation> reservations = mSections.get(dayDiff);
+                List<APIObject> reservations = mSections.get(dayDiff);
 
                 if (reservations == null || reservations.isEmpty()) {
                     return "";
                 }
 
-                return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(reservations.get(0).getStartTime() * 1000L);
+                return "";//FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(reservations.get(0).getStartTime() * 1000L); TODO
         }
     }
 

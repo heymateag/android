@@ -3,20 +3,20 @@ package works.heymate.core.reservation;
 import android.net.Uri;
 import android.util.Base64;
 
-import com.amplifyframework.core.model.temporal.Temporal;
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.Reservation;
 import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.createoffer.PriceInputItem;
 
 import java.util.Iterator;
 
+import works.heymate.api.APIObject;
 import works.heymate.core.Texts;
 import works.heymate.core.URLs;
 import works.heymate.core.Utils;
+import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.model.Reservation;
+import works.heymate.model.TimeSlot;
 import works.heymate.util.DefaultObjectBuilder;
 import works.heymate.util.DefaultObjectProvider;
 import works.heymate.util.Template;
@@ -39,6 +39,7 @@ public class ReservationUtils {
     public static final String CONSUMER_ID = "ci";
     public static final String MEETING_TYPE = "mt";
     public static final String MEETING_ID = "mi";
+    public static final String MEETING_PASSWORD = "mp";
 
     public static class PhraseInfo {
 
@@ -51,7 +52,7 @@ public class ReservationUtils {
         public String languageCode;
         public String phraseName;
 
-        public Reservation reservation;
+        public APIObject reservation;
 
     }
 
@@ -64,10 +65,10 @@ public class ReservationUtils {
     Click the link below to join:
     {url}
      */
-    public static String serializeBeautiful(Reservation reservation, Offer ofer, String... additionalFields) {
+    public static String serializeBeautiful(APIObject reservation, APIObject timeSlot, APIObject offer, String... additionalFields) {
         String phraseName = Texts.get(Texts.RESERVATION_PHRASE_NAME).toString();
 
-        String url = deepLinkForReservation(reservation, additionalFields) +
+        String url = deepLinkForReservation(reservation, timeSlot, additionalFields) +
                 (additionalFields.length > 0 ? "&" : "?") + PARAMETER_LANGUAGE + "=" + Texts.getLanguageCode() +
                 "&" + PARAMETER_PHRASE_NAME + "=" + Base64.encodeToString(phraseName.getBytes(), 0);
 
@@ -79,7 +80,7 @@ public class ReservationUtils {
                     case "reservation":
                         return reservation;
                     case "offer":
-                        return ofer;
+                        return offer;
                     case "url":
                         return url;
                 }
@@ -155,11 +156,7 @@ public class ReservationUtils {
         DefaultObjectBuilder objectBuilder = new DefaultObjectBuilder();
         Template.parse(rawPhrase).build(phrase, objectBuilder);
 
-        Reservation.Builder builder = reservationForDeepLink(phraseInfo);
-
-        if (builder == null) {
-            return null;
-        }
+        APIObject reservation = reservationForDeepLink(phraseInfo);
 
         try {
             JSONObject jReservation = objectBuilder.getJSON().getJSONObject("reservation");
@@ -171,15 +168,15 @@ public class ReservationUtils {
 //            builder.locationData(Utils.getOrNull(jReservation, "locationData"));
         } catch (JSONException e) { }
 
-        phraseInfo.reservation = builder.build();
+        phraseInfo.reservation = reservation;
 
         return phraseInfo;
     }
 
-    public static String deepLinkForReservation(Reservation reservation, String... additionalFields) {
+    public static String deepLinkForReservation(APIObject reservation, APIObject timeSlot, String... additionalFields) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(URLs.getBaseURL(URLs.PATH_RESERVATION)).append('/').append(reservation.getId());
+        sb.append(URLs.getBaseURL(URLs.PATH_RESERVATION)).append('/').append(reservation.getString(Reservation.ID));
 
         if (additionalFields.length > 0) {
             sb.append('?').append(PARAMETER_DATA).append('=');
@@ -189,34 +186,37 @@ public class ReservationUtils {
             for (String additionalField: additionalFields) {
                 switch (additionalField) {
                     case OFFER_ID:
-                        Utils.putValues(data, OFFER_ID, reservation.getOfferId());
+                        Utils.putValues(data, OFFER_ID, timeSlot.getString(TimeSlot.OFFER_ID));
                         continue;
                     case TIME_SLOT_ID:
-                        Utils.putValues(data, TIME_SLOT_ID, reservation.getTimeSlotId());
+                        Utils.putValues(data, TIME_SLOT_ID, timeSlot.getString(TimeSlot.ID));
                         continue;
                     case PURCHASED_PLAN_ID:
-                        Utils.putValues(data, PURCHASED_PLAN_ID, reservation.getPurchasedPlanId());
+                        Utils.putValues(data, PURCHASED_PLAN_ID, null); // TODO reservation.getPurchasedPlanId()
                         continue;
                     case PURCHASED_PLAN_TYPE:
-                        Utils.putValues(data, PURCHASED_PLAN_TYPE, reservation.getPurchasedPlanType());
+                        Utils.putValues(data, PURCHASED_PLAN_TYPE, PurchasePlanTypes.SINGLE); // TODO reservation.getPurchasedPlanType()
                         continue;
                     case START_TIME:
-                        Utils.putValues(data, START_TIME, reservation.getStartTime().toString());
+                        Utils.putValues(data, START_TIME, timeSlot.getString(TimeSlot.FROM_TIME));
                         continue;
                     case END_TIME:
-                        Utils.putValues(data, END_TIME, reservation.getEndTime().toString());
+                        Utils.putValues(data, END_TIME, timeSlot.getString(TimeSlot.TO_TIME));
                         continue;
                     case SERVICE_PROVIDER_ID:
-                        Utils.putValues(data, SERVICE_PROVIDER_ID, reservation.getServiceProviderId());
+                        Utils.putValues(data, SERVICE_PROVIDER_ID, reservation.getString(Reservation.SERVICE_PROVIDER_ID));
                         continue;
                     case CONSUMER_ID:
-                        Utils.putValues(data, CONSUMER_ID, reservation.getConsumerId());
+                        Utils.putValues(data, CONSUMER_ID, reservation.getString(Reservation.CONSUMER_ID));
                         continue;
                     case MEETING_TYPE:
-                        Utils.putValues(data, MEETING_TYPE, reservation.getMeetingType());
+                        Utils.putValues(data, MEETING_TYPE, timeSlot.getString(TimeSlot.OFFER_TYPE));
                         continue;
                     case MEETING_ID:
-                        Utils.putValues(data, MEETING_ID, reservation.getMeetingId());
+                        Utils.putValues(data, MEETING_ID, timeSlot.getString(TimeSlot.MEETING_ID));
+                        continue;
+                    case MEETING_PASSWORD:
+                        Utils.putValues(data, MEETING_PASSWORD, timeSlot.getString(TimeSlot.MEETING_PASSWORD));
                         continue;
                 }
             }
@@ -227,11 +227,11 @@ public class ReservationUtils {
         return sb.toString();
     }
 
-    public static Reservation.Builder reservationForDeepLink(PhraseInfo phraseInfo) {
-        Reservation.Builder builder = new Reservation.Builder();
+    public static APIObject reservationForDeepLink(PhraseInfo phraseInfo) {
+        APIObject reservation = new APIObject();
 
         if (phraseInfo.reservationId != null) {
-            builder.id(phraseInfo.reservationId);
+            reservation.set(Reservation.ID, phraseInfo.reservationId);
         }
 
         if (phraseInfo.urlParameters != null) {
@@ -248,36 +248,39 @@ public class ReservationUtils {
 
                         switch (key) {
                             case OFFER_ID:
-                                builder.offerId(Utils.getOrNull(data, OFFER_ID));
+                                reservation.set(Reservation.OFFER_ID, Utils.getOrNull(data, OFFER_ID));
                                 continue;
                             case TIME_SLOT_ID:
-                                builder.timeSlotId(Utils.getOrNull(data, TIME_SLOT_ID));
+                                reservation.set(Reservation.TIMESLOT_ID, Utils.getOrNull(data, TIME_SLOT_ID));
                                 continue;
                             case PURCHASED_PLAN_ID:
-                                builder.purchasedPlanId(Utils.getOrNull(data, PURCHASED_PLAN_ID));
+                                //builder.purchasedPlanId(Utils.getOrNull(data, PURCHASED_PLAN_ID)); TODO
                                 continue;
                             case PURCHASED_PLAN_TYPE:
-                                builder.purchasedPlanType(Utils.getOrNull(data, PURCHASED_PLAN_TYPE));
+                                //reservation.purchasedPlanType(Utils.getOrNull(data, PURCHASED_PLAN_TYPE)); TODO
                                 continue;
                             case START_TIME:
-                                String startTime = Utils.getOrNull(data, START_TIME);
-                                builder.startTime(startTime == null ? null : Integer.parseInt(startTime));
+//                                String startTime = Utils.getOrNull(data, START_TIME); TODO
+//                                builder.startTime(startTime == null ? null : Integer.parseInt(startTime));
                                 continue;
                             case END_TIME:
-                                String endTime = Utils.getOrNull(data, END_TIME);
-                                builder.endTime(endTime == null ? null : Integer.parseInt(endTime));
+//                                String endTime = Utils.getOrNull(data, END_TIME); TODO
+//                                builder.endTime(endTime == null ? null : Integer.parseInt(endTime));
                                 continue;
                             case SERVICE_PROVIDER_ID:
-                                builder.serviceProviderId(Utils.getOrNull(data, SERVICE_PROVIDER_ID));
+                                reservation.set(Reservation.SERVICE_PROVIDER_ID, Utils.getOrNull(data, SERVICE_PROVIDER_ID));
                                 continue;
                             case CONSUMER_ID:
-                                builder.consumerId(Utils.getOrNull(data, CONSUMER_ID));
+                                reservation.set(Reservation.CONSUMER_ID, Utils.getOrNull(data, CONSUMER_ID));
                                 continue;
                             case MEETING_TYPE:
-                                builder.meetingType(Utils.getOrNull(data, MEETING_TYPE));
+                                //builder.meetingType(Utils.getOrNull(data, MEETING_TYPE)); TODO
                                 continue;
                             case MEETING_ID:
-                                builder.meetingId(Utils.getOrNull(data, MEETING_ID));
+                                reservation.set(Reservation.MEETING_ID, Utils.getOrNull(data, MEETING_ID));
+                                continue;
+                            case MEETING_PASSWORD:
+                                reservation.set(Reservation.MEETING_PASSWORD, Utils.getOrNull(data, MEETING_PASSWORD));
                                 continue;
                         }
                     }
@@ -289,7 +292,7 @@ public class ReservationUtils {
             }
         }
 
-        return builder;
+        return reservation;
     }
 
 }

@@ -23,6 +23,10 @@ public class AlphaConversion {
             src = "cEUR";
             dst = "EUR";
         }
+        else if (Currency.REAL.equals(currency)) { // TODO really?
+            src = "cREAL";
+            dst = "REAL";
+        }
         else {
             Utils.postOnUIThread(() -> callback.onAPICallResult(false, -1F, null));
             return;

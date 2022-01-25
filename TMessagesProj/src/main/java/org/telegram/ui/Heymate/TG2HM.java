@@ -25,8 +25,11 @@ import java.util.Map;
 
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
+import works.heymate.core.wallet.Wallet;
 
 public class TG2HM {
+
+    private static final String BRASIL = "BR"; // Brasil
 
     private static final List<String> EUROPEAN_UNION_COUNTRIES = Arrays.asList(
             "AT", // Austria
@@ -68,12 +71,15 @@ public class TG2HM {
         return defaultCurrency;
     }
 
-    public static Money pickTheRightMoney(Money usd, Money eur) {
+    public static Money pickTheRightMoney(Money usd, Money eur, Money real) {
         if (getDefaultCurrency().equals(Currency.USD)) {
             return usd;
         }
         else if (getDefaultCurrency().equals(Currency.EUR)) {
             return eur;
+        }
+        else if (getDefaultCurrency().equals(Currency.REAL)) {
+            return real;
         }
 
         return usd;
@@ -103,6 +109,16 @@ public class TG2HM {
         }
 
         return user.phone;
+    }
+
+    public static Wallet getWallet() {
+        String phoneNumber = getCurrentPhoneNumber();
+
+        if (phoneNumber == null) {
+            return null;
+        }
+
+        return Wallet.get(ApplicationLoader.applicationContext, phoneNumber);
     }
 
     public static String getFCMToken() {
@@ -172,6 +188,10 @@ public class TG2HM {
 
     private static Currency getCurrencyForPhoneNumber(String phoneNumber) {
         String country = getCountryForPhoneNumber(phoneNumber);
+
+        if (BRASIL.equals(country)) {
+            return Currency.REAL;
+        }
 
         return EUROPEAN_UNION_COUNTRIES.contains(country) ? Currency.EUR : Currency.USD;
     }

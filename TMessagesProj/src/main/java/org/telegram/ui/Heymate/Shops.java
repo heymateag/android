@@ -2,8 +2,6 @@ package org.telegram.ui.Heymate;
 
 import android.content.Context;
 
-import com.amplifyframework.datastore.generated.model.Shop;
-
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.tgnet.ConnectionsManager;
@@ -25,105 +23,105 @@ public class Shops {
 
     private static boolean lastTimeFailed = false;
 
-    public static void reloadShops(Context context, int currentAccount) {
-        HtAmplify.getInstance(context).getShops((success, shops, exception) -> {
-            if (success) {
-                MessagesController messagesController = MessagesController.getInstance(currentAccount);
-
-                ArrayList<TLRPC.Dialog> dialogList = new ArrayList<>((shops == null ? 0 : shops.size()) + OLD_SHOP_IDS.size());
-
-                List<String> dialogsToLoad = new ArrayList<>();
-                List<Long> dialogIdsToLoad = new ArrayList<>();
-
-                for (long id: OLD_SHOP_IDS) {
-                    TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
-
-                    if (dialog != null) {
-                        dialogList.add(dialog);
-                    }
-                    else {
-                        dialogIdsToLoad.add(id);
-                        // TODO
-                    }
-                }
-
-                if (shops != null) {
-                    for (Shop shop: shops) {
-                        long id = shop.getTgId();
-
-                        TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
-
-                        if (dialog != null) {
-                            dialogList.add(dialog);
-                        }
-                        else {
-                            String username = shop.getTitle();
-
-                            if (username == null || username.isEmpty()) {
-                                continue;
-                            }
-
-                            dialogsToLoad.add(username);
-
-                            dialogIdsToLoad.add(shop.getType() == HtAmplify.ShopType.MarketPlace.ordinal() ? id : -id);
-                        }
-                    }
-                }
-
-                updateDialogs(dialogList);
-
-                if (dialogsToLoad.isEmpty()) {
-                    return;
-                }
-
-//                loadNextDialog(dialogsToLoad, dialogList, currentAccount);
-
-                TLRPC.TL_messages_getPeerDialogs req = new TLRPC.TL_messages_getPeerDialogs();
-
-                for (long id: dialogIdsToLoad) {
-                    TLRPC.TL_inputDialogPeer peer = new TLRPC.TL_inputDialogPeer();
-                    if (id < 0) {
-                        peer.peer = new TLRPC.TL_inputPeerChannel();
-                        peer.peer.channel_id = -id;
-                    }
-                    else {
-                        peer.peer = new TLRPC.TL_inputPeerChat();
-                        peer.peer.chat_id = id;
-                    }
-                    req.peers.add(peer);
-                }
-
-                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> Utils.runOnUIThread(() -> {
-                    boolean failed = true;
-
-                    if (response instanceof TLRPC.TL_messages_peerDialogs) {
-                        failed = false;
-
-                        TLRPC.TL_messages_peerDialogs peerDialogs = (TLRPC.TL_messages_peerDialogs) response;
-
-                        TLRPC.messages_Dialogs dialogsRes = new TLRPC.TL_messages_dialogs();
-                        dialogsRes.chats = peerDialogs.chats;
-                        dialogsRes.count = peerDialogs.dialogs.size();
-                        dialogsRes.dialogs = peerDialogs.dialogs;
-                        dialogsRes.messages = peerDialogs.messages;
-                        dialogsRes.users = peerDialogs.users;
-
-                        messagesController.processLoadedDialogs(dialogsRes, null, 0, -1, 0, 0, false, true, false);
-
-                        MessagesStorage messagesStorage = MessagesStorage.getInstance(currentAccount);
-                        messagesStorage.putDialogs(dialogsRes, 1);
-
-                        dialogList.addAll(peerDialogs.dialogs);
-                    }
-
-                    if (!failed || lastTimeFailed) {
-                        updateDialogs(dialogList);
-                    }
-
-                    lastTimeFailed = failed;
-                }));
-            }
-        });
+    public static void reloadShops(Context context, int currentAccount) { // TODO get shops
+//        HtAmplify.getInstance(context).getShops((success, shops, exception) -> {
+//            if (success) {
+//                MessagesController messagesController = MessagesController.getInstance(currentAccount);
+//
+//                ArrayList<TLRPC.Dialog> dialogList = new ArrayList<>((shops == null ? 0 : shops.size()) + OLD_SHOP_IDS.size());
+//
+//                List<String> dialogsToLoad = new ArrayList<>();
+//                List<Long> dialogIdsToLoad = new ArrayList<>();
+//
+//                for (long id: OLD_SHOP_IDS) {
+//                    TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
+//
+//                    if (dialog != null) {
+//                        dialogList.add(dialog);
+//                    }
+//                    else {
+//                        dialogIdsToLoad.add(id);
+//                        // TODO
+//                    }
+//                }
+//
+//                if (shops != null) {
+//                    for (Shop shop: shops) {
+//                        long id = shop.getTgId();
+//
+//                        TLRPC.Dialog dialog = messagesController.dialogs_dict.get(-id);
+//
+//                        if (dialog != null) {
+//                            dialogList.add(dialog);
+//                        }
+//                        else {
+//                            String username = shop.getTitle();
+//
+//                            if (username == null || username.isEmpty()) {
+//                                continue;
+//                            }
+//
+//                            dialogsToLoad.add(username);
+//
+//                            dialogIdsToLoad.add(shop.getType() == HtAmplify.ShopType.MarketPlace.ordinal() ? id : -id);
+//                        }
+//                    }
+//                }
+//
+//                updateDialogs(dialogList);
+//
+//                if (dialogsToLoad.isEmpty()) {
+//                    return;
+//                }
+//
+////                loadNextDialog(dialogsToLoad, dialogList, currentAccount);
+//
+//                TLRPC.TL_messages_getPeerDialogs req = new TLRPC.TL_messages_getPeerDialogs();
+//
+//                for (long id: dialogIdsToLoad) {
+//                    TLRPC.TL_inputDialogPeer peer = new TLRPC.TL_inputDialogPeer();
+//                    if (id < 0) {
+//                        peer.peer = new TLRPC.TL_inputPeerChannel();
+//                        peer.peer.channel_id = -id;
+//                    }
+//                    else {
+//                        peer.peer = new TLRPC.TL_inputPeerChat();
+//                        peer.peer.chat_id = id;
+//                    }
+//                    req.peers.add(peer);
+//                }
+//
+//                ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> Utils.runOnUIThread(() -> {
+//                    boolean failed = true;
+//
+//                    if (response instanceof TLRPC.TL_messages_peerDialogs) {
+//                        failed = false;
+//
+//                        TLRPC.TL_messages_peerDialogs peerDialogs = (TLRPC.TL_messages_peerDialogs) response;
+//
+//                        TLRPC.messages_Dialogs dialogsRes = new TLRPC.TL_messages_dialogs();
+//                        dialogsRes.chats = peerDialogs.chats;
+//                        dialogsRes.count = peerDialogs.dialogs.size();
+//                        dialogsRes.dialogs = peerDialogs.dialogs;
+//                        dialogsRes.messages = peerDialogs.messages;
+//                        dialogsRes.users = peerDialogs.users;
+//
+//                        messagesController.processLoadedDialogs(dialogsRes, null, 0, -1, 0, 0, false, true, false);
+//
+//                        MessagesStorage messagesStorage = MessagesStorage.getInstance(currentAccount);
+//                        messagesStorage.putDialogs(dialogsRes, 1);
+//
+//                        dialogList.addAll(peerDialogs.dialogs);
+//                    }
+//
+//                    if (!failed || lastTimeFailed) {
+//                        updateDialogs(dialogList);
+//                    }
+//
+//                    lastTimeFailed = failed;
+//                }));
+//            }
+//        });
     }
 
 //    private static void loadNextDialog(List<String> dialogsToLoad, ArrayList<TLRPC.Dialog> dialogList, int currentAccount) {

@@ -2,20 +2,20 @@ package works.heymate.core.offer;
 
 import android.net.Uri;
 import android.util.Base64;
-
-import com.amplifyframework.core.model.temporal.Temporal;
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.google.android.exoplayer2.util.Log;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
 
-import works.heymate.core.Currency;
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
 import works.heymate.core.Texts;
 import works.heymate.core.URLs;
 import works.heymate.core.Utils;
+import works.heymate.model.Offer;
+import works.heymate.model.Pricing;
 import works.heymate.util.DefaultObjectBuilder;
 import works.heymate.util.DefaultObjectProvider;
 import works.heymate.util.Template;
@@ -62,7 +62,7 @@ public class OfferUtils {
         public String languageCode;
         public String phraseName;
 
-        public Offer offer;
+        public APIObject offer;
 
     }
 
@@ -82,7 +82,7 @@ public class OfferUtils {
 
     Learn more here: {url}
      */
-    public static String serializeBeautiful(Offer offer, String referralId, String username, String... additionalFields) {
+    public static String serializeBeautiful(APIObject offer, String referralId, String username, String... additionalFields) {
         String phraseName = Texts.get(Texts.OFFER_PHRASE_NAME).toString();
 
         String url = deepLinkForOffer(referralId, offer, additionalFields) +
@@ -184,59 +184,50 @@ public class OfferUtils {
         DefaultObjectBuilder objectBuilder = new DefaultObjectBuilder();
         Template.parse(rawPhrase).build(phrase, objectBuilder);
 
-        Offer.Builder builder = offerForDeepLink(phraseInfo);
-
-        if (builder == null) {
-            return null;
-        }
+        APIObject offer = offerForDeepLink(phraseInfo);
 
         try {
             JSONObject jOffer = objectBuilder.getJSON().getJSONObject("offer");
 
              try {
-                 builder.termsConfig(jOffer.getJSONObject("termsConfig").toString());
+                 offer.set(Offer.PAYMENT_TERMS, new APIObject(jOffer.getJSONObject("termsConfig")));
              } catch (Throwable t) { }
 
             try {
-                builder.pricingInfo(jOffer.getJSONObject("pricingInfo").toString());
+                offer.set(Offer.PRICING, new APIObject(jOffer.getJSONObject("pricingInfo")));
             } catch (Throwable t) { }
 
-            builder.title(Utils.getOrNull(jOffer, "title"));
-            builder.description(Utils.getOrNull(jOffer, "description"));
-            builder.category(Utils.getOrNull(jOffer, "category"));
-            builder.subCategory(Utils.getOrNull(jOffer, "subCategory"));
-            builder.locationData(Utils.getOrNull(jOffer, "locationData"));
+            offer.set(Offer.TITLE, Utils.getOrNull(jOffer, "title"));
+            offer.set(Offer.DESCRIPTION, Utils.getOrNull(jOffer, "description"));
+            offer.set(Offer.CATEGORY + "." + Offer.Category.MAIN_CATEGORY, Utils.getOrNull(jOffer, "category"));
+            offer.set(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY, Utils.getOrNull(jOffer, "subCategory"));
+            offer.set(Offer.LOCATION + "." + Offer.Location.ADDRESS, Utils.getOrNull(jOffer, "locationData"));
         } catch (JSONException e) { }
 
-        phraseInfo.offer = builder.build();
+        phraseInfo.offer = offer;
 
         return phraseInfo;
     }
 
-    public static String deepLinkForOffer(String referralId, Offer offer, String... additionalFields) {
+    public static String deepLinkForOffer(String referralId, APIObject offer, String... additionalFields) {
         StringBuilder sb = new StringBuilder();
 
         if (referralId == null) {
-            sb.append(URLs.getBaseURL(URLs.PATH_OFFER)).append('/').append(offer.getId());
+            sb.append(URLs.getBaseURL(URLs.PATH_OFFER)).append('/').append(offer.getString(Offer.ID));
         }
         else {
             sb.append(URLs.getBaseURL(URLs.PATH_REFERRAL)).append('/').append(referralId);
         }
 
         if (additionalFields.length > 0) {
-            PricingInfo pricingInfo = null;
+            Pricing pricing = null;
 
             try {
-                pricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
+                pricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
             } catch (Throwable t) { }
 
-            JSONObject termsConfig;
-
-            try {
-                termsConfig = new JSONObject(offer.getTermsConfig());
-            } catch (JSONException e) {
-                termsConfig = new JSONObject();
-            }
+            APIObject terms = offer.getObject(Offer.PAYMENT_TERMS);
+            APIArray cancellation = terms == null ? null : terms.getArray(Offer.PaymentTerms.CANCELLATION);
 
             sb.append('?').append(PARAMETER_DATA).append('=');
 
@@ -245,64 +236,64 @@ public class OfferUtils {
             for (String additionalField: additionalFields) {
                 switch (additionalField) {
                     case TITLE:
-                        Utils.putValues(data, TITLE, offer.getTitle());
+                        Utils.putValues(data, TITLE, offer.getString(Offer.TITLE));
                         continue;
                     case DESCRIPTION:
-                        Utils.putValues(data, DESCRIPTION, offer.getDescription());
+                        Utils.putValues(data, DESCRIPTION, offer.getString(Offer.DESCRIPTION));
                         continue;
                     case CATEGORY:
-                        Utils.putValues(data, CATEGORY, offer.getCategory());
+                        Utils.putValues(data, CATEGORY, offer.getObject(Offer.CATEGORY).getString(Offer.Category.MAIN_CATEGORY));
                         continue;
                     case SUB_CATEGORY:
-                        Utils.putValues(data, SUB_CATEGORY, offer.getSubCategory());
+                        Utils.putValues(data, SUB_CATEGORY, offer.getObject(Offer.CATEGORY).getString(Offer.Category.SUB_CATEGORY));
                         continue;
                     case PRICE:
-                        Utils.putValues(data, PRICE, pricingInfo != null ? String.valueOf(pricingInfo.price) : null);
+                        Utils.putValues(data, PRICE, pricing != null ? String.valueOf(pricing.getPrice()) : null);
                         continue;
                     case CURRENCY:
-                        Utils.putValues(data, CURRENCY, pricingInfo != null ? pricingInfo.currency.name() : null);
+                        Utils.putValues(data, CURRENCY, pricing != null ? pricing.getCurrency() : null);
                         continue;
                     case PAYMENT_TYPE:
-                        Utils.putValues(data, PAYMENT_TYPE, pricingInfo != null ? pricingInfo.rateType : null);
+                        Utils.putValues(data, PAYMENT_TYPE, pricing != null ? pricing.getRateType() : null);
                         continue;
                     case ADDRESS:
-                        Utils.putValues(data, ADDRESS, offer.getLocationData());
+                        Utils.putValues(data, ADDRESS, offer.getObject(Offer.LOCATION).getString(Offer.Location.ADDRESS));
                         continue;
                     case LATITUDE:
-                        Utils.putValues(data, LATITUDE, offer.getLatitude());
+                        Utils.putValues(data, LATITUDE, offer.getObject(Offer.LOCATION).getString(Offer.Location.LATITUDE));
                         continue;
                     case LONGITUDE:
-                        Utils.putValues(data, LONGITUDE, offer.getLongitude());
+                        Utils.putValues(data, LONGITUDE, offer.getObject(Offer.LOCATION).getString(Offer.Location.LONGITUDE));
                         continue;
                     case EXPIRY:
-                        Utils.putValues(data, EXPIRY, offer.getExpiry().format());
+                        Utils.putValues(data, EXPIRY, offer.getString(Offer.EXPIRATION));
                         continue;
                     case INITIAL_DEPOSIT:
-                        Utils.putValues(data, INITIAL_DEPOSIT, Utils.getOrNull(termsConfig, INITIAL_DEPOSIT));
+                        Utils.putValues(data, INITIAL_DEPOSIT, terms.getString(Offer.PaymentTerms.DEPOSIT));
                         continue;
                     case DELAY_TIME:
-                        Utils.putValues(data, DELAY_TIME, Utils.getOrNull(termsConfig, DELAY_TIME));
+                        Utils.putValues(data, DELAY_TIME, terms.getString(Offer.PaymentTerms.DELAY_IN_START + "." + Offer.PaymentTerms.DelayInStart.DURATION));
                         continue;
                     case DELAY_PERCENT:
-                        Utils.putValues(data, DELAY_PERCENT, Utils.getOrNull(termsConfig, DELAY_PERCENT));
+                        Utils.putValues(data, DELAY_PERCENT, terms.getString(Offer.PaymentTerms.DELAY_IN_START + "." + Offer.PaymentTerms.DelayInStart.PENALTY));
                         continue;
                     case CANCEL_HOURS1:
-                        Utils.putValues(data, CANCEL_HOURS1, Utils.getOrNull(termsConfig, CANCEL_HOURS1));
+                        Utils.putValues(data, CANCEL_HOURS1, cancellation != null && cancellation.size() > 0 ? cancellation.getObject(0).getString(Offer.PaymentTerms.Cancellation.RANGE) : null);
                         continue;
                     case CANCEL_PERCENT1:
-                        Utils.putValues(data, CANCEL_PERCENT1, Utils.getOrNull(termsConfig, CANCEL_PERCENT1));
+                        Utils.putValues(data, CANCEL_PERCENT1, cancellation != null && cancellation.size() > 0 ? cancellation.getObject(0).getString(Offer.PaymentTerms.Cancellation.PENALTY) : null);
                         continue;
                     case CANCEL_HOURS2:
-                        Utils.putValues(data, CANCEL_HOURS2, Utils.getOrNull(termsConfig, CANCEL_HOURS2));
+                        Utils.putValues(data, CANCEL_HOURS2, cancellation != null && cancellation.size() > 1 ? cancellation.getObject(1).getString(Offer.PaymentTerms.Cancellation.RANGE) : null);
                         continue;
                     case CANCEL_PERCENT2:
-                        Utils.putValues(data, CANCEL_PERCENT2, Utils.getOrNull(termsConfig, CANCEL_PERCENT2));
+                        Utils.putValues(data, CANCEL_PERCENT2, cancellation != null && cancellation.size() > 1 ? cancellation.getObject(1).getString(Offer.PaymentTerms.Cancellation.PENALTY) : null);
                         continue;
                     case TERMS_CONFIG:
-                        Utils.putValues(data, TERMS_CONFIG, termsConfig.toString());
+                        Utils.putValues(data, TERMS_CONFIG, terms == null ? null : terms.asJSON().toString());
                         continue;
                     case TERMS:
-                        Utils.putValues(data, TERMS, offer.getTerms());
+                        Utils.putValues(data, TERMS, offer.getString(Offer.TERMS_AND_CONDITIONS));
                         continue;
                 }
             }
@@ -313,117 +304,115 @@ public class OfferUtils {
         return sb.toString();
     }
 
-    public static Offer.Builder offerForDeepLink(PhraseInfo phraseInfo) {
-        Offer.Builder builder = new Offer.Builder();
+    public static APIObject offerForDeepLink(PhraseInfo phraseInfo) {
+        APIObject offer = new APIObject();
 
         if (phraseInfo.offerId != null) {
-            builder.id(phraseInfo.offerId);
+            offer.set(Offer.ID, phraseInfo.offerId);
         }
 
         if (phraseInfo.urlParameters != null) {
             JSONObject parameters = phraseInfo.urlParameters;
 
-            if (parameters != null && parameters.has(PARAMETER_DATA) && !parameters.isNull(PARAMETER_DATA)) {
+            if (parameters.has(PARAMETER_DATA) && !parameters.isNull(PARAMETER_DATA)) {
                 try {
                     JSONObject data = new JSONObject(new String(Base64.decode(parameters.getString(PARAMETER_DATA), Base64.URL_SAFE)));
 
-                    String price = null;
-                    String currency = null;
-                    String rateType = null;
-
-                    String termsConfigStr = null;
-                    JSONObject termsConfig = new JSONObject();
-
                     Iterator<String> keys = data.keys();
+
+                    String cancelHours1 = null;
+                    String cancelPenalty1 = null;
+                    String cancelHours2 = null;
+                    String cancelPenalty2 = null;
 
                     while (keys.hasNext()) {
                         String key = keys.next();
 
                         switch (key) {
                             case TITLE:
-                                builder.title(Utils.getOrNull(data, TITLE));
+                                offer.set(Offer.TITLE, Utils.getOrNull(data, TITLE));
                                 continue;
                             case DESCRIPTION:
-                                builder.description(Utils.getOrNull(data, DESCRIPTION));
+                                offer.set(Offer.DESCRIPTION, Utils.getOrNull(data, DESCRIPTION));
                                 continue;
                             case CATEGORY:
-                                builder.category(Utils.getOrNull(data, CATEGORY));
+                                offer.set(Offer.CATEGORY + "." + Offer.Category.MAIN_CATEGORY, Utils.getOrNull(data, CATEGORY));
                                 continue;
                             case SUB_CATEGORY:
-                                builder.subCategory(Utils.getOrNull(data, SUB_CATEGORY));
+                                offer.set(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY, Utils.getOrNull(data, SUB_CATEGORY));
                                 continue;
                             case PRICE:
-                                price = Utils.getOrNull(data, PRICE);
+                                offer.set(Offer.PRICING + "." + Pricing.PRICE, Utils.getOrNull(data, PRICE));
                                 continue;
                             case CURRENCY:
-                                currency = Utils.getOrNull(data, CURRENCY);
+                                offer.set(Offer.PRICING + "." + Pricing.CURRENCY, Utils.getOrNull(data, CURRENCY));
                                 continue;
                             case PAYMENT_TYPE:
-                                rateType = Utils.getOrNull(data, PAYMENT_TYPE);
+                                offer.set(Offer.PRICING + "." + Pricing.RATE_TYPE, Utils.getOrNull(data, PAYMENT_TYPE));
                                 continue;
                             case ADDRESS:
-                                builder.locationData(Utils.getOrNull(data, ADDRESS));
+                                offer.set(Offer.LOCATION + "." + Offer.Location.ADDRESS, Utils.getOrNull(data, ADDRESS));
                                 continue;
                             case LATITUDE:
-                                builder.latitude(Utils.getOrNull(data, LATITUDE));
+                                offer.set(Offer.LOCATION + "." + Offer.Location.LATITUDE, Utils.getOrNull(data, LATITUDE));
                                 continue;
                             case LONGITUDE:
-                                builder.longitude(Utils.getOrNull(data, LONGITUDE));
+                                offer.set(Offer.LOCATION + "." + Offer.Location.LONGITUDE, Utils.getOrNull(data, LONGITUDE));
                                 continue;
                             case EXPIRY:
-                                String expiry = Utils.getOrNull(data, EXPIRY);
-
-                                if (expiry != null) {
-                                    builder.expiry(new Temporal.Date(expiry)); // TODO Might crash
-                                }
+                                offer.set(Offer.EXPIRATION, Utils.getOrNull(data, EXPIRY));
                             case INITIAL_DEPOSIT:
-                                Utils.putValues(termsConfig, INITIAL_DEPOSIT, Utils.getOrNull(data, INITIAL_DEPOSIT));
+                                offer.set(Offer.PAYMENT_TERMS + "." + Offer.PaymentTerms.DEPOSIT, Utils.getOrNull(data, INITIAL_DEPOSIT));
                                 continue;
                             case DELAY_TIME:
-                                Utils.putValues(termsConfig, DELAY_TIME, Utils.getOrNull(data, DELAY_TIME));
+                                offer.set(Offer.PAYMENT_TERMS + "." + Offer.PaymentTerms.DELAY_IN_START + "." + Offer.PaymentTerms.DelayInStart.DURATION, Utils.getOrNull(data, DELAY_TIME));
                                 continue;
                             case DELAY_PERCENT:
-                                Utils.putValues(termsConfig, DELAY_PERCENT, Utils.getOrNull(data, DELAY_PERCENT));
+                                offer.set(Offer.PAYMENT_TERMS + "." + Offer.PaymentTerms.DELAY_IN_START + "." + Offer.PaymentTerms.DelayInStart.PENALTY, Utils.getOrNull(data, DELAY_PERCENT));
                                 continue;
                             case CANCEL_HOURS1:
-                                Utils.putValues(termsConfig, CANCEL_HOURS1, Utils.getOrNull(data, CANCEL_HOURS1));
+                                cancelHours1 = Utils.getOrNull(data, CANCEL_HOURS1);
                                 continue;
                             case CANCEL_PERCENT1:
-                                Utils.putValues(termsConfig, CANCEL_PERCENT1, Utils.getOrNull(data, CANCEL_PERCENT1));
+                                cancelPenalty1 = Utils.getOrNull(data, CANCEL_PERCENT1);
                                 continue;
                             case CANCEL_HOURS2:
-                                Utils.putValues(termsConfig, CANCEL_HOURS2, Utils.getOrNull(data, CANCEL_HOURS2));
+                                cancelHours2 = Utils.getOrNull(data, CANCEL_HOURS2);
                                 continue;
                             case CANCEL_PERCENT2:
-                                Utils.putValues(termsConfig, CANCEL_PERCENT2, Utils.getOrNull(data, CANCEL_PERCENT2));
+                                cancelPenalty2 = Utils.getOrNull(data, CANCEL_PERCENT2);
                                 continue;
                             case TERMS_CONFIG:
-                                termsConfigStr = Utils.getOrNull(data, TERMS_CONFIG);
+                                String termsStr = Utils.getOrNull(data, TERMS_CONFIG);
+
+                                if (termsStr != null) {
+                                    offer.set(Offer.PAYMENT_TERMS, new APIObject(new JSONObject(termsStr)));
+                                }
                                 continue;
                             case TERMS:
-                                builder.terms(Utils.getOrNull(data, TERMS));
+                                offer.set(Offer.TERMS_AND_CONDITIONS, Utils.getOrNull(data, TERMS));
                                 continue;
                         }
                     }
 
-                    if (price != null && currency != null && rateType != null) {
-                        PricingInfo pricingInfo = new PricingInfo(
-                                Integer.parseInt(price),
-                                Currency.forName(currency),
-                                rateType,
-                                0,
-                                0,
-                                null,
-                                0
-                        );
-                        builder.pricingInfo(pricingInfo.asJSON().toString());
-                    }
+                    if (cancelHours1 != null && cancelPenalty1 != null) {
+                        APIArray cancellation = new APIArray();
 
-                    if (termsConfigStr != null) {
-                        builder.termsConfig(termsConfigStr);
-                    }
-                    else if (termsConfig.length() > 0) {
-                        builder.termsConfig(termsConfig.toString());
+                        APIObject cancel1 = new APIObject(Utils.quickJSON(
+                                Offer.PaymentTerms.Cancellation.RANGE, cancelHours1,
+                                Offer.PaymentTerms.Cancellation.PENALTY, cancelPenalty1
+                        ));
+                        cancellation.add(cancel1);
+
+                        if (cancelHours2 != null && cancelPenalty2 != null) {
+                            APIObject cancel2 = new APIObject(Utils.quickJSON(
+                                    Offer.PaymentTerms.Cancellation.RANGE, cancelHours2,
+                                    Offer.PaymentTerms.Cancellation.PENALTY, cancelPenalty2
+                            ));
+                            cancellation.add(cancel2);
+                        }
+
+                        offer.set(Offer.PAYMENT_TERMS + "." + Offer.PaymentTerms.CANCELLATION, cancellation);
                     }
                 } catch (JSONException e) {
                     try {
@@ -433,7 +422,7 @@ public class OfferUtils {
             }
         }
 
-        return builder;
+        return offer;
     }
 
 }

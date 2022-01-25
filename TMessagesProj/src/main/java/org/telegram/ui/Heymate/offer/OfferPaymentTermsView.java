@@ -7,12 +7,11 @@ import android.widget.TextView;
 
 import com.yashoid.sequencelayout.SequenceLayout;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.telegram.ui.ActionBar.Theme;
 
+import works.heymate.api.APIObject;
 import works.heymate.beta.R;
-import works.heymate.core.offer.OfferUtils;
+import works.heymate.model.Offer;
 
 public class OfferPaymentTermsView extends SequenceLayout {
 
@@ -72,28 +71,29 @@ public class OfferPaymentTermsView extends SequenceLayout {
         mDepositValue.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
     }
 
-    public void setPaymentTerms(JSONObject terms) {
-        try {
-            int delayMinutes = terms.getInt(OfferUtils.DELAY_TIME);
-            int delayPercent = terms.getInt(OfferUtils.DELAY_PERCENT);
-            int cancelMinutes = terms.getInt(OfferUtils.CANCEL_HOURS1);
-            int cancelPercent = terms.getInt(OfferUtils.CANCEL_PERCENT1);
-            int cancel2Minutes = terms.getInt(OfferUtils.CANCEL_HOURS2);
-            int cancel2Percent = terms.getInt(OfferUtils.CANCEL_PERCENT2);
-            int deposit = terms.getInt(OfferUtils.INITIAL_DEPOSIT);
+    public void setPaymentTerms(APIObject terms) {
+        APIObject cancel1 = terms.getArray(Offer.PaymentTerms.CANCELLATION).getObject(0);
+        APIObject cancel2 = terms.getArray(Offer.PaymentTerms.CANCELLATION).getObject(1);
 
-            mDelayTitle.setText("Delays in start by > " + delayMinutes + " min");
-            mDelayValue.setText(delayPercent + "%");
+        int delayMinutes = terms.getInt(Offer.PaymentTerms.DELAY_IN_START + "." + Offer.PaymentTerms.DelayInStart.DURATION);
+        int delayPercent = terms.getInt(Offer.PaymentTerms.DELAY_IN_START + "." + Offer.PaymentTerms.DelayInStart.PENALTY);
+        int cancelMinutes = cancel1.getInt(Offer.PaymentTerms.Cancellation.RANGE);
+        int cancelPercent = cancel1.getInt(Offer.PaymentTerms.Cancellation.PENALTY);
+        int cancel2Minutes = cancel2.getInt(Offer.PaymentTerms.Cancellation.RANGE);
+        int cancel2Percent = cancel2.getInt(Offer.PaymentTerms.Cancellation.PENALTY);
+        int deposit = terms.getInt(Offer.PaymentTerms.DEPOSIT);
 
-            mCancelTitle.setText("Cancellation in < " + (cancelMinutes / 60) + " hr of start");
-            mCancelValue.setText(cancelPercent + "%");
+        mDelayTitle.setText("Delays in start by > " + delayMinutes + " min");
+        mDelayValue.setText(delayPercent + "%");
 
-            mCancel2Title.setText("Cancellation in " + (cancelMinutes / 60) + "-" + (cancel2Minutes / 60) + " hr of start");
-            mCancel2Value.setText(cancel2Percent + "%");
+        mCancelTitle.setText("Cancellation in < " + (cancelMinutes / 60) + " hr of start");
+        mCancelValue.setText(cancelPercent + "%");
 
-            mDepositTitle.setText("Initial deposit");
-            mDepositValue.setText(deposit + "%");
-        } catch (JSONException e) { }
+        mCancel2Title.setText("Cancellation in " + (cancelMinutes / 60) + "-" + (cancel2Minutes / 60) + " hr of start");
+        mCancel2Value.setText(cancel2Percent + "%");
+
+        mDepositTitle.setText("Initial deposit");
+        mDepositValue.setText(deposit + "%");
     }
 
 }

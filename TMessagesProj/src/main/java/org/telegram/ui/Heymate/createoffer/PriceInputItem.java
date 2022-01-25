@@ -30,17 +30,17 @@ import org.telegram.ui.Heymate.HeymateConfig;
 
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
-import works.heymate.core.offer.PricingInfo;
+
+import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.widget.MultiChoicePopup;
 
 import works.heymate.beta.R;
+import works.heymate.model.Pricing;
 
 public class PriceInputItem extends ExpandableItem {
 
-    private static final Currency[] DEMO_CURRENCIES = { Currency.USD, Currency.EUR };
-    private static final Currency[] REAL_CURRENCIES = { Currency.EUR };
-
-    private static final int DEFAULT_CURRENCY_CHOICE = HeymateConfig.DEMO ? 1 : 0;
+    private static final Currency[] DEMO_CURRENCIES = { Currency.REAL, Currency.EUR, Currency.USD };
+    private static final Currency[] REAL_CURRENCIES = { Currency.REAL, Currency.EUR };
 
     private static final String[] DEMO_RATE_TYPES = { "Per Session", "Per Hour" };
     private static final String[] REAL_RATE_TYPES = { "Per Session" };
@@ -61,6 +61,8 @@ public class PriceInputItem extends ExpandableItem {
     private EditText mSubscriptionPrice;
     private TextView mSubscriptionPer;
 
+    private int mDefaultCurrencyChoice = 0;
+
     public PriceInputItem(@NonNull Context context) {
         super(context);
         setTitle("Pricing");
@@ -69,6 +71,15 @@ public class PriceInputItem extends ExpandableItem {
 
     @Override
     protected View createContent() {
+        Currency currency = TG2HM.getDefaultCurrency();
+
+        for (int i = 0; i < CURRENCIES.length; i++) {
+            if (currency.equals(CURRENCIES[i])) {
+                mDefaultCurrencyChoice = i;
+                break;
+            }
+        }
+
         FrameLayout frame = new FrameLayout(getContext());
 
         SequenceLayout content = (SequenceLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_priceinput, null, false);
@@ -104,7 +115,7 @@ public class PriceInputItem extends ExpandableItem {
             currencies[i] = CURRENCIES[i].name();
         }
 
-        styleMultiChoice(mCurrency, currencies, DEFAULT_CURRENCY_CHOICE, () -> {
+        styleMultiChoice(mCurrency, currencies, mDefaultCurrencyChoice, () -> {
             updateBundleCalculatedPrice();
             updateSubscriptionPer();
         });
@@ -271,7 +282,7 @@ public class PriceInputItem extends ExpandableItem {
         }
     }
 
-    public PricingInfo getPricingInfo() {
+    public Pricing getPricing() {
         try {
             int price = Integer.parseInt(mFixedPrice.getText().toString());
             Currency currency = Currency.forName(mCurrency.getText().toString());
@@ -281,29 +292,29 @@ public class PriceInputItem extends ExpandableItem {
             String subscriptionPeriod = mCheckSubscription.isChecked() ? mSubscriptionPeriod.getText().toString() : null;
             int subscriptionPrice = subscriptionPeriod == null ? 0 : Integer.parseInt(mSubscriptionPrice.getText().toString());
 
-            return new PricingInfo(price, currency, rateType, bundleCount, bundleDiscountPercent, subscriptionPeriod, subscriptionPrice);
+            return new Pricing(price, currency, rateType, bundleCount, bundleDiscountPercent, subscriptionPeriod, subscriptionPrice);
         } catch (Throwable t) {
             return null;
         }
     }
 
-    public void setPricingInfo(PricingInfo pricingInfo) {
-        mFixedPrice.setText(pricingInfo.price == 0 ? "" : String.valueOf(pricingInfo.price));
-        mCurrency.setText(pricingInfo.currency == null ? CURRENCIES[DEFAULT_CURRENCY_CHOICE].name() : pricingInfo.currency.name());
+    public void setPricing(Pricing pricing) {
+        mFixedPrice.setText(pricing.getPrice() == 0 ? "" : String.valueOf(pricing.getPrice()));
+        mCurrency.setText(pricing.getCurrency() == null ? CURRENCIES[mDefaultCurrencyChoice].name() : pricing.getCurrency());
 
         mRateType.setText(RATE_TYPES[0]);
 
         for (String rateType: RATE_TYPES) {
-            if (rateType.equals(pricingInfo.rateType)) {
+            if (rateType.equals(pricing.getRateType())) {
                 mRateType.setText(rateType);
                 break;
             }
         }
 
-        if (pricingInfo.bundleCount > 0) {
+        if (pricing.getBundleCount() > 0) {
             mCheckBundle.setChecked(true);
-            mBundleSessionCount.setText(String.valueOf(pricingInfo.bundleCount));
-            mBundleDiscountPercent.setText(pricingInfo.bundleDiscountPercent == 0 ? "" : String.valueOf(pricingInfo.bundleDiscountPercent));
+            mBundleSessionCount.setText(String.valueOf(pricing.getBundleCount()));
+            mBundleDiscountPercent.setText(pricing.getBundleDiscountPercent() == 0 ? "" : String.valueOf(pricing.getBundleDiscountPercent()));
         }
         else {
             mCheckBundle.setChecked(false);
@@ -312,10 +323,10 @@ public class PriceInputItem extends ExpandableItem {
         }
         updateBundleViews();
 
-        if (pricingInfo.subscriptionPeriod != null) {
+        if (pricing.getSubscriptionPeriod() != null) {
             mCheckSubscription.setChecked(true);
-            mSubscriptionPeriod.setText(pricingInfo.subscriptionPeriod);
-            mSubscriptionPrice.setText(pricingInfo.subscriptionPrice == 0 ? "" : String.valueOf(pricingInfo.subscriptionPrice));
+            mSubscriptionPeriod.setText(pricing.getSubscriptionPeriod());
+            mSubscriptionPrice.setText(pricing.getSubscriptionPrice() == 0 ? "" : String.valueOf(pricing.getSubscriptionPrice()));
         }
         updateSubscriptionViews();
     }

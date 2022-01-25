@@ -5,6 +5,6 @@ import works.heymate.core.Money;
 
 public interface BalanceCallback {
 
-    void onBalanceQueryResult(boolean success, Money usdBalance, Money eurBalance, CeloException errorCause);
+    void onBalanceQueryResult(boolean success, Money usdBalance, Money eurBalance, Money realBalance, CeloException errorCause);
 
 }

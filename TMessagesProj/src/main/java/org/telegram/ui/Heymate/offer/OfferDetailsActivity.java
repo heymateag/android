@@ -19,19 +19,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.datastore.generated.model.Offer;
 import com.yashoid.sequencelayout.SequenceLayout;
 import com.yashoid.sequencelayout.Span;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BackDrawable;
@@ -42,12 +38,10 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.FileCache;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.MeetingType;
 import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
-import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
@@ -57,10 +51,17 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.beta.R;
 import works.heymate.core.Texts;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.offer.PurchasePlanInfo;
+import works.heymate.model.Offer;
+import works.heymate.model.Offers;
+import works.heymate.model.Pricing;
+import works.heymate.model.User;
+import works.heymate.model.Users;
 
 public class OfferDetailsActivity extends BaseFragment implements OfferPricingView.OnPlanChangedListener {
 
@@ -116,11 +117,11 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     private RecyclerView mContentList;
     private RoundedCornersImageView mImage;
 
-    private Offer mOffer = null;
+    private APIObject mOffer = null;
     private OfferUtils.PhraseInfo mPhraseInfo = null;
 
-    private PricingInfo mPricingInfo = null;
-    private JSONObject mPaymentTerms = null;
+    private Pricing mPricing = null;
+    private APIObject mPaymentTerms = null;
 
     private int[] mRows = null;
 
@@ -152,10 +153,10 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         if (args != null && args.containsKey(EXTRA_OFFER_ID)) {
             String offerId = args.getString(EXTRA_OFFER_ID);
 
-            HtAmplify.getInstance(ApplicationLoader.applicationContext).getOffer(offerId, (success, result, exception) -> {
-                if (success) {
-                    if (result != null) {
-                        setOffer(result, null);
+            APIs.get().getOffer(offerId, result -> {
+                if (result.success) {
+                    if (result.response != null) {
+                        setOffer(result.response, null);
                         return;
                     }
                     else {
@@ -298,14 +299,14 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         return content;
     }
 
-    public void setOffer(Offer offer, OfferUtils.PhraseInfo phraseInfo) {
+    public void setOffer(APIObject offer, OfferUtils.PhraseInfo phraseInfo) {
         mOffer = offer;
         mPhraseInfo = phraseInfo;
 
         if (mOffer == null) {
             mPhraseInfo = null;
 
-            mPricingInfo = null;
+            mPricing = null;
             mPaymentTerms = null;
 
             mRows = null;
@@ -316,22 +317,13 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
 
         checkPhoto();
 
-        try {
-            mPricingInfo = new PricingInfo(new JSONObject(offer.getPricingInfo()));
-            mPaymentTerms = new JSONObject(offer.getTermsConfig());
-        } catch (JSONException e) {
-            mPricingInfo = null;
-            mPaymentTerms = null;
-        }
+        mPricing = new Pricing(offer.getObject(Offer.PRICING).asJSON());
+        mPaymentTerms = offer.getObject(Offer.PAYMENT_TERMS);
 
-        boolean onlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getMeetingType());
+        boolean onlineMeeting = MeetingType.ONLINE_MEETING.equals(mOffer.getString(Offer.MEETING_TYPE));
         boolean hasReferralPlan = false;
 
-        try {
-            if (mPaymentTerms != null && mPaymentTerms.getDouble(OfferUtils.PROMOTION_RATE) > 0) {
-                hasReferralPlan = true;
-            }
-        } catch (JSONException e) { }
+        // TODO if hasReferralPlan = true promotion
 
         if (onlineMeeting) {
             mRows = hasReferralPlan ? ONLINE_OFFER : ONLINE_OFFER_WITHOUT_REFERRAL;
@@ -348,8 +340,10 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
             return;
         }
 
-        if (mOffer.getHasImage() != null && mOffer.getHasImage()) {
-            FileCache.get().getImage(mOffer.getId(), AndroidUtilities.displaySize.x, (success, drawable, exception) -> {
+        String imageFileName = Offers.getImageFileName(mOffer);
+
+        if (imageFileName != null) {
+            FileCache.get().getImage(mOffer.getString(Offer.ID), imageFileName, AndroidUtilities.displaySize.x, (success, drawable, exception) -> {
                 if (drawable != null) {
                     mImage.setImageDrawable(drawable);
                 }
@@ -458,13 +452,13 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     }
 
     private void initPayment() {
-        if (mSelectedPlan == null || mOffer == null || mPricingInfo == null) {
+        if (mSelectedPlan == null || mOffer == null || mPricing == null) {
             return;
         }
 
-        PurchasePlanInfo purchasePlanInfo = mPricingInfo.getPurchasePlanInfo(mSelectedPlan);
+        PurchasePlanInfo purchasePlanInfo = mPricing.getPurchasePlanInfo(mSelectedPlan);
 
-        PaymentController.get(getParentActivity()).initPayment(mOffer.getId(), purchasePlanInfo.type, mPhraseInfo == null ? null : mPhraseInfo.referralId);
+        PaymentController.get(getParentActivity()).initPayment(mOffer.getString(Offer.ID), purchasePlanInfo.type, mPhraseInfo == null ? null : mPhraseInfo.referralId);
     }
 
     private void promote(boolean share) {
@@ -472,7 +466,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
             return;
         }
 
-        if (mPhraseInfo == null || mOffer.getUserId() != null && mOffer.getUserId().equals(String.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).clientUserId))) {
+        if (mPhraseInfo == null || mOffer.getString(Offer.USER_ID) != null && mOffer.getString(Offer.USER_ID).equals(Users.currentUser.getString(User.ID))) {
             doPromote(null, share);
             return;
         }
@@ -497,7 +491,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     }
 
     private void doPromote(String referralId, boolean share) {
-        String message = OfferUtils.serializeBeautiful(mOffer, referralId, mOffer.getUserId(), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
+        String message = OfferUtils.serializeBeautiful(mOffer, referralId, mOffer.getString(Offer.USER_ID), OfferUtils.CATEGORY, OfferUtils.EXPIRY);
 
         if (share) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -668,9 +662,9 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         TextView category = view.findViewById(R.id.category);
         TextView description = view.findViewById(R.id.description);
 
-        title.setText(mOffer.getTitle());
-        category.setText(mOffer.getSubCategory());
-        description.setText(mOffer.getDescription());
+        title.setText(mOffer.getString(Offer.TITLE));
+        category.setText(mOffer.getString(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY));
+        description.setText(mOffer.getString(Offer.DESCRIPTION));
     }
 
     private View createTime(ViewGroup parent, String titleText, int iconResId) {
@@ -694,8 +688,8 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d y", Locale.getDefault());
 
-        if (mOffer.getCreatedAt() != null) {
-            time.setText(dateFormat.format(mOffer.getCreatedAt().toDate()));
+        if (mOffer.getString(Offer.CREATED_AT) != null) {
+            time.setText(dateFormat.format(mOffer.getLong(Offer.CREATED_AT)));
         }
     }
 
@@ -704,8 +698,8 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d y", Locale.getDefault());
 
-        if (mOffer.getExpiry() != null) {
-            time.setText(dateFormat.format(mOffer.getExpiry().toDate()));
+        if (mOffer.getString(Offer.EXPIRATION) != null) {
+            time.setText(dateFormat.format(mOffer.getLong(Offer.EXPIRATION)));
         }
     }
 
@@ -719,7 +713,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
 
     private void bindPricing(View view) {
         OfferPricingView offerPricingView = (OfferPricingView) view;
-        offerPricingView.setPricingInfo(mPricingInfo, mSelectedPlan);
+        offerPricingView.setPricingInfo(mPricing, mSelectedPlan);
     }
 
     private View createLocation(ViewGroup parent) {
@@ -730,11 +724,18 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
 
     private void bindLocation(View view) {
         OfferLocationView locationView = (OfferLocationView) view;
-        locationView.setAddress(mOffer.getLocationData());
+
+        APIObject location = mOffer.getObject(Offer.LOCATION);
+
+        if (location == null) {
+            return;
+        }
+
+        locationView.setAddress(location.getString(Offer.Location.ADDRESS));
 
         try {
-            double latitude = Double.parseDouble(mOffer.getLatitude());
-            double longitude = Double.parseDouble(mOffer.getLongitude());
+            double latitude = location.getDouble(Offer.Location.LATITUDE);
+            double longitude = location.getDouble(Offer.Location.LONGITUDE);
 
             locationView.setLocation(latitude, longitude);
         } catch (NumberFormatException | NullPointerException e) { }
@@ -757,7 +758,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     }
 
     private void bindTermsAndConditions(View view) {
-        ((OfferTermsView) view).setTerms(mOffer.getTerms());
+        ((OfferTermsView) view).setTerms(mOffer.getString(Offer.TERMS_AND_CONDITIONS));
     }
 
     private View createReferral(ViewGroup parent) {
@@ -767,10 +768,8 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
     }
 
     private void bindReferral(View view) {
-        try {
-            int promotionPercent = mPaymentTerms.getInt(OfferUtils.PROMOTION_RATE);
-            ((OfferReferralView) view).setReferralAmount(promotionPercent);
-        } catch (JSONException e) { }
+        int promotionPercent = 0; // mPaymentTerms.getInt(OfferUtils.PROMOTION_RATE); TODO promotion
+        ((OfferReferralView) view).setReferralAmount(promotionPercent);
     }
 
     @Override

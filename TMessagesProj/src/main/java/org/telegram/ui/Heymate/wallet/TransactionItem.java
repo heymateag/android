@@ -32,6 +32,7 @@ public class TransactionItem extends SequenceLayout {
 
     private String mUSDAddress;
     private String mEURAddress;
+    private String mREALAddress;
 
     private String mAddress;
 
@@ -68,9 +69,10 @@ public class TransactionItem extends SequenceLayout {
         mAddress = Wallet.get(context, TG2HM.getCurrentPhoneNumber()).getAddress();
     }
 
-    public void setCurrencyAddresses(String usdAddress, String eurAddress) {
+    public void setCurrencyAddresses(String usdAddress, String eurAddress, String realAddress) {
         mUSDAddress = usdAddress;
         mEURAddress = eurAddress;
+        mREALAddress = realAddress;
     }
 
     public void setTransaction(JSONObject transaction) {
@@ -81,7 +83,7 @@ public class TransactionItem extends SequenceLayout {
             BigInteger value = new BigInteger(transaction.getString("value"));
             String contract = transaction.getString("contractAddress");
 
-            Currency currency = mEURAddress.equals(contract) ? Currency.EUR : Currency.USD;
+            Currency currency = mREALAddress.equals(contract) ? Currency.REAL : (mEURAddress.equals(contract) ? Currency.EUR : Currency.USD);
 
             boolean received = mAddress.equals(to);
 

@@ -22,10 +22,8 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.log.HMLog;
 
-import works.heymate.celo.CeloContext;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
-import works.heymate.core.Texts;
 import works.heymate.core.wallet.Wallet;
 
 public class EasterActivity extends BaseFragment {
@@ -61,13 +59,22 @@ public class EasterActivity extends BaseFragment {
         content.setPadding(72, 72, 72, 72);
 
         Spinner currencySpinner = new Spinner(context);
-        currencySpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, new String[] {Currency.USD.name(), Currency.EUR.name()}));
-        currencySpinner.setSelection(TG2HM.getDefaultCurrency() == Currency.USD ? 0 : 1);
+        currencySpinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, new String[] {Currency.REAL.name(), Currency.EUR.name(), Currency.USD.name()}));
+
+        if (TG2HM.getDefaultCurrency() == Currency.REAL) {
+            currencySpinner.setSelection(0);
+        }
+        else if (TG2HM.getDefaultCurrency() == Currency.EUR) {
+            currencySpinner.setSelection(1);
+        }
+        else {
+            currencySpinner.setSelection(2);
+        }
         currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TG2HM.defaultCurrency = position == 0 ? Currency.USD : Currency.EUR;
+                TG2HM.defaultCurrency = Currency.forName(parent.getItemAtPosition(position).toString());
 
                 editAmount.setText("...");
                 refresh();
@@ -79,7 +86,7 @@ public class EasterActivity extends BaseFragment {
         content.addView(currencySpinner, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 12));
 
         TextView textAmount = new TextView(context);
-        textAmount.setText("Amount in cents - 1 cent less than the actual balance for gas safety.");
+        textAmount.setText("Amount in cents - 3 cents less than the actual balance for gas safety.");
         content.addView(textAmount, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         editAmount = new EditText(context);
@@ -169,11 +176,11 @@ public class EasterActivity extends BaseFragment {
             editAmount.setText("0");
         }
         else {
-            wallet.getBalance((success, cUSD, cEUR, errorCause) -> {
-                Money balance = TG2HM.getDefaultCurrency() == Currency.USD ? cUSD : cEUR;
+            wallet.getBalance((success, cUSD, cEUR, cREAL, errorCause) -> {
+                Money balance = TG2HM.pickTheRightMoney(cUSD, cEUR, cREAL);
 
                 if (success) {
-                    editAmount.setText("" + (balance.getCents()  - 1));
+                    editAmount.setText("" + (balance.getCents()  - 3));
                 }
                 else {
                     editAmount.setText("Failed to get balance!");

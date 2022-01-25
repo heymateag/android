@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
 
-    //AppSync SDK
+    // amplify
     implementation 'com.amplifyframework:aws-api:1.16.11'
     implementation 'com.amplifyframework:aws-datastore:1.16.11'
     implementation 'com.amplifyframework:aws-auth-cognito:1.17.1'
@@ -335,7 +335,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2462 * 76 // HeymateConfig
+    defaultConfig.versionCode = 2462 * 83 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -354,7 +354,7 @@ android {
     defaultConfig {
         minSdkVersion 21 // 21 Only for Zoom SDK
         targetSdkVersion 30
-        versionName "8.2.1 - 76"
+        versionName "8.2.1 - 83" // HeymateConfig
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 

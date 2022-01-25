@@ -136,6 +136,10 @@ public class AlphaFortressness {
                                     token = contractKit.contracts.getStableTokenEUR();
                                     contractKit.setFeeCurrency(CeloContract.StableTokenEUR);
                                 }
+                                else if (Currency.REAL.equals(currency)) {
+                                    token = contractKit.contracts.getStableTokenBRL();
+                                    contractKit.setFeeCurrency(CeloContract.StableTokenBRL);
+                                }
                                 else {
                                     AlphaTransaction.clearPendingTransaction();
 

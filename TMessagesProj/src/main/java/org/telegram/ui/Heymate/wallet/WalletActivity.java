@@ -20,16 +20,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.trustwallet.walletconnect.models.session.WCSession;
+
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.MrzRecognizer;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.CameraScanActivity;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.LoadingUtil;
@@ -54,6 +58,7 @@ import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
 import works.heymate.ramp.alphafortress.AlphaFortressness;
 import works.heymate.ramp.alphafortress.BeneficiaryModel;
+import works.heymate.walletconnect.WalletConnection;
 
 public class WalletActivity extends BaseFragment {
 
@@ -67,6 +72,7 @@ public class WalletActivity extends BaseFragment {
 
     private String mUSDAddress;
     private String mEURAddress;
+    private String mREALAddress;
 
     @Override
     public boolean onFragmentCreate() {
@@ -78,6 +84,7 @@ public class WalletActivity extends BaseFragment {
         ActionBar actionBar = getActionBar();
         actionBar.setBackButtonDrawable(new BackDrawable(false));
         actionBar.setTitle(Texts.get(Texts.YOUR_WALLET));
+        actionBar.createMenu().addItem(1, R.drawable.msg_qrcode);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -87,6 +94,36 @@ public class WalletActivity extends BaseFragment {
 
                 if (id == -1) {
                     finishFragment();
+                    return;
+                }
+
+                if (id == 1) {
+                    CameraScanActivity.showAsSheet(WalletActivity.this, false, true, new CameraScanActivity.CameraScanActivityDelegate() {
+
+                        @Override
+                        public void didFindMrzInfo(MrzRecognizer.Result result) {
+                            // Don't care
+                        }
+
+                        @Override
+                        public void didFindQr(String text) {
+                            WCSession session = WalletConnection.sessionFromUri(text);
+
+                            if (session == null) {
+                                Toast.makeText(getParentActivity(), "QR code is not a wallet connection.", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            Wallet wallet = TG2HM.getWallet();
+
+                            if (wallet == null) {
+                                return;
+                            }
+
+                            wallet.getConnection().connect(session);
+                        }
+
+                    });
                 }
             }
         });
@@ -376,9 +413,9 @@ public class WalletActivity extends BaseFragment {
         else {
             mTextBalance.setText("");
 
-            wallet.getBalance((success, usd, eur, errorCause) -> {
+            wallet.getBalance((success, usd, eur, real, errorCause) -> {
                 if (success) {
-                    mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur).toString());
+                    mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur, real).toString());
                 }
                 else {
                     mTextBalance.setText("[Connection problem]");
@@ -423,6 +460,7 @@ public class WalletActivity extends BaseFragment {
 
                 mUSDAddress = contractKit.contracts.getStableToken().getContractAddress();
                 mEURAddress = contractKit.contracts.getStableTokenEUR().getContractAddress();
+                mREALAddress = contractKit.contracts.getStableTokenBRL().getContractAddress();
 
                 new Thread() {
 
@@ -468,7 +506,7 @@ public class WalletActivity extends BaseFragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             TransactionItem view = new TransactionItem(parent.getContext());
-            view.setCurrencyAddresses(mUSDAddress, mEURAddress);
+            view.setCurrencyAddresses(mUSDAddress, mEURAddress, mREALAddress);
             return new RecyclerView.ViewHolder(view) { };
         }
 

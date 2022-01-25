@@ -1,6 +1,7 @@
 package works.heymate.walletconnect;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.trustwallet.walletconnect.WCClient;
@@ -11,6 +12,7 @@ import com.trustwallet.walletconnect.models.session.WCSession;
 
 import org.celo.contractkit.CeloContract;
 import org.celo.contractkit.ContractKit;
+import org.celo.contractkit.protocol.CeloGasProvider;
 import org.celo.contractkit.protocol.CeloRawTransaction;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +25,6 @@ import org.web3j.crypto.Sign;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 
 import java.io.IOException;
@@ -33,8 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
 import okhttp3.OkHttpClient;
 import works.heymate.celo.CeloAccount;
 import works.heymate.core.Currency;
@@ -50,7 +49,7 @@ public class WalletConnection {
     private static final String SESSION_PEER_ID = "peer_id";
 
     public static WCSession sessionFromUri(String uri) {
-        return WCSession.Companion.from(uri);
+        return uri == null ? null : WCSession.Companion.from(uri);
     }
 
     private final Wallet mWallet;
@@ -118,7 +117,14 @@ public class WalletConnection {
 
         if (client != null) {
             if (!client.isConnected()) {
-                client.connect(session, mPeerMeta, mPeerId, null);
+                new Thread() {
+
+                    @Override
+                    public void run() {
+                        client.connect(session, mPeerMeta, mPeerId, null);
+                    }
+
+                }.start();
             }
 
             return;
@@ -136,6 +142,17 @@ public class WalletConnection {
 
     private WCClient newClient(String sSession) {
         WCClient client = new WCClient(mGson, mOkHttpClient);
+
+        client.setOnFailure(throwable -> {
+            Utils.runOnUIThread(() -> {
+                Activity activity = ActivityMonitor.get().getCurrentActivity();
+
+                String errorMessage = throwable == null ? "Failure with no error!" : (throwable.getMessage() == null ? (throwable.getStackTrace()[0].toString()) : throwable.getMessage());
+
+                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
+            });
+            return null;
+        });
 
         client.setOnSessionRequest((requestId, wcPeerMeta) -> {
             Utils.postOnUIThread(() -> {
@@ -292,15 +309,20 @@ public class WalletConnection {
     }
 
     private CeloRawTransaction wcTransactionToCeloTransaction(ContractKit contractKit, WCEthereumTransaction wcEthereumTransaction) throws IOException {
+        String feeCurrency = getFeeCurrency(contractKit);
+
+        CeloGasProvider gasProvider = new CeloGasProvider(contractKit.contracts.getGasPriceMinimum().getContract(), feeCurrency);
+
         return new CeloRawTransaction(
                 wcEthereumTransaction.getNonce() == null ? getNonce(contractKit) : Numeric.toBigInt(wcEthereumTransaction.getNonce()),
                 //wcEthereumTransaction.getGasPrice() == null ? DefaultGasProvider.GAS_PRICE : Numeric.toBigInt(wcEthereumTransaction.getGasPrice()),
-                DefaultGasProvider.GAS_PRICE,
-                wcEthereumTransaction.getGasLimit() == null ? DefaultGasProvider.GAS_LIMIT : Numeric.toBigInt(wcEthereumTransaction.getGasLimit()),
+                gasProvider.getGasPrice(),
+//                wcEthereumTransaction.getGasLimit() == null ? DefaultGasProvider.GAS_LIMIT : Numeric.toBigInt(wcEthereumTransaction.getGasLimit()),
+                gasProvider.getGasLimit(),
                 wcEthereumTransaction.getTo(),
                 wcEthereumTransaction.getValue() == null ? null : Numeric.toBigInt(wcEthereumTransaction.getValue()),
                 wcEthereumTransaction.getData(),
-                getGasCurrency(contractKit),
+                feeCurrency,
                 null,
                 null
         );
@@ -311,7 +333,7 @@ public class WalletConnection {
         return ethGetTransactionCount.getTransactionCount();
     }
 
-    private String getGasCurrency(ContractKit contractKit) {
+    private String getFeeCurrency(ContractKit contractKit) {
         Currency currency = TG2HM.getDefaultCurrency();
 
         if (currency == Currency.USD) {

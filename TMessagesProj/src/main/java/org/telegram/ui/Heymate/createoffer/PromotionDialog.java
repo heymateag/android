@@ -233,7 +233,7 @@ public class PromotionDialog extends Dialog {
             mCallback.onPromote(percentage);
         });
 
-        mRadioReferral.setChecked(true, false);
+        mRadioShare.setChecked(true, false);
     }
 
     private void toggleReferral(View v) {

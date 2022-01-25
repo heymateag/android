@@ -1,28 +1,32 @@
 package works.heymate.api;
 
-import org.json.JSONObject;
-
+import java.io.File;
 import java.util.List;
 
-import works.heymate.core.offer.PricingInfo;
+import works.heymate.model.Pricing;
 
 public interface IHeymateAPI {
+
+    // TODO getServiceProviderSchedule
+
+    void getUserInfo(String userId, APICallback callback);
 
     void updatePushToken(String deviceId, String pushId, APICallback callback);
 
     void updateUserInfo(String fullName, String username, String avatarHash, String telegramId, APICallback callback);
 
+    void uploadFile(File file, APICallback callback);
+
+    void downloadFile(String fileName, File destination, APICallback callback);
+
     void createOffer(String title, String description, String category, String subcategory,
                      long expiration, String address, String latitude, String longitude,
                      String meetingType, int participants, String terms,
-                     PricingInfo pricingInfo, JSONObject termsConfig,
-                     String walletAddress, String singleSignature,
-                     String bundleSignature, String subscriptionSignature,
-                     List<Long> timeSlots, APICallback callback);
+                     Pricing pricing, APIObject paymentTerms,
+                     String walletAddress, List<Long> timeSlots, List<String> images,
+                     APICallback callback);
 
     void getOffer(String id, APICallback callback);
-
-    void deleteOffer(String id, APICallback callback);
 
     void getMyOffers(APICallback callback);
 
@@ -36,9 +40,11 @@ public interface IHeymateAPI {
 
     void getPurchasedPlan(String planId, APICallback callback);
 
-    void createReservation(String offerId, String serviceProviderId, String timeSlotId, APICallback callback);
+    void createReservation(String offerId, String serviceProviderId, String timeSlotId, String tradeId, APICallback callback);
 
     void getMyOrders(APICallback callback);
+
+    void getTimeSlotReservations(String timeSlotId, APICallback callback);
 
     void getReservation(String reservationId, APICallback callback);
 

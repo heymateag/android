@@ -4,13 +4,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import works.heymate.core.Utils;
 
@@ -31,47 +38,50 @@ public class SimpleNetworkCall {
 
     }
 
-    public static void callMapAsync(NetworkCallCallback callback, String method, String url, Map<String, Object> body, String... headers) {
-        try {
-            callAsync(callback, method, url, mapToObject(body), headers);
-        } catch (JSONException e) {
-            if (callback != null) {
-                NetworkCallResult result = new NetworkCallResult();
-                result.exception = e;
+    private static final Executor sExecutor = new ThreadPoolExecutor(2, 5, 5000, TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>());
 
-                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
-            }
-        }
+    public static void callMapAsync(NetworkCallCallback callback, String method, String url, Map<String, Object> body, String... headers) {
+        callAsync(callback, method, url, Utils.mapToJSON(body), headers);
     }
 
     public static void callAsync(NetworkCallCallback callback, String url, JSONObject body, String... headers) {
-        new Thread() {
+        sExecutor.execute(() -> {
+            NetworkCallResult result = call(url, body, headers);
 
-            @Override
-            public void run() {
-                NetworkCallResult result = call(url, body, headers);
-
-                if (callback != null) {
-                    Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
-                }
+            if (callback != null) {
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
             }
-
-        }.start();
+        });
     }
 
     public static void callAsync(NetworkCallCallback callback, String method, String url, JSONObject body, String... headers) {
-        new Thread() {
+        sExecutor.execute(() -> {
+            NetworkCallResult result = call(method, url, body, headers);
 
-            @Override
-            public void run() {
-                NetworkCallResult result = call(method, url, body, headers);
-
-                if (callback != null) {
-                    Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
-                }
+            if (callback != null) {
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
             }
+        });
+    }
 
-        }.start();
+    public static void rawCallAsync(NetworkCallCallback callback, String method, String url, InputStream body, String contentType, String... headers) {
+        sExecutor.execute(() -> {
+            NetworkCallResult result = rawCall(method, url, body, contentType, headers);
+
+            if (callback != null) {
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
+            }
+        });
+    }
+
+    public static void downloadAsync(NetworkCallCallback callback, String url, File destination, String... headers) {
+        sExecutor.execute(() -> {
+            NetworkCallResult result = download(url, destination, headers);
+
+            if (callback != null) {
+                Utils.postOnUIThread(() -> callback.onNetworkCallResult(result));
+            }
+        });
     }
 
     public static NetworkCallResult call(String url, JSONObject body, String... headers) {
@@ -79,6 +89,10 @@ public class SimpleNetworkCall {
     }
 
     public static NetworkCallResult call(String method, String url, JSONObject body, String... headers) {
+        return rawCall(method, url, body == null ? null : new ByteArrayInputStream(body.toString().getBytes()), "application/json", headers);
+    }
+
+    public static NetworkCallResult rawCall(String method, String url, InputStream body, String contentType, String... headers) {
         NetworkCallResult result = new NetworkCallResult();
 
         try {
@@ -91,9 +105,21 @@ public class SimpleNetworkCall {
             }
 
             if (body != null) {
-                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Content-Type", contentType);
                 connection.setDoOutput(true);
-                connection.getOutputStream().write(body.toString().getBytes());
+
+                OutputStream output = connection.getOutputStream();
+
+                byte[] buffer = new byte[1024];
+                int size = 0;
+
+                while (size != -1) {
+                    size = body.read(buffer);
+
+                    if (size > 0) {
+                        output.write(buffer, 0, size);
+                    }
+                }
             }
 
             result.responseCode = connection.getResponseCode();
@@ -116,41 +142,47 @@ public class SimpleNetworkCall {
         return result;
     }
 
-    private static JSONObject mapToObject(Map<String, Object> map) throws JSONException {
-        JSONObject json = new JSONObject();
+    public static NetworkCallResult download(String url, File destination, String... headers) {
+        NetworkCallResult result = new NetworkCallResult();
 
-        for (Map.Entry<String, Object> entry: map.entrySet()) {
-            json.put(entry.getKey(), objectToJsonCompatible(entry.getValue()));
-        }
+        FileOutputStream output = null;
 
-        return json;
-    }
+        try {
+            output = new FileOutputStream(destination);
 
-    private static Object objectToJsonCompatible(Object object) throws JSONException {
-        if (object instanceof JSONObject) {
-            return object;
-        }
-        else if (object instanceof JSONArray) {
-            return object;
-        }
-        else if (object instanceof Map) {
-            return mapToObject((Map) object);
-        }
-        else if (object instanceof Collection) {
-            JSONArray jArray = new JSONArray();
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 
-            for (Object obj: (Collection) object) {
-                jArray.put(objectToJsonCompatible(obj));
+            for (int i = 0; i < headers.length; i += 2) {
+                connection.setRequestProperty(headers[i], headers[i + 1]);
             }
 
-            return jArray;
+            result.responseCode = connection.getResponseCode();
+
+            if (result.responseCode >= 200 && result.responseCode < 300) {
+                byte[] buffer = new byte[1024];
+                int size = 0;
+
+                InputStream input = connection.getInputStream();
+
+                while (size != -1) {
+                    size = input.read(buffer);
+
+                    if (size > 0) {
+                        output.write(buffer, 0, size);
+                    }
+                }
+            }
+
+            connection.disconnect();
+        } catch (IOException e) {
+            result.exception = e;
+        } finally {
+            try {
+                output.close();
+            } catch (Throwable t) {}
         }
-        else if (object == null) {
-            return JSONObject.NULL;
-        }
-        else {
-            return object;
-        }
+
+        return result;
     }
 
     private static String readStream(InputStream stream) throws IOException {

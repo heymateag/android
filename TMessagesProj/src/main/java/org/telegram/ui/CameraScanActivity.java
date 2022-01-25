@@ -92,6 +92,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     private BarcodeDetector visionQrReader;
 
     private boolean needGalleryButton;
+    private boolean anyQR = false;
 
     private int currentType;
 
@@ -109,6 +110,10 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     }
 
     public static ActionBarLayout[] showAsSheet(BaseFragment parentFragment, boolean gallery, CameraScanActivityDelegate delegate) {
+        return showAsSheet(parentFragment, gallery, false, delegate);
+    }
+
+    public static ActionBarLayout[] showAsSheet(BaseFragment parentFragment, boolean gallery, boolean anyQR, CameraScanActivityDelegate delegate) {
         if (parentFragment == null || parentFragment.getParentActivity() == null) {
             return null;
         }
@@ -128,6 +133,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     }
                 };
                 fragment.needGalleryButton = gallery;
+                fragment.anyQR = anyQR;
                 actionBarLayout[0].addFragmentToStack(fragment);
                 actionBarLayout[0].showLastFragment();
                 actionBarLayout[0].setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
@@ -629,6 +635,9 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             if (TextUtils.isEmpty(text)) {
                 onNoQrFound();
                 return null;
+            }
+            if (anyQR) {
+                return text;
             }
             if (needGalleryButton) {
                 if (!text.startsWith("ton://transfer/")) {

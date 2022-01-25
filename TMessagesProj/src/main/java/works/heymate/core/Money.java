@@ -74,7 +74,9 @@ public class Money implements Parcelable, Comparable<Money> {
 
     @Override
     public String toString() {
-        return mCurrency.format(mAmount / 100 + "." + mAmount % 100);
+        String cents = String.valueOf(mAmount % 100);
+
+        return mCurrency.format(mAmount / 100 + "." + (cents.length() == 1 ? "0" + cents : cents));
     }
 
     @Override
@@ -107,6 +109,24 @@ public class Money implements Parcelable, Comparable<Money> {
         }
 
         return (int) (mAmount - o.mAmount);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Money)) {
+            return false;
+        }
+
+        Money oMoney = (Money) o;
+
+        return mAmount == oMoney.mAmount && mCurrency.equals(oMoney.mCurrency);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mCurrency.hashCode();
+        result = 31 * result + (int) (mAmount ^ (mAmount >>> 32));
+        return result;
     }
 
 }

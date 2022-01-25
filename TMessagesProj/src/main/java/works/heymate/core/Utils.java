@@ -3,8 +3,15 @@ package works.heymate.core;
 import android.os.Handler;
 import android.os.Looper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import works.heymate.api.APIObject;
 
 public class Utils {
 
@@ -28,6 +35,63 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static JSONObject quickJSON(Object... keyValues) {
+        return mapToJSON(quickMap(keyValues));
+    }
+
+    public static Map<String, Object> quickMap(Object... keyValues) {
+        Map<String, Object> map = new HashMap<>();
+
+        for (int i = 0; i < keyValues.length; i += 2) {
+            map.put(keyValues[i].toString(), keyValues[i + 1]);
+        }
+
+        return map;
+    }
+
+    public static JSONObject mapToJSON(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+
+        JSONObject json = new JSONObject();
+
+        try {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                json.put(entry.getKey(), objectToJsonCompatible(entry.getValue()));
+            }
+        } catch (JSONException e) { }
+
+        return json;
+    }
+
+    private static Object objectToJsonCompatible(Object object) throws JSONException {
+        if (object instanceof JSONObject) {
+            return object;
+        }
+        else if (object instanceof JSONArray) {
+            return object;
+        }
+        else if (object instanceof Map) {
+            return mapToJSON((Map) object);
+        }
+        else if (object instanceof Collection) {
+            JSONArray jArray = new JSONArray();
+
+            for (Object obj: (Collection) object) {
+                jArray.put(objectToJsonCompatible(obj));
+            }
+
+            return jArray;
+        }
+        else if (object == null) {
+            return JSONObject.NULL;
+        }
+        else {
+            return object;
+        }
     }
 
     public static void runOnUIThread(Runnable runnable) {

@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.datastore.generated.model.TimeSlot;
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -29,7 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
+import works.heymate.api.APIArray;
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.core.Texts;
+import works.heymate.model.Offer;
+import works.heymate.model.TimeSlot;
 
 public class TimeSlotSelectionActivity extends BaseFragment {
 
@@ -47,7 +51,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
     private TimeZone mTimeZone;
 
     private List<TimeSlotPickerAdapter.TimeSlot> mTimeSlots;
-    private Map<TimeSlotPickerAdapter.TimeSlot, TimeSlot> mTimeSlotsMap;
+    private Map<TimeSlotPickerAdapter.TimeSlot, APIObject> mTimeSlotsMap;
 
     private TimeSlotPicker mTimeSlotPicker;
 
@@ -115,7 +119,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
                 return false;
             }
 
-            TimeSlot selectedTimeSlot = mTimeSlotsMap.get(timeSlot);
+            APIObject selectedTimeSlot = mTimeSlotsMap.get(timeSlot);
             PaymentController.get(getParentActivity()).resumeTimeSlotPurchase(selectedTimeSlot);
 
             finishFragment();
@@ -124,19 +128,23 @@ public class TimeSlotSelectionActivity extends BaseFragment {
 
         String offerId = getArguments().getString(Constants.OFFER_ID);
 
-        HtAmplify.getInstance(getParentActivity()).getTimeSlots(offerId, (success, timeSlots, exception) -> {
-            if (success) {
+        APIs.get().getOffer(offerId, result -> {
+            if (result.response != null) {
+                APIArray timeSlots = result.response.getArray(Offer.TIMESLOTS);
+
                 mTimeZone = TimeZone.getDefault();
                 mTimeSlots = new ArrayList<>(timeSlots.size());
                 mTimeSlotsMap = new Hashtable<>(timeSlots.size());
 
                 mTimeSlotPicker.setTimeZone(mTimeZone);
 
-                for (TimeSlot timeSlot: timeSlots) {
-                    long start = timeSlot.getStartTime() * 1000L;
-                    long end = timeSlot.getEndTime() * 1000L;
+                for (int i = 0; i < timeSlots.size(); i++) {
+                    APIObject timeSlot = timeSlots.getObject(i);
+
+                    long start = timeSlot.getLong(TimeSlot.FROM_TIME) * 1000L;
+                    long end = timeSlot.getLong(TimeSlot.TO_TIME) * 1000L;
                     int duration = (int) ((end - start) / 1000L / 60L);
-                    boolean reserved = timeSlot.getRemainingReservations() <= 0;
+                    boolean reserved = timeSlot.getInt(TimeSlot.REMAINING_RESERVATIONS) <= 0;
 
                     TimeSlotPickerAdapter.TimeSlot pickerTimeSlot = new TimeSlotPickerAdapter.TimeSlot(start, duration, reserved);
 
@@ -164,7 +172,7 @@ public class TimeSlotSelectionActivity extends BaseFragment {
                 });
             }
             else {
-                Log.e(TAG, "Failed to get time slots", exception);
+                Log.e(TAG, "Failed to get time slots", result.error);
                 Toast.makeText(getParentActivity(), Texts.get(Texts.NETWORK_ERROR), Toast.LENGTH_LONG).show();
 
                 finishFragment();

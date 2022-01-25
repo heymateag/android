@@ -268,8 +268,6 @@ public class LaunchActivity extends FragmentActivity implements ActionBarLayout.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        OnlineReservation.stabilizeOnlineMeetingStatuses(getApplicationContext());
-
         boolean crashed;
         File logFile;
 

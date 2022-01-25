@@ -13,14 +13,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.S3Object;
-import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +34,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import works.heymate.api.APICallback;
+import works.heymate.api.APIResult;
+import works.heymate.api.APIs;
 import works.heymate.core.Utils;
 
 public class FileCache {
@@ -124,7 +123,7 @@ public class FileCache {
         });
     }
 
-    public void uploadImage(String id, Callback callback) {
+    public void uploadImage(String id, APICallback callback) {
         mHandler.post(() -> {
             CacheInfo cacheInfo = getCacheInfo(id);
 
@@ -170,19 +169,11 @@ public class FileCache {
                 }
             }
 
-            try {
-                HtAmplify.getInstance(mContext).uploadFile(id, file);
-
-                if (callback != null) {
-                    Utils.runOnUIThread(() -> callback.onResult(true, null));
-                }
-            } catch (AmazonClientException e) {
-                reportError("Failed to update image file", e, callback);
-            }
+            APIs.get().uploadFile(file, callback);
         });
     }
 
-    public void getImage(String id, int size, BitmapCallback callback) {
+    public void getImage(String id, String fileName, int size, BitmapCallback callback) {
         mHandler.post(() -> {
             BitmapWrapperDrawable handle = new BitmapWrapperDrawable();
 
@@ -222,40 +213,19 @@ public class FileCache {
 
             File originalFile = getFileForId(id, ORIGINAL_SIZE);
 
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                S3Object imageObject = HtAmplify.getInstance(mContext).downloadFile(id);
-
-                inputStream = imageObject.getObjectContent();
-                outputStream = new FileOutputStream(originalFile);
-
-                byte[] buffer = new byte[1024];
-                int readSize = 0;
-
-                while (readSize != -1) {
-                    readSize = inputStream.read(buffer);
-
-                    if (readSize > 0) {
-                        outputStream.write(buffer, 0, readSize);
+            APIs.get().downloadFile(fileName, originalFile, result -> {
+                if (result.success) {
+                    mHandler.post(() -> getImageFromOriginalFile(id, size, originalFile, handle, callback));
+                }
+                else {
+                    if (result.error == null) {
+                        notifyGetImageResult(true, null, null, callback);
+                        return;
                     }
+
+                    notifyGetImageResult(false, null, result.error, callback);
                 }
-
-                outputStream.close();
-
-                getImageFromOriginalFile(id, size, originalFile, handle, callback);
-            } catch (Exception e) {
-                if (e instanceof AmazonS3Exception && ((AmazonS3Exception) e).getStatusCode() == 404) {
-                    notifyGetImageResult(true, null, null, callback);
-                    return;
-                }
-
-                notifyGetImageResult(false, null, e, callback);
-            } finally {
-                try { inputStream.close(); } catch (Throwable t) { }
-                try { outputStream.close(); } catch (Throwable t) { }
-            }
+            });
         });
     }
 
@@ -416,6 +386,14 @@ public class FileCache {
 
         if (callback != null) {
             Utils.runOnUIThread(() -> callback.onResult(false, exception != null ? exception : new Exception(text)));
+        }
+    }
+
+    private void reportError(String text, Exception exception, APICallback callback) {
+        Log.e(TAG, text, exception);
+
+        if (callback != null) {
+            Utils.runOnUIThread(() -> callback.onAPIResult(new APIResult(exception != null ? exception : new Exception(text))));
         }
     }
 

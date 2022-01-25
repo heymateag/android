@@ -3,6 +3,9 @@ package works.heymate.api;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class APIArray {
 
     private JSONArray mJSON;
@@ -11,8 +14,16 @@ public class APIArray {
         mJSON = json;
     }
 
+    public APIArray() {
+        mJSON = new JSONArray();
+    }
+
     public int size() {
         return mJSON.length();
+    }
+
+    public void add(Object object) {
+        mJSON.put(object);
     }
 
     public String getString(int i) {
@@ -69,6 +80,18 @@ public class APIArray {
         } catch (JSONException e) {
             return null;
         }
+    }
+
+    public List<APIObject> asObjectList() {
+        List<APIObject> objects = new ArrayList<>(mJSON.length());
+
+        for (int i = 0; i < mJSON.length(); i++) {
+            try {
+                objects.add(new APIObject(mJSON.getJSONObject(i)));
+            } catch (JSONException e) { }
+        }
+
+        return objects;
     }
 
 }

@@ -12,11 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amplifyframework.api.ApiException;
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.PurchasedPlan;
-import com.amplifyframework.datastore.generated.model.Reservation;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -30,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import works.heymate.api.APIObject;
 import works.heymate.core.Texts;
+import works.heymate.model.PurchasedPlan;
 
 public class SubscriptionsAdapter extends MyScheduleAdapter {
 
@@ -38,9 +35,9 @@ public class SubscriptionsAdapter extends MyScheduleAdapter {
     private final BaseFragment mParent;
     private final RecyclerListView mListView;
 
-    private SparseArray<List<PurchasedPlan>> mSections = new SparseArray<>();
+    private SparseArray<List<APIObject>> mSections = new SparseArray<>();
 
-    private Map<String, Offer> mOffers = new HashMap<>();
+    private Map<String, APIObject> mOffers = new HashMap<>();
 
     public SubscriptionsAdapter(RecyclerListView listView, BaseFragment parent) {
         mContext = listView.getContext();
@@ -50,81 +47,81 @@ public class SubscriptionsAdapter extends MyScheduleAdapter {
 
     @Override
     public void getData() {
-        HtAmplify.getInstance(mContext).getPurchasedPlans(this::onPurchasedPlansQueryResult);
+//        HtAmplify.getInstance(mContext).getPurchasedPlans(this::onPurchasedPlansQueryResult);
     }
 
-    private void onPurchasedPlansQueryResult(boolean success, List<PurchasedPlan> purchasedPlans, ApiException exception) {
-        if (!success) {
-            return;
-        }
+//    private void onPurchasedPlansQueryResult(boolean success, List<PurchasedPlan> purchasedPlans, ApiException exception) {
+//        if (!success) {
+//            return;
+//        }
+//
+//        Collections.sort(purchasedPlans, (o1, o2) -> (int) (o2.getPurchaseTime().toDate().getTime() - o1.getPurchaseTime().toDate().getTime()));
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR_OF_DAY, 0);
+//        calendar.set(Calendar.MINUTE, 0);
+//        calendar.set(Calendar.SECOND, 0);
+//        calendar.set(Calendar.MILLISECOND, 0);
+//        long baseTime = calendar.getTimeInMillis();
+//
+//        mSections.clear();
+//
+//        for (PurchasedPlan purchasedPlan: purchasedPlans) {
+//            long slotTime = purchasedPlan.getPurchaseTime().toDate().getTime();
+//
+//            int dayDiff;
+//
+//            if (baseTime > slotTime) {
+//                dayDiff = (int) ((baseTime - slotTime) / MyScheduleUtils.ONE_DAY + 1);
+//            }
+//            else {
+//                dayDiff = (int) -((slotTime - baseTime) / MyScheduleUtils.ONE_DAY);
+//            }
+//
+//            List<PurchasedPlan> list = mSections.get(dayDiff);
+//
+//            if (list == null) {
+//                list = new ArrayList<>();
+//                mSections.put(dayDiff, list);
+//            }
+//
+//            list.add(purchasedPlan);
+//
+//            if (!mOffers.containsKey(purchasedPlan.getId())) {
+//                HtAmplify.getInstance(mContext).getOffer(purchasedPlan.getOfferId(), (success1, data, exception1) -> {
+//                    if (success1) {
+//                        mOffers.put(purchasedPlan.getId(), data);
+//                        updateItem(purchasedPlan);
+//                    }
+//                });
+//            }
+//        }
+//
+//        notifyDataSetChanged();
+//    }
 
-        Collections.sort(purchasedPlans, (o1, o2) -> (int) (o2.getPurchaseTime().toDate().getTime() - o1.getPurchaseTime().toDate().getTime()));
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        long baseTime = calendar.getTimeInMillis();
-
-        mSections.clear();
-
-        for (PurchasedPlan purchasedPlan: purchasedPlans) {
-            long slotTime = purchasedPlan.getPurchaseTime().toDate().getTime();
-
-            int dayDiff;
-
-            if (baseTime > slotTime) {
-                dayDiff = (int) ((baseTime - slotTime) / MyScheduleUtils.ONE_DAY + 1);
-            }
-            else {
-                dayDiff = (int) -((slotTime - baseTime) / MyScheduleUtils.ONE_DAY);
-            }
-
-            List<PurchasedPlan> list = mSections.get(dayDiff);
-
-            if (list == null) {
-                list = new ArrayList<>();
-                mSections.put(dayDiff, list);
-            }
-
-            list.add(purchasedPlan);
-
-            if (!mOffers.containsKey(purchasedPlan.getId())) {
-                HtAmplify.getInstance(mContext).getOffer(purchasedPlan.getOfferId(), (success1, data, exception1) -> {
-                    if (success1) {
-                        mOffers.put(purchasedPlan.getId(), data);
-                        updateItem(purchasedPlan);
-                    }
-                });
-            }
-        }
-
-        notifyDataSetChanged();
-    }
-
-    private void updateItem(PurchasedPlan purchasedPlan) {
+    private void updateItem(APIObject purchasedPlan) {
         for (int i = 0; i < mListView.getChildCount(); i++) {
             if (mListView.getChildAt(i) instanceof SubscriptionItem) {
                 SubscriptionItem item = (SubscriptionItem) mListView.getChildAt(i);
 
-                if (purchasedPlan.getId().equals(item.getPurchasedPlanId())) {
+                if (purchasedPlan.getString(PurchasedPlan.ID).equals(item.getPurchasedPlanId())) {
                     item.setPurchasedPlan(purchasedPlan);
-                    item.setOffer(mOffers.get(purchasedPlan.getId()));
+                    item.setOffer(mOffers.get(purchasedPlan.getString(PurchasedPlan.ID)));
                 }
             }
         }
     }
 
-    protected void updatePurchasedPlan(PurchasedPlan purchasedPlan) {
+    protected void updatePurchasedPlan(APIObject purchasedPlan) {
         boolean found = false;
 
         for (int i = 0; i < mSections.size(); i++) {
-            List<PurchasedPlan> purchasedPlans = mSections.get(mSections.keyAt(i));
+            List<APIObject> purchasedPlans = mSections.get(mSections.keyAt(i));
 
             if (purchasedPlans != null) {
                 for (int index = 0; index < purchasedPlans.size(); index++) {
-                    if (purchasedPlan.getId().equals(purchasedPlans.get(index).getId())) {
+                    if (purchasedPlan.getString(PurchasedPlan.ID).equals(purchasedPlans.get(index).getString(PurchasedPlan.ID))) {
                         found = true;
 
                         purchasedPlans.set(index, purchasedPlan);
@@ -205,10 +202,10 @@ public class SubscriptionsAdapter extends MyScheduleAdapter {
     public void onBindViewHolder(int section, int position, RecyclerView.ViewHolder holder) {
         SubscriptionItem item = (SubscriptionItem) holder.itemView;
 
-        PurchasedPlan purchasedPlan = (PurchasedPlan) getItem(section, position);
+        APIObject purchasedPlan = (APIObject) getItem(section, position);
 
         item.setPurchasedPlan(purchasedPlan);
-        item.setOffer(mOffers.get(purchasedPlan.getId()));
+        item.setOffer(mOffers.get(purchasedPlan.getString(PurchasedPlan.ID)));
     }
 
     @Override
@@ -228,13 +225,13 @@ public class SubscriptionsAdapter extends MyScheduleAdapter {
             case 1:
                 return Texts.get(Texts.YESTERDAY);
             default:
-                List<PurchasedPlan> reservations = mSections.get(dayDiff);
+                List<APIObject> purchasedPlans = mSections.get(dayDiff);
 
-                if (reservations == null || reservations.isEmpty()) {
+                if (purchasedPlans == null || purchasedPlans.isEmpty()) {
                     return "";
                 }
 
-                return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(reservations.get(0).getPurchaseTime().toDate().getTime());
+                return FastDateFormat.getDateInstance(FastDateFormat.MEDIUM).format(purchasedPlans.get(0).getLong(PurchasedPlan.CREATED_AT)); // TODO convert timestamp?
         }
     }
 

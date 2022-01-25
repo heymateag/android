@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,6 @@ import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.log.HMLog;
 import org.telegram.ui.Heymate.log.LogToGroup;
@@ -37,26 +37,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import works.heymate.api.APIs;
 import works.heymate.beta.R;
 import works.heymate.core.HeymateEvents;
+import works.heymate.model.Reservation;
+import works.heymate.model.User;
+import works.heymate.model.Users;
 
 public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents.HeymateEventObserver {
 
     private static final String TAG = "OnlineMeetingActivity";
 
     private static final String KEY_MEETING_ID = "meetingId";
+    private static final String KEY_MEETING_PASSWORD = "meetingPassword";
     private static final String KEY_TIME_SLOT_ID = "timeSlotId";
     private static final String KEY_RESERVATION_ID = "reservationId";
 
-    private static Bundle createArgs(String meetingId, String timeSlotId, String reservationId) {
+    private static Bundle createArgs(String meetingId, String meetingPassword, String timeSlotId, String reservationId) {
         Bundle args = new Bundle();
         args.putString(KEY_MEETING_ID, meetingId);
+        args.putString(KEY_MEETING_PASSWORD, meetingPassword);
         args.putString(KEY_TIME_SLOT_ID, timeSlotId);
         args.putString(KEY_RESERVATION_ID, reservationId);
         return args;
     }
 
     private String mMeetingId;
+    private String mMeetingPassword;
     private String mTimeSlotId;
     private String mReservationId;
 
@@ -78,20 +85,21 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     private boolean mStarted = false;
 
-    public OnlineMeetingActivity(String meetingId, String timeSlotId, String reservationId) {
-        super(createArgs(meetingId, timeSlotId, reservationId));
+    public OnlineMeetingActivity(String meetingId, String meetingPassword, String timeSlotId, String reservationId) {
+        super(createArgs(meetingId, meetingPassword, timeSlotId, reservationId));
     }
 
     @Override
     public boolean onFragmentCreate() {
         mMeetingId = getArguments().getString(KEY_MEETING_ID);
+        mMeetingPassword = getArguments().getString(KEY_MEETING_PASSWORD);
         mTimeSlotId = getArguments().getString(KEY_TIME_SLOT_ID);
         mReservationId = getArguments().getString(KEY_RESERVATION_ID);
 
         if (mTimeSlotId == null && mReservationId != null) {
-            HtAmplify.getInstance(getParentActivity()).getReservation(mReservationId, (success, result, exception) -> {
-                if (result != null) {
-                    mTimeSlotId = result.getTimeSlotId();
+            APIs.get().getReservation(mReservationId, result -> {
+                if (result.response != null) {
+                    mTimeSlotId = result.response.getString(Reservation.TIMESLOT_ID);
                 }
             });
         }
@@ -248,7 +256,7 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         mStarted = true;
 
         HMLog.d(TAG, "About to ensure session");
-        if (OnlineMeeting.get().ensureSession(mMeetingId, mTimeSlotId, mReservationId)) {
+        if (OnlineMeeting.get().ensureSession(mMeetingId, mMeetingPassword, mTimeSlotId, mReservationId)) {
             MeetingMember self = OnlineMeeting.get().getSelf();
 
             HMLog.d(TAG, "Already in session. Self exists: " + (self != null));
@@ -459,25 +467,20 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
 
     private void confirmCloseMeeting() {
         HMLog.d(TAG, "confirmCloseMeeting");
-        LoadingUtil.onLoadingStarted();
 
-        if (mTimeSlotId != null) {
-            HtAmplify.getInstance(getParentActivity()).getTimeSlot(mTimeSlotId, (success, result, exception) -> {
+        if (mReservationId != null) {
+            LoadingUtil.onLoadingStarted();
+
+            APIs.get().getReservation(mReservationId, result -> {
                 LoadingUtil.onLoadingFinished();
 
-                if (success) {
-                    confirmCloseMeeting(String.valueOf(getUserConfig().clientUserId).equals(result.getUserId()));
+                if (result.success) {
+                    confirmCloseMeeting(TextUtils.equals(result.response.getString(Reservation.SERVICE_PROVIDER_ID), Users.currentUser.getString(User.ID)));
                 }
             });
         }
-        else if (mReservationId != null) {
-            HtAmplify.getInstance(getParentActivity()).getReservation(mReservationId, (success, result, exception) -> {
-                LoadingUtil.onLoadingFinished();
-
-                if (success) {
-                    confirmCloseMeeting(String.valueOf(getUserConfig().clientUserId).equals(result.getServiceProviderId()));
-                }
-            });
+        else if (mTimeSlotId != null) {
+            confirmCloseMeeting(true); // Assuming only the service provider does not have the reservation id.
         }
     }
 
@@ -500,10 +503,10 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         if (mStarted) {
             LoadingUtil.onLoadingStarted();
 
-            OnlineReservation.onlineMeetingClosed(getParentActivity(), mTimeSlotId, mReservationId, (success, result, exception) -> {
+            OnlineReservation.onlineMeetingClosed(getParentActivity(), mTimeSlotId, mReservationId, result -> {
                 LoadingUtil.onLoadingFinished();
 
-                if (success) {
+                if (result.success) {
                     OnlineMeeting.get().leaveMeeting();
                     finishFragment();
                 }

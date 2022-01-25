@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.Reservation;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -27,14 +25,17 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HtAmplify;
-import org.telegram.ui.Heymate.offer.HtOfferDetailsPopUp;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.ProfileActivity;
 
+import works.heymate.api.APIObject;
+import works.heymate.api.APIs;
 import works.heymate.beta.R;
+import works.heymate.model.Offer;
+import works.heymate.model.Reservation;
 
 public class MeetingMessageItem extends SequenceLayout {
 
@@ -50,8 +51,8 @@ public class MeetingMessageItem extends SequenceLayout {
 
     private BaseFragment mParent = null;
 
-    private Offer mOffer = null;
-    private Reservation mReservation = null;
+    private APIObject mOffer = null;
+    private APIObject mReservation = null;
     private long mUserId;
 
     private String mLoadingOfferId = null;
@@ -122,17 +123,17 @@ public class MeetingMessageItem extends SequenceLayout {
                 OfferDetailsActivity offerDetails = new OfferDetailsActivity();
                 offerDetails.setOffer(mOffer, null);
                 mParent.presentFragment(offerDetails);
-//                new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null).show();
             }
         });
 
         mJoin.setOnClickListener(v -> {
             if (mParent != null && userCanJoin()) {
-                String meetingId = mReservation.getMeetingId();
+                String meetingId = mReservation.getString(Reservation.MEETING_ID);
+                String meetingPassword = mReservation.getString(Reservation.MEETING_PASSWORD);
 
                 if (meetingId != null) {
                     LogToGroup.logIfCrashed(() -> {
-                        mParent.presentFragment(new OnlineMeetingActivity(meetingId, null, mReservation.getId()));
+                        mParent.presentFragment(new OnlineMeetingActivity(meetingId, meetingPassword, null, mReservation.getString(Reservation.ID)));
                     });
                 }
             }
@@ -147,25 +148,25 @@ public class MeetingMessageItem extends SequenceLayout {
         mParent = parent;
     }
 
-    public void setReservation(Reservation reservation) {
+    public void setReservation(APIObject reservation) {
         mReservation = reservation;
 
-        if (!reservation.getId().equals(mLoadingReservationId)) {
+        if (!reservation.getString(Reservation.ID).equals(mLoadingReservationId)) {
             mLoadingReservationId = null;
         }
 
-        if (mReservation.getOfferId() == null || mReservation.getStatus() == null) {
+        if (mReservation.getString(Reservation.OFFER_ID) == null || mReservation.getString(Reservation.STATUS) == null) {
             mOffer = null;
             mLoadingOfferId = null;
 
-            mLoadingReservationId = mReservation.getId();
+            mLoadingReservationId = mReservation.getString(Reservation.ID);
 
             String reservationIdToBeLoaded = mLoadingReservationId;
 
-            HtAmplify.getInstance(getContext()).getReservation(mLoadingReservationId, (success, result, exception) -> {
-                if (success && result != null) {
-                    if (result.getId().equals(mLoadingReservationId)) {
-                        setReservation(result);
+            APIs.get().getReservation(mLoadingReservationId, result -> {
+                if (result.response != null) {
+                    if (result.response.getString(Reservation.ID).equals(mLoadingReservationId)) {
+                        setReservation(result.response);
                     }
                 }
 
@@ -175,18 +176,18 @@ public class MeetingMessageItem extends SequenceLayout {
             });
         }
         else {
-            if (mOffer == null || !mOffer.getId().equals(mReservation.getOfferId())) {
+            if (mOffer == null || !mOffer.getString(Offer.ID).equals(mReservation.getString(Reservation.OFFER_ID))) {
                 mOffer = null;
 
-                if (!mReservation.getOfferId().equals(mLoadingOfferId)) {
-                    mLoadingOfferId = mReservation.getOfferId();
+                if (!mReservation.getString(Reservation.OFFER_ID).equals(mLoadingOfferId)) {
+                    mLoadingOfferId = mReservation.getString(Reservation.OFFER_ID);
 
                     String offerIdToBeLoaded = mLoadingOfferId;
 
-                    HtAmplify.getInstance(getContext()).getOffer(mReservation.getOfferId(), (success, data, exception) -> {
-                        if (success) {
-                            if (data.getId().equals(mLoadingOfferId)) {
-                                setOffer(data);
+                    APIs.get().getOffer(mLoadingOfferId, result -> {
+                        if (result.response != null) {
+                            if (result.response.getString(Offer.ID).equals(mLoadingOfferId)) {
+                                setOffer(result.response);
                             }
                         }
 
@@ -201,7 +202,7 @@ public class MeetingMessageItem extends SequenceLayout {
         updateLayout();
     }
 
-    private void setOffer(Offer offer) {
+    private void setOffer(APIObject offer) {
         mOffer = offer;
 
         updateLayout();
@@ -212,10 +213,10 @@ public class MeetingMessageItem extends SequenceLayout {
             OnlineReservation.stabilizeReservationStatus(getContext(), mReservation, mOffer);
         }
 
-        String userId = mReservation == null ? null : mReservation.getServiceProviderId();
+        String userId = mReservation == null ? null : mReservation.getString(Reservation.SERVICE_PROVIDER_ID);
 
         if (userId == null) {
-            userId = mOffer == null ? null : mOffer.getUserId();
+            userId = mOffer == null ? null : mOffer.getString(Offer.USER_ID);
         }
 
         if (userId != null) {
@@ -237,9 +238,9 @@ public class MeetingMessageItem extends SequenceLayout {
         }
 
         if (mOffer != null) {
-            mTitle.setText(mOffer.getTitle());
-            mSubCategory.setText(mOffer.getSubCategory());
-            mDescription.setText(mOffer.getDescription());
+            mTitle.setText(mOffer.getString(Offer.TITLE));
+            mSubCategory.setText(mOffer.getString(Offer.CATEGORY + "." + Offer.Category.SUB_CATEGORY));
+            mDescription.setText(mOffer.getString(Offer.DESCRIPTION));
         }
 
         if (userCanJoin()) {
@@ -254,32 +255,33 @@ public class MeetingMessageItem extends SequenceLayout {
     private final Runnable mTimeTracker = new Runnable() {
         @Override
         public void run() {
-            if (mReservation != null) {
-                Integer startTime = mReservation.getStartTime();
-
-                if (startTime != null) {
-                    int passedSeconds = (int) Math.abs(System.currentTimeMillis() / 1000 - startTime);
-
-                    if (passedSeconds >= 0) {
-                        int passedMinutes = passedSeconds / 60;
-                        passedSeconds %= 60;
-
-                        int passedHours = passedMinutes / 60;
-                        passedMinutes %= 60;
-
-                        mTimer.setText(fixDigits(passedHours) + ":" + fixDigits(passedMinutes) + ":" + fixDigits(passedSeconds));
-                    }
-                }
-
-                if (userCanJoin()) {
-                    mHandler.postDelayed(mTimeTracker, 1000);
-                }
-            }
+            // TODO timer based on start time
+//            if (mReservation != null) {
+//                Integer startTime = mReservation.getStartTime();
+//
+//                if (startTime != null) {
+//                    int passedSeconds = (int) Math.abs(System.currentTimeMillis() / 1000 - startTime);
+//
+//                    if (passedSeconds >= 0) {
+//                        int passedMinutes = passedSeconds / 60;
+//                        passedSeconds %= 60;
+//
+//                        int passedHours = passedMinutes / 60;
+//                        passedMinutes %= 60;
+//
+//                        mTimer.setText(fixDigits(passedHours) + ":" + fixDigits(passedMinutes) + ":" + fixDigits(passedSeconds));
+//                    }
+//                }
+//
+//                if (userCanJoin()) {
+//                    mHandler.postDelayed(mTimeTracker, 1000);
+//                }
+//            }
         }
     };
 
     private boolean userCanJoin() {
-        return mReservation != null && mReservation.getStatus() != null && HtTimeSlotStatus.valueOf(mReservation.getStatus()).getStateIndex() <= HtTimeSlotStatus.STARTED.getStateIndex();
+        return mReservation != null && mReservation.getString(Reservation.STATUS) != null && HtTimeSlotStatus.valueOf(mReservation.getString(Reservation.STATUS)).getStateIndex() <= HtTimeSlotStatus.STARTED.getStateIndex();
     }
 
     @Override

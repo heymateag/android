@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import com.amplifyframework.datastore.generated.model.Offer;
-import com.amplifyframework.datastore.generated.model.PurchasedPlan;
 import com.yashoid.sequencelayout.SequenceLayout;
 
 import org.json.JSONException;
@@ -25,13 +23,16 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
-import works.heymate.core.offer.PricingInfo;
 import org.telegram.ui.Heymate.offer.OfferDetailsActivity;
 import org.telegram.ui.Heymate.payment.PaymentController;
 import org.telegram.ui.ProfileActivity;
 
+import works.heymate.api.APIObject;
 import works.heymate.core.Texts;
 import works.heymate.core.offer.PurchasePlanTypes;
+import works.heymate.model.Offer;
+import works.heymate.model.Pricing;
+import works.heymate.model.PurchasedPlan;
 
 public class SubscriptionItem extends SequenceLayout implements View.OnClickListener {
 
@@ -46,10 +47,10 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
     private final TextView mButtonLeft;
     private final TextView mButtonRight;
 
-    private PurchasedPlan mPurchasedPlan = null;
-    private Offer mOffer = null;
+    private APIObject mPurchasedPlan = null;
+    private APIObject mOffer = null;
 
-    private long mUserId = 0;
+    private String mUserId = null;
 
     private ImageReceiver avatarImage = new ImageReceiver(this);
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
@@ -90,72 +91,66 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
         avatarImage.setRoundRadius(AndroidUtilities.dp(28));
     }
 
-    public void setPurchasedPlan(PurchasedPlan purchasedPlan) {
+    public void setPurchasedPlan(APIObject purchasedPlan) {
         mPurchasedPlan = purchasedPlan;
 
-        try {
-            mUserId = Long.parseLong(purchasedPlan.getServiceProviderId());
-        } catch (Throwable t) {
-            mUserId = 0;
-        }
+//        try { TODO
+//            mUserId = Long.parseLong(purchasedPlan.getServiceProviderId());
+//        } catch (Throwable t) {
+            mUserId = null;
+//        }
 
         updateLayout();
     }
 
     public String getPurchasedPlanId() {
-        return mPurchasedPlan == null ? null : mPurchasedPlan.getId();
+        return mPurchasedPlan == null ? null : mPurchasedPlan.getString(PurchasedPlan.ID);
     }
 
-    public void setOffer(Offer offer) {
+    public void setOffer(APIObject offer) {
         mOffer = offer;
 
         try {
-            mUserId = Long.parseLong(offer.getUserId());
+            mUserId = offer.getString(Offer.USER_ID);
         } catch (Throwable t) {
-            mUserId = 0;
+            mUserId = null;
         }
 
         updateLayout();
     }
 
     private void updateLayout() {
-        if (mUserId != 0) {
-            TLRPC.User user = MessagesController.getInstance(mParent.getCurrentAccount()).getUser(mUserId);
-            onUserLoaded(user);
-        }
-        else {
+//        if (mUserId != null) { TODO
+//            TLRPC.User user = MessagesController.getInstance(mParent.getCurrentAccount()).getUser(mUserId);
+//            onUserLoaded(user);
+//        }
+//        else {
             onUserLoaded(null);
-        }
+//        }
 
         if (mOffer != null) {
-            mTextInfo.setText(mOffer.getTitle());
+            mTextInfo.setText(mOffer.getString(Offer.TITLE));
         }
 
         if (mPurchasedPlan != null) {
-            if (PurchasePlanTypes.BUNDLE.equals(mPurchasedPlan.getPlanType())) {
+            if (PurchasePlanTypes.BUNDLE.equals(mPurchasedPlan.getString(PurchasedPlan.PLAN_TYPE))) {
                 if (mOffer != null) {
-                    try {
-                        PricingInfo pricingInfo = new PricingInfo(new JSONObject(mOffer.getPricingInfo()));
+                    Pricing pricing = new Pricing(mOffer.getObject(Offer.PRICING).asJSON());
 
-                        int remainingSessions = pricingInfo.bundleCount - mPurchasedPlan.getFinishedReservationsCount() - mPurchasedPlan.getPendingReservationsCount();
+                    int remainingSessions = pricing.getBundleCount();// TODO fix counting - mPurchasedPlan.getFinishedReservationsCount() - mPurchasedPlan.getPendingReservationsCount();
 
-                        mTextMoreInfo.setText(remainingSessions + " reservations remaining"); // TODO Texts
+                    mTextMoreInfo.setText(remainingSessions + " reservations remaining"); // TODO Texts
 
-                        if (remainingSessions > 0) {
-                            mButtonLeft.setVisibility(VISIBLE);
-                            setRightPositive();
-                            mButtonRight.setText("Schedule");
-                            mButtonRight.setOnClickListener(v -> scheduleNewReservation());
-                        }
-                        else {
-                            mButtonLeft.setVisibility(GONE);
-                            setRightAsDetails();
-                            mButtonRight.setOnClickListener(v -> showDetails());
-                        }
-                    } catch (JSONException e) {
-                        mTextMoreInfo.setText("");
+                    if (remainingSessions > 0) {
+                        mButtonLeft.setVisibility(VISIBLE);
+                        setRightPositive();
+                        mButtonRight.setText("Schedule");
+                        mButtonRight.setOnClickListener(v -> scheduleNewReservation());
+                    }
+                    else {
                         mButtonLeft.setVisibility(GONE);
-                        mButtonRight.setVisibility(GONE);
+                        setRightAsDetails();
+                        mButtonRight.setOnClickListener(v -> showDetails());
                     }
                 }
                 else {
@@ -207,11 +202,11 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v == mImageUser || v == mTextName) {
-            if (mUserId != 0) {
-                Bundle args = new Bundle();
-                args.putLong("user_id", mUserId);
-                mParent.presentFragment(new ProfileActivity(args));
-            }
+//            if (mUserId != null) { TODO
+//                Bundle args = new Bundle();
+//                args.putLong("user_id", mUserId);
+//                mParent.presentFragment(new ProfileActivity(args));
+//            }
             return;
         }
 
@@ -226,17 +221,13 @@ public class SubscriptionItem extends SequenceLayout implements View.OnClickList
             return;
         }
 
-        PaymentController.get(getContext()).purchaseTimeSlot(mOffer.getId(), mPurchasedPlan.getId(), null);
+        PaymentController.get(getContext()).purchaseTimeSlot(mOffer.getString(Offer.ID), mPurchasedPlan.getString(PurchasedPlan.ID), null);
     }
 
     private void showDetails() {
         OfferDetailsActivity offerDetails = new OfferDetailsActivity();
         offerDetails.setOffer(mOffer, null);
         mParent.presentFragment(offerDetails);
-//        HtOfferDetailsPopUp detailsPopUp = new HtOfferDetailsPopUp(getContext(), mParent, mOffer, null);
-//        AlertDialog dialog = detailsPopUp.create();
-//        detailsPopUp.closeImage.setOnClickListener(v -> dialog.dismiss());
-//        mParent.showDialog(dialog);
     }
 
     @Override

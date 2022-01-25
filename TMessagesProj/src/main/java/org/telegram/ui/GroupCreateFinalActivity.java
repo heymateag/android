@@ -846,11 +846,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 case CreateShopActivity.TYPE_NONE:
                     // Nothing to do.
                     return;
-                case CreateShopActivity.TYPE_MARKETPLACE:
-                    HtAmplify.getInstance(getParentActivity()).createShop(chatId, username, HtAmplify.ShopType.MarketPlace);
+                case CreateShopActivity.TYPE_MARKETPLACE: // TODO create shops
+//                    HtAmplify.getInstance(getParentActivity()).createShop(chatId, username, HtAmplify.ShopType.MarketPlace);
                     break;
                 case CreateShopActivity.TYPE_SHOP:
-                    HtAmplify.getInstance(getParentActivity()).createShop(chatId, username, HtAmplify.ShopType.Shop);
+//                    HtAmplify.getInstance(getParentActivity()).createShop(chatId, username, HtAmplify.ShopType.Shop);
                     break;
             }
 

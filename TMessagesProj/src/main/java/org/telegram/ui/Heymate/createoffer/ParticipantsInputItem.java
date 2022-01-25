@@ -88,7 +88,6 @@ public class ParticipantsInputItem extends ExpandableItem {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mCheckBox.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.ht_theme)));
         }
-        mCheckBox.setChecked(false);
         radioLayout.addView(mCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
 
         TextView unlimitedLabel = new TextView(getContext());
@@ -113,8 +112,8 @@ public class ParticipantsInputItem extends ExpandableItem {
         return content;
     }
 
-    public int getMaximumParticipants() {
-        return mCheckBox.isChecked() ? 0 : (mEditCount.length() == 0 ? -1 : Integer.parseInt(mEditCount.getText().toString()));
+    public int getMaximumParticipants() { // TODO zero policy for unlimited participans?
+        return mCheckBox.isChecked() ? Integer.MAX_VALUE : (mEditCount.length() == 0 ? -1 : Integer.parseInt(mEditCount.getText().toString()));
     }
 
     public void setMaximumParticipants(int maximumParticipants) {
@@ -125,8 +124,10 @@ public class ParticipantsInputItem extends ExpandableItem {
                 mEditCount.setText("");
                 break;
             case 0:
+            case Integer.MAX_VALUE:
                 mCheckBox.setChecked(true);
                 mEditCount.setEnabled(false);
+                mEditCount.setText("");
                 break;
             default:
                 mCheckBox.setChecked(false);
