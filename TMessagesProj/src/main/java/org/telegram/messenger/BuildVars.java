@@ -27,7 +27,7 @@ public class BuildVars {
     public static int APP_ID = 23167;
     public static String APP_HASH = "86f8ef5614337213cac8e2bcfafa7261";
     public static String SMS_HASH = isStandaloneApp() ? "w0lkcmTZkKh" : (DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT");
-    public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
+    public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=works.heymate.beta.beta";
 
     static {
         if (ApplicationLoader.applicationContext != null) {

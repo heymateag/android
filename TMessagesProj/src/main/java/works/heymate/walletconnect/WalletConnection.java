@@ -146,7 +146,10 @@ public class WalletConnection {
         client.setOnFailure(throwable -> {
             Utils.runOnUIThread(() -> {
                 Activity activity = ActivityMonitor.get().getCurrentActivity();
-                Toast.makeText(activity, throwable.getMessage(), Toast.LENGTH_LONG).show();
+
+                String errorMessage = throwable == null ? "Failure with no error!" : (throwable.getMessage() == null ? (throwable.getStackTrace()[0].toString()) : throwable.getMessage());
+
+                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
             });
             return null;
         });
