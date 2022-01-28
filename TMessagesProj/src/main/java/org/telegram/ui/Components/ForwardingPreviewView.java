@@ -36,7 +36,7 @@ import org.telegram.messenger.ForwardingMessagesParams;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -977,6 +977,7 @@ public class ForwardingPreviewView extends FrameLayout {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             ChatMessageCell cell = (ChatMessageCell) holder.itemView;
+            cell.setInvalidateSpoilersParent(forwardingMessagesParams.hasSpoilers);
             cell.setParentViewSize(chatListView.getMeasuredWidth(), chatListView.getMeasuredHeight());
             int id = cell.getMessageObject() != null ? cell.getMessageObject().getId() : 0;
             cell.setMessageObject(forwardingMessagesParams.previewMessages.get(position), forwardingMessagesParams.groupedMessagesMap.get(forwardingMessagesParams.previewMessages.get(position).getGroupId()), true, true);

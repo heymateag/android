@@ -20,12 +20,12 @@ import android.provider.MediaStore;
 import androidx.core.content.FileProvider;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.BuildConfig;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -58,16 +58,16 @@ public class WallpaperUpdater {
 
     public void showAlert(final boolean fromTheme) {
         BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity);
-        builder.setTitle(LocaleController.getString("ChoosePhoto", works.heymate.beta.R.string.ChoosePhoto), true);
+        builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
 
         CharSequence[] items;
         int[] icons;
         if (fromTheme) {
-            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", works.heymate.beta.R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", works.heymate.beta.R.string.SelectFromGallery), LocaleController.getString("SelectColor", works.heymate.beta.R.string.SelectColor), LocaleController.getString("Default", works.heymate.beta.R.string.Default)};
+            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default)};
             icons = null;
         } else {
-            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", works.heymate.beta.R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", works.heymate.beta.R.string.SelectFromGallery)};
-            icons = new int[]{R.drawable.menu_camera, works.heymate.beta.R.drawable.profile_photos};
+            items = new CharSequence[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery)};
+            icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};
         }
 
         builder.setItems(items, icons, (dialogInterface, i) -> {

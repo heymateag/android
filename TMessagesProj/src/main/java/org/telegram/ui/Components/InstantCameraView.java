@@ -73,7 +73,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -309,7 +309,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         switchCameraButton = new ImageView(context);
         switchCameraButton.setScaleType(ImageView.ScaleType.CENTER);
-        switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", works.heymate.beta.R.string.AccDescrSwitchCamera));
+        switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", R.string.AccDescrSwitchCamera));
         addView(switchCameraButton, LayoutHelper.createFrame(62, 62, Gravity.LEFT | Gravity.BOTTOM, 8, 0, 0, 0));
         switchCameraButton.setOnClickListener(v -> {
             if (!cameraReady || cameraSession == null || !cameraSession.isInitied() || cameraThread == null) {
@@ -320,7 +320,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    switchCameraButton.setImageResource(isFrontface ? works.heymate.beta.R.drawable.camera_revert1 : works.heymate.beta.R.drawable.camera_revert2);
+                    switchCameraButton.setImageResource(isFrontface ? R.drawable.camera_revert1 : R.drawable.camera_revert2);
                     ObjectAnimator.ofFloat(switchCameraButton, View.SCALE_X, 1.0f).setDuration(100).start();
                 }
             });
@@ -329,7 +329,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         muteImageView = new ImageView(context);
         muteImageView.setScaleType(ImageView.ScaleType.CENTER);
-        muteImageView.setImageResource(works.heymate.beta.R.drawable.video_mute);
+        muteImageView.setImageResource(R.drawable.video_mute);
         muteImageView.setAlpha(0.0f);
         addView(muteImageView, LayoutHelper.createFrame(48, 48, Gravity.CENTER));
 
@@ -521,7 +521,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             return;
         }
 
-        switchCameraButton.setImageResource(works.heymate.beta.R.drawable.camera_revert1);
+        switchCameraButton.setImageResource(R.drawable.camera_revert1);
         textureOverlayView.setAlpha(1.0f);
         textureOverlayView.invalidate();
         if (lastBitmap == null) {
@@ -535,7 +535,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (lastBitmap != null) {
             textureOverlayView.setImageBitmap(lastBitmap);
         } else {
-            textureOverlayView.setImageResource(works.heymate.beta.R.drawable.icplaceholder);
+            textureOverlayView.setImageResource(R.drawable.icplaceholder);
         }
         cameraReady = false;
         isFrontface = true;
@@ -2609,7 +2609,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         if (zoom > 0f) {
             finishZoomTransition = ValueAnimator.ofFloat(zoom, 0);
             finishZoomTransition.addUpdateListener(valueAnimator -> {
-                cameraSession.setZoom((float) valueAnimator.getAnimatedValue());
+                if (cameraSession != null) {
+                    cameraSession.setZoom((float) valueAnimator.getAnimatedValue());
+                }
             });
             finishZoomTransition.addListener(new AnimatorListenerAdapter() {
                 @Override

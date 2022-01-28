@@ -25,7 +25,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -117,8 +117,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("BlockUserMultiTitle", works.heymate.beta.R.string.BlockUserMultiTitle));
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setTitle(LocaleController.getString("BlockUserMultiTitle", R.string.BlockUserMultiTitle));
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -137,7 +137,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         hasOwnBackground = true;
 
         ActionBarMenu menu = actionBar.createMenu();
-        searchItem = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 dialogsActivity.getActionBar().openSearchField("", false);
@@ -158,7 +158,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 contactsActivity.getActionBar().setSearchFieldText(editText.getText().toString());
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
 
         scrollSlidingTextTabStrip = new ScrollSlidingTextTabStrip(context);
         scrollSlidingTextTabStrip.setUseSameWidth(true);
@@ -621,18 +621,18 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("BlockUser", works.heymate.beta.R.string.BlockUser));
-        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", works.heymate.beta.R.string.AreYouSureBlockContact2, ContactsController.formatName(user.first_name, user.last_name))));
-        builder.setPositiveButton(LocaleController.getString("BlockContact", works.heymate.beta.R.string.BlockContact), (dialogInterface, i) -> {
+        builder.setTitle(LocaleController.getString("BlockUser", R.string.BlockUser));
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", R.string.AreYouSureBlockContact2, ContactsController.formatName(user.first_name, user.last_name))));
+        builder.setPositiveButton(LocaleController.getString("BlockContact", R.string.BlockContact), (dialogInterface, i) -> {
             if (MessagesController.isSupportUser(user)) {
-                AlertsCreator.showSimpleToast(DialogOrContactPickerActivity.this, LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred));
+                AlertsCreator.showSimpleToast(DialogOrContactPickerActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
             } else {
                 MessagesController.getInstance(currentAccount).blockPeer(user.id);
-                AlertsCreator.showSimpleToast(DialogOrContactPickerActivity.this, LocaleController.getString("UserBlocked", works.heymate.beta.R.string.UserBlocked));
+                AlertsCreator.showSimpleToast(DialogOrContactPickerActivity.this, LocaleController.getString("UserBlocked", R.string.UserBlocked));
             }
             finishFragment();
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         AlertDialog dialog = builder.create();
         showDialog(dialog);
         TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -645,8 +645,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         if (scrollSlidingTextTabStrip == null) {
             return;
         }
-        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("BlockUserChatsTitle", works.heymate.beta.R.string.BlockUserChatsTitle));
-        scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("BlockUserContactsTitle", works.heymate.beta.R.string.BlockUserContactsTitle));
+        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("BlockUserChatsTitle", R.string.BlockUserChatsTitle));
+        scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("BlockUserContactsTitle", R.string.BlockUserContactsTitle));
         scrollSlidingTextTabStrip.setVisibility(View.VISIBLE);
         actionBar.setExtraHeight(AndroidUtilities.dp(44));
         int id = scrollSlidingTextTabStrip.getCurrentTabId();

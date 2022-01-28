@@ -56,7 +56,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Adapters.FiltersView;
@@ -430,7 +430,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
                 processedPopupClick = true;
                 if (!allowCloseAnimation) {
-                    popupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupAnimation);
+                    popupWindow.setAnimationStyle(R.style.PopupAnimation);
                 }
                 popupWindow.dismiss(allowCloseAnimation);
             }
@@ -461,7 +461,7 @@ public class ActionBarMenuItem extends FrameLayout {
         View cell = new View(getContext());
         cell.setMinimumWidth(AndroidUtilities.dp(196));
         cell.setTag(id);
-        cell.setTag(works.heymate.beta.R.id.object_tag, 1);
+        cell.setTag(R.id.object_tag, 1);
         popupLayout.addView(cell);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) cell.getLayoutParams();
         if (LocaleController.isRTL) {
@@ -1374,7 +1374,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 searchField.requestFocus();
                 AndroidUtilities.showKeyboard(searchField);
             });
-            clearButton.setContentDescription(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton));
+            clearButton.setContentDescription(LocaleController.getString("ClearButton", R.string.ClearButton));
             if (wrapInScrollView) {
                 wrappedSearchFrameLayout.addView(clearButton, LayoutHelper.createFrame(48, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT));
             } else {
@@ -1593,6 +1593,23 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    /**
+     * Hides this menu item if no subitems are available
+     */
+    public void checkHideMenuItem() {
+        boolean isVisible = false;
+        for (int i = 0; i < popupLayout.getItemsCount(); i++) {
+            if (popupLayout.getItemAt(i).getVisibility() == VISIBLE) {
+                isVisible = true;
+                break;
+            }
+        }
+        int v = isVisible ? VISIBLE : GONE;
+        if (v != getVisibility()) {
+            setVisibility(v);
+        }
+    }
+
     public void hideAllSubItems() {
         if (popupLayout == null) {
             return;
@@ -1601,6 +1618,7 @@ public class ActionBarMenuItem extends FrameLayout {
             popupLayout.getItemAt(a).setVisibility(GONE);
         }
         measurePopup = true;
+        checkHideMenuItem();
     }
 
     public boolean isSubItemVisible(int id) {
@@ -1714,7 +1732,7 @@ public class ActionBarMenuItem extends FrameLayout {
             addView(avatarImageView, LayoutHelper.createFrame(32, 32));
 
             closeIconView = new ImageView(context);
-            closeIconView.setImageResource(works.heymate.beta.R.drawable.ic_close_white);
+            closeIconView.setImageResource(R.drawable.ic_close_white);
             addView(closeIconView, LayoutHelper.createFrame(24, 24, Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
 
             titleView = new TextView(context);
@@ -1760,7 +1778,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 if (data.chat instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) data.chat;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == user.id) {
-                        CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), works.heymate.beta.R.drawable.chats_saved);
+                        CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), R.drawable.chats_saved);
                         combinedDrawable.setIconSize(AndroidUtilities.dp(16), AndroidUtilities.dp(16));
                         Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor(Theme.key_avatar_backgroundSaved), false);
                         Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor(Theme.key_avatar_actionBarIconBlue), true);
@@ -1775,7 +1793,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     avatarImageView.getImageReceiver().setForUserOrChat(chat, thumbDrawable);
                 }
             } else if (data.filterType == FiltersView.FILTER_TYPE_ARCHIVE) {
-                CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), works.heymate.beta.R.drawable.chats_archive);
+                CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), R.drawable.chats_archive);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(16), AndroidUtilities.dp(16));
                 Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor(Theme.key_avatar_backgroundArchived), false);
                 Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor(Theme.key_avatar_actionBarIconBlue), true);

@@ -57,7 +57,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -204,34 +204,34 @@ public class EditWidgetActivity extends BaseFragment {
             addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
             ChatActionCell chatActionCell = new ChatActionCell(context);
-            chatActionCell.setCustomText(LocaleController.getString("WidgetPreview", works.heymate.beta.R.string.WidgetPreview));
+            chatActionCell.setCustomText(LocaleController.getString("WidgetPreview", R.string.WidgetPreview));
             linearLayout.addView(chatActionCell, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 4));
 
             LinearLayout widgetPreview = new LinearLayout(context);
             widgetPreview.setOrientation(LinearLayout.VERTICAL);
-            widgetPreview.setBackgroundResource(works.heymate.beta.R.drawable.widget_bg);
+            widgetPreview.setBackgroundResource(R.drawable.widget_bg);
             linearLayout.addView(widgetPreview, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 10, 0, 10, 0));
 
             previewImageView = new ImageView(context);
 
             if (widgetType == TYPE_CHATS) {
                 for (int a = 0; a < 2; a++) {
-                    cells[a] = (ViewGroup) getParentActivity().getLayoutInflater().inflate(works.heymate.beta.R.layout.shortcut_widget_item, null);
+                    cells[a] = (ViewGroup) getParentActivity().getLayoutInflater().inflate(R.layout.shortcut_widget_item, null);
                     widgetPreview.addView(cells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                 }
                 widgetPreview.addView(previewImageView, LayoutHelper.createLinear(218, 160, Gravity.CENTER));
-                previewImageView.setImageResource(works.heymate.beta.R.drawable.chats_widget_preview);
+                previewImageView.setImageResource(R.drawable.chats_widget_preview);
             } else if (widgetType == TYPE_CONTACTS) {
                 for (int a = 0; a < 2; a++) {
-                    cells[a] = (ViewGroup) getParentActivity().getLayoutInflater().inflate(works.heymate.beta.R.layout.contacts_widget_item, null);
+                    cells[a] = (ViewGroup) getParentActivity().getLayoutInflater().inflate(R.layout.contacts_widget_item, null);
                     widgetPreview.addView(cells[a], LayoutHelper.createLinear(160, LayoutHelper.WRAP_CONTENT));
                 }
                 widgetPreview.addView(previewImageView, LayoutHelper.createLinear(160, 160, Gravity.CENTER));
-                previewImageView.setImageResource(works.heymate.beta.R.drawable.contacts_widget_preview);
+                previewImageView.setImageResource(R.drawable.contacts_widget_preview);
             }
             updateDialogs();
 
-            shadowDrawable = Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
+            shadowDrawable = Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
         }
         
         public void updateDialogs() {
@@ -265,11 +265,11 @@ public class EditWidgetActivity extends BaseFragment {
                         user = getMessagesController().getUser(dialog.id);
                         if (user != null) {
                             if (UserObject.isUserSelf(user)) {
-                                name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
+                                name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                             } else if (UserObject.isReplyUser(user)) {
-                                name = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
+                                name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
                             } else if (UserObject.isDeleted(user)) {
-                                name = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
+                                name = LocaleController.getString("HiddenName", R.string.HiddenName);
                             } else {
                                 name = ContactsController.formatName(user.first_name, user.last_name);
                             }
@@ -286,7 +286,7 @@ public class EditWidgetActivity extends BaseFragment {
                             }
                         }
                     }
-                    ((TextView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_text)).setText(name);
+                    ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_text)).setText(name);
 
                     try {
                         Bitmap bitmap = null;
@@ -328,7 +328,7 @@ public class EditWidgetActivity extends BaseFragment {
                             canvas.restore();
                         }
                         canvas.setBitmap(null);
-                        ((ImageView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_avatar)).setImageBitmap(result);
+                        ((ImageView) cells[a].findViewById(R.id.shortcut_widget_item_avatar)).setImageBitmap(result);
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
@@ -345,7 +345,7 @@ public class EditWidgetActivity extends BaseFragment {
                         }
                         CharSequence messageString;
                         CharSequence messageNameString;
-                        int textColor = getContext().getResources().getColor(works.heymate.beta.R.color.widget_text);
+                        int textColor = getContext().getResources().getColor(R.color.widget_text);
                         if (message.messageOwner instanceof TLRPC.TL_messageService) {
                             if (ChatObject.isChannel(chat) && (message.messageOwner.action instanceof TLRPC.TL_messageActionHistoryClear ||
                                     message.messageOwner.action instanceof TLRPC.TL_messageActionChannelMigrateFrom)) {
@@ -353,12 +353,12 @@ public class EditWidgetActivity extends BaseFragment {
                             } else {
                                 messageString = message.messageText;
                             }
-                            textColor = getContext().getResources().getColor(works.heymate.beta.R.color.widget_action_text);
+                            textColor = getContext().getResources().getColor(R.color.widget_action_text);
                         } else {
                             boolean needEmoji = true;
                             if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                                 if (message.isOutOwner()) {
-                                    messageNameString = LocaleController.getString("FromYou", works.heymate.beta.R.string.FromYou);
+                                    messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
                                 } else if (fromUser != null) {
                                     messageNameString = UserObject.getFirstName(fromUser).replace("\n", "");
                                 } else {
@@ -385,7 +385,7 @@ public class EditWidgetActivity extends BaseFragment {
                                     }
                                     stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, emoji + mess.replace('\n', ' '), messageNameString));
                                 } else if (message.messageOwner.media != null && !message.isMediaEmpty()) {
-                                    textColor = getContext().getResources().getColor(works.heymate.beta.R.color.widget_action_text);
+                                    textColor = getContext().getResources().getColor(R.color.widget_action_text);
                                     String innerMessage;
                                     if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                                         TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) message.messageOwner.media;
@@ -434,9 +434,9 @@ public class EditWidgetActivity extends BaseFragment {
                                 messageString = stringBuilder;
                             } else {
                                 if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPhoto && message.messageOwner.media.photo instanceof TLRPC.TL_photoEmpty && message.messageOwner.media.ttl_seconds != 0) {
-                                    messageString = LocaleController.getString("AttachPhotoExpired", works.heymate.beta.R.string.AttachPhotoExpired);
+                                    messageString = LocaleController.getString("AttachPhotoExpired", R.string.AttachPhotoExpired);
                                 } else if (message.messageOwner.media instanceof TLRPC.TL_messageMediaDocument && message.messageOwner.media.document instanceof TLRPC.TL_documentEmpty && message.messageOwner.media.ttl_seconds != 0) {
-                                    messageString = LocaleController.getString("AttachVideoExpired", works.heymate.beta.R.string.AttachVideoExpired);
+                                    messageString = LocaleController.getString("AttachVideoExpired", R.string.AttachVideoExpired);
                                 } else if (message.caption != null) {
                                     String emoji;
                                     if (message.isVideo()) {
@@ -464,37 +464,37 @@ public class EditWidgetActivity extends BaseFragment {
                                         AndroidUtilities.highlightText(messageString, message.highlightedWords, null);
                                     }
                                     if (message.messageOwner.media != null && !message.isMediaEmpty()) {
-                                        textColor = getContext().getResources().getColor(works.heymate.beta.R.color.widget_action_text);
+                                        textColor = getContext().getResources().getColor(R.color.widget_action_text);
                                     }
                                 }
                             }
                         }
 
-                        ((TextView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_time)).setText(LocaleController.stringForMessageListDate(message.messageOwner.date));
-                        ((TextView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_message)).setText(messageString.toString());
-                        ((TextView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_message)).setTextColor(textColor);
+                        ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_time)).setText(LocaleController.stringForMessageListDate(message.messageOwner.date));
+                        ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_message)).setText(messageString.toString());
+                        ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_message)).setTextColor(textColor);
                     } else {
                         if (dialog.last_message_date != 0) {
                             ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_time)).setText(LocaleController.stringForMessageListDate(dialog.last_message_date));
                         } else {
-                            ((TextView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_time)).setText("");
+                            ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_time)).setText("");
                         }
-                        ((TextView) cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_message)).setText("");
+                        ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_message)).setText("");
                     }
                     if (dialog.unread_count > 0) {
                         ((TextView) cells[a].findViewById(R.id.shortcut_widget_item_badge)).setText(String.format("%d", dialog.unread_count));
                         cells[a].findViewById(R.id.shortcut_widget_item_badge).setVisibility(VISIBLE);
                         if (getMessagesController().isDialogMuted(dialog.id)) {
-                            cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_badge).setBackgroundResource(works.heymate.beta.R.drawable.widget_counter_muted);
+                            cells[a].findViewById(R.id.shortcut_widget_item_badge).setBackgroundResource(R.drawable.widget_counter_muted);
                         } else {
-                            cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_badge).setBackgroundResource(works.heymate.beta.R.drawable.widget_counter);
+                            cells[a].findViewById(R.id.shortcut_widget_item_badge).setBackgroundResource(R.drawable.widget_counter);
                         }
                     } else {
-                        cells[a].findViewById(works.heymate.beta.R.id.shortcut_widget_item_badge).setVisibility(GONE);
+                        cells[a].findViewById(R.id.shortcut_widget_item_badge).setVisibility(GONE);
                     }
                 }
-                cells[0].findViewById(works.heymate.beta.R.id.shortcut_widget_item_divider).setVisibility(cells[1].getVisibility());
-                cells[1].findViewById(works.heymate.beta.R.id.shortcut_widget_item_divider).setVisibility(GONE);
+                cells[0].findViewById(R.id.shortcut_widget_item_divider).setVisibility(cells[1].getVisibility());
+                cells[1].findViewById(R.id.shortcut_widget_item_divider).setVisibility(GONE);
             } else if (widgetType == TYPE_CONTACTS) {
                 for (int position = 0; position < 2; position++) {
                     for (int a = 0; a < 2; a++) {
@@ -523,13 +523,13 @@ public class EditWidgetActivity extends BaseFragment {
                             }
                         }
                         if (dialog == null) {
-                            cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item1 : works.heymate.beta.R.id.contacts_widget_item2).setVisibility(INVISIBLE);
+                            cells[position].findViewById(a == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2).setVisibility(INVISIBLE);
                             if (num == 0 || num == 2) {
                                 cells[position].setVisibility(GONE);
                             }
                             continue;
                         }
-                        cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item1 : works.heymate.beta.R.id.contacts_widget_item2).setVisibility(VISIBLE);
+                        cells[position].findViewById(a == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2).setVisibility(VISIBLE);
                         if (num == 0 || num == 2) {
                             cells[position].setVisibility(VISIBLE);
                         }
@@ -542,11 +542,11 @@ public class EditWidgetActivity extends BaseFragment {
                         if (DialogObject.isUserDialog(dialog.id)) {
                             user = getMessagesController().getUser(dialog.id);
                             if (UserObject.isUserSelf(user)) {
-                                name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
+                                name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                             } else if (UserObject.isReplyUser(user)) {
-                                name = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
+                                name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
                             } else if (UserObject.isDeleted(user)) {
-                                name = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
+                                name = LocaleController.getString("HiddenName", R.string.HiddenName);
                             } else {
                                 name = UserObject.getFirstName(user);
                             }
@@ -560,7 +560,7 @@ public class EditWidgetActivity extends BaseFragment {
                                 photoPath = chat.photo.photo_small;
                             }
                         }
-                        ((TextView) cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_text1 : works.heymate.beta.R.id.contacts_widget_item_text2)).setText(name);
+                        ((TextView) cells[position].findViewById(a == 0 ? R.id.contacts_widget_item_text1 : R.id.contacts_widget_item_text2)).setText(name);
                         try {
                             Bitmap bitmap = null;
                             if (photoPath != null) {
@@ -597,7 +597,7 @@ public class EditWidgetActivity extends BaseFragment {
                                 canvas.restore();
                             }
                             canvas.setBitmap(null);
-                            ((ImageView) cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_avatar1 : works.heymate.beta.R.id.contacts_widget_item_avatar2)).setImageBitmap(result);
+                            ((ImageView) cells[position].findViewById(a == 0 ? R.id.contacts_widget_item_avatar1 : R.id.contacts_widget_item_avatar2)).setImageBitmap(result);
                         } catch (Throwable e) {
                             FileLog.e(e);
                         }
@@ -609,10 +609,10 @@ public class EditWidgetActivity extends BaseFragment {
                             } else {
                                 count = String.format("%d", dialog.unread_count);
                             }
-                            ((TextView) cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_badge1 : works.heymate.beta.R.id.contacts_widget_item_badge2)).setText(count);
-                            cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_badge_bg1 : works.heymate.beta.R.id.contacts_widget_item_badge_bg2).setVisibility(VISIBLE);
+                            ((TextView) cells[position].findViewById(a == 0 ? R.id.contacts_widget_item_badge1 : R.id.contacts_widget_item_badge2)).setText(count);
+                            cells[position].findViewById(a == 0 ? R.id.contacts_widget_item_badge_bg1 : R.id.contacts_widget_item_badge_bg2).setVisibility(VISIBLE);
                         } else {
-                            cells[position].findViewById(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_badge_bg1 : works.heymate.beta.R.id.contacts_widget_item_badge_bg2).setVisibility(GONE);
+                            cells[position].findViewById(a == 0 ? R.id.contacts_widget_item_badge_bg1 : R.id.contacts_widget_item_badge_bg2).setVisibility(GONE);
                         }
                     }
                 }
@@ -775,19 +775,19 @@ public class EditWidgetActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(false);
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
 
         if (widgetType == TYPE_CHATS) {
-            actionBar.setTitle(LocaleController.getString("WidgetChats", works.heymate.beta.R.string.WidgetChats));
+            actionBar.setTitle(LocaleController.getString("WidgetChats", R.string.WidgetChats));
         } else {
-            actionBar.setTitle(LocaleController.getString("WidgetShortcuts", works.heymate.beta.R.string.WidgetShortcuts));
+            actionBar.setTitle(LocaleController.getString("WidgetShortcuts", R.string.WidgetShortcuts));
         }
         ActionBarMenu menu = actionBar.createMenu();
-        menu.addItem(done_item, LocaleController.getString("Done", works.heymate.beta.R.string.Done).toUpperCase());
+        menu.addItem(done_item, LocaleController.getString("Done", R.string.Done).toUpperCase());
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -863,11 +863,11 @@ public class EditWidgetActivity extends BaseFragment {
                 if (getParentActivity() == null || !(view instanceof GroupCreateUserCell)) {
                     return false;
                 }
-                ImageView imageView = (ImageView) view.getTag(works.heymate.beta.R.id.object_tag);
+                ImageView imageView = (ImageView) view.getTag(R.id.object_tag);
                 imageView.getHitRect(rect);
                 if (!rect.contains((int) x, (int) y)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    CharSequence[] items = new CharSequence[]{LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)};
+                    CharSequence[] items = new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)};
                     builder.setItems(items, (dialogInterface, i) -> {
                         if (i == 0) {
                             selectedDialogs.remove(position - chatsStartRow);
@@ -930,7 +930,7 @@ public class EditWidgetActivity extends BaseFragment {
             switch (viewType) {
                 case 0:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 1:
                     view = new TextCell(mContext);
@@ -943,9 +943,9 @@ public class EditWidgetActivity extends BaseFragment {
                 default:
                     GroupCreateUserCell cell = new GroupCreateUserCell(mContext, 0, 0, false);
                     ImageView sortImageView = new ImageView(mContext);
-                    sortImageView.setImageResource(works.heymate.beta.R.drawable.list_reorder);
+                    sortImageView.setImageResource(R.drawable.list_reorder);
                     sortImageView.setScaleType(ImageView.ScaleType.CENTER);
-                    cell.setTag(works.heymate.beta.R.id.object_tag, sortImageView);
+                    cell.setTag(R.id.object_tag, sortImageView);
                     cell.addView(sortImageView, LayoutHelper.createFrame(40, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), 10, 0, 10, 0));
                     sortImageView.setOnTouchListener((v, event) -> {
                         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -968,12 +968,12 @@ public class EditWidgetActivity extends BaseFragment {
                     if (position == infoRow) {
                         SpannableStringBuilder builder = new SpannableStringBuilder();
                         if (widgetType == TYPE_CHATS) {
-                            builder.append(LocaleController.getString("EditWidgetChatsInfo", works.heymate.beta.R.string.EditWidgetChatsInfo));
+                            builder.append(LocaleController.getString("EditWidgetChatsInfo", R.string.EditWidgetChatsInfo));
                         } else if (widgetType == TYPE_CONTACTS) {
-                            builder.append(LocaleController.getString("EditWidgetContactsInfo", works.heymate.beta.R.string.EditWidgetContactsInfo));
+                            builder.append(LocaleController.getString("EditWidgetContactsInfo", R.string.EditWidgetContactsInfo));
                         }
                         if (SharedConfig.passcodeHash.length() > 0) {
-                            builder.append("\n\n").append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscode2", works.heymate.beta.R.string.WidgetPasscode2)));
+                            builder.append("\n\n").append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscode2", R.string.WidgetPasscode2)));
                         }
                         cell.setText(builder);
                     }
@@ -982,12 +982,12 @@ public class EditWidgetActivity extends BaseFragment {
                 case 1: {
                     TextCell cell = (TextCell) holder.itemView;
                     cell.setColors(null, Theme.key_windowBackgroundWhiteBlueText4);
-                    Drawable drawable1 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_circle);
-                    Drawable drawable2 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_plus);
+                    Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.poll_add_circle);
+                    Drawable drawable2 = mContext.getResources().getDrawable(R.drawable.poll_add_plus);
                     drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
                     drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.MULTIPLY));
                     CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
-                    cell.setTextAndIcon(LocaleController.getString("SelectChats", works.heymate.beta.R.string.SelectChats), combinedDrawable, chatsStartRow != -1);
+                    cell.setTextAndIcon(LocaleController.getString("SelectChats", R.string.SelectChats), combinedDrawable, chatsStartRow != -1);
                     cell.getImageView().setPadding(0, AndroidUtilities.dp(7), 0, 0);
                     break;
                 }

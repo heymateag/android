@@ -30,7 +30,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -59,9 +59,9 @@ public class ChangeBioActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio));
+        actionBar.setTitle(LocaleController.getString("UserBio", R.string.UserBio));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -74,8 +74,8 @@ public class ChangeBioActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56));
-        doneButton.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        doneButton.setContentDescription(LocaleController.getString("Done", R.string.Done));
 
         fragmentView = new LinearLayout(context);
         LinearLayout linearLayout = (LinearLayout) fragmentView;
@@ -117,7 +117,7 @@ public class ChangeBioActivity extends BaseFragment {
         };
         firstNameField.setFilters(inputFilters);
         firstNameField.setMinHeight(AndroidUtilities.dp(36));
-        firstNameField.setHint(LocaleController.getString("UserBio", works.heymate.beta.R.string.UserBio));
+        firstNameField.setHint(LocaleController.getString("UserBio", R.string.UserBio));
         firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         firstNameField.setCursorSize(AndroidUtilities.dp(20));
         firstNameField.setCursorWidth(1.5f);
@@ -160,7 +160,7 @@ public class ChangeBioActivity extends BaseFragment {
         helpTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
         helpTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", works.heymate.beta.R.string.UserBioInfo)));
+        helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", R.string.UserBioInfo)));
         linearLayout.addView(helpTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 24, 10, 24, 0));
 
         TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(UserConfig.getInstance(currentAccount).getClientUserId());

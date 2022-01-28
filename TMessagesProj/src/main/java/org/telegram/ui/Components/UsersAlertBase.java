@@ -35,7 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -89,7 +89,7 @@ public class UsersAlertBase extends BottomSheet {
 
         currentAccount = account;
 
-        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
 
         containerView = createContainerView(context);
         containerView.setWillNotDraw(false);
@@ -109,8 +109,8 @@ public class UsersAlertBase extends BottomSheet {
 
         emptyView = new StickerEmptyView(context, flickerLoadingView, StickerEmptyView.STICKER_TYPE_SEARCH);
         emptyView.addView(flickerLoadingView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 0, 2, 0, 0));
-        emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
-        emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", works.heymate.beta.R.string.SearchEmptyViewFilteredSubtitle2));
+        emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
         emptyView.setVisibility(View.GONE);
         emptyView.setAnimateLayoutChange(true);
         emptyView.showProgress(true, false);
@@ -221,7 +221,7 @@ public class UsersAlertBase extends BottomSheet {
 
             searchIconImageView = new ImageView(context);
             searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
-            searchIconImageView.setImageResource(works.heymate.beta.R.drawable.smiles_inputsearch);
+            searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
             searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(keySearchPlaceholder), PorterDuff.Mode.MULTIPLY));
             addView(searchIconImageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 16, 11, 0, 0));
 
@@ -261,7 +261,7 @@ public class UsersAlertBase extends BottomSheet {
             searchEditText.setLines(1);
             searchEditText.setSingleLine(true);
             searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-            searchEditText.setHint(LocaleController.getString("VoipGroupSearchMembers", works.heymate.beta.R.string.VoipGroupSearchMembers));
+            searchEditText.setHint(LocaleController.getString("VoipGroupSearchMembers", R.string.VoipGroupSearchMembers));
             searchEditText.setCursorColor(Theme.getColor(keySearchText));
             searchEditText.setCursorSize(AndroidUtilities.dp(20));
             searchEditText.setCursorWidth(1.5f);

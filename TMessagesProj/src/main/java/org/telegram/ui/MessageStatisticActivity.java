@@ -43,7 +43,7 @@ import org.telegram.messenger.LruCache;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -236,14 +236,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
 
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         emptyView = new EmptyTextProgressView(context);
-        emptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+        emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
         emptyView.setVisibility(View.GONE);
 
         progressLayout = new LinearLayout(context);
@@ -251,7 +251,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
         imageView = new RLottieImageView(context);
         imageView.setAutoRepeat(true);
-        imageView.setAnimation(works.heymate.beta.R.raw.statistic_preload, 120, 120);
+        imageView.setAnimation(R.raw.statistic_preload, 120, 120);
         imageView.playAnimation();
 
         TextView loadingTitle = new TextView(context);
@@ -259,14 +259,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         loadingTitle.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         loadingTitle.setTextColor(Theme.getColor(Theme.key_player_actionBarTitle));
         loadingTitle.setTag(Theme.key_player_actionBarTitle);
-        loadingTitle.setText(LocaleController.getString("LoadingStats", works.heymate.beta.R.string.LoadingStats));
+        loadingTitle.setText(LocaleController.getString("LoadingStats", R.string.LoadingStats));
         loadingTitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
         TextView loadingSubtitle = new TextView(context);
         loadingSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         loadingSubtitle.setTextColor(Theme.getColor(Theme.key_player_actionBarSubtitle));
         loadingSubtitle.setTag(Theme.key_player_actionBarSubtitle);
-        loadingSubtitle.setText(LocaleController.getString("LoadingStatsDescription", works.heymate.beta.R.string.LoadingStatsDescription));
+        loadingSubtitle.setText(LocaleController.getString("LoadingStatsDescription", R.string.LoadingStatsDescription));
         loadingSubtitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
         progressLayout.addView(imageView, LayoutHelper.createLinear(120, 120, Gravity.CENTER_HORIZONTAL, 0, 0, 0, 20));
@@ -467,8 +467,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         if (chat != null && chat.can_view_stats) {
             ActionBarMenu menu = actionBar.createMenu();
             menu.clearItems();
-            ActionBarMenuItem headerItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
-            headerItem.addSubItem(1, works.heymate.beta.R.drawable.msg_stats, LocaleController.getString("ViewChannelStats", works.heymate.beta.R.string.ViewChannelStats));
+            ActionBarMenuItem headerItem = menu.addItem(0, R.drawable.ic_ab_other);
+            headerItem.addSubItem(1, R.drawable.msg_stats, LocaleController.getString("ViewChannelStats", R.string.ViewChannelStats));
         }
     }
 
@@ -539,7 +539,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 return;
             }
             TLRPC.TL_stats_messageStats res = (TLRPC.TL_stats_messageStats) response;
-            interactionsViewData = StatisticActivity.createViewData(res.views_graph, LocaleController.getString("InteractionsChartTitle", works.heymate.beta.R.string.InteractionsChartTitle), 1, false);
+            interactionsViewData = StatisticActivity.createViewData(res.views_graph, LocaleController.getString("InteractionsChartTitle", R.string.InteractionsChartTitle), 1, false);
             if (interactionsViewData != null && interactionsViewData.chartData.x.length <= 5) {
                 statsLoaded = false;
                 TLRPC.TL_stats_loadAsyncGraph request = new TLRPC.TL_stats_loadAsyncGraph();
@@ -777,12 +777,12 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                     }
                     break;
                 case 1:
-                    holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == overviewHeaderRow) {
-                        headerCell.setText(LocaleController.formatString("StatisticOverview", works.heymate.beta.R.string.StatisticOverview));
+                        headerCell.setText(LocaleController.formatString("StatisticOverview", R.string.StatisticOverview));
                     } else {
                         headerCell.setText(LocaleController.formatPluralString("PublicSharesCount", publicChats));
                     }
@@ -866,12 +866,12 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
         public void setData() {
             primary[0].setText(AndroidUtilities.formatWholeNumber(messageObject.messageOwner.views, 0));
-            title[0].setText(LocaleController.getString("StatisticViews", works.heymate.beta.R.string.StatisticViews));
+            title[0].setText(LocaleController.getString("StatisticViews", R.string.StatisticViews));
 
             if (publicChats > 0) {
                 cell[1].setVisibility(View.VISIBLE);
                 primary[1].setText(AndroidUtilities.formatWholeNumber(publicChats, 0));
-                title[1].setText(LocaleController.formatString("PublicShares", works.heymate.beta.R.string.PublicShares));
+                title[1].setText(LocaleController.formatString("PublicShares", R.string.PublicShares));
             } else {
                 cell[1].setVisibility(View.GONE);
             }
@@ -880,7 +880,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             if (privateChats > 0) {
                 cell[2].setVisibility(View.VISIBLE);
                 primary[2].setText(AndroidUtilities.formatWholeNumber(privateChats, 0));
-                title[2].setText(LocaleController.formatString("PrivateShares", works.heymate.beta.R.string.PrivateShares));
+                title[2].setText(LocaleController.formatString("PrivateShares", R.string.PrivateShares));
             } else {
                 cell[2].setVisibility(View.GONE);
             }
@@ -970,7 +970,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             ((StatisticActivity.BaseChartCell) child).recolor();
             child.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         } else if (child instanceof ShadowSectionCell) {
-            Drawable shadowDrawable = Theme.getThemedDrawable(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+            Drawable shadowDrawable = Theme.getThemedDrawable(ApplicationLoader.applicationContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
             Drawable background = new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray));
             CombinedDrawable combinedDrawable = new CombinedDrawable(background, shadowDrawable, 0, 0);
             combinedDrawable.setFullsize(true);

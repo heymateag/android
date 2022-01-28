@@ -38,7 +38,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -174,7 +174,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
 
             ImageView searchIconImageView = new ImageView(context);
             searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
-            searchIconImageView.setImageResource(works.heymate.beta.R.drawable.smiles_inputsearch);
+            searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
             searchIconImageView.setColorFilter(new PorterDuffColorFilter(0xff777777, PorterDuff.Mode.MULTIPLY));
             addView(searchIconImageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 16, 14, 0, 0));
 
@@ -212,11 +212,11 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             searchEditText.setSingleLine(true);
             searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
             if (type == 0) {
-                searchEditText.setHint(LocaleController.getString("SearchStickersHint", works.heymate.beta.R.string.SearchStickersHint));
+                searchEditText.setHint(LocaleController.getString("SearchStickersHint", R.string.SearchStickersHint));
             } else if (type == 1) {
-                searchEditText.setHint(LocaleController.getString("SearchEmojiHint", works.heymate.beta.R.string.SearchEmojiHint));
+                searchEditText.setHint(LocaleController.getString("SearchEmojiHint", R.string.SearchEmojiHint));
             } else if (type == 2) {
-                searchEditText.setHint(LocaleController.getString("SearchGifsTitle", works.heymate.beta.R.string.SearchGifsTitle));
+                searchEditText.setHint(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
             }
             searchEditText.setCursorColor(0xffffffff);
             searchEditText.setCursorSize(AndroidUtilities.dp(20));
@@ -296,7 +296,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         MediaDataController.getInstance(currentAccount).loadRecents(MediaDataController.TYPE_MASK, false, true, false);
         MediaDataController.getInstance(currentAccount).loadRecents(MediaDataController.TYPE_FAVE, false, true, false);
 
-        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff252525, PorterDuff.Mode.MULTIPLY));
 
         containerView = new SizeNotifierFrameLayout(context) {
@@ -444,8 +444,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         searchFieldHeight = AndroidUtilities.dp(64);
 
         stickerIcons = new Drawable[]{
-                Theme.createEmojiIconSelectorDrawable(context, works.heymate.beta.R.drawable.stickers_recent, 0xff4b4b4b, 0xff6ebaed),
-                Theme.createEmojiIconSelectorDrawable(context, works.heymate.beta.R.drawable.stickers_favorites, 0xff4b4b4b, 0xff6ebaed),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_recent, 0xff4b4b4b, 0xff6ebaed),
+                Theme.createEmojiIconSelectorDrawable(context, R.drawable.stickers_favorites, 0xff4b4b4b, 0xff6ebaed),
         };
 
         MediaDataController.getInstance(currentAccount).checkStickers(MediaDataController.TYPE_IMAGE);
@@ -589,7 +589,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         });
 
         View topShadow = new View(context);
-        topShadow.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, 0xffe2e5e7));
+        topShadow.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, 0xffe2e5e7));
         containerView.addView(topShadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 6));
 
         if (!isVideo) {
@@ -629,7 +629,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 }
             };
             stickersButton.setScaleType(ImageView.ScaleType.CENTER);
-            stickersButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, works.heymate.beta.R.drawable.smiles_tab_stickers, 0xffffffff, 0xff6ebaed));
+            stickersButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, R.drawable.smiles_tab_stickers, 0xffffffff, 0xff6ebaed));
             if (Build.VERSION.SDK_INT >= 21) {
                 RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(0x1effffff);
                 Theme.setRippleDrawableForceSoftware(rippleDrawable);
@@ -656,7 +656,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 }
             };
             masksButton.setScaleType(ImageView.ScaleType.CENTER);
-            masksButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, works.heymate.beta.R.drawable.ic_masks_msk1, 0xffffffff, 0xff6ebaed));
+            masksButton.setImageDrawable(Theme.createEmojiIconSelectorDrawable(context, R.drawable.ic_masks_msk1, 0xffffffff, 0xff6ebaed));
             if (Build.VERSION.SDK_INT >= 21) {
                 RippleDrawable rippleDrawable = (RippleDrawable) Theme.createSelectorDrawable(0x1effffff);
                 Theme.setRippleDrawableForceSoftware(rippleDrawable);
@@ -804,13 +804,13 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         if (currentType == MediaDataController.TYPE_IMAGE && !favouriteStickers.isEmpty()) {
             favTabBum = stickersTabOffset;
             stickersTabOffset++;
-            stickersTab.addIconTab(1, stickerIcons[1]).setContentDescription(LocaleController.getString("FavoriteStickers", works.heymate.beta.R.string.FavoriteStickers));
+            stickersTab.addIconTab(1, stickerIcons[1]).setContentDescription(LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers));
         }
 
         if (!recentStickers[currentType].isEmpty()) {
             recentTabBum = stickersTabOffset;
             stickersTabOffset++;
-            stickersTab.addIconTab(0, stickerIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", works.heymate.beta.R.string.RecentStickers));
+            stickersTab.addIconTab(0, stickerIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", R.string.RecentStickers));
         }
 
         stickerSets[currentType].clear();
@@ -1125,9 +1125,9 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                             cell.setText(set.set.title, 0);
                         }
                     } else if (object == recentStickers[currentType]) {
-                        cell.setText(LocaleController.getString("RecentStickers", works.heymate.beta.R.string.RecentStickers), 0);
+                        cell.setText(LocaleController.getString("RecentStickers", R.string.RecentStickers), 0);
                     } else if (object == favouriteStickers) {
-                        cell.setText(LocaleController.getString("FavoriteStickers", works.heymate.beta.R.string.FavoriteStickers), 0);
+                        cell.setText(LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers), 0);
                     }
                     break;
                 }
@@ -1481,12 +1481,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
 
                     ImageView imageView = new ImageView(context);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
-                    imageView.setImageResource(works.heymate.beta.R.drawable.stickers_empty);
+                    imageView.setImageResource(R.drawable.stickers_empty);
                     imageView.setColorFilter(new PorterDuffColorFilter(0xff949ba1, PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 50));
 
                     TextView textView = new TextView(context);
-                    textView.setText(LocaleController.getString("NoStickersFound", works.heymate.beta.R.string.NoStickersFound));
+                    textView.setText(LocaleController.getString("NoStickersFound", R.string.NoStickersFound));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     textView.setTextColor(0xff949ba1);
                     frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));

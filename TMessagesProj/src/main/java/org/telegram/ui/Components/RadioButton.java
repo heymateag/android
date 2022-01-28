@@ -17,8 +17,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import androidx.annotation.Keep;
-
-import android.util.AttributeSet;
 import android.view.View;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -43,15 +41,7 @@ public class RadioButton extends View {
     private int size = AndroidUtilities.dp(16);
 
     public RadioButton(Context context) {
-        this(context, null, 0);
-    }
-
-    public RadioButton(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public RadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context);
         if (paint == null) {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setStrokeWidth(AndroidUtilities.dp(2));

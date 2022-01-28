@@ -27,7 +27,7 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.voip.Instance;
 import org.telegram.tgnet.TLRPC;
@@ -149,8 +149,8 @@ public class DataSettingsActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("DataSettings", works.heymate.beta.R.string.DataSettings));
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setTitle(LocaleController.getString("DataSettings", R.string.DataSettings));
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
@@ -243,9 +243,9 @@ public class DataSettingsActivity extends BaseFragment {
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", works.heymate.beta.R.string.ResetAutomaticMediaDownloadAlertTitle));
-                builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", works.heymate.beta.R.string.ResetAutomaticMediaDownloadAlert));
-                builder.setPositiveButton(LocaleController.getString("Reset", works.heymate.beta.R.string.Reset), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", R.string.ResetAutomaticMediaDownloadAlertTitle));
+                builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", R.string.ResetAutomaticMediaDownloadAlert));
+                builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), (dialogInterface, i) -> {
                     DownloadController.Preset preset;
                     DownloadController.Preset defaultPreset;
                     String key;
@@ -279,7 +279,7 @@ public class DataSettingsActivity extends BaseFragment {
                     }
                     listAdapter.notifyItemRangeChanged(mobileRow, 4);
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 AlertDialog dialog = builder.create();
                 showDialog(dialog);
                 TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -306,11 +306,11 @@ public class DataSettingsActivity extends BaseFragment {
                         break;
                 }
                 Dialog dlg = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{
-                                LocaleController.getString("UseLessDataNever", works.heymate.beta.R.string.UseLessDataNever),
-                                LocaleController.getString("UseLessDataOnRoaming", works.heymate.beta.R.string.UseLessDataOnRoaming),
-                                LocaleController.getString("UseLessDataOnMobile", works.heymate.beta.R.string.UseLessDataOnMobile),
-                                LocaleController.getString("UseLessDataAlways", works.heymate.beta.R.string.UseLessDataAlways)},
-                        LocaleController.getString("VoipUseLessData", works.heymate.beta.R.string.VoipUseLessData), selected, (dialog, which) -> {
+                                LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever),
+                                LocaleController.getString("UseLessDataOnRoaming", R.string.UseLessDataOnRoaming),
+                                LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile),
+                                LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways)},
+                        LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), selected, (dialog, which) -> {
                             int val = -1;
                             switch (which) {
                                 case 0:
@@ -339,7 +339,7 @@ public class DataSettingsActivity extends BaseFragment {
                 presentFragment(new DataUsageActivity());
             } else if (position == storageNumRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("StoragePath", works.heymate.beta.R.string.StoragePath));
+                builder.setTitle(LocaleController.getString("StoragePath", R.string.StoragePath));
                 final LinearLayout linearLayout = new LinearLayout(getParentActivity());
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 builder.setView(linearLayout);
@@ -371,7 +371,7 @@ public class DataSettingsActivity extends BaseFragment {
                         listAdapter.notifyItemChanged(storageNumRow);
                     });
                 }
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position == proxyRow) {
                 presentFragment(new ProxyListActivity());
@@ -405,13 +405,13 @@ public class DataSettingsActivity extends BaseFragment {
                 }
             } else if (position == clearDraftsRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AreYouSureClearDraftsTitle", works.heymate.beta.R.string.AreYouSureClearDraftsTitle));
-                builder.setMessage(LocaleController.getString("AreYouSureClearDrafts", works.heymate.beta.R.string.AreYouSureClearDrafts));
-                builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("AreYouSureClearDraftsTitle", R.string.AreYouSureClearDraftsTitle));
+                builder.setMessage(LocaleController.getString("AreYouSureClearDrafts", R.string.AreYouSureClearDrafts));
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
                     TLRPC.TL_messages_clearAllDrafts req = new TLRPC.TL_messages_clearAllDrafts();
                     getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> getMediaDataController().clearAllDrafts(true)));
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 AlertDialog alertDialog = builder.create();
                 showDialog(alertDialog);
                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -455,9 +455,9 @@ public class DataSettingsActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 0: {
                     if (position == clearDraftsSectionRow) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -466,27 +466,27 @@ public class DataSettingsActivity extends BaseFragment {
                     textCell.setCanDisable(false);
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == storageUsageRow) {
-                        textCell.setText(LocaleController.getString("StorageUsage", works.heymate.beta.R.string.StorageUsage), true);
+                        textCell.setText(LocaleController.getString("StorageUsage", R.string.StorageUsage), true);
                     } else if (position == useLessDataForCallsRow) {
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                         String value = null;
                         switch (preferences.getInt("VoipDataSaving", VoIPHelper.getDataSavingDefault())) {
                             case Instance.DATA_SAVING_NEVER:
-                                value = LocaleController.getString("UseLessDataNever", works.heymate.beta.R.string.UseLessDataNever);
+                                value = LocaleController.getString("UseLessDataNever", R.string.UseLessDataNever);
                                 break;
                             case Instance.DATA_SAVING_MOBILE:
-                                value = LocaleController.getString("UseLessDataOnMobile", works.heymate.beta.R.string.UseLessDataOnMobile);
+                                value = LocaleController.getString("UseLessDataOnMobile", R.string.UseLessDataOnMobile);
                                 break;
                             case Instance.DATA_SAVING_ROAMING:
-                                value = LocaleController.getString("UseLessDataOnRoaming", works.heymate.beta.R.string.UseLessDataOnRoaming);
+                                value = LocaleController.getString("UseLessDataOnRoaming", R.string.UseLessDataOnRoaming);
                                 break;
                             case Instance.DATA_SAVING_ALWAYS:
-                                value = LocaleController.getString("UseLessDataAlways", works.heymate.beta.R.string.UseLessDataAlways);
+                                value = LocaleController.getString("UseLessDataAlways", R.string.UseLessDataAlways);
                                 break;
                         }
-                        textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", works.heymate.beta.R.string.VoipUseLessData), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), value, true);
                     } else if (position == dataUsageRow) {
-                        textCell.setText(LocaleController.getString("NetworkUsage", works.heymate.beta.R.string.NetworkUsage), storageNumRow != -1);
+                        textCell.setText(LocaleController.getString("NetworkUsage", R.string.NetworkUsage), storageNumRow != -1);
                     } else if (position == storageNumRow) {
                         String dir = storageDirs.get(0).getAbsolutePath();
                         if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
@@ -498,58 +498,58 @@ public class DataSettingsActivity extends BaseFragment {
                                 }
                             }
                         }
-                        textCell.setTextAndValue(LocaleController.getString("StoragePath", works.heymate.beta.R.string.StoragePath), dir, false);
+                        textCell.setTextAndValue(LocaleController.getString("StoragePath", R.string.StoragePath), dir, false);
                     } else if (position == proxyRow) {
-                        textCell.setText(LocaleController.getString("ProxySettings", works.heymate.beta.R.string.ProxySettings), false);
+                        textCell.setText(LocaleController.getString("ProxySettings", R.string.ProxySettings), false);
                     } else if (position == resetDownloadRow) {
                         textCell.setCanDisable(true);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
-                        textCell.setText(LocaleController.getString("ResetAutomaticMediaDownload", works.heymate.beta.R.string.ResetAutomaticMediaDownload), false);
+                        textCell.setText(LocaleController.getString("ResetAutomaticMediaDownload", R.string.ResetAutomaticMediaDownload), false);
                     } else if (position == quickRepliesRow){
-                        textCell.setText(LocaleController.getString("VoipQuickReplies", works.heymate.beta.R.string.VoipQuickReplies), false);
+                        textCell.setText(LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), false);
                     } else if (position == clearDraftsRow) {
-                        textCell.setText(LocaleController.getString("PrivacyDeleteCloudDrafts", works.heymate.beta.R.string.PrivacyDeleteCloudDrafts), false);
+                        textCell.setText(LocaleController.getString("PrivacyDeleteCloudDrafts", R.string.PrivacyDeleteCloudDrafts), false);
                     }
                     break;
                 }
                 case 2: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == mediaDownloadSectionRow) {
-                        headerCell.setText(LocaleController.getString("AutomaticMediaDownload", works.heymate.beta.R.string.AutomaticMediaDownload));
+                        headerCell.setText(LocaleController.getString("AutomaticMediaDownload", R.string.AutomaticMediaDownload));
                     } else if (position == usageSectionRow) {
-                        headerCell.setText(LocaleController.getString("DataUsage", works.heymate.beta.R.string.DataUsage));
+                        headerCell.setText(LocaleController.getString("DataUsage", R.string.DataUsage));
                     } else if (position == callsSectionRow) {
-                        headerCell.setText(LocaleController.getString("Calls", works.heymate.beta.R.string.Calls));
+                        headerCell.setText(LocaleController.getString("Calls", R.string.Calls));
                     } else if (position == proxySectionRow) {
-                        headerCell.setText(LocaleController.getString("Proxy", works.heymate.beta.R.string.Proxy));
+                        headerCell.setText(LocaleController.getString("Proxy", R.string.Proxy));
                     } else if (position == streamSectionRow) {
-                        headerCell.setText(LocaleController.getString("Streaming", works.heymate.beta.R.string.Streaming));
+                        headerCell.setText(LocaleController.getString("Streaming", R.string.Streaming));
                     } else if (position == autoplayHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AutoplayMedia", works.heymate.beta.R.string.AutoplayMedia));
+                        headerCell.setText(LocaleController.getString("AutoplayMedia", R.string.AutoplayMedia));
                     }
                     break;
                 }
                 case 3: {
                     TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                     if (position == enableStreamRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EnableStreaming", works.heymate.beta.R.string.EnableStreaming), SharedConfig.streamMedia, enableAllStreamRow != -1);
+                        checkCell.setTextAndCheck(LocaleController.getString("EnableStreaming", R.string.EnableStreaming), SharedConfig.streamMedia, enableAllStreamRow != -1);
                     } else if (position == enableCacheStreamRow) {
-                        //checkCell.setTextAndCheck(LocaleController.getString("CacheStreamFile", works.heymate.beta.R.string.CacheStreamFile), SharedConfig.saveStreamMedia, true);
+                        //checkCell.setTextAndCheck(LocaleController.getString("CacheStreamFile", R.string.CacheStreamFile), SharedConfig.saveStreamMedia, true);
                     } else if (position == enableMkvRow) {
                         checkCell.setTextAndCheck("(beta only) Show MKV as Video", SharedConfig.streamMkv, true);
                     } else if (position == enableAllStreamRow) {
                         checkCell.setTextAndCheck("(beta only) Stream All Videos", SharedConfig.streamAllVideo, false);
                     } else if (position == autoplayGifsRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("AutoplayGIF", works.heymate.beta.R.string.AutoplayGIF), SharedConfig.autoplayGifs, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("AutoplayGIF", R.string.AutoplayGIF), SharedConfig.autoplayGifs, true);
                     } else if (position == autoplayVideoRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("AutoplayVideo", works.heymate.beta.R.string.AutoplayVideo), SharedConfig.autoplayVideo, false);
+                        checkCell.setTextAndCheck(LocaleController.getString("AutoplayVideo", R.string.AutoplayVideo), SharedConfig.autoplayVideo, false);
                     }
                     break;
                 }
                 case 4: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == enableAllStreamInfoRow) {
-                        cell.setText(LocaleController.getString("EnableAllStreamingInfo", works.heymate.beta.R.string.EnableAllStreamingInfo));
+                        cell.setText(LocaleController.getString("EnableAllStreamingInfo", R.string.EnableAllStreamingInfo));
                     }
                     break;
                 }
@@ -561,15 +561,15 @@ public class DataSettingsActivity extends BaseFragment {
                     DownloadController.Preset preset;
                     boolean enabled;
                     if (position == mobileRow) {
-                        text = LocaleController.getString("WhenUsingMobileData", works.heymate.beta.R.string.WhenUsingMobileData);
+                        text = LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData);
                         enabled = DownloadController.getInstance(currentAccount).mobilePreset.enabled;
                         preset = DownloadController.getInstance(currentAccount).getCurrentMobilePreset();
                     } else if (position == wifiRow) {
-                        text = LocaleController.getString("WhenConnectedOnWiFi", works.heymate.beta.R.string.WhenConnectedOnWiFi);
+                        text = LocaleController.getString("WhenConnectedOnWiFi", R.string.WhenConnectedOnWiFi);
                         enabled = DownloadController.getInstance(currentAccount).wifiPreset.enabled;
                         preset = DownloadController.getInstance(currentAccount).getCurrentWiFiPreset();
                     } else {
-                        text = LocaleController.getString("WhenRoaming", works.heymate.beta.R.string.WhenRoaming);
+                        text = LocaleController.getString("WhenRoaming", R.string.WhenRoaming);
                         enabled = DownloadController.getInstance(currentAccount).roamingPreset.enabled;
                         preset = DownloadController.getInstance(currentAccount).getCurrentRoamingPreset();
                     }
@@ -594,24 +594,24 @@ public class DataSettingsActivity extends BaseFragment {
                     }
                     if (preset.enabled && count != 0) {
                         if (photos) {
-                            builder.append(LocaleController.getString("AutoDownloadPhotosOn", works.heymate.beta.R.string.AutoDownloadPhotosOn));
+                            builder.append(LocaleController.getString("AutoDownloadPhotosOn", R.string.AutoDownloadPhotosOn));
                         }
                         if (videos) {
                             if (builder.length() > 0) {
                                 builder.append(", ");
                             }
-                            builder.append(LocaleController.getString("AutoDownloadVideosOn", works.heymate.beta.R.string.AutoDownloadVideosOn));
+                            builder.append(LocaleController.getString("AutoDownloadVideosOn", R.string.AutoDownloadVideosOn));
                             builder.append(String.format(" (%1$s)", AndroidUtilities.formatFileSize(preset.sizes[DownloadController.typeToIndex(DownloadController.AUTODOWNLOAD_TYPE_VIDEO)], true)));
                         }
                         if (files) {
                             if (builder.length() > 0) {
                                 builder.append(", ");
                             }
-                            builder.append(LocaleController.getString("AutoDownloadFilesOn", works.heymate.beta.R.string.AutoDownloadFilesOn));
+                            builder.append(LocaleController.getString("AutoDownloadFilesOn", R.string.AutoDownloadFilesOn));
                             builder.append(String.format(" (%1$s)", AndroidUtilities.formatFileSize(preset.sizes[DownloadController.typeToIndex(DownloadController.AUTODOWNLOAD_TYPE_DOCUMENT)], true)));
                         }
                     } else {
-                        builder.append(LocaleController.getString("NoMediaAutoDownload", works.heymate.beta.R.string.NoMediaAutoDownload));
+                        builder.append(LocaleController.getString("NoMediaAutoDownload", R.string.NoMediaAutoDownload));
                     }
                     checkCell.setTextAndValueAndCheck(text, builder, (photos || videos || files) && enabled, 0, true, true);
                     break;
@@ -679,7 +679,7 @@ public class DataSettingsActivity extends BaseFragment {
                     break;
                 case 4:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 5:
                 default:

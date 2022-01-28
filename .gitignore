@@ -4,6 +4,11 @@ build/
 obj/
 *.iml
 local.properties
+*.keystore
+gradle.properties
+
+TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java
+
 *.cxx/
 amplify
 amplify/\#current-cloud-backend

@@ -21,7 +21,7 @@ import android.view.ViewPropertyAnimator;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -147,24 +147,24 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 if (!TextUtils.isEmpty(addressName)) {
                     address = addressName;
                 } else if (customLocation == null && gpsLocation == null || fetchingLocation) {
-                    address = LocaleController.getString("Loading", works.heymate.beta.R.string.Loading);
+                    address = LocaleController.getString("Loading", R.string.Loading);
                 } else if (customLocation != null) {
                     address = String.format(Locale.US, "(%f,%f)", customLocation.getLatitude(), customLocation.getLongitude());
                 } else if (gpsLocation != null) {
                     address = String.format(Locale.US, "(%f,%f)", gpsLocation.getLatitude(), gpsLocation.getLongitude());
                 } else {
-                    address = LocaleController.getString("Loading", works.heymate.beta.R.string.Loading);
+                    address = LocaleController.getString("Loading", R.string.Loading);
                 }
                 if (locationType == LocationActivity.LOCATION_TYPE_GROUP) {
-                    sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", works.heymate.beta.R.string.ChatSetThisLocation), address);
+                    sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", R.string.ChatSetThisLocation), address);
                 } else {
-                    sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", works.heymate.beta.R.string.SendSelectedLocation), address);
+                    sendLocationCell.setText(LocaleController.getString("SendSelectedLocation", R.string.SendSelectedLocation), address);
                 }
             } else {
                 if (gpsLocation != null) {
-                    sendLocationCell.setText(LocaleController.getString("SendLocation", works.heymate.beta.R.string.SendLocation), LocaleController.formatString("AccurateTo", works.heymate.beta.R.string.AccurateTo, LocaleController.formatPluralString("Meters", (int) gpsLocation.getAccuracy())));
+                    sendLocationCell.setText(LocaleController.getString("SendLocation", R.string.SendLocation), LocaleController.formatString("AccurateTo", R.string.AccurateTo, LocaleController.formatPluralString("Meters", (int) gpsLocation.getAccuracy())));
                 } else {
-                    sendLocationCell.setText(LocaleController.getString("SendLocation", works.heymate.beta.R.string.SendLocation), LocaleController.getString("Loading", works.heymate.beta.R.string.Loading));
+                    sendLocationCell.setText(LocaleController.getString("SendLocation", R.string.SendLocation), LocaleController.getString("Loading", R.string.Loading));
                 }
             }
         }
@@ -322,9 +322,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
             case 2: {
                 HeaderCell cell = (HeaderCell) holder.itemView;
                 if (currentMessageObject != null) {
-                    cell.setText(LocaleController.getString("LiveLocations", works.heymate.beta.R.string.LiveLocations));
+                    cell.setText(LocaleController.getString("LiveLocations", R.string.LiveLocations));
                 } else {
-                    cell.setText(LocaleController.getString("NearbyVenue", works.heymate.beta.R.string.NearbyVenue));
+                    cell.setText(LocaleController.getString("NearbyVenue", R.string.NearbyVenue));
                 }
                 break;
             }

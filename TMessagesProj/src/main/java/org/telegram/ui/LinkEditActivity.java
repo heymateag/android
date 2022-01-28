@@ -24,7 +24,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -93,12 +93,12 @@ public class LinkEditActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (type == CREATE_TYPE) {
-            actionBar.setTitle(LocaleController.getString("NewLink", works.heymate.beta.R.string.NewLink));
+            actionBar.setTitle(LocaleController.getString("NewLink", R.string.NewLink));
         } else if (type == EDIT_TYPE) {
-            actionBar.setTitle(LocaleController.getString("EditLink", works.heymate.beta.R.string.EditLink));
+            actionBar.setTitle(LocaleController.getString("EditLink", R.string.EditLink));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -277,9 +277,9 @@ public class LinkEditActivity extends BaseFragment {
         buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
 
         if (type == CREATE_TYPE) {
-            buttonTextView.setText(LocaleController.getString("CreateLink", works.heymate.beta.R.string.CreateLink));
+            buttonTextView.setText(LocaleController.getString("CreateLink", R.string.CreateLink));
         } else if (type == EDIT_TYPE) {
-            buttonTextView.setText(LocaleController.getString("SaveLink", works.heymate.beta.R.string.SaveLink));
+            buttonTextView.setText(LocaleController.getString("SaveLink", R.string.SaveLink));
         }
 
         approveCell = new TextCheckCell(context) {
@@ -314,7 +314,7 @@ public class LinkEditActivity extends BaseFragment {
         linearLayout.addView(hintCell);
 
         timeHeaderCell = new HeaderCell(context);
-        timeHeaderCell.setText(LocaleController.getString("LimitByPeriod", works.heymate.beta.R.string.LimitByPeriod));
+        timeHeaderCell.setText(LocaleController.getString("LimitByPeriod", R.string.LimitByPeriod));
         linearLayout.addView(timeHeaderCell);
         timeChooseView = new SlideChooseView(context);
         linearLayout.addView(timeChooseView);
@@ -337,11 +337,11 @@ public class LinkEditActivity extends BaseFragment {
         linearLayout.addView(timeEditText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
 
         divider = new TextInfoPrivacyCell(context);
-        divider.setText(LocaleController.getString("TimeLimitHelp", works.heymate.beta.R.string.TimeLimitHelp));
+        divider.setText(LocaleController.getString("TimeLimitHelp", R.string.TimeLimitHelp));
         linearLayout.addView(divider);
 
         usesHeaderCell = new HeaderCell(context);
-        usesHeaderCell.setText(LocaleController.getString("LimitNumberOfUses", works.heymate.beta.R.string.LimitNumberOfUses));
+        usesHeaderCell.setText(LocaleController.getString("LimitNumberOfUses", R.string.LimitNumberOfUses));
         linearLayout.addView(usesHeaderCell);
         usesChooseView = new SlideChooseView(context);
         usesChooseView.setCallback(index -> {
@@ -369,7 +369,7 @@ public class LinkEditActivity extends BaseFragment {
         usesEditText.setPadding(AndroidUtilities.dp(22), 0, AndroidUtilities.dp(22), 0);
         usesEditText.setGravity(Gravity.CENTER_VERTICAL);
         usesEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        usesEditText.setHint(LocaleController.getString("UsesLimitHint", works.heymate.beta.R.string.UsesLimitHint));
+        usesEditText.setHint(LocaleController.getString("UsesLimitHint", R.string.UsesLimitHint));
         usesEditText.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
         usesEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
         usesEditText.addTextChangedListener(new TextWatcher() {
@@ -458,17 +458,17 @@ public class LinkEditActivity extends BaseFragment {
         if (type == EDIT_TYPE) {
             revokeLink = new TextSettingsCell(context);
             revokeLink.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            revokeLink.setText(LocaleController.getString("RevokeLink", works.heymate.beta.R.string.RevokeLink), false);
+            revokeLink.setText(LocaleController.getString("RevokeLink", R.string.RevokeLink), false);
             revokeLink.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
             revokeLink.setOnClickListener(view -> {
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
-                builder2.setMessage(LocaleController.getString("RevokeAlert", works.heymate.beta.R.string.RevokeAlert));
-                builder2.setTitle(LocaleController.getString("RevokeLink", works.heymate.beta.R.string.RevokeLink));
-                builder2.setPositiveButton(LocaleController.getString("RevokeButton", works.heymate.beta.R.string.RevokeButton), (dialogInterface2, i2) -> {
+                builder2.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
+                builder2.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
+                builder2.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), (dialogInterface2, i2) -> {
                     callback.revokeLink(inviteToEdit);
                     finishFragment();
                 });
-                builder2.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder2.create());
 
             });
@@ -686,7 +686,7 @@ public class LinkEditActivity extends BaseFragment {
         String[] options = new String[dispalyedUses.size() + 1];
         for (int i = 0; i < options.length; i++) {
             if (i == options.length - 1) {
-                options[i] = LocaleController.getString("NoLimit", works.heymate.beta.R.string.NoLimit);
+                options[i] = LocaleController.getString("NoLimit", R.string.NoLimit);
             } else {
                 options[i] = dispalyedUses.get(i).toString();
             }
@@ -718,7 +718,7 @@ public class LinkEditActivity extends BaseFragment {
         String[] options = new String[dispalyedDates.size() + 1];
         for (int i = 0; i < options.length; i++) {
             if (i == options.length - 1) {
-                options[i] = LocaleController.getString("NoLimit", works.heymate.beta.R.string.NoLimit);
+                options[i] = LocaleController.getString("NoLimit", R.string.NoLimit);
             } else {
                 if (dispalyedDates.get(i) == defaultDates[0]) {
                     options[i] = LocaleController.formatPluralString("Hours", 1);
@@ -728,7 +728,7 @@ public class LinkEditActivity extends BaseFragment {
                     options[i] = LocaleController.formatPluralString("Weeks", 1);
                 } else {
                     if (selectedDate < 86400L) {
-                        options[i] = LocaleController.getString("MessageScheduleToday", works.heymate.beta.R.string.MessageScheduleToday);
+                        options[i] = LocaleController.getString("MessageScheduleToday", R.string.MessageScheduleToday);
                     } else if (selectedDate < 364 * 86400L) {
                         options[i] = LocaleController.getInstance().formatterScheduleDay.format(originDate * 1000L);
                     } else {

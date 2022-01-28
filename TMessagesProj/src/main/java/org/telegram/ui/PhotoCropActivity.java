@@ -24,7 +24,7 @@ import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -418,9 +418,9 @@ public class PhotoCropActivity extends BaseFragment {
         actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, false);
         actionBar.setTitleColor(0xffffffff);
         actionBar.setItemsColor(0xffffffff, false);
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("CropImage", works.heymate.beta.R.string.CropImage));
+        actionBar.setTitle(LocaleController.getString("CropImage", R.string.CropImage));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -441,7 +441,7 @@ public class PhotoCropActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+        menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         fragmentView = view = new PhotoCropView(context);
         ((PhotoCropView) fragmentView).freeform = getArguments().getBoolean("freeform", false);

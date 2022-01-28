@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -60,16 +60,16 @@ public class PhotoAttachPermissionCell extends FrameLayout {
 
     public void setType(int type) {
         if (type == 0) {
-            imageView.setImageResource(works.heymate.beta.R.drawable.permissions_camera1);
-            imageView2.setImageResource(works.heymate.beta.R.drawable.permissions_camera2);
-            textView.setText(LocaleController.getString("CameraPermissionText", works.heymate.beta.R.string.CameraPermissionText));
+            imageView.setImageResource(R.drawable.permissions_camera1);
+            imageView2.setImageResource(R.drawable.permissions_camera2);
+            textView.setText(LocaleController.getString("CameraPermissionText", R.string.CameraPermissionText));
 
             imageView.setLayoutParams(LayoutHelper.createFrame(44, 44, Gravity.CENTER, 5, 0, 0, 27));
             imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44, Gravity.CENTER, 5, 0, 0, 27));
         } else {
-            imageView.setImageResource(works.heymate.beta.R.drawable.permissions_gallery1);
-            imageView2.setImageResource(works.heymate.beta.R.drawable.permissions_gallery2);
-            textView.setText(LocaleController.getString("GalleryPermissionText", works.heymate.beta.R.string.GalleryPermissionText));
+            imageView.setImageResource(R.drawable.permissions_gallery1);
+            imageView2.setImageResource(R.drawable.permissions_gallery2);
+            textView.setText(LocaleController.getString("GalleryPermissionText", R.string.GalleryPermissionText));
 
             imageView.setLayoutParams(LayoutHelper.createFrame(44, 44, Gravity.CENTER, 0, 0, 2, 27));
             imageView2.setLayoutParams(LayoutHelper.createFrame(44, 44, Gravity.CENTER, 0, 0, 2, 27));

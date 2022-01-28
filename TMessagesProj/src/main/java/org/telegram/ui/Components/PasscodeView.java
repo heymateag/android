@@ -57,7 +57,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -578,7 +578,7 @@ public class PasscodeView extends FrameLayout {
         });
 
         checkImage = new ImageView(context);
-        checkImage.setImageResource(works.heymate.beta.R.drawable.passcode_check);
+        checkImage.setImageResource(R.drawable.passcode_check);
         checkImage.setScaleType(ImageView.ScaleType.CENTER);
         checkImage.setBackgroundResource(R.drawable.bar_selector_lock);
         passwordFrameLayout.addView(checkImage, LayoutHelper.createFrame(60, 60, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 10, 4));
@@ -672,7 +672,7 @@ public class PasscodeView extends FrameLayout {
                     info.setClassName("android.widget.Button");
                 }
             };
-            frameLayout.setBackgroundResource(works.heymate.beta.R.drawable.bar_selector_lock);
+            frameLayout.setBackgroundResource(R.drawable.bar_selector_lock);
             frameLayout.setTag(a);
             if (a == 11) {
                 frameLayout.setContentDescription(LocaleController.getString("AccDescrFingerprint", R.string.AccDescrFingerprint));
@@ -686,12 +686,12 @@ public class PasscodeView extends FrameLayout {
                     }
                     return true;
                 });
-                frameLayout.setContentDescription(LocaleController.getString("AccDescrBackspace", works.heymate.beta.R.string.AccDescrBackspace));
-                setNextFocus(frameLayout, works.heymate.beta.R.id.passcode_btn_1);
+                frameLayout.setContentDescription(LocaleController.getString("AccDescrBackspace", R.string.AccDescrBackspace));
+                setNextFocus(frameLayout, R.id.passcode_btn_1);
             } else {
                 frameLayout.setContentDescription(a + "");
                 if (a == 0) {
-                    setNextFocus(frameLayout, works.heymate.beta.R.id.passcode_btn_backspace);
+                    setNextFocus(frameLayout, R.id.passcode_btn_backspace);
                 } else if (a == 9) {
                     if (fingerprintView.getVisibility() == View.VISIBLE) {
                         setNextFocus(frameLayout, R.id.passcode_btn_fingerprint);
@@ -873,7 +873,7 @@ public class PasscodeView extends FrameLayout {
         if (SharedConfig.passcodeRetryInMs > 0) {
             int value = Math.max(1, (int) Math.ceil(SharedConfig.passcodeRetryInMs / 1000.0));
             if (value != lastValue) {
-                retryTextView.setText(LocaleController.formatString("TooManyTries", works.heymate.beta.R.string.TooManyTries, LocaleController.formatPluralString("Seconds", value)));
+                retryTextView.setText(LocaleController.formatString("TooManyTries", R.string.TooManyTries, LocaleController.formatPluralString("Seconds", value)));
                 lastValue = value;
             }
             if (retryTextView.getVisibility() != VISIBLE) {
@@ -972,7 +972,7 @@ public class PasscodeView extends FrameLayout {
                     fingerprintTextView.setId(id_fingerprint_textview);
                     fingerprintTextView.setTextAppearance(android.R.style.TextAppearance_Material_Subhead);
                     fingerprintTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                    fingerprintTextView.setText(LocaleController.getString("FingerprintInfo", works.heymate.beta.R.string.FingerprintInfo));
+                    fingerprintTextView.setText(LocaleController.getString("FingerprintInfo", R.string.FingerprintInfo));
                     relativeLayout.addView(fingerprintTextView);
                     RelativeLayout.LayoutParams layoutParams = LayoutHelper.createRelative(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -980,13 +980,13 @@ public class PasscodeView extends FrameLayout {
                     fingerprintTextView.setLayoutParams(layoutParams);
 
                     fingerprintImageView = new ImageView(getContext());
-                    fingerprintImageView.setImageResource(works.heymate.beta.R.drawable.ic_fp_40px);
+                    fingerprintImageView.setImageResource(R.drawable.ic_fp_40px);
                     fingerprintImageView.setId(id_fingerprint_imageview);
                     relativeLayout.addView(fingerprintImageView, LayoutHelper.createRelative(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 20, 0, 0, RelativeLayout.ALIGN_PARENT_START, RelativeLayout.BELOW, id_fingerprint_textview));
 
                     fingerprintStatusTextView = new TextView(getContext());
                     fingerprintStatusTextView.setGravity(Gravity.CENTER_VERTICAL);
-                    fingerprintStatusTextView.setText(LocaleController.getString("FingerprintHelp", works.heymate.beta.R.string.FingerprintHelp));
+                    fingerprintStatusTextView.setText(LocaleController.getString("FingerprintHelp", R.string.FingerprintHelp));
                     fingerprintStatusTextView.setTextAppearance(android.R.style.TextAppearance_Material_Body1);
                     fingerprintStatusTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack) & 0x42ffffff);
                     relativeLayout.addView(fingerprintStatusTextView);
@@ -998,9 +998,9 @@ public class PasscodeView extends FrameLayout {
                     fingerprintStatusTextView.setLayoutParams(layoutParams);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
                     builder.setView(relativeLayout);
-                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     builder.setOnDismissListener(dialog -> {
                         if (cancellationSignal != null) {
                             selfCancelled = true;
@@ -1049,7 +1049,7 @@ public class PasscodeView extends FrameLayout {
 
                         @Override
                         public void onAuthenticationFailed() {
-                            showFingerprintError(LocaleController.getString("FingerprintNotRecognized", works.heymate.beta.R.string.FingerprintNotRecognized));
+                            showFingerprintError(LocaleController.getString("FingerprintNotRecognized", R.string.FingerprintNotRecognized));
                         }
 
                         @Override
@@ -1342,7 +1342,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     private void showFingerprintError(CharSequence error) {
-        fingerprintImageView.setImageResource(works.heymate.beta.R.drawable.ic_fingerprint_error);
+        fingerprintImageView.setImageResource(R.drawable.ic_fingerprint_error);
         fingerprintStatusTextView.setText(error);
         fingerprintStatusTextView.setTextColor(0xfff4511e);
         Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);

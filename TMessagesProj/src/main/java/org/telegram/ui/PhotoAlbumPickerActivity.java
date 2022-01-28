@@ -44,7 +44,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -165,7 +165,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         actionBar.setTitleColor(Theme.getColor(Theme.key_dialogTextBlack));
         actionBar.setItemsColor(Theme.getColor(Theme.key_dialogTextBlack), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_dialogButtonSelector), false);
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -184,11 +184,11 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
         ActionBarMenu menu = actionBar.createMenu();
         if (allowSearchImages) {
-            menu.addItem(2, works.heymate.beta.R.drawable.ic_ab_search).setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+            menu.addItem(2, R.drawable.ic_ab_search).setContentDescription(LocaleController.getString("Search", R.string.Search));
         }
-        ActionBarMenuItem menuItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
-        menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
-        menuItem.addSubItem(1, works.heymate.beta.R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", works.heymate.beta.R.string.OpenInExternalApp));
+        ActionBarMenuItem menuItem = menu.addItem(0, R.drawable.ic_ab_other);
+        menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        menuItem.addSubItem(1, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
         sizeNotifierFrameLayout = new SizeNotifierFrameLayout(context) {
 
@@ -321,7 +321,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         sizeNotifierFrameLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
         fragmentView = sizeNotifierFrameLayout;
 
-        actionBar.setTitle(LocaleController.getString("Gallery", works.heymate.beta.R.string.Gallery));
+        actionBar.setTitle(LocaleController.getString("Gallery", R.string.Gallery));
 
         listView = new RecyclerListView(context);
         listView.setPadding(AndroidUtilities.dp(6), AndroidUtilities.dp(4), AndroidUtilities.dp(6), AndroidUtilities.dp(54));
@@ -339,7 +339,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         emptyView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         emptyView.setGravity(Gravity.CENTER);
         emptyView.setVisibility(View.GONE);
-        emptyView.setText(LocaleController.getString("NoPhotos", works.heymate.beta.R.string.NoPhotos));
+        emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
         sizeNotifierFrameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 48));
         emptyView.setOnTouchListener((v, event) -> true);
 
@@ -352,7 +352,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         progressView.addView(progressBar, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
         shadow = new View(context);
-        shadow.setBackgroundResource(works.heymate.beta.R.drawable.header_shadow_reverse);
+        shadow.setBackgroundResource(R.drawable.header_shadow_reverse);
         shadow.setTranslationY(AndroidUtilities.dp(48));
         sizeNotifierFrameLayout.addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 3, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 48));
 
@@ -370,7 +370,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         InputFilter[] inputFilters = new InputFilter[1];
         inputFilters[0] = new InputFilter.LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength);
         commentTextView.setFilters(inputFilters);
-        commentTextView.setHint(LocaleController.getString("AddCaption", works.heymate.beta.R.string.AddCaption));
+        commentTextView.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         EditTextBoldCursor editText = commentTextView.getEditText();
         editText.setMaxLines(1);
         editText.setSingleLine(true);
@@ -400,14 +400,14 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         writeButton = new ImageView(context);
         writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_dialogFloatingButton), Theme.getColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, writeButtonDrawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             writeButtonDrawable = combinedDrawable;
         }
         writeButton.setBackgroundDrawable(writeButtonDrawable);
-        writeButton.setImageResource(works.heymate.beta.R.drawable.attach_send);
+        writeButton.setImageResource(R.drawable.attach_send);
         writeButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -475,9 +475,9 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a ==  1);
                     if (num == 0) {
                         if (UserObject.isUserSelf(user)) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", works.heymate.beta.R.string.SetReminder), works.heymate.beta.R.drawable.msg_schedule);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
                         } else {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", works.heymate.beta.R.string.ScheduleMessage), works.heymate.beta.R.drawable.msg_schedule);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
                         }
                     } else {
                         itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
@@ -504,7 +504,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
                 sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
                 sendPopupWindow.setAnimationEnabled(false);
-                sendPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation2);
+                sendPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
                 sendPopupWindow.setOutsideTouchable(true);
                 sendPopupWindow.setClippingEnabled(true);
                 sendPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);

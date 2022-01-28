@@ -89,7 +89,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.FileLog;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.browser.Browser;
@@ -534,11 +534,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             searchEditText.setSingleLine(true);
             searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
             if (type == 0) {
-                searchEditText.setHint(LocaleController.getString("SearchStickersHint", works.heymate.beta.R.string.SearchStickersHint));
+                searchEditText.setHint(LocaleController.getString("SearchStickersHint", R.string.SearchStickersHint));
             } else if (type == 1) {
-                searchEditText.setHint(LocaleController.getString("SearchEmojiHint", works.heymate.beta.R.string.SearchEmojiHint));
+                searchEditText.setHint(LocaleController.getString("SearchEmojiHint", R.string.SearchEmojiHint));
             } else if (type == 2) {
-                searchEditText.setHint(LocaleController.getString("SearchGifsTitle", works.heymate.beta.R.string.SearchGifsTitle));
+                searchEditText.setHint(LocaleController.getString("SearchGifsTitle", R.string.SearchGifsTitle));
             }
             searchEditText.setCursorColor(getThemedColor(Theme.key_featuredStickers_addedIcon));
             searchEditText.setCursorSize(AndroidUtilities.dp(20));
@@ -1118,14 +1118,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         };
 
         emojiTitles = new String[]{
-                LocaleController.getString("Emoji1", works.heymate.beta.R.string.Emoji1),
-                LocaleController.getString("Emoji2", works.heymate.beta.R.string.Emoji2),
-                LocaleController.getString("Emoji3", works.heymate.beta.R.string.Emoji3),
-                LocaleController.getString("Emoji4", works.heymate.beta.R.string.Emoji4),
-                LocaleController.getString("Emoji5", works.heymate.beta.R.string.Emoji5),
-                LocaleController.getString("Emoji6", works.heymate.beta.R.string.Emoji6),
-                LocaleController.getString("Emoji7", works.heymate.beta.R.string.Emoji7),
-                LocaleController.getString("Emoji8", works.heymate.beta.R.string.Emoji8)
+                LocaleController.getString("Emoji1", R.string.Emoji1),
+                LocaleController.getString("Emoji2", R.string.Emoji2),
+                LocaleController.getString("Emoji3", R.string.Emoji3),
+                LocaleController.getString("Emoji4", R.string.Emoji4),
+                LocaleController.getString("Emoji5", R.string.Emoji5),
+                LocaleController.getString("Emoji6", R.string.Emoji6),
+                LocaleController.getString("Emoji7", R.string.Emoji7),
+                LocaleController.getString("Emoji8", R.string.Emoji8)
         };
 
         showGifs = needGif;
@@ -1946,7 +1946,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         pager.setAdapter(new EmojiPagesAdapter());
 
         topShadow = new View(context);
-        topShadow.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, 0xffe2e5e7));
+        topShadow.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, 0xffe2e5e7));
         addView(topShadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 6));
 
         backspaceButton = new ImageView(context) {
@@ -1971,7 +1971,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         backspaceButton.setImageResource(R.drawable.smiles_tab_clear);
         backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.MULTIPLY));
         backspaceButton.setScaleType(ImageView.ScaleType.CENTER);
-        backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", works.heymate.beta.R.string.AccDescrBackspace));
+        backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", R.string.AccDescrBackspace));
         backspaceButton.setFocusable(true);
         backspaceButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -2012,7 +2012,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (Build.VERSION.SDK_INT >= 21) {
                 stickerSettingsButton.setBackground(Theme.createSelectorDrawable(color));
             }
-            stickerSettingsButton.setContentDescription(LocaleController.getString("Settings", works.heymate.beta.R.string.Settings));
+            stickerSettingsButton.setContentDescription(LocaleController.getString("Settings", R.string.Settings));
             bottomTabContainer.addView(stickerSettingsButton, LayoutHelper.createFrame(52, 44, Gravity.BOTTOM | Gravity.RIGHT));
             stickerSettingsButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -2097,7 +2097,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             searchButton.setImageResource(R.drawable.smiles_tab_search);
             searchButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.MULTIPLY));
             searchButton.setScaleType(ImageView.ScaleType.CENTER);
-            searchButton.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+            searchButton.setContentDescription(LocaleController.getString("Search", R.string.Search));
             searchButton.setFocusable(true);
             if (Build.VERSION.SDK_INT >= 21) {
                 searchButton.setBackground(Theme.createSelectorDrawable(color));
@@ -2132,7 +2132,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
             Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), getThemedColor(Theme.key_chat_emojiPanelBackground), getThemedColor(Theme.key_chat_emojiPanelBackground));
             if (Build.VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
+                Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
                 shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
                 combinedDrawable.setIconSize(AndroidUtilities.dp(40), AndroidUtilities.dp(40));
@@ -2152,7 +2152,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             backspaceButton.setPadding(0, 0, AndroidUtilities.dp(2), 0);
             backspaceButton.setBackground(drawable);
-            backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", works.heymate.beta.R.string.AccDescrBackspace));
+            backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", R.string.AccDescrBackspace));
             backspaceButton.setFocusable(true);
             bottomTabContainer.addView(backspaceButton, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 40 : 44), (Build.VERSION.SDK_INT >= 21 ? 40 : 44), Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
             shadowLine.setVisibility(GONE);
@@ -3187,15 +3187,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         hasRecentEmoji = newHas;
         emojiTabs.removeTabs();
         String[] descriptions = {
-                LocaleController.getString("RecentStickers", works.heymate.beta.R.string.RecentStickers),
-                LocaleController.getString("Emoji1", works.heymate.beta.R.string.Emoji1),
-                LocaleController.getString("Emoji2", works.heymate.beta.R.string.Emoji2),
-                LocaleController.getString("Emoji3", works.heymate.beta.R.string.Emoji3),
-                LocaleController.getString("Emoji4", works.heymate.beta.R.string.Emoji4),
-                LocaleController.getString("Emoji5", works.heymate.beta.R.string.Emoji5),
-                LocaleController.getString("Emoji6", works.heymate.beta.R.string.Emoji6),
-                LocaleController.getString("Emoji7", works.heymate.beta.R.string.Emoji7),
-                LocaleController.getString("Emoji8", works.heymate.beta.R.string.Emoji8),
+                LocaleController.getString("RecentStickers", R.string.RecentStickers),
+                LocaleController.getString("Emoji1", R.string.Emoji1),
+                LocaleController.getString("Emoji2", R.string.Emoji2),
+                LocaleController.getString("Emoji3", R.string.Emoji3),
+                LocaleController.getString("Emoji4", R.string.Emoji4),
+                LocaleController.getString("Emoji5", R.string.Emoji5),
+                LocaleController.getString("Emoji6", R.string.Emoji6),
+                LocaleController.getString("Emoji7", R.string.Emoji7),
+                LocaleController.getString("Emoji8", R.string.Emoji8),
         };
         for (int a = 0; a < emojiIcons.length; a++) {
             if (a == 0 && Emoji.recentEmoji.isEmpty()) {
@@ -3388,11 +3388,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
         if (hasRecent) {
             gifRecentTabNum = gifTabsCount++;
-            gifTabs.addIconTab(0, gifIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", works.heymate.beta.R.string.RecentStickers));
+            gifTabs.addIconTab(0, gifIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", R.string.RecentStickers));
         }
 
         gifTrendingTabNum = gifTabsCount++;
-        gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", works.heymate.beta.R.string.FeaturedGifs));
+        gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", R.string.FeaturedGifs));
 
         gifFirstEmojiTabNum = gifTabsCount;
         final int hPadding = AndroidUtilities.dp(13);
@@ -3854,9 +3854,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         String text;
         if (!ChatObject.hasAdminRights(chat) && chat.default_banned_rights != null && chat.default_banned_rights.send_stickers) {
             if (gif) {
-                mediaBanTooltip.setText(LocaleController.getString("GlobalAttachGifRestricted", works.heymate.beta.R.string.GlobalAttachGifRestricted));
+                mediaBanTooltip.setText(LocaleController.getString("GlobalAttachGifRestricted", R.string.GlobalAttachGifRestricted));
             } else {
-                mediaBanTooltip.setText(LocaleController.getString("GlobalAttachStickersRestricted", works.heymate.beta.R.string.GlobalAttachStickersRestricted));
+                mediaBanTooltip.setText(LocaleController.getString("GlobalAttachStickersRestricted", R.string.GlobalAttachStickersRestricted));
             }
         } else {
             if (chat.banned_rights == null) {
@@ -3864,15 +3864,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
                 if (gif) {
-                    mediaBanTooltip.setText(LocaleController.getString("AttachGifRestrictedForever", works.heymate.beta.R.string.AttachGifRestrictedForever));
+                    mediaBanTooltip.setText(LocaleController.getString("AttachGifRestrictedForever", R.string.AttachGifRestrictedForever));
                 } else {
-                    mediaBanTooltip.setText(LocaleController.getString("AttachStickersRestrictedForever", works.heymate.beta.R.string.AttachStickersRestrictedForever));
+                    mediaBanTooltip.setText(LocaleController.getString("AttachStickersRestrictedForever", R.string.AttachStickersRestrictedForever));
                 }
             } else {
                 if (gif) {
-                    mediaBanTooltip.setText(LocaleController.formatString("AttachGifRestricted", works.heymate.beta.R.string.AttachGifRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                    mediaBanTooltip.setText(LocaleController.formatString("AttachGifRestricted", R.string.AttachGifRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                 } else {
-                    mediaBanTooltip.setText(LocaleController.formatString("AttachStickersRestricted", works.heymate.beta.R.string.AttachStickersRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                    mediaBanTooltip.setText(LocaleController.formatString("AttachStickersRestricted", R.string.AttachStickersRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                 }
             }
         }
@@ -4347,10 +4347,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         if (groupStickersHidden && groupStickerSet == null) {
                             icon = 0;
                         } else {
-                            icon = groupStickerSet != null ? works.heymate.beta.R.drawable.stickersclose : works.heymate.beta.R.drawable.stickerset_close;
+                            icon = groupStickerSet != null ? R.drawable.stickersclose : R.drawable.stickerset_close;
                         }
                         TLRPC.Chat chat = info != null ? MessagesController.getInstance(currentAccount).getChat(info.id) : null;
-                        cell.setText(LocaleController.formatString("CurrentGroupStickers", works.heymate.beta.R.string.CurrentGroupStickers, chat != null ? chat.title : "Group Stickers"), icon);
+                        cell.setText(LocaleController.formatString("CurrentGroupStickers", R.string.CurrentGroupStickers, chat != null ? chat.title : "Group Stickers"), icon);
                     } else {
                         Object object = cache.get(position);
                         if (object instanceof TLRPC.TL_messages_stickerSet) {
@@ -4359,9 +4359,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 cell.setText(set.set.title, 0);
                             }
                         } else if (object == recentStickers) {
-                            cell.setText(LocaleController.getString("RecentStickers", works.heymate.beta.R.string.RecentStickers), 0);
+                            cell.setText(LocaleController.getString("RecentStickers", R.string.RecentStickers), 0);
                         } else if (object == favouriteStickers) {
-                            cell.setText(LocaleController.getString("FavoriteStickers", works.heymate.beta.R.string.FavoriteStickers), 0);
+                            cell.setText(LocaleController.getString("FavoriteStickers", R.string.FavoriteStickers), 0);
                         }
                     }
                     break;
@@ -4644,7 +4644,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     };
 
                     TextView textView = new TextView(getContext());
-                    textView.setText(LocaleController.getString("NoEmojiFound", works.heymate.beta.R.string.NoEmojiFound));
+                    textView.setText(LocaleController.getString("NoEmojiFound", R.string.NoEmojiFound));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     textView.setTextColor(getThemedColor(Theme.key_chat_emojiPanelEmptyText));
                     frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 10, 0, 0));
@@ -4665,11 +4665,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             linearLayout.setPadding(AndroidUtilities.dp(21), 0, AndroidUtilities.dp(21), 0);
 
                             ImageView imageView1 = new ImageView(getContext());
-                            imageView1.setImageResource(works.heymate.beta.R.drawable.smiles_info);
+                            imageView1.setImageResource(R.drawable.smiles_info);
                             linearLayout.addView(imageView1, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15, 0, 0));
 
                             TextView textView = new TextView(getContext());
-                            textView.setText(LocaleController.getString("EmojiSuggestions", works.heymate.beta.R.string.EmojiSuggestions));
+                            textView.setText(LocaleController.getString("EmojiSuggestions", R.string.EmojiSuggestions));
                             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                             textView.setTextColor(getThemedColor(Theme.key_dialogTextBlue2));
                             textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
@@ -4677,14 +4677,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 24, 0, 0));
 
                             textView = new TextView(getContext());
-                            textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EmojiSuggestionsInfo", works.heymate.beta.R.string.EmojiSuggestionsInfo)));
+                            textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EmojiSuggestionsInfo", R.string.EmojiSuggestionsInfo)));
                             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                             textView.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
                             textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
                             linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 11, 0, 0));
 
                             textView = new TextView(getContext());
-                            textView.setText(LocaleController.formatString("EmojiSuggestionsUrl", works.heymate.beta.R.string.EmojiSuggestionsUrl, lastSearchAlias != null ? lastSearchAlias : lastSearchKeyboardLanguage));
+                            textView.setText(LocaleController.formatString("EmojiSuggestionsUrl", R.string.EmojiSuggestionsUrl, lastSearchAlias != null ? lastSearchAlias : lastSearchKeyboardLanguage));
                             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                             textView.setTextColor(getThemedColor(Theme.key_dialogTextLink));
                             textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
@@ -4846,11 +4846,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return LocaleController.getString("Emoji", works.heymate.beta.R.string.Emoji);
+                    return LocaleController.getString("Emoji", R.string.Emoji);
                 case 1:
-                    return LocaleController.getString("AccDescrGIFs", works.heymate.beta.R.string.AccDescrGIFs);
+                    return LocaleController.getString("AccDescrGIFs", R.string.AccDescrGIFs);
                 case 2:
-                    return LocaleController.getString("AccDescrStickers", works.heymate.beta.R.string.AccDescrStickers);
+                    return LocaleController.getString("AccDescrStickers", R.string.AccDescrStickers);
             }
             return null;
         }
@@ -5450,7 +5450,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 59));
 
             textView = new TextView(getContext());
-            textView.setText(LocaleController.getString("NoGIFsFound", works.heymate.beta.R.string.NoGIFsFound));
+            textView.setText(LocaleController.getString("NoGIFsFound", R.string.NoGIFsFound));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             textView.setTextColor(getThemedColor(Theme.key_chat_emojiPanelEmptyText));
             addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 9));
@@ -5809,7 +5809,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     frameLayout.addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 59));
 
                     TextView textView = new TextView(context);
-                    textView.setText(LocaleController.getString("NoStickersFound", works.heymate.beta.R.string.NoStickersFound));
+                    textView.setText(LocaleController.getString("NoStickersFound", R.string.NoStickersFound));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     textView.setTextColor(getThemedColor(Theme.key_chat_emojiPanelEmptyText));
                     frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 9));

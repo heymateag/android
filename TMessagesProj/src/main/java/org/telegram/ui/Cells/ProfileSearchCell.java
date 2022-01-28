@@ -27,7 +27,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -130,16 +130,16 @@ public class ProfileSearchCell extends BaseCell {
             delta -= ConnectionsManager.getInstance(currentAccount).getCurrentTime();
             if (delta <= 0) {
                 if (custom) {
-                    text = LocaleController.getString("NotificationsCustom", works.heymate.beta.R.string.NotificationsCustom);
+                    text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
                 } else {
-                    text = LocaleController.getString("NotificationsUnmuted", works.heymate.beta.R.string.NotificationsUnmuted);
+                    text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
                 }
             } else if (delta < 60 * 60) {
-                text = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
             } else if (delta < 60 * 60 * 24) {
-                text = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
             } else if (delta < 60 * 60 * 24 * 365) {
-                text = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
             } else {
                 text = null;
             }
@@ -154,13 +154,13 @@ public class ProfileSearchCell extends BaseCell {
                 enabled = false;
             }
             if (enabled && custom) {
-                text = LocaleController.getString("NotificationsCustom", works.heymate.beta.R.string.NotificationsCustom);
+                text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
             } else {
-                text = enabled ? LocaleController.getString("NotificationsUnmuted", works.heymate.beta.R.string.NotificationsUnmuted) : LocaleController.getString("NotificationsMuted", works.heymate.beta.R.string.NotificationsMuted);
+                text = enabled ? LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted) : LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
             }
         }
         if (text == null) {
-            text = LocaleController.getString("NotificationsOff", works.heymate.beta.R.string.NotificationsOff);
+            text = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
         }
 
         if (DialogObject.isEncryptedDialog(exception.did)) {
@@ -320,7 +320,7 @@ public class ProfileSearchCell extends BaseCell {
             if (user != null && user.phone != null && user.phone.length() != 0) {
                 nameString = PhoneFormat.getInstance().format("+" + user.phone);
             } else {
-                nameString = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
+                nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
             }
         }
         if (encryptedChat != null) {
@@ -391,16 +391,16 @@ public class ProfileSearchCell extends BaseCell {
                 statusString = subLabel;
             } else if (user != null) {
                 if (MessagesController.isSupportUser(user)) {
-                    statusString = LocaleController.getString("SupportStatus", works.heymate.beta.R.string.SupportStatus);
+                    statusString = LocaleController.getString("SupportStatus", R.string.SupportStatus);
                 } else if (user.bot) {
-                    statusString = LocaleController.getString("Bot", works.heymate.beta.R.string.Bot);
+                    statusString = LocaleController.getString("Bot", R.string.Bot);
                 } else if (user.id == 333000 || user.id == 777000) {
-                    statusString = LocaleController.getString("ServiceNotifications", works.heymate.beta.R.string.ServiceNotifications);
+                    statusString = LocaleController.getString("ServiceNotifications", R.string.ServiceNotifications);
                 } else {
                     statusString = LocaleController.formatUserStatus(currentAccount, user);
                     if (user != null && (user.id == UserConfig.getInstance(currentAccount).getClientUserId() || user.status != null && user.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime())) {
                         currentStatusPaint = Theme.dialogs_onlinePaint;
-                        statusString = LocaleController.getString("Online", works.heymate.beta.R.string.Online);
+                        statusString = LocaleController.getString("Online", R.string.Online);
                     }
                 }
             }

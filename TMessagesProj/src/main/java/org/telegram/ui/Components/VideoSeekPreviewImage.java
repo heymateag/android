@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.FileLoader;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 
@@ -59,7 +59,7 @@ public class VideoSeekPreviewImage extends View {
         super(context);
         setVisibility(INVISIBLE);
 
-        frameDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.videopreview);
+        frameDrawable = context.getResources().getDrawable(R.drawable.videopreview);
         textPaint.setTextSize(AndroidUtilities.dp(13));
         textPaint.setColor(0xffffffff);
 

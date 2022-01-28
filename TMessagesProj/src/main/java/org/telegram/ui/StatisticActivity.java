@@ -40,7 +40,7 @@ import org.telegram.messenger.LruCache;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -182,15 +182,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 final ChartViewData[] chartsViewData = new ChartViewData[9];
                 TLRPC.TL_stats_broadcastStats stats = (TLRPC.TL_stats_broadcastStats) response;
 
-                chartsViewData[0] = createViewData(stats.iv_interactions_graph, LocaleController.getString("IVInteractionsChartTitle", works.heymate.beta.R.string.IVInteractionsChartTitle), 1);
-                chartsViewData[1] = createViewData(stats.followers_graph, LocaleController.getString("FollowersChartTitle", works.heymate.beta.R.string.FollowersChartTitle), 0);
-                chartsViewData[2] = createViewData(stats.top_hours_graph, LocaleController.getString("TopHoursChartTitle", works.heymate.beta.R.string.TopHoursChartTitle), 0);
-                chartsViewData[3] = createViewData(stats.interactions_graph, LocaleController.getString("InteractionsChartTitle", works.heymate.beta.R.string.InteractionsChartTitle), 1);
-                chartsViewData[4] = createViewData(stats.growth_graph, LocaleController.getString("GrowthChartTitle", works.heymate.beta.R.string.GrowthChartTitle), 0);
-                chartsViewData[5] = createViewData(stats.views_by_source_graph, LocaleController.getString("ViewsBySourceChartTitle", works.heymate.beta.R.string.ViewsBySourceChartTitle), 2);
-                chartsViewData[6] = createViewData(stats.new_followers_by_source_graph, LocaleController.getString("NewFollowersBySourceChartTitle", works.heymate.beta.R.string.NewFollowersBySourceChartTitle), 2);
-                chartsViewData[7] = createViewData(stats.languages_graph, LocaleController.getString("LanguagesChartTitle", works.heymate.beta.R.string.LanguagesChartTitle), 4, true);
-                chartsViewData[8] = createViewData(stats.mute_graph, LocaleController.getString("NotificationsChartTitle", works.heymate.beta.R.string.NotificationsChartTitle), 0);
+                chartsViewData[0] = createViewData(stats.iv_interactions_graph, LocaleController.getString("IVInteractionsChartTitle", R.string.IVInteractionsChartTitle), 1);
+                chartsViewData[1] = createViewData(stats.followers_graph, LocaleController.getString("FollowersChartTitle", R.string.FollowersChartTitle), 0);
+                chartsViewData[2] = createViewData(stats.top_hours_graph, LocaleController.getString("TopHoursChartTitle", R.string.TopHoursChartTitle), 0);
+                chartsViewData[3] = createViewData(stats.interactions_graph, LocaleController.getString("InteractionsChartTitle", R.string.InteractionsChartTitle), 1);
+                chartsViewData[4] = createViewData(stats.growth_graph, LocaleController.getString("GrowthChartTitle", R.string.GrowthChartTitle), 0);
+                chartsViewData[5] = createViewData(stats.views_by_source_graph, LocaleController.getString("ViewsBySourceChartTitle", R.string.ViewsBySourceChartTitle), 2);
+                chartsViewData[6] = createViewData(stats.new_followers_by_source_graph, LocaleController.getString("NewFollowersBySourceChartTitle", R.string.NewFollowersBySourceChartTitle), 2);
+                chartsViewData[7] = createViewData(stats.languages_graph, LocaleController.getString("LanguagesChartTitle", R.string.LanguagesChartTitle), 4, true);
+                chartsViewData[8] = createViewData(stats.mute_graph, LocaleController.getString("NotificationsChartTitle", R.string.NotificationsChartTitle), 0);
 
                 if (chartsViewData[2] != null) {
                     chartsViewData[2].useHourFormat = true;
@@ -236,14 +236,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 final ChartViewData[] chartsViewData = new ChartViewData[8];
                 TLRPC.TL_stats_megagroupStats stats = (TLRPC.TL_stats_megagroupStats) response;
 
-                chartsViewData[0] = createViewData(stats.growth_graph, LocaleController.getString("GrowthChartTitle", works.heymate.beta.R.string.GrowthChartTitle), 0);
-                chartsViewData[1] = createViewData(stats.members_graph, LocaleController.getString("GroupMembersChartTitle", works.heymate.beta.R.string.GroupMembersChartTitle), 0);
-                chartsViewData[2] = createViewData(stats.new_members_by_source_graph, LocaleController.getString("NewMembersBySourceChartTitle", works.heymate.beta.R.string.NewMembersBySourceChartTitle), 2);
-                chartsViewData[3] = createViewData(stats.languages_graph, LocaleController.getString("MembersLanguageChartTitle", works.heymate.beta.R.string.MembersLanguageChartTitle), 4, true);
-                chartsViewData[4] = createViewData(stats.messages_graph, LocaleController.getString("MessagesChartTitle", works.heymate.beta.R.string.MessagesChartTitle), 2);
-                chartsViewData[5] = createViewData(stats.actions_graph, LocaleController.getString("ActionsChartTitle", works.heymate.beta.R.string.ActionsChartTitle), 1);
-                chartsViewData[6] = createViewData(stats.top_hours_graph, LocaleController.getString("TopHoursChartTitle", works.heymate.beta.R.string.TopHoursChartTitle), 0);
-                chartsViewData[7] = createViewData(stats.weekdays_graph, LocaleController.getString("TopDaysOfWeekChartTitle", works.heymate.beta.R.string.TopDaysOfWeekChartTitle), 4);
+                chartsViewData[0] = createViewData(stats.growth_graph, LocaleController.getString("GrowthChartTitle", R.string.GrowthChartTitle), 0);
+                chartsViewData[1] = createViewData(stats.members_graph, LocaleController.getString("GroupMembersChartTitle", R.string.GroupMembersChartTitle), 0);
+                chartsViewData[2] = createViewData(stats.new_members_by_source_graph, LocaleController.getString("NewMembersBySourceChartTitle", R.string.NewMembersBySourceChartTitle), 2);
+                chartsViewData[3] = createViewData(stats.languages_graph, LocaleController.getString("MembersLanguageChartTitle", R.string.MembersLanguageChartTitle), 4, true);
+                chartsViewData[4] = createViewData(stats.messages_graph, LocaleController.getString("MessagesChartTitle", R.string.MessagesChartTitle), 2);
+                chartsViewData[5] = createViewData(stats.actions_graph, LocaleController.getString("ActionsChartTitle", R.string.ActionsChartTitle), 1);
+                chartsViewData[6] = createViewData(stats.top_hours_graph, LocaleController.getString("TopHoursChartTitle", R.string.TopHoursChartTitle), 0);
+                chartsViewData[7] = createViewData(stats.weekdays_graph, LocaleController.getString("TopDaysOfWeekChartTitle", R.string.TopDaysOfWeekChartTitle), 4);
 
                 if (chartsViewData[6] != null) {
                     chartsViewData[6].useHourFormat = true;
@@ -407,7 +407,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
         imageView = new RLottieImageView(context);
         imageView.setAutoRepeat(true);
-        imageView.setAnimation(works.heymate.beta.R.raw.statistic_preload, 120, 120);
+        imageView.setAnimation(R.raw.statistic_preload, 120, 120);
         imageView.playAnimation();
 
         TextView loadingTitle = new TextView(context);
@@ -415,14 +415,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         loadingTitle.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         loadingTitle.setTextColor(Theme.getColor(Theme.key_player_actionBarTitle));
         loadingTitle.setTag(Theme.key_player_actionBarTitle);
-        loadingTitle.setText(LocaleController.getString("LoadingStats", works.heymate.beta.R.string.LoadingStats));
+        loadingTitle.setText(LocaleController.getString("LoadingStats", R.string.LoadingStats));
         loadingTitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
         TextView loadingSubtitle = new TextView(context);
         loadingSubtitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         loadingSubtitle.setTextColor(Theme.getColor(Theme.key_player_actionBarSubtitle));
         loadingSubtitle.setTag(Theme.key_player_actionBarSubtitle);
-        loadingSubtitle.setText(LocaleController.getString("LoadingStatsDescription", works.heymate.beta.R.string.LoadingStatsDescription));
+        loadingSubtitle.setText(LocaleController.getString("LoadingStatsDescription", R.string.LoadingStatsDescription));
         loadingSubtitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
         progressLayout.addView(imageView, LayoutHelper.createLinear(120, 120, Gravity.CENTER_HORIZONTAL, 0, 0, 0, 20));
@@ -493,13 +493,13 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 final ArrayList<Integer> actions = new ArrayList<>();
                 final ArrayList<Integer> icons = new ArrayList<>();
 
-                items.add(LocaleController.getString("ViewMessageStatistic", works.heymate.beta.R.string.ViewMessageStatistic));
+                items.add(LocaleController.getString("ViewMessageStatistic", R.string.ViewMessageStatistic));
                 actions.add(0);
-                icons.add(works.heymate.beta.R.drawable.msg_stats);
+                icons.add(R.drawable.msg_stats);
 
-                items.add(LocaleController.getString("ViewMessage", works.heymate.beta.R.string.ViewMessage));
+                items.add(LocaleController.getString("ViewMessage", R.string.ViewMessage));
                 actions.add(1);
-                icons.add(works.heymate.beta.R.drawable.menu_chats);
+                icons.add(R.drawable.menu_chats);
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
@@ -545,7 +545,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
         avatarContainer.setChatAvatar(chatLocal);
         avatarContainer.setTitle(chatLocal.title);
-        avatarContainer.setSubtitle(LocaleController.getString("Statistics", works.heymate.beta.R.string.Statistics));
+        avatarContainer.setSubtitle(LocaleController.getString("Statistics", R.string.Statistics));
 
         actionBar.setBackButtonDrawable(new BackDrawable(false));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -855,15 +855,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 ChartHeaderView headerCell = (ChartHeaderView) holder.itemView;
                 headerCell.setDates(minDateOverview, maxDateOverview);
                 if (position == overviewHeaderCell) {
-                    headerCell.setTitle(LocaleController.getString("StatisticOverview", works.heymate.beta.R.string.StatisticOverview));
+                    headerCell.setTitle(LocaleController.getString("StatisticOverview", R.string.StatisticOverview));
                 } else if (position == topAdminsHeaderCell) {
-                    headerCell.setTitle(LocaleController.getString("TopAdmins", works.heymate.beta.R.string.TopAdmins));
+                    headerCell.setTitle(LocaleController.getString("TopAdmins", R.string.TopAdmins));
                 } else if (position == topInviterHeaderCell) {
-                    headerCell.setTitle(LocaleController.getString("TopInviters", works.heymate.beta.R.string.TopInviters));
+                    headerCell.setTitle(LocaleController.getString("TopInviters", R.string.TopInviters));
                 } else if (position == topMembersHeaderCell) {
-                    headerCell.setTitle(LocaleController.getString("TopMembers", works.heymate.beta.R.string.TopMembers));
+                    headerCell.setTitle(LocaleController.getString("TopMembers", R.string.TopMembers));
                 } else {
-                    headerCell.setTitle(LocaleController.getString("RecentPosts", works.heymate.beta.R.string.RecentPosts));
+                    headerCell.setTitle(LocaleController.getString("RecentPosts", R.string.RecentPosts));
                 }
             } else if (type == 14) {
                 OverviewCell overviewCell = (OverviewCell) holder.itemView;
@@ -874,7 +874,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
             } else if (type == 15) {
                 ManageChatTextCell manageChatTextCell = (ManageChatTextCell) holder.itemView;
-                manageChatTextCell.setText(LocaleController.formatPluralString("ShowVotes", topMembersAll.size() - topMembersVisible.size()), null, works.heymate.beta.R.drawable.arrow_more, false);
+                manageChatTextCell.setText(LocaleController.formatPluralString("ShowVotes", topMembersAll.size() - topMembersVisible.size()), null, R.drawable.arrow_more, false);
             }
         }
 
@@ -1916,7 +1916,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         if (child instanceof ChartCell) {
             ((ChartCell) child).recolor();
         } else if (child instanceof ShadowSectionCell) {
-            Drawable shadowDrawable = Theme.getThemedDrawable(ApplicationLoader.applicationContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+            Drawable shadowDrawable = Theme.getThemedDrawable(ApplicationLoader.applicationContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
             Drawable background = new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray));
             CombinedDrawable combinedDrawable = new CombinedDrawable(background, shadowDrawable, 0, 0);
             combinedDrawable.setFullsize(true);
@@ -2231,7 +2231,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         public OverviewChannelData(TLRPC.TL_stats_broadcastStats stats) {
             int dif = (int) (stats.followers.current - stats.followers.previous);
             float difPercent = stats.followers.previous == 0 ? 0 : Math.abs(dif / (float) stats.followers.previous * 100f);
-            followersTitle = LocaleController.getString("FollowersChartTitle", works.heymate.beta.R.string.FollowersChartTitle);
+            followersTitle = LocaleController.getString("FollowersChartTitle", R.string.FollowersChartTitle);
             followersPrimary = AndroidUtilities.formatWholeNumber((int) stats.followers.current, 0);
 
             if (dif == 0 || difPercent == 0) {
@@ -2245,7 +2245,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
             dif = (int) (stats.shares_per_post.current - stats.shares_per_post.previous);
             difPercent = stats.shares_per_post.previous == 0 ? 0 : Math.abs(dif / (float) stats.shares_per_post.previous * 100f);
-            sharesTitle = LocaleController.getString("SharesPerPost", works.heymate.beta.R.string.SharesPerPost);
+            sharesTitle = LocaleController.getString("SharesPerPost", R.string.SharesPerPost);
             sharesPrimary = AndroidUtilities.formatWholeNumber((int) stats.shares_per_post.current, 0);
 
             if (dif == 0 || difPercent == 0) {
@@ -2259,7 +2259,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
             dif = (int) (stats.views_per_post.current - stats.views_per_post.previous);
             difPercent = stats.views_per_post.previous == 0 ? 0 : Math.abs(dif / (float) stats.views_per_post.previous * 100f);
-            viewsTitle = LocaleController.getString("ViewsPerPost", works.heymate.beta.R.string.ViewsPerPost);
+            viewsTitle = LocaleController.getString("ViewsPerPost", R.string.ViewsPerPost);
             viewsPrimary = AndroidUtilities.formatWholeNumber((int) stats.views_per_post.current, 0);
             if (dif == 0 || difPercent == 0) {
                 viewsSecondary = "";
@@ -2271,7 +2271,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             viewsUp = dif >= 0;
 
             difPercent = (float) (stats.enabled_notifications.part / stats.enabled_notifications.total * 100f);
-            notificationsTitle = LocaleController.getString("EnabledNotifications", works.heymate.beta.R.string.EnabledNotifications);
+            notificationsTitle = LocaleController.getString("EnabledNotifications", R.string.EnabledNotifications);
             if (difPercent == (int) difPercent) {
                 notificationsPrimary = String.format(Locale.ENGLISH, "%d%s", (int) difPercent, "%");
             } else {
@@ -2305,7 +2305,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         public OverviewChatData(TLRPC.TL_stats_megagroupStats stats) {
             int dif = (int) (stats.members.current - stats.members.previous);
             float difPercent = stats.members.previous == 0 ? 0 : Math.abs(dif / (float) stats.members.previous * 100f);
-            membersTitle = LocaleController.getString("MembersOverviewTitle", works.heymate.beta.R.string.MembersOverviewTitle);
+            membersTitle = LocaleController.getString("MembersOverviewTitle", R.string.MembersOverviewTitle);
             membersPrimary = AndroidUtilities.formatWholeNumber((int) stats.members.current, 0);
 
             if (dif == 0 || difPercent == 0) {
@@ -2319,7 +2319,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
             dif = (int) (stats.viewers.current - stats.viewers.previous);
             difPercent = stats.viewers.previous == 0 ? 0 : Math.abs(dif / (float) stats.viewers.previous * 100f);
-            viewingMembersTitle =  LocaleController.getString("ViewingMembers", works.heymate.beta.R.string.ViewingMembers);
+            viewingMembersTitle =  LocaleController.getString("ViewingMembers", R.string.ViewingMembers);
             viewingMembersPrimary = AndroidUtilities.formatWholeNumber((int) stats.viewers.current, 0);
 
             if (dif == 0 || difPercent == 0) {
@@ -2332,7 +2332,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
             dif = (int) (stats.posters.current - stats.posters.previous);
             difPercent = stats.posters.previous == 0 ? 0 : Math.abs(dif / (float) stats.posters.previous * 100f);
-            postingMembersTitle = LocaleController.getString("PostingMembers", works.heymate.beta.R.string.PostingMembers);
+            postingMembersTitle = LocaleController.getString("PostingMembers", R.string.PostingMembers);
             postingMembersPrimary = AndroidUtilities.formatWholeNumber((int) stats.posters.current, 0);
             if (dif == 0 || difPercent == 0) {
                 postingMembersSecondary = "";
@@ -2343,7 +2343,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
             dif = (int) (stats.messages.current - stats.messages.previous);
             difPercent = stats.messages.previous == 0 ? 0 : Math.abs(dif / (float) stats.messages.previous * 100f);
-            messagesTitle = LocaleController.getString("MessagesOverview", works.heymate.beta.R.string.MessagesOverview);
+            messagesTitle = LocaleController.getString("MessagesOverview", R.string.MessagesOverview);
             messagesPrimary = AndroidUtilities.formatWholeNumber((int) stats.messages.current, 0);
             if (dif == 0 || difPercent == 0) {
                 messagesSecondary = "";
@@ -2474,7 +2474,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 if (stringBuilder.length() > 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.formatString("CharactersPerMessage", works.heymate.beta.R.string.CharactersPerMessage, LocaleController.formatPluralString("Characters", poster.avg_chars)));
+                stringBuilder.append(LocaleController.formatString("CharactersPerMessage", R.string.CharactersPerMessage, LocaleController.formatPluralString("Characters", poster.avg_chars)));
             }
             data.description = stringBuilder.toString();
             return data;
@@ -2563,11 +2563,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
             }
 
-            items.add(LocaleController.getString("StatisticOpenProfile", works.heymate.beta.R.string.StatisticOpenProfile));
-            icons.add(works.heymate.beta.R.drawable.menu_private);
+            items.add(LocaleController.getString("StatisticOpenProfile", R.string.StatisticOpenProfile));
+            icons.add(R.drawable.menu_private);
             actions.add(2);
-            items.add(LocaleController.getString("StatisticSearchUserHistory", works.heymate.beta.R.string.StatisticSearchUserHistory));
-            icons.add(works.heymate.beta.R.drawable.menu_chats);
+            items.add(LocaleController.getString("StatisticSearchUserHistory", R.string.StatisticSearchUserHistory));
+            icons.add(R.drawable.menu_chats);
             actions.add(1);
 
             if (userIsPracticant && currentParticipant == null) {
@@ -2642,8 +2642,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
                 if (canEditAdmin) {
                     isAdmin = channelParticipant.admin_rights == null;
-                    items.add(isAdmin ? LocaleController.getString("SetAsAdmin", works.heymate.beta.R.string.SetAsAdmin) : LocaleController.getString("EditAdminRights", works.heymate.beta.R.string.EditAdminRights));
-                    icons.add(isAdmin ? works.heymate.beta.R.drawable.actions_addadmin : works.heymate.beta.R.drawable.actions_permissions);
+                    items.add(isAdmin ? LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin) : LocaleController.getString("EditAdminRights", R.string.EditAdminRights));
+                    icons.add(isAdmin ? R.drawable.actions_addadmin : R.drawable.actions_permissions);
                     actions.add(0);
                 }
             }

@@ -13,7 +13,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
@@ -26,7 +25,6 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -46,16 +44,13 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
 
 public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
@@ -292,7 +287,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageDrawable(drawable);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
             tab.addView(imageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             textView = new TextView(getContext());
@@ -305,7 +300,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             textView.setPadding(AndroidUtilities.dp(5), 0, AndroidUtilities.dp(5), AndroidUtilities.dp(1));
             tab.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 18, Gravity.TOP | Gravity.LEFT, 26, 6, 0, 0));
         }
-        tab.setTag(works.heymate.beta.R.id.index_tag, position);
+        tab.setTag(R.id.index_tag, position);
         tab.setSelected(position == currentPosition);
 
         tabTypes.put(key, tab);
@@ -324,10 +319,10 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             tab.setFocusable(true);
             tab.setImageDrawable(drawable);
             tab.setScaleType(ImageView.ScaleType.CENTER);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
             tabsContainer.addView(tab, position);
         }
-        tab.setTag(works.heymate.beta.R.id.index_tag, position);
+        tab.setTag(R.id.index_tag, position);
         tab.setSelected(position == currentPosition);
 
         tabTypes.put(key, tab);
@@ -369,7 +364,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             StickerTabView stickerTabView = new StickerTabView(getContext(), StickerTabView.STICKER_TYPE);
             tab = stickerTabView;
             tab.setFocusable(true);
-            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(works.heymate.beta.R.id.index_tag)));
+            tab.setOnClickListener(v -> delegate.onPageSelected((Integer) v.getTag(R.id.index_tag)));
             tabsContainer.addView(tab, position);
             stickerTabView.setRoundImage();
 
@@ -648,7 +643,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     }
                     if (sticker instanceof TLRPC.Document) {
                       //  String.format(Locale.US, "%d_%d_nr_%s" + messageObject.emojiAnimatedStickerColor, w, h, messageObject.toString());
-                        tabView.imageView.setImage(ImageLocation.getForDocument((TLRPC.Document) sticker), "36_36", thumbDrawable, null);
+                        tabView.imageView.setImage(ImageLocation.getForDocument((TLRPC.Document) sticker), "36_36_nolimit", thumbDrawable, null);
                     } else {
                         tabView.imageView.setImageDrawable(thumbDrawable);
                     }

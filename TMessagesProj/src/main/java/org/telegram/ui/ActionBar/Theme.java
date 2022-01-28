@@ -60,6 +60,11 @@ import android.util.SparseArray;
 import android.util.StateSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.core.graphics.ColorUtils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -67,7 +72,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatThemeController;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
@@ -76,15 +80,15 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.time.SunDate;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Cells.ThemesHorizontalListCell;
 import org.telegram.ui.Components.AudioVisualizerDrawable;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
@@ -101,7 +105,6 @@ import org.telegram.ui.Components.RoundStatusDrawable;
 import org.telegram.ui.Components.ScamDrawable;
 import org.telegram.ui.Components.SendingFileDrawable;
 import org.telegram.ui.Components.StatusDrawable;
-import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.TypingDotsDrawable;
 import org.telegram.ui.RoundVideoProgressShadow;
@@ -120,15 +123,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.core.graphics.ColorUtils;
 
 public class Theme {
 
@@ -207,6 +204,7 @@ public class Theme {
         private Shader crosfadeFromBitmapShader;
 
         PathDrawParams pathDrawCacheParams;
+        private int overrideRoundRadius;
 
         public MessageDrawable(int type, boolean out, boolean selected) {
             this(type, out, selected, null);
@@ -658,7 +656,10 @@ public class Theme {
             int padding = dp(2);
             int rad;
             int nearRad;
-            if (currentType == TYPE_PREVIEW) {
+            if (overrideRoundRadius != 0) {
+                rad = overrideRoundRadius;
+                nearRad = overrideRoundRadius;
+            } else if (currentType == TYPE_PREVIEW) {
                 rad = dp(6);
                 nearRad = dp(6);
             } else {
@@ -864,6 +865,10 @@ public class Theme {
             if (crossfadeFromDrawable != null) {
                 crossfadeFromDrawable.setBounds(left, top, right, bottom);
             }
+        }
+
+        public void setRoundRadius(int radius) {
+            this.overrideRoundRadius = radius;
         }
 
         public static class PathDrawParams {
@@ -1519,7 +1524,7 @@ public class Theme {
             if (id < 100) {
                 return !TextUtils.isEmpty(patternSlug) ? new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v5.jpg", parentTheme.getKey(), id, patternSlug)) : null;
             } else {
-                return !TextUtils.isEmpty(patternSlug) ? new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v8_dubug.jpg", parentTheme.getKey(), id, patternSlug)) : null;
+                return !TextUtils.isEmpty(patternSlug) ? new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v8_debug.jpg", parentTheme.getKey(), id, patternSlug)) : null;
             }
         }
 
@@ -1935,15 +1940,15 @@ public class Theme {
 
         public String getName() {
             if ("Blue".equals(name)) {
-                return LocaleController.getString("ThemeClassic", works.heymate.beta.R.string.ThemeClassic);
+                return LocaleController.getString("ThemeClassic", R.string.ThemeClassic);
             } else if ("Dark Blue".equals(name)) {
-                return LocaleController.getString("ThemeDark", works.heymate.beta.R.string.ThemeDark);
+                return LocaleController.getString("ThemeDark", R.string.ThemeDark);
             } else if ("Arctic Blue".equals(name)) {
-                return LocaleController.getString("ThemeArcticBlue", works.heymate.beta.R.string.ThemeArcticBlue);
+                return LocaleController.getString("ThemeArcticBlue", R.string.ThemeArcticBlue);
             } else if ("Day".equals(name)) {
-                return LocaleController.getString("ThemeDay", works.heymate.beta.R.string.ThemeDay);
+                return LocaleController.getString("ThemeDay", R.string.ThemeDay);
             } else if ("Night".equals(name)) {
-                return LocaleController.getString("ThemeNight", works.heymate.beta.R.string.ThemeNight);
+                return LocaleController.getString("ThemeNight", R.string.ThemeNight);
             }
             return info != null ? info.title : name;
         }
@@ -2140,6 +2145,9 @@ public class Theme {
             for (int a = 0; a < accent.length; a++) {
                 ThemeAccent themeAccent = new ThemeAccent();
                 themeAccent.id = ids != null ? ids[a] : a;
+                if (isHome(themeAccent)) {
+                    themeAccent.isDefault = true;
+                }
                 themeAccent.accentColor = accent[a];
                 themeAccent.parentTheme = this;
                 if (myMessages != null) {
@@ -2356,6 +2364,7 @@ public class Theme {
                 themeAccent.account = account;
                 themeAccentsMap.put(id, themeAccent);
                 themeAccents.add(0, themeAccent);
+                sortAccents(this);
                 accentsByThemeId.put(info.id, themeAccent);
                 return themeAccent;
             }
@@ -2393,6 +2402,7 @@ public class Theme {
                 overrideWallpaper = themeAccent.overrideWallpaper;
                 themeAccentsMap.put(id, themeAccent);
                 themeAccents.add(0, themeAccent);
+                sortAccents(this);
                 return themeAccent;
             } else {
                 return accent;
@@ -2406,7 +2416,7 @@ public class Theme {
 
         public boolean createBackground(File file, String toPath) {
             try {
-                Bitmap bitmap = ThemesHorizontalListCell.getScaledBitmap(AndroidUtilities.dp(640), AndroidUtilities.dp(360), file.getAbsolutePath(), null, 0);
+                Bitmap bitmap = AndroidUtilities.getScaledBitmap(AndroidUtilities.dp(640), AndroidUtilities.dp(360), file.getAbsolutePath(), null, 0);
                 if (bitmap != null && patternBgColor != 0) {
                     Bitmap finalBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
                     Canvas canvas = new Canvas(finalBitmap);
@@ -3442,6 +3452,7 @@ public class Theme {
     public static final String key_chat_inTextSelectionHighlight = "chat_inTextSelectionHighlight";
     public static final String key_chat_recordedVoiceHighlight = "key_chat_recordedVoiceHighlight";
     public static final String key_chat_TextSelectionCursor = "chat_TextSelectionCursor";
+    public static final String key_chat_BlurAlpha = "chat_BlurAlpha";
 
     public static final String key_voipgroup_listSelector = "voipgroup_listSelector";
     public static final String key_voipgroup_inviteMembersBackground = "voipgroup_inviteMembersBackground";
@@ -3665,6 +3676,14 @@ public class Theme {
     public final static String key_statisticChartLine_indigo = "statisticChartLine_indigo";
     public final static String key_statisticChartLineEmpty = "statisticChartLineEmpty";
 
+    public static final String key_chat_outReactionButtonBackground = "chat_outReactionButtonBackground";
+    public static final String key_chat_inReactionButtonBackground = "chat_inReactionButtonBackground";
+    public static final String key_chat_outReactionButtonText = "chat_outReactionButtonText";
+    public static final String key_chat_inReactionButtonText = "chat_inReactionButtonText";
+    public static final String key_chat_inReactionButtonTextSelected = "chat_inReactionButtonTextSelected";
+    public static final String key_chat_outReactionButtonTextSelected = "chat_outReactionButtonTextSelected";
+
+
     public static final String key_drawable_botInline = "drawableBotInline";
     public static final String key_drawable_botLink = "drawableBotLink";
     public static final String key_drawable_commentSticker = "drawableCommentSticker";
@@ -3711,6 +3730,8 @@ public class Theme {
     public static final String key_drawable_lockIconDrawable = "drawableLockIcon";
     public static final String key_drawable_chat_pollHintDrawableOut = "drawable_chat_pollHintDrawableOut";
     public static final String key_drawable_chat_pollHintDrawableIn = "drawable_chat_pollHintDrawableIn";
+
+
     private static final HashMap<String, Drawable> defaultChatDrawables = new HashMap<>();
     private static final HashMap<String, String> defaultChatDrawableColorKeys = new HashMap<>();
 
@@ -4424,6 +4445,7 @@ public class Theme {
         defaultColors.put(key_chat_outTextSelectionHighlight, 0x2E3F9923);
         defaultColors.put(key_chat_inTextSelectionHighlight, 0x5062A9E3);
         defaultColors.put(key_chat_TextSelectionCursor, 0xFF419FE8);
+        defaultColors.put(key_chat_BlurAlpha, 0xAF000000);
 
         defaultColors.put(key_statisticChartSignature, 0x7f252529);
         defaultColors.put(key_statisticChartSignatureAlpha, 0x7f252529);
@@ -4516,6 +4538,13 @@ public class Theme {
         defaultColors.put(key_voipgroup_mutedByAdminMuteButtonDisabled, 0x3378A3FF);
         defaultColors.put(key_voipgroup_windowBackgroundWhiteInputField, 0xffdbdbdb);
         defaultColors.put(key_voipgroup_windowBackgroundWhiteInputFieldActivated, 0xff37a9f0);
+
+        defaultColors.put(key_chat_outReactionButtonBackground, 0xff78c272);
+        defaultColors.put(key_chat_inReactionButtonBackground, 0xff72b5e8);
+        defaultColors.put(key_chat_inReactionButtonText, 0xff3a8ccf);
+        defaultColors.put(key_chat_outReactionButtonText, 0xff55ab4f);
+        defaultColors.put(key_chat_inReactionButtonTextSelected, 0xffffffff);
+        defaultColors.put(key_chat_outReactionButtonTextSelected, 0xffffffff);
 
 
         fallbackKeys.put(key_chat_inAdminText, key_chat_inTimeText);
@@ -4652,6 +4681,13 @@ public class Theme {
 
         fallbackKeys.put(key_returnToCallMutedBackground, key_windowBackgroundWhite);
         fallbackKeys.put(key_dialogSwipeRemove, key_avatar_backgroundRed);
+
+        fallbackKeys.put(key_chat_inReactionButtonBackground, key_chat_inLoader);
+        fallbackKeys.put(key_chat_outReactionButtonBackground, key_chat_outLoader);
+        fallbackKeys.put(key_chat_inReactionButtonText, key_chat_inPreviewInstantText);
+        fallbackKeys.put(key_chat_outReactionButtonText, key_chat_outPreviewInstantText);
+        fallbackKeys.put(key_chat_inReactionButtonTextSelected, key_windowBackgroundWhite);
+        fallbackKeys.put(key_chat_outReactionButtonTextSelected, key_windowBackgroundWhite);
 
         themeAccentExclusionKeys.addAll(Arrays.asList(keys_avatar_background));
         themeAccentExclusionKeys.addAll(Arrays.asList(keys_avatar_nameInMessage));
@@ -4839,6 +4875,7 @@ public class Theme {
                 new int[]    {          0,                            180,                            45,                             0,                            45,                           180,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0 },
                 new int[]    {          0,                             52,                            46,                            57,                            45,                            64,                            52,                            35,                            36,                            41,                            50,                            50,                            35,                            38,                            37,                            30 }
                 );
+        sortAccents(themeInfo);
         themes.add(currentDayTheme = currentTheme = defaultTheme = themeInfo);
         themesDict.put("Blue", themeInfo);
 
@@ -4862,6 +4899,7 @@ public class Theme {
                 new int[]    {                           225,                            45,                           225,                           135,                            45,                           225,                            45,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0 },
                 new int[]    {                            40,                            40,                            31,                            50,                            25,                            34,                            35,                            35,                            38,                            29,                            24,                            34,                            34,                            31,                            29,                            37,                            21,                            38 }
                 );
+        sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Dark Blue", currentNightTheme = themeInfo);
 
@@ -4885,6 +4923,7 @@ public class Theme {
                 new int[]    {                           315,                           315,                           225,                           315,                             0,                           180,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0 },
                 new int[]    {                            50,                            50,                            58,                            47,                            46,                            50,                            49,                            46,                            51,                            50,                            49,                            34,                            54,                            50,                            40 }
                 );
+        sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Arctic Blue", themeInfo);
 
@@ -4908,6 +4947,7 @@ public class Theme {
                 new int[]    {          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0 },
                 new int[]    {          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0,          0 }
                 );
+        sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Day", themeInfo);
 
@@ -4931,15 +4971,21 @@ public class Theme {
                 new int[]    {                            45,                           135,                             0,                           180,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0,                             0 },
                 new int[]    {                            34,                            47,                            52,                            48,                            54,                            50,                            37,                            56,                            48,                            49,                            40,                            64,                            38,                            48 }
                 );
+        sortAccents(themeInfo);
         themes.add(themeInfo);
         themesDict.put("Night", themeInfo);
 
         String themesString = themeConfig.getString("themes2", null);
 
-        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
-            remoteThemesHash[a] = themeConfig.getLong("2remoteThemesHash" + (a != 0 ? a : ""), 0);
-            lastLoadingThemesTime[a] = themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0);
+        int remoteVersion = themeConfig.getInt("remote_version", 0);
+        int appRemoteThemesVersion = 1;
+        if (remoteVersion == appRemoteThemesVersion) {
+            for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                remoteThemesHash[a] = themeConfig.getLong("2remoteThemesHash" + (a != 0 ? a : ""), 0);
+                lastLoadingThemesTime[a] = themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0);
+            }
         }
+        themeConfig.edit().putInt("remote_version", appRemoteThemesVersion).apply();
         if (!TextUtils.isEmpty(themesString)) {
             try {
                 JSONArray jsonArray = new JSONArray(themesString);
@@ -5150,15 +5196,8 @@ public class Theme {
                         }
                     }
                     if (!newAccents.isEmpty()) {
-                        Collections.sort(newAccents, (o1, o2) -> {
-                            if (o1.id > o2.id) {
-                                return -1;
-                            } else if (o1.id < o2.id) {
-                                return 1;
-                            }
-                            return 0;
-                        });
                         info.themeAccents.addAll(0, newAccents);
+                        sortAccents(info);
                     }
                     if (info.themeAccentsMap != null && info.themeAccentsMap.get(info.currentAccentId) == null) {
                         info.currentAccentId = info.firstAccentIsDefault ? DEFALT_THEME_ACCENT_ID : 0;
@@ -5201,7 +5240,6 @@ public class Theme {
             throw new RuntimeException(e);
         }
         if (applyingTheme == null) {
-//            applyingTheme = currentNightTheme;
             applyingTheme = defaultTheme;
         } else {
             currentDayTheme = applyingTheme;
@@ -5253,7 +5291,10 @@ public class Theme {
             SerializedData serializedData = new SerializedData(Utilities.hexToBytes(value));
             try {
                 TLRPC.TL_theme theme = TLRPC.Theme.TLdeserialize(serializedData, serializedData.readInt32(true), true);
-                previewItems.add(new ChatThemeBottomSheet.ChatThemeItem(EmojiThemes.createPreviewFullTheme(theme)));
+                EmojiThemes fullTheme = EmojiThemes.createPreviewFullTheme(theme);
+                if (fullTheme.items.size() >= 4) {
+                    previewItems.add(new ChatThemeBottomSheet.ChatThemeItem(fullTheme));
+                }
 
                 ChatThemeController.chatThemeQueue.postRunnable(new Runnable() {
                     @Override
@@ -5264,7 +5305,6 @@ public class Theme {
                         AndroidUtilities.runOnUIThread(() -> {
                             defaultEmojiThemes.clear();
                             defaultEmojiThemes.addAll(previewItems);
-                            NotificationCenter.getInstance(0).postNotificationName(NotificationCenter.emojiPreviewThemesChanged);
                         });
                     }
                 });
@@ -5272,6 +5312,42 @@ public class Theme {
                 FileLog.e(e);
             }
         }
+    }
+
+    private static void sortAccents(ThemeInfo info) {
+        Collections.sort(info.themeAccents, (o1, o2) -> {
+            if (isHome(o1)) {
+                return -1;
+            }
+            if (isHome(o2)) {
+                return 1;
+            }
+            int i1 = o1.isDefault ? 1 : 0;
+            int i2 = o2.isDefault ? 1 : 0;
+
+            if (i1 == i2) {
+                if (o1.isDefault) {
+                    if (o1.id > o2.id) {
+                        return 1;
+                    } else if (o1.id < o2.id) {
+                        return -1;
+                    }
+                } else {
+                    if (o1.id > o2.id) {
+                        return -1;
+                    } else if (o1.id < o2.id) {
+                        return 1;
+                    }
+                }
+            } else {
+                if (i1 > i2) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+            return 0;
+        });
     }
 
     private static Method StateListDrawable_getStateDrawableMethod;
@@ -5427,14 +5503,14 @@ public class Theme {
             int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             int minutes = calendar.get(Calendar.MINUTE);
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            if (monthOfYear == 0 && dayOfMonth == 1 && minutes <= 10 && hour == 0) {
+            if (monthOfYear == 0 && dayOfMonth == 1 && hour <= 23) {
                 canStartHolidayAnimation = true;
             } else {
                 canStartHolidayAnimation = false;
             }
             if (dialogs_holidayDrawable == null) {
                 if (monthOfYear == 11 && dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
-                    dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.newyear);
+                    dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -AndroidUtilities.dp(3);
                     dialogs_holidayDrawableOffsetY = -AndroidUtilities.dp(1);
                 }
@@ -5592,14 +5668,6 @@ public class Theme {
     public static Drawable createRoundRectDrawable(int rad, int defaultColor) {
         ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
         defaultDrawable.getPaint().setColor(defaultColor);
-        return defaultDrawable;
-    }
-
-    public static Drawable createBorderRoundRectDrawable(int rad, int defaultColor) {
-        ShapeDrawable defaultDrawable = new ShapeDrawable(new RoundRectShape(new float[]{rad, rad, rad, rad, rad, rad, rad, rad}, null, null));
-        defaultDrawable.getPaint().setColor(defaultColor);
-        defaultDrawable.getPaint().setStyle(Paint.Style.STROKE);
-        defaultDrawable.getPaint().setStrokeWidth(AndroidUtilities.dp(1));
         return defaultDrawable;
     }
 
@@ -7121,7 +7189,7 @@ public class Theme {
     }
 
     public static void loadRemoteThemes(final int currentAccount, boolean force) {
-        if (loadingRemoteThemes[currentAccount]) {
+        if (loadingRemoteThemes[currentAccount] || !force && Math.abs(System.currentTimeMillis() / 1000 - lastLoadingThemesTime[currentAccount]) < 60 * 60 || !UserConfig.getInstance(currentAccount).isClientActivated()) {
             return;
         }
         loadingRemoteThemes[currentAccount] = true;
@@ -7152,15 +7220,13 @@ public class Theme {
                 boolean loadPatterns = false;
                 boolean added = false;
                 for (int a = 0, N = res.themes.size(); a < N; a++) {
-                    TLRPC.Theme t = res.themes.get(a);
+                    TLRPC.TL_theme t = res.themes.get(a);
                     if (!(t instanceof TLRPC.TL_theme)) {
                         continue;
                     }
-                    TLRPC.TL_theme theme = (TLRPC.TL_theme) t;
+                    TLRPC.TL_theme theme = t;
                     if (theme.isDefault) {
-                        //TODO new emoji themes
-                        continue;
-                        //emojiPreviewThemes.add(theme);
+                        emojiPreviewThemes.add(theme);
                     }
                     if (theme.settings != null && theme.settings.size() > 0) {
                         for (int i = 0; i < theme.settings.size(); i++) {
@@ -7192,7 +7258,7 @@ public class Theme {
                                     accent.patternMotion = settings.wallpaper != null && settings.wallpaper.settings != null && settings.wallpaper.settings.motion;
                                     oldServerThemes.remove(accent);
                                 } else {
-                                    accent = info.createNewAccent(theme, currentAccount);
+                                    accent = info.createNewAccent(theme, currentAccount, false, i);
                                     if (!TextUtils.isEmpty(accent.patternSlug)) {
                                         loadPatterns = true;
                                     }
@@ -7271,7 +7337,6 @@ public class Theme {
             SerializedData data = new SerializedData(tlChatTheme.getObjectSize());
             tlChatTheme.serializeToStream(data);
             editor.putString("theme_" + i, Utilities.bytesToHex(data.toByteArray()));
-            EmojiThemes chatTheme = new EmojiThemes(tlChatTheme, false);
         }
         editor.apply();
 
@@ -7282,7 +7347,9 @@ public class Theme {
                 TLRPC.TL_theme theme = emojiPreviewThemes.get(i);
                 EmojiThemes chatTheme = EmojiThemes.createPreviewFullTheme(theme);
                 ChatThemeBottomSheet.ChatThemeItem item = new ChatThemeBottomSheet.ChatThemeItem(chatTheme);
-                previewItems.add(item);
+                if (chatTheme.items.size() >= 4) {
+                    previewItems.add(item);
+                }
             }
             ChatThemeController.chatThemeQueue.postRunnable(new Runnable() {
                 @Override
@@ -7293,13 +7360,13 @@ public class Theme {
                     AndroidUtilities.runOnUIThread(() -> {
                         defaultEmojiThemes.clear();
                         defaultEmojiThemes.addAll(previewItems);
-                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.emojiPreviewThemesChanged);
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiPreviewThemesChanged);
                     });
                 }
             });
         } else {
             defaultEmojiThemes.clear();
-            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.emojiPreviewThemesChanged);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiPreviewThemesChanged);
         }
     }
 
@@ -7460,7 +7527,9 @@ public class Theme {
         try {
             String[] wallpaperLink = new String[1];
             HashMap<String, Integer> colors = getThemeFileValues(new File(pathToFile), null, wallpaperLink);
-            checkIsDark(colors, accent.parentTheme);
+            if (accent != null) {
+                checkIsDark(colors, accent.parentTheme);
+            }
             Integer wallpaperFileOffset = colors.get("wallpaperFileOffset");
             Bitmap bitmap = Bitmaps.createBitmap(560, 678, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -7535,13 +7604,13 @@ public class Theme {
             }
 
 
-            Drawable backDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_back).mutate();
+            Drawable backDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_back).mutate();
             setDrawableColor(backDrawable, actionBarIconColor);
-            Drawable otherDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_dots).mutate();
+            Drawable otherDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_dots).mutate();
             setDrawableColor(otherDrawable, actionBarIconColor);
-            Drawable emojiDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_smile).mutate();
+            Drawable emojiDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_smile).mutate();
             setDrawableColor(emojiDrawable, messageFieldIconColor);
-            Drawable micDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(works.heymate.beta.R.drawable.preview_mic).mutate();
+            Drawable micDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.preview_mic).mutate();
             setDrawableColor(micDrawable, messageFieldIconColor);
 
             MessageDrawable[] msgDrawable = new MessageDrawable[2];
@@ -7614,7 +7683,8 @@ public class Theme {
                         if (gradientRotation == null) {
                             gradientRotation = 45;
                         }
-                        final int[] gradientColors = {backColor, gradientToColor2};
+                        int gradientToColorInt = gradientToColor2 == null ? 0 : gradientToColor2;
+                        final int[] gradientColors = {backColor, gradientToColorInt};
                         wallpaperDrawable = BackgroundGradientDrawable.createDitheredGradientBitmapDrawable(gradientRotation, gradientColors, bitmap.getWidth(), bitmap.getHeight() - 120);
                         quality = 90;
                     }
@@ -7850,18 +7920,18 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            avatarDrawables[0] = resources.getDrawable(works.heymate.beta.R.drawable.chats_saved);
-            avatarDrawables[1] = resources.getDrawable(works.heymate.beta.R.drawable.ghost);
-            avatarDrawables[2] = resources.getDrawable(works.heymate.beta.R.drawable.folders_private);
-            avatarDrawables[3] = resources.getDrawable(works.heymate.beta.R.drawable.folders_requests);
-            avatarDrawables[4] = resources.getDrawable(works.heymate.beta.R.drawable.folders_group);
-            avatarDrawables[5] = resources.getDrawable(works.heymate.beta.R.drawable.folders_channel);
-            avatarDrawables[6] = resources.getDrawable(works.heymate.beta.R.drawable.folders_bot);
-            avatarDrawables[7] = resources.getDrawable(works.heymate.beta.R.drawable.folders_mute);
-            avatarDrawables[8] = resources.getDrawable(works.heymate.beta.R.drawable.folders_read);
-            avatarDrawables[9] = resources.getDrawable(works.heymate.beta.R.drawable.folders_archive);
-            avatarDrawables[10] = resources.getDrawable(works.heymate.beta.R.drawable.folders_private);
-            avatarDrawables[11] = resources.getDrawable(works.heymate.beta.R.drawable.chats_replies);
+            avatarDrawables[0] = resources.getDrawable(R.drawable.chats_saved);
+            avatarDrawables[1] = resources.getDrawable(R.drawable.ghost);
+            avatarDrawables[2] = resources.getDrawable(R.drawable.folders_private);
+            avatarDrawables[3] = resources.getDrawable(R.drawable.folders_requests);
+            avatarDrawables[4] = resources.getDrawable(R.drawable.folders_group);
+            avatarDrawables[5] = resources.getDrawable(R.drawable.folders_channel);
+            avatarDrawables[6] = resources.getDrawable(R.drawable.folders_bot);
+            avatarDrawables[7] = resources.getDrawable(R.drawable.folders_mute);
+            avatarDrawables[8] = resources.getDrawable(R.drawable.folders_read);
+            avatarDrawables[9] = resources.getDrawable(R.drawable.folders_archive);
+            avatarDrawables[10] = resources.getDrawable(R.drawable.folders_private);
+            avatarDrawables[11] = resources.getDrawable(R.drawable.chats_replies);
 
 
             if (dialogs_archiveAvatarDrawable != null) {
@@ -7883,21 +7953,21 @@ public class Theme {
             if (dialogs_hidePsaDrawable != null) {
                 dialogs_hidePsaDrawable.recycle();
             }
-            dialogs_archiveAvatarDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_archiveavatar, "chats_archiveavatar", AndroidUtilities.dp(36), AndroidUtilities.dp(36), false, null);
-            dialogs_archiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_archive, "chats_archive", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_unarchiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_unarchive, "chats_unarchive", AndroidUtilities.dp(AndroidUtilities.dp(36)), AndroidUtilities.dp(36));
-            dialogs_pinArchiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_hide, "chats_hide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_unpinArchiveDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chats_unhide, "chats_unhide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_hidePsaDrawable = new RLottieDrawable(works.heymate.beta.R.raw.chat_audio_record_delete, "chats_psahide", AndroidUtilities.dp(30), AndroidUtilities.dp(30));
+            dialogs_archiveAvatarDrawable = new RLottieDrawable(R.raw.chats_archiveavatar, "chats_archiveavatar", AndroidUtilities.dp(36), AndroidUtilities.dp(36), false, null);
+            dialogs_archiveDrawable = new RLottieDrawable(R.raw.chats_archive, "chats_archive", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_unarchiveDrawable = new RLottieDrawable(R.raw.chats_unarchive, "chats_unarchive", AndroidUtilities.dp(AndroidUtilities.dp(36)), AndroidUtilities.dp(36));
+            dialogs_pinArchiveDrawable = new RLottieDrawable(R.raw.chats_hide, "chats_hide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_unpinArchiveDrawable = new RLottieDrawable(R.raw.chats_unhide, "chats_unhide", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_hidePsaDrawable = new RLottieDrawable(R.raw.chat_audio_record_delete, "chats_psahide", AndroidUtilities.dp(30), AndroidUtilities.dp(30));
 
-            dialogs_swipeMuteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_mute, "swipe_mute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeUnmuteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_unmute, "swipe_unmute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeMuteDrawable = new RLottieDrawable(R.raw.swipe_mute, "swipe_mute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeUnmuteDrawable = new RLottieDrawable(R.raw.swipe_unmute, "swipe_unmute", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
 
-            dialogs_swipeReadDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_read, "swipe_read", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeUnreadDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_unread, "swipe_unread", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeDeleteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_delete, "swipe_delete", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipeUnpinDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_unpin, "swipe_unpin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
-            dialogs_swipePinDrawable = new RLottieDrawable(works.heymate.beta.R.raw.swipe_pin, "swipe_pin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeReadDrawable = new RLottieDrawable(R.raw.swipe_read, "swipe_read", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeUnreadDrawable = new RLottieDrawable(R.raw.swipe_unread, "swipe_unread", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeDeleteDrawable = new RLottieDrawable(R.raw.swipe_delete, "swipe_delete", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipeUnpinDrawable = new RLottieDrawable(R.raw.swipe_unpin, "swipe_unpin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+            dialogs_swipePinDrawable = new RLottieDrawable(R.raw.swipe_pin, "swipe_pin", AndroidUtilities.dp(36), AndroidUtilities.dp(36));
 
             applyCommonTheme();
         }
@@ -8008,25 +8078,25 @@ public class Theme {
             dialogs_errorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             dialogs_actionMessagePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-            dialogs_lockDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_secret);
-            dialogs_checkDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_check).mutate();
-            dialogs_playDrawable = resources.getDrawable(works.heymate.beta.R.drawable.minithumb_play).mutate();
-            dialogs_checkReadDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_check).mutate();
-            dialogs_halfCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_halfcheck);
+            dialogs_lockDrawable = resources.getDrawable(R.drawable.list_secret);
+            dialogs_checkDrawable = resources.getDrawable(R.drawable.list_check).mutate();
+            dialogs_playDrawable = resources.getDrawable(R.drawable.minithumb_play).mutate();
+            dialogs_checkReadDrawable = resources.getDrawable(R.drawable.list_check).mutate();
+            dialogs_halfCheckDrawable = resources.getDrawable(R.drawable.list_halfcheck);
             dialogs_clockDrawable = new MsgClockDrawable();
-            dialogs_errorDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_warning_sign);
-            dialogs_reorderDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_reorder).mutate();
-            dialogs_groupDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_group);
-            dialogs_broadcastDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_broadcast);
-            dialogs_muteDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_mute).mutate();
-            dialogs_verifiedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_area).mutate();
+            dialogs_errorDrawable = resources.getDrawable(R.drawable.list_warning_sign);
+            dialogs_reorderDrawable = resources.getDrawable(R.drawable.list_reorder).mutate();
+            dialogs_groupDrawable = resources.getDrawable(R.drawable.list_group);
+            dialogs_broadcastDrawable = resources.getDrawable(R.drawable.list_broadcast);
+            dialogs_muteDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
+            dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
             dialogs_fakeDrawable = new ScamDrawable(11, 1);
-            dialogs_verifiedCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_check).mutate();
-            dialogs_mentionDrawable = resources.getDrawable(works.heymate.beta.R.drawable.mentionchatslist);
-            dialogs_botDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_bot);
-            dialogs_pinnedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.list_pin);
-            moveUpDrawable = resources.getDrawable(works.heymate.beta.R.drawable.preview_open);
+            dialogs_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
+            dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
+            dialogs_botDrawable = resources.getDrawable(R.drawable.list_bot);
+            dialogs_pinnedDrawable = resources.getDrawable(R.drawable.list_pin);
+            moveUpDrawable = resources.getDrawable(R.drawable.preview_open);
 
             RectF rect = new RectF();
             chat_updatePath[0] = new Path();
@@ -8244,7 +8314,7 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            chat_msgNoSoundDrawable = resources.getDrawable(works.heymate.beta.R.drawable.video_muted);
+            chat_msgNoSoundDrawable = resources.getDrawable(R.drawable.video_muted);
 
             chat_msgInDrawable = new MessageDrawable(MessageDrawable.TYPE_TEXT, false, false);
             chat_msgInSelectedDrawable = new MessageDrawable(MessageDrawable.TYPE_TEXT, false, true);
@@ -8317,40 +8387,40 @@ public class Theme {
             chat_msgCallDownRedDrawable = resources.getDrawable(R.drawable.chat_calls_incoming).mutate();
             chat_msgCallDownGreenDrawable = resources.getDrawable(R.drawable.chat_calls_incoming).mutate();
             for (int a = 0; a < 2; a++) {
-                chat_pollCheckDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.poll_right).mutate();
-                chat_pollCrossDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.poll_wrong).mutate();
-                chat_pollHintDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.smiles_panel_objects).mutate();
-                chat_psaHelpDrawable[a] = resources.getDrawable(works.heymate.beta.R.drawable.msg_psa).mutate();
+                chat_pollCheckDrawable[a] = resources.getDrawable(R.drawable.poll_right).mutate();
+                chat_pollCrossDrawable[a] = resources.getDrawable(R.drawable.poll_wrong).mutate();
+                chat_pollHintDrawable[a] = resources.getDrawable(R.drawable.smiles_panel_objects).mutate();
+                chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
             }
 
-            calllog_msgCallUpRedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_made_green_18dp).mutate();
-            calllog_msgCallUpGreenDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_made_green_18dp).mutate();
-            calllog_msgCallDownRedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_received_green_18dp).mutate();
-            calllog_msgCallDownGreenDrawable = resources.getDrawable(works.heymate.beta.R.drawable.ic_call_received_green_18dp).mutate();
-            chat_msgAvatarLiveLocationDrawable = resources.getDrawable(works.heymate.beta.R.drawable.livepin).mutate();
+            calllog_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
+            calllog_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
+            calllog_msgCallDownRedDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+            calllog_msgCallDownGreenDrawable = resources.getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
+            chat_msgAvatarLiveLocationDrawable = resources.getDrawable(R.drawable.livepin).mutate();
 
-            chat_inlineResultFile = resources.getDrawable(works.heymate.beta.R.drawable.bot_file);
-            chat_inlineResultAudio = resources.getDrawable(works.heymate.beta.R.drawable.bot_music);
-            chat_inlineResultLocation = resources.getDrawable(works.heymate.beta.R.drawable.bot_location);
-            chat_redLocationIcon = resources.getDrawable(works.heymate.beta.R.drawable.map_pin).mutate();
+            chat_inlineResultFile = resources.getDrawable(R.drawable.bot_file);
+            chat_inlineResultAudio = resources.getDrawable(R.drawable.bot_music);
+            chat_inlineResultLocation = resources.getDrawable(R.drawable.bot_location);
+            chat_redLocationIcon = resources.getDrawable(R.drawable.map_pin).mutate();
 
-            chat_botLinkDrawalbe = resources.getDrawable(works.heymate.beta.R.drawable.bot_link);
-            chat_botInlineDrawable = resources.getDrawable(works.heymate.beta.R.drawable.bot_lines);
-            chat_botCardDrawalbe = resources.getDrawable(works.heymate.beta.R.drawable.bot_card);
+            chat_botLinkDrawalbe = resources.getDrawable(R.drawable.bot_link);
+            chat_botInlineDrawable = resources.getDrawable(R.drawable.bot_lines);
+            chat_botCardDrawalbe = resources.getDrawable(R.drawable.bot_card);
 
-            chat_commentDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_msgbubble);
-            chat_commentStickerDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_msgbubble2);
-            chat_commentArrowDrawable = resources.getDrawable(works.heymate.beta.R.drawable.msg_arrowright);
+            chat_commentDrawable = resources.getDrawable(R.drawable.msg_msgbubble);
+            chat_commentStickerDrawable = resources.getDrawable(R.drawable.msg_msgbubble2);
+            chat_commentArrowDrawable = resources.getDrawable(R.drawable.msg_arrowright);
 
             chat_contextResult_shadowUnderSwitchDrawable = resources.getDrawable(R.drawable.header_shadow).mutate();
 
-            chat_attachButtonDrawables[0] = new RLottieDrawable(works.heymate.beta.R.raw.attach_gallery, "attach_gallery", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[1] = new RLottieDrawable(works.heymate.beta.R.raw.attach_music, "attach_music", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[2] = new RLottieDrawable(works.heymate.beta.R.raw.attach_file, "attach_file", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[3] = new RLottieDrawable(works.heymate.beta.R.raw.attach_contact, "attach_contact", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[4] = new RLottieDrawable(works.heymate.beta.R.raw.attach_location, "attach_location", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachButtonDrawables[5] = new RLottieDrawable(works.heymate.beta.R.raw.attach_poll, "attach_poll", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
-            chat_attachEmptyDrawable = resources.getDrawable(works.heymate.beta.R.drawable.nophotos3);
+            chat_attachButtonDrawables[0] = new RLottieDrawable(R.raw.attach_gallery, "attach_gallery", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[1] = new RLottieDrawable(R.raw.attach_music, "attach_music", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[2] = new RLottieDrawable(R.raw.attach_file, "attach_file", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[3] = new RLottieDrawable(R.raw.attach_contact, "attach_contact", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[4] = new RLottieDrawable(R.raw.attach_location, "attach_location", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachButtonDrawables[5] = new RLottieDrawable(R.raw.attach_poll, "attach_poll", AndroidUtilities.dp(26), AndroidUtilities.dp(26));
+            chat_attachEmptyDrawable = resources.getDrawable(R.drawable.nophotos3);
 
             chat_shareIconDrawable = resources.getDrawable(R.drawable.share_arrow).mutate();
             chat_replyIconDrawable = resources.getDrawable(R.drawable.fast_reply);
@@ -8928,8 +8998,8 @@ public class Theme {
 
             Resources resources = context.getResources();
 
-            profile_verifiedDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_area).mutate();
-            profile_verifiedCheckDrawable = resources.getDrawable(works.heymate.beta.R.drawable.verified_check).mutate();
+            profile_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
+            profile_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
 
             applyProfileTheme();
         }
@@ -9056,7 +9126,7 @@ public class Theme {
                 return colorInteger;
             }
         }
-        return  getColor(key);
+        return getColor(key);
     }
     public static int getColor(String key) {
         return getColor(key, null, false);
@@ -9447,6 +9517,7 @@ public class Theme {
             Integer gradientToColor2 = currentColors.get(key_chat_wallpaper_gradient_to2);
             gradientToColor2 = currentColors.get(key_chat_wallpaper_gradient_to2);
             Integer gradientToColor1 = currentColors.get(key_chat_wallpaper_gradient_to1);
+
             if (wallpaperFile != null && wallpaperFile.exists()) {
                 try {
                     if (backgroundColor != null && gradientToColor1 != null && gradientToColor2 != null) {
@@ -9980,5 +10051,20 @@ public class Theme {
 
     public static boolean isCurrentThemeDay() {
         return !getActiveTheme().isDark();
+    }
+
+    public static boolean isHome(ThemeAccent accent) {
+        if (accent.parentTheme != null) {
+            if (accent.parentTheme.getKey().equals("Blue") && accent.id == 99) {
+                return true;
+            }
+            if (accent.parentTheme.getKey().equals("Day") && accent.id == 9) {
+                return true;
+            }
+            if ((accent.parentTheme.getKey().equals("Night") || accent.parentTheme.getKey().equals("Dark Blue")) && accent.id == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

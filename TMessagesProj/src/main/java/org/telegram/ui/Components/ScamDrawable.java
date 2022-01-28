@@ -10,7 +10,7 @@ import android.text.TextPaint;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 
 public class ScamDrawable extends Drawable {
 
@@ -31,9 +31,9 @@ public class ScamDrawable extends Drawable {
         paint.setStrokeWidth(AndroidUtilities.dp(1));
 
         if (type == 0) {
-            text = LocaleController.getString("ScamMessage", works.heymate.beta.R.string.ScamMessage);
+            text = LocaleController.getString("ScamMessage", R.string.ScamMessage);
         } else {
-            text = LocaleController.getString("FakeMessage", works.heymate.beta.R.string.FakeMessage);
+            text = LocaleController.getString("FakeMessage", R.string.FakeMessage);
         }
         textWidth = (int) Math.ceil(textPaint.measureText(text));
     }
@@ -41,9 +41,9 @@ public class ScamDrawable extends Drawable {
     public void checkText() {
         String newText;
         if (currentType == 0) {
-            newText = LocaleController.getString("ScamMessage", works.heymate.beta.R.string.ScamMessage);
+            newText = LocaleController.getString("ScamMessage", R.string.ScamMessage);
         } else {
-            newText = LocaleController.getString("FakeMessage", works.heymate.beta.R.string.FakeMessage);
+            newText = LocaleController.getString("FakeMessage", R.string.FakeMessage);
         }
         if (!newText.equals(text)) {
             text = newText;

@@ -23,7 +23,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -104,7 +104,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
 
             @Override
             public boolean dispatchTouchEvent(MotionEvent ev) {
-                if (sharedMediaLayout != null && sharedMediaLayout.isInFastScroll() && sharedMediaLayout.getY() == 0) {
+                if (sharedMediaLayout != null && sharedMediaLayout.isInFastScroll()) {
                     return sharedMediaLayout.dispatchFastScrollEvent(ev);
                 }
                 if (sharedMediaLayout != null && sharedMediaLayout.checkPinchToZoom(ev)) {
@@ -213,7 +213,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             }
 
         };
-
+        sharedMediaLayout.setPinnedToTop(true);
         sharedMediaLayout.getSearchItem().setTranslationY(0);
         sharedMediaLayout.photoVideoOptionsItem.setTranslationY(0);
 

@@ -29,7 +29,7 @@ import android.widget.ImageView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
@@ -145,7 +145,7 @@ public class PollEditTextCell extends FrameLayout {
             moveImageView = new ImageView(context);
             moveImageView.setFocusable(false);
             moveImageView.setScaleType(ImageView.ScaleType.CENTER);
-            moveImageView.setImageResource(works.heymate.beta.R.drawable.poll_reorder);
+            moveImageView.setImageResource(R.drawable.poll_reorder);
             moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
             addView(moveImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 6, 2, 6, 0));
 
@@ -153,10 +153,10 @@ public class PollEditTextCell extends FrameLayout {
             deleteImageView.setFocusable(false);
             deleteImageView.setScaleType(ImageView.ScaleType.CENTER);
             deleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-            deleteImageView.setImageResource(works.heymate.beta.R.drawable.poll_remove);
+            deleteImageView.setImageResource(R.drawable.poll_remove);
             deleteImageView.setOnClickListener(onDelete);
             deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
-            deleteImageView.setContentDescription(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
+            deleteImageView.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
             addView(deleteImageView, LayoutHelper.createFrame(48, 50, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 3 : 0, 0, LocaleController.isRTL ? 0 : 3, 0));
 
             textView2 = new SimpleTextView(context);
@@ -166,7 +166,7 @@ public class PollEditTextCell extends FrameLayout {
 
             checkBox = new CheckBox2(context, 21);
             checkBox.setColor(null, Theme.key_windowBackgroundWhiteGrayIcon, Theme.key_checkboxCheck);
-            checkBox.setContentDescription(LocaleController.getString("AccDescrQuizCorrectAnswer", works.heymate.beta.R.string.AccDescrQuizCorrectAnswer));
+            checkBox.setContentDescription(LocaleController.getString("AccDescrQuizCorrectAnswer", R.string.AccDescrQuizCorrectAnswer));
             checkBox.setDrawUnchecked(true);
             checkBox.setChecked(true, false);
             checkBox.setAlpha(0.0f);

@@ -46,7 +46,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
@@ -54,7 +54,7 @@ import org.telegram.ui.ActionBar.Theme;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class EditTextBoldCursor extends EditText {
+public class EditTextBoldCursor extends EditTextEffects {
 
     private static Field mEditor;
     private static Field mShowCursorField;
@@ -119,7 +119,7 @@ public class EditTextBoldCursor extends EditText {
     private ViewTreeObserver.OnPreDrawListener listenerFixer;
 
     private FloatingToolbar floatingToolbar;
-    private FloatingActionMode floatingActionMode;
+    public FloatingActionMode floatingActionMode;
     private ViewTreeObserver.OnPreDrawListener floatingToolbarPreDrawListener;
     private View windowView;
     private View attachedToWindow;

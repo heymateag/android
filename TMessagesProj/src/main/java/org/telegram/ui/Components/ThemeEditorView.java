@@ -62,7 +62,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
@@ -171,7 +171,7 @@ public class ThemeEditorView {
 
                 ImageView searchIconImageView = new ImageView(context);
                 searchIconImageView.setScaleType(ImageView.ScaleType.CENTER);
-                searchIconImageView.setImageResource(works.heymate.beta.R.drawable.smiles_inputsearch);
+                searchIconImageView.setImageResource(R.drawable.smiles_inputsearch);
                 searchIconImageView.setColorFilter(new PorterDuffColorFilter(0xffa1a8af, PorterDuff.Mode.MULTIPLY));
                 addView(searchIconImageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 16, 11, 0, 0));
 
@@ -209,7 +209,7 @@ public class ThemeEditorView {
                 searchEditText.setLines(1);
                 searchEditText.setSingleLine(true);
                 searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-                searchEditText.setHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+                searchEditText.setHint(LocaleController.getString("Search", R.string.Search));
                 searchEditText.setCursorColor(0xff50a8eb);
                 searchEditText.setCursorSize(AndroidUtilities.dp(20));
                 searchEditText.setCursorWidth(1.5f);
@@ -240,12 +240,12 @@ public class ThemeEditorView {
                         String text = searchEditText.getText().toString();
                         if (text.length() != 0) {
                             if (searchEmptyView != null) {
-                                searchEmptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+                                searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                             }
                         } else {
                             if (listView.getAdapter() != listAdapter) {
                                 int top = getCurrentTop();
-                                searchEmptyView.setText(LocaleController.getString("NoChats", works.heymate.beta.R.string.NoChats));
+                                searchEmptyView.setText(LocaleController.getString("NoChats", R.string.NoChats));
                                 searchEmptyView.showTextView();
                                 listView.setAdapter(listAdapter);
                                 listAdapter.notifyDataSetChanged();
@@ -317,7 +317,7 @@ public class ThemeEditorView {
                 setWillNotDraw(false);
 
                 circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                circleDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.knob_shadow).mutate();
+                circleDrawable = context.getResources().getDrawable(R.drawable.knob_shadow).mutate();
 
                 colorWheelPaint = new Paint();
                 colorWheelPaint.setAntiAlias(true);
@@ -638,7 +638,7 @@ public class ThemeEditorView {
         public EditorAlert(final Context context, ArrayList<ThemeDescription> items) {
             super(context, true);
 
-            shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
+            shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
 
             containerView = new FrameLayout(context) {
 
@@ -806,7 +806,7 @@ public class ThemeEditorView {
             searchEmptyView = new EmptyTextProgressView(context);
             searchEmptyView.setShowAtCenter(true);
             searchEmptyView.showTextView();
-            searchEmptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+            searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
             listView.setEmptyView(searchEmptyView);
             containerView.addView(searchEmptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 52, 0, 0));
 
@@ -840,7 +840,7 @@ public class ThemeEditorView {
             closeButton.setGravity(Gravity.CENTER);
             closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             closeButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            closeButton.setText(LocaleController.getString("CloseEditor", works.heymate.beta.R.string.CloseEditor).toUpperCase());
+            closeButton.setText(LocaleController.getString("CloseEditor", R.string.CloseEditor).toUpperCase());
             closeButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             bottomSaveLayout.addView(closeButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             closeButton.setOnClickListener(v -> dismiss());
@@ -851,7 +851,7 @@ public class ThemeEditorView {
             saveButton.setGravity(Gravity.CENTER);
             saveButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            saveButton.setText(LocaleController.getString("SaveTheme", works.heymate.beta.R.string.SaveTheme).toUpperCase());
+            saveButton.setText(LocaleController.getString("SaveTheme", R.string.SaveTheme).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             bottomSaveLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
             saveButton.setOnClickListener(v -> {
@@ -872,7 +872,7 @@ public class ThemeEditorView {
             cancelButton.setGravity(Gravity.CENTER);
             cancelButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            cancelButton.setText(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase());
+            cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
             cancelButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             bottomLayout.addView(cancelButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             cancelButton.setOnClickListener(v -> {
@@ -892,7 +892,7 @@ public class ThemeEditorView {
             defaultButtom.setGravity(Gravity.CENTER);
             defaultButtom.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             defaultButtom.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            defaultButtom.setText(LocaleController.getString("Default", works.heymate.beta.R.string.Default).toUpperCase());
+            defaultButtom.setText(LocaleController.getString("Default", R.string.Default).toUpperCase());
             defaultButtom.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(defaultButtom, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             defaultButtom.setOnClickListener(v -> {
@@ -908,7 +908,7 @@ public class ThemeEditorView {
             saveButton.setGravity(Gravity.CENTER);
             saveButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_AUDIO_SELECTOR_COLOR, 0));
             saveButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            saveButton.setText(LocaleController.getString("Save", works.heymate.beta.R.string.Save).toUpperCase());
+            saveButton.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
             saveButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(saveButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             saveButton.setOnClickListener(v -> setColorPickerVisible(false));
@@ -1531,7 +1531,7 @@ public class ThemeEditorView {
     }
 
     private void showWithAnimation() {
-        windowView.setBackgroundResource(works.heymate.beta.R.drawable.theme_picker);
+        windowView.setBackgroundResource(R.drawable.theme_picker);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(ObjectAnimator.ofFloat(windowView, View.ALPHA, 0.0f, 1.0f),
                 ObjectAnimator.ofFloat(windowView, View.SCALE_X, 0.0f, 1.0f),

@@ -28,14 +28,14 @@ import android.view.View;
 import androidx.core.content.FileProvider;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.BuildConfig;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
@@ -148,34 +148,34 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             return;
         }
         BottomSheet.Builder builder = new BottomSheet.Builder(parentFragment.getParentActivity());
-        builder.setTitle(LocaleController.getString("ChoosePhoto", works.heymate.beta.R.string.ChoosePhoto), true);
+        builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
 
         ArrayList<CharSequence> items = new ArrayList<>();
         ArrayList<Integer> icons = new ArrayList<>();
         ArrayList<Integer> ids = new ArrayList<>();
 
-        items.add(LocaleController.getString("ChooseTakePhoto", works.heymate.beta.R.string.ChooseTakePhoto));
-        icons.add(works.heymate.beta.R.drawable.menu_camera);
+        items.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
+        icons.add(R.drawable.menu_camera);
         ids.add(0);
 
         if (canSelectVideo) {
-            items.add(LocaleController.getString("ChooseRecordVideo", works.heymate.beta.R.string.ChooseRecordVideo));
-            icons.add(works.heymate.beta.R.drawable.msg_video);
+            items.add(LocaleController.getString("ChooseRecordVideo", R.string.ChooseRecordVideo));
+            icons.add(R.drawable.msg_video);
             ids.add(4);
         }
 
-        items.add(LocaleController.getString("ChooseFromGallery", works.heymate.beta.R.string.ChooseFromGallery));
-        icons.add(works.heymate.beta.R.drawable.profile_photos);
+        items.add(LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery));
+        icons.add(R.drawable.profile_photos);
         ids.add(1);
 
         if (searchAvailable) {
-            items.add(LocaleController.getString("ChooseFromSearch", works.heymate.beta.R.string.ChooseFromSearch));
-            icons.add(works.heymate.beta.R.drawable.menu_search);
+            items.add(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch));
+            icons.add(R.drawable.menu_search);
             ids.add(2);
         }
         if (hasAvatar) {
-            items.add(LocaleController.getString("DeletePhoto", works.heymate.beta.R.string.DeletePhoto));
-            icons.add(works.heymate.beta.R.drawable.chats_delete);
+            items.add(LocaleController.getString("DeletePhoto", R.string.DeletePhoto));
+            icons.add(R.drawable.chats_delete);
             ids.add(3);
         }
 

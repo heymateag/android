@@ -11,6 +11,7 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -26,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,13 +39,14 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.FilesMigrationService;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -99,6 +102,7 @@ public class CacheControlActivity extends BaseFragment {
     private long totalSize = -1;
     private long totalDeviceSize = -1;
     private long totalDeviceFreeSize = -1;
+    private long migrateOldFolderRow = -1;
     private StorageDiagramView.ClearViewData[] clearViewData = new StorageDiagramView.ClearViewData[7];
     private boolean calculating = true;
 
@@ -115,18 +119,6 @@ public class CacheControlActivity extends BaseFragment {
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-
-        rowCount = 0;
-
-        keepMediaHeaderRow = rowCount++;
-        keepMediaChooserRow = rowCount++;
-        keepMediaInfoRow = rowCount++;
-        deviseStorageHeaderRow = rowCount++;
-        storageUsageRow = rowCount++;
-
-        cacheInfoRow = rowCount++;
-        databaseRow = rowCount++;
-        databaseInfoRow = rowCount++;
 
         databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
 
@@ -209,19 +201,34 @@ public class CacheControlActivity extends BaseFragment {
         });
 
         fragmentCreateTime = System.currentTimeMillis();
+        updateRows();
         return true;
+    }
+
+    private void updateRows() {
+        rowCount = 0;
+
+        keepMediaHeaderRow = rowCount++;
+        keepMediaChooserRow = rowCount++;
+        keepMediaInfoRow = rowCount++;
+        deviseStorageHeaderRow = rowCount++;
+        storageUsageRow = rowCount++;
+
+        cacheInfoRow = rowCount++;
+        databaseRow = rowCount++;
+        databaseInfoRow = rowCount++;
     }
 
     private void updateStorageUsageRow() {
         View view = layoutManager.findViewByPosition(storageUsageRow);
         if (view instanceof StroageUsageView) {
             StroageUsageView stroageUsageView = ((StroageUsageView) view);
-            long currentTime =  System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && currentTime - fragmentCreateTime > 250) {
                 TransitionSet transition = new TransitionSet();
                 ChangeBounds changeBounds = new ChangeBounds();
                 changeBounds.setDuration(250);
-                changeBounds.excludeTarget(stroageUsageView.legendLayout,true);
+                changeBounds.excludeTarget(stroageUsageView.legendLayout, true);
                 Fade in = new Fade(Fade.IN);
                 in.setDuration(290);
                 transition
@@ -371,7 +378,7 @@ public class CacheControlActivity extends BaseFragment {
                     FileLog.e(e);
                 }
 
-                cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", works.heymate.beta.R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
+                cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
                 cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             });
         });
@@ -379,9 +386,9 @@ public class CacheControlActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("StorageUsage", works.heymate.beta.R.string.StorageUsage));
+        actionBar.setTitle(LocaleController.getString("StorageUsage", R.string.StorageUsage));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -406,7 +413,9 @@ public class CacheControlActivity extends BaseFragment {
             if (getParentActivity() == null) {
                 return;
             }
-            if (position == databaseRow) {
+            if (position == migrateOldFolderRow) {
+                migrateOldFolder();
+            } else if (position == databaseRow) {
                 clearDatabase();
             } else if (position == storageUsageRow) {
                 if (totalSize <= 0 || getParentActivity() == null) {
@@ -432,31 +441,31 @@ public class CacheControlActivity extends BaseFragment {
                     String color;
                     if (a == 0) {
                         size = photoSize;
-                        name = LocaleController.getString("LocalPhotoCache", works.heymate.beta.R.string.LocalPhotoCache);
+                        name = LocaleController.getString("LocalPhotoCache", R.string.LocalPhotoCache);
                         color = Theme.key_statisticChartLine_blue;
                     } else if (a == 1) {
                         size = videoSize;
-                        name = LocaleController.getString("LocalVideoCache", works.heymate.beta.R.string.LocalVideoCache);
+                        name = LocaleController.getString("LocalVideoCache", R.string.LocalVideoCache);
                         color = Theme.key_statisticChartLine_golden;
                     } else if (a == 2) {
                         size = documentsSize;
-                        name = LocaleController.getString("LocalDocumentCache", works.heymate.beta.R.string.LocalDocumentCache);
+                        name = LocaleController.getString("LocalDocumentCache", R.string.LocalDocumentCache);
                         color = Theme.key_statisticChartLine_green;
                     } else if (a == 3) {
                         size = musicSize;
-                        name = LocaleController.getString("LocalMusicCache", works.heymate.beta.R.string.LocalMusicCache);
+                        name = LocaleController.getString("LocalMusicCache", R.string.LocalMusicCache);
                         color = Theme.key_statisticChartLine_indigo;
                     } else if (a == 4) {
                         size = audioSize;
-                        name = LocaleController.getString("LocalAudioCache", works.heymate.beta.R.string.LocalAudioCache);
+                        name = LocaleController.getString("LocalAudioCache", R.string.LocalAudioCache);
                         color = Theme.key_statisticChartLine_red;
                     } else if (a == 5) {
                         size = stickersSize;
-                        name = LocaleController.getString("AnimatedStickers", works.heymate.beta.R.string.AnimatedStickers);
+                        name = LocaleController.getString("AnimatedStickers", R.string.AnimatedStickers);
                         color = Theme.key_statisticChartLine_lightgreen;
                     } else {
                         size = cacheSize;
-                        name = LocaleController.getString("LocalCache", works.heymate.beta.R.string.LocalCache);
+                        name = LocaleController.getString("LocalCache", R.string.LocalCache);
                         color = Theme.key_statisticChartLine_lightblue;
                     }
                     if (size > 0) {
@@ -498,7 +507,7 @@ public class CacheControlActivity extends BaseFragment {
                 }
                 circleDiagramView.setData(clearViewData);
                 BottomSheet.BottomSheetCell cell = new BottomSheet.BottomSheetCell(getParentActivity(), 2);
-                cell.setTextAndIcon(LocaleController.getString("ClearMediaCache", works.heymate.beta.R.string.ClearMediaCache), 0);
+                cell.setTextAndIcon(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), 0);
                 actionTextView = cell.getTextView();
                 cell.getTextView().setOnClickListener(v -> {
                     try {
@@ -525,12 +534,17 @@ public class CacheControlActivity extends BaseFragment {
         return fragmentView;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void migrateOldFolder() {
+        FilesMigrationService.checkBottomSheet(this);
+    }
+
     private void clearDatabase() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", works.heymate.beta.R.string.LocalDatabaseClearTextTitle));
-        builder.setMessage(LocaleController.getString("LocalDatabaseClearText", works.heymate.beta.R.string.LocalDatabaseClearText));
-        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
-        builder.setPositiveButton(LocaleController.getString("CacheClear", works.heymate.beta.R.string.CacheClear), (dialogInterface, i) -> {
+        builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle));
+        builder.setMessage(LocaleController.getString("LocalDatabaseClearText", R.string.LocalDatabaseClearText));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("CacheClear", R.string.CacheClear), (dialogInterface, i) -> {
             if (getParentActivity() == null) {
                 return;
             }
@@ -657,7 +671,7 @@ public class CacheControlActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == databaseRow || (position == storageUsageRow && (totalSize > 0) && !calculating);
+            return position == migrateOldFolderRow || position == databaseRow || (position == storageUsageRow && (totalSize > 0) && !calculating);
         }
 
         @Override
@@ -704,7 +718,7 @@ public class CacheControlActivity extends BaseFragment {
                     } else {
                         index = keepMedia + 1;
                     }
-                    slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", works.heymate.beta.R.string.KeepMediaForever));
+                    slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever));
                     break;
                 case 1:
                 default:
@@ -720,20 +734,22 @@ public class CacheControlActivity extends BaseFragment {
                 case 0:
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == databaseRow) {
-                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", works.heymate.beta.R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), false);
+                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), false);
+                    } else if (position == migrateOldFolderRow) {
+                        textCell.setTextAndValue(LocaleController.getString("MigrateOldFolder", R.string.MigrateOldFolder), null, false);
                     }
                     break;
                 case 1:
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == databaseInfoRow) {
-                        privacyCell.setText(LocaleController.getString("LocalDatabaseInfo", works.heymate.beta.R.string.LocalDatabaseInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("LocalDatabaseInfo", R.string.LocalDatabaseInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == cacheInfoRow) {
                         privacyCell.setText("");
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == keepMediaInfoRow) {
-                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", works.heymate.beta.R.string.KeepMediaInfo)));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("KeepMediaInfo", R.string.KeepMediaInfo)));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 2:
@@ -743,9 +759,9 @@ public class CacheControlActivity extends BaseFragment {
                 case 3:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == keepMediaHeaderRow) {
-                        headerCell.setText(LocaleController.getString("KeepMedia", works.heymate.beta.R.string.KeepMedia));
+                        headerCell.setText(LocaleController.getString("KeepMedia", R.string.KeepMedia));
                     } else if (position == deviseStorageHeaderRow) {
-                        headerCell.setText(LocaleController.getString("DeviceStorage", works.heymate.beta.R.string.DeviceStorage));
+                        headerCell.setText(LocaleController.getString("DeviceStorage", R.string.DeviceStorage));
                     }
                     break;
             }
@@ -828,5 +844,22 @@ public class CacheControlActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(bottomSheetView, 0, null, null, null, null, Theme.key_statisticChartLine_orange));
         arrayList.add(new ThemeDescription(bottomSheetView, 0, null, null, null, null, Theme.key_statisticChartLine_indigo));
         return arrayList;
+    }
+
+    @Override
+    public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 4) {
+            boolean allGranted = true;
+            for (int a = 0; a < grantResults.length; a++) {
+                if (grantResults[a] != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+            if (allGranted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && FilesMigrationService.filesMigrationBottomSheet != null) {
+                FilesMigrationService.filesMigrationBottomSheet.migrateOldFolder();
+            }
+
+        }
     }
 }

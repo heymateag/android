@@ -42,7 +42,7 @@ import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -131,7 +131,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         this.parentFragment = parentFragment;
         this.chatId = chatId;
 
-        searchView.searchEditText.setHint(LocaleController.getString("SearchForChats", works.heymate.beta.R.string.SearchForChats));
+        searchView.searchEditText.setHint(LocaleController.getString("SearchForChats", R.string.SearchForChats));
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         touchSlop = configuration.getScaledTouchSlop();
@@ -253,7 +253,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
 
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -261,7 +261,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         }
         floatingButton.setBackgroundDrawable(drawable);
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-        floatingButton.setImageResource(works.heymate.beta.R.drawable.floating_check);
+        floatingButton.setImageResource(R.drawable.floating_check);
 
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();
@@ -296,9 +296,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 if (selectedContacts.size() == 1) {
-                    builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", works.heymate.beta.R.string.AddOneMemberAlertTitle));
+                    builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", R.string.AddOneMemberAlertTitle));
                 } else {
-                    builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", works.heymate.beta.R.string.AddMembersAlertTitle, LocaleController.formatPluralString("Members", selectedContacts.size())));
+                    builder.setTitle(LocaleController.formatString("AddMembersAlertTitle", R.string.AddMembersAlertTitle, LocaleController.formatPluralString("Members", selectedContacts.size())));
                 }
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int a = 0; a < selectedContacts.size(); a++) {
@@ -314,7 +314,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 }
                 TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(chatId);
                 if (selectedContacts.size() > 5) {
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", works.heymate.beta.R.string.AddMembersAlertNamesText, LocaleController.formatPluralString("Members", selectedContacts.size()), chat.title)));
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, LocaleController.formatPluralString("Members", selectedContacts.size()), chat.title)));
                     String countString = String.format("%d", selectedContacts.size());
                     int index = TextUtils.indexOf(spannableStringBuilder, countString);
                     if (index >= 0) {
@@ -322,10 +322,10 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     }
                     builder.setMessage(spannableStringBuilder);
                 } else {
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", works.heymate.beta.R.string.AddMembersAlertNamesText, stringBuilder, chat.title)));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, stringBuilder, chat.title)));
                 }
-                builder.setPositiveButton(LocaleController.getString("Add", works.heymate.beta.R.string.Add), (dialogInterface, i) -> onAddToGroupDone(0));
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setPositiveButton(LocaleController.getString("Add", R.string.Add), (dialogInterface, i) -> onAddToGroupDone(0));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.create();
                 builder.show();
             }
@@ -334,7 +334,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         floatingButton.setScaleX(0.0f);
         floatingButton.setScaleY(0.0f);
         floatingButton.setAlpha(0.0f);
-        floatingButton.setContentDescription(LocaleController.getString("Next", works.heymate.beta.R.string.Next));
+        floatingButton.setContentDescription(LocaleController.getString("Next", R.string.Next));
 
         containerView.addView(floatingButton, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 56 : 60), (Build.VERSION.SDK_INT >= 21 ? 56 : 60), Gravity.RIGHT | Gravity.BOTTOM, 14, 14, 14, 14));
 
@@ -556,7 +556,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 default:
                 case 1:
                     ManageChatTextCell manageChatTextCell = new ManageChatTextCell(context);
-                    manageChatTextCell.setText(LocaleController.getString("VoipGroupCopyInviteLink", works.heymate.beta.R.string.VoipGroupCopyInviteLink), null, works.heymate.beta.R.drawable.msg_link, 7, true);
+                    manageChatTextCell.setText(LocaleController.getString("VoipGroupCopyInviteLink", R.string.VoipGroupCopyInviteLink), null, R.drawable.msg_link, 7, true);
                     manageChatTextCell.setColors(Theme.key_dialogTextBlue2, Theme.key_dialogTextBlue2);
                     view = manageChatTextCell;
                     break;
@@ -585,9 +585,9 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     stickerEmptyView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     stickerEmptyView.subtitle.setVisibility(View.GONE);
                     if (dialogsDelegate != null) {
-                        stickerEmptyView.title.setText(LocaleController.getString("FilterNoChats", works.heymate.beta.R.string.FilterNoChats));
+                        stickerEmptyView.title.setText(LocaleController.getString("FilterNoChats", R.string.FilterNoChats));
                     } else {
-                        stickerEmptyView.title.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
+                        stickerEmptyView.title.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
                     }
                     stickerEmptyView.setAnimateLayoutChange(true);
                     view = stickerEmptyView;
@@ -745,7 +745,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     break;
                 case 0: {
                     GroupCreateSectionCell cell = (GroupCreateSectionCell) holder.itemView;
-                    cell.setText(LocaleController.getString("GlobalSearch", works.heymate.beta.R.string.GlobalSearch));
+                    cell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                     break;
                 }
                 case 1: {

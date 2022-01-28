@@ -35,7 +35,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -421,22 +421,22 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
 	@Override
 	public View createView(Context context) {
-		greenDrawable = getParentActivity().getResources().getDrawable(works.heymate.beta.R.drawable.ic_call_made_green_18dp).mutate();
+		greenDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
 		greenDrawable.setBounds(0, 0, greenDrawable.getIntrinsicWidth(), greenDrawable.getIntrinsicHeight());
 		greenDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.MULTIPLY));
 		iconOut = new ImageSpan(greenDrawable, ImageSpan.ALIGN_BOTTOM);
-		greenDrawable2 = getParentActivity().getResources().getDrawable(works.heymate.beta.R.drawable.ic_call_received_green_18dp).mutate();
+		greenDrawable2 = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
 		greenDrawable2.setBounds(0, 0, greenDrawable2.getIntrinsicWidth(), greenDrawable2.getIntrinsicHeight());
 		greenDrawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedGreenIcon), PorterDuff.Mode.MULTIPLY));
 		iconIn = new ImageSpan(greenDrawable2, ImageSpan.ALIGN_BOTTOM);
-		redDrawable = getParentActivity().getResources().getDrawable(works.heymate.beta.R.drawable.ic_call_received_green_18dp).mutate();
+		redDrawable = getParentActivity().getResources().getDrawable(R.drawable.ic_call_received_green_18dp).mutate();
 		redDrawable.setBounds(0, 0, redDrawable.getIntrinsicWidth(), redDrawable.getIntrinsicHeight());
 		redDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_calls_callReceivedRedIcon), PorterDuff.Mode.MULTIPLY));
 		iconMissed = new ImageSpan(redDrawable, ImageSpan.ALIGN_BOTTOM);
 
 		actionBar.setBackButtonDrawable(new BackDrawable(false));
 		actionBar.setAllowOverlayTitle(true);
-		actionBar.setTitle(LocaleController.getString("Calls", works.heymate.beta.R.string.Calls));
+		actionBar.setTitle(LocaleController.getString("Calls", R.string.Calls));
 		actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
 			@Override
 			public void onItemClick(int id) {
@@ -455,9 +455,9 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		});
 
 		ActionBarMenu menu = actionBar.createMenu();
-		otherItem = menu.addItem(10, works.heymate.beta.R.drawable.ic_ab_other);
-		otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
-		otherItem.addSubItem(delete_all_calls, works.heymate.beta.R.drawable.msg_delete, LocaleController.getString("DeleteAllCalls", works.heymate.beta.R.string.DeleteAllCalls));
+		otherItem = menu.addItem(10, R.drawable.ic_ab_other);
+		otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+		otherItem.addSubItem(delete_all_calls, R.drawable.msg_delete, LocaleController.getString("DeleteAllCalls", R.string.DeleteAllCalls));
 
 		fragmentView = new FrameLayout(context);
 		fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -554,7 +554,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
 		Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
 		if (Build.VERSION.SDK_INT < 21) {
-			Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
+			Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
 			shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
 			CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
 			combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -562,8 +562,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		}
 		floatingButton.setBackgroundDrawable(drawable);
 		floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
-		floatingButton.setImageResource(works.heymate.beta.R.drawable.ic_call);
-		floatingButton.setContentDescription(LocaleController.getString("Call", works.heymate.beta.R.string.Call));
+		floatingButton.setImageResource(R.drawable.ic_call);
+		floatingButton.setContentDescription(LocaleController.getString("Call", R.string.Call));
 		if (Build.VERSION.SDK_INT >= 21) {
 			StateListAnimator animator = new StateListAnimator();
 			animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(floatingButton, "translationZ", AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
@@ -599,17 +599,17 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
 
 		if (all) {
-			builder.setTitle(LocaleController.getString("DeleteAllCalls", works.heymate.beta.R.string.DeleteAllCalls));
-			builder.setMessage(LocaleController.getString("DeleteAllCallsText", works.heymate.beta.R.string.DeleteAllCallsText));
+			builder.setTitle(LocaleController.getString("DeleteAllCalls", R.string.DeleteAllCalls));
+			builder.setMessage(LocaleController.getString("DeleteAllCallsText", R.string.DeleteAllCallsText));
 		} else {
-			builder.setTitle(LocaleController.getString("DeleteCalls", works.heymate.beta.R.string.DeleteCalls));
-			builder.setMessage(LocaleController.getString("DeleteSelectedCallsText", works.heymate.beta.R.string.DeleteSelectedCallsText));
+			builder.setTitle(LocaleController.getString("DeleteCalls", R.string.DeleteCalls));
+			builder.setMessage(LocaleController.getString("DeleteSelectedCallsText", R.string.DeleteSelectedCallsText));
 		}
 		final boolean[] checks = new boolean[]{false};
 		FrameLayout frameLayout = new FrameLayout(getParentActivity());
 		CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
 		cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-		cell.setText(LocaleController.getString("DeleteCallsForEveryone", works.heymate.beta.R.string.DeleteCallsForEveryone), "", false, false);
+		cell.setText(LocaleController.getString("DeleteCallsForEveryone", R.string.DeleteCallsForEveryone), "", false, false);
 		cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(8) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(8), 0);
 		frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 8, 0, 8, 0));
 		cell.setOnClickListener(v -> {
@@ -618,7 +618,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 			cell1.setChecked(checks[0], true);
 		});
 		builder.setView(frameLayout);
-		builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
+		builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
 			if (all) {
 				deleteAllMessages(checks[0]);
 				calls.clear();
@@ -631,7 +631,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 			}
 			hideActionMode(false);
 		});
-		builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+		builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
 		AlertDialog alertDialog = builder.create();
 		showDialog(alertDialog);
 		TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -693,7 +693,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 		actionMode.addView(selectedDialogsCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 		selectedDialogsCountTextView.setOnTouchListener((v, event) -> true);
 
-		actionModeViews.add(actionMode.addItemWithWidth(delete, works.heymate.beta.R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)));
+		actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
 	}
 
 	private boolean addOrRemoveSelectedDialog(ArrayList<TLRPC.Message> messages, CallCell cell) {
@@ -1002,7 +1002,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 					break;
 				case 2:
 					view = new TextInfoPrivacyCell(mContext);
-					view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+					view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
 					break;
 				case 3:
 					view = new HeaderCell(mContext);

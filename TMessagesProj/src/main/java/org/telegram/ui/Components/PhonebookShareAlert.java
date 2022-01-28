@@ -42,7 +42,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -500,13 +500,13 @@ public class PhonebookShareAlert extends BottomSheet {
                             Browser.openUrl(this.parentFragment.getParentActivity(), url);
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(this.parentFragment.getParentActivity());
-                            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialogInterface, i) -> {
+                            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
                                 if (i == 0) {
                                     try {
                                         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
                                         android.content.ClipData clip = android.content.ClipData.newPlainText("label", item.getValue(false));
                                         clipboard.setPrimaryClip(clip);
-                                        Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         FileLog.e(e);
                                     }
@@ -553,14 +553,14 @@ public class PhonebookShareAlert extends BottomSheet {
                         } else {
                             final Bulletin.SimpleLayout layout = new Bulletin.SimpleLayout(context, resourcesProvider);
                             if (item.type == 0) {
-                                layout.textView.setText(LocaleController.getString("PhoneCopied", works.heymate.beta.R.string.PhoneCopied));
-                                layout.imageView.setImageResource(works.heymate.beta.R.drawable.menu_calls);
+                                layout.textView.setText(LocaleController.getString("PhoneCopied", R.string.PhoneCopied));
+                                layout.imageView.setImageResource(R.drawable.menu_calls);
                             } else if (item.type == 1) {
-                                layout.textView.setText(LocaleController.getString("EmailCopied", works.heymate.beta.R.string.EmailCopied));
-                                layout.imageView.setImageResource(works.heymate.beta.R.drawable.menu_mail);
+                                layout.textView.setText(LocaleController.getString("EmailCopied", R.string.EmailCopied));
+                                layout.imageView.setImageResource(R.drawable.menu_mail);
                             } else {
-                                layout.textView.setText(LocaleController.getString("TextCopied", works.heymate.beta.R.string.TextCopied));
-                                layout.imageView.setImageResource(works.heymate.beta.R.drawable.menu_info);
+                                layout.textView.setText(LocaleController.getString("TextCopied", R.string.TextCopied));
+                                layout.imageView.setImageResource(R.drawable.menu_info);
                             }
                             Bulletin.make((FrameLayout) containerView, layout, Bulletin.DURATION_SHORT).show();
                         }
@@ -585,9 +585,9 @@ public class PhonebookShareAlert extends BottomSheet {
         actionBar.setOccupyStatusBar(false);
         actionBar.setAlpha(0.0f);
         if (isImport) {
-            actionBar.setTitle(LocaleController.getString("AddContactPhonebookTitle", works.heymate.beta.R.string.AddContactPhonebookTitle));
+            actionBar.setTitle(LocaleController.getString("AddContactPhonebookTitle", R.string.AddContactPhonebookTitle));
         } else {
-            actionBar.setTitle(LocaleController.getString("ShareContactTitle", works.heymate.beta.R.string.ShareContactTitle));
+            actionBar.setTitle(LocaleController.getString("ShareContactTitle", R.string.ShareContactTitle));
         }
         containerView.addView(actionBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -615,9 +615,9 @@ public class PhonebookShareAlert extends BottomSheet {
         buttonTextView.setTextColor(getThemedColor(Theme.key_featuredStickers_buttonText));
         buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         if (isImport) {
-            buttonTextView.setText(LocaleController.getString("AddContactPhonebookTitle", works.heymate.beta.R.string.AddContactPhonebookTitle));
+            buttonTextView.setText(LocaleController.getString("AddContactPhonebookTitle", R.string.AddContactPhonebookTitle));
         } else {
-            buttonTextView.setText(LocaleController.getString("ShareContactTitle", works.heymate.beta.R.string.ShareContactTitle));
+            buttonTextView.setText(LocaleController.getString("ShareContactTitle", R.string.ShareContactTitle));
         }
         buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), getThemedColor(Theme.key_featuredStickers_addButton), getThemedColor(Theme.key_featuredStickers_addButtonPressed)));
@@ -625,11 +625,11 @@ public class PhonebookShareAlert extends BottomSheet {
         buttonTextView.setOnClickListener(v -> {
             if (isImport) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(LocaleController.getString("AddContactTitle", works.heymate.beta.R.string.AddContactTitle));
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.setItems(new CharSequence[]{
-                        LocaleController.getString("CreateNewContact", works.heymate.beta.R.string.CreateNewContact),
-                        LocaleController.getString("AddToExistingContact", works.heymate.beta.R.string.AddToExistingContact)
+                        LocaleController.getString("CreateNewContact", R.string.CreateNewContact),
+                        LocaleController.getString("AddToExistingContact", R.string.AddToExistingContact)
                 }, new DialogInterface.OnClickListener() {
 
                     private void fillRowWithType(String type, ContentValues row) {
@@ -1052,29 +1052,29 @@ public class PhonebookShareAlert extends BottomSheet {
                 int icon;
                 if (position >= phoneStartRow && position < phoneEndRow) {
                     item = phones.get(position - phoneStartRow);
-                    icon = works.heymate.beta.R.drawable.menu_calls;
+                    icon = R.drawable.menu_calls;
                 } else {
                     item = other.get(position - vcardStartRow);
                     if (item.type == 1) {
-                        icon = works.heymate.beta.R.drawable.menu_mail;
+                        icon = R.drawable.menu_mail;
                     } else if (item.type == 2) {
-                        icon = works.heymate.beta.R.drawable.menu_location;
+                        icon = R.drawable.menu_location;
                     } else if (item.type == 3) {
-                        icon = works.heymate.beta.R.drawable.msg_link;
+                        icon = R.drawable.msg_link;
                     } else if (item.type == 4) {
-                        icon = works.heymate.beta.R.drawable.profile_info;
+                        icon = R.drawable.profile_info;
                     } else if (item.type == 5) {
-                        icon = works.heymate.beta.R.drawable.menu_date;
+                        icon = R.drawable.menu_date;
                     } else if (item.type == 6) {
                         if ("ORG".equalsIgnoreCase(item.getRawType(true))) {
-                            icon = works.heymate.beta.R.drawable.menu_work;
+                            icon = R.drawable.menu_work;
                         } else {
-                            icon = works.heymate.beta.R.drawable.menu_jobtitle;
+                            icon = R.drawable.menu_jobtitle;
                         }
                     } else if (item.type == 20) {
-                        icon = works.heymate.beta.R.drawable.menu_info;
+                        icon = R.drawable.menu_info;
                     } else {
-                        icon = works.heymate.beta.R.drawable.menu_info;
+                        icon = R.drawable.menu_info;
                     }
                 }
                 cell.setVCardItem(item, icon, position != getItemCount() - 1);

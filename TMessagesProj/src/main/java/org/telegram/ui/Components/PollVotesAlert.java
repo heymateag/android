@@ -44,7 +44,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -226,9 +226,9 @@ public class PollVotesAlert extends BottomSheet {
                     righTextView.setText(LocaleController.formatPluralString("Vote", votesCount));
                 }
             } else if (collapsed == 1) {
-                righTextView.setText(LocaleController.getString("PollExpand", works.heymate.beta.R.string.PollExpand));
+                righTextView.setText(LocaleController.getString("PollExpand", R.string.PollExpand));
             } else {
-                righTextView.setText(LocaleController.getString("PollCollapse", works.heymate.beta.R.string.PollCollapse));
+                righTextView.setText(LocaleController.getString("PollCollapse", R.string.PollCollapse));
             }
         }
     }
@@ -570,7 +570,7 @@ public class PollVotesAlert extends BottomSheet {
 
         updatePlaceholder();
 
-        shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
+        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
 
         containerView = new FrameLayout(context) {
@@ -838,14 +838,14 @@ public class PollVotesAlert extends BottomSheet {
             }
         };
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setItemsColor(Theme.getColor(Theme.key_dialogTextBlack), false);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_dialogButtonSelector), false);
         actionBar.setTitleColor(Theme.getColor(Theme.key_dialogTextBlack));
         actionBar.setSubtitleColor(Theme.getColor(Theme.key_player_actionBarSubtitle));
         actionBar.setOccupyStatusBar(false);
         actionBar.setAlpha(0.0f);
-        actionBar.setTitle(LocaleController.getString("PollResults", works.heymate.beta.R.string.PollResults));
+        actionBar.setTitle(LocaleController.getString("PollResults", R.string.PollResults));
         if (poll.quiz) {
             actionBar.setSubtitle(LocaleController.formatPluralString("Answer", mediaPoll.results.total_voters));
         } else {
@@ -1043,7 +1043,7 @@ public class PollVotesAlert extends BottomSheet {
             return new SectionCell(mContext) {
                 @Override
                 protected void onCollapseClick() {
-                    VotesList list = (VotesList) getTag(works.heymate.beta.R.id.object_tag);
+                    VotesList list = (VotesList) getTag(R.id.object_tag);
                     if (list.votes.size() <= 15) {
                         return;
                     }
@@ -1074,7 +1074,7 @@ public class PollVotesAlert extends BottomSheet {
                     if (Arrays.equals(answer.option, votesList.option)) {
                         Button button = votesPercents.get(votesList);
                         sectionCell.setText(answer.text, button.percent, button.votesCount, votesList.getCollapsed());
-                        sectionCell.setTag(works.heymate.beta.R.id.object_tag, votesList);
+                        sectionCell.setTag(R.id.object_tag, votesList);
                         break;
                     }
                 }
@@ -1127,7 +1127,7 @@ public class PollVotesAlert extends BottomSheet {
                         if (Arrays.equals(answer.option, votesList.option)) {
                             Button button = votesPercents.get(votesList);
                             sectionCell.setText(answer.text, button.percent, button.votesCount, votesList.getCollapsed());
-                            sectionCell.setTag(works.heymate.beta.R.id.object_tag, votesList);
+                            sectionCell.setTag(R.id.object_tag, votesList);
                             break;
                         }
                     }
@@ -1137,7 +1137,7 @@ public class PollVotesAlert extends BottomSheet {
                     TextCell textCell = (TextCell) holder.itemView;
                     section--;
                     VotesList votesList = voters.get(section);
-                    textCell.setTextAndIcon(LocaleController.formatPluralString("ShowVotes", votesList.count - votesList.getCount()), works.heymate.beta.R.drawable.arrow_more, false);
+                    textCell.setTextAndIcon(LocaleController.formatPluralString("ShowVotes", votesList.count - votesList.getCount()), R.drawable.arrow_more, false);
                     break;
                 }
             }

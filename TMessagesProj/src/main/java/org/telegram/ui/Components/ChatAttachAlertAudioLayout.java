@@ -38,7 +38,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
@@ -138,7 +138,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                 parentAlert.makeFocusable(editText, true);
             }
         };
-        searchField.setHint(LocaleController.getString("SearchMusic", works.heymate.beta.R.string.SearchMusic));
+        searchField.setHint(LocaleController.getString("SearchMusic", R.string.SearchMusic));
         frameLayout.addView(searchField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
         progressView = new EmptyTextProgressView(context, null, resourcesProvider);
@@ -265,10 +265,10 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             emptyView.setVisibility(View.GONE);
         } else {
             if (listView.getAdapter() == searchAdapter) {
-                emptyTitleTextView.setText(LocaleController.getString("NoAudioFound", works.heymate.beta.R.string.NoAudioFound));
+                emptyTitleTextView.setText(LocaleController.getString("NoAudioFound", R.string.NoAudioFound));
             } else {
-                emptyTitleTextView.setText(LocaleController.getString("NoAudioFiles", works.heymate.beta.R.string.NoAudioFiles));
-                emptySubtitleTextView.setText(LocaleController.getString("NoAudioFilesInfo", works.heymate.beta.R.string.NoAudioFilesInfo));
+                emptyTitleTextView.setText(LocaleController.getString("NoAudioFiles", R.string.NoAudioFiles));
+                emptySubtitleTextView.setText(LocaleController.getString("NoAudioFilesInfo", R.string.NoAudioFilesInfo));
             }
             currentEmptyView = emptyView;
             progressView.setVisibility(View.GONE);
@@ -470,7 +470,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             add = false;
         } else {
             if (maxSelectedFiles >= 0 && selectedAudios.size() >= maxSelectedFiles) {
-                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", works.heymate.beta.R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", maxSelectedFiles)));
+                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", maxSelectedFiles)));
                 return;
             }
             selectedAudios.put(audioEntry.id, audioEntry);
@@ -747,7 +747,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                     listView.setAdapter(searchAdapter);
                 }
                 if (listView.getAdapter() == searchAdapter) {
-                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundInfo", works.heymate.beta.R.string.NoAudioFoundInfo, query)));
+                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundInfo", R.string.NoAudioFoundInfo, query)));
                 }
                 searchResult = result;
                 notifyDataSetChanged();

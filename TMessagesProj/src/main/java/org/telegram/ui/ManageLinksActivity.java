@@ -43,7 +43,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
@@ -517,9 +517,9 @@ public class ManageLinksActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("InviteLinks", works.heymate.beta.R.string.InviteLinks));
+        actionBar.setTitle(LocaleController.getString("InviteLinks", R.string.InviteLinks));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -547,19 +547,7 @@ public class ManageLinksActivity extends BaseFragment {
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
 
-        listView = new RecyclerListView(context) {
-            @Override
-            protected void dispatchDraw(Canvas canvas) {
-                recyclerItemsEnterAnimator.dispatchDraw();
-                super.dispatchDraw(canvas);
-            }
-
-            @Override
-            protected void onDetachedFromWindow() {
-                super.onDetachedFromWindow();
-                recyclerItemsEnterAnimator.onDetached();
-            }
-        };
+        listView = new RecyclerListView(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean supportsPredictiveItemAnimations() {
@@ -617,9 +605,9 @@ public class ManageLinksActivity extends BaseFragment {
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("DeleteAllRevokedLinks", works.heymate.beta.R.string.DeleteAllRevokedLinks));
-                builder.setMessage(LocaleController.getString("DeleteAllRevokedLinkHelp", works.heymate.beta.R.string.DeleteAllRevokedLinkHelp));
-                builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface2, i2) -> {
+                builder.setTitle(LocaleController.getString("DeleteAllRevokedLinks", R.string.DeleteAllRevokedLinks));
+                builder.setMessage(LocaleController.getString("DeleteAllRevokedLinkHelp", R.string.DeleteAllRevokedLinkHelp));
+                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface2, i2) -> {
                     TLRPC.TL_messages_deleteRevokedExportedChatInvites req = new TLRPC.TL_messages_deleteRevokedExportedChatInvites();
                     req.peer = getMessagesController().getInputPeer(-currentChatId);
                     if (adminId == getUserConfig().getClientUserId()) {
@@ -637,7 +625,7 @@ public class ManageLinksActivity extends BaseFragment {
                         }
                     }));
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position >= adminsStartRow && position < adminsEndRow) {
                 int p = position - adminsStartRow;
@@ -660,8 +648,8 @@ public class ManageLinksActivity extends BaseFragment {
             return false;
         });
 
-        linkIcon = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.msg_link_1);
-        linkIconRevoked = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.msg_link_2);
+        linkIcon = ContextCompat.getDrawable(context, R.drawable.msg_link_1);
+        linkIconRevoked = ContextCompat.getDrawable(context, R.drawable.msg_link_2);
         linkIcon.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY));
         updateRows(true);
 
@@ -701,7 +689,7 @@ public class ManageLinksActivity extends BaseFragment {
             messageTextView.setTextColor(Theme.getColor(Theme.key_chats_message));
             messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             messageTextView.setGravity(Gravity.CENTER);
-            messageTextView.setText(isChannel ? LocaleController.getString("PrimaryLinkHelpChannel", works.heymate.beta.R.string.PrimaryLinkHelpChannel) : LocaleController.getString("PrimaryLinkHelp", works.heymate.beta.R.string.PrimaryLinkHelp));
+            messageTextView.setText(isChannel ? LocaleController.getString("PrimaryLinkHelpChannel", R.string.PrimaryLinkHelpChannel) : LocaleController.getString("PrimaryLinkHelp", R.string.PrimaryLinkHelp));
 
             addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 52, 143, 52, 18));
         }
@@ -751,7 +739,7 @@ public class ManageLinksActivity extends BaseFragment {
                 case 0:
                 default:
                     view = new HintInnerCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundWhite));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundWhite));
                     break;
                 case 1:
                     view = new HeaderCell(mContext, 23);
@@ -795,19 +783,19 @@ public class ManageLinksActivity extends BaseFragment {
                     break;
                 case 7:
                     view = new ShadowSectionCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 8:
                     TextSettingsCell revokeAll = new TextSettingsCell(mContext);
                     revokeAll.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    revokeAll.setText(LocaleController.getString("DeleteAllRevokedLinks", works.heymate.beta.R.string.DeleteAllRevokedLinks), false);
+                    revokeAll.setText(LocaleController.getString("DeleteAllRevokedLinks", R.string.DeleteAllRevokedLinks), false);
                     revokeAll.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
                     view = revokeAll;
                     break;
                 case 9:
                     TextInfoPrivacyCell cell = new TextInfoPrivacyCell(mContext);
-                    cell.setText(LocaleController.getString("CreateNewLinkHelp", works.heymate.beta.R.string.CreateNewLinkHelp));
-                    cell.setBackground(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    cell.setText(LocaleController.getString("CreateNewLinkHelp", R.string.CreateNewLinkHelp));
+                    cell.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     view = cell;
                     break;
                 case 10:
@@ -848,29 +836,29 @@ public class ManageLinksActivity extends BaseFragment {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == permanentLinkHeaderRow) {
                         if (isPublic && adminId == getAccountInstance().getUserConfig().clientUserId) {
-                            headerCell.setText(LocaleController.getString("PublicLink", works.heymate.beta.R.string.PublicLink));
+                            headerCell.setText(LocaleController.getString("PublicLink", R.string.PublicLink));
                         } else if (adminId == getAccountInstance().getUserConfig().clientUserId) {
-                            headerCell.setText(LocaleController.getString("ChannelInviteLinkTitle", works.heymate.beta.R.string.ChannelInviteLinkTitle));
+                            headerCell.setText(LocaleController.getString("ChannelInviteLinkTitle", R.string.ChannelInviteLinkTitle));
                         } else {
-                            headerCell.setText(LocaleController.getString("PermanentLinkForThisAdmin", works.heymate.beta.R.string.PermanentLinkForThisAdmin));
+                            headerCell.setText(LocaleController.getString("PermanentLinkForThisAdmin", R.string.PermanentLinkForThisAdmin));
                         }
                     } else if (position == revokedHeader) {
-                        headerCell.setText(LocaleController.getString("RevokedLinks", works.heymate.beta.R.string.RevokedLinks));
+                        headerCell.setText(LocaleController.getString("RevokedLinks", R.string.RevokedLinks));
                     } else if (position == linksHeaderRow) {
-                        headerCell.setText(LocaleController.getString("LinksCreatedByThisAdmin", works.heymate.beta.R.string.LinksCreatedByThisAdmin));
+                        headerCell.setText(LocaleController.getString("LinksCreatedByThisAdmin", R.string.LinksCreatedByThisAdmin));
                     } else if (position == adminsHeaderRow) {
-                        headerCell.setText(LocaleController.getString("LinksCreatedByOtherAdmins", works.heymate.beta.R.string.LinksCreatedByOtherAdmins));
+                        headerCell.setText(LocaleController.getString("LinksCreatedByOtherAdmins", R.string.LinksCreatedByOtherAdmins));
                     }
                     break;
                 case 3:
                     TextCell textCell = (TextCell) holder.itemView;
-                    Drawable drawable1 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_circle);
-                    Drawable drawable2 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_plus);
+                    Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.poll_add_circle);
+                    Drawable drawable2 = mContext.getResources().getDrawable(R.drawable.poll_add_plus);
                     drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
                     drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.MULTIPLY));
                     CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
 
-                    textCell.setTextAndIcon(LocaleController.getString("CreateNewLink", works.heymate.beta.R.string.CreateNewLink), combinedDrawable, !invites.isEmpty());
+                    textCell.setTextAndIcon(LocaleController.getString("CreateNewLink", R.string.CreateNewLink), combinedDrawable, !invites.isEmpty());
                     break;
                 case 5:
                     TLRPC.TL_chatInviteExported invite;
@@ -974,7 +962,7 @@ public class ManageLinksActivity extends BaseFragment {
                     DiffCallback callback = saveListState();
                     revokedInvites.add(0, oldInvite);
                     updateRecyclerViewAnimated(callback);
-                    BulletinFactory.of(this).createSimpleBulletin(works.heymate.beta.R.raw.linkbroken, LocaleController.getString("InviteRevokedHint", works.heymate.beta.R.string.InviteRevokedHint)).show();
+                    BulletinFactory.of(this).createSimpleBulletin(R.raw.linkbroken, LocaleController.getString("InviteRevokedHint", R.string.InviteRevokedHint)).show();
                 }
 
             }));
@@ -1102,7 +1090,7 @@ public class ManageLinksActivity extends BaseFragment {
             linearLayout.addView(subtitleView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 6, 0, 0));
 
             optionsView = new ImageView(context);
-            optionsView.setImageDrawable(ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.ic_ab_other));
+            optionsView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ab_other));
             optionsView.setScaleType(ImageView.ScaleType.CENTER);
             optionsView.setColorFilter(Theme.getColor(Theme.key_stickers_menu));
             optionsView.setOnClickListener(view -> {
@@ -1115,28 +1103,28 @@ public class ManageLinksActivity extends BaseFragment {
 
                 boolean redLastItem = false;
                 if (invite.revoked) {
-                    items.add(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
-                    icons.add(works.heymate.beta.R.drawable.msg_delete);
+                    items.add(LocaleController.getString("Delete", R.string.Delete));
+                    icons.add(R.drawable.msg_delete);
                     actions.add(4);
                     redLastItem = true;
                 } else {
-                    items.add(LocaleController.getString("CopyLink", works.heymate.beta.R.string.CopyLink));
-                    icons.add(works.heymate.beta.R.drawable.msg_copy);
+                    items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
+                    icons.add(R.drawable.msg_copy);
                     actions.add(0);
 
-                    items.add(LocaleController.getString("ShareLink", works.heymate.beta.R.string.ShareLink));
-                    icons.add(works.heymate.beta.R.drawable.msg_share);
+                    items.add(LocaleController.getString("ShareLink", R.string.ShareLink));
+                    icons.add(R.drawable.msg_share);
                     actions.add(1);
 
                     if (!invite.permanent && canEdit) {
-                        items.add(LocaleController.getString("EditLink", works.heymate.beta.R.string.EditLink));
-                        icons.add(works.heymate.beta.R.drawable.msg_edit);
+                        items.add(LocaleController.getString("EditLink", R.string.EditLink));
+                        icons.add(R.drawable.msg_edit);
                         actions.add(2);
                     }
 
                     if (canEdit) {
-                        items.add(LocaleController.getString("RevokeLink", works.heymate.beta.R.string.RevokeLink));
-                        icons.add(works.heymate.beta.R.drawable.msg_delete);
+                        items.add(LocaleController.getString("RevokeLink", R.string.RevokeLink));
+                        icons.add(R.drawable.msg_delete);
                         actions.add(3);
                         redLastItem = true;
                     }
@@ -1166,7 +1154,7 @@ public class ManageLinksActivity extends BaseFragment {
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType("text/plain");
                                 intent.putExtra(Intent.EXTRA_TEXT, invite.link);
-                                startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", works.heymate.beta.R.string.InviteToGroupByLink)), 500);
+                                startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink)), 500);
                             } catch (Exception e) {
                                 FileLog.e(e);
                             }
@@ -1194,7 +1182,7 @@ public class ManageLinksActivity extends BaseFragment {
                             break;
                     }
                 });
-                builder.setTitle(LocaleController.getString("InviteLink", works.heymate.beta.R.string.InviteLink));
+                builder.setTitle(LocaleController.getString("InviteLink", R.string.InviteLink));
                 AlertDialog alert = builder.create();
                 builder.show();
                 if (redLastItem) {
@@ -1402,20 +1390,20 @@ public class ManageLinksActivity extends BaseFragment {
                 DotDividerSpan dotDividerSpan = new DotDividerSpan();
                 dotDividerSpan.setTopPadding(AndroidUtilities.dp(1.5f));
                 spannableStringBuilder.append("  .  ").setSpan(dotDividerSpan, spannableStringBuilder.length() - 3, spannableStringBuilder.length() - 2, 0);
-                spannableStringBuilder.append(LocaleController.getString("Permanent", works.heymate.beta.R.string.Permanent));
+                spannableStringBuilder.append(LocaleController.getString("Permanent", R.string.Permanent));
                 subtitleView.setText(spannableStringBuilder);
             } else if (invite.expired || invite.revoked) {
                 if (invite.revoked && invite.usage == 0) {
-                    joinedString = LocaleController.getString("NoOneJoined", works.heymate.beta.R.string.NoOneJoined);
+                    joinedString = LocaleController.getString("NoOneJoined", R.string.NoOneJoined);
                 }
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(joinedString);
                 DotDividerSpan dotDividerSpan = new DotDividerSpan();
                 dotDividerSpan.setTopPadding(AndroidUtilities.dp(1.5f));
                 spannableStringBuilder.append("  .  ").setSpan(dotDividerSpan, spannableStringBuilder.length() - 3, spannableStringBuilder.length() - 2, 0);
                 if (!invite.revoked && invite.usage_limit > 0 && invite.usage >= invite.usage_limit) {
-                    spannableStringBuilder.append(LocaleController.getString("LinkLimitReached", works.heymate.beta.R.string.LinkLimitReached));
+                    spannableStringBuilder.append(LocaleController.getString("LinkLimitReached", R.string.LinkLimitReached));
                 } else {
-                    spannableStringBuilder.append(invite.revoked ? LocaleController.getString("Revoked", works.heymate.beta.R.string.Revoked) : LocaleController.getString("Expired", works.heymate.beta.R.string.Expired));
+                    spannableStringBuilder.append(invite.revoked ? LocaleController.getString("Revoked", R.string.Revoked) : LocaleController.getString("Expired", R.string.Expired));
                 }
                 subtitleView.setText(spannableStringBuilder);
             } else if (invite.expire_date > 0) {
@@ -1498,7 +1486,7 @@ public class ManageLinksActivity extends BaseFragment {
                     }
                 }
                 if (getParentActivity() != null) {
-                    BulletinFactory.of(this).createSimpleBulletin(works.heymate.beta.R.raw.linkbroken, LocaleController.getString("InviteRevokedHint", works.heymate.beta.R.string.InviteRevokedHint)).show();
+                    BulletinFactory.of(this).createSimpleBulletin(R.raw.linkbroken, LocaleController.getString("InviteRevokedHint", R.string.InviteRevokedHint)).show();
                 }
             }
         }));

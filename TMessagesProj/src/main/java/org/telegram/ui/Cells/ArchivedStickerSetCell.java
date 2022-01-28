@@ -32,7 +32,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -65,7 +65,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
 
         if (this.checkable = checkable) {
             currentButton = addButton = new ProgressButton(context);
-            addButton.setText(LocaleController.getString("Add", works.heymate.beta.R.string.Add));
+            addButton.setText(LocaleController.getString("Add", R.string.Add));
             addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
             addButton.setProgressColor(Theme.getColor(Theme.key_featuredStickers_buttonProgress));
             addButton.setBackgroundRoundRect(Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
@@ -78,7 +78,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             deleteButton.setMinimumWidth(minWidth);
             deleteButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             deleteButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_removeButtonText));
-            deleteButton.setText(LocaleController.getString("StickersRemove", works.heymate.beta.R.string.StickersRemove));
+            deleteButton.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
             deleteButton.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor(Theme.key_featuredStickers_removeButtonText)));
             deleteButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             ViewHelper.setPadding(deleteButton, 8, 0, 8, 0);

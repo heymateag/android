@@ -41,7 +41,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.RLottieImageView;
@@ -88,6 +88,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private int topResId;
     private View topView;
     private int topAnimationId;
+    private int topAnimationSize;
     private int topHeight = 132;
     private Drawable topDrawable;
     private int topBackgroundColor;
@@ -138,6 +139,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private float aspectRatio;
     private boolean dimEnabled = true;
     private final Theme.ResourcesProvider resourcesProvider;
+    private boolean topAnimationAutoRepeat = true;
 
     public static class AlertDialogCell extends FrameLayout {
 
@@ -461,12 +463,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             } else if (topResId != 0) {
                 topImageView.setImageResource(topResId);
             } else {
-                topImageView.setAutoRepeat(true);
-                topImageView.setAnimation(topAnimationId, 94, 94);
+                topImageView.setAutoRepeat(topAnimationAutoRepeat);
+                topImageView.setAnimation(topAnimationId, topAnimationSize, topAnimationSize);
                 topImageView.playAnimation();
             }
             topImageView.setScaleType(ImageView.ScaleType.CENTER);
-            topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(works.heymate.beta.R.drawable.popup_fixed_top));
+            topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.popup_fixed_top));
             topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(topBackgroundColor, PorterDuff.Mode.MULTIPLY));
             topImageView.setPadding(0, 0, 0, 0);
             containerView.addView(topImageView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, topHeight, Gravity.LEFT | Gravity.TOP, -8, -8, 0, 0));
@@ -507,8 +509,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         if (progressViewStyle == 0) {
-            shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(works.heymate.beta.R.drawable.header_shadow).mutate();
-            shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(works.heymate.beta.R.drawable.header_shadow_reverse).mutate();
+            shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow).mutate();
+            shadow[1] = (BitmapDrawable) getContext().getResources().getDrawable(R.drawable.header_shadow_reverse).mutate();
             shadow[0].setAlpha(0);
             shadow[1].setAlpha(0);
             shadow[0].setCallback(this);
@@ -937,10 +939,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             return;
         }
         Builder builder = new Builder(getContext());
-        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-        builder.setMessage(LocaleController.getString("StopLoading", works.heymate.beta.R.string.StopLoading));
-        builder.setPositiveButton(LocaleController.getString("WaitMore", works.heymate.beta.R.string.WaitMore), null);
-        builder.setNegativeButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setMessage(LocaleController.getString("StopLoading", R.string.StopLoading));
+        builder.setPositiveButton(LocaleController.getString("WaitMore", R.string.WaitMore), null);
+        builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
             if (onCancelListener != null) {
                 onCancelListener.onCancel(AlertDialog.this);
             }
@@ -1059,7 +1061,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     public void setTopAnimation(int resId, int backgroundColor) {
+        setTopAnimation(resId, 94, backgroundColor);
+    }
+    public void setTopAnimation(int resId, int size, int backgroundColor) {
         topAnimationId = resId;
+        topAnimationSize = size;
         topBackgroundColor = backgroundColor;
     }
 
@@ -1273,10 +1279,15 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             return this;
         }
 
-        public Builder setTopAnimation(int resId, int backgroundColor) {
+        public Builder setTopAnimation(int resId, int size, boolean autoRepeat, int backgroundColor) {
             alertDialog.topAnimationId = resId;
+            alertDialog.topAnimationSize = size;
+            alertDialog.topAnimationAutoRepeat = autoRepeat;
             alertDialog.topBackgroundColor = backgroundColor;
             return this;
+        }
+        public Builder setTopAnimation(int resId, int backgroundColor) {
+            return setTopAnimation(resId, 94, true, backgroundColor);
         }
 
         public Builder setTopImage(Drawable drawable, int backgroundColor) {

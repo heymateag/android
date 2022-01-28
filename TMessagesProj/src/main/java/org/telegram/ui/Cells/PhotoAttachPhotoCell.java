@@ -40,7 +40,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -105,7 +105,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         container.addView(videoInfoContainer, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 17, Gravity.BOTTOM | Gravity.LEFT, 4, 0, 0, 4));
 
         ImageView imageView1 = new ImageView(context);
-        imageView1.setImageResource(works.heymate.beta.R.drawable.play_mini_video);
+        imageView1.setImageResource(R.drawable.play_mini_video);
         videoInfoContainer.addView(imageView1, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL));
 
         videoTextView = new TextView(context);
@@ -223,7 +223,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         searchEntry = searchImage;
         isLast = last;
 
-        Drawable thumb = zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(works.heymate.beta.R.drawable.nophotos);
+        Drawable thumb = zoomOnSelect ? Theme.chat_attachEmptyDrawable : getResources().getDrawable(R.drawable.nophotos);
         if (searchImage.thumbPhotoSize != null) {
             imageView.setImage(ImageLocation.getForPhoto(searchImage.thumbPhotoSize, searchImage.photo), null, thumb, searchImage);
         } else if (searchImage.photoSize != null) {
@@ -405,21 +405,21 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setEnabled(true);
         if (photoEntry != null && photoEntry.isVideo) {
-            info.setText(LocaleController.getString("AttachVideo", works.heymate.beta.R.string.AttachVideo) + ", " + LocaleController.formatDuration(photoEntry.duration));
+            info.setText(LocaleController.getString("AttachVideo", R.string.AttachVideo) + ", " + LocaleController.formatDuration(photoEntry.duration));
         } else {
-            info.setText(LocaleController.getString("AttachPhoto", works.heymate.beta.R.string.AttachPhoto));
+            info.setText(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
         }
         if (checkBox.isChecked()) {
             info.setSelected(true);
         }
         if (Build.VERSION.SDK_INT >= 21) {
-            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(works.heymate.beta.R.id.acc_action_open_photo, LocaleController.getString("Open", works.heymate.beta.R.string.Open)));
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.acc_action_open_photo, LocaleController.getString("Open", R.string.Open)));
         }
     }
 
     @Override
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        if (action == works.heymate.beta.R.id.acc_action_open_photo) {
+        if (action == R.id.acc_action_open_photo) {
             View parent = (View) getParent();
             parent.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, getLeft(), getTop() + getHeight() - 1, 0));
             parent.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, getLeft(), getTop() + getHeight() - 1, 0));

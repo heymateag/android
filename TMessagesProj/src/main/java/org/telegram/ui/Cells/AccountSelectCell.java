@@ -64,7 +64,7 @@ public class AccountSelectCell extends FrameLayout {
         if (hasInfo) {
             addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 61, 7, 8, 0));
             textView.setTextColor(Theme.getColor(Theme.key_voipgroup_nameText));
-            textView.setText(LocaleController.getString("VoipGroupDisplayAs", works.heymate.beta.R.string.VoipGroupDisplayAs));
+            textView.setText(LocaleController.getString("VoipGroupDisplayAs", R.string.VoipGroupDisplayAs));
 
             infoTextView = new TextView(context);
             infoTextView.setTextColor(Theme.getColor(Theme.key_voipgroup_lastSeenText));
@@ -81,7 +81,7 @@ public class AccountSelectCell extends FrameLayout {
             textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
 
             checkImageView = new ImageView(context);
-            checkImageView.setImageResource(works.heymate.beta.R.drawable.account_check);
+            checkImageView.setImageResource(R.drawable.account_check);
             checkImageView.setScaleType(ImageView.ScaleType.CENTER);
             checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemCheck), PorterDuff.Mode.MULTIPLY));
             addView(checkImageView, LayoutHelper.createFrame(40, LayoutHelper.MATCH_PARENT, Gravity.RIGHT | Gravity.TOP, 0, 0, 6, 0));

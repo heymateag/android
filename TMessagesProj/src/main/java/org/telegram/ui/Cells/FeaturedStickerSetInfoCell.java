@@ -29,7 +29,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -118,7 +118,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             delButton.setTextColor(getThemedColor(Theme.key_featuredStickers_removeButtonText));
             delButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            delButton.setText(LocaleController.getString("StickersRemove", works.heymate.beta.R.string.StickersRemove));
+            delButton.setText(LocaleController.getString("StickersRemove", R.string.StickersRemove));
             if (supportRtl) {
                 lp = LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, 28, Gravity.TOP | Gravity.END, 0, 16, 14, 0);
             } else {

@@ -51,7 +51,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
@@ -235,26 +235,26 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 String string;
                 switch (a) {
                     case 0:
-                        string = LocaleController.getString("SlowmodeOff", works.heymate.beta.R.string.SlowmodeOff);
+                        string = LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
                         break;
                     case 1:
-                        string = LocaleController.formatString("SlowmodeSeconds", works.heymate.beta.R.string.SlowmodeSeconds, 10);
+                        string = LocaleController.formatString("SlowmodeSeconds", R.string.SlowmodeSeconds, 10);
                         break;
                     case 2:
-                        string = LocaleController.formatString("SlowmodeSeconds", works.heymate.beta.R.string.SlowmodeSeconds, 30);
+                        string = LocaleController.formatString("SlowmodeSeconds", R.string.SlowmodeSeconds, 30);
                         break;
                     case 3:
-                        string = LocaleController.formatString("SlowmodeMinutes", works.heymate.beta.R.string.SlowmodeMinutes, 1);
+                        string = LocaleController.formatString("SlowmodeMinutes", R.string.SlowmodeMinutes, 1);
                         break;
                     case 4:
-                        string = LocaleController.formatString("SlowmodeMinutes", works.heymate.beta.R.string.SlowmodeMinutes, 5);
+                        string = LocaleController.formatString("SlowmodeMinutes", R.string.SlowmodeMinutes, 5);
                         break;
                     case 5:
-                        string = LocaleController.formatString("SlowmodeMinutes", works.heymate.beta.R.string.SlowmodeMinutes, 15);
+                        string = LocaleController.formatString("SlowmodeMinutes", R.string.SlowmodeMinutes, 15);
                         break;
                     case 6:
                     default:
-                        string = LocaleController.formatString("SlowmodeHours", works.heymate.beta.R.string.SlowmodeHours, 1);
+                        string = LocaleController.formatString("SlowmodeHours", R.string.SlowmodeHours, 1);
                         break;
                 }
                 strings.add(string);
@@ -280,7 +280,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 @Override
                 protected CharSequence getContentDescription(View host) {
                     if (selectedSlowmode == 0) {
-                        return LocaleController.getString("SlowmodeOff", works.heymate.beta.R.string.SlowmodeOff);
+                        return LocaleController.getString("SlowmodeOff", R.string.SlowmodeOff);
                     } else {
                         return formatSeconds(getSecondsForIndex(selectedSlowmode));
                     }
@@ -640,28 +640,28 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     public View createView(Context context) {
         searching = false;
 
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (type == TYPE_KICKED) {
-            actionBar.setTitle(LocaleController.getString("ChannelPermissions", works.heymate.beta.R.string.ChannelPermissions));
+            actionBar.setTitle(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions));
         } else if (type == TYPE_BANNED) {
-            actionBar.setTitle(LocaleController.getString("ChannelBlacklist", works.heymate.beta.R.string.ChannelBlacklist));
+            actionBar.setTitle(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist));
         } else if (type == TYPE_ADMIN) {
-            actionBar.setTitle(LocaleController.getString("ChannelAdministrators", works.heymate.beta.R.string.ChannelAdministrators));
+            actionBar.setTitle(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators));
         } else if (type == TYPE_USERS) {
             if (selectType == 0) {
                 if (isChannel) {
-                    actionBar.setTitle(LocaleController.getString("ChannelSubscribers", works.heymate.beta.R.string.ChannelSubscribers));
+                    actionBar.setTitle(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
                 } else {
-                    actionBar.setTitle(LocaleController.getString("ChannelMembers", works.heymate.beta.R.string.ChannelMembers));
+                    actionBar.setTitle(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
                 }
             } else {
                 if (selectType == 1) {
-                    actionBar.setTitle(LocaleController.getString("ChannelAddAdmin", works.heymate.beta.R.string.ChannelAddAdmin));
+                    actionBar.setTitle(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin));
                 } else if (selectType == 2) {
-                    actionBar.setTitle(LocaleController.getString("ChannelBlockUser", works.heymate.beta.R.string.ChannelBlockUser));
+                    actionBar.setTitle(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser));
                 } else if (selectType == 3) {
-                    actionBar.setTitle(LocaleController.getString("ChannelAddException", works.heymate.beta.R.string.ChannelAddException));
+                    actionBar.setTitle(LocaleController.getString("ChannelAddException", R.string.ChannelAddException));
                 }
             }
         }
@@ -680,7 +680,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (selectType != 0 || type == TYPE_USERS || type == TYPE_BANNED || type == TYPE_KICKED) {
             searchListViewAdapter = new SearchAdapter(context);
             ActionBarMenu menu = actionBar.createMenu();
-            searchItem = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+            searchItem = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
                 @Override
                 public void onSearchExpand() {
                     searching = true;
@@ -723,16 +723,16 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 }
             });
             if (type == TYPE_KICKED) {
-                searchItem.setSearchFieldHint(LocaleController.getString("ChannelSearchException", works.heymate.beta.R.string.ChannelSearchException));
+                searchItem.setSearchFieldHint(LocaleController.getString("ChannelSearchException", R.string.ChannelSearchException));
             } else {
-                searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+                searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
             }
             if (!(ChatObject.isChannel(currentChat) || currentChat.creator)) {
                 searchItem.setVisibility(View.GONE);
             }
 
             if (type == TYPE_KICKED) {
-                doneItem = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+                doneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
             }
         }
 
@@ -759,8 +759,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         progressBar.setVisibility(View.GONE);
 
         emptyView = new StickerEmptyView(context, progressLayout, StickerEmptyView.STICKER_TYPE_SEARCH);
-        emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
-        emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", works.heymate.beta.R.string.SearchEmptyViewFilteredSubtitle2));
+        emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
+        emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
         emptyView.setVisibility(View.GONE);
         emptyView.setAnimateLayoutChange(true);
         emptyView.showProgress(true, false);
@@ -1043,9 +1043,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     }
                     if (checkCell.hasIcon()) {
                         if (!TextUtils.isEmpty(currentChat.username) && (position == pinMessagesRow || position == changeInfoRow)) {
-                            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("EditCantEditPermissionsPublic", works.heymate.beta.R.string.EditCantEditPermissionsPublic)).show();
+                            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("EditCantEditPermissionsPublic", R.string.EditCantEditPermissionsPublic)).show();
                         } else {
-                            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("EditCantEditPermissions", works.heymate.beta.R.string.EditCantEditPermissions)).show();
+                            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("EditCantEditPermissions", R.string.EditCantEditPermissions)).show();
                         }
                         return;
                     }
@@ -1199,10 +1199,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             final boolean canEdit = canEditAdmin;
                             final String rankFinal = rank;
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                            builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", works.heymate.beta.R.string.AdminWillBeRemoved, UserObject.getUserName(user)));
-                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> openRightsEdit(user.id, participant, ar, br, rankFinal, canEdit, selectType == 1 ? 0 : 1, false));
-                            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, UserObject.getUserName(user)));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> openRightsEdit(user.id, participant, ar, br, rankFinal, canEdit, selectType == 1 ? 0 : 1, false));
+                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             showDialog(builder.create());
                         } else {
                             openRightsEdit(peerId, participant, adminRights, bannedRights, rank, canEditAdmin, selectType == 1 ? 0 : 1, selectType == 1 || selectType == 3);
@@ -1753,8 +1753,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 if (resultOnly) {
                     return true;
                 }
-                items.add(editingAdmin ? LocaleController.getString("EditAdminRights", works.heymate.beta.R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", works.heymate.beta.R.string.SetAsAdmin));
-                icons.add(works.heymate.beta.R.drawable.actions_addadmin);
+                items.add(editingAdmin ? LocaleController.getString("EditAdminRights", R.string.EditAdminRights) : LocaleController.getString("SetAsAdmin", R.string.SetAsAdmin));
+                icons.add(R.drawable.actions_addadmin);
                 actions.add(0);
             }
             boolean hasRemove = false;
@@ -1764,15 +1764,15 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 }
                 if (!isChannel) {
                     if (ChatObject.isChannel(currentChat) && !currentChat.gigagroup) {
-                        items.add(LocaleController.getString("ChangePermissions", works.heymate.beta.R.string.ChangePermissions));
-                        icons.add(works.heymate.beta.R.drawable.actions_permissions);
+                        items.add(LocaleController.getString("ChangePermissions", R.string.ChangePermissions));
+                        icons.add(R.drawable.actions_permissions);
                         actions.add(1);
                     }
-                    items.add(LocaleController.getString("KickFromGroup", works.heymate.beta.R.string.KickFromGroup));
+                    items.add(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
                 } else {
-                    items.add(LocaleController.getString("ChannelRemoveUser", works.heymate.beta.R.string.ChannelRemoveUser));
+                    items.add(LocaleController.getString("ChannelRemoveUser", R.string.ChannelRemoveUser));
                 }
-                icons.add(works.heymate.beta.R.drawable.actions_remove_user);
+                icons.add(R.drawable.actions_remove_user);
                 actions.add(2);
                 hasRemove = true;
             }
@@ -1791,10 +1791,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 } else {
                     if (actions.get(i) == 1 && canEditAdmin && (participant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_chatParticipantAdmin)) {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
-                        builder2.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                        builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", works.heymate.beta.R.string.AdminWillBeRemoved, UserObject.getUserName(user)));
-                        builder2.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> openRightsEdit2(peerId, date, participant, adminRights, bannedRights, rank, canEditAdmin, actions.get(i), false));
-                        builder2.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder2.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                        builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, UserObject.getUserName(user)));
+                        builder2.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> openRightsEdit2(peerId, date, participant, adminRights, bannedRights, rank, canEditAdmin, actions.get(i), false));
+                        builder2.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         showDialog(builder2.create());
                     } else {
                         openRightsEdit2(peerId, date, participant, adminRights, bannedRights, rank, canEditAdmin, actions.get(i), false);
@@ -1814,37 +1814,37 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return true;
                 }
                 items = new CharSequence[]{
-                        LocaleController.getString("ChannelEditPermissions", works.heymate.beta.R.string.ChannelEditPermissions),
-                        LocaleController.getString("ChannelDeleteFromList", works.heymate.beta.R.string.ChannelDeleteFromList)};
+                        LocaleController.getString("ChannelEditPermissions", R.string.ChannelEditPermissions),
+                        LocaleController.getString("ChannelDeleteFromList", R.string.ChannelDeleteFromList)};
                 icons = new int[]{
-                        works.heymate.beta.R.drawable.actions_permissions,
-                        works.heymate.beta.R.drawable.chats_delete};
+                        R.drawable.actions_permissions,
+                        R.drawable.chats_delete};
             } else if (type == TYPE_BANNED && ChatObject.canBlockUsers(currentChat)) {
                 if (resultOnly) {
                     return true;
                 }
                 items = new CharSequence[]{
-                        ChatObject.canAddUsers(currentChat) && peerId > 0 ? (isChannel ? LocaleController.getString("ChannelAddToChannel", works.heymate.beta.R.string.ChannelAddToChannel) : LocaleController.getString("ChannelAddToGroup", works.heymate.beta.R.string.ChannelAddToGroup)) : null,
-                        LocaleController.getString("ChannelDeleteFromList", works.heymate.beta.R.string.ChannelDeleteFromList)};
+                        ChatObject.canAddUsers(currentChat) && peerId > 0 ? (isChannel ? LocaleController.getString("ChannelAddToChannel", R.string.ChannelAddToChannel) : LocaleController.getString("ChannelAddToGroup", R.string.ChannelAddToGroup)) : null,
+                        LocaleController.getString("ChannelDeleteFromList", R.string.ChannelDeleteFromList)};
                 icons = new int[]{
-                        works.heymate.beta.R.drawable.actions_addmember2,
-                        works.heymate.beta.R.drawable.chats_delete};
+                        R.drawable.actions_addmember2,
+                        R.drawable.chats_delete};
             } else if (type == TYPE_ADMIN && ChatObject.canAddAdmins(currentChat) && canEdit) {
                 if (resultOnly) {
                     return true;
                 }
                 if (currentChat.creator || !(participant instanceof TLRPC.TL_channelParticipantCreator) && canEdit) {
                     items = new CharSequence[]{
-                            LocaleController.getString("EditAdminRights", works.heymate.beta.R.string.EditAdminRights),
-                            LocaleController.getString("ChannelRemoveUserAdmin", works.heymate.beta.R.string.ChannelRemoveUserAdmin)};
+                            LocaleController.getString("EditAdminRights", R.string.EditAdminRights),
+                            LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
                     icons = new int[]{
-                            works.heymate.beta.R.drawable.actions_addadmin,
-                            works.heymate.beta.R.drawable.actions_remove_user};
+                            R.drawable.actions_addadmin,
+                            R.drawable.actions_remove_user};
                 } else {
                     items = new CharSequence[]{
-                            LocaleController.getString("ChannelRemoveUserAdmin", works.heymate.beta.R.string.ChannelRemoveUserAdmin)};
+                            LocaleController.getString("ChannelRemoveUserAdmin", R.string.ChannelRemoveUserAdmin)};
                     icons = new int[]{
-                            works.heymate.beta.R.drawable.actions_remove_user};
+                            R.drawable.actions_remove_user};
                 }
             } else {
                 items = null;
@@ -2028,14 +2028,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         String newBannedRights = ChatObject.getBannedRightsString(defaultBannedRights);
         if (!newBannedRights.equals(initialBannedRights) || initialSlowmode != selectedSlowmode) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", works.heymate.beta.R.string.UserRestrictionsApplyChanges));
+            builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", R.string.UserRestrictionsApplyChanges));
             if (isChannel) {
-                builder.setMessage(LocaleController.getString("ChannelSettingsChangedAlert", works.heymate.beta.R.string.ChannelSettingsChangedAlert));
+                builder.setMessage(LocaleController.getString("ChannelSettingsChangedAlert", R.string.ChannelSettingsChangedAlert));
             } else {
-                builder.setMessage(LocaleController.getString("GroupSettingsChangedAlert", works.heymate.beta.R.string.GroupSettingsChangedAlert));
+                builder.setMessage(LocaleController.getString("GroupSettingsChangedAlert", R.string.GroupSettingsChangedAlert));
             }
-            builder.setPositiveButton(LocaleController.getString("ApplyTheme", works.heymate.beta.R.string.ApplyTheme), (dialogInterface, i) -> processDone());
-            builder.setNegativeButton(LocaleController.getString("PassportDiscard", works.heymate.beta.R.string.PassportDiscard), (dialog, which) -> finishFragment());
+            builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), (dialogInterface, i) -> processDone());
+            builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialog, which) -> finishFragment());
             showDialog(builder.create());
             return false;
         }
@@ -2052,55 +2052,55 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         StringBuilder builder = new StringBuilder();
         if (rights.view_messages && defaultBannedRights.view_messages != rights.view_messages) {
-            builder.append(LocaleController.getString("UserRestrictionsNoRead", works.heymate.beta.R.string.UserRestrictionsNoRead));
+            builder.append(LocaleController.getString("UserRestrictionsNoRead", R.string.UserRestrictionsNoRead));
         }
         if (rights.send_messages && defaultBannedRights.send_messages != rights.send_messages) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoSend", works.heymate.beta.R.string.UserRestrictionsNoSend));
+            builder.append(LocaleController.getString("UserRestrictionsNoSend", R.string.UserRestrictionsNoSend));
         }
         if (rights.send_media && defaultBannedRights.send_media != rights.send_media) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoSendMedia", works.heymate.beta.R.string.UserRestrictionsNoSendMedia));
+            builder.append(LocaleController.getString("UserRestrictionsNoSendMedia", R.string.UserRestrictionsNoSendMedia));
         }
         if (rights.send_stickers && defaultBannedRights.send_stickers != rights.send_stickers) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoSendStickers", works.heymate.beta.R.string.UserRestrictionsNoSendStickers));
+            builder.append(LocaleController.getString("UserRestrictionsNoSendStickers", R.string.UserRestrictionsNoSendStickers));
         }
         if (rights.send_polls && defaultBannedRights.send_polls != rights.send_polls) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoSendPolls", works.heymate.beta.R.string.UserRestrictionsNoSendPolls));
+            builder.append(LocaleController.getString("UserRestrictionsNoSendPolls", R.string.UserRestrictionsNoSendPolls));
         }
         if (rights.embed_links && defaultBannedRights.embed_links != rights.embed_links) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoEmbedLinks", works.heymate.beta.R.string.UserRestrictionsNoEmbedLinks));
+            builder.append(LocaleController.getString("UserRestrictionsNoEmbedLinks", R.string.UserRestrictionsNoEmbedLinks));
         }
         if (rights.invite_users && defaultBannedRights.invite_users != rights.invite_users) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoInviteUsers", works.heymate.beta.R.string.UserRestrictionsNoInviteUsers));
+            builder.append(LocaleController.getString("UserRestrictionsNoInviteUsers", R.string.UserRestrictionsNoInviteUsers));
         }
         if (rights.pin_messages && defaultBannedRights.pin_messages != rights.pin_messages) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoPinMessages", works.heymate.beta.R.string.UserRestrictionsNoPinMessages));
+            builder.append(LocaleController.getString("UserRestrictionsNoPinMessages", R.string.UserRestrictionsNoPinMessages));
         }
         if (rights.change_info && defaultBannedRights.change_info != rights.change_info) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
-            builder.append(LocaleController.getString("UserRestrictionsNoChangeInfo", works.heymate.beta.R.string.UserRestrictionsNoChangeInfo));
+            builder.append(LocaleController.getString("UserRestrictionsNoChangeInfo", R.string.UserRestrictionsNoChangeInfo));
         }
         if (builder.length() != 0) {
             builder.replace(0, 1, builder.substring(0, 1).toUpperCase());
@@ -2828,9 +2828,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         peerObject = object;
                     } else if (object instanceof TLRPC.ChannelParticipant) {
                         long peerId = MessageObject.getPeerId(((TLRPC.ChannelParticipant) object).peer);
-                        if (peerId > 0) {
+                        if (peerId >= 0) {
                             TLRPC.User user = getMessagesController().getUser(peerId);
-                            un = user.username;
+                            if (user != null) {
+                                un = user.username;
+                            }
                             peerObject = user;
                         } else {
                             TLRPC.Chat chat = getMessagesController().getChat(-peerId);
@@ -2925,20 +2927,20 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
                     if (position == groupStartRow) {
                         if (type == TYPE_BANNED) {
-                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", works.heymate.beta.R.string.ChannelBlockedUsers));
+                            sectionCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers));
                         } else if (type == TYPE_KICKED) {
-                            sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", works.heymate.beta.R.string.ChannelRestrictedUsers));
+                            sectionCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers));
                         } else {
                             if (isChannel) {
-                                sectionCell.setText(LocaleController.getString("ChannelSubscribers", works.heymate.beta.R.string.ChannelSubscribers));
+                                sectionCell.setText(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers));
                             } else {
-                                sectionCell.setText(LocaleController.getString("ChannelMembers", works.heymate.beta.R.string.ChannelMembers));
+                                sectionCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers));
                             }
                         }
                     } else if (position == globalStartRow) {
-                        sectionCell.setText(LocaleController.getString("GlobalSearch", works.heymate.beta.R.string.GlobalSearch));
+                        sectionCell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                     } else if (position == contactsStartRow) {
-                        sectionCell.setText(LocaleController.getString("Contacts", works.heymate.beta.R.string.Contacts));
+                        sectionCell.setText(LocaleController.getString("Contacts", R.string.Contacts));
                     }
                     break;
                 }
@@ -3028,20 +3030,20 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         }
                     };
                     FrameLayout frameLayout = (FrameLayout) view;
-                    frameLayout.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    frameLayout.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
 
                     LinearLayout linearLayout = new LinearLayout(mContext);
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
                     frameLayout.addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 20, 0, 20, 0));
 
                     ImageView imageView = new ImageView(mContext);
-                    imageView.setImageResource(works.heymate.beta.R.drawable.group_ban_empty);
+                    imageView.setImageResource(R.drawable.group_ban_empty);
                     imageView.setScaleType(ImageView.ScaleType.CENTER);
                     imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_emptyListPlaceholder), PorterDuff.Mode.MULTIPLY));
                     linearLayout.addView(imageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
 
                     TextView textView = new TextView(mContext);
-                    textView.setText(LocaleController.getString("NoBlockedUsers", works.heymate.beta.R.string.NoBlockedUsers));
+                    textView.setText(LocaleController.getString("NoBlockedUsers", R.string.NoBlockedUsers));
                     textView.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     textView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -3050,9 +3052,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
                     textView = new TextView(mContext);
                     if (isChannel) {
-                        textView.setText(LocaleController.getString("NoBlockedChannel2", works.heymate.beta.R.string.NoBlockedChannel2));
+                        textView.setText(LocaleController.getString("NoBlockedChannel2", R.string.NoBlockedChannel2));
                     } else {
-                        textView.setText(LocaleController.getString("NoBlockedGroup2", works.heymate.beta.R.string.NoBlockedGroup2));
+                        textView.setText(LocaleController.getString("NoBlockedGroup2", R.string.NoBlockedGroup2));
                     }
                     textView.setTextColor(Theme.getColor(Theme.key_emptyListPlaceholder));
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -3166,21 +3168,21 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             if (banned) {
                                 TLRPC.User user1 = getMessagesController().getUser(kickedBy);
                                 if (user1 != null) {
-                                    role = LocaleController.formatString("UserRemovedBy", works.heymate.beta.R.string.UserRemovedBy, UserObject.getUserName(user1));
+                                    role = LocaleController.formatString("UserRemovedBy", R.string.UserRemovedBy, UserObject.getUserName(user1));
                                 }
                             }
                             userCell.setData(object, null, role, position != lastRow - 1);
                         } else if (type == TYPE_ADMIN) {
                             String role = null;
                             if (creator) {
-                                role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
+                                role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                             } else if (admin) {
                                 TLRPC.User user1 = getMessagesController().getUser(promotedBy);
                                 if (user1 != null) {
                                     if (user1.id == peerId) {
-                                        role = LocaleController.getString("ChannelAdministrator", works.heymate.beta.R.string.ChannelAdministrator);
+                                        role = LocaleController.getString("ChannelAdministrator", R.string.ChannelAdministrator);
                                     } else {
-                                        role = LocaleController.formatString("EditAdminPromotedBy", works.heymate.beta.R.string.EditAdminPromotedBy, UserObject.getUserName(user1));
+                                        role = LocaleController.formatString("EditAdminPromotedBy", R.string.EditAdminPromotedBy, UserObject.getUserName(user1));
                                     }
                                 }
                             }
@@ -3201,40 +3203,40 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     if (position == participantsInfoRow) {
                         if (type == TYPE_BANNED || type == TYPE_KICKED) {
                             if (isChannel) {
-                                privacyCell.setText(LocaleController.getString("NoBlockedChannel2", works.heymate.beta.R.string.NoBlockedChannel2));
+                                privacyCell.setText(LocaleController.getString("NoBlockedChannel2", R.string.NoBlockedChannel2));
                             } else {
-                                privacyCell.setText(LocaleController.getString("NoBlockedGroup2", works.heymate.beta.R.string.NoBlockedGroup2));
+                                privacyCell.setText(LocaleController.getString("NoBlockedGroup2", R.string.NoBlockedGroup2));
                             }
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         } else if (type == TYPE_ADMIN) {
                             if (addNewRow != -1) {
                                 if (isChannel) {
-                                    privacyCell.setText(LocaleController.getString("ChannelAdminsInfo", works.heymate.beta.R.string.ChannelAdminsInfo));
+                                    privacyCell.setText(LocaleController.getString("ChannelAdminsInfo", R.string.ChannelAdminsInfo));
                                 } else {
-                                    privacyCell.setText(LocaleController.getString("MegaAdminsInfo", works.heymate.beta.R.string.MegaAdminsInfo));
+                                    privacyCell.setText(LocaleController.getString("MegaAdminsInfo", R.string.MegaAdminsInfo));
                                 }
                             } else {
                                 privacyCell.setText("");
                             }
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         } else if (type == TYPE_USERS) {
                             if (!isChannel || selectType != 0) {
                                 privacyCell.setText("");
                             } else {
-                                privacyCell.setText(LocaleController.getString("ChannelMembersInfo", works.heymate.beta.R.string.ChannelMembersInfo));
+                                privacyCell.setText(LocaleController.getString("ChannelMembersInfo", R.string.ChannelMembersInfo));
                             }
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         }
                     } else if (position == slowmodeInfoRow) {
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         int seconds = getSecondsForIndex(selectedSlowmode);
                         if (info == null || seconds == 0) {
-                            privacyCell.setText(LocaleController.getString("SlowmodeInfoOff", works.heymate.beta.R.string.SlowmodeInfoOff));
+                            privacyCell.setText(LocaleController.getString("SlowmodeInfoOff", R.string.SlowmodeInfoOff));
                         } else {
-                            privacyCell.setText(LocaleController.formatString("SlowmodeInfoSelected", works.heymate.beta.R.string.SlowmodeInfoSelected, formatSeconds(seconds)));
+                            privacyCell.setText(LocaleController.formatString("SlowmodeInfoSelected", R.string.SlowmodeInfoSelected, formatSeconds(seconds)));
                         }
                     } else if (position == gigaInfoRow) {
-                        privacyCell.setText(LocaleController.getString("BroadcastGroupConvertInfo", works.heymate.beta.R.string.BroadcastGroupConvertInfo));
+                        privacyCell.setText(LocaleController.getString("BroadcastGroupConvertInfo", R.string.BroadcastGroupConvertInfo));
                     }
                     break;
                 case 2:
@@ -3243,36 +3245,36 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     if (position == addNewRow) {
                         if (type == TYPE_KICKED) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                            actionCell.setText(LocaleController.getString("ChannelAddException", works.heymate.beta.R.string.ChannelAddException), null, works.heymate.beta.R.drawable.actions_addmember2, participantsStartRow != -1);
+                            actionCell.setText(LocaleController.getString("ChannelAddException", R.string.ChannelAddException), null, R.drawable.actions_addmember2, participantsStartRow != -1);
                         } else if (type == TYPE_BANNED) {
-                            actionCell.setText(LocaleController.getString("ChannelBlockUser", works.heymate.beta.R.string.ChannelBlockUser), null, works.heymate.beta.R.drawable.actions_removed, false);
+                            actionCell.setText(LocaleController.getString("ChannelBlockUser", R.string.ChannelBlockUser), null, R.drawable.actions_removed, false);
                         } else if (type == TYPE_ADMIN) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                             boolean showDivider = !(loadingUsers && !firstLoaded);
-                            actionCell.setText(LocaleController.getString("ChannelAddAdmin", works.heymate.beta.R.string.ChannelAddAdmin), null, works.heymate.beta.R.drawable.add_admin, showDivider);
+                            actionCell.setText(LocaleController.getString("ChannelAddAdmin", R.string.ChannelAddAdmin), null, R.drawable.add_admin, showDivider);
                         } else if (type == TYPE_USERS) {
                             actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                             boolean showDivider = !(loadingUsers && !firstLoaded) && membersHeaderRow == -1 && !participants.isEmpty();
                             if (isChannel) {
-                                actionCell.setText(LocaleController.getString("AddSubscriber", works.heymate.beta.R.string.AddSubscriber), null, works.heymate.beta.R.drawable.actions_addmember2, showDivider);
+                                actionCell.setText(LocaleController.getString("AddSubscriber", R.string.AddSubscriber), null, R.drawable.actions_addmember2, showDivider);
                             } else {
-                                actionCell.setText(LocaleController.getString("AddMember", works.heymate.beta.R.string.AddMember), null, works.heymate.beta.R.drawable.actions_addmember2, showDivider);
+                                actionCell.setText(LocaleController.getString("AddMember", R.string.AddMember), null, R.drawable.actions_addmember2, showDivider);
                             }
                         }
                     } else if (position == recentActionsRow) {
-                        actionCell.setText(LocaleController.getString("EventLog", works.heymate.beta.R.string.EventLog), null, works.heymate.beta.R.drawable.group_log, false);
+                        actionCell.setText(LocaleController.getString("EventLog", R.string.EventLog), null, R.drawable.group_log, false);
                     } else if (position == addNew2Row) {
-                        actionCell.setText(LocaleController.getString("ChannelInviteViaLink", works.heymate.beta.R.string.ChannelInviteViaLink), null, works.heymate.beta.R.drawable.profile_link, true);
+                        actionCell.setText(LocaleController.getString("ChannelInviteViaLink", R.string.ChannelInviteViaLink), null, R.drawable.profile_link, true);
                     } else if (position == gigaConvertRow) {
                         actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                        actionCell.setText(LocaleController.getString("BroadcastGroupConvert", works.heymate.beta.R.string.BroadcastGroupConvert), null, works.heymate.beta.R.drawable.msg_channel, false);
+                        actionCell.setText(LocaleController.getString("BroadcastGroupConvert", R.string.BroadcastGroupConvert), null, R.drawable.msg_channel, false);
                     }
                     break;
                 case 3:
                     if (position == addNewSectionRow || type == TYPE_KICKED && position == participantsDividerRow && addNewRow == -1 && participantsStartRow == -1) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 5:
@@ -3283,41 +3285,41 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             if (count != 0) {
                                 headerCell.setText(LocaleController.formatPluralString("RemovedUser", count));
                             } else {
-                                headerCell.setText(LocaleController.getString("ChannelBlockedUsers", works.heymate.beta.R.string.ChannelBlockedUsers));
+                                headerCell.setText(LocaleController.getString("ChannelBlockedUsers", R.string.ChannelBlockedUsers));
                             }
                         } else {
-                            headerCell.setText(LocaleController.getString("ChannelRestrictedUsers", works.heymate.beta.R.string.ChannelRestrictedUsers));
+                            headerCell.setText(LocaleController.getString("ChannelRestrictedUsers", R.string.ChannelRestrictedUsers));
                         }
                     } else if (position == permissionsSectionRow) {
-                        headerCell.setText(LocaleController.getString("ChannelPermissionsHeader", works.heymate.beta.R.string.ChannelPermissionsHeader));
+                        headerCell.setText(LocaleController.getString("ChannelPermissionsHeader", R.string.ChannelPermissionsHeader));
                     } else if (position == slowmodeRow) {
-                        headerCell.setText(LocaleController.getString("Slowmode", works.heymate.beta.R.string.Slowmode));
+                        headerCell.setText(LocaleController.getString("Slowmode", R.string.Slowmode));
                     } else if (position == gigaHeaderRow) {
-                        headerCell.setText(LocaleController.getString("BroadcastGroup", works.heymate.beta.R.string.BroadcastGroup));
+                        headerCell.setText(LocaleController.getString("BroadcastGroup", R.string.BroadcastGroup));
                     }
                     break;
                 case 6:
                     TextSettingsCell settingsCell = (TextSettingsCell) holder.itemView;
-                    settingsCell.setTextAndValue(LocaleController.getString("ChannelBlacklist", works.heymate.beta.R.string.ChannelBlacklist), String.format("%d", info != null ? info.kicked_count : 0), false);
+                    settingsCell.setTextAndValue(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", info != null ? info.kicked_count : 0), false);
                     break;
                 case 7:
                     TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
                     if (position == changeInfoRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsChangeInfo", works.heymate.beta.R.string.UserRestrictionsChangeInfo), !defaultBannedRights.change_info && TextUtils.isEmpty(currentChat.username), false);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsChangeInfo", R.string.UserRestrictionsChangeInfo), !defaultBannedRights.change_info && TextUtils.isEmpty(currentChat.username), false);
                     } else if (position == addUsersRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsInviteUsers", works.heymate.beta.R.string.UserRestrictionsInviteUsers), !defaultBannedRights.invite_users, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsInviteUsers", R.string.UserRestrictionsInviteUsers), !defaultBannedRights.invite_users, true);
                     } else if (position == pinMessagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsPinMessages", works.heymate.beta.R.string.UserRestrictionsPinMessages), !defaultBannedRights.pin_messages && TextUtils.isEmpty(currentChat.username), true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsPinMessages", R.string.UserRestrictionsPinMessages), !defaultBannedRights.pin_messages && TextUtils.isEmpty(currentChat.username), true);
                     } else if (position == sendMessagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSend", works.heymate.beta.R.string.UserRestrictionsSend), !defaultBannedRights.send_messages, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSend", R.string.UserRestrictionsSend), !defaultBannedRights.send_messages, true);
                     } else if (position == sendMediaRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendMedia", works.heymate.beta.R.string.UserRestrictionsSendMedia), !defaultBannedRights.send_media, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendMedia", R.string.UserRestrictionsSendMedia), !defaultBannedRights.send_media, true);
                     } else if (position == sendStickersRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendStickers", works.heymate.beta.R.string.UserRestrictionsSendStickers), !defaultBannedRights.send_stickers, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendStickers", R.string.UserRestrictionsSendStickers), !defaultBannedRights.send_stickers, true);
                     } else if (position == embedLinksRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsEmbedLinks", works.heymate.beta.R.string.UserRestrictionsEmbedLinks), !defaultBannedRights.embed_links, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsEmbedLinks", R.string.UserRestrictionsEmbedLinks), !defaultBannedRights.embed_links, true);
                     } else if (position == sendPollsRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendPolls", works.heymate.beta.R.string.UserRestrictionsSendPolls), !defaultBannedRights.send_polls, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendPolls", R.string.UserRestrictionsSendPolls), !defaultBannedRights.send_polls, true);
                     }
 
                     if (position == sendMediaRow || position == sendStickersRow || position == embedLinksRow || position == sendPollsRow) {
@@ -3330,7 +3332,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                                 position == pinMessagesRow && !ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_PIN) ||
                                 position == changeInfoRow && !ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_CHANGE_INFO) ||
                                 !TextUtils.isEmpty(currentChat.username) && (position == pinMessagesRow || position == changeInfoRow)) {
-                            checkCell.setIcon(works.heymate.beta.R.drawable.permission_locked);
+                            checkCell.setIcon(R.drawable.permission_locked);
                         } else {
                             checkCell.setIcon(0);
                         }
@@ -3342,17 +3344,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     GraySectionCell sectionCell = (GraySectionCell) holder.itemView;
                     if (position == membersHeaderRow) {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                            sectionCell.setText(LocaleController.getString("ChannelOtherSubscribers", works.heymate.beta.R.string.ChannelOtherSubscribers));
+                            sectionCell.setText(LocaleController.getString("ChannelOtherSubscribers", R.string.ChannelOtherSubscribers));
                         } else {
-                            sectionCell.setText(LocaleController.getString("ChannelOtherMembers", works.heymate.beta.R.string.ChannelOtherMembers));
+                            sectionCell.setText(LocaleController.getString("ChannelOtherMembers", R.string.ChannelOtherMembers));
                         }
                     } else if (position == botHeaderRow) {
-                        sectionCell.setText(LocaleController.getString("ChannelBots", works.heymate.beta.R.string.ChannelBots));
+                        sectionCell.setText(LocaleController.getString("ChannelBots", R.string.ChannelBots));
                     } else if (position == contactsHeaderRow) {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
-                            sectionCell.setText(LocaleController.getString("ChannelContacts", works.heymate.beta.R.string.ChannelContacts));
+                            sectionCell.setText(LocaleController.getString("ChannelContacts", R.string.ChannelContacts));
                         } else {
-                            sectionCell.setText(LocaleController.getString("GroupContacts", works.heymate.beta.R.string.GroupContacts));
+                            sectionCell.setText(LocaleController.getString("GroupContacts", R.string.GroupContacts));
                         }
                     } else if (position == loadingHeaderRow) {
                         sectionCell.setText("");

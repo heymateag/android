@@ -32,7 +32,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -84,7 +84,7 @@ public class WallpaperCell extends FrameLayout {
             addView(imageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
 
             imageView2 = new ImageView(context);
-            imageView2.setImageResource(works.heymate.beta.R.drawable.ic_gallery_background);
+            imageView2.setImageResource(R.drawable.ic_gallery_background);
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             addView(imageView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
 
@@ -92,7 +92,7 @@ public class WallpaperCell extends FrameLayout {
             selector.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             addView(selector, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-            checkBox = new CheckBox(context, works.heymate.beta.R.drawable.round_check2);
+            checkBox = new CheckBox(context, R.drawable.round_check2);
             checkBox.setVisibility(INVISIBLE);
             checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(checkBox, LayoutHelper.createFrame(22, 22, Gravity.RIGHT | Gravity.TOP, 0, 2, 2, 0));
@@ -321,7 +321,7 @@ public class WallpaperCell extends FrameLayout {
 
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        checkDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.background_selected).mutate();
+        checkDrawable = context.getResources().getDrawable(R.drawable.background_selected).mutate();
 
         backgroundPaint = new Paint();
         backgroundPaint.setColor(Theme.getColor(Theme.key_sharedMedia_photoPlaceholder));

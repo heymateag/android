@@ -32,7 +32,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.GroupCallActivity;
@@ -407,7 +407,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         windowRemoveTooltipOverlayView = new FrameLayout(context);
         iconView = new RLottieImageView(context);
         iconView.setScaleType(ImageView.ScaleType.CENTER);
-        deleteIcon = new RLottieDrawable(works.heymate.beta.R.raw.group_pip_delete_icon, "" + works.heymate.beta.R.raw.group_pip_delete_icon, AndroidUtilities.dp(40), AndroidUtilities.dp(40), true, null);
+        deleteIcon = new RLottieDrawable(R.raw.group_pip_delete_icon, "" + R.raw.group_pip_delete_icon, AndroidUtilities.dp(40), AndroidUtilities.dp(40), true, null);
         deleteIcon.setPlayInDirectionOfCustomEndFrame(true);
         iconView.setAnimation(deleteIcon);
         iconView.setColorFilter(Color.WHITE);
@@ -670,7 +670,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     private void updateAvatars(boolean animated) {
-        if (avatarsImageView.transitionProgressAnimator == null) {
+        if (avatarsImageView.avatarsDarawable.transitionProgressAnimator == null) {
             ChatObject.Call call;
 
             VoIPService voIPService = VoIPService.getSharedInstance();

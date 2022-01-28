@@ -20,7 +20,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -59,14 +59,14 @@ public class DialogsEmptyCell extends LinearLayout {
 
         emptyTextView1 = new TextView(context);
         emptyTextView1.setTextColor(Theme.getColor(Theme.key_chats_nameMessage_threeLines));
-        emptyTextView1.setText(LocaleController.getString("NoChats", works.heymate.beta.R.string.NoChats));
+        emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         emptyTextView1.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         emptyTextView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         emptyTextView1.setGravity(Gravity.CENTER);
         addView(emptyTextView1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 52, 10, 52, 0));
 
         emptyTextView2 = new TextView(context);
-        String help = LocaleController.getString("NoChatsHelp", works.heymate.beta.R.string.NoChatsHelp);
+        String help = LocaleController.getString("NoChatsHelp", R.string.NoChatsHelp);
         if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
             help = help.replace('\n', ' ');
         }
@@ -87,22 +87,22 @@ public class DialogsEmptyCell extends LinearLayout {
         int icon;
         if (currentType == 0) {
             icon = 0;
-            help = LocaleController.getString("NoChatsHelp", works.heymate.beta.R.string.NoChatsHelp);
-            emptyTextView1.setText(LocaleController.getString("NoChats", works.heymate.beta.R.string.NoChats));
+            help = LocaleController.getString("NoChatsHelp", R.string.NoChatsHelp);
+            emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         } else if (currentType == 1) {
             icon = 0;
-            help = LocaleController.getString("NoChatsContactsHelp", works.heymate.beta.R.string.NoChatsContactsHelp);
-            emptyTextView1.setText(LocaleController.getString("NoChats", works.heymate.beta.R.string.NoChats));
+            help = LocaleController.getString("NoChatsContactsHelp", R.string.NoChatsContactsHelp);
+            emptyTextView1.setText(LocaleController.getString("NoChats", R.string.NoChats));
         } else if (currentType == 2) {
             imageView.setAutoRepeat(false);
-            icon = works.heymate.beta.R.raw.filter_no_chats;
-            help = LocaleController.getString("FilterNoChatsToDisplayInfo", works.heymate.beta.R.string.FilterNoChatsToDisplayInfo);
-            emptyTextView1.setText(LocaleController.getString("FilterNoChatsToDisplay", works.heymate.beta.R.string.FilterNoChatsToDisplay));
+            icon = R.raw.filter_no_chats;
+            help = LocaleController.getString("FilterNoChatsToDisplayInfo", R.string.FilterNoChatsToDisplayInfo);
+            emptyTextView1.setText(LocaleController.getString("FilterNoChatsToDisplay", R.string.FilterNoChatsToDisplay));
         } else {
             imageView.setAutoRepeat(true);
-            icon = works.heymate.beta.R.raw.filter_new;
-            help = LocaleController.getString("FilterAddingChatsInfo", works.heymate.beta.R.string.FilterAddingChatsInfo);
-            emptyTextView1.setText(LocaleController.getString("FilterAddingChats", works.heymate.beta.R.string.FilterAddingChats));
+            icon = R.raw.filter_new;
+            help = LocaleController.getString("FilterAddingChatsInfo", R.string.FilterAddingChatsInfo);
+            emptyTextView1.setText(LocaleController.getString("FilterAddingChats", R.string.FilterAddingChats));
         }
         if (icon != 0) {
             imageView.setVisibility(VISIBLE);

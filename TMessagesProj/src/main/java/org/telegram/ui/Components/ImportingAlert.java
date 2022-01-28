@@ -26,7 +26,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -137,12 +137,12 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         textView.setEllipsize(TextUtils.TruncateAt.END);
         frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 17, 20, 17, 0));
 
-        completedDrawable = new RLottieDrawable(works.heymate.beta.R.raw.import_finish, "" + works.heymate.beta.R.raw.import_finish, AndroidUtilities.dp(120), AndroidUtilities.dp(120), false, null);
+        completedDrawable = new RLottieDrawable(R.raw.import_finish, "" + R.raw.import_finish, AndroidUtilities.dp(120), AndroidUtilities.dp(120), false, null);
         completedDrawable.setAllowDecodeSingleFrame(true);
 
         imageView = new RLottieImageView(context);
         imageView.setAutoRepeat(true);
-        imageView.setAnimation(works.heymate.beta.R.raw.import_loop, 120, 120);
+        imageView.setAnimation(R.raw.import_loop, 120, 120);
         imageView.playAnimation();
         frameLayout.addView(imageView, LayoutHelper.createFrame(160, 160, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 17, 79, 17, 0));
         imageView.getAnimatedDrawable().setOnFinishCallback(onFinishCallback, 178);
@@ -160,7 +160,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
 
         cell = new BottomSheetCell(context, resourcesProvider);
         cell.setBackground(null);
-        cell.setText(LocaleController.getString("ImportDone", works.heymate.beta.R.string.ImportDone));
+        cell.setText(LocaleController.getString("ImportDone", R.string.ImportDone));
         cell.setVisibility(View.INVISIBLE);
         cell.background.setOnClickListener(v -> dismiss());
         cell.background.setPivotY(AndroidUtilities.dp(48));
@@ -262,7 +262,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             }
 
             percentTextView.setText(String.format("%d%%", importingHistory.uploadProgress));
-            importCountTextView[0].setText(LocaleController.formatString("ImportCount", works.heymate.beta.R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+            importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
             lineProgressView.setProgress(importingHistory.uploadProgress / 100.0f, true);
         } else if (id == NotificationCenter.stickersImportProgressChanged) {
             if (args.length > 1) {

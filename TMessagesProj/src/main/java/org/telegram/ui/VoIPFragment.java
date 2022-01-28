@@ -57,7 +57,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -667,7 +667,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         });
 
         emojiRationalTextView = new TextView(context);
-        emojiRationalTextView.setText(LocaleController.formatString("CallEmojiKeyTooltip", works.heymate.beta.R.string.CallEmojiKeyTooltip, UserObject.getFirstName(callingUser)));
+        emojiRationalTextView.setText(LocaleController.formatString("CallEmojiKeyTooltip", R.string.CallEmojiKeyTooltip, UserObject.getFirstName(callingUser)));
         emojiRationalTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         emojiRationalTextView.setTextColor(Color.WHITE);
         emojiRationalTextView.setGravity(Gravity.CENTER);
@@ -689,9 +689,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
 
                     builder.append(", ");
                     if (service.privateCall != null && service.privateCall.video) {
-                        builder.append(LocaleController.getString("VoipInVideoCallBranding", works.heymate.beta.R.string.VoipInVideoCallBranding));
+                        builder.append(LocaleController.getString("VoipInVideoCallBranding", R.string.VoipInVideoCallBranding));
                     } else {
-                        builder.append(LocaleController.getString("VoipInCallBranding", works.heymate.beta.R.string.VoipInCallBranding));
+                        builder.append(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding));
                     }
 
                     final long callDuration = service.getCallDuration();
@@ -789,9 +789,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
 
         backIcon = new ImageView(context);
         backIcon.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.3f))));
-        backIcon.setImageResource(works.heymate.beta.R.drawable.ic_ab_back);
+        backIcon.setImageResource(R.drawable.ic_ab_back);
         backIcon.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(16), AndroidUtilities.dp(16), AndroidUtilities.dp(16));
-        backIcon.setContentDescription(LocaleController.getString("Back", works.heymate.beta.R.string.Back));
+        backIcon.setContentDescription(LocaleController.getString("Back", R.string.Back));
         frameLayout.addView(backIcon, LayoutHelper.createFrame(56, 56, Gravity.TOP | Gravity.LEFT));
 
         speakerPhoneIcon = new ImageView(context) {
@@ -806,7 +806,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 }
             }
         };
-        speakerPhoneIcon.setContentDescription(LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker));
+        speakerPhoneIcon.setContentDescription(LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker));
         speakerPhoneIcon.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.3f))));
         speakerPhoneIcon.setPadding(AndroidUtilities.dp(12), AndroidUtilities.dp(12), AndroidUtilities.dp(12), AndroidUtilities.dp(12));
         frameLayout.addView(speakerPhoneIcon, LayoutHelper.createFrame(56, 56, Gravity.TOP | Gravity.RIGHT));
@@ -837,7 +837,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         frameLayout.addView(notificationsLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 200, Gravity.BOTTOM, 16, 0, 16, 0));
 
         tapToVideoTooltip = new HintView(context, 4);
-        tapToVideoTooltip.setText(LocaleController.getString("TapToTurnCamera", works.heymate.beta.R.string.TapToTurnCamera));
+        tapToVideoTooltip.setText(LocaleController.getString("TapToTurnCamera", R.string.TapToTurnCamera));
         frameLayout.addView(tapToVideoTooltip, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 19, 0, 19, 8));
         tapToVideoTooltip.setBottomOffset(AndroidUtilities.dp(4));
         tapToVideoTooltip.setVisibility(View.GONE);
@@ -1202,34 +1202,34 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                     } else {
                         showCallingAvatarMini = false;
                     }
-                    statusTextView.setText(LocaleController.getString("VoipInVideoCallBranding", works.heymate.beta.R.string.VoipInVideoCallBranding), true, animated);
+                    statusTextView.setText(LocaleController.getString("VoipInVideoCallBranding", R.string.VoipInVideoCallBranding), true, animated);
                     acceptDeclineView.setTranslationY(-AndroidUtilities.dp(60));
                 } else {
-                    statusTextView.setText(LocaleController.getString("VoipInCallBranding", works.heymate.beta.R.string.VoipInCallBranding), true, animated);
+                    statusTextView.setText(LocaleController.getString("VoipInCallBranding", R.string.VoipInCallBranding), true, animated);
                     acceptDeclineView.setTranslationY(0);
                 }
                 break;
             case VoIPService.STATE_WAIT_INIT:
             case VoIPService.STATE_WAIT_INIT_ACK:
-                statusTextView.setText(LocaleController.getString("VoipConnecting", works.heymate.beta.R.string.VoipConnecting), true, animated);
+                statusTextView.setText(LocaleController.getString("VoipConnecting", R.string.VoipConnecting), true, animated);
                 break;
             case VoIPService.STATE_EXCHANGING_KEYS:
-                statusTextView.setText(LocaleController.getString("VoipExchangingKeys", works.heymate.beta.R.string.VoipExchangingKeys), true, animated);
+                statusTextView.setText(LocaleController.getString("VoipExchangingKeys", R.string.VoipExchangingKeys), true, animated);
                 break;
             case VoIPService.STATE_WAITING:
-                statusTextView.setText(LocaleController.getString("VoipWaiting", works.heymate.beta.R.string.VoipWaiting), true, animated);
+                statusTextView.setText(LocaleController.getString("VoipWaiting", R.string.VoipWaiting), true, animated);
                 break;
             case VoIPService.STATE_RINGING:
-                statusTextView.setText(LocaleController.getString("VoipRinging", works.heymate.beta.R.string.VoipRinging), true, animated);
+                statusTextView.setText(LocaleController.getString("VoipRinging", R.string.VoipRinging), true, animated);
                 break;
             case VoIPService.STATE_REQUESTING:
-                statusTextView.setText(LocaleController.getString("VoipRequesting", works.heymate.beta.R.string.VoipRequesting), true, animated);
+                statusTextView.setText(LocaleController.getString("VoipRequesting", R.string.VoipRequesting), true, animated);
                 break;
             case VoIPService.STATE_HANGING_UP:
                 break;
             case VoIPService.STATE_BUSY:
                 showAcceptDeclineView = true;
-                statusTextView.setText(LocaleController.getString("VoipBusy", works.heymate.beta.R.string.VoipBusy), false, animated);
+                statusTextView.setText(LocaleController.getString("VoipBusy", R.string.VoipBusy), false, animated);
                 acceptDeclineView.setRetryMod(true);
                 currentUserIsVideo = false;
                 callingUserIsVideo = false;
@@ -1253,18 +1253,18 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 if (!TextUtils.equals(lastError, Instance.ERROR_UNKNOWN)) {
                     if (TextUtils.equals(lastError, Instance.ERROR_INCOMPATIBLE)) {
                         final String name = ContactsController.formatName(callingUser.first_name, callingUser.last_name);
-                        final String message = LocaleController.formatString("VoipPeerIncompatible", works.heymate.beta.R.string.VoipPeerIncompatible, name);
+                        final String message = LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, name);
                         showErrorDialog(AndroidUtilities.replaceTags(message));
                     } else if (TextUtils.equals(lastError, Instance.ERROR_PEER_OUTDATED)) {
                         if (isVideoCall) {
                             final String name = UserObject.getFirstName(callingUser);
-                            final String message = LocaleController.formatString("VoipPeerVideoOutdated", works.heymate.beta.R.string.VoipPeerVideoOutdated, name);
+                            final String message = LocaleController.formatString("VoipPeerVideoOutdated", R.string.VoipPeerVideoOutdated, name);
                             boolean[] callAgain = new boolean[1];
                             AlertDialog dlg = new DarkAlertDialog.Builder(activity)
-                                    .setTitle(LocaleController.getString("VoipFailed", works.heymate.beta.R.string.VoipFailed))
+                                    .setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed))
                                     .setMessage(AndroidUtilities.replaceTags(message))
-                                    .setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialogInterface, i) -> windowView.finish())
-                                    .setPositiveButton(LocaleController.getString("VoipPeerVideoOutdatedMakeVoice", works.heymate.beta.R.string.VoipPeerVideoOutdatedMakeVoice), (dialogInterface, i) -> {
+                                    .setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialogInterface, i) -> windowView.finish())
+                                    .setPositiveButton(LocaleController.getString("VoipPeerVideoOutdatedMakeVoice", R.string.VoipPeerVideoOutdatedMakeVoice), (dialogInterface, i) -> {
                                         callAgain[0] = true;
                                         currentState = VoIPService.STATE_BUSY;
                                         Intent intent = new Intent(activity, VoIPService.class);
@@ -1289,19 +1289,19 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                             });
                         } else {
                             final String name = UserObject.getFirstName(callingUser);
-                            final String message = LocaleController.formatString("VoipPeerOutdated", works.heymate.beta.R.string.VoipPeerOutdated, name);
+                            final String message = LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, name);
                             showErrorDialog(AndroidUtilities.replaceTags(message));
                         }
                     } else if (TextUtils.equals(lastError, Instance.ERROR_PRIVACY)) {
                         final String name = ContactsController.formatName(callingUser.first_name, callingUser.last_name);
-                        final String message = LocaleController.formatString("CallNotAvailable", works.heymate.beta.R.string.CallNotAvailable, name);
+                        final String message = LocaleController.formatString("CallNotAvailable", R.string.CallNotAvailable, name);
                         showErrorDialog(AndroidUtilities.replaceTags(message));
                     } else if (TextUtils.equals(lastError, Instance.ERROR_AUDIO_IO)) {
                         showErrorDialog("Error initializing audio hardware");
                     } else if (TextUtils.equals(lastError, Instance.ERROR_LOCALIZED)) {
                         windowView.finish();
                     } else if (TextUtils.equals(lastError, Instance.ERROR_CONNECTION_SERVICE)) {
-                        showErrorDialog(LocaleController.getString("VoipErrorUnknown", works.heymate.beta.R.string.VoipErrorUnknown));
+                        showErrorDialog(LocaleController.getString("VoipErrorUnknown", R.string.VoipErrorUnknown));
                     } else {
                         AndroidUtilities.runOnUIThread(() -> windowView.finish(), 1000);
                     }
@@ -1698,7 +1698,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             buf.write(service.getGA());
             auth_key = buf.toByteArray();
         } catch (Exception checkedExceptionsAreBad) {
-            FileLog.e(checkedExceptionsAreBad);
+            FileLog.e(checkedExceptionsAreBad, false);
         }
         if (auth_key == null) {
             return;
@@ -1706,6 +1706,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         byte[] sha256 = Utilities.computeSHA256(auth_key, 0, auth_key.length);
         String[] emoji = EncryptionKeyEmojifier.emojifyForCall(sha256);
         for (int i = 0; i < 4; i++) {
+            Emoji.preloadEmoji(emoji[i]);
             Emoji.EmojiDrawable drawable = Emoji.getEmojiDrawable(emoji[i]);
             if (drawable != null) {
                 drawable.setBounds(0, 0, AndroidUtilities.dp(22), AndroidUtilities.dp(22));
@@ -1837,7 +1838,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             setVideoAction(bottomButtons[1], service, animated);
             setMicrohoneAction(bottomButtons[2], service, animated);
 
-            bottomButtons[3].setData(works.heymate.beta.R.drawable.calls_decline, Color.WHITE, 0xFFF01D2C, LocaleController.getString("VoipEndCall", works.heymate.beta.R.string.VoipEndCall), false, animated);
+            bottomButtons[3].setData(R.drawable.calls_decline, Color.WHITE, 0xFFF01D2C, LocaleController.getString("VoipEndCall", R.string.VoipEndCall), false, animated);
             bottomButtons[3].setOnClickListener(view -> {
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().hangUp();
@@ -1857,9 +1858,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
 
     private void setMicrohoneAction(VoIPToggleButton bottomButton, VoIPService service, boolean animated) {
         if (service.isMicMute()) {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_unmute, Color.BLACK, Color.WHITE, LocaleController.getString("VoipUnmute", works.heymate.beta.R.string.VoipUnmute), true, animated);
+            bottomButton.setData(R.drawable.calls_unmute, Color.BLACK, Color.WHITE, LocaleController.getString("VoipUnmute", R.string.VoipUnmute), true, animated);
         } else {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_unmute, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipMute", works.heymate.beta.R.string.VoipMute), false, animated);
+            bottomButton.setData(R.drawable.calls_unmute, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipMute", R.string.VoipMute), false, animated);
         }
         currentUserCameraFloatingLayout.setMuted(service.isMicMute(), animated);
         bottomButton.setOnClickListener(view -> {
@@ -1869,9 +1870,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 if (accessibilityManager.isTouchExplorationEnabled()) {
                     final String text;
                     if (micMute) {
-                        text = LocaleController.getString("AccDescrVoipMicOff", works.heymate.beta.R.string.AccDescrVoipMicOff);
+                        text = LocaleController.getString("AccDescrVoipMicOff", R.string.AccDescrVoipMicOff);
                     } else {
-                        text = LocaleController.getString("AccDescrVoipMicOn", works.heymate.beta.R.string.AccDescrVoipMicOn);
+                        text = LocaleController.getString("AccDescrVoipMicOn", R.string.AccDescrVoipMicOn);
                     }
                     view.announceForAccessibility(text);
                 }
@@ -1893,7 +1894,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             if (currentUserIsVideo) {
                 bottomButton.setData(service.isScreencast() ? R.drawable.calls_sharescreen : R.drawable.calls_video, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipStopVideo", R.string.VoipStopVideo), false, animated);
             } else {
-                bottomButton.setData(works.heymate.beta.R.drawable.calls_video, Color.BLACK, Color.WHITE, LocaleController.getString("VoipStartVideo", works.heymate.beta.R.string.VoipStartVideo), true, animated);
+                bottomButton.setData(R.drawable.calls_video, Color.BLACK, Color.WHITE, LocaleController.getString("VoipStartVideo", R.string.VoipStartVideo), true, animated);
             }
             bottomButton.setCrossOffset(-AndroidUtilities.dpf2(3.5f));
             bottomButton.setOnClickListener(view -> {
@@ -1902,12 +1903,12 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                 } else {
                     if (Build.VERSION.SDK_INT < 21 && service.privateCall != null && !service.privateCall.video && !callingUserIsVideo && !service.sharedUIParams.cameraAlertWasShowed) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setMessage(LocaleController.getString("VoipSwitchToVideoCall", works.heymate.beta.R.string.VoipSwitchToVideoCall));
-                        builder.setPositiveButton(LocaleController.getString("VoipSwitch", works.heymate.beta.R.string.VoipSwitch), (dialogInterface, i) -> {
+                        builder.setMessage(LocaleController.getString("VoipSwitchToVideoCall", R.string.VoipSwitchToVideoCall));
+                        builder.setPositiveButton(LocaleController.getString("VoipSwitch", R.string.VoipSwitch), (dialogInterface, i) -> {
                             service.sharedUIParams.cameraAlertWasShowed = true;
                             toggleCameraInput();
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         builder.create().show();
                     } else {
                         toggleCameraInput();
@@ -1916,7 +1917,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             });
             bottomButton.setEnabled(true);
         } else {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_video, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.5f)), ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), "Video", false, animated);
+            bottomButton.setData(R.drawable.calls_video, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.5f)), ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), "Video", false, animated);
             bottomButton.setOnClickListener(null);
             bottomButton.setEnabled(false);
         }
@@ -1928,27 +1929,27 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             return;
         }
         if (service.isBluetoothOn()) {
-            speakerPhoneIcon.setImageResource(works.heymate.beta.R.drawable.calls_bluetooth);
+            speakerPhoneIcon.setImageResource(R.drawable.calls_bluetooth);
         } else if (service.isSpeakerphoneOn()) {
-            speakerPhoneIcon.setImageResource(works.heymate.beta.R.drawable.calls_speaker);
+            speakerPhoneIcon.setImageResource(R.drawable.calls_speaker);
         } else {
             if (service.isHeadsetPlugged()) {
-                speakerPhoneIcon.setImageResource(works.heymate.beta.R.drawable.calls_menu_headset);
+                speakerPhoneIcon.setImageResource(R.drawable.calls_menu_headset);
             } else {
-                speakerPhoneIcon.setImageResource(works.heymate.beta.R.drawable.calls_menu_phone);
+                speakerPhoneIcon.setImageResource(R.drawable.calls_menu_phone);
             }
         }
     }
 
     private void setSpeakerPhoneAction(VoIPToggleButton bottomButton, VoIPService service, boolean animated) {
         if (service.isBluetoothOn()) {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_bluetooth, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipAudioRoutingBluetooth", works.heymate.beta.R.string.VoipAudioRoutingBluetooth), false, animated);
+            bottomButton.setData(R.drawable.calls_bluetooth, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth), false, animated);
             bottomButton.setChecked(false, animated);
         } else if (service.isSpeakerphoneOn()) {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_speaker, Color.BLACK, Color.WHITE, LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker), false, animated);
+            bottomButton.setData(R.drawable.calls_speaker, Color.BLACK, Color.WHITE, LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker), false, animated);
             bottomButton.setChecked(true, animated);
         } else {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_speaker, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipSpeaker", works.heymate.beta.R.string.VoipSpeaker), false, animated);
+            bottomButton.setData(R.drawable.calls_speaker, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipSpeaker", R.string.VoipSpeaker), false, animated);
             bottomButton.setChecked(false, animated);
         }
         bottomButton.setCheckableForAccessibility(true);
@@ -1962,15 +1963,15 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
 
     private void setFrontalCameraAction(VoIPToggleButton bottomButton, VoIPService service, boolean animated) {
         if (!currentUserIsVideo) {
-            bottomButton.setData(works.heymate.beta.R.drawable.calls_flip,  ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.5f)), ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipFlip", works.heymate.beta.R.string.VoipFlip), false, animated);
+            bottomButton.setData(R.drawable.calls_flip,  ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.5f)), ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipFlip", R.string.VoipFlip), false, animated);
             bottomButton.setOnClickListener(null);
             bottomButton.setEnabled(false);
         } else {
             bottomButton.setEnabled(true);
             if (!service.isFrontFaceCamera()) {
-                bottomButton.setData(works.heymate.beta.R.drawable.calls_flip, Color.BLACK, Color.WHITE, LocaleController.getString("VoipFlip", works.heymate.beta.R.string.VoipFlip), false, animated);
+                bottomButton.setData(R.drawable.calls_flip, Color.BLACK, Color.WHITE, LocaleController.getString("VoipFlip", R.string.VoipFlip), false, animated);
             } else {
-                bottomButton.setData(works.heymate.beta.R.drawable.calls_flip, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipFlip", works.heymate.beta.R.string.VoipFlip), false, animated);
+                bottomButton.setData(R.drawable.calls_flip, Color.WHITE, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.12f)), LocaleController.getString("VoipFlip", R.string.VoipFlip), false, animated);
             }
 
             bottomButton.setOnClickListener(view -> {
@@ -1979,9 +1980,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
                     if (accessibilityManager.isTouchExplorationEnabled()) {
                         final String text;
                         if (service.isFrontFaceCamera()) {
-                            text = LocaleController.getString("AccDescrVoipCamSwitchedToBack", works.heymate.beta.R.string.AccDescrVoipCamSwitchedToBack);
+                            text = LocaleController.getString("AccDescrVoipCamSwitchedToBack", R.string.AccDescrVoipCamSwitchedToBack);
                         } else {
-                            text = LocaleController.getString("AccDescrVoipCamSwitchedToFront", works.heymate.beta.R.string.AccDescrVoipCamSwitchedToFront);
+                            text = LocaleController.getString("AccDescrVoipCamSwitchedToFront", R.string.AccDescrVoipCamSwitchedToFront);
                         }
                         view.announceForAccessibility(text);
                     }
@@ -2004,9 +2005,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             if (accessibilityManager.isTouchExplorationEnabled()) {
                 final String text;
                 if (!currentUserIsVideo) {
-                    text = LocaleController.getString("AccDescrVoipCamOn", works.heymate.beta.R.string.AccDescrVoipCamOn);
+                    text = LocaleController.getString("AccDescrVoipCamOn", R.string.AccDescrVoipCamOn);
                 } else {
-                    text = LocaleController.getString("AccDescrVoipCamOff", works.heymate.beta.R.string.AccDescrVoipCamOff);
+                    text = LocaleController.getString("AccDescrVoipCamOff", R.string.AccDescrVoipCamOff);
                 }
                 fragmentView.announceForAccessibility(text);
             }
@@ -2179,9 +2180,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             return;
         }
         AlertDialog dlg = new DarkAlertDialog.Builder(activity)
-                .setTitle(LocaleController.getString("VoipFailed", works.heymate.beta.R.string.VoipFailed))
+                .setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed))
                 .setMessage(message)
-                .setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null)
+                .setPositiveButton(LocaleController.getString("OK", R.string.OK), null)
                 .show();
         dlg.setCanceledOnTouchOutside(true);
         dlg.setOnDismissListener(dialog -> windowView.finish());

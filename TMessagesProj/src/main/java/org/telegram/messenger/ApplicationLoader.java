@@ -59,6 +59,8 @@ import works.heymate.core.wallet.Wallet;
 import works.heymate.model.User;
 import works.heymate.model.Users;
 
+import androidx.multidex.MultiDex;
+
 public class ApplicationLoader extends Application {
 
     @SuppressLint("StaticFieldLeak")
@@ -483,6 +485,38 @@ public class ApplicationLoader extends Application {
             ensureCurrentNetworkGet(false);
             if (currentNetworkInfo == null) {
                 return StatsController.TYPE_MOBILE;
+            }
+            if (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || currentNetworkInfo.getType() == ConnectivityManager.TYPE_ETHERNET) {
+                if (connectivityManager.isActiveNetworkMetered()) {
+                    return StatsController.TYPE_MOBILE;
+                } else {
+                    return StatsController.TYPE_WIFI;
+                }
+            }
+            if (currentNetworkInfo.isRoaming()) {
+                return StatsController.TYPE_ROAMING;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return StatsController.TYPE_MOBILE;
+    }
+
+    public static int getCurrentNetworkType() {
+        if (isConnectedOrConnectingToWiFi()) {
+            return StatsController.TYPE_WIFI;
+        } else if (isRoaming()) {
+            return StatsController.TYPE_ROAMING;
+        } else {
+            return StatsController.TYPE_MOBILE;
+        }
+    }
+
+    public static boolean isNetworkOnlineFast() {
+        try {
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo == null) {
+                return true;
             }
             if (currentNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI || currentNetworkInfo.getType() == ConnectivityManager.TYPE_ETHERNET) {
                 if (connectivityManager.isActiveNetworkMetered()) {

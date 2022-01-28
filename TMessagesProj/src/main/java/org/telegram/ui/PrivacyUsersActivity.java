@@ -21,7 +21,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -110,28 +110,28 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (currentType == TYPE_BLOCKED) {
-            actionBar.setTitle(LocaleController.getString("BlockedUsers", works.heymate.beta.R.string.BlockedUsers));
+            actionBar.setTitle(LocaleController.getString("BlockedUsers", R.string.BlockedUsers));
         } else if (currentType == TYPE_FILTER) {
             if (isAlwaysShare) {
-                actionBar.setTitle(LocaleController.getString("FilterAlwaysShow", works.heymate.beta.R.string.FilterAlwaysShow));
+                actionBar.setTitle(LocaleController.getString("FilterAlwaysShow", R.string.FilterAlwaysShow));
             } else {
-                actionBar.setTitle(LocaleController.getString("FilterNeverShow", works.heymate.beta.R.string.FilterNeverShow));
+                actionBar.setTitle(LocaleController.getString("FilterNeverShow", R.string.FilterNeverShow));
             }
         } else {
             if (isGroup) {
                 if (isAlwaysShare) {
-                    actionBar.setTitle(LocaleController.getString("AlwaysAllow", works.heymate.beta.R.string.AlwaysAllow));
+                    actionBar.setTitle(LocaleController.getString("AlwaysAllow", R.string.AlwaysAllow));
                 } else {
-                    actionBar.setTitle(LocaleController.getString("NeverAllow", works.heymate.beta.R.string.NeverAllow));
+                    actionBar.setTitle(LocaleController.getString("NeverAllow", R.string.NeverAllow));
                 }
             } else {
                 if (isAlwaysShare) {
-                    actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", works.heymate.beta.R.string.AlwaysShareWithTitle));
+                    actionBar.setTitle(LocaleController.getString("AlwaysShareWithTitle", R.string.AlwaysShareWithTitle));
                 } else {
-                    actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", works.heymate.beta.R.string.NeverShareWithTitle));
+                    actionBar.setTitle(LocaleController.getString("NeverShareWithTitle", R.string.NeverShareWithTitle));
                 }
             }
         }
@@ -150,9 +150,9 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
         emptyView = new EmptyTextProgressView(context);
         if (currentType == TYPE_BLOCKED) {
-            emptyView.setText(LocaleController.getString("NoBlocked", works.heymate.beta.R.string.NoBlocked));
+            emptyView.setText(LocaleController.getString("NoBlocked", R.string.NoBlocked));
         } else {
-            emptyView.setText(LocaleController.getString("NoContacts", works.heymate.beta.R.string.NoContacts));
+            emptyView.setText(LocaleController.getString("NoContacts", R.string.NoContacts));
         }
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
@@ -261,9 +261,9 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         CharSequence[] items;
         if (currentType == TYPE_BLOCKED) {
-            items = new CharSequence[]{LocaleController.getString("Unblock", works.heymate.beta.R.string.Unblock)};
+            items = new CharSequence[]{LocaleController.getString("Unblock", R.string.Unblock)};
         } else {
-            items = new CharSequence[]{LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)};
+            items = new CharSequence[]{LocaleController.getString("Delete", R.string.Delete)};
         }
         builder.setItems(items, (dialogInterface, i) -> {
             if (i == 0) {
@@ -424,11 +424,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                         if (user != null) {
                             String number;
                             if (user.bot) {
-                                number = LocaleController.getString("Bot", works.heymate.beta.R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", works.heymate.beta.R.string.Bot).substring(1);
+                                number = LocaleController.getString("Bot", R.string.Bot).substring(0, 1).toUpperCase() + LocaleController.getString("Bot", R.string.Bot).substring(1);
                             } else if (user.phone != null && user.phone.length() != 0) {
                                 number = PhoneFormat.getInstance().format("+" + user.phone);
                             } else {
-                                number = LocaleController.getString("NumberUnknown", works.heymate.beta.R.string.NumberUnknown);
+                                number = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
                             }
                             userCell.setData(user, null, number, position != usersEndRow - 1);
                         }
@@ -439,11 +439,11 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                             if (chat.participants_count != 0) {
                                 subtitle = LocaleController.formatPluralString("Members", chat.participants_count);
                             } else if (chat.has_geo) {
-                                subtitle = LocaleController.getString("MegaLocation", works.heymate.beta.R.string.MegaLocation);
+                                subtitle = LocaleController.getString("MegaLocation", R.string.MegaLocation);
                             } else if (TextUtils.isEmpty(chat.username)) {
-                                subtitle = LocaleController.getString("MegaPrivate", works.heymate.beta.R.string.MegaPrivate);
+                                subtitle = LocaleController.getString("MegaPrivate", R.string.MegaPrivate);
                             } else {
-                                subtitle = LocaleController.getString("MegaPublic", works.heymate.beta.R.string.MegaPublic);
+                                subtitle = LocaleController.getString("MegaPublic", R.string.MegaPublic);
                             }
                             userCell.setData(chat, null, subtitle, position != usersEndRow - 1);
                         }
@@ -453,27 +453,27 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == blockUserDetailRow) {
                         if (currentType == TYPE_BLOCKED) {
-                            privacyCell.setText(LocaleController.getString("BlockedUsersInfo", works.heymate.beta.R.string.BlockedUsersInfo));
+                            privacyCell.setText(LocaleController.getString("BlockedUsersInfo", R.string.BlockedUsersInfo));
                         } else {
                             privacyCell.setText(null);
                         }
                         if (usersStartRow == -1) {
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                         } else {
-                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                            privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                         }
                     } else if (position == usersDetailRow) {
                         privacyCell.setText("");
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 2:
                     ManageChatTextCell actionCell = (ManageChatTextCell) holder.itemView;
                     actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                     if (currentType == TYPE_BLOCKED) {
-                        actionCell.setText(LocaleController.getString("BlockUser", works.heymate.beta.R.string.BlockUser), null, works.heymate.beta.R.drawable.actions_addmember2, false);
+                        actionCell.setText(LocaleController.getString("BlockUser", R.string.BlockUser), null, R.drawable.actions_addmember2, false);
                     } else {
-                        actionCell.setText(LocaleController.getString("PrivacyAddAnException", works.heymate.beta.R.string.PrivacyAddAnException), null, works.heymate.beta.R.drawable.actions_addmember2, false);
+                        actionCell.setText(LocaleController.getString("PrivacyAddAnException", R.string.PrivacyAddAnException), null, R.drawable.actions_addmember2, false);
                     }
                     break;
                 case 3:
@@ -482,7 +482,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                         if (currentType == TYPE_BLOCKED) {
                             headerCell.setText(LocaleController.formatPluralString("BlockedUsersCount", getMessagesController().totalBlockedCount));
                         } else {
-                            headerCell.setText(LocaleController.getString("PrivacyExceptions", works.heymate.beta.R.string.PrivacyExceptions));
+                            headerCell.setText(LocaleController.getString("PrivacyExceptions", R.string.PrivacyExceptions));
                         }
                     }
                     break;

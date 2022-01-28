@@ -67,7 +67,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -292,7 +292,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             lastPressedMarkerView.addView(addressTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 18, 32, 18, 0));
 
             nameTextView.setText(location.venue.title);
-            addressTextView.setText(LocaleController.getString("TapToSendLocation", works.heymate.beta.R.string.TapToSendLocation));
+            addressTextView.setText(LocaleController.getString("TapToSendLocation", R.string.TapToSendLocation));
 
             FrameLayout iconLayout = new FrameLayout(context);
             iconLayout.setBackground(Theme.createCircleDrawable(AndroidUtilities.dp(36), LocationCell.getColorForIndex(location.num)));
@@ -398,7 +398,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
         overlayView = new MapOverlayView(context);
 
-        searchItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -447,8 +447,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 searchAdapter.searchDelayed(text, userLocation);
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
-        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
         EditTextBoldCursor editText = searchItem.getSearchField();
         editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
         editText.setCursorColor(getThemedColor(Theme.key_dialogTextBlack));
@@ -507,7 +507,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         searchAreaButton.setVisibility(INVISIBLE);
         Drawable drawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(40), getThemedColor(Theme.key_location_actionBackground), getThemedColor(Theme.key_location_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.places_btn).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.places_btn).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, AndroidUtilities.dp(2), AndroidUtilities.dp(2));
             combinedDrawable.setFullsize(true);
@@ -529,7 +529,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         searchAreaButton.setTextColor(getThemedColor(Theme.key_location_actionActiveIcon));
         searchAreaButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         searchAreaButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        searchAreaButton.setText(LocaleController.getString("PlacesInThisArea", works.heymate.beta.R.string.PlacesInThisArea));
+        searchAreaButton.setText(LocaleController.getString("PlacesInThisArea", R.string.PlacesInThisArea));
         searchAreaButton.setGravity(Gravity.CENTER);
         searchAreaButton.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
         mapViewClip.addView(searchAreaButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 80, 12, 80, 0));
@@ -551,7 +551,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         mapTypeButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), getThemedColor(Theme.key_location_actionBackground), getThemedColor(Theme.key_location_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(40), AndroidUtilities.dp(40));
@@ -570,7 +570,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
         mapTypeButton.setBackgroundDrawable(drawable);
-        mapTypeButton.setIcon(works.heymate.beta.R.drawable.location_type);
+        mapTypeButton.setIcon(R.drawable.location_type);
         mapViewClip.addView(mapTypeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12, 12, 0));
         mapTypeButton.setOnClickListener(v -> mapTypeButton.toggleSubMenu());
         mapTypeButton.setDelegate(id -> {
@@ -589,7 +589,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         locationButton = new ImageView(context);
         drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), getThemedColor(Theme.key_location_actionBackground), getThemedColor(Theme.key_location_actionPressedBackground));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(40), AndroidUtilities.dp(40));
@@ -608,11 +608,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
         locationButton.setBackgroundDrawable(drawable);
-        locationButton.setImageResource(works.heymate.beta.R.drawable.location_current);
+        locationButton.setImageResource(R.drawable.location_current);
         locationButton.setScaleType(ImageView.ScaleType.CENTER);
         locationButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_location_actionActiveIcon), PorterDuff.Mode.MULTIPLY));
         locationButton.setTag(Theme.key_location_actionActiveIcon);
-        locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", works.heymate.beta.R.string.AccDescrMyLocation));
+        locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", R.string.AccDescrMyLocation));
         FrameLayout.LayoutParams layoutParams1 = LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 12, 12);
         mapViewClip.addView(locationButton, layoutParams1);
         locationButton.setOnClickListener(v -> {
@@ -661,7 +661,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         emptyTitleTextView.setGravity(Gravity.CENTER);
         emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         emptyTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        emptyTitleTextView.setText(LocaleController.getString("NoPlacesFound", works.heymate.beta.R.string.NoPlacesFound));
+        emptyTitleTextView.setText(LocaleController.getString("NoPlacesFound", R.string.NoPlacesFound));
         emptyView.addView(emptyTitleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 11, 0, 0));
 
         emptySubtitleTextView = new TextView(context);
@@ -859,7 +859,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                             }));
                             if (isActiveThemeDark()) {
                                 currentMapStyleDark = true;
-                                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, works.heymate.beta.R.raw.mapstyle_night);
+                                MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
                                 googleMap.setMapStyle(style);
                             }
                             onMapInit();
@@ -876,7 +876,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         }).start();
 
         markerImageView = new ImageView(context);
-        markerImageView.setImageResource(works.heymate.beta.R.drawable.map_pin2);
+        markerImageView.setImageResource(R.drawable.map_pin2);
         mapViewClip.addView(markerImageView, LayoutHelper.createFrame(28, 48, Gravity.TOP | Gravity.CENTER_HORIZONTAL));
 
         searchListView = new RecyclerListView(context, resourcesProvider);
@@ -889,7 +889,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     searchItem.setShowSearchProgress(searchAdapter.isSearching());
                 }
                 if (emptySubtitleTextView != null) {
-                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoPlacesFoundInfo", works.heymate.beta.R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
+                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoPlacesFoundInfo", R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
                 }
                 super.notifyDataSetChanged();
             }
@@ -1308,7 +1308,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     builder.show();
                 }
             } catch (Exception e) {
@@ -1335,11 +1335,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), resourcesProvider);
         builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         if (byButton) {
-            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
+            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
         } else {
-            builder.setMessage(LocaleController.getString("PermissionNoLocation", works.heymate.beta.R.string.PermissionNoLocation));
+            builder.setMessage(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation));
         }
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
                 return;
             }
@@ -1351,7 +1351,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 FileLog.e(e);
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.show();
     }
 
@@ -1552,7 +1552,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
     @Override
     void onShow() {
-        parentAlert.actionBar.setTitle(LocaleController.getString("ShareLocation", works.heymate.beta.R.string.ShareLocation));
+        parentAlert.actionBar.setTitle(LocaleController.getString("ShareLocation", R.string.ShareLocation));
         if (mapView.getParent() == null) {
             mapViewClip.addView(mapView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, overScrollHeight + AndroidUtilities.dp(10), Gravity.TOP | Gravity.LEFT));
             mapViewClip.addView(overlayView, 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, overScrollHeight + AndroidUtilities.dp(10), Gravity.TOP | Gravity.LEFT));
@@ -1612,7 +1612,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 if (isActiveThemeDark()) {
                     if (!currentMapStyleDark) {
                         currentMapStyleDark = true;
-                        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, works.heymate.beta.R.raw.mapstyle_night);
+                        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
                         googleMap.setMapStyle(style);
                     }
                 } else {

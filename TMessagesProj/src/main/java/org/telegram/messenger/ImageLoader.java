@@ -14,14 +14,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import androidx.exifinterface.media.ExifInterface;
-
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -32,7 +28,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
-import com.google.android.exoplayer2.util.Log;
+import androidx.exifinterface.media.ExifInterface;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -361,7 +357,7 @@ public class ImageLoader {
                         }
                     }
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e(e, false);
                 }
                 httpConnectionStream = httpConnection.getInputStream();
 
@@ -407,7 +403,7 @@ public class ImageLoader {
                 } else if (e instanceof FileNotFoundException) {
                     canRetry = false;
                 }
-                FileLog.e(e);
+                FileLog.e(e, false);
             } finally {
                 try {
                     if (httpConnection != null) {
@@ -521,20 +517,27 @@ public class ImageLoader {
                         fileOutputStream = new RandomAccessFile(cacheImage.tempFilePath, "rws");
                     }
                 } catch (Throwable e) {
+                    boolean sentLogs = true;
                     if (e instanceof SocketTimeoutException) {
                         if (ApplicationLoader.isNetworkOnline()) {
                             canRetry = false;
                         }
+                        sentLogs = false;
                     } else if (e instanceof UnknownHostException) {
                         canRetry = false;
+                        sentLogs = false;
                     } else if (e instanceof SocketException) {
                         if (e.getMessage() != null && e.getMessage().contains("ECONNRESET")) {
                             canRetry = false;
                         }
+                        sentLogs = false;
                     } else if (e instanceof FileNotFoundException) {
                         canRetry = false;
+                        sentLogs = false;
+                    } else if (e instanceof InterruptedException) {
+                        sentLogs = false;
                     }
-                    FileLog.e(e);
+                    FileLog.e(e, sentLogs);
                 }
             }
 
@@ -840,6 +843,7 @@ public class ImageLoader {
                 int autoRepeat = 1;
                 int[] colors = null;
                 String diceEmoji = null;
+                int fitzModifier = 0;
                 if (cacheImage.filter != null) {
                     String[] args = cacheImage.filter.split("_");
                     if (args.length >= 2) {
@@ -847,7 +851,7 @@ public class ImageLoader {
                         float h_filter = Float.parseFloat(args[1]);
                         w = Math.min(512, (int) (w_filter * AndroidUtilities.density));
                         h = Math.min(512, (int) (h_filter * AndroidUtilities.density));
-                        if (w_filter <= 90 && h_filter <= 90) {
+                        if (w_filter <= 90 && h_filter <= 90 && !cacheImage.filter.contains("nolimit")) {
                             w = Math.min(w, 160);
                             h = Math.min(h, 160);
                             limitFps = true;
@@ -855,7 +859,7 @@ public class ImageLoader {
                         if (args.length >= 3 && "pcache".equals(args[2])) {
                             precache = true;
                         } else {
-                            precache = SharedConfig.getDevicePerformanceClass() != SharedConfig.PERFORMANCE_CLASS_HIGH;
+                            precache = !cacheImage.filter.contains("nolimit") && SharedConfig.getDevicePerformanceClass() != SharedConfig.PERFORMANCE_CLASS_HIGH;
                         }
                     }
 
@@ -871,15 +875,15 @@ public class ImageLoader {
                     }
                     if (args.length >= 5) {
                         if ("c1".equals(args[4])) {
-                            colors = new int[]{0xf77e41, 0xcb7b55, 0xffb139, 0xf6b689, 0xffd140, 0xffcda7, 0xffdf79, 0xffdfc5};
+                            fitzModifier = 12;
                         } else if ("c2".equals(args[4])) {
-                            colors = new int[]{0xf77e41, 0xa45a38, 0xffb139, 0xdf986b, 0xffd140, 0xedb183, 0xffdf79, 0xf4c3a0};
+                            fitzModifier = 3;
                         } else if ("c3".equals(args[4])) {
-                            colors = new int[]{0xf77e41, 0x703a17, 0xffb139, 0xab673d, 0xffd140, 0xc37f4e, 0xffdf79, 0xd89667};
+                            fitzModifier = 4;
                         } else if ("c4".equals(args[4])) {
-                            colors = new int[]{0xf77e41, 0x4a2409, 0xffb139, 0x7d3e0e, 0xffd140, 0x965529, 0xffdf79, 0xa96337};
+                            fitzModifier = 5;
                         } else if ("c5".equals(args[4])) {
-                            colors = new int[]{0xf77e41, 0x200f0a, 0xffb139, 0x412924, 0xffd140, 0x593d37, 0xffdf79, 0x63453f};
+                            fitzModifier = 6;
                         }
                     }
                 }
@@ -907,7 +911,7 @@ public class ImageLoader {
                             compressed = true;
                         }
                     } catch (Exception e) {
-                        FileLog.e(e);
+                        FileLog.e(e, false);
                     } finally {
                         if (randomAccessFile != null) {
                             try {
@@ -918,9 +922,9 @@ public class ImageLoader {
                         }
                     }
                     if (compressed) {
-                        lottieDrawable = new RLottieDrawable(cacheImage.finalFilePath, decompressGzip(cacheImage.finalFilePath), w, h, precache, limitFps, colors);
+                        lottieDrawable = new RLottieDrawable(cacheImage.finalFilePath, decompressGzip(cacheImage.finalFilePath), w, h, precache, limitFps, null, fitzModifier);
                     } else {
-                        lottieDrawable = new RLottieDrawable(cacheImage.finalFilePath, w, h, precache, limitFps, colors);
+                        lottieDrawable = new RLottieDrawable(cacheImage.finalFilePath, w, h, precache, limitFps, null, fitzModifier);
                     }
                 }
                 lottieDrawable.setAutoRepeat(autoRepeat);
@@ -1153,7 +1157,11 @@ public class ImageLoader {
                         }
                     }
                 } catch (Throwable e) {
-                    FileLog.e(e);
+                    boolean sentLog = true;
+                    if (e instanceof FileNotFoundException) {
+                        sentLog = false;
+                    }
+                    FileLog.e(e, sentLog);
                 }
 
                 if (cacheImage.type == ImageReceiver.TYPE_THUMB) {
@@ -1931,7 +1939,7 @@ public class ImageLoader {
 
     @TargetApi(26)
     private static void moveDirectory(File source, File target) {
-        if (!target.exists() && !target.mkdir()) {
+        if (!source.exists() || (!target.exists() && !target.mkdir())) {
             return;
         }
         try (Stream<Path> files = Files.list(source.toPath())) {
@@ -1984,27 +1992,20 @@ public class ImageLoader {
                         }
                     }
                 }
-                telegramPath = new File(path, "Telegram");
-                telegramPath.mkdirs();
-                /*int version = 0;
-                try {
-                    PackageManager pm = ApplicationLoader.applicationContext.getPackageManager();
-                    ApplicationInfo applicationInfo = pm.getApplicationInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-                    if (applicationInfo != null) {
-                        version = applicationInfo.targetSdkVersion;
-                    }
-                } catch (Throwable ignore) {
 
+                if (Build.VERSION.SDK_INT >= 30) {
+                    File newPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+                    telegramPath = new File(newPath, "Telegram");
+//                    File oldPath = new File(path, "Telegram");
+//                    long moveStart = System.currentTimeMillis();
+//                    moveDirectory(oldPath, telegramPath);
+//                    long dt = System.currentTimeMillis() - moveStart;
+//                    FileLog.d("move time = " + dt);
+                } else {
+                    telegramPath = new File(path, "Telegram");
                 }
-                File newPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-                telegramPath = new File(newPath, "Telegram"); //TODO
-                if (Build.VERSION.SDK_INT >= 29 && version < 30) {
-                    File oldPath = new File(path, "Telegram");
-                    long moveStart = SystemClock.elapsedRealtime();
-                    moveDirectory(oldPath, telegramPath);
-                    long dt = SystemClock.elapsedRealtime() - moveStart;
-                    FileLog.d("move time = " + dt);
-                }*/
+                telegramPath.mkdirs();
+
                 if (Build.VERSION.SDK_INT >= 19 && !telegramPath.isDirectory()) {
                     ArrayList<File> dirs = AndroidUtilities.getDataDirs();
                     for (int a = 0, N = dirs.size(); a < N; a++) {

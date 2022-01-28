@@ -16,8 +16,6 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 
-import works.heymate.beta.R;
-
 public class ChatsWidgetProvider extends AppWidgetProvider {
 
     @Override
@@ -93,20 +91,20 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
             }
 
             if (rows == 1 || selectedDialogs.size() <= 1) {
-                id = works.heymate.beta.R.layout.shortcut_widget_layout_1;
+                id = R.layout.shortcut_widget_layout_1;
             } else if (rows == 2 || selectedDialogs.size() <= 2) {
-                id = works.heymate.beta.R.layout.shortcut_widget_layout_2;
+                id = R.layout.shortcut_widget_layout_2;
             } else if (rows == 3 || selectedDialogs.size() <= 3) {
-                id = works.heymate.beta.R.layout.shortcut_widget_layout_3;
+                id = R.layout.shortcut_widget_layout_3;
             } else {
-                id = works.heymate.beta.R.layout.shortcut_widget_layout_4;
+                id = R.layout.shortcut_widget_layout_4;
             }
         } else {
-            id = works.heymate.beta.R.layout.shortcut_widget_layout_1;
+            id = R.layout.shortcut_widget_layout_1;
         }
         RemoteViews rv = new RemoteViews(context.getPackageName(), id);
-        rv.setRemoteAdapter(appWidgetId, works.heymate.beta.R.id.list_view, intent2);
-        rv.setEmptyView(works.heymate.beta.R.id.list_view, works.heymate.beta.R.id.empty_view);
+        rv.setRemoteAdapter(appWidgetId, R.id.list_view, intent2);
+        rv.setEmptyView(R.id.list_view, R.id.empty_view);
 
         Intent intent = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
         intent.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
@@ -114,7 +112,7 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        rv.setPendingIntentTemplate(works.heymate.beta.R.id.list_view, contentIntent);
+        rv.setPendingIntentTemplate(R.id.list_view, contentIntent);
         appWidgetManager.updateAppWidget(appWidgetId, rv);
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_view);
     }

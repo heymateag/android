@@ -31,7 +31,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPService;
@@ -204,9 +204,9 @@ public class GroupCallUserCell extends FrameLayout {
 
         public VerifiedDrawable(Context context) {
             super();
-            drawables[0] = context.getResources().getDrawable(works.heymate.beta.R.drawable.verified_area).mutate();
+            drawables[0] = context.getResources().getDrawable(R.drawable.verified_area).mutate();
             drawables[0].setColorFilter(new PorterDuffColorFilter(0xff75B3EE, PorterDuff.Mode.MULTIPLY));
-            drawables[1] = context.getResources().getDrawable(works.heymate.beta.R.drawable.verified_check).mutate();
+            drawables[1] = context.getResources().getDrawable(R.drawable.verified_check).mutate();
         }
 
         @Override
@@ -288,7 +288,7 @@ public class GroupCallUserCell extends FrameLayout {
         nameTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 54 : 67, 10, LocaleController.isRTL ? 67 : 54, 0));
 
-        speakingDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.voice_volume_mini);
+        speakingDrawable = context.getResources().getDrawable(R.drawable.voice_volume_mini);
         speakingDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_voipgroup_speakingText), PorterDuff.Mode.MULTIPLY));
 
         for (int a = 0; a < statusTextView.length; a++) {
@@ -346,17 +346,17 @@ public class GroupCallUserCell extends FrameLayout {
             } else {
                 if (a == 0) {
                     statusTextView[a].setTextColor(Theme.getColor(Theme.key_voipgroup_listeningText));
-                    statusTextView[a].setText(LocaleController.getString("Listening", works.heymate.beta.R.string.Listening));
+                    statusTextView[a].setText(LocaleController.getString("Listening", R.string.Listening));
                 } else if (a == 1) {
                     statusTextView[a].setTextColor(Theme.getColor(Theme.key_voipgroup_speakingText));
-                    statusTextView[a].setText(LocaleController.getString("Speaking", works.heymate.beta.R.string.Speaking));
+                    statusTextView[a].setText(LocaleController.getString("Speaking", R.string.Speaking));
                     statusTextView[a].setDrawablePadding(AndroidUtilities.dp(2));
                 } else if (a == 2) {
                     statusTextView[a].setTextColor(Theme.getColor(Theme.key_voipgroup_mutedByAdminIcon));
-                    statusTextView[a].setText(LocaleController.getString("VoipGroupMutedForMe", works.heymate.beta.R.string.VoipGroupMutedForMe));
+                    statusTextView[a].setText(LocaleController.getString("VoipGroupMutedForMe", R.string.VoipGroupMutedForMe));
                 } else if (a == 3) {
                     statusTextView[a].setTextColor(Theme.getColor(Theme.key_voipgroup_listeningText));
-                    statusTextView[a].setText(LocaleController.getString("WantsToSpeak", works.heymate.beta.R.string.WantsToSpeak));
+                    statusTextView[a].setText(LocaleController.getString("WantsToSpeak", R.string.WantsToSpeak));
                 }
                 addView(statusTextView[a], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 54 : 67, 32, LocaleController.isRTL ? 67 : 54, 0));
             }
@@ -369,8 +369,8 @@ public class GroupCallUserCell extends FrameLayout {
         fullAboutTextView.setVisibility(View.GONE);
         addView(fullAboutTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20 * 3, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 14, 32, 14, 0));
 
-        muteDrawable = new RLottieDrawable(works.heymate.beta.R.raw.voice_outlined2, "" + works.heymate.beta.R.raw.voice_outlined2, AndroidUtilities.dp(34), AndroidUtilities.dp(32), true, null);
-        shakeHandDrawable = new RLottieDrawable(works.heymate.beta.R.raw.hand_1, "" + works.heymate.beta.R.raw.hand_1, AndroidUtilities.dp(34), AndroidUtilities.dp(32), true, null);
+        muteDrawable = new RLottieDrawable(R.raw.voice_outlined2, "" + R.raw.voice_outlined2, AndroidUtilities.dp(34), AndroidUtilities.dp(32), true, null);
+        shakeHandDrawable = new RLottieDrawable(R.raw.hand_1, "" + R.raw.hand_1, AndroidUtilities.dp(34), AndroidUtilities.dp(32), true, null);
 
         muteButton = new RLottieImageView(context);
         muteButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -671,23 +671,23 @@ public class GroupCallUserCell extends FrameLayout {
         if (isSelfUser()) {
             if (!hasAbout && !hasAvatar) {
                 if (currentUser != null) {
-                    statusTextView[4].setText(LocaleController.getString("TapToAddPhotoOrBio", works.heymate.beta.R.string.TapToAddPhotoOrBio));
+                    statusTextView[4].setText(LocaleController.getString("TapToAddPhotoOrBio", R.string.TapToAddPhotoOrBio));
                 } else {
-                    statusTextView[4].setText(LocaleController.getString("TapToAddPhotoOrDescription", works.heymate.beta.R.string.TapToAddPhotoOrDescription));
+                    statusTextView[4].setText(LocaleController.getString("TapToAddPhotoOrDescription", R.string.TapToAddPhotoOrDescription));
                 }
                 statusTextView[4].setTextColor(Theme.getColor(grayIconColor));
             } else if (!hasAbout ){
                 if (currentUser != null) {
-                    statusTextView[4].setText(LocaleController.getString("TapToAddBio", works.heymate.beta.R.string.TapToAddBio));
+                    statusTextView[4].setText(LocaleController.getString("TapToAddBio", R.string.TapToAddBio));
                 } else {
-                    statusTextView[4].setText(LocaleController.getString("TapToAddDescription", works.heymate.beta.R.string.TapToAddDescription));
+                    statusTextView[4].setText(LocaleController.getString("TapToAddDescription", R.string.TapToAddDescription));
                 }
                 statusTextView[4].setTextColor(Theme.getColor(grayIconColor));
             } else if (!hasAvatar) {
-                statusTextView[4].setText(LocaleController.getString("TapToAddPhoto", works.heymate.beta.R.string.TapToAddPhoto));
+                statusTextView[4].setText(LocaleController.getString("TapToAddPhoto", R.string.TapToAddPhoto));
                 statusTextView[4].setTextColor(Theme.getColor(grayIconColor));
             } else {
-                statusTextView[4].setText(LocaleController.getString("ThisIsYou", works.heymate.beta.R.string.ThisIsYou));
+                statusTextView[4].setText(LocaleController.getString("ThisIsYou", R.string.ThisIsYou));
                 statusTextView[4].setTextColor(Theme.getColor(Theme.key_voipgroup_listeningText));
             }
             if (hasAbout) {
@@ -739,10 +739,10 @@ public class GroupCallUserCell extends FrameLayout {
             int volume = vol / 100;
             if (volume != 100) {
                 statusTextView[1].setLeftDrawable(speakingDrawable);
-                statusTextView[1].setText(LocaleController.formatString("SpeakingWithVolume", works.heymate.beta.R.string.SpeakingWithVolume, vol < 100 ? 1 : volume));
+                statusTextView[1].setText(LocaleController.formatString("SpeakingWithVolume", R.string.SpeakingWithVolume, vol < 100 ? 1 : volume));
             } else {
                 statusTextView[1].setLeftDrawable(null);
-                statusTextView[1].setText(LocaleController.getString("Speaking", works.heymate.beta.R.string.Speaking));
+                statusTextView[1].setText(LocaleController.getString("Speaking", R.string.Speaking));
             }
         }
         if (isSelfUser()) {
@@ -1039,7 +1039,7 @@ public class GroupCallUserCell extends FrameLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         if (info.isEnabled() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, participant.muted && !participant.can_self_unmute ? LocaleController.getString("VoipUnmute", works.heymate.beta.R.string.VoipUnmute) : LocaleController.getString("VoipMute", works.heymate.beta.R.string.VoipMute)));
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, participant.muted && !participant.can_self_unmute ? LocaleController.getString("VoipUnmute", R.string.VoipUnmute) : LocaleController.getString("VoipMute", R.string.VoipMute)));
         }
     }
 

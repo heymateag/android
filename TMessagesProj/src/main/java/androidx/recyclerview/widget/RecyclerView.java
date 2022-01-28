@@ -59,7 +59,6 @@ import android.widget.LinearLayout;
 import android.widget.OverScroller;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
@@ -12434,7 +12433,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
 
         /**
          * Removes the mapping from the specified id, if there was any.
-         * @param resourceId Id of the resource you want to remove. It is suggested to use works.heymate.beta.R.id.* to
+         * @param resourceId Id of the resource you want to remove. It is suggested to use R.id.* to
          *                   preserve cross functionality and avoid conflicts.
          */
         public void remove(int resourceId) {
@@ -12448,7 +12447,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Gets the Object mapped from the specified id, or <code>null</code>
          * if no such data exists.
          *
-         * @param resourceId Id of the resource you want to remove. It is suggested to use works.heymate.beta.R.id.*
+         * @param resourceId Id of the resource you want to remove. It is suggested to use R.id.*
          *                   to
          *                   preserve cross functionality and avoid conflicts.
          */
@@ -12464,7 +12463,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
          * Adds a mapping from the specified id to the specified value, replacing the previous
          * mapping from the specified key if there was one.
          *
-         * @param resourceId Id of the resource you want to add. It is suggested to use works.heymate.beta.R.id.* to
+         * @param resourceId Id of the resource you want to add. It is suggested to use R.id.* to
          *                   preserve cross functionality and avoid conflicts.
          * @param data       The data you want to associate with the resourceId.
          */

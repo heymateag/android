@@ -13,7 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -63,12 +63,12 @@ public class GroupCallInvitedCell extends FrameLayout {
         statusTextView.setTextSize(15);
         statusTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         statusTextView.setTextColor(Theme.getColor(grayIconColor));
-        statusTextView.setText(LocaleController.getString("Invited", works.heymate.beta.R.string.Invited));
+        statusTextView.setText(LocaleController.getString("Invited", R.string.Invited));
         addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 54 : 67, 32, LocaleController.isRTL ? 67 : 54, 0));
 
         muteButton = new ImageView(context);
         muteButton.setScaleType(ImageView.ScaleType.CENTER);
-        muteButton.setImageResource(works.heymate.beta.R.drawable.msg_invited);
+        muteButton.setImageResource(R.drawable.msg_invited);
         muteButton.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         muteButton.setPadding(0, 0, AndroidUtilities.dp(4), 0);
         muteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(grayIconColor), PorterDuff.Mode.MULTIPLY));

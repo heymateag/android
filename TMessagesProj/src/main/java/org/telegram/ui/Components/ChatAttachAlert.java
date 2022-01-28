@@ -28,12 +28,14 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.text.util.Linkify;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -44,6 +46,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -62,7 +65,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -244,7 +247,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         }
 
-        void applyCaption(String text) {
+        void applyCaption(CharSequence text) {
 
         }
 
@@ -417,6 +420,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         public AttachButton(Context context) {
             super(context);
             setWillNotDraw(false);
+            setFocusable(true);
+            setFocusableInTouchMode(true);
 
             imageView = new RLottieImageView(context) {
                 @Override
@@ -435,6 +440,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             textView.setTextColor(getThemedColor(Theme.key_dialogTextGray2));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
             textView.setLineSpacing(-AndroidUtilities.dp(2), 1.0f);
+            textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
             addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 62, 0, 0));
         }
 
@@ -1067,8 +1073,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         selectedMenuItem = new ActionBarMenuItem(context, null, 0, getThemedColor(Theme.key_dialogTextBlack), false, resourcesProvider);
         selectedMenuItem.setLongClickEnabled(false);
-        selectedMenuItem.setIcon(works.heymate.beta.R.drawable.ic_ab_other);
-        selectedMenuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
+        selectedMenuItem.setIcon(R.drawable.ic_ab_other);
+        selectedMenuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         selectedMenuItem.setVisibility(View.INVISIBLE);
         selectedMenuItem.setAlpha(0.0f);
         selectedMenuItem.setSubMenuOpenSide(2);
@@ -1080,7 +1086,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         doneItem = new ActionBarMenuItem(context, null, 0, getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader), true, resourcesProvider);
         doneItem.setLongClickEnabled(false);
-        doneItem.setText(LocaleController.getString("Create", works.heymate.beta.R.string.Create).toUpperCase());
+        doneItem.setText(LocaleController.getString("Create", R.string.Create).toUpperCase());
         doneItem.setVisibility(View.INVISIBLE);
         doneItem.setAlpha(0.0f);
         doneItem.setTranslationX(-AndroidUtilities.dp(12));
@@ -1089,8 +1095,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         searchItem = new ActionBarMenuItem(context, null, 0, getThemedColor(Theme.key_dialogTextBlack), false, resourcesProvider);
         searchItem.setLongClickEnabled(false);
-        searchItem.setIcon(works.heymate.beta.R.drawable.ic_ab_search);
-        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setIcon(R.drawable.ic_ab_search);
+        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
         searchItem.setVisibility(View.INVISIBLE);
         searchItem.setAlpha(0.0f);
         searchItem.setTranslationX(-AndroidUtilities.dp(42));
@@ -1201,7 +1207,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         containerView.addView(actionBarShadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 1));
 
         shadow = new View(context);
-        shadow.setBackgroundResource(works.heymate.beta.R.drawable.attach_shadow);
+        shadow.setBackgroundResource(R.drawable.attach_shadow);
         shadow.getBackground().setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
         containerView.addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 2, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 84));
 
@@ -1288,10 +1294,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     return false;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                builder.setMessage(LocaleController.formatString("ChatHintsDelete", works.heymate.beta.R.string.ChatHintsDelete, ContactsController.formatName(button.currentUser.first_name, button.currentUser.last_name)));
-                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialogInterface, i) -> MediaDataController.getInstance(currentAccount).removeInline(button.currentUser.id));
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.formatString("ChatHintsDelete", R.string.ChatHintsDelete, ContactsController.formatName(button.currentUser.first_name, button.currentUser.last_name)));
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> MediaDataController.getInstance(currentAccount).removeInline(button.currentUser.id));
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 builder.show();
                 return true;
             }
@@ -1431,7 +1437,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 updateLayout(currentAttachLayout,true, 0);
             }
         };
-        commentTextView.setHint(LocaleController.getString("AddCaption", works.heymate.beta.R.string.AddCaption));
+        commentTextView.setHint(LocaleController.getString("AddCaption", R.string.AddCaption));
         commentTextView.onResume();
         commentTextView.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -1539,7 +1545,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         writeButton = new ImageView(context);
         writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), getThemedColor(Theme.key_dialogFloatingButton), getThemedColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, writeButtonDrawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
@@ -1638,12 +1644,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 itemCells[a] = new ActionBarMenuSubItem(getContext(), a == 0, a == 1, resourcesProvider);
                 if (num == 0) {
                     if (UserObject.isUserSelf(user)) {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", works.heymate.beta.R.string.SetReminder), works.heymate.beta.R.drawable.msg_schedule);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
                     } else {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", works.heymate.beta.R.string.ScheduleMessage), works.heymate.beta.R.drawable.msg_schedule);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
                     }
                 } else if (num == 1) {
-                    itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", works.heymate.beta.R.string.SendWithoutSound), works.heymate.beta.R.drawable.input_notify_off);
+                    itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                 }
                 itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 
@@ -1676,7 +1682,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
             sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
             sendPopupWindow.setAnimationEnabled(false);
-            sendPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation2);
+            sendPopupWindow.setAnimationStyle(R.style.PopupContextAnimation2);
             sendPopupWindow.setOutsideTouchable(true);
             sendPopupWindow.setClippingEnabled(true);
             sendPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
@@ -1769,7 +1775,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (commentTextView.length() <= 0) {
             return;
         }
-        currentAttachLayout.applyCaption(commentTextView.getText().toString());
+        currentAttachLayout.applyCaption(commentTextView.getText());
     }
 
     private void sendPressed(boolean notify, int scheduleDate) {
@@ -2624,7 +2630,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             MediaController.loadGalleryPhotosAlbums(0);
         }
         currentAttachLayout.onOpenAnimationEnd();
-        AndroidUtilities.makeAccessibilityAnnouncement(LocaleController.getString("AccDescrAttachButton", works.heymate.beta.R.string.AccDescrAttachButton));
+        AndroidUtilities.makeAccessibilityAnnouncement(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
         openTransitionFinished = true;
     }
 
@@ -2652,9 +2658,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             buttonsRecyclerView.setVisibility(View.GONE);
             shadow.setVisibility(View.GONE);
             if (avatarPicker == 2) {
-                selectedTextView.setText(LocaleController.getString("ChoosePhotoOrVideo", works.heymate.beta.R.string.ChoosePhotoOrVideo));
+                selectedTextView.setText(LocaleController.getString("ChoosePhotoOrVideo", R.string.ChoosePhotoOrVideo));
             } else {
-                selectedTextView.setText(LocaleController.getString("ChoosePhoto", works.heymate.beta.R.string.ChoosePhoto));
+                selectedTextView.setText(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto));
             }
         } else {
             typeButtonsAvailable = true;
@@ -2713,22 +2719,22 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 case 0:
                     AttachButton attachButton = (AttachButton) holder.itemView;
                     if (position == galleryButton) {
-                        attachButton.setTextAndIcon(1, LocaleController.getString("ChatGallery", works.heymate.beta.R.string.ChatGallery), Theme.chat_attachButtonDrawables[0], Theme.key_chat_attachGalleryBackground, Theme.key_chat_attachGalleryText);
+                        attachButton.setTextAndIcon(1, LocaleController.getString("ChatGallery", R.string.ChatGallery), Theme.chat_attachButtonDrawables[0], Theme.key_chat_attachGalleryBackground, Theme.key_chat_attachGalleryText);
                         attachButton.setTag(1);
                     } else if (position == documentButton) {
-                        attachButton.setTextAndIcon(4, LocaleController.getString("ChatDocument", works.heymate.beta.R.string.ChatDocument), Theme.chat_attachButtonDrawables[2], Theme.key_chat_attachFileBackground, Theme.key_chat_attachFileText);
+                        attachButton.setTextAndIcon(4, LocaleController.getString("ChatDocument", R.string.ChatDocument), Theme.chat_attachButtonDrawables[2], Theme.key_chat_attachFileBackground, Theme.key_chat_attachFileText);
                         attachButton.setTag(4);
                     } else if (position == locationButton) {
-                        attachButton.setTextAndIcon(6, LocaleController.getString("ChatLocation", works.heymate.beta.R.string.ChatLocation), Theme.chat_attachButtonDrawables[4], Theme.key_chat_attachLocationBackground, Theme.key_chat_attachLocationText);
+                        attachButton.setTextAndIcon(6, LocaleController.getString("ChatLocation", R.string.ChatLocation), Theme.chat_attachButtonDrawables[4], Theme.key_chat_attachLocationBackground, Theme.key_chat_attachLocationText);
                         attachButton.setTag(6);
                     } else if (position == musicButton) {
-                        attachButton.setTextAndIcon(3, LocaleController.getString("AttachMusic", works.heymate.beta.R.string.AttachMusic), Theme.chat_attachButtonDrawables[1], Theme.key_chat_attachAudioBackground, Theme.key_chat_attachAudioText);
+                        attachButton.setTextAndIcon(3, LocaleController.getString("AttachMusic", R.string.AttachMusic), Theme.chat_attachButtonDrawables[1], Theme.key_chat_attachAudioBackground, Theme.key_chat_attachAudioText);
                         attachButton.setTag(3);
                     } else if (position == pollButton) {
-                        attachButton.setTextAndIcon(9, LocaleController.getString("Poll", works.heymate.beta.R.string.Poll), Theme.chat_attachButtonDrawables[5], Theme.key_chat_attachPollBackground, Theme.key_chat_attachPollText);
+                        attachButton.setTextAndIcon(9, LocaleController.getString("Poll", R.string.Poll), Theme.chat_attachButtonDrawables[5], Theme.key_chat_attachPollBackground, Theme.key_chat_attachPollText);
                         attachButton.setTag(9);
                     } else if (position == contactButton) {
-                        attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", works.heymate.beta.R.string.AttachContact), Theme.chat_attachButtonDrawables[3], Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
+                        attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", R.string.AttachContact), Theme.chat_attachButtonDrawables[3], Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
                         attachButton.setTag(5);
                     }
                     break;

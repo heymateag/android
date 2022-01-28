@@ -17,7 +17,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -104,19 +104,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             }
         };
 
-        searchListView = new RecyclerListView(context) {
-            @Override
-            protected void dispatchDraw(Canvas canvas) {
-                itemsEnterAnimator.dispatchDraw();
-                super.dispatchDraw(canvas);
-            }
-
-            @Override
-            protected void onDetachedFromWindow() {
-                super.onDetachedFromWindow();
-                itemsEnterAnimator.onDetached();
-            }
-        };
+        searchListView = new RecyclerListView(context);
         searchListView.setPivotY(0);
         searchListView.setAdapter(dialogsSearchAdapter);
         searchListView.setVerticalScrollBarEnabled(true);
@@ -163,7 +151,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 super.setVisibility(visibility);
             }
         };
-        emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+        emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
         emptyView.subtitle.setVisibility(View.GONE);
         emptyView.setVisibility(View.GONE);
         emptyView.addView(loadingView, 0);
@@ -181,7 +169,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             @Override
             public String getItemTitle(int position) {
                 if (position == 0) {
-                    return LocaleController.getString("SearchAllChatsShort", works.heymate.beta.R.string.SearchAllChatsShort);
+                    return LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort);
                 } else {
                     return FiltersView.filters[position - 1].title;
                 }
@@ -343,8 +331,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             actionMode.addView(selectedMessagesCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
             selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
 
-            gotoItem = actionMode.addItemWithWidth(gotoItemId, works.heymate.beta.R.drawable.msg_message, AndroidUtilities.dp(54), LocaleController.getString("AccDescrGoToMessage", works.heymate.beta.R.string.AccDescrGoToMessage));
-            forwardItem = actionMode.addItemWithWidth(forwardItemId, works.heymate.beta.R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", works.heymate.beta.R.string.Forward));
+            gotoItem = actionMode.addItemWithWidth(gotoItemId, R.drawable.msg_message, AndroidUtilities.dp(54), LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
+            forwardItem = actionMode.addItemWithWidth(forwardItemId, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward));
         }
         if (parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
             parent.getActionBar().setBackButtonDrawable(new BackDrawable(false));

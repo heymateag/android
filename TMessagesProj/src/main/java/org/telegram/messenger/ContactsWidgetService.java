@@ -76,28 +76,28 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     public RemoteViews getViewAt(int position) {
         if (deleted) {
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.widget_deleted);
-            rv.setTextViewText(works.heymate.beta.R.id.widget_deleted_text, LocaleController.getString("WidgetLoggedOff", works.heymate.beta.R.string.WidgetLoggedOff));
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_deleted);
+            rv.setTextViewText(R.id.widget_deleted_text, LocaleController.getString("WidgetLoggedOff", R.string.WidgetLoggedOff));
             return rv;
         } else if (position >= getCount() - 1) {
-            RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.widget_edititem);
-            rv.setTextViewText(works.heymate.beta.R.id.widget_edititem_text, LocaleController.getString("TapToEditWidgetShort", works.heymate.beta.R.string.TapToEditWidgetShort));
+            RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_edititem);
+            rv.setTextViewText(R.id.widget_edititem_text, LocaleController.getString("TapToEditWidgetShort", R.string.TapToEditWidgetShort));
             Bundle extras = new Bundle();
             extras.putInt("appWidgetId", appWidgetId);
             extras.putInt("appWidgetType", EditWidgetActivity.TYPE_CONTACTS);
             extras.putInt("currentAccount", accountInstance.getCurrentAccount());
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
-            rv.setOnClickFillInIntent(works.heymate.beta.R.id.widget_edititem, fillInIntent);
+            rv.setOnClickFillInIntent(R.id.widget_edititem, fillInIntent);
             return rv;
         }
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), works.heymate.beta.R.layout.contacts_widget_item);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.contacts_widget_item);
         for (int a = 0; a < 2; a++) {
             int num = position * 2 + a;
             if (num >= dids.size()) {
-                rv.setViewVisibility(a == 0 ? works.heymate.beta.R.id.contacts_widget_item1 : works.heymate.beta.R.id.contacts_widget_item2, View.INVISIBLE);
+                rv.setViewVisibility(a == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2, View.INVISIBLE);
             } else {
-                rv.setViewVisibility(a == 0 ? works.heymate.beta.R.id.contacts_widget_item1 : works.heymate.beta.R.id.contacts_widget_item2, View.VISIBLE);
+                rv.setViewVisibility(a == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2, View.VISIBLE);
 
                 Long id = dids.get(position * 2 + a);
                 String name;
@@ -108,11 +108,11 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                 if (DialogObject.isUserDialog(id)) {
                     user = accountInstance.getMessagesController().getUser(id);
                     if (UserObject.isUserSelf(user)) {
-                        name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
+                        name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                     } else if (UserObject.isReplyUser(user)) {
-                        name = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
+                        name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
                     } else if (UserObject.isDeleted(user)) {
-                        name = LocaleController.getString("HiddenName", works.heymate.beta.R.string.HiddenName);
+                        name = LocaleController.getString("HiddenName", R.string.HiddenName);
                     } else {
                         name = UserObject.getFirstName(user);
                     }
@@ -130,7 +130,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                         name = "";
                     }
                 }
-                rv.setTextViewText(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_text1 : works.heymate.beta.R.id.contacts_widget_item_text2, name);
+                rv.setTextViewText(a == 0 ? R.id.contacts_widget_item_text1 : R.id.contacts_widget_item_text2, name);
 
                 try {
                     Bitmap bitmap = null;
@@ -172,7 +172,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                         canvas.restore();
                     }
                     canvas.setBitmap(null);
-                    rv.setImageViewBitmap(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_avatar1 : works.heymate.beta.R.id.contacts_widget_item_avatar2, result);
+                    rv.setImageViewBitmap(a == 0 ? R.id.contacts_widget_item_avatar1 : R.id.contacts_widget_item_avatar2, result);
                 } catch (Throwable e) {
                     FileLog.e(e);
                 }
@@ -186,10 +186,10 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                     } else {
                         count = String.format("%d", dialog.unread_count);
                     }
-                    rv.setTextViewText(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_badge1 : works.heymate.beta.R.id.contacts_widget_item_badge2, count);
-                    rv.setViewVisibility(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_badge_bg1 : works.heymate.beta.R.id.contacts_widget_item_badge_bg2, View.VISIBLE);
+                    rv.setTextViewText(a == 0 ? R.id.contacts_widget_item_badge1 : R.id.contacts_widget_item_badge2, count);
+                    rv.setViewVisibility(a == 0 ? R.id.contacts_widget_item_badge_bg1 : R.id.contacts_widget_item_badge_bg2, View.VISIBLE);
                 } else {
-                    rv.setViewVisibility(a == 0 ? works.heymate.beta.R.id.contacts_widget_item_badge_bg1 : works.heymate.beta.R.id.contacts_widget_item_badge_bg2, View.GONE);
+                    rv.setViewVisibility(a == 0 ? R.id.contacts_widget_item_badge_bg1 : R.id.contacts_widget_item_badge_bg2, View.GONE);
                 }
 
                 Bundle extras = new Bundle();
@@ -203,7 +203,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
                 Intent fillInIntent = new Intent();
                 fillInIntent.putExtras(extras);
-                rv.setOnClickFillInIntent(a == 0 ? works.heymate.beta.R.id.contacts_widget_item1 : works.heymate.beta.R.id.contacts_widget_item2, fillInIntent);
+                rv.setOnClickFillInIntent(a == 0 ? R.id.contacts_widget_item1 : R.id.contacts_widget_item2, fillInIntent);
             }
         }
         return rv;

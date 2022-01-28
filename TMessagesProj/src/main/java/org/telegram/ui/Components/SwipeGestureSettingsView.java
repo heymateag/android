@@ -16,7 +16,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -55,12 +55,12 @@ public class SwipeGestureSettingsView extends FrameLayout {
     public SwipeGestureSettingsView(Context context, int currentAccount) {
         super(context);
 
-        strings[SWIPE_GESTURE_PIN] = LocaleController.getString("SwipeSettingsPin", works.heymate.beta.R.string.SwipeSettingsPin);
-        strings[SWIPE_GESTURE_READ] = LocaleController.getString("SwipeSettingsRead", works.heymate.beta.R.string.SwipeSettingsRead);
-        strings[SWIPE_GESTURE_ARCHIVE] = LocaleController.getString("SwipeSettingsArchive", works.heymate.beta.R.string.SwipeSettingsArchive);
-        strings[SWIPE_GESTURE_MUTE] = LocaleController.getString("SwipeSettingsMute", works.heymate.beta.R.string.SwipeSettingsMute);
-        strings[SWIPE_GESTURE_DELETE] = LocaleController.getString("SwipeSettingsDelete", works.heymate.beta.R.string.SwipeSettingsDelete);
-        strings[SWIPE_GESTURE_FOLDERS] = LocaleController.getString("SwipeSettingsFolders", works.heymate.beta.R.string.SwipeSettingsFolders);
+        strings[SWIPE_GESTURE_PIN] = LocaleController.getString("SwipeSettingsPin", R.string.SwipeSettingsPin);
+        strings[SWIPE_GESTURE_READ] = LocaleController.getString("SwipeSettingsRead", R.string.SwipeSettingsRead);
+        strings[SWIPE_GESTURE_ARCHIVE] = LocaleController.getString("SwipeSettingsArchive", R.string.SwipeSettingsArchive);
+        strings[SWIPE_GESTURE_MUTE] = LocaleController.getString("SwipeSettingsMute", R.string.SwipeSettingsMute);
+        strings[SWIPE_GESTURE_DELETE] = LocaleController.getString("SwipeSettingsDelete", R.string.SwipeSettingsDelete);
+        strings[SWIPE_GESTURE_FOLDERS] = LocaleController.getString("SwipeSettingsFolders", R.string.SwipeSettingsFolders);
 
         backgroundKeys[SWIPE_GESTURE_PIN] = Theme.key_chats_archiveBackground;
         backgroundKeys[SWIPE_GESTURE_READ] = Theme.key_chats_archiveBackground;
@@ -275,22 +275,22 @@ public class SwipeGestureSettingsView extends FrameLayout {
             switch (i) {
                 default:
                 case SWIPE_GESTURE_PIN:
-                    rawId = works.heymate.beta.R.raw.swipe_pin;
+                    rawId = R.raw.swipe_pin;
                     break;
                 case SWIPE_GESTURE_ARCHIVE:
-                    rawId = works.heymate.beta.R.raw.chats_archive;
+                    rawId = R.raw.chats_archive;
                     break;
                 case SWIPE_GESTURE_DELETE:
-                    rawId = works.heymate.beta.R.raw.swipe_delete;
+                    rawId = R.raw.swipe_delete;
                     break;
                 case SWIPE_GESTURE_MUTE:
-                    rawId = works.heymate.beta.R.raw.swipe_mute;
+                    rawId = R.raw.swipe_mute;
                     break;
                 case SWIPE_GESTURE_READ:
-                    rawId = works.heymate.beta.R.raw.swipe_read;
+                    rawId = R.raw.swipe_read;
                     break;
                 case SWIPE_GESTURE_FOLDERS:
-                    rawId = works.heymate.beta.R.raw.swipe_disabled;
+                    rawId = R.raw.swipe_disabled;
                     break;
             }
             icons[i] = new RLottieDrawable(rawId, "" + rawId, AndroidUtilities.dp(28), AndroidUtilities.dp(28), true, null);

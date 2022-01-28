@@ -26,7 +26,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -157,7 +157,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 22, 35, 22, 0));
 
             addButton = new ProgressButton(context);
-            addButton.setText(LocaleController.getString("Add", works.heymate.beta.R.string.Add));
+            addButton.setText(LocaleController.getString("Add", R.string.Add));
             addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
             addButton.setProgressColor(Theme.getColor(Theme.key_featuredStickers_buttonProgress));
             addButton.setBackgroundRoundRect(Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
@@ -207,7 +207,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             super(context);
 
             imageView = new RLottieImageView(context);
-            imageView.setAnimation(works.heymate.beta.R.raw.filters, 90, 90);
+            imageView.setAnimation(R.raw.filters, 90, 90);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.playAnimation();
             addView(imageView, LayoutHelper.createFrame(90, 90, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 14, 0, 0));
@@ -222,7 +222,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
             messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             messageTextView.setGravity(Gravity.CENTER);
-            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CreateNewFilterInfo", works.heymate.beta.R.string.CreateNewFilterInfo)));
+            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CreateNewFilterInfo", R.string.CreateNewFilterInfo)));
             addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 40, 121, 40, 24));
         }
 
@@ -251,9 +251,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             moveImageView = new ImageView(context);
             moveImageView.setFocusable(false);
             moveImageView.setScaleType(ImageView.ScaleType.CENTER);
-            moveImageView.setImageResource(works.heymate.beta.R.drawable.list_reorder);
+            moveImageView.setImageResource(R.drawable.list_reorder);
             moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.MULTIPLY));
-            moveImageView.setContentDescription(LocaleController.getString("FilterReorder", works.heymate.beta.R.string.FilterReorder));
+            moveImageView.setContentDescription(LocaleController.getString("FilterReorder", R.string.FilterReorder));
             moveImageView.setClickable(true);
             addView(moveImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 6, 0, 6, 0));
 
@@ -284,8 +284,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             optionsImageView.setScaleType(ImageView.ScaleType.CENTER);
             optionsImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
             optionsImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_stickers_menu), PorterDuff.Mode.MULTIPLY));
-            optionsImageView.setImageResource(works.heymate.beta.R.drawable.msg_actions);
-            optionsImageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
+            optionsImageView.setImageResource(R.drawable.msg_actions);
+            optionsImageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
             addView(optionsImageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 6, 0, 6, 0));
         }
 
@@ -299,37 +299,37 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
             StringBuilder info = new StringBuilder();
             if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) {
-                info.append(LocaleController.getString("FilterAllChats", works.heymate.beta.R.string.FilterAllChats));
+                info.append(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             } else {
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_CONTACTS) != 0) {
                     if (info.length() != 0) {
                         info.append(", ");
                     }
-                    info.append(LocaleController.getString("FilterContacts", works.heymate.beta.R.string.FilterContacts));
+                    info.append(LocaleController.getString("FilterContacts", R.string.FilterContacts));
                 }
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS) != 0) {
                     if (info.length() != 0) {
                         info.append(", ");
                     }
-                    info.append(LocaleController.getString("FilterNonContacts", works.heymate.beta.R.string.FilterNonContacts));
+                    info.append(LocaleController.getString("FilterNonContacts", R.string.FilterNonContacts));
                 }
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_GROUPS) != 0) {
                     if (info.length() != 0) {
                         info.append(", ");
                     }
-                    info.append(LocaleController.getString("FilterGroups", works.heymate.beta.R.string.FilterGroups));
+                    info.append(LocaleController.getString("FilterGroups", R.string.FilterGroups));
                 }
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_CHANNELS) != 0) {
                     if (info.length() != 0) {
                         info.append(", ");
                     }
-                    info.append(LocaleController.getString("FilterChannels", works.heymate.beta.R.string.FilterChannels));
+                    info.append(LocaleController.getString("FilterChannels", R.string.FilterChannels));
                 }
                 if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_BOTS) != 0) {
                     if (info.length() != 0) {
                         info.append(", ");
                     }
-                    info.append(LocaleController.getString("FilterBots", works.heymate.beta.R.string.FilterBots));
+                    info.append(LocaleController.getString("FilterBots", R.string.FilterBots));
                 }
             }
             if (!filter.alwaysShow.isEmpty() || !filter.neverShow.isEmpty()) {
@@ -339,7 +339,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 info.append(LocaleController.formatPluralString("Exception", filter.alwaysShow.size() + filter.neverShow.size()));
             }
             if (info.length() == 0) {
-                info.append(LocaleController.getString("FilterNoChats", works.heymate.beta.R.string.FilterNoChats));
+                info.append(LocaleController.getString("FilterNoChats", R.string.FilterNoChats));
             }
 
             textView.setText(Emoji.replaceEmoji(filter.name, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
@@ -443,9 +443,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("Filters", works.heymate.beta.R.string.Filters));
+        actionBar.setTitle(LocaleController.getString("Filters", R.string.Filters));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -527,7 +527,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                     break;
                 case 1:
                     view = new HintInnerCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     FilterCell filterCell = new FilterCell(mContext);
@@ -546,22 +546,22 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         paint.setTextSize(AndroidUtilities.dp(20));
                         builder1.setTitle(Emoji.replaceEmoji(filter.name, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false));
                         final CharSequence[] items = new CharSequence[]{
-                                LocaleController.getString("FilterEditItem", works.heymate.beta.R.string.FilterEditItem),
-                                LocaleController.getString("FilterDeleteItem", works.heymate.beta.R.string.FilterDeleteItem),
+                                LocaleController.getString("FilterEditItem", R.string.FilterEditItem),
+                                LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem),
                         };
                         final int[] icons = new int[]{
-                                works.heymate.beta.R.drawable.msg_edit,
-                                works.heymate.beta.R.drawable.msg_delete
+                                R.drawable.msg_edit,
+                                R.drawable.msg_delete
                         };
                         builder1.setItems(items, icons, (dialog, which) -> {
                             if (which == 0) {
                                 presentFragment(new FilterCreateActivity(filter));
                             } else if (which == 1) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                builder.setTitle(LocaleController.getString("FilterDelete", works.heymate.beta.R.string.FilterDelete));
-                                builder.setMessage(LocaleController.getString("FilterDeleteAlert", works.heymate.beta.R.string.FilterDeleteAlert));
-                                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
-                                builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialog2, which2) -> {
+                                builder.setTitle(LocaleController.getString("FilterDelete", R.string.FilterDelete));
+                                builder.setMessage(LocaleController.getString("FilterDeleteAlert", R.string.FilterDeleteAlert));
+                                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialog2, which2) -> {
                                     AlertDialog progressDialog = null;
                                     if (getParentActivity() != null) {
                                         progressDialog = new AlertDialog(getParentActivity(), 3);
@@ -723,9 +723,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 case 0: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == filtersHeaderRow) {
-                        headerCell.setText(LocaleController.getString("Filters", works.heymate.beta.R.string.Filters));
+                        headerCell.setText(LocaleController.getString("Filters", R.string.Filters));
                     } else if (position == recommendedHeaderRow) {
-                        headerCell.setText(LocaleController.getString("FilterRecommended", works.heymate.beta.R.string.FilterRecommended));
+                        headerCell.setText(LocaleController.getString("FilterRecommended", R.string.FilterRecommended));
                     }
                     break;
                 }
@@ -736,9 +736,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 }
                 case 3: {
                     if (position == createSectionRow) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -746,13 +746,13 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                     TextCell textCell = (TextCell) holder.itemView;
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     if (position == createFilterRow) {
-                        Drawable drawable1 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_circle);
-                        Drawable drawable2 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_plus);
+                        Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.poll_add_circle);
+                        Drawable drawable2 = mContext.getResources().getDrawable(R.drawable.poll_add_plus);
                         drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
                         drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.MULTIPLY));
                         CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
 
-                        textCell.setTextAndIcon(LocaleController.getString("CreateNewFilter", works.heymate.beta.R.string.CreateNewFilter), combinedDrawable, false);
+                        textCell.setTextAndIcon(LocaleController.getString("CreateNewFilter", R.string.CreateNewFilter), combinedDrawable, false);
                     }
                     break;
                 }

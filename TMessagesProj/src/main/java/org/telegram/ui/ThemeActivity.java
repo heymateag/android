@@ -28,13 +28,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.Keep;
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -46,19 +39,29 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Keep;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import works.heymate.beta.BuildConfig;
-import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.time.SunDate;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -91,7 +94,6 @@ import org.telegram.ui.Components.ThemeEditorView;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -171,6 +173,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     private int themeListRow2;
     private int themeAccentListRow;
     private int themeInfoRow;
+    private int reactionsDoubleTapRow;
 
     private int swipeGestureHeaderRow;
     private int swipeGestureRow;
@@ -492,6 +495,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         chatListHeaderRow = -1;
         chatListRow = -1;
         chatListInfoRow = -1;
+        reactionsDoubleTapRow = -1;
 
         textSizeRow = -1;
         backgroundRow = -1;
@@ -563,16 +567,17 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             backgroundRow = rowCount++;
             newThemeInfoRow = rowCount++;
             themeHeaderRow = rowCount++;
-            // TODO
-            //themeListRow2 = rowCount++;
-            themeListRow = rowCount++;
-            hasThemeAccents = Theme.getCurrentTheme().hasAccentColors();
-            if (themesHorizontalListCell != null) {
-                themesHorizontalListCell.setDrawDivider(hasThemeAccents);
-            }
-            if (hasThemeAccents) {
-                themeAccentListRow = rowCount++;
-            }
+
+            themeListRow2 = rowCount++;
+            //
+//            themeListRow = rowCount++;
+//            hasThemeAccents = Theme.getCurrentTheme().hasAccentColors();
+//            if (themesHorizontalListCell != null) {
+//                themesHorizontalListCell.setDrawDivider(hasThemeAccents);
+//            }
+//            if (hasThemeAccents) {
+//                themeAccentListRow = rowCount++;
+//            }
             //
             themeInfoRow = rowCount++;
 
@@ -598,6 +603,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             sendByEnterRow = rowCount++;
             saveToGalleryRow = rowCount++;
             distanceRow = rowCount++;
+            reactionsDoubleTapRow = rowCount++;
             settings2Row = rowCount++;
             stickersRow = rowCount++;
             stickersSection2Row = rowCount++;
@@ -729,6 +735,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needShareTheme);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needSetDayNightTheme);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiPreviewThemesChanged);
         getNotificationCenter().addObserver(this, NotificationCenter.themeUploadedToServer);
         getNotificationCenter().addObserver(this, NotificationCenter.themeUploadError);
         if (currentType == THEME_TYPE_BASIC) {
@@ -749,6 +756,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needShareTheme);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiPreviewThemesChanged);
         getNotificationCenter().removeObserver(this, NotificationCenter.themeUploadedToServer);
         getNotificationCenter().removeObserver(this, NotificationCenter.themeUploadError);
         Theme.saveAutoNightThemeConfig();
@@ -801,6 +809,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         } else if (id == NotificationCenter.needSetDayNightTheme) {
             updateMenuItem();
             checkCurrentDayNight();
+        } else if (id == NotificationCenter.emojiPreviewThemesChanged) {
+            if (themeListRow2 >= 0) {
+                listAdapter.notifyItemChanged(themeListRow2);
+            }
         }
     }
 
@@ -827,14 +839,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         } else if (currentType == THEME_TYPE_BASIC) {
             actionBar.setTitle(LocaleController.getString("ChatSettings", R.string.ChatSettings));
             ActionBarMenu menu = actionBar.createMenu();
-            menuItem = menu.addItem(0, works.heymate.beta.R.drawable.ic_ab_other);
-            menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
-            menuItem.addSubItem(share_theme, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("ShareTheme", works.heymate.beta.R.string.ShareTheme));
-            menuItem.addSubItem(edit_theme, works.heymate.beta.R.drawable.msg_edit, LocaleController.getString("EditThemeColors", works.heymate.beta.R.string.EditThemeColors));
-            menuItem.addSubItem(create_theme, works.heymate.beta.R.drawable.menu_palette, LocaleController.getString("CreateNewThemeMenu", works.heymate.beta.R.string.CreateNewThemeMenu));
-            menuItem.addSubItem(reset_settings, works.heymate.beta.R.drawable.msg_reset, LocaleController.getString("ThemeResetToDefaults", works.heymate.beta.R.string.ThemeResetToDefaults));
+            menuItem = menu.addItem(0, R.drawable.ic_ab_other);
+            menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+            menuItem.addSubItem(share_theme, R.drawable.msg_share, LocaleController.getString("ShareTheme", R.string.ShareTheme));
+            menuItem.addSubItem(edit_theme, R.drawable.msg_edit, LocaleController.getString("EditThemeColors", R.string.EditThemeColors));
+            menuItem.addSubItem(create_theme, R.drawable.menu_palette, LocaleController.getString("CreateNewThemeMenu", R.string.CreateNewThemeMenu));
+            menuItem.addSubItem(reset_settings, R.drawable.msg_reset, LocaleController.getString("ThemeResetToDefaults", R.string.ThemeResetToDefaults));
         } else {
-            actionBar.setTitle(LocaleController.getString("AutoNightTheme", works.heymate.beta.R.string.AutoNightTheme));
+            actionBar.setTitle(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme));
         }
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -861,9 +873,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         return;
                     }
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                    builder1.setTitle(LocaleController.getString("ThemeResetToDefaultsTitle", works.heymate.beta.R.string.ThemeResetToDefaultsTitle));
-                    builder1.setMessage(LocaleController.getString("ThemeResetToDefaultsText", works.heymate.beta.R.string.ThemeResetToDefaultsText));
-                    builder1.setPositiveButton(LocaleController.getString("Reset", works.heymate.beta.R.string.Reset), (dialogInterface, i) -> {
+                    builder1.setTitle(LocaleController.getString("ThemeResetToDefaultsTitle", R.string.ThemeResetToDefaultsTitle));
+                    builder1.setMessage(LocaleController.getString("ThemeResetToDefaultsText", R.string.ThemeResetToDefaultsText));
+                    builder1.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), (dialogInterface, i) -> {
                         boolean changed = false;
                         if (setFontSize(AndroidUtilities.isTablet() ? 18 : 16)) {
                             changed = true;
@@ -900,7 +912,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             }
                         }
                     });
-                    builder1.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     AlertDialog alertDialog = builder1.create();
                     showDialog(alertDialog);
                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -992,11 +1004,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("DistanceUnitsTitle", works.heymate.beta.R.string.DistanceUnitsTitle));
+                builder.setTitle(LocaleController.getString("DistanceUnitsTitle", R.string.DistanceUnitsTitle));
                 builder.setItems(new CharSequence[]{
-                        LocaleController.getString("DistanceUnitsAutomatic", works.heymate.beta.R.string.DistanceUnitsAutomatic),
-                        LocaleController.getString("DistanceUnitsKilometers", works.heymate.beta.R.string.DistanceUnitsKilometers),
-                        LocaleController.getString("DistanceUnitsMiles", works.heymate.beta.R.string.DistanceUnitsMiles)
+                        LocaleController.getString("DistanceUnitsAutomatic", R.string.DistanceUnitsAutomatic),
+                        LocaleController.getString("DistanceUnitsKilometers", R.string.DistanceUnitsKilometers),
+                        LocaleController.getString("DistanceUnitsMiles", R.string.DistanceUnitsMiles)
                 }, (dialog, which) -> {
                     SharedConfig.setDistanceSystemType(which);
                     RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(distanceRow);
@@ -1004,7 +1016,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         listAdapter.onBindViewHolder(holder, distanceRow);
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position == customTabsRow) {
                 SharedConfig.toggleCustomTabs();
@@ -1023,11 +1035,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("SortBy", works.heymate.beta.R.string.SortBy));
+                builder.setTitle(LocaleController.getString("SortBy", R.string.SortBy));
                 builder.setItems(new CharSequence[]{
-                        LocaleController.getString("Default", works.heymate.beta.R.string.Default),
-                        LocaleController.getString("SortFirstName", works.heymate.beta.R.string.SortFirstName),
-                        LocaleController.getString("SortLastName", works.heymate.beta.R.string.SortLastName)
+                        LocaleController.getString("Default", R.string.Default),
+                        LocaleController.getString("SortFirstName", R.string.SortFirstName),
+                        LocaleController.getString("SortLastName", R.string.SortLastName)
                 }, (dialog, which) -> {
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
@@ -1037,10 +1049,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         listAdapter.notifyItemChanged(position);
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position == stickersRow) {
                 presentFragment(new StickersActivity(MediaDataController.TYPE_IMAGE));
+            } else if (position == reactionsDoubleTapRow) {
+                presentFragment(new ReactionsDoubleTapManageActivity());
             } else if (position == emojiRow) {
                 SharedConfig.toggleBigEmoji();
                 if (view instanceof TextCheckCell) {
@@ -1059,19 +1073,19 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     Theme.saveAutoNightThemeConfig();
                     Theme.checkAutoNightThemeConditions(true);
                     boolean enabled = Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE;
-                    String value = enabled ? Theme.getCurrentNightThemeName() : LocaleController.getString("AutoNightThemeOff", works.heymate.beta.R.string.AutoNightThemeOff);
+                    String value = enabled ? Theme.getCurrentNightThemeName() : LocaleController.getString("AutoNightThemeOff", R.string.AutoNightThemeOff);
                     if (enabled) {
                         String type;
                         if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SCHEDULED) {
-                            type = LocaleController.getString("AutoNightScheduled", works.heymate.beta.R.string.AutoNightScheduled);
+                            type = LocaleController.getString("AutoNightScheduled", R.string.AutoNightScheduled);
                         } else if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM) {
-                            type = LocaleController.getString("AutoNightSystemDefault", works.heymate.beta.R.string.AutoNightSystemDefault);
+                            type = LocaleController.getString("AutoNightSystemDefault", R.string.AutoNightSystemDefault);
                         } else {
-                            type = LocaleController.getString("AutoNightAdaptive", works.heymate.beta.R.string.AutoNightAdaptive);
+                            type = LocaleController.getString("AutoNightAdaptive", R.string.AutoNightAdaptive);
                         }
                         value = type + " " + value;
                     }
-                    checkCell.setTextAndValueAndCheck(LocaleController.getString("AutoNightTheme", works.heymate.beta.R.string.AutoNightTheme), value, enabled, true);
+                    checkCell.setTextAndValueAndCheck(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), value, enabled, true);
                 } else {
                     presentFragment(new ThemeActivity(THEME_TYPE_NIGHT));
                 }
@@ -1133,10 +1147,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     int time = hourOfDay * 60 + minute;
                     if (position == scheduleFromRow) {
                         Theme.autoNightDayStartTime = time;
-                        cell.setTextAndValue(LocaleController.getString("AutoNightFrom", works.heymate.beta.R.string.AutoNightFrom), String.format("%02d:%02d", hourOfDay, minute), true);
+                        cell.setTextAndValue(LocaleController.getString("AutoNightFrom", R.string.AutoNightFrom), String.format("%02d:%02d", hourOfDay, minute), true);
                     } else {
                         Theme.autoNightDayEndTime = time;
-                        cell.setTextAndValue(LocaleController.getString("AutoNightTo", works.heymate.beta.R.string.AutoNightTo), String.format("%02d:%02d", hourOfDay, minute), true);
+                        cell.setTextAndValue(LocaleController.getString("AutoNightTo", R.string.AutoNightTo), String.format("%02d:%02d", hourOfDay, minute), true);
                     }
                 }, currentHour, currentMinute, true);
                 showDialog(dialog);
@@ -1227,9 +1241,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
                 if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", works.heymate.beta.R.string.GpsDisabledAlertTitle));
-                    builder.setMessage(LocaleController.getString("GpsDisabledAlertText", works.heymate.beta.R.string.GpsDisabledAlertText));
-                    builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", works.heymate.beta.R.string.ConnectingToProxyEnable), (dialog, id) -> {
+                    builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", R.string.GpsDisabledAlertTitle));
+                    builder.setMessage(LocaleController.getString("GpsDisabledAlertText", R.string.GpsDisabledAlertText));
+                    builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), (dialog, id) -> {
                         if (getParentActivity() == null) {
                             return;
                         }
@@ -1239,7 +1253,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
                         }
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     showDialog(builder.create());
                     return;
                 }
@@ -1296,7 +1310,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 if (listView != null) {
                     RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(scheduleUpdateLocationRow);
                     if (holder != null && holder.itemView instanceof TextSettingsCell) {
-                        ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("AutoNightUpdateLocation", works.heymate.beta.R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
+                        ((TextSettingsCell) holder.itemView).setTextAndValue(LocaleController.getString("AutoNightUpdateLocation", R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
                     }
                 }
             });
@@ -1340,13 +1354,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
         if (byButton) {
-            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
+            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
         } else {
-            builder.setMessage(LocaleController.getString("PermissionNoLocation", works.heymate.beta.R.string.PermissionNoLocation));
+            builder.setMessage(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation));
         }
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
                 return;
             }
@@ -1358,7 +1372,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 FileLog.e(e);
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         showDialog(builder.create());
     }
 
@@ -1369,7 +1383,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         currentHour = Theme.autoNightSunsetTime / 60;
         currentMinute = (Theme.autoNightSunsetTime - currentHour * 60);
         String sunsetTimeStr = String.format("%02d:%02d", currentHour, currentMinute);
-        return LocaleController.formatString("AutoNightUpdateLocationInfo", works.heymate.beta.R.string.AutoNightUpdateLocationInfo, sunsetTimeStr, sunriseTimeStr);
+        return LocaleController.formatString("AutoNightUpdateLocationInfo", R.string.AutoNightUpdateLocationInfo, sunsetTimeStr, sunriseTimeStr);
     }
 
     private static class InnerAccentView extends View {
@@ -1463,7 +1477,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         @Override
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
-            info.setText(LocaleController.getString("ColorPickerMainColor", works.heymate.beta.R.string.ColorPickerMainColor));
+            info.setText(LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
             info.setClassName(Button.class.getName());
             info.setChecked(checked);
             info.setCheckable(true);
@@ -1523,7 +1537,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         @Override
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
-            info.setText(LocaleController.getString("ColorPickerMainColor", works.heymate.beta.R.string.ColorPickerMainColor));
+            info.setText(LocaleController.getString("ColorPickerMainColor", R.string.ColorPickerMainColor));
             info.setClassName(Button.class.getName());
             info.setEnabled(true);
         }
@@ -1613,7 +1627,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 0 || type == 1 || type == 4 || type == 7 || type == 10 || type == 11 || type == 12 || type == 14;
+            return type == 0 || type == 1 || type == 4 || type == 7 || type == 10 || type == 11 || type == 12 || type == 14 || type == 18;
         }
 
         private void showOptionsForTheme(Theme.ThemeInfo themeInfo) {
@@ -1629,26 +1643,26 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 hasDelete = false;
                 items = new CharSequence[]{
                         null,
-                        LocaleController.getString("ExportTheme", works.heymate.beta.R.string.ExportTheme)
+                        LocaleController.getString("ExportTheme", R.string.ExportTheme)
                 };
                 icons = new int[]{
                         0,
-                        works.heymate.beta.R.drawable.msg_shareout
+                        R.drawable.msg_shareout
                 };
             } else {
                 hasDelete = themeInfo.info == null || !themeInfo.info.isDefault;
                 items = new CharSequence[]{
-                        LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile),
-                        LocaleController.getString("ExportTheme", works.heymate.beta.R.string.ExportTheme),
-                        themeInfo.info == null || !themeInfo.info.isDefault && themeInfo.info.creator ? LocaleController.getString("Edit", works.heymate.beta.R.string.Edit) : null,
-                        themeInfo.info != null && themeInfo.info.creator ? LocaleController.getString("ThemeSetUrl", works.heymate.beta.R.string.ThemeSetUrl) : null,
-                        hasDelete ? LocaleController.getString("Delete", works.heymate.beta.R.string.Delete) : null};
+                        LocaleController.getString("ShareFile", R.string.ShareFile),
+                        LocaleController.getString("ExportTheme", R.string.ExportTheme),
+                        themeInfo.info == null || !themeInfo.info.isDefault && themeInfo.info.creator ? LocaleController.getString("Edit", R.string.Edit) : null,
+                        themeInfo.info != null && themeInfo.info.creator ? LocaleController.getString("ThemeSetUrl", R.string.ThemeSetUrl) : null,
+                        hasDelete ? LocaleController.getString("Delete", R.string.Delete) : null};
                 icons = new int[]{
-                        works.heymate.beta.R.drawable.msg_share,
-                        works.heymate.beta.R.drawable.msg_shareout,
-                        works.heymate.beta.R.drawable.msg_edit,
-                        works.heymate.beta.R.drawable.msg_link,
-                        works.heymate.beta.R.drawable.msg_delete
+                        R.drawable.msg_share,
+                        R.drawable.msg_shareout,
+                        R.drawable.msg_edit,
+                        R.drawable.msg_link,
+                        R.drawable.msg_delete
                 };
             }
             builder.setItems(items, icons, (dialog, which) -> {
@@ -1712,7 +1726,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         } else {
                             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(finalFile));
                         }
-                        startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", works.heymate.beta.R.string.ShareFile)), 500);
+                        startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -1729,16 +1743,16 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         return;
                     }
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                    builder1.setTitle(LocaleController.getString("DeleteThemeTitle", works.heymate.beta.R.string.DeleteThemeTitle));
-                    builder1.setMessage(LocaleController.getString("DeleteThemeAlert", works.heymate.beta.R.string.DeleteThemeAlert));
-                    builder1.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
+                    builder1.setTitle(LocaleController.getString("DeleteThemeTitle", R.string.DeleteThemeTitle));
+                    builder1.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
+                    builder1.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
                         MessagesController.getInstance(themeInfo.account).saveTheme(themeInfo, null, themeInfo == Theme.getCurrentNightTheme(), true);
                         if (Theme.deleteTheme(themeInfo)) {
                             parentLayout.rebuildAllFragmentViews(true, true);
                         }
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated);
                     });
-                    builder1.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     AlertDialog alertDialog = builder1.create();
                     showDialog(alertDialog);
                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -1764,7 +1778,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 3:
                     view = new ShadowSectionCell(mContext);
@@ -1788,7 +1802,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                 RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(automaticBrightnessInfoRow);
                                 if (holder != null) {
                                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
-                                    cell.setText(LocaleController.formatString("AutoNightBrightnessInfo", works.heymate.beta.R.string.AutoNightBrightnessInfo, (int) (100 * Theme.autoNightBrighnessThreshold)));
+                                    cell.setText(LocaleController.formatString("AutoNightBrightnessInfo", R.string.AutoNightBrightnessInfo, (int) (100 * Theme.autoNightBrighnessThreshold)));
                                 }
                                 Theme.checkAutoNightThemeConditions(true);
                             }
@@ -1902,19 +1916,19 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             return false;
                         }
                         Theme.ThemeAccent accent = accentsAdapter.themeAccents.get(position);
-                        if (accent.id >= 100) {
+                        if (accent.id >= 100 && !accent.isDefault) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                             CharSequence[] items = new CharSequence[]{
-                                    LocaleController.getString("OpenInEditor", works.heymate.beta.R.string.OpenInEditor),
-                                    LocaleController.getString("ShareTheme", works.heymate.beta.R.string.ShareTheme),
-                                    accent.info != null && accent.info.creator ? LocaleController.getString("ThemeSetUrl", works.heymate.beta.R.string.ThemeSetUrl) : null,
-                                    LocaleController.getString("DeleteTheme", works.heymate.beta.R.string.DeleteTheme)
+                                    LocaleController.getString("OpenInEditor", R.string.OpenInEditor),
+                                    LocaleController.getString("ShareTheme", R.string.ShareTheme),
+                                    accent.info != null && accent.info.creator ? LocaleController.getString("ThemeSetUrl", R.string.ThemeSetUrl) : null,
+                                    LocaleController.getString("DeleteTheme", R.string.DeleteTheme)
                             };
                             int[] icons = new int[]{
-                                    works.heymate.beta.R.drawable.msg_edit,
-                                    works.heymate.beta.R.drawable.msg_share,
-                                    works.heymate.beta.R.drawable.msg_link,
-                                    works.heymate.beta.R.drawable.msg_delete
+                                    R.drawable.msg_edit,
+                                    R.drawable.msg_share,
+                                    R.drawable.msg_link,
+                                    R.drawable.msg_delete
                             };
                             builder.setItems(items, icons, (dialog, which) -> {
                                 if (getParentActivity() == null) {
@@ -1937,15 +1951,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                                         return;
                                     }
                                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                                    builder1.setTitle(LocaleController.getString("DeleteThemeTitle", works.heymate.beta.R.string.DeleteThemeTitle));
-                                    builder1.setMessage(LocaleController.getString("DeleteThemeAlert", works.heymate.beta.R.string.DeleteThemeAlert));
-                                    builder1.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface, i) -> {
+                                    builder1.setTitle(LocaleController.getString("DeleteThemeTitle", R.string.DeleteThemeTitle));
+                                    builder1.setMessage(LocaleController.getString("DeleteThemeAlert", R.string.DeleteThemeAlert));
+                                    builder1.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface, i) -> {
                                         if (Theme.deleteThemeAccent(accentsAdapter.currentTheme, accent, true)) {
                                             Theme.refreshThemeColors();
                                             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, Theme.getActiveTheme(), currentType == THEME_TYPE_NIGHT, null, -1);
                                         }
                                     });
-                                    builder1.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                                    builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                                     AlertDialog alertDialog = builder1.create();
                                     showDialog(alertDialog);
                                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -1988,7 +2002,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 case 17:
                     DefaultThemesPreviewCell cell = new DefaultThemesPreviewCell(mContext, ThemeActivity.this, currentType);
                     view = cell;
+                    cell.setFocusable(false);
                     view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    break;
+                case 18:
+                    view = new TextSettingsCell(mContext);
                     break;
             }
             return new RecyclerListView.Holder(view);
@@ -2001,53 +2019,53 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     TextSettingsCell cell = (TextSettingsCell) holder.itemView;
                     if (position == nightThemeRow) {
                         if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_NONE || Theme.getCurrentNightTheme() == null) {
-                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", works.heymate.beta.R.string.AutoNightTheme), LocaleController.getString("AutoNightThemeOff", works.heymate.beta.R.string.AutoNightThemeOff), false);
+                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), LocaleController.getString("AutoNightThemeOff", R.string.AutoNightThemeOff), false);
                         } else {
-                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", works.heymate.beta.R.string.AutoNightTheme), Theme.getCurrentNightThemeName(), false);
+                            cell.setTextAndValue(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), Theme.getCurrentNightThemeName(), false);
                         }
                     } else if (position == scheduleFromRow) {
                         int currentHour = Theme.autoNightDayStartTime / 60;
                         int currentMinute = (Theme.autoNightDayStartTime - currentHour * 60);
-                        cell.setTextAndValue(LocaleController.getString("AutoNightFrom", works.heymate.beta.R.string.AutoNightFrom), String.format("%02d:%02d", currentHour, currentMinute), true);
+                        cell.setTextAndValue(LocaleController.getString("AutoNightFrom", R.string.AutoNightFrom), String.format("%02d:%02d", currentHour, currentMinute), true);
                     } else if (position == scheduleToRow) {
                         int currentHour = Theme.autoNightDayEndTime / 60;
                         int currentMinute = (Theme.autoNightDayEndTime - currentHour * 60);
-                        cell.setTextAndValue(LocaleController.getString("AutoNightTo", works.heymate.beta.R.string.AutoNightTo), String.format("%02d:%02d", currentHour, currentMinute), false);
+                        cell.setTextAndValue(LocaleController.getString("AutoNightTo", R.string.AutoNightTo), String.format("%02d:%02d", currentHour, currentMinute), false);
                     } else if (position == scheduleUpdateLocationRow) {
-                        cell.setTextAndValue(LocaleController.getString("AutoNightUpdateLocation", works.heymate.beta.R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
+                        cell.setTextAndValue(LocaleController.getString("AutoNightUpdateLocation", R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
                     } else if (position == contactsSortRow) {
                         String value;
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                         int sort = preferences.getInt("sortContactsBy", 0);
                         if (sort == 0) {
-                            value = LocaleController.getString("Default", works.heymate.beta.R.string.Default);
+                            value = LocaleController.getString("Default", R.string.Default);
                         } else if (sort == 1) {
-                            value = LocaleController.getString("FirstName", works.heymate.beta.R.string.SortFirstName);
+                            value = LocaleController.getString("FirstName", R.string.SortFirstName);
                         } else {
-                            value = LocaleController.getString("LastName", works.heymate.beta.R.string.SortLastName);
+                            value = LocaleController.getString("LastName", R.string.SortLastName);
                         }
-                        cell.setTextAndValue(LocaleController.getString("SortBy", works.heymate.beta.R.string.SortBy), value, true);
+                        cell.setTextAndValue(LocaleController.getString("SortBy", R.string.SortBy), value, true);
                     } else if (position == contactsReimportRow) {
-                        cell.setText(LocaleController.getString("ImportContacts", works.heymate.beta.R.string.ImportContacts), true);
+                        cell.setText(LocaleController.getString("ImportContacts", R.string.ImportContacts), true);
                     } else if (position == stickersRow) {
-                        cell.setText(LocaleController.getString("StickersAndMasks", works.heymate.beta.R.string.StickersAndMasks), false);
+                        cell.setText(LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), false);
                     } else if (position == distanceRow) {
                         String value;
                         if (SharedConfig.distanceSystemType == 0) {
-                            value = LocaleController.getString("DistanceUnitsAutomatic", works.heymate.beta.R.string.DistanceUnitsAutomatic);
+                            value = LocaleController.getString("DistanceUnitsAutomatic", R.string.DistanceUnitsAutomatic);
                         } else if (SharedConfig.distanceSystemType == 1) {
-                            value = LocaleController.getString("DistanceUnitsKilometers", works.heymate.beta.R.string.DistanceUnitsKilometers);
+                            value = LocaleController.getString("DistanceUnitsKilometers", R.string.DistanceUnitsKilometers);
                         } else {
-                            value = LocaleController.getString("DistanceUnitsMiles", works.heymate.beta.R.string.DistanceUnitsMiles);
+                            value = LocaleController.getString("DistanceUnitsMiles", R.string.DistanceUnitsMiles);
                         }
-                        cell.setTextAndValue(LocaleController.getString("DistanceUnits", works.heymate.beta.R.string.DistanceUnits), value, false);
+                        cell.setTextAndValue(LocaleController.getString("DistanceUnits", R.string.DistanceUnits), value, true);
                     }
                     break;
                 }
                 case 2: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == automaticBrightnessInfoRow) {
-                        cell.setText(LocaleController.formatString("AutoNightBrightnessInfo", works.heymate.beta.R.string.AutoNightBrightnessInfo, (int) (100 * Theme.autoNightBrighnessThreshold)));
+                        cell.setText(LocaleController.formatString("AutoNightBrightnessInfo", R.string.AutoNightBrightnessInfo, (int) (100 * Theme.autoNightBrighnessThreshold)));
                     } else if (position == scheduleLocationInfoRow) {
                         cell.setText(getLocationSunString());
                     }
@@ -2055,35 +2073,35 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 }
                 case 3: {
                     if (position == stickersSection2Row || position == nightTypeInfoRow && themeInfoRow == -1 || position == themeInfoRow && nightTypeInfoRow != -1) {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
                 case 4: {
                     ThemeTypeCell typeCell = (ThemeTypeCell) holder.itemView;
                     if (position == nightDisabledRow) {
-                        typeCell.setValue(LocaleController.getString("AutoNightDisabled", works.heymate.beta.R.string.AutoNightDisabled), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_NONE, true);
+                        typeCell.setValue(LocaleController.getString("AutoNightDisabled", R.string.AutoNightDisabled), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_NONE, true);
                     } else if (position == nightScheduledRow) {
-                        typeCell.setValue(LocaleController.getString("AutoNightScheduled", works.heymate.beta.R.string.AutoNightScheduled), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SCHEDULED, true);
+                        typeCell.setValue(LocaleController.getString("AutoNightScheduled", R.string.AutoNightScheduled), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SCHEDULED, true);
                     } else if (position == nightAutomaticRow) {
-                        typeCell.setValue(LocaleController.getString("AutoNightAdaptive", works.heymate.beta.R.string.AutoNightAdaptive), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_AUTOMATIC, nightSystemDefaultRow != -1);
+                        typeCell.setValue(LocaleController.getString("AutoNightAdaptive", R.string.AutoNightAdaptive), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_AUTOMATIC, nightSystemDefaultRow != -1);
                     } else if (position == nightSystemDefaultRow) {
-                        typeCell.setValue(LocaleController.getString("AutoNightSystemDefault", works.heymate.beta.R.string.AutoNightSystemDefault), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM, false);
+                        typeCell.setValue(LocaleController.getString("AutoNightSystemDefault", R.string.AutoNightSystemDefault), Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM, false);
                     }
                     break;
                 }
                 case 5: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == scheduleHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AutoNightSchedule", works.heymate.beta.R.string.AutoNightSchedule));
+                        headerCell.setText(LocaleController.getString("AutoNightSchedule", R.string.AutoNightSchedule));
                     } else if (position == automaticHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AutoNightBrightness", works.heymate.beta.R.string.AutoNightBrightness));
+                        headerCell.setText(LocaleController.getString("AutoNightBrightness", R.string.AutoNightBrightness));
                     } else if (position == preferedHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AutoNightPreferred", works.heymate.beta.R.string.AutoNightPreferred));
+                        headerCell.setText(LocaleController.getString("AutoNightPreferred", R.string.AutoNightPreferred));
                     } else if (position == settingsRow) {
-                        headerCell.setText(LocaleController.getString("SETTINGS", works.heymate.beta.R.string.SETTINGS));
+                        headerCell.setText(LocaleController.getString("SETTINGS", R.string.SETTINGS));
                     } else if (position == themeHeaderRow) {
                         if (currentType == THEME_TYPE_THEMES_BROWSER) {
                             headerCell.setText(LocaleController.getString("BuildMyOwnTheme", R.string.BuildMyOwnTheme));
@@ -2091,11 +2109,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             headerCell.setText(LocaleController.getString("ColorTheme", R.string.ColorTheme));
                         }
                     } else if (position == textSizeHeaderRow) {
-                        headerCell.setText(LocaleController.getString("TextSizeHeader", works.heymate.beta.R.string.TextSizeHeader));
+                        headerCell.setText(LocaleController.getString("TextSizeHeader", R.string.TextSizeHeader));
                     } else if (position == chatListHeaderRow) {
-                        headerCell.setText(LocaleController.getString("ChatList", works.heymate.beta.R.string.ChatList));
+                        headerCell.setText(LocaleController.getString("ChatList", R.string.ChatList));
                     } else if (position == bubbleRadiusHeaderRow) {
-                        headerCell.setText(LocaleController.getString("BubbleRadius", works.heymate.beta.R.string.BubbleRadius));
+                        headerCell.setText(LocaleController.getString("BubbleRadius", R.string.BubbleRadius));
                     } else if (position == swipeGestureHeaderRow) {
                         headerCell.setText(LocaleController.getString("ChatListSwipeGesture", R.string.ChatListSwipeGesture));
                     } else if (position == selectThemeHeaderRow) {
@@ -2111,23 +2129,23 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 case 7: {
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     if (position == scheduleLocationRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("AutoNightLocation", works.heymate.beta.R.string.AutoNightLocation), Theme.autoNightScheduleByLocation, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("AutoNightLocation", R.string.AutoNightLocation), Theme.autoNightScheduleByLocation, true);
                     } else if (position == enableAnimationsRow) {
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                        textCheckCell.setTextAndCheck(LocaleController.getString("EnableAnimations", works.heymate.beta.R.string.EnableAnimations), preferences.getBoolean("view_animations", true), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("EnableAnimations", R.string.EnableAnimations), preferences.getBoolean("view_animations", true), true);
                     } else if (position == sendByEnterRow) {
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SendByEnter", works.heymate.beta.R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("SendByEnter", R.string.SendByEnter), preferences.getBoolean("send_by_enter", false), true);
                     } else if (position == saveToGalleryRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", works.heymate.beta.R.string.SaveToGallerySettings), SharedConfig.saveToGallery, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), SharedConfig.saveToGallery, true);
                     } else if (position == raiseToSpeakRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("RaiseToSpeak", works.heymate.beta.R.string.RaiseToSpeak), SharedConfig.raiseToSpeak, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), SharedConfig.raiseToSpeak, true);
                     } else if (position == customTabsRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("ChromeCustomTabs", works.heymate.beta.R.string.ChromeCustomTabs), LocaleController.getString("ChromeCustomTabsInfo", works.heymate.beta.R.string.ChromeCustomTabsInfo), SharedConfig.customTabs, false, true);
+                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("ChromeCustomTabs", R.string.ChromeCustomTabs), LocaleController.getString("ChromeCustomTabsInfo", R.string.ChromeCustomTabsInfo), SharedConfig.customTabs, false, true);
                     } else if (position == directShareRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("DirectShare", works.heymate.beta.R.string.DirectShare), LocaleController.getString("DirectShareInfo", works.heymate.beta.R.string.DirectShareInfo), SharedConfig.directShare, false, true);
+                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("DirectShare", R.string.DirectShare), LocaleController.getString("DirectShareInfo", R.string.DirectShareInfo), SharedConfig.directShare, false, true);
                     } else if (position == emojiRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("LargeEmoji", works.heymate.beta.R.string.LargeEmoji), SharedConfig.allowBigEmoji, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("LargeEmoji", R.string.LargeEmoji), SharedConfig.allowBigEmoji, true);
                     }
                     break;
                 }
@@ -2135,19 +2153,19 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     NotificationsCheckCell checkCell = (NotificationsCheckCell) holder.itemView;
                     if (position == nightThemeRow) {
                         boolean enabled = Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE;
-                        String value = enabled ? Theme.getCurrentNightThemeName() : LocaleController.getString("AutoNightThemeOff", works.heymate.beta.R.string.AutoNightThemeOff);
+                        String value = enabled ? Theme.getCurrentNightThemeName() : LocaleController.getString("AutoNightThemeOff", R.string.AutoNightThemeOff);
                         if (enabled) {
                             String type;
                             if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SCHEDULED) {
-                                type = LocaleController.getString("AutoNightScheduled", works.heymate.beta.R.string.AutoNightScheduled);
+                                type = LocaleController.getString("AutoNightScheduled", R.string.AutoNightScheduled);
                             } else if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM) {
-                                type = LocaleController.getString("AutoNightSystemDefault", works.heymate.beta.R.string.AutoNightSystemDefault);
+                                type = LocaleController.getString("AutoNightSystemDefault", R.string.AutoNightSystemDefault);
                             } else {
-                                type = LocaleController.getString("AutoNightAdaptive", works.heymate.beta.R.string.AutoNightAdaptive);
+                                type = LocaleController.getString("AutoNightAdaptive", R.string.AutoNightAdaptive);
                             }
                             value = type + " " + value;
                         }
-                        checkCell.setTextAndValueAndCheck(LocaleController.getString("AutoNightTheme", works.heymate.beta.R.string.AutoNightTheme), value, enabled, true);
+                        checkCell.setTextAndValueAndCheck(LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), value, enabled, true);
                     }
                     break;
                 }
@@ -2186,6 +2204,19 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 case 17: {
                     DefaultThemesPreviewCell cell = (DefaultThemesPreviewCell) holder.itemView;
                     cell.updateDayNightMode();
+                    break;
+                }
+                case 18:{
+                    TextSettingsCell settingsCell = (TextSettingsCell) holder.itemView;
+                    settingsCell.setText(LocaleController.getString("DoubleTapSetting", R.string.DoubleTapSetting), false);
+                    String reaction = MediaDataController.getInstance(currentAccount).getDoubleTapReaction();
+                    if (reaction != null) {
+                        TLRPC.TL_availableReaction availableReaction = MediaDataController.getInstance(currentAccount).getReactionsMap().get(reaction);
+                        if (availableReaction != null) {
+                            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(availableReaction.static_icon.thumbs, Theme.key_windowBackgroundGray, 1.0f);
+                            settingsCell.getValueBackupImageView().getImageReceiver().setImage(ImageLocation.getForDocument(availableReaction.static_icon), "100_100", svgThumb, "webp", availableReaction, 1);
+                        }
+                    }
                     break;
                 }
             }
@@ -2246,6 +2277,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 return 16;
             } else if (position == themeListRow2) {
                 return 17;
+            } else if (position == reactionsDoubleTapRow) {
+                return 18;
             }
             return 1;
         }

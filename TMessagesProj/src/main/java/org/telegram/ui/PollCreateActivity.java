@@ -21,7 +21,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
@@ -169,11 +169,11 @@ public class PollCreateActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         if (quizOnly == 1) {
-            actionBar.setTitle(LocaleController.getString("NewQuiz", works.heymate.beta.R.string.NewQuiz));
+            actionBar.setTitle(LocaleController.getString("NewQuiz", R.string.NewQuiz));
         } else {
-            actionBar.setTitle(LocaleController.getString("NewPoll", works.heymate.beta.R.string.NewPoll));
+            actionBar.setTitle(LocaleController.getString("NewPoll", R.string.NewPoll));
         }
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -248,7 +248,7 @@ public class PollCreateActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneItem = menu.addItem(done_button, LocaleController.getString("Create", works.heymate.beta.R.string.Create).toUpperCase());
+        doneItem = menu.addItem(done_button, LocaleController.getString("Create", R.string.Create).toUpperCase());
 
         listAdapter = new ListAdapter(context);
 
@@ -369,7 +369,7 @@ public class PollCreateActivity extends BaseFragment {
         });
 
         hintView = new HintView(context, 4);
-        hintView.setText(LocaleController.getString("PollTapToSelect", works.heymate.beta.R.string.PollTapToSelect));
+        hintView.setText(LocaleController.getString("PollTapToSelect", R.string.PollTapToSelect));
         hintView.setAlpha(0.0f);
         hintView.setVisibility(View.INVISIBLE);
         frameLayout.addView(hintView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 19, 0, 19, 0));
@@ -497,10 +497,10 @@ public class PollCreateActivity extends BaseFragment {
         }
         if (!allowDiscard) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("CancelPollAlertTitle", works.heymate.beta.R.string.CancelPollAlertTitle));
-            builder.setMessage(LocaleController.getString("CancelPollAlertText", works.heymate.beta.R.string.CancelPollAlertText));
-            builder.setPositiveButton(LocaleController.getString("PassportDiscard", works.heymate.beta.R.string.PassportDiscard), (dialogInterface, i) -> finishFragment());
-            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+            builder.setTitle(LocaleController.getString("CancelPollAlertTitle", R.string.CancelPollAlertTitle));
+            builder.setMessage(LocaleController.getString("CancelPollAlertText", R.string.CancelPollAlertText));
+            builder.setPositiveButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialogInterface, i) -> finishFragment());
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             showDialog(builder.create());
         }
         return allowDiscard;
@@ -572,59 +572,59 @@ public class PollCreateActivity extends BaseFragment {
                 case 0: {
                     HeaderCell cell = (HeaderCell) holder.itemView;
                     if (position == questionHeaderRow) {
-                        cell.setText(LocaleController.getString("PollQuestion", works.heymate.beta.R.string.PollQuestion));
+                        cell.setText(LocaleController.getString("PollQuestion", R.string.PollQuestion));
                     } else if (position == answerHeaderRow) {
                         if (quizOnly == 1) {
-                            cell.setText(LocaleController.getString("QuizAnswers", works.heymate.beta.R.string.QuizAnswers));
+                            cell.setText(LocaleController.getString("QuizAnswers", R.string.QuizAnswers));
                         } else {
-                            cell.setText(LocaleController.getString("AnswerOptions", works.heymate.beta.R.string.AnswerOptions));
+                            cell.setText(LocaleController.getString("AnswerOptions", R.string.AnswerOptions));
                         }
                     } else if (position == settingsHeaderRow) {
-                        cell.setText(LocaleController.getString("Settings", works.heymate.beta.R.string.Settings));
+                        cell.setText(LocaleController.getString("Settings", R.string.Settings));
                     }
                     break;
                 }
                 case 2: {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     cell.setFixedSize(0);
-                    cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    cell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     if (position == solutionInfoRow) {
-                        cell.setText(LocaleController.getString("AddAnExplanationInfo", works.heymate.beta.R.string.AddAnExplanationInfo));
+                        cell.setText(LocaleController.getString("AddAnExplanationInfo", R.string.AddAnExplanationInfo));
                     } else if (position == settingsSectionRow) {
                         if (quizOnly != 0) {
                             cell.setFixedSize(12);
                             cell.setText(null);
                         } else {
-                            cell.setText(LocaleController.getString("QuizInfo", works.heymate.beta.R.string.QuizInfo));
+                            cell.setText(LocaleController.getString("QuizInfo", R.string.QuizInfo));
                         }
                     } else if (10 - answersCount <= 0) {
-                        cell.setText(LocaleController.getString("AddAnOptionInfoMax", works.heymate.beta.R.string.AddAnOptionInfoMax));
+                        cell.setText(LocaleController.getString("AddAnOptionInfoMax", R.string.AddAnOptionInfoMax));
                     } else {
-                        cell.setText(LocaleController.formatString("AddAnOptionInfo", works.heymate.beta.R.string.AddAnOptionInfo, LocaleController.formatPluralString("Option", 10 - answersCount)));
+                        cell.setText(LocaleController.formatString("AddAnOptionInfo", R.string.AddAnOptionInfo, LocaleController.formatPluralString("Option", 10 - answersCount)));
                     }
                     break;
                 }
                 case 3: {
                     TextCell textCell = (TextCell) holder.itemView;
                     textCell.setColors(null, Theme.key_windowBackgroundWhiteBlueText4);
-                    Drawable drawable1 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_circle);
-                    Drawable drawable2 = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.poll_add_plus);
+                    Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.poll_add_circle);
+                    Drawable drawable2 = mContext.getResources().getDrawable(R.drawable.poll_add_plus);
                     drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
                     drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_checkboxCheck), PorterDuff.Mode.MULTIPLY));
                     CombinedDrawable combinedDrawable = new CombinedDrawable(drawable1, drawable2);
-                    textCell.setTextAndIcon(LocaleController.getString("AddAnOption", works.heymate.beta.R.string.AddAnOption), combinedDrawable, false);
+                    textCell.setTextAndIcon(LocaleController.getString("AddAnOption", R.string.AddAnOption), combinedDrawable, false);
                     break;
                 }
                 case 6: {
                     TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                     if (position == anonymousRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("PollAnonymous", works.heymate.beta.R.string.PollAnonymous), anonymousPoll, multipleRow != -1 || quizRow != -1);
+                        checkCell.setTextAndCheck(LocaleController.getString("PollAnonymous", R.string.PollAnonymous), anonymousPoll, multipleRow != -1 || quizRow != -1);
                         checkCell.setEnabled(true, null);
                     } else if (position == multipleRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("PollMultiple", works.heymate.beta.R.string.PollMultiple), multipleChoise, quizRow != -1);
+                        checkCell.setTextAndCheck(LocaleController.getString("PollMultiple", R.string.PollMultiple), multipleChoise, quizRow != -1);
                         checkCell.setEnabled(true, null);
                     } else if (position == quizRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("PollQuiz", works.heymate.beta.R.string.PollQuiz), quizPoll, false);
+                        checkCell.setTextAndCheck(LocaleController.getString("PollQuiz", R.string.PollQuiz), quizPoll, false);
                         checkCell.setEnabled(quizOnly == 0, null);
                     }
                 }
@@ -637,7 +637,7 @@ public class PollCreateActivity extends BaseFragment {
             if (viewType == 4) {
                 PollEditTextCell textCell = (PollEditTextCell) holder.itemView;
                 textCell.setTag(1);
-                textCell.setTextAndHint(questionString != null ? questionString : "", LocaleController.getString("QuestionHint", works.heymate.beta.R.string.QuestionHint), false);
+                textCell.setTextAndHint(questionString != null ? questionString : "", LocaleController.getString("QuestionHint", R.string.QuestionHint), false);
                 textCell.setTag(null);
                 setTextLeft(holder.itemView, holder.getAdapterPosition());
             } else if (viewType == 5) {
@@ -645,7 +645,7 @@ public class PollCreateActivity extends BaseFragment {
                 PollEditTextCell textCell = (PollEditTextCell) holder.itemView;
                 textCell.setTag(1);
                 int index = position - answerStartRow;
-                textCell.setTextAndHint(answers[index], LocaleController.getString("OptionHint", works.heymate.beta.R.string.OptionHint), true);
+                textCell.setTextAndHint(answers[index], LocaleController.getString("OptionHint", R.string.OptionHint), true);
                 textCell.setTag(null);
                 if (requestFieldFocusAtPosition == position) {
                     EditTextBoldCursor editText = textCell.getTextView();
@@ -657,7 +657,7 @@ public class PollCreateActivity extends BaseFragment {
             } else if (viewType == 7) {
                 PollEditTextCell textCell = (PollEditTextCell) holder.itemView;
                 textCell.setTag(1);
-                textCell.setTextAndHint(solutionString != null ? solutionString : "", LocaleController.getString("AddAnExplanation", works.heymate.beta.R.string.AddAnExplanation), false);
+                textCell.setTextAndHint(solutionString != null ? solutionString : "", LocaleController.getString("AddAnExplanation", R.string.AddAnExplanation), false);
                 textCell.setTag(null);
                 setTextLeft(holder.itemView, holder.getAdapterPosition());
             }

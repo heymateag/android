@@ -35,7 +35,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -143,11 +143,11 @@ public class AvatarPreviewer {
     }
 
     public static enum MenuItem {
-        OPEN_PROFILE("OpenProfile", works.heymate.beta.R.string.OpenProfile, works.heymate.beta.R.drawable.msg_openprofile),
-        OPEN_CHANNEL("OpenChannel2", works.heymate.beta.R.string.OpenChannel2, works.heymate.beta.R.drawable.msg_channel),
-        OPEN_GROUP("OpenGroup2", works.heymate.beta.R.string.OpenGroup2, works.heymate.beta.R.drawable.msg_discussion),
-        SEND_MESSAGE("SendMessage", works.heymate.beta.R.string.SendMessage, works.heymate.beta.R.drawable.msg_discussion),
-        MENTION("Mention", works.heymate.beta.R.string.Mention, works.heymate.beta.R.drawable.msg_mention);
+        OPEN_PROFILE("OpenProfile", R.string.OpenProfile, R.drawable.msg_openprofile),
+        OPEN_CHANNEL("OpenChannel2", R.string.OpenChannel2, R.drawable.msg_channel),
+        OPEN_GROUP("OpenGroup2", R.string.OpenGroup2, R.drawable.msg_discussion),
+        SEND_MESSAGE("SendMessage", R.string.SendMessage, R.drawable.msg_discussion),
+        MENTION("Mention", R.string.Mention, R.drawable.msg_mention);
 
         private final String labelKey;
         private final int labelResId;
@@ -377,7 +377,7 @@ public class AvatarPreviewer {
             radialProgress.setOverrideAlpha(0.0f);
             radialProgress.setIcon(MediaActionDrawable.ICON_EMPTY, false, false);
             radialProgress.setColors(0x42000000, 0x42000000, Color.WHITE, Color.WHITE);
-            arrowDrawable = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.preview_arrow);
+            arrowDrawable = ContextCompat.getDrawable(context, R.drawable.preview_arrow);
         }
 
         @Override

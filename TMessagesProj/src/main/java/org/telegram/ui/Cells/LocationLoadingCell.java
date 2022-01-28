@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
@@ -48,7 +48,7 @@ public class LocationLoadingCell extends FrameLayout {
         textView.setGravity(Gravity.CENTER);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-        textView.setText(LocaleController.getString("NoPlacesFound", works.heymate.beta.R.string.NoPlacesFound));
+        textView.setText(LocaleController.getString("NoPlacesFound", R.string.NoPlacesFound));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 34, 0, 0));
     }
 

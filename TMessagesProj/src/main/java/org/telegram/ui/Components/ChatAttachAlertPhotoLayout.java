@@ -49,6 +49,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Keep;
+import androidx.core.graphics.ColorUtils;
+import androidx.exifinterface.media.ExifInterface;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -58,11 +66,13 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.camera.CameraController;
@@ -83,14 +93,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-import androidx.annotation.Keep;
-import androidx.core.graphics.ColorUtils;
-import androidx.exifinterface.media.ExifInterface;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -361,6 +363,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
 
         @Override
+        public void onApplyCaption(CharSequence caption) {
+            parentAlert.commentTextView.setText(caption);
+        }
+
+        @Override
         public boolean cancelButtonPressed() {
             return false;
         }
@@ -465,7 +472,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);
         FrameLayout container = alert.getContainer();
 
-        cameraDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.instant_camera).mutate();
+        cameraDrawable = context.getResources().getDrawable(R.drawable.instant_camera).mutate();
 
         ActionBarMenu menu = parentAlert.actionBar.createMenu();
         dropDownContainer = new ActionBarMenuItem(context, menu, 0, 0, resourcesProvider) {
@@ -497,9 +504,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
         checkCamera(false);
 
-        parentAlert.selectedMenuItem.addSubItem(group, LocaleController.getString("SendWithoutGrouping", works.heymate.beta.R.string.SendWithoutGrouping));
-        parentAlert.selectedMenuItem.addSubItem(compress, LocaleController.getString("SendWithoutCompression", works.heymate.beta.R.string.SendWithoutCompression));
-        parentAlert.selectedMenuItem.addSubItem(open_in, works.heymate.beta.R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", works.heymate.beta.R.string.OpenInExternalApp));
+        parentAlert.selectedMenuItem.addSubItem(group, LocaleController.getString("SendWithoutGrouping", R.string.SendWithoutGrouping));
+        parentAlert.selectedMenuItem.addSubItem(compress, LocaleController.getString("SendWithoutCompression", R.string.SendWithoutCompression));
+        parentAlert.selectedMenuItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
 
         gridView = new RecyclerListView(context, resourcesProvider) {
             @Override
@@ -803,14 +810,14 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         container.addView(cameraPanel, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 126, Gravity.LEFT | Gravity.BOTTOM));
 
         counterTextView = new TextView(context);
-        counterTextView.setBackgroundResource(works.heymate.beta.R.drawable.photos_rounded);
+        counterTextView.setBackgroundResource(R.drawable.photos_rounded);
         counterTextView.setVisibility(View.GONE);
         counterTextView.setTextColor(0xffffffff);
         counterTextView.setGravity(Gravity.CENTER);
         counterTextView.setPivotX(0);
         counterTextView.setPivotY(0);
         counterTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        counterTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, works.heymate.beta.R.drawable.photos_arrow, 0);
+        counterTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.photos_arrow, 0);
         counterTextView.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         counterTextView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
         container.addView(counterTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 38, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 100 + 16));
@@ -971,7 +978,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
         });
         shutterButton.setFocusable(true);
-        shutterButton.setContentDescription(LocaleController.getString("AccDescrShutter", works.heymate.beta.R.string.AccDescrShutter));
+        shutterButton.setContentDescription(LocaleController.getString("AccDescrShutter", R.string.AccDescrShutter));
 
         switchCameraButton = new ImageView(context);
         switchCameraButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -987,14 +994,14 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    switchCameraButton.setImageResource(cameraView != null && cameraView.isFrontface() ? works.heymate.beta.R.drawable.camera_revert1 : works.heymate.beta.R.drawable.camera_revert2);
+                    switchCameraButton.setImageResource(cameraView != null && cameraView.isFrontface() ? R.drawable.camera_revert1 : R.drawable.camera_revert2);
                     ObjectAnimator.ofFloat(switchCameraButton, View.SCALE_X, 1.0f).setDuration(100).start();
                 }
             });
             animator.start();
 
         });
-        switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", works.heymate.beta.R.string.AccDescrSwitchCamera));
+        switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", R.string.AccDescrSwitchCamera));
 
         for (int a = 0; a < 2; a++) {
             flashModeButton[a] = new ImageView(context);
@@ -1039,7 +1046,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         tooltipTextView = new TextView(context);
         tooltipTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         tooltipTextView.setTextColor(0xffffffff);
-        tooltipTextView.setText(LocaleController.getString("TapForVideo", works.heymate.beta.R.string.TapForVideo));
+        tooltipTextView.setText(LocaleController.getString("TapForVideo", R.string.TapForVideo));
         tooltipTextView.setShadowLayer(AndroidUtilities.dp(3.33333f), 0, AndroidUtilities.dp(0.666f), 0x4c000000);
         tooltipTextView.setPadding(AndroidUtilities.dp(6), 0, AndroidUtilities.dp(6), 0);
         cameraPanel.addView(tooltipTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 16));
@@ -1559,16 +1566,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private void setCameraFlashModeIcon(ImageView imageView, String mode) {
         switch (mode) {
             case Camera.Parameters.FLASH_MODE_OFF:
-                imageView.setImageResource(works.heymate.beta.R.drawable.flash_off);
-                imageView.setContentDescription(LocaleController.getString("AccDescrCameraFlashOff", works.heymate.beta.R.string.AccDescrCameraFlashOff));
+                imageView.setImageResource(R.drawable.flash_off);
+                imageView.setContentDescription(LocaleController.getString("AccDescrCameraFlashOff", R.string.AccDescrCameraFlashOff));
                 break;
             case Camera.Parameters.FLASH_MODE_ON:
-                imageView.setImageResource(works.heymate.beta.R.drawable.flash_on);
-                imageView.setContentDescription(LocaleController.getString("AccDescrCameraFlashOn", works.heymate.beta.R.string.AccDescrCameraFlashOn));
+                imageView.setImageResource(R.drawable.flash_on);
+                imageView.setContentDescription(LocaleController.getString("AccDescrCameraFlashOn", R.string.AccDescrCameraFlashOn));
                 break;
             case Camera.Parameters.FLASH_MODE_AUTO:
-                imageView.setImageResource(works.heymate.beta.R.drawable.flash_auto);
-                imageView.setContentDescription(LocaleController.getString("AccDescrCameraFlashAuto", works.heymate.beta.R.string.AccDescrCameraFlashAuto));
+                imageView.setImageResource(R.drawable.flash_auto);
+                imageView.setContentDescription(LocaleController.getString("AccDescrCameraFlashAuto", R.string.AccDescrCameraFlashAuto));
                 break;
         }
     }
@@ -1764,7 +1771,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 });
                 cameraView.setClipToOutline(true);
             }
-            cameraView.setContentDescription(LocaleController.getString("AccDescrInstantCamera", works.heymate.beta.R.string.AccDescrInstantCamera));
+            cameraView.setContentDescription(LocaleController.getString("AccDescrInstantCamera", R.string.AccDescrInstantCamera));
             parentAlert.getContainer().addView(cameraView, 1, new FrameLayout.LayoutParams(itemSize, itemSize));
             cameraView.setDelegate(new CameraView.CameraViewDelegate() {
                 @Override
@@ -1790,7 +1797,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                             flashModeButton[a].setTranslationY(0.0f);
                         }
                     }
-                    switchCameraButton.setImageResource(cameraView.isFrontface() ? works.heymate.beta.R.drawable.camera_revert1 : works.heymate.beta.R.drawable.camera_revert2);
+                    switchCameraButton.setImageResource(cameraView.isFrontface() ? R.drawable.camera_revert1 : R.drawable.camera_revert2);
                     switchCameraButton.setVisibility(cameraView.hasFrontFaceCamera() ? View.VISIBLE : View.INVISIBLE);
                     if (!cameraOpened) {
                         cameraInitAnimation = new AnimatorSet();
@@ -2473,7 +2480,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         } else if (id >= 10) {
             selectedAlbumEntry = dropDownAlbums.get(id - 10);
             if (selectedAlbumEntry == galleryAlbumEntry) {
-                dropDown.setText(LocaleController.getString("ChatGallery", works.heymate.beta.R.string.ChatGallery));
+                dropDown.setText(LocaleController.getString("ChatGallery", R.string.ChatGallery));
             } else {
                 dropDown.setText(selectedAlbumEntry.bucketName);
             }
@@ -2507,15 +2514,26 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     @Override
-    void applyCaption(String text) {
-        int imageId = (Integer) selectedPhotosOrder.get(0);
-        Object entry = selectedPhotos.get(imageId);
-        if (entry instanceof MediaController.PhotoEntry) {
-            MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) entry;
-            photoEntry.caption = text;
-        } else if (entry instanceof MediaController.SearchImage) {
-            MediaController.SearchImage searchImage = (MediaController.SearchImage) entry;
-            searchImage.caption = text;
+    void applyCaption(CharSequence text) {
+        for (int a = 0; a < selectedPhotosOrder.size(); a++) {
+            Object o = selectedPhotos.get(selectedPhotosOrder.get(a));
+            if (o instanceof MediaController.PhotoEntry) {
+                MediaController.PhotoEntry photoEntry1 = (MediaController.PhotoEntry) o;
+                if (a == 0) {
+                    photoEntry1.caption = text;
+                    photoEntry1.entities = MediaDataController.getInstance(UserConfig.selectedAccount).getEntities(new CharSequence[] {text}, false);
+                } else {
+                    photoEntry1.caption = null;
+                }
+            } else if (o instanceof MediaController.SearchImage) {
+                MediaController.SearchImage photoEntry1 = (MediaController.SearchImage) o;
+                if (a == 0) {
+                    photoEntry1.caption = text;
+                    photoEntry1.entities = MediaDataController.getInstance(UserConfig.selectedAccount).getEntities(new CharSequence[] {text}, false);
+                } else {
+                    photoEntry1.caption = null;
+                }
+            }
         }
     }
 
@@ -2619,15 +2637,15 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (parentAlert.baseFragment instanceof ChatActivity && parentAlert.avatarPicker == 0) {
             galleryAlbumEntry = MediaController.allMediaAlbumEntry;
             if (mediaEnabled) {
-                progressView.setText(LocaleController.getString("NoPhotos", works.heymate.beta.R.string.NoPhotos));
+                progressView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
             } else {
                 TLRPC.Chat chat = ((ChatActivity) parentAlert.baseFragment).getCurrentChat();
                 if (ChatObject.isActionBannedByDefault(chat, ChatObject.ACTION_SEND_MEDIA)) {
-                    progressView.setText(LocaleController.getString("GlobalAttachMediaRestricted", works.heymate.beta.R.string.GlobalAttachMediaRestricted));
+                    progressView.setText(LocaleController.getString("GlobalAttachMediaRestricted", R.string.GlobalAttachMediaRestricted));
                 } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                    progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", works.heymate.beta.R.string.AttachMediaRestrictedForever));
+                    progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever));
                 } else {
-                    progressView.setText(LocaleController.formatString("AttachMediaRestricted", works.heymate.beta.R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                    progressView.setText(LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                 }
             }
         } else {
@@ -2651,7 +2669,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         cameraPhotoLayoutManager.scrollToPositionWithOffset(0, 1000000);
         layoutManager.scrollToPositionWithOffset(0, 1000000);
 
-        dropDown.setText(LocaleController.getString("ChatGallery", works.heymate.beta.R.string.ChatGallery));
+        dropDown.setText(LocaleController.getString("ChatGallery", R.string.ChatGallery));
 
         selectedAlbumEntry = galleryAlbumEntry;
         if (selectedAlbumEntry != null) {

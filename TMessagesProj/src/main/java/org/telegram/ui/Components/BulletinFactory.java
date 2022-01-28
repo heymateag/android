@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.os.Build;
 import android.widget.FrameLayout;
 
 import androidx.annotation.CheckResult;
@@ -8,7 +9,7 @@ import androidx.annotation.CheckResult;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationsController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -32,23 +33,23 @@ public final class BulletinFactory {
 
     public enum FileType {
 
-        PHOTO("PhotoSavedHint", works.heymate.beta.R.string.PhotoSavedHint, Icon.SAVED_TO_GALLERY),
+        PHOTO("PhotoSavedHint", R.string.PhotoSavedHint, Icon.SAVED_TO_GALLERY),
         PHOTOS("PhotosSavedHint", Icon.SAVED_TO_GALLERY),
 
-        VIDEO("VideoSavedHint", works.heymate.beta.R.string.VideoSavedHint, Icon.SAVED_TO_GALLERY),
+        VIDEO("VideoSavedHint", R.string.VideoSavedHint, Icon.SAVED_TO_GALLERY),
         VIDEOS("VideosSavedHint", Icon.SAVED_TO_GALLERY),
 
         MEDIA("MediaSavedHint", Icon.SAVED_TO_GALLERY),
 
-        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", works.heymate.beta.R.string.PhotoSavedToDownloadsHint, Icon.SAVED_TO_DOWNLOADS),
-        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", works.heymate.beta.R.string.VideoSavedToDownloadsHint, Icon.SAVED_TO_DOWNLOADS),
+        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", R.string.PhotoSavedToDownloadsHint, Icon.SAVED_TO_DOWNLOADS),
+        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", R.string.VideoSavedToDownloadsHint, Icon.SAVED_TO_DOWNLOADS),
 
         GIF("GifSavedToDownloadsHint", Icon.SAVED_TO_DOWNLOADS),
 
-        AUDIO("AudioSavedHint", works.heymate.beta.R.string.AudioSavedHint, Icon.SAVED_TO_MUSIC),
+        AUDIO("AudioSavedHint", R.string.AudioSavedHint, Icon.SAVED_TO_MUSIC),
         AUDIOS("AudiosSavedHint", Icon.SAVED_TO_MUSIC),
 
-        UNKNOWN("FileSavedHint", works.heymate.beta.R.string.FileSavedHint, Icon.SAVED_TO_DOWNLOADS),
+        UNKNOWN("FileSavedHint", R.string.FileSavedHint, Icon.SAVED_TO_DOWNLOADS),
         UNKNOWNS("FilesSavedHint", Icon.SAVED_TO_DOWNLOADS);
 
         private final String localeKey;
@@ -84,9 +85,9 @@ public final class BulletinFactory {
 
         private enum Icon {
 
-            SAVED_TO_DOWNLOADS(works.heymate.beta.R.raw.ic_download, 2, "Box", "Arrow"),
-            SAVED_TO_GALLERY(works.heymate.beta.R.raw.ic_save_to_gallery, 0, "Box", "Arrow", "Mask", "Arrow 2", "Splash"),
-            SAVED_TO_MUSIC(works.heymate.beta.R.raw.ic_save_to_music, 2, "Box", "Arrow");
+            SAVED_TO_DOWNLOADS(R.raw.ic_download, 2, "Box", "Arrow"),
+            SAVED_TO_GALLERY(R.raw.ic_save_to_gallery, 0, "Box", "Arrow", "Mask", "Arrow 2", "Splash"),
+            SAVED_TO_MUSIC(R.raw.ic_save_to_music, 2, "Box", "Arrow");
 
             private final int resId;
             private final String[] layers;
@@ -196,6 +197,9 @@ public final class BulletinFactory {
 
     @CheckResult
     public Bulletin createCopyLinkBulletin(boolean isPrivate, Theme.ResourcesProvider resourcesProvider) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return new Bulletin.EmptyBulletin();
+        }
         if (isPrivate) {
             final Bulletin.TwoLineLottieLayout layout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider);
             layout.setAnimation(R.raw.voip_invite, 36, 36, "Wibe", "Circle");
@@ -238,23 +242,23 @@ public final class BulletinFactory {
 
         switch (setting) {
             case NotificationsController.SETTING_MUTE_HOUR:
-                text = LocaleController.formatString("NotificationsMutedForHint", works.heymate.beta.R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 1));
+                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 1));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_8_HOURS:
-                text = LocaleController.formatString("NotificationsMutedForHint", works.heymate.beta.R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 8));
+                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 8));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_2_DAYS:
-                text = LocaleController.formatString("NotificationsMutedForHint", works.heymate.beta.R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Days", 2));
+                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Days", 2));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_FOREVER:
-                text = LocaleController.getString("NotificationsMutedHint", works.heymate.beta.R.string.NotificationsMutedHint);
+                text = LocaleController.getString("NotificationsMutedHint", R.string.NotificationsMutedHint);
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_UNMUTE:
-                text = LocaleController.getString("NotificationsUnmutedHint", works.heymate.beta.R.string.NotificationsUnmutedHint);
+                text = LocaleController.getString("NotificationsUnmutedHint", R.string.NotificationsUnmutedHint);
                 mute = false;
                 break;
             default:
@@ -262,9 +266,9 @@ public final class BulletinFactory {
         }
 
         if (mute) {
-            layout.setAnimation(works.heymate.beta.R.raw.ic_mute, "Body Main", "Body Top", "Line", "Curve Big", "Curve Small");
+            layout.setAnimation(R.raw.ic_mute, "Body Main", "Body Top", "Line", "Curve Big", "Curve Small");
         } else {
-            layout.setAnimation(works.heymate.beta.R.raw.ic_unmute, "BODY", "Wibe Big", "Wibe Big 3", "Wibe Small");
+            layout.setAnimation(R.raw.ic_unmute, "BODY", "Wibe Big", "Wibe Big 3", "Wibe Small");
         }
 
         layout.textView.setText(text);
@@ -333,11 +337,11 @@ public final class BulletinFactory {
         layout.setAnimation(R.raw.ic_ban, "Hand");
         String name;
         if (user.deleted) {
-            name = LocaleController.formatString("HiddenName", works.heymate.beta.R.string.HiddenName);
+            name = LocaleController.formatString("HiddenName", R.string.HiddenName);
         } else {
             name = user.first_name;
         }
-        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserRemovedFromChatHint", works.heymate.beta.R.string.UserRemovedFromChatHint, name, chatName)));
+        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserRemovedFromChatHint", R.string.UserRemovedFromChatHint, name, chatName)));
         return Bulletin.make(fragment, layout, Bulletin.DURATION_SHORT);
     }
 
@@ -346,11 +350,11 @@ public final class BulletinFactory {
         final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(fragment.getParentActivity(), null);
         final String text;
         if (banned) {
-            layout.setAnimation(works.heymate.beta.R.raw.ic_ban, "Hand");
-            text = LocaleController.getString("UserBlocked", works.heymate.beta.R.string.UserBlocked);
+            layout.setAnimation(R.raw.ic_ban, "Hand");
+            text = LocaleController.getString("UserBlocked", R.string.UserBlocked);
         } else {
-            layout.setAnimation(works.heymate.beta.R.raw.ic_unban, "Main", "Finger 1", "Finger 2", "Finger 3", "Finger 4");
-            text = LocaleController.getString("UserUnblocked", works.heymate.beta.R.string.UserUnblocked);
+            layout.setAnimation(R.raw.ic_unban, "Main", "Finger 1", "Finger 2", "Finger 3", "Finger 4");
+            text = LocaleController.getString("UserUnblocked", R.string.UserUnblocked);
         }
         layout.textView.setText(AndroidUtilities.replaceTags(text));
         return Bulletin.make(fragment, layout, Bulletin.DURATION_SHORT);

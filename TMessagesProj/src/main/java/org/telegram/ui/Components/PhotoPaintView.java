@@ -37,7 +37,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.tgnet.TLRPC;
@@ -279,7 +279,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         cancelTextView.setGravity(Gravity.CENTER);
         cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         cancelTextView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
-        cancelTextView.setText(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel).toUpperCase());
+        cancelTextView.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         toolsView.addView(cancelTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
@@ -289,27 +289,27 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         doneTextView.setGravity(Gravity.CENTER);
         doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_PICKER_SELECTOR_COLOR, 0));
         doneTextView.setPadding(AndroidUtilities.dp(20), 0, AndroidUtilities.dp(20), 0);
-        doneTextView.setText(LocaleController.getString("Done", works.heymate.beta.R.string.Done).toUpperCase());
+        doneTextView.setText(LocaleController.getString("Done", R.string.Done).toUpperCase());
         doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         toolsView.addView(doneTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.RIGHT));
 
         paintButton = new ImageView(context);
         paintButton.setScaleType(ImageView.ScaleType.CENTER);
-        paintButton.setImageResource(works.heymate.beta.R.drawable.photo_paint);
+        paintButton.setImageResource(R.drawable.photo_paint);
         paintButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         toolsView.addView(paintButton, LayoutHelper.createFrame(54, LayoutHelper.MATCH_PARENT, Gravity.CENTER, 0, 0, 56, 0));
         paintButton.setOnClickListener(v -> selectEntity(null));
 
         ImageView stickerButton = new ImageView(context);
         stickerButton.setScaleType(ImageView.ScaleType.CENTER);
-        stickerButton.setImageResource(works.heymate.beta.R.drawable.photo_sticker);
+        stickerButton.setImageResource(R.drawable.photo_sticker);
         stickerButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         toolsView.addView(stickerButton, LayoutHelper.createFrame(54, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
         stickerButton.setOnClickListener(v -> openStickersView());
 
         ImageView textButton = new ImageView(context);
         textButton.setScaleType(ImageView.ScaleType.CENTER);
-        textButton.setImageResource(works.heymate.beta.R.drawable.photo_paint_text);
+        textButton.setImageResource(R.drawable.photo_paint_text);
         textButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         toolsView.addView(textButton, LayoutHelper.createFrame(54, LayoutHelper.MATCH_PARENT, Gravity.CENTER, 56, 0, 0, 0));
         textButton.setOnClickListener(v -> createText(true));
@@ -405,14 +405,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private void updateSettingsButton() {
-        int resource = works.heymate.beta.R.drawable.photo_paint_brush;
+        int resource = R.drawable.photo_paint_brush;
         if (currentEntityView != null) {
             if (currentEntityView instanceof StickerView) {
-                resource = works.heymate.beta.R.drawable.photo_flip;
+                resource = R.drawable.photo_flip;
             } else if (currentEntityView instanceof TextPaintView) {
-                resource = works.heymate.beta.R.drawable.photo_outline;
+                resource = R.drawable.photo_outline;
             }
-            paintButton.setImageResource(works.heymate.beta.R.drawable.photo_paint);
+            paintButton.setImageResource(R.drawable.photo_paint);
             paintButton.setColorFilter(null);
         } else {
             if (brushSwatch != null) {
@@ -599,10 +599,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-            builder.setMessage(LocaleController.getString("PhotoEditorDiscardAlert", works.heymate.beta.R.string.PhotoEditorDiscardAlert));
-            builder.setTitle(LocaleController.getString("DiscardChanges", works.heymate.beta.R.string.DiscardChanges));
-            builder.setPositiveButton(LocaleController.getString("PassportDiscard", works.heymate.beta.R.string.PassportDiscard), (dialogInterface, i) -> okRunnable.run());
-            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+            builder.setMessage(LocaleController.getString("PhotoEditorDiscardAlert", R.string.PhotoEditorDiscardAlert));
+            builder.setTitle(LocaleController.getString("DiscardChanges", R.string.DiscardChanges));
+            builder.setPositiveButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialogInterface, i) -> okRunnable.run());
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             photoViewer.showAlertDialog(builder);
         } else {
             okRunnable.run();
@@ -920,6 +920,9 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
                 int w = view.getMeasuredWidth();
                 int h = view.getMeasuredHeight();
+                if (w == 0 || h == 0) {
+                    return;
+                }
                 int tr = currentCropState.transformRotation;
                 int fw = w, rotatedW = w;
                 int fh = h, rotatedH = h;
@@ -1242,7 +1245,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             deleteView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(14), 0);
             deleteView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             deleteView.setTag(0);
-            deleteView.setText(LocaleController.getString("PaintDelete", works.heymate.beta.R.string.PaintDelete));
+            deleteView.setText(LocaleController.getString("PaintDelete", R.string.PaintDelete));
             deleteView.setOnClickListener(v -> {
                 removeEntity(entityView);
 
@@ -1260,7 +1263,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 editView.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
                 editView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 editView.setTag(1);
-                editView.setText(LocaleController.getString("PaintEdit", works.heymate.beta.R.string.PaintEdit));
+                editView.setText(LocaleController.getString("PaintEdit", R.string.PaintEdit));
                 editView.setOnClickListener(v -> {
                     editSelectedTextEntity();
 
@@ -1278,7 +1281,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             duplicateView.setPadding(AndroidUtilities.dp(14), 0, AndroidUtilities.dp(16), 0);
             duplicateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             duplicateView.setTag(2);
-            duplicateView.setText(LocaleController.getString("PaintDuplicate", works.heymate.beta.R.string.PaintDuplicate));
+            duplicateView.setText(LocaleController.getString("PaintDuplicate", R.string.PaintDuplicate));
             duplicateView.setOnClickListener(v -> {
                 duplicateSelectedEntity();
 
@@ -1328,7 +1331,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         button.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0, 16, 0));
 
         ImageView check = new ImageView(getContext());
-        check.setImageResource(works.heymate.beta.R.drawable.msg_text_check);
+        check.setImageResource(R.drawable.msg_text_check);
         check.setScaleType(ImageView.ScaleType.CENTER);
         check.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_radioBackgroundChecked), PorterDuff.Mode.MULTIPLY));
         check.setVisibility(selected ? VISIBLE : INVISIBLE);
@@ -1339,16 +1342,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     private void showBrushSettings() {
         showPopup(() -> {
-            View radial = buttonForBrush(0, works.heymate.beta.R.drawable.msg_draw_pen, LocaleController.getString("PaintPen", works.heymate.beta.R.string.PaintPen), currentBrush == 0);
+            View radial = buttonForBrush(0, R.drawable.msg_draw_pen, LocaleController.getString("PaintPen", R.string.PaintPen), currentBrush == 0);
             popupLayout.addView(radial, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 54));
 
-            View elliptical = buttonForBrush(1, works.heymate.beta.R.drawable.msg_draw_marker, LocaleController.getString("PaintMarker", works.heymate.beta.R.string.PaintMarker), currentBrush == 1);
+            View elliptical = buttonForBrush(1, R.drawable.msg_draw_marker, LocaleController.getString("PaintMarker", R.string.PaintMarker), currentBrush == 1);
             popupLayout.addView(elliptical, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 54));
 
-            View neon = buttonForBrush(2, works.heymate.beta.R.drawable.msg_draw_neon, LocaleController.getString("PaintNeon", works.heymate.beta.R.string.PaintNeon), currentBrush == 2);
+            View neon = buttonForBrush(2, R.drawable.msg_draw_neon, LocaleController.getString("PaintNeon", R.string.PaintNeon), currentBrush == 2);
             popupLayout.addView(neon, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 54));
 
-            View arrow = buttonForBrush(3, works.heymate.beta.R.drawable.msg_draw_arrow, LocaleController.getString("PaintArrow", works.heymate.beta.R.string.PaintArrow), currentBrush == 3);
+            View arrow = buttonForBrush(3, R.drawable.msg_draw_arrow, LocaleController.getString("PaintArrow", R.string.PaintArrow), currentBrush == 3);
             popupLayout.addView(arrow, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 54));
 
         }, this, Gravity.RIGHT | Gravity.BOTTOM, 0, AndroidUtilities.dp(48));
@@ -1385,7 +1388,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
         if (selected) {
             ImageView check = new ImageView(getContext());
-            check.setImageResource(works.heymate.beta.R.drawable.msg_text_check);
+            check.setImageResource(R.drawable.msg_text_check);
             check.setScaleType(ImageView.ScaleType.CENTER);
             check.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_radioBackgroundChecked), PorterDuff.Mode.MULTIPLY));
             button.addView(check, LayoutHelper.createLinear(50, LayoutHelper.MATCH_PARENT));
@@ -1400,14 +1403,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 String text;
                 int icon;
                 if (a == 0) {
-                    text = LocaleController.getString("PaintOutlined", works.heymate.beta.R.string.PaintOutlined);
-                    icon = works.heymate.beta.R.drawable.msg_text_outlined;
+                    text = LocaleController.getString("PaintOutlined", R.string.PaintOutlined);
+                    icon = R.drawable.msg_text_outlined;
                 } else if (a == 1) {
-                    text = LocaleController.getString("PaintRegular", works.heymate.beta.R.string.PaintRegular);
-                    icon = works.heymate.beta.R.drawable.msg_text_regular;
+                    text = LocaleController.getString("PaintRegular", R.string.PaintRegular);
+                    icon = R.drawable.msg_text_regular;
                 } else {
-                    text = LocaleController.getString("PaintFramed", works.heymate.beta.R.string.PaintFramed);
-                    icon = works.heymate.beta.R.drawable.msg_text_framed;
+                    text = LocaleController.getString("PaintFramed", R.string.PaintFramed);
+                    icon = R.drawable.msg_text_framed;
                 }
                 popupLayout.addView(buttonForText(a, text, icon, selectedTextType == a), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             }
@@ -1449,7 +1452,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         if (popupWindow == null) {
             popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
             popupWindow.setAnimationEnabled(false);
-            popupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupAnimation);
+            popupWindow.setAnimationStyle(R.style.PopupAnimation);
             popupWindow.setOutsideTouchable(true);
             popupWindow.setClippingEnabled(true);
             popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);

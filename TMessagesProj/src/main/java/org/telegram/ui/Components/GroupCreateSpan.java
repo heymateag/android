@@ -29,7 +29,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -67,7 +67,7 @@ public class GroupCreateSpan extends View {
         super(context);
 
         currentContact = contact;
-        deleteDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.delete);
+        deleteDrawable = getResources().getDrawable(R.drawable.delete);
         textPaint.setTextSize(AndroidUtilities.dp(14));
 
         String firstName;
@@ -86,56 +86,56 @@ public class GroupCreateSpan extends View {
                 case "contacts":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_CONTACTS);
                     uid = Integer.MIN_VALUE;
-                    firstName = LocaleController.getString("FilterContacts", works.heymate.beta.R.string.FilterContacts);
+                    firstName = LocaleController.getString("FilterContacts", R.string.FilterContacts);
                     break;
                 case "non_contacts":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_NON_CONTACTS);
                     uid = Integer.MIN_VALUE + 1;
-                    firstName = LocaleController.getString("FilterNonContacts", works.heymate.beta.R.string.FilterNonContacts);
+                    firstName = LocaleController.getString("FilterNonContacts", R.string.FilterNonContacts);
                     break;
                 case "groups":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_GROUPS);
                     uid = Integer.MIN_VALUE + 2;
-                    firstName = LocaleController.getString("FilterGroups", works.heymate.beta.R.string.FilterGroups);
+                    firstName = LocaleController.getString("FilterGroups", R.string.FilterGroups);
                     break;
                 case "channels":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_CHANNELS);
                     uid = Integer.MIN_VALUE + 3;
-                    firstName = LocaleController.getString("FilterChannels", works.heymate.beta.R.string.FilterChannels);
+                    firstName = LocaleController.getString("FilterChannels", R.string.FilterChannels);
                     break;
                 case "bots":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_BOTS);
                     uid = Integer.MIN_VALUE + 4;
-                    firstName = LocaleController.getString("FilterBots", works.heymate.beta.R.string.FilterBots);
+                    firstName = LocaleController.getString("FilterBots", R.string.FilterBots);
                     break;
                 case "muted":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_MUTED);
                     uid = Integer.MIN_VALUE + 5;
-                    firstName = LocaleController.getString("FilterMuted", works.heymate.beta.R.string.FilterMuted);
+                    firstName = LocaleController.getString("FilterMuted", R.string.FilterMuted);
                     break;
                 case "read":
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_READ);
                     uid = Integer.MIN_VALUE + 6;
-                    firstName = LocaleController.getString("FilterRead", works.heymate.beta.R.string.FilterRead);
+                    firstName = LocaleController.getString("FilterRead", R.string.FilterRead);
                     break;
                 case "archived":
                 default:
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_FILTER_ARCHIVED);
                     uid = Integer.MIN_VALUE + 7;
-                    firstName = LocaleController.getString("FilterArchived", works.heymate.beta.R.string.FilterArchived);
+                    firstName = LocaleController.getString("FilterArchived", R.string.FilterArchived);
                     break;
             }
         } else if (object instanceof TLRPC.User) {
             TLRPC.User user = (TLRPC.User) object;
             uid = user.id;
             if (UserObject.isReplyUser(user)) {
-                firstName = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle);
+                firstName = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
                 avatarDrawable.setSmallSize(true);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 imageLocation = null;
                 imageParent = null;
             } else if (UserObject.isUserSelf(user)) {
-                firstName = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
+                firstName = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                 avatarDrawable.setSmallSize(true);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 imageLocation = null;
@@ -296,6 +296,6 @@ public class GroupCreateSpan extends View {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setText(nameLayout.getText());
         if (isDeleting() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("Delete", works.heymate.beta.R.string.Delete)));
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId(), LocaleController.getString("Delete", R.string.Delete)));
     }
 }

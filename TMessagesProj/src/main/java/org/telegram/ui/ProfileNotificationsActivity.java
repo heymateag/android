@@ -39,7 +39,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -221,7 +221,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
     @Override
     public View createView(final Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -271,10 +271,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             }
         });
         if (addingException) {
-            actionBar.setTitle(LocaleController.getString("NotificationsNewException", works.heymate.beta.R.string.NotificationsNewException));
-            actionBar.createMenu().addItem(done_button, LocaleController.getString("Done", works.heymate.beta.R.string.Done).toUpperCase());
+            actionBar.setTitle(LocaleController.getString("NotificationsNewException", R.string.NotificationsNewException));
+            actionBar.createMenu().addItem(done_button, LocaleController.getString("Done", R.string.Done).toUpperCase());
         } else {
-            actionBar.setTitle(LocaleController.getString("CustomNotifications", works.heymate.beta.R.string.CustomNotifications));
+            actionBar.setTitle(LocaleController.getString("CustomNotifications", R.string.CustomNotifications));
         }
 
         fragmentView = new FrameLayout(context);
@@ -446,7 +446,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 int notifyDelay = position / 10;
                                 String times = LocaleController.formatPluralString("Times", notifyMaxCount + 1);
                                 String minutes = LocaleController.formatPluralString("Minutes", notifyDelay + 1);
-                                textView.setText(LocaleController.formatString("SmartNotificationsDetail", works.heymate.beta.R.string.SmartNotificationsDetail, times, minutes));
+                                textView.setText(LocaleController.formatString("SmartNotificationsDetail", R.string.SmartNotificationsDetail, times, minutes));
                             }
                         });
                         list.setPadding(0, AndroidUtilities.dp(12), 0, AndroidUtilities.dp(8));
@@ -465,10 +465,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             dismissCurrentDialog();
                         });
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                        builder.setTitle(LocaleController.getString("SmartNotificationsAlert", works.heymate.beta.R.string.SmartNotificationsAlert));
+                        builder.setTitle(LocaleController.getString("SmartNotificationsAlert", R.string.SmartNotificationsAlert));
                         builder.setView(list);
-                        builder.setPositiveButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
-                        builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", works.heymate.beta.R.string.SmartNotificationsDisabled), (dialog, which) -> {
+                        builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), (dialog, which) -> {
                             SharedPreferences preferences12 = MessagesController.getNotificationsSettings(currentAccount);
                             preferences12.edit().putInt("smart_max_count_" + dialogId, 0).commit();
                             if (adapter != null) {
@@ -523,13 +523,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 if (rng != null) {
                     if (requestCode == 13) {
                         if (ringtone.equals(Settings.System.DEFAULT_RINGTONE_URI)) {
-                            name = LocaleController.getString("DefaultRingtone", works.heymate.beta.R.string.DefaultRingtone);
+                            name = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
                         } else {
                             name = rng.getTitle(getParentActivity());
                         }
                     } else {
                         if (ringtone.equals(Settings.System.DEFAULT_NOTIFICATION_URI)) {
-                            name = LocaleController.getString("SoundDefault", works.heymate.beta.R.string.SoundDefault);
+                            name = LocaleController.getString("SoundDefault", R.string.SoundDefault);
                         } else {
                             name = rng.getTitle(getParentActivity());
                         }
@@ -725,13 +725,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 case 0: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == generalRow) {
-                        headerCell.setText(LocaleController.getString("General", works.heymate.beta.R.string.General));
+                        headerCell.setText(LocaleController.getString("General", R.string.General));
                     } else if (position == popupRow) {
-                        headerCell.setText(LocaleController.getString("ProfilePopupNotification", works.heymate.beta.R.string.ProfilePopupNotification));
+                        headerCell.setText(LocaleController.getString("ProfilePopupNotification", R.string.ProfilePopupNotification));
                     } else if (position == ledRow) {
-                        headerCell.setText(LocaleController.getString("NotificationsLed", works.heymate.beta.R.string.NotificationsLed));
+                        headerCell.setText(LocaleController.getString("NotificationsLed", R.string.NotificationsLed));
                     } else if (position == callsRow) {
-                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", works.heymate.beta.R.string.VoipNotificationSettings));
+                        headerCell.setText(LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings));
                     }
                     break;
                 }
@@ -741,58 +741,58 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     if (position == soundRow) {
                         String value = preferences.getString("sound_" + dialogId, LocaleController.getString("SoundDefault", R.string.SoundDefault));
                         if (value.equals("NoSound")) {
-                            value = LocaleController.getString("NoSound", works.heymate.beta.R.string.NoSound);
+                            value = LocaleController.getString("NoSound", R.string.NoSound);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("Sound", works.heymate.beta.R.string.Sound), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("Sound", R.string.Sound), value, true);
                     } else if (position == ringtoneRow) {
                         String value = preferences.getString("ringtone_" + dialogId, LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone));
                         if (value.equals("NoSound")) {
-                            value = LocaleController.getString("NoSound", works.heymate.beta.R.string.NoSound);
+                            value = LocaleController.getString("NoSound", R.string.NoSound);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", works.heymate.beta.R.string.VoipSettingsRingtone), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("VoipSettingsRingtone", R.string.VoipSettingsRingtone), value, false);
                     } else if (position == vibrateRow) {
                         int value = preferences.getInt("vibrate_" + dialogId, 0);
                         if (value == 0 || value == 4) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("VibrationDefault", works.heymate.beta.R.string.VibrationDefault), smartRow != -1 || priorityRow != -1);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), smartRow != -1 || priorityRow != -1);
                         } else if (value == 1) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("Short", works.heymate.beta.R.string.Short), smartRow != -1 || priorityRow != -1);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Short", R.string.Short), smartRow != -1 || priorityRow != -1);
                         } else if (value == 2) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("VibrationDisabled", works.heymate.beta.R.string.VibrationDisabled), smartRow != -1 || priorityRow != -1);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), smartRow != -1 || priorityRow != -1);
                         } else if (value == 3) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("Long", works.heymate.beta.R.string.Long), smartRow != -1 || priorityRow != -1);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Long", R.string.Long), smartRow != -1 || priorityRow != -1);
                         }
                     } else if (position == priorityRow) {
                         int value = preferences.getInt("priority_" + dialogId, 3);
                         if (value == 0) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", works.heymate.beta.R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityHigh", works.heymate.beta.R.string.NotificationsPriorityHigh), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityHigh", R.string.NotificationsPriorityHigh), false);
                         } else if (value == 1 || value == 2) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", works.heymate.beta.R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityUrgent", works.heymate.beta.R.string.NotificationsPriorityUrgent), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityUrgent", R.string.NotificationsPriorityUrgent), false);
                         } else if (value == 3) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", works.heymate.beta.R.string.NotificationsImportance), LocaleController.getString("NotificationsPrioritySettings", works.heymate.beta.R.string.NotificationsPrioritySettings), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance), LocaleController.getString("NotificationsPrioritySettings", R.string.NotificationsPrioritySettings), false);
                         } else if (value == 4) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", works.heymate.beta.R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityLow", works.heymate.beta.R.string.NotificationsPriorityLow), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityLow", R.string.NotificationsPriorityLow), false);
                         } else if (value == 5) {
-                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", works.heymate.beta.R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityMedium", works.heymate.beta.R.string.NotificationsPriorityMedium), false);
+                            textCell.setTextAndValue(LocaleController.getString("NotificationsImportance", R.string.NotificationsImportance), LocaleController.getString("NotificationsPriorityMedium", R.string.NotificationsPriorityMedium), false);
                         }
                     } else if (position == smartRow) {
                         int notifyMaxCount = preferences.getInt("smart_max_count_" + dialogId, 2);
                         int notifyDelay = preferences.getInt("smart_delay_" + dialogId, 3 * 60);
                         if (notifyMaxCount == 0) {
-                            textCell.setTextAndValue(LocaleController.getString("SmartNotifications", works.heymate.beta.R.string.SmartNotifications), LocaleController.getString("SmartNotificationsDisabled", works.heymate.beta.R.string.SmartNotificationsDisabled), priorityRow != -1);
+                            textCell.setTextAndValue(LocaleController.getString("SmartNotifications", R.string.SmartNotifications), LocaleController.getString("SmartNotificationsDisabled", R.string.SmartNotificationsDisabled), priorityRow != -1);
                         } else {
                             String minutes = LocaleController.formatPluralString("Minutes", notifyDelay / 60);
-                            textCell.setTextAndValue(LocaleController.getString("SmartNotifications", works.heymate.beta.R.string.SmartNotifications), LocaleController.formatString("SmartNotificationsInfo", works.heymate.beta.R.string.SmartNotificationsInfo, notifyMaxCount, minutes), priorityRow != -1);
+                            textCell.setTextAndValue(LocaleController.getString("SmartNotifications", R.string.SmartNotifications), LocaleController.formatString("SmartNotificationsInfo", R.string.SmartNotificationsInfo, notifyMaxCount, minutes), priorityRow != -1);
                         }
                     } else if (position == callsVibrateRow) {
                         int value = preferences.getInt("calls_vibrate_" + dialogId, 0);
                         if (value == 0 || value == 4) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("VibrationDefault", works.heymate.beta.R.string.VibrationDefault), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDefault", R.string.VibrationDefault), true);
                         } else if (value == 1) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("Short", works.heymate.beta.R.string.Short), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Short", R.string.Short), true);
                         } else if (value == 2) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("VibrationDisabled", works.heymate.beta.R.string.VibrationDisabled), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("VibrationDisabled", R.string.VibrationDisabled), true);
                         } else if (value == 3) {
-                            textCell.setTextAndValue(LocaleController.getString("Vibrate", works.heymate.beta.R.string.Vibrate), LocaleController.getString("Long", works.heymate.beta.R.string.Long), true);
+                            textCell.setTextAndValue(LocaleController.getString("Vibrate", R.string.Vibrate), LocaleController.getString("Long", R.string.Long), true);
                         }
                     }
                     break;
@@ -800,24 +800,24 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 case 2: {
                     TextInfoPrivacyCell textCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == popupInfoRow) {
-                        textCell.setText(LocaleController.getString("ProfilePopupNotificationInfo", works.heymate.beta.R.string.ProfilePopupNotificationInfo));
-                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell.setText(LocaleController.getString("ProfilePopupNotificationInfo", R.string.ProfilePopupNotificationInfo));
+                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == ledInfoRow) {
-                        textCell.setText(LocaleController.getString("NotificationsLedInfo", works.heymate.beta.R.string.NotificationsLedInfo));
-                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        textCell.setText(LocaleController.getString("NotificationsLedInfo", R.string.NotificationsLedInfo));
+                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == priorityInfoRow) {
                         if (priorityRow == -1) {
                             textCell.setText("");
                         } else {
-                            textCell.setText(LocaleController.getString("PriorityInfo", works.heymate.beta.R.string.PriorityInfo));
+                            textCell.setText(LocaleController.getString("PriorityInfo", R.string.PriorityInfo));
                         }
-                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == customInfoRow) {
                         textCell.setText(null);
-                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == ringtoneInfoRow) {
-                        textCell.setText(LocaleController.getString("VoipRingtoneInfo", works.heymate.beta.R.string.VoipRingtoneInfo));
-                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        textCell.setText(LocaleController.getString("VoipRingtoneInfo", R.string.VoipRingtoneInfo));
+                        textCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -840,7 +840,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             break;
                         }
                     }
-                    textCell.setTextAndColor(LocaleController.getString("NotificationsLedColor", works.heymate.beta.R.string.NotificationsLedColor), color, false);
+                    textCell.setTextAndColor(LocaleController.getString("NotificationsLedColor", R.string.NotificationsLedColor), color, false);
                     break;
                 }
                 case 4: {
@@ -856,10 +856,10 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }
                     }
                     if (position == popupEnabledRow) {
-                        radioCell.setText(LocaleController.getString("PopupEnabled", works.heymate.beta.R.string.PopupEnabled), popup == 1, true);
+                        radioCell.setText(LocaleController.getString("PopupEnabled", R.string.PopupEnabled), popup == 1, true);
                         radioCell.setTag(1);
                     } else if (position == popupDisabledRow) {
-                        radioCell.setText(LocaleController.getString("PopupDisabled", works.heymate.beta.R.string.PopupDisabled), popup == 2, false);
+                        radioCell.setText(LocaleController.getString("PopupDisabled", R.string.PopupDisabled), popup == 2, false);
                         radioCell.setTag(2);
                     }
                     break;
@@ -867,7 +867,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 case 5: {
                     TextCheckBoxCell cell = (TextCheckBoxCell) holder.itemView;
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
-                    cell.setTextAndCheck(LocaleController.getString("NotificationsEnableCustom", works.heymate.beta.R.string.NotificationsEnableCustom), customEnabled && notificationsEnabled, false);
+                    cell.setTextAndCheck(LocaleController.getString("NotificationsEnableCustom", R.string.NotificationsEnableCustom), customEnabled && notificationsEnabled, false);
                     break;
                 }
                 case 6: {
@@ -885,7 +885,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                     SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                     if (position == enableRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("Notifications", works.heymate.beta.R.string.Notifications), notificationsEnabled, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("Notifications", R.string.Notifications), notificationsEnabled, true);
                     } else if (position == previewRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", R.string.MessagePreview), preferences.getBoolean("content_preview_" + dialogId, true), true);
                     }

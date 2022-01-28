@@ -36,7 +36,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -260,12 +260,12 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (currentType == TYPE_ADMIN) {
-            actionBar.setTitle(LocaleController.getString("EditAdmin", works.heymate.beta.R.string.EditAdmin));
+            actionBar.setTitle(LocaleController.getString("EditAdmin", R.string.EditAdmin));
         } else {
-            actionBar.setTitle(LocaleController.getString("UserRestrictions", works.heymate.beta.R.string.UserRestrictions));
+            actionBar.setTitle(LocaleController.getString("UserRestrictions", R.string.UserRestrictions));
         }
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
@@ -283,7 +283,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
         if (canEdit || !isChannel && currentChat.creator && UserObject.isUserSelf(currentUser)) {
             ActionBarMenu menu = actionBar.createMenu();
-            menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+            menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
         }
 
         fragmentView = new FrameLayout(context);
@@ -354,7 +354,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
                 HeaderCell headerCell = new HeaderCell(context, Theme.key_dialogTextBlue2, 23, 15, false);
                 headerCell.setHeight(47);
-                headerCell.setText(LocaleController.getString("UserRestrictionsDuration", works.heymate.beta.R.string.UserRestrictionsDuration));
+                headerCell.setText(LocaleController.getString("UserRestrictionsDuration", R.string.UserRestrictionsDuration));
                 linearLayout.addView(headerCell);
 
                 LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
@@ -371,7 +371,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     String text;
                     switch (a) {
                         case 0:
-                            text = LocaleController.getString("UserRestrictionsUntilForever", works.heymate.beta.R.string.UserRestrictionsUntilForever);
+                            text = LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever);
                             break;
                         case 1:
                             text = LocaleController.formatPluralString("Days", 1);
@@ -384,7 +384,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                             break;
                         case 4:
                         default:
-                            text = LocaleController.getString("UserRestrictionsCustom", works.heymate.beta.R.string.UserRestrictionsCustom);
+                            text = LocaleController.getString("UserRestrictionsCustom", R.string.UserRestrictionsCustom);
                             break;
                     }
                     buttons[a].setTextAndIcon(text, 0);
@@ -424,8 +424,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                                                 bannedRights.until_date = time + hourOfDay * 3600 + minute * 60;
                                                 listViewAdapter.notifyItemChanged(untilDateRow);
                                             }, 0, 0, true);
-                                            dialog13.setButton(DialogInterface.BUTTON_POSITIVE, LocaleController.getString("Set", works.heymate.beta.R.string.Set), dialog13);
-                                            dialog13.setButton(DialogInterface.BUTTON_NEGATIVE, LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialog131, which) -> {
+                                            dialog13.setButton(DialogInterface.BUTTON_POSITIVE, LocaleController.getString("Set", R.string.Set), dialog13);
+                                            dialog13.setButton(DialogInterface.BUTTON_NEGATIVE, LocaleController.getString("Cancel", R.string.Cancel), (dialog131, which) -> {
 
                                             });
                                             showDialog(dialog13);
@@ -451,8 +451,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                                     date.set(Calendar.MILLISECOND, date.getMaximum(Calendar.MILLISECOND));
                                     datePicker.setMaxDate(date.getTimeInMillis());
 
-                                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, LocaleController.getString("Set", works.heymate.beta.R.string.Set), dialog);
-                                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), (dialog1, which) -> {
+                                    dialog.setButton(DialogInterface.BUTTON_POSITIVE, LocaleController.getString("Set", R.string.Set), dialog);
+                                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, LocaleController.getString("Cancel", R.string.Cancel), (dialog1, which) -> {
 
                                     });
                                     if (Build.VERSION.SDK_INT >= 21) {
@@ -481,7 +481,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             } else if (view instanceof TextCheckCell2) {
                 TextCheckCell2 checkCell = (TextCheckCell2) view;
                 if (checkCell.hasIcon()) {
-                    Toast.makeText(getParentActivity(), LocaleController.getString("UserRestrictionsDisabled", works.heymate.beta.R.string.UserRestrictionsDisabled), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getParentActivity(), LocaleController.getString("UserRestrictionsDisabled", R.string.UserRestrictionsDisabled), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (!checkCell.isEnabled()) {
@@ -643,17 +643,17 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (srp == null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         if (isChannel) {
-                            builder.setTitle(LocaleController.getString("EditAdminChannelTransfer", works.heymate.beta.R.string.EditAdminChannelTransfer));
+                            builder.setTitle(LocaleController.getString("EditAdminChannelTransfer", R.string.EditAdminChannelTransfer));
                         } else {
-                            builder.setTitle(LocaleController.getString("EditAdminGroupTransfer", works.heymate.beta.R.string.EditAdminGroupTransfer));
+                            builder.setTitle(LocaleController.getString("EditAdminGroupTransfer", R.string.EditAdminGroupTransfer));
                         }
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferReadyAlertText", works.heymate.beta.R.string.EditAdminTransferReadyAlertText, currentChat.title, UserObject.getFirstName(currentUser))));
-                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferChangeOwner", works.heymate.beta.R.string.EditAdminTransferChangeOwner), (dialogInterface, i) -> {
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferReadyAlertText", R.string.EditAdminTransferReadyAlertText, currentChat.title, UserObject.getFirstName(currentUser))));
+                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferChangeOwner", R.string.EditAdminTransferChangeOwner), (dialogInterface, i) -> {
                             TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
                             fragment.setDelegate(password -> initTransfer(password, fragment));
                             presentFragment(fragment);
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         showDialog(builder.create());
                     }
                 } else if ("PASSWORD_MISSING".equals(error.text) || error.text.startsWith("PASSWORD_TOO_FRESH_") || error.text.startsWith("SESSION_TOO_FRESH_")) {
@@ -661,7 +661,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         passwordFragment.needHideProgress();
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("EditAdminTransferAlertTitle", works.heymate.beta.R.string.EditAdminTransferAlertTitle));
+                    builder.setTitle(LocaleController.getString("EditAdminTransferAlertTitle", R.string.EditAdminTransferAlertTitle));
 
                     LinearLayout linearLayout = new LinearLayout(getParentActivity());
                     linearLayout.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(2), AndroidUtilities.dp(24), 0);
@@ -673,9 +673,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
                     if (isChannel) {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditChannelAdminTransferAlertText", works.heymate.beta.R.string.EditChannelAdminTransferAlertText, UserObject.getFirstName(currentUser))));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditChannelAdminTransferAlertText", R.string.EditChannelAdminTransferAlertText, UserObject.getFirstName(currentUser))));
                     } else {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferAlertText", works.heymate.beta.R.string.EditAdminTransferAlertText, UserObject.getFirstName(currentUser))));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferAlertText", R.string.EditAdminTransferAlertText, UserObject.getFirstName(currentUser))));
                     }
                     linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
@@ -684,7 +684,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     linearLayout.addView(linearLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 11, 0, 0));
 
                     ImageView dotImageView = new ImageView(getParentActivity());
-                    dotImageView.setImageResource(works.heymate.beta.R.drawable.list_circle);
+                    dotImageView.setImageResource(R.drawable.list_circle);
                     dotImageView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(11) : 0, AndroidUtilities.dp(9), LocaleController.isRTL ? 0 : AndroidUtilities.dp(11), 0);
                     dotImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
 
@@ -692,7 +692,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText1", works.heymate.beta.R.string.EditAdminTransferAlertText1)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText1", R.string.EditAdminTransferAlertText1)));
                     if (LocaleController.isRTL) {
                         linearLayout2.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                         linearLayout2.addView(dotImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT));
@@ -706,7 +706,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     linearLayout.addView(linearLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 11, 0, 0));
 
                     dotImageView = new ImageView(getParentActivity());
-                    dotImageView.setImageResource(works.heymate.beta.R.drawable.list_circle);
+                    dotImageView.setImageResource(R.drawable.list_circle);
                     dotImageView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(11) : 0, AndroidUtilities.dp(9), LocaleController.isRTL ? 0 : AndroidUtilities.dp(11), 0);
                     dotImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
 
@@ -714,7 +714,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText2", works.heymate.beta.R.string.EditAdminTransferAlertText2)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText2", R.string.EditAdminTransferAlertText2)));
                     if (LocaleController.isRTL) {
                         linearLayout2.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                         linearLayout2.addView(dotImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT));
@@ -724,17 +724,17 @@ public class ChatRightsEditActivity extends BaseFragment {
                     }
 
                     if ("PASSWORD_MISSING".equals(error.text)) {
-                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", works.heymate.beta.R.string.EditAdminTransferSetPassword), (dialogInterface, i) -> presentFragment(new TwoStepVerificationSetupActivity(TwoStepVerificationSetupActivity.TYPE_INTRO, null)));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", R.string.EditAdminTransferSetPassword), (dialogInterface, i) -> presentFragment(new TwoStepVerificationSetupActivity(TwoStepVerificationSetupActivity.TYPE_INTRO, null)));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     } else {
                         messageTextView = new TextView(getParentActivity());
                         messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                        messageTextView.setText(LocaleController.getString("EditAdminTransferAlertText3", works.heymate.beta.R.string.EditAdminTransferAlertText3));
+                        messageTextView.setText(LocaleController.getString("EditAdminTransferAlertText3", R.string.EditAdminTransferAlertText3));
                         linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 11, 0, 0));
 
-                        builder.setNegativeButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                        builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
                     }
                     showDialog(builder.create());
                 } else if ("SRP_ID_INVALID".equals(error.text)) {
@@ -956,11 +956,11 @@ public class ChatRightsEditActivity extends BaseFragment {
         }
         if (changed) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", works.heymate.beta.R.string.UserRestrictionsApplyChanges));
+            builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", R.string.UserRestrictionsApplyChanges));
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(chatId);
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", works.heymate.beta.R.string.UserRestrictionsApplyChangesText, chat.title)));
-            builder.setPositiveButton(LocaleController.getString("ApplyTheme", works.heymate.beta.R.string.ApplyTheme), (dialogInterface, i) -> onDonePressed());
-            builder.setNegativeButton(LocaleController.getString("PassportDiscard", works.heymate.beta.R.string.PassportDiscard), (dialog, which) -> finishFragment());
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", R.string.UserRestrictionsApplyChangesText, chat.title)));
+            builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), (dialogInterface, i) -> onDonePressed());
+            builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialog, which) -> finishFragment());
             showDialog(builder.create());
             return false;
         }
@@ -1050,7 +1050,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     break;
                 case 1:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new TextSettingsCell(mContext);
@@ -1114,15 +1114,15 @@ public class ChatRightsEditActivity extends BaseFragment {
                 case 1:
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == cantEditInfoRow) {
-                        privacyCell.setText(LocaleController.getString("EditAdminCantEdit", works.heymate.beta.R.string.EditAdminCantEdit));
+                        privacyCell.setText(LocaleController.getString("EditAdminCantEdit", R.string.EditAdminCantEdit));
                     } else if (position == rankInfoRow) {
                         String hint;
                         if (UserObject.isUserSelf(currentUser) && currentChat.creator) {
-                            hint = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
+                            hint = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                         } else {
-                            hint = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
+                            hint = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                         }
-                        privacyCell.setText(LocaleController.formatString("EditAdminRankInfo", works.heymate.beta.R.string.EditAdminRankInfo, hint));
+                        privacyCell.setText(LocaleController.formatString("EditAdminRankInfo", R.string.EditAdminRankInfo, hint));
                     }
                     break;
                 case 2:
@@ -1131,17 +1131,17 @@ public class ChatRightsEditActivity extends BaseFragment {
                         actionCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText5));
                         actionCell.setTag(Theme.key_windowBackgroundWhiteRedText5);
                         if (currentType == TYPE_ADMIN) {
-                            actionCell.setText(LocaleController.getString("EditAdminRemoveAdmin", works.heymate.beta.R.string.EditAdminRemoveAdmin), false);
+                            actionCell.setText(LocaleController.getString("EditAdminRemoveAdmin", R.string.EditAdminRemoveAdmin), false);
                         } else if (currentType == TYPE_BANNED) {
-                            actionCell.setText(LocaleController.getString("UserRestrictionsBlock", works.heymate.beta.R.string.UserRestrictionsBlock), false);
+                            actionCell.setText(LocaleController.getString("UserRestrictionsBlock", R.string.UserRestrictionsBlock), false);
                         }
                     } else if (position == transferOwnerRow) {
                         actionCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                         actionCell.setTag(Theme.key_windowBackgroundWhiteBlackText);
                         if (isChannel) {
-                            actionCell.setText(LocaleController.getString("EditAdminChannelTransfer", works.heymate.beta.R.string.EditAdminChannelTransfer), false);
+                            actionCell.setText(LocaleController.getString("EditAdminChannelTransfer", R.string.EditAdminChannelTransfer), false);
                         } else {
-                            actionCell.setText(LocaleController.getString("EditAdminGroupTransfer", works.heymate.beta.R.string.EditAdminGroupTransfer), false);
+                            actionCell.setText(LocaleController.getString("EditAdminGroupTransfer", R.string.EditAdminGroupTransfer), false);
                         }
                     }
                     break;
@@ -1149,12 +1149,12 @@ public class ChatRightsEditActivity extends BaseFragment {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == 2) {
                         if (currentType == TYPE_ADMIN) {
-                            headerCell.setText(LocaleController.getString("EditAdminWhatCanDo", works.heymate.beta.R.string.EditAdminWhatCanDo));
+                            headerCell.setText(LocaleController.getString("EditAdminWhatCanDo", R.string.EditAdminWhatCanDo));
                         } else if (currentType == TYPE_BANNED) {
-                            headerCell.setText(LocaleController.getString("UserRestrictionsCanDo", works.heymate.beta.R.string.UserRestrictionsCanDo));
+                            headerCell.setText(LocaleController.getString("UserRestrictionsCanDo", R.string.UserRestrictionsCanDo));
                         }
                     } else if (position == rankHeaderRow) {
-                        headerCell.setText(LocaleController.getString("EditAdminRank", works.heymate.beta.R.string.EditAdminRank));
+                        headerCell.setText(LocaleController.getString("EditAdminRank", R.string.EditAdminRank));
                     }
                     break;
                 case 4:
@@ -1162,65 +1162,65 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (position == changeInfoRow) {
                         if (currentType == TYPE_ADMIN) {
                             if (isChannel) {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeChannelInfo", works.heymate.beta.R.string.EditAdminChangeChannelInfo), adminRights.change_info, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeChannelInfo", R.string.EditAdminChangeChannelInfo), adminRights.change_info, true);
                             } else {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeGroupInfo", works.heymate.beta.R.string.EditAdminChangeGroupInfo), adminRights.change_info, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminChangeGroupInfo", R.string.EditAdminChangeGroupInfo), adminRights.change_info, true);
                             }
                         } else if (currentType == TYPE_BANNED) {
-                            checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsChangeInfo", works.heymate.beta.R.string.UserRestrictionsChangeInfo), !bannedRights.change_info && !defaultBannedRights.change_info, false);
-                            checkCell.setIcon(defaultBannedRights.change_info ? works.heymate.beta.R.drawable.permission_locked : 0);
+                            checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsChangeInfo", R.string.UserRestrictionsChangeInfo), !bannedRights.change_info && !defaultBannedRights.change_info, false);
+                            checkCell.setIcon(defaultBannedRights.change_info ? R.drawable.permission_locked : 0);
                         }
                     } else if (position == postMessagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminPostMessages", works.heymate.beta.R.string.EditAdminPostMessages), adminRights.post_messages, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminPostMessages", R.string.EditAdminPostMessages), adminRights.post_messages, true);
                     } else if (position == editMesagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminEditMessages", works.heymate.beta.R.string.EditAdminEditMessages), adminRights.edit_messages, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminEditMessages", R.string.EditAdminEditMessages), adminRights.edit_messages, true);
                     } else if (position == deleteMessagesRow) {
                         if (isChannel) {
-                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminDeleteMessages", works.heymate.beta.R.string.EditAdminDeleteMessages), adminRights.delete_messages, true);
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminDeleteMessages", R.string.EditAdminDeleteMessages), adminRights.delete_messages, true);
                         } else {
-                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminGroupDeleteMessages", works.heymate.beta.R.string.EditAdminGroupDeleteMessages), adminRights.delete_messages, true);
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminGroupDeleteMessages", R.string.EditAdminGroupDeleteMessages), adminRights.delete_messages, true);
                         }
                     } else if (position == addAdminsRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddAdmins", works.heymate.beta.R.string.EditAdminAddAdmins), adminRights.add_admins, anonymousRow != -1);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddAdmins", R.string.EditAdminAddAdmins), adminRights.add_admins, anonymousRow != -1);
                     } else if (position == anonymousRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminSendAnonymously", works.heymate.beta.R.string.EditAdminSendAnonymously), adminRights.anonymous, false);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminSendAnonymously", R.string.EditAdminSendAnonymously), adminRights.anonymous, false);
                     } else if (position == banUsersRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminBanUsers", works.heymate.beta.R.string.EditAdminBanUsers), adminRights.ban_users, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("EditAdminBanUsers", R.string.EditAdminBanUsers), adminRights.ban_users, true);
                     } else if (position == startVoiceChatRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("StartVoipChatPermission", works.heymate.beta.R.string.StartVoipChatPermission), adminRights.manage_call, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("StartVoipChatPermission", R.string.StartVoipChatPermission), adminRights.manage_call, true);
                     } else if (position == addUsersRow) {
                         if (currentType == TYPE_ADMIN) {
                             if (ChatObject.isActionBannedByDefault(currentChat, ChatObject.ACTION_INVITE)) {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsers", works.heymate.beta.R.string.EditAdminAddUsers), adminRights.invite_users, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsers", R.string.EditAdminAddUsers), adminRights.invite_users, true);
                             } else {
-                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsersViaLink", works.heymate.beta.R.string.EditAdminAddUsersViaLink), adminRights.invite_users, true);
+                                checkCell.setTextAndCheck(LocaleController.getString("EditAdminAddUsersViaLink", R.string.EditAdminAddUsersViaLink), adminRights.invite_users, true);
                             }
                         } else if (currentType == TYPE_BANNED) {
-                            checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsInviteUsers", works.heymate.beta.R.string.UserRestrictionsInviteUsers), !bannedRights.invite_users && !defaultBannedRights.invite_users, true);
-                            checkCell.setIcon(defaultBannedRights.invite_users ? works.heymate.beta.R.drawable.permission_locked : 0);
+                            checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsInviteUsers", R.string.UserRestrictionsInviteUsers), !bannedRights.invite_users && !defaultBannedRights.invite_users, true);
+                            checkCell.setIcon(defaultBannedRights.invite_users ? R.drawable.permission_locked : 0);
                         }
                     } else if (position == pinMessagesRow) {
                         if (currentType == TYPE_ADMIN) {
-                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminPinMessages", works.heymate.beta.R.string.EditAdminPinMessages), adminRights.pin_messages, true);
+                            checkCell.setTextAndCheck(LocaleController.getString("EditAdminPinMessages", R.string.EditAdminPinMessages), adminRights.pin_messages, true);
                         } else if (currentType == TYPE_BANNED) {
-                            checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsPinMessages", works.heymate.beta.R.string.UserRestrictionsPinMessages), !bannedRights.pin_messages && !defaultBannedRights.pin_messages, true);
-                            checkCell.setIcon(defaultBannedRights.pin_messages ? works.heymate.beta.R.drawable.permission_locked : 0);
+                            checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsPinMessages", R.string.UserRestrictionsPinMessages), !bannedRights.pin_messages && !defaultBannedRights.pin_messages, true);
+                            checkCell.setIcon(defaultBannedRights.pin_messages ? R.drawable.permission_locked : 0);
                         }
                     } else if (position == sendMessagesRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSend", works.heymate.beta.R.string.UserRestrictionsSend), !bannedRights.send_messages && !defaultBannedRights.send_messages, true);
-                        checkCell.setIcon(defaultBannedRights.send_messages ? works.heymate.beta.R.drawable.permission_locked : 0);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSend", R.string.UserRestrictionsSend), !bannedRights.send_messages && !defaultBannedRights.send_messages, true);
+                        checkCell.setIcon(defaultBannedRights.send_messages ? R.drawable.permission_locked : 0);
                     } else if (position == sendMediaRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendMedia", works.heymate.beta.R.string.UserRestrictionsSendMedia), !bannedRights.send_media && !defaultBannedRights.send_media, true);
-                        checkCell.setIcon(defaultBannedRights.send_media ? works.heymate.beta.R.drawable.permission_locked : 0);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendMedia", R.string.UserRestrictionsSendMedia), !bannedRights.send_media && !defaultBannedRights.send_media, true);
+                        checkCell.setIcon(defaultBannedRights.send_media ? R.drawable.permission_locked : 0);
                     } else if (position == sendStickersRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendStickers", works.heymate.beta.R.string.UserRestrictionsSendStickers), !bannedRights.send_stickers && !defaultBannedRights.send_stickers, true);
-                        checkCell.setIcon(defaultBannedRights.send_stickers ? works.heymate.beta.R.drawable.permission_locked : 0);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendStickers", R.string.UserRestrictionsSendStickers), !bannedRights.send_stickers && !defaultBannedRights.send_stickers, true);
+                        checkCell.setIcon(defaultBannedRights.send_stickers ? R.drawable.permission_locked : 0);
                     } else if (position == embedLinksRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsEmbedLinks", works.heymate.beta.R.string.UserRestrictionsEmbedLinks), !bannedRights.embed_links && !defaultBannedRights.embed_links, true);
-                        checkCell.setIcon(defaultBannedRights.embed_links ? works.heymate.beta.R.drawable.permission_locked : 0);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsEmbedLinks", R.string.UserRestrictionsEmbedLinks), !bannedRights.embed_links && !defaultBannedRights.embed_links, true);
+                        checkCell.setIcon(defaultBannedRights.embed_links ? R.drawable.permission_locked : 0);
                     } else if (position == sendPollsRow) {
-                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendPolls", works.heymate.beta.R.string.UserRestrictionsSendPolls), !bannedRights.send_polls && !defaultBannedRights.send_polls, true);
-                        checkCell.setIcon(defaultBannedRights.send_polls ? works.heymate.beta.R.drawable.permission_locked : 0);
+                        checkCell.setTextAndCheck(LocaleController.getString("UserRestrictionsSendPolls", R.string.UserRestrictionsSendPolls), !bannedRights.send_polls && !defaultBannedRights.send_polls, true);
+                        checkCell.setIcon(defaultBannedRights.send_polls ? R.drawable.permission_locked : 0);
                     }
 
                     if (position == sendMediaRow || position == sendStickersRow || position == embedLinksRow || position == sendPollsRow) {
@@ -1232,13 +1232,13 @@ public class ChatRightsEditActivity extends BaseFragment {
                 case 5:
                     ShadowSectionCell shadowCell = (ShadowSectionCell) holder.itemView;
                     if (position == rightsShadowRow) {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, removeAdminRow == -1 && rankRow == -1 ? works.heymate.beta.R.drawable.greydivider_bottom : works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, removeAdminRow == -1 && rankRow == -1 ? R.drawable.greydivider_bottom : R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == removeAdminShadowRow) {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == rankInfoRow) {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, canEdit ? works.heymate.beta.R.drawable.greydivider : works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, canEdit ? R.drawable.greydivider : R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        shadowCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 6:
@@ -1246,20 +1246,20 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (position == untilDateRow) {
                         String value;
                         if (bannedRights.until_date == 0 || Math.abs(bannedRights.until_date - System.currentTimeMillis() / 1000) > 10 * 365 * 24 * 60 * 60) {
-                            value = LocaleController.getString("UserRestrictionsUntilForever", works.heymate.beta.R.string.UserRestrictionsUntilForever);
+                            value = LocaleController.getString("UserRestrictionsUntilForever", R.string.UserRestrictionsUntilForever);
                         } else {
                             value = LocaleController.formatDateForBan(bannedRights.until_date);
                         }
-                        detailCell.setTextAndValue(LocaleController.getString("UserRestrictionsDuration", works.heymate.beta.R.string.UserRestrictionsDuration), value, false);
+                        detailCell.setTextAndValue(LocaleController.getString("UserRestrictionsDuration", R.string.UserRestrictionsDuration), value, false);
                     }
                     break;
                 case 7:
                     PollEditTextCell textCell = (PollEditTextCell) holder.itemView;
                     String hint;
                     if (UserObject.isUserSelf(currentUser) && currentChat.creator) {
-                        hint = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
+                        hint = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                     } else {
-                        hint = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
+                        hint = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                     }
                     ignoreTextChange = true;
                     textCell.getTextView().setEnabled(canEdit || currentChat.creator);

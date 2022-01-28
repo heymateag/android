@@ -36,7 +36,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.UserConfig;
@@ -116,9 +116,9 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("Username", works.heymate.beta.R.string.Username));
+        actionBar.setTitle(LocaleController.getString("Username", R.string.Username));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -131,7 +131,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
         if (user == null) {
@@ -155,7 +155,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         firstNameField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         firstNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         firstNameField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        firstNameField.setHint(LocaleController.getString("UsernamePlaceholder", works.heymate.beta.R.string.UsernamePlaceholder));
+        firstNameField.setHint(LocaleController.getString("UsernamePlaceholder", R.string.UsernamePlaceholder));
         firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         firstNameField.setCursorSize(AndroidUtilities.dp(20));
         firstNameField.setCursorWidth(1.5f);
@@ -188,7 +188,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }
                 if (name.length() > 0) {
                     String url = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + name;
-                    String text = LocaleController.formatString("UsernameHelpLink", works.heymate.beta.R.string.UsernameHelpLink, url);
+                    String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
                     int index = text.indexOf(url);
                     SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
                     if (index >= 0) {
@@ -212,7 +212,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         helpTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
         helpTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        helpTextView.setText(infoText = AndroidUtilities.replaceTags(LocaleController.getString("UsernameHelp", works.heymate.beta.R.string.UsernameHelp)));
+        helpTextView.setText(infoText = AndroidUtilities.replaceTags(LocaleController.getString("UsernameHelp", R.string.UsernameHelp)));
         helpTextView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
         helpTextView.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
         helpTextView.setMovementMethod(new LinkMovementMethodMy());
@@ -264,7 +264,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         lastNameAvailable = false;
         if (name != null) {
             if (name.startsWith("_") || name.endsWith("_")) {
-                checkTextView.setText(LocaleController.getString("UsernameInvalid", works.heymate.beta.R.string.UsernameInvalid));
+                checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                 checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                 return false;
@@ -273,9 +273,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                 char ch = name.charAt(a);
                 if (a == 0 && ch >= '0' && ch <= '9') {
                     if (alert) {
-                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidStartNumber", works.heymate.beta.R.string.UsernameInvalidStartNumber));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                     } else {
-                        checkTextView.setText(LocaleController.getString("UsernameInvalidStartNumber", works.heymate.beta.R.string.UsernameInvalidStartNumber));
+                        checkTextView.setText(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                         checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     }
@@ -283,9 +283,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }
                 if (!(ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_')) {
                     if (alert) {
-                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalid", works.heymate.beta.R.string.UsernameInvalid));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                     } else {
-                        checkTextView.setText(LocaleController.getString("UsernameInvalid", works.heymate.beta.R.string.UsernameInvalid));
+                        checkTextView.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                         checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                     }
@@ -295,9 +295,9 @@ public class ChangeUsernameActivity extends BaseFragment {
         }
         if (name == null || name.length() < 5) {
             if (alert) {
-                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidShort", works.heymate.beta.R.string.UsernameInvalidShort));
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
             } else {
-                checkTextView.setText(LocaleController.getString("UsernameInvalidShort", works.heymate.beta.R.string.UsernameInvalidShort));
+                checkTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
                 checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             }
@@ -305,9 +305,9 @@ public class ChangeUsernameActivity extends BaseFragment {
         }
         if (name.length() > 32) {
             if (alert) {
-                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidLong", works.heymate.beta.R.string.UsernameInvalidLong));
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
             } else {
-                checkTextView.setText(LocaleController.getString("UsernameInvalidLong", works.heymate.beta.R.string.UsernameInvalidLong));
+                checkTextView.setText(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
                 checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                 checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
             }
@@ -320,13 +320,13 @@ public class ChangeUsernameActivity extends BaseFragment {
                 currentName = "";
             }
             if (name.equals(currentName)) {
-                checkTextView.setText(LocaleController.formatString("UsernameAvailable", works.heymate.beta.R.string.UsernameAvailable, name));
+                checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
                 checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                 checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                 return true;
             }
 
-            checkTextView.setText(LocaleController.getString("UsernameChecking", works.heymate.beta.R.string.UsernameChecking));
+            checkTextView.setText(LocaleController.getString("UsernameChecking", R.string.UsernameChecking));
             checkTextView.setTag(Theme.key_windowBackgroundWhiteGrayText8);
             checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));
             lastCheckName = name;
@@ -338,12 +338,12 @@ public class ChangeUsernameActivity extends BaseFragment {
                     checkReqId = 0;
                     if (lastCheckName != null && lastCheckName.equals(nameFinal)) {
                         if (error == null && response instanceof TLRPC.TL_boolTrue) {
-                            checkTextView.setText(LocaleController.formatString("UsernameAvailable", works.heymate.beta.R.string.UsernameAvailable, nameFinal));
+                            checkTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, nameFinal));
                             checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                             checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                             lastNameAvailable = true;
                         } else {
-                            checkTextView.setText(LocaleController.getString("UsernameInUse", works.heymate.beta.R.string.UsernameInUse));
+                            checkTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
                             checkTextView.setTag(Theme.key_windowBackgroundWhiteRedText4);
                             checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
                             lastNameAvailable = false;

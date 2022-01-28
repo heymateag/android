@@ -71,7 +71,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -228,8 +228,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             leftTab = new SimpleTextView(context);
             leftTab.setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
             leftTab.setTextSize(13);
-            leftTab.setLeftDrawable(works.heymate.beta.R.drawable.msg_tabs_mic1);
-            leftTab.setText(LocaleController.getString("VoipGroupInviteCanSpeak", works.heymate.beta.R.string.VoipGroupInviteCanSpeak));
+            leftTab.setLeftDrawable(R.drawable.msg_tabs_mic1);
+            leftTab.setText(LocaleController.getString("VoipGroupInviteCanSpeak", R.string.VoipGroupInviteCanSpeak));
             leftTab.setGravity(Gravity.CENTER);
             addView(leftTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 14, 0, 0, 0));
             leftTab.setOnClickListener(v -> switchToTab(0));
@@ -237,8 +237,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             rightTab = new SimpleTextView(context);
             rightTab.setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
             rightTab.setTextSize(13);
-            rightTab.setLeftDrawable(works.heymate.beta.R.drawable.msg_tabs_mic2);
-            rightTab.setText(LocaleController.getString("VoipGroupInviteListenOnly", works.heymate.beta.R.string.VoipGroupInviteListenOnly));
+            rightTab.setLeftDrawable(R.drawable.msg_tabs_mic2);
+            rightTab.setText(LocaleController.getString("VoipGroupInviteListenOnly", R.string.VoipGroupInviteListenOnly));
             rightTab.setGravity(Gravity.CENTER);
             addView(rightTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 14, 0));
             rightTab.setOnClickListener(v -> switchToTab(1));
@@ -377,12 +377,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     String text = searchEditText.getText().toString();
                     if (text.length() != 0) {
                         if (searchEmptyView != null) {
-                            searchEmptyView.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
+                            searchEmptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
                         }
                     } else {
                         if (gridView.getAdapter() != listAdapter) {
                             int top = getCurrentTop();
-                            searchEmptyView.setText(LocaleController.getString("NoChats", works.heymate.beta.R.string.NoChats));
+                            searchEmptyView.setText(LocaleController.getString("NoChats", R.string.NoChats));
                             searchEmptyView.showTextView();
                             checkCurrentList(false);
                             listAdapter.notifyDataSetChanged();
@@ -889,9 +889,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         return;
                     }
                     if (num == 0) {
-                        pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopySpeakerLink", works.heymate.beta.R.string.VoipGroupCopySpeakerLink).toUpperCase());
+                        pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopySpeakerLink", R.string.VoipGroupCopySpeakerLink).toUpperCase());
                     } else {
-                        pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopyListenLink", works.heymate.beta.R.string.VoipGroupCopyListenLink).toUpperCase());
+                        pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopyListenLink", R.string.VoipGroupCopyListenLink).toUpperCase());
                     }
                 }
             };
@@ -961,18 +961,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
 
         searchGridView = new RecyclerListView(context, resourcesProvider) {
-
-            @Override
-            protected void dispatchDraw(Canvas canvas) {
-                recyclerItemsEnterAnimator.dispatchDraw();
-                super.dispatchDraw(canvas);
-            }
-
-            @Override
-            protected void onDetachedFromWindow() {
-                super.onDetachedFromWindow();
-                recyclerItemsEnterAnimator.onDetached();
-            }
 
             @Override
             protected boolean allowSelectChildAtPosition(float x, float y) {
@@ -1067,16 +1055,16 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             pickerBottomLayout.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             pickerBottomLayout.setGravity(Gravity.CENTER);
             if (darkTheme && linkToCopy[1] != null) {
-                pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopySpeakerLink", works.heymate.beta.R.string.VoipGroupCopySpeakerLink).toUpperCase());
+                pickerBottomLayout.setText(LocaleController.getString("VoipGroupCopySpeakerLink", R.string.VoipGroupCopySpeakerLink).toUpperCase());
             } else {
-                pickerBottomLayout.setText(LocaleController.getString("CopyLink", works.heymate.beta.R.string.CopyLink).toUpperCase());
+                pickerBottomLayout.setText(LocaleController.getString("CopyLink", R.string.CopyLink).toUpperCase());
             }
             pickerBottomLayout.setOnClickListener(v -> {
                 if (selectedDialogs.size() == 0 && (isChannel || linkToCopy[0] != null)) {
                     dismiss();
                     if (linkToCopy[0] == null && loadingLink) {
                         copyLinkOnEnd = true;
-                        Toast.makeText(ShareAlert.this.getContext(), LocaleController.getString("Loading", works.heymate.beta.R.string.Loading), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShareAlert.this.getContext(), LocaleController.getString("Loading", R.string.Loading), Toast.LENGTH_SHORT).show();
                     } else {
                         copyLink(ShareAlert.this.getContext());
                     }
@@ -1220,7 +1208,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         if (forCall) {
             commentTextView.getEditText().setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
         }
-        commentTextView.setHint(LocaleController.getString("ShareComment", works.heymate.beta.R.string.ShareComment));
+        commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
         commentTextView.onResume();
         frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 0, 0, 84, 0));
         frameLayout2.setClipChildren(false);
@@ -1247,14 +1235,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         ImageView writeButton = new ImageView(context);
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), getThemedColor(Theme.key_dialogFloatingButton), getThemedColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton));
         if (Build.VERSION.SDK_INT < 21) {
-            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow_profile).mutate();
+            Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
         }
         writeButton.setBackgroundDrawable(drawable);
-        writeButton.setImageResource(works.heymate.beta.R.drawable.attach_send);
+        writeButton.setImageResource(R.drawable.attach_send);
         writeButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         writeButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);

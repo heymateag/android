@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
@@ -502,7 +502,7 @@ public class VideoTimelineView extends View {
         public TimeHintView(Context context) {
             super(context);
             tooltipPaint.setTextSize(AndroidUtilities.dp(14));
-            tooltipBackgroundArrow = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.tooltip_arrow);
+            tooltipBackgroundArrow = ContextCompat.getDrawable(context, R.drawable.tooltip_arrow);
             tooltipBackground = Theme.createRoundRectDrawable(AndroidUtilities.dp(5), Theme.getColor(Theme.key_chat_gifSaveHintBackground));
             updateColors();
             setTime(0);

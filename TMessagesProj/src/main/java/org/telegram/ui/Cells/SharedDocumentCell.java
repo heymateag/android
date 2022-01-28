@@ -37,7 +37,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.FileLoader;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -196,7 +196,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 8 : 72, 5, LocaleController.isRTL ? 72 : 8, 0));
         }
 
-        statusDrawable = new RLottieDrawable(works.heymate.beta.R.raw.download_arrow, "download_arrow", AndroidUtilities.dp(14), AndroidUtilities.dp(14), true, null);
+        statusDrawable = new RLottieDrawable(R.raw.download_arrow, "download_arrow", AndroidUtilities.dp(14), AndroidUtilities.dp(14), true, null);
         statusImageView = new RLottieImageView(context);
         statusImageView.setAnimation(statusDrawable);
         statusImageView.setVisibility(INVISIBLE);
@@ -270,16 +270,16 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 Drawable drawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(42), resId);
                 String iconKey;
                 String backKey;
-                if (resId == works.heymate.beta.R.drawable.files_storage) {
+                if (resId == R.drawable.files_storage) {
                     backKey = Theme.key_chat_attachLocationBackground;
                     iconKey = Theme.key_chat_attachLocationIcon;
-                } else if (resId == works.heymate.beta.R.drawable.files_gallery) {
+                } else if (resId == R.drawable.files_gallery) {
                     backKey = Theme.key_chat_attachContactBackground;
                     iconKey = Theme.key_chat_attachContactIcon;
-                } else if (resId == works.heymate.beta.R.drawable.files_music) {
+                } else if (resId == R.drawable.files_music) {
                     backKey = Theme.key_chat_attachAudioBackground;
                     iconKey = Theme.key_chat_attachAudioIcon;
-                } else if (resId == works.heymate.beta.R.drawable.files_internal) {
+                } else if (resId == R.drawable.files_internal) {
                     backKey = Theme.key_chat_attachGalleryBackground;
                     iconKey = Theme.key_chat_attachGalleryIcon;
                 } else {
@@ -439,7 +439,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                         .append(fromName));
                 rightDateTextView.setText(LocaleController.stringForMessageListDate(messageObject.messageOwner.date));
             } else {
-                dateTextView.setText(String.format("%s, %s", AndroidUtilities.formatFileSize(document.size), LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)))));
+                dateTextView.setText(String.format("%s, %s", AndroidUtilities.formatFileSize(document.size), LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)))));
             }
 
             if (messageObject.hasHighlightedWords() && !TextUtils.isEmpty(message.messageOwner.message)) {

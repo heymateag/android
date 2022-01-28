@@ -15,7 +15,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 
 public class ShareLocationDrawable extends Drawable {
 
@@ -29,25 +29,25 @@ public class ShareLocationDrawable extends Drawable {
     public ShareLocationDrawable(Context context, int type) {
         currentType = type;
         if (type == 4) {
-            drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.pin);
-            drawableLeft = context.getResources().getDrawable(works.heymate.beta.R.drawable.smallanimationpinleft);
-            drawableRight = context.getResources().getDrawable(works.heymate.beta.R.drawable.smallanimationpinright);
+            drawable = context.getResources().getDrawable(R.drawable.pin);
+            drawableLeft = context.getResources().getDrawable(R.drawable.smallanimationpinleft);
+            drawableRight = context.getResources().getDrawable(R.drawable.smallanimationpinright);
         } else if (type == 3) {
-            drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.nearby_l);
-            drawableLeft = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpinleft);
-            drawableRight = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpinright);
+            drawable = context.getResources().getDrawable(R.drawable.nearby_l);
+            drawableLeft = context.getResources().getDrawable(R.drawable.animationpinleft);
+            drawableRight = context.getResources().getDrawable(R.drawable.animationpinright);
         } else if (type == 2) {
-            drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.nearby_m);
-            drawableLeft = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpinleft);
-            drawableRight = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpinright);
+            drawable = context.getResources().getDrawable(R.drawable.nearby_m);
+            drawableLeft = context.getResources().getDrawable(R.drawable.animationpinleft);
+            drawableRight = context.getResources().getDrawable(R.drawable.animationpinright);
         } else if (type == 1) {
-            drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.smallanimationpin);
-            drawableLeft = context.getResources().getDrawable(works.heymate.beta.R.drawable.smallanimationpinleft);
-            drawableRight = context.getResources().getDrawable(works.heymate.beta.R.drawable.smallanimationpinright);
+            drawable = context.getResources().getDrawable(R.drawable.smallanimationpin);
+            drawableLeft = context.getResources().getDrawable(R.drawable.smallanimationpinleft);
+            drawableRight = context.getResources().getDrawable(R.drawable.smallanimationpinright);
         } else {
-            drawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpin);
-            drawableLeft = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpinleft);
-            drawableRight = context.getResources().getDrawable(works.heymate.beta.R.drawable.animationpinright);
+            drawable = context.getResources().getDrawable(R.drawable.animationpin);
+            drawableLeft = context.getResources().getDrawable(R.drawable.animationpinleft);
+            drawableRight = context.getResources().getDrawable(R.drawable.animationpinright);
         }
     }
 

@@ -105,7 +105,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             mediaSession = new MediaSession(this, "telegramAudioPlayer");
             playbackState = new PlaybackState.Builder();
             albumArtPlaceholder = Bitmap.createBitmap(AndroidUtilities.dp(102), AndroidUtilities.dp(102), Bitmap.Config.ARGB_8888);
-            Drawable placeholder = getResources().getDrawable(works.heymate.beta.R.drawable.nocover_big);
+            Drawable placeholder = getResources().getDrawable(R.drawable.nocover_big);
             placeholder.setBounds(0, 0, albumArtPlaceholder.getWidth(), albumArtPlaceholder.getHeight());
             placeholder.draw(new Canvas(albumArtPlaceholder));
             mediaSession.setCallback(new MediaSession.Callback() {
@@ -253,7 +253,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             PendingIntent pendingSeek = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_SEEK).setComponent(new ComponentName(this, MusicPlayerReceiver.class)), PendingIntent.FLAG_CANCEL_CURRENT);
 
             Notification.Builder bldr = new Notification.Builder(this);
-            bldr.setSmallIcon(works.heymate.beta.R.drawable.player)
+            bldr.setSmallIcon(R.drawable.player)
                     .setOngoing(isPlaying)
                     .setContentTitle(songName)
                     .setContentText(authorName)
@@ -276,23 +276,23 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
                 bldr.setLargeIcon(albumArtPlaceholder);
             }
 
-            final String nextDescription = LocaleController.getString("Next", works.heymate.beta.R.string.Next);
-            final String previousDescription = LocaleController.getString("AccDescrPrevious", works.heymate.beta.R.string.AccDescrPrevious);
+            final String nextDescription = LocaleController.getString("Next", R.string.Next);
+            final String previousDescription = LocaleController.getString("AccDescrPrevious", R.string.AccDescrPrevious);
 
             if (MediaController.getInstance().isDownloadingCurrentMessage()) {
                 playbackState.setState(PlaybackState.STATE_BUFFERING, 0, 1).setActions(0);
-                bldr.addAction(new Notification.Action.Builder(works.heymate.beta.R.drawable.ic_action_previous, previousDescription, pendingPrev).build())
-                        .addAction(new Notification.Action.Builder(works.heymate.beta.R.drawable.loading_animation2, LocaleController.getString("Loading", works.heymate.beta.R.string.Loading), null).build())
-                        .addAction(new Notification.Action.Builder(works.heymate.beta.R.drawable.ic_action_next, nextDescription, pendingNext).build());
+                bldr.addAction(new Notification.Action.Builder(R.drawable.ic_action_previous, previousDescription, pendingPrev).build())
+                        .addAction(new Notification.Action.Builder(R.drawable.loading_animation2, LocaleController.getString("Loading", R.string.Loading), null).build())
+                        .addAction(new Notification.Action.Builder(R.drawable.ic_action_next, nextDescription, pendingNext).build());
             } else {
                 playbackState.setState(isPlaying ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED,
                         MediaController.getInstance().getPlayingMessageObject().audioProgressSec * 1000L,
                         isPlaying ? 1 : 0)
                         .setActions(PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SEEK_TO | PlaybackState.ACTION_SKIP_TO_PREVIOUS | PlaybackState.ACTION_SKIP_TO_NEXT);
-                final String playPauseTitle = isPlaying ? LocaleController.getString("AccActionPause", works.heymate.beta.R.string.AccActionPause) : LocaleController.getString("AccActionPlay", works.heymate.beta.R.string.AccActionPlay);
-                bldr.addAction(new Notification.Action.Builder(works.heymate.beta.R.drawable.ic_action_previous, previousDescription, pendingPrev).build())
-                        .addAction(new Notification.Action.Builder(isPlaying ? works.heymate.beta.R.drawable.ic_action_pause : works.heymate.beta.R.drawable.ic_action_play, playPauseTitle, pendingPlaypause).build())
-                        .addAction(new Notification.Action.Builder(works.heymate.beta.R.drawable.ic_action_next, nextDescription, pendingNext).build());
+                final String playPauseTitle = isPlaying ? LocaleController.getString("AccActionPause", R.string.AccActionPause) : LocaleController.getString("AccActionPlay", R.string.AccActionPlay);
+                bldr.addAction(new Notification.Action.Builder(R.drawable.ic_action_previous, previousDescription, pendingPrev).build())
+                        .addAction(new Notification.Action.Builder(isPlaying ? R.drawable.ic_action_pause : R.drawable.ic_action_play, playPauseTitle, pendingPlaypause).build())
+                        .addAction(new Notification.Action.Builder(R.drawable.ic_action_next, nextDescription, pendingNext).build());
             }
 
             mediaSession.setPlaybackState(playbackState.build());
@@ -319,14 +319,14 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             }
 
         } else {
-            RemoteViews simpleContentView = new RemoteViews(getApplicationContext().getPackageName(), works.heymate.beta.R.layout.player_small_notification);
+            RemoteViews simpleContentView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.player_small_notification);
             RemoteViews expandedView = null;
             if (supportBigNotifications) {
-                expandedView = new RemoteViews(getApplicationContext().getPackageName(), works.heymate.beta.R.layout.player_big_notification);
+                expandedView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.player_big_notification);
             }
 
             notification = new NotificationCompat.Builder(getApplicationContext())
-                    .setSmallIcon(works.heymate.beta.R.drawable.player)
+                    .setSmallIcon(R.drawable.player)
                     .setContentIntent(contentIntent)
                     .setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL)
                     .setContentTitle(songName).build();
@@ -342,62 +342,62 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             }
 
             if (albumArt != null) {
-                notification.contentView.setImageViewBitmap(works.heymate.beta.R.id.player_album_art, albumArt);
+                notification.contentView.setImageViewBitmap(R.id.player_album_art, albumArt);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setImageViewBitmap(works.heymate.beta.R.id.player_album_art, albumArt);
+                    notification.bigContentView.setImageViewBitmap(R.id.player_album_art, albumArt);
                 }
             } else {
-                notification.contentView.setImageViewResource(works.heymate.beta.R.id.player_album_art, works.heymate.beta.R.drawable.nocover_small);
+                notification.contentView.setImageViewResource(R.id.player_album_art, R.drawable.nocover_small);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setImageViewResource(works.heymate.beta.R.id.player_album_art, works.heymate.beta.R.drawable.nocover_big);
+                    notification.bigContentView.setImageViewResource(R.id.player_album_art, R.drawable.nocover_big);
                 }
             }
             if (MediaController.getInstance().isDownloadingCurrentMessage()) {
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_pause, View.GONE);
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_play, View.GONE);
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_next, View.GONE);
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_previous, View.GONE);
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_progress_bar, View.VISIBLE);
+                notification.contentView.setViewVisibility(R.id.player_pause, View.GONE);
+                notification.contentView.setViewVisibility(R.id.player_play, View.GONE);
+                notification.contentView.setViewVisibility(R.id.player_next, View.GONE);
+                notification.contentView.setViewVisibility(R.id.player_previous, View.GONE);
+                notification.contentView.setViewVisibility(R.id.player_progress_bar, View.VISIBLE);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_pause, View.GONE);
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_play, View.GONE);
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_next, View.GONE);
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_previous, View.GONE);
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_progress_bar, View.VISIBLE);
+                    notification.bigContentView.setViewVisibility(R.id.player_pause, View.GONE);
+                    notification.bigContentView.setViewVisibility(R.id.player_play, View.GONE);
+                    notification.bigContentView.setViewVisibility(R.id.player_next, View.GONE);
+                    notification.bigContentView.setViewVisibility(R.id.player_previous, View.GONE);
+                    notification.bigContentView.setViewVisibility(R.id.player_progress_bar, View.VISIBLE);
                 }
             } else {
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_progress_bar, View.GONE);
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_next, View.VISIBLE);
-                notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_previous, View.VISIBLE);
+                notification.contentView.setViewVisibility(R.id.player_progress_bar, View.GONE);
+                notification.contentView.setViewVisibility(R.id.player_next, View.VISIBLE);
+                notification.contentView.setViewVisibility(R.id.player_previous, View.VISIBLE);
                 if (supportBigNotifications) {
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_next, View.VISIBLE);
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_previous, View.VISIBLE);
-                    notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_progress_bar, View.GONE);
+                    notification.bigContentView.setViewVisibility(R.id.player_next, View.VISIBLE);
+                    notification.bigContentView.setViewVisibility(R.id.player_previous, View.VISIBLE);
+                    notification.bigContentView.setViewVisibility(R.id.player_progress_bar, View.GONE);
                 }
 
                 if (MediaController.getInstance().isMessagePaused()) {
-                    notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_pause, View.GONE);
-                    notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_play, View.VISIBLE);
+                    notification.contentView.setViewVisibility(R.id.player_pause, View.GONE);
+                    notification.contentView.setViewVisibility(R.id.player_play, View.VISIBLE);
                     if (supportBigNotifications) {
-                        notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_pause, View.GONE);
-                        notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_play, View.VISIBLE);
+                        notification.bigContentView.setViewVisibility(R.id.player_pause, View.GONE);
+                        notification.bigContentView.setViewVisibility(R.id.player_play, View.VISIBLE);
                     }
                 } else {
-                    notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_pause, View.VISIBLE);
-                    notification.contentView.setViewVisibility(works.heymate.beta.R.id.player_play, View.GONE);
+                    notification.contentView.setViewVisibility(R.id.player_pause, View.VISIBLE);
+                    notification.contentView.setViewVisibility(R.id.player_play, View.GONE);
                     if (supportBigNotifications) {
-                        notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_pause, View.VISIBLE);
-                        notification.bigContentView.setViewVisibility(works.heymate.beta.R.id.player_play, View.GONE);
+                        notification.bigContentView.setViewVisibility(R.id.player_pause, View.VISIBLE);
+                        notification.bigContentView.setViewVisibility(R.id.player_play, View.GONE);
                     }
                 }
             }
 
-            notification.contentView.setTextViewText(works.heymate.beta.R.id.player_song_name, songName);
-            notification.contentView.setTextViewText(works.heymate.beta.R.id.player_author_name, authorName);
+            notification.contentView.setTextViewText(R.id.player_song_name, songName);
+            notification.contentView.setTextViewText(R.id.player_author_name, authorName);
             if (supportBigNotifications) {
-                notification.bigContentView.setTextViewText(works.heymate.beta.R.id.player_song_name, songName);
-                notification.bigContentView.setTextViewText(works.heymate.beta.R.id.player_author_name, authorName);
-                notification.bigContentView.setTextViewText(works.heymate.beta.R.id.player_album_title, audioInfo != null && !TextUtils.isEmpty(audioInfo.getAlbum()) ? audioInfo.getAlbum() : "");
+                notification.bigContentView.setTextViewText(R.id.player_song_name, songName);
+                notification.bigContentView.setTextViewText(R.id.player_author_name, authorName);
+                notification.bigContentView.setTextViewText(R.id.player_album_title, audioInfo != null && !TextUtils.isEmpty(audioInfo.getAlbum()) ? audioInfo.getAlbum() : "");
             }
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
             startForeground(ID_NOTIFICATION, notification);
@@ -480,15 +480,15 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
 
     public void setListeners(RemoteViews view) {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PREVIOUS), PendingIntent.FLAG_UPDATE_CURRENT);
-        view.setOnClickPendingIntent(works.heymate.beta.R.id.player_previous, pendingIntent);
+        view.setOnClickPendingIntent(R.id.player_previous, pendingIntent);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_CLOSE), PendingIntent.FLAG_UPDATE_CURRENT);
-        view.setOnClickPendingIntent(works.heymate.beta.R.id.player_close, pendingIntent);
+        view.setOnClickPendingIntent(R.id.player_close, pendingIntent);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PAUSE), PendingIntent.FLAG_UPDATE_CURRENT);
-        view.setOnClickPendingIntent(works.heymate.beta.R.id.player_pause, pendingIntent);
+        view.setOnClickPendingIntent(R.id.player_pause, pendingIntent);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_NEXT), PendingIntent.FLAG_UPDATE_CURRENT);
-        view.setOnClickPendingIntent(works.heymate.beta.R.id.player_next, pendingIntent);
+        view.setOnClickPendingIntent(R.id.player_next, pendingIntent);
         pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(NOTIFY_PLAY), PendingIntent.FLAG_UPDATE_CURRENT);
-        view.setOnClickPendingIntent(works.heymate.beta.R.id.player_play, pendingIntent);
+        view.setOnClickPendingIntent(R.id.player_play, pendingIntent);
     }
 
     @SuppressLint("NewApi")

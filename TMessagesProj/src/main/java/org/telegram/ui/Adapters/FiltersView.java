@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -64,11 +64,11 @@ public class FiltersView extends RecyclerListView {
     public final static int FILTER_TYPE_ARCHIVE = 7;
 
     public final static MediaFilterData[] filters = new MediaFilterData[]{
-            new MediaFilterData(works.heymate.beta.R.drawable.search_media, works.heymate.beta.R.drawable.search_media_filled, LocaleController.getString("SharedMediaTab2", works.heymate.beta.R.string.SharedMediaTab2), new TLRPC.TL_inputMessagesFilterPhotoVideo(), FILTER_TYPE_MEDIA),
-            new MediaFilterData(works.heymate.beta.R.drawable.search_links, works.heymate.beta.R.drawable.search_links_filled, LocaleController.getString("SharedLinksTab2", works.heymate.beta.R.string.SharedLinksTab2), new TLRPC.TL_inputMessagesFilterUrl(), FILTER_TYPE_LINKS),
-            new MediaFilterData(works.heymate.beta.R.drawable.search_files, works.heymate.beta.R.drawable.search_files_filled, LocaleController.getString("SharedFilesTab2", works.heymate.beta.R.string.SharedFilesTab2), new TLRPC.TL_inputMessagesFilterDocument(), FILTER_TYPE_FILES),
-            new MediaFilterData(works.heymate.beta.R.drawable.search_music, works.heymate.beta.R.drawable.search_music_filled, LocaleController.getString("SharedMusicTab2", works.heymate.beta.R.string.SharedMusicTab2), new TLRPC.TL_inputMessagesFilterMusic(), FILTER_TYPE_MUSIC),
-            new MediaFilterData(works.heymate.beta.R.drawable.search_voice, works.heymate.beta.R.drawable.search_voice_filled, LocaleController.getString("SharedVoiceTab2", works.heymate.beta.R.string.SharedVoiceTab2), new TLRPC.TL_inputMessagesFilterRoundVoice(), FILTER_TYPE_VOICE)
+            new MediaFilterData(R.drawable.search_media, R.drawable.search_media_filled, LocaleController.getString("SharedMediaTab2", R.string.SharedMediaTab2), new TLRPC.TL_inputMessagesFilterPhotoVideo(), FILTER_TYPE_MEDIA),
+            new MediaFilterData(R.drawable.search_links, R.drawable.search_links_filled, LocaleController.getString("SharedLinksTab2", R.string.SharedLinksTab2), new TLRPC.TL_inputMessagesFilterUrl(), FILTER_TYPE_LINKS),
+            new MediaFilterData(R.drawable.search_files, R.drawable.search_files_filled, LocaleController.getString("SharedFilesTab2", R.string.SharedFilesTab2), new TLRPC.TL_inputMessagesFilterDocument(), FILTER_TYPE_FILES),
+            new MediaFilterData(R.drawable.search_music, R.drawable.search_music_filled, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), new TLRPC.TL_inputMessagesFilterMusic(), FILTER_TYPE_MUSIC),
+            new MediaFilterData(R.drawable.search_voice, R.drawable.search_voice_filled, LocaleController.getString("SharedVoiceTab2", R.string.SharedVoiceTab2), new TLRPC.TL_inputMessagesFilterRoundVoice(), FILTER_TYPE_VOICE)
     };
 
     private ArrayList<MediaFilterData> usersFilters = new ArrayList<>();
@@ -226,11 +226,11 @@ public class FiltersView extends RecyclerListView {
                     TLRPC.User user = (TLRPC.User) object;
                     String title;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == user.id) {
-                        title = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
+                        title = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                     } else {
                         title = ContactsController.formatName(user.first_name, user.last_name, 10);
                     }
-                    MediaFilterData data = new MediaFilterData(works.heymate.beta.R.drawable.search_users, works.heymate.beta.R.drawable.search_users_filled, title, null, FILTER_TYPE_CHAT);
+                    MediaFilterData data = new MediaFilterData(R.drawable.search_users, R.drawable.search_users_filled, title, null, FILTER_TYPE_CHAT);
                     data.setUser(user);
                     usersFilters.add(data);
                 } else if (object instanceof TLRPC.Chat) {
@@ -239,7 +239,7 @@ public class FiltersView extends RecyclerListView {
                     if (chat.title.length() > 12) {
                         title = String.format("%s...", title.substring(0, 10));
                     }
-                    MediaFilterData data = new MediaFilterData(works.heymate.beta.R.drawable.search_users, works.heymate.beta.R.drawable.search_users_filled, title, null, FILTER_TYPE_CHAT);
+                    MediaFilterData data = new MediaFilterData(R.drawable.search_users, R.drawable.search_users_filled, title, null, FILTER_TYPE_CHAT);
                     data.setUser(chat);
                     usersFilters.add(data);
                 }
@@ -248,7 +248,7 @@ public class FiltersView extends RecyclerListView {
         if (dates != null) {
             for (int i = 0; i < dates.size(); i++) {
                 DateData dateData = dates.get(i);
-                MediaFilterData data = new MediaFilterData(works.heymate.beta.R.drawable.search_date, works.heymate.beta.R.drawable.search_date_filled, dateData.title, null, FILTER_TYPE_DATE);
+                MediaFilterData data = new MediaFilterData(R.drawable.search_date, R.drawable.search_date_filled, dateData.title, null, FILTER_TYPE_DATE);
                 data.setDate(dateData);
                 usersFilters.add(data);
             }
@@ -286,7 +286,7 @@ public class FiltersView extends RecyclerListView {
         if (q.length() < 3) {
             return;
         }
-        if (LocaleController.getString("SearchTipToday", works.heymate.beta.R.string.SearchTipToday).toLowerCase().startsWith(q) || "today".startsWith(q)) {
+        if (LocaleController.getString("SearchTipToday", R.string.SearchTipToday).toLowerCase().startsWith(q) || "today".startsWith(q)) {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
@@ -295,11 +295,11 @@ public class FiltersView extends RecyclerListView {
             long minDate = calendar.getTimeInMillis();
             calendar.set(year, month, day + 1, 0, 0, 0);
             long maxDate = calendar.getTimeInMillis() - 1;
-            dates.add(new DateData(LocaleController.getString("SearchTipToday", works.heymate.beta.R.string.SearchTipToday), minDate, maxDate));
+            dates.add(new DateData(LocaleController.getString("SearchTipToday", R.string.SearchTipToday), minDate, maxDate));
             return;
         }
 
-        if (LocaleController.getString("SearchTipYesterday", works.heymate.beta.R.string.SearchTipYesterday).toLowerCase().startsWith(q) || "yesterday".startsWith(q)) {
+        if (LocaleController.getString("SearchTipYesterday", R.string.SearchTipYesterday).toLowerCase().startsWith(q) || "yesterday".startsWith(q)) {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
@@ -308,7 +308,7 @@ public class FiltersView extends RecyclerListView {
             long minDate = calendar.getTimeInMillis() - 86400000L;
             calendar.set(year, month, day + 1, 0, 0, 0);
             long maxDate = calendar.getTimeInMillis() - 86400001L;
-            dates.add(new DateData(LocaleController.getString("SearchTipYesterday", works.heymate.beta.R.string.SearchTipYesterday), minDate, maxDate));
+            dates.add(new DateData(LocaleController.getString("SearchTipYesterday", R.string.SearchTipYesterday), minDate, maxDate));
             return;
         }
         Matcher matcher;
@@ -533,18 +533,18 @@ public class FiltersView extends RecyclerListView {
 
     public static int getMonth(String q) {
         String[] months = new String[]{
-                LocaleController.getString("January", works.heymate.beta.R.string.January).toLowerCase(),
-                LocaleController.getString("February", works.heymate.beta.R.string.February).toLowerCase(),
-                LocaleController.getString("March", works.heymate.beta.R.string.March).toLowerCase(),
-                LocaleController.getString("April", works.heymate.beta.R.string.April).toLowerCase(),
-                LocaleController.getString("May", works.heymate.beta.R.string.May).toLowerCase(),
-                LocaleController.getString("June", works.heymate.beta.R.string.June).toLowerCase(),
-                LocaleController.getString("July", works.heymate.beta.R.string.July).toLowerCase(),
-                LocaleController.getString("August", works.heymate.beta.R.string.August).toLowerCase(),
-                LocaleController.getString("September", works.heymate.beta.R.string.September).toLowerCase(),
-                LocaleController.getString("October", works.heymate.beta.R.string.October).toLowerCase(),
-                LocaleController.getString("November", works.heymate.beta.R.string.November).toLowerCase(),
-                LocaleController.getString("December", works.heymate.beta.R.string.December).toLowerCase()
+                LocaleController.getString("January", R.string.January).toLowerCase(),
+                LocaleController.getString("February", R.string.February).toLowerCase(),
+                LocaleController.getString("March", R.string.March).toLowerCase(),
+                LocaleController.getString("April", R.string.April).toLowerCase(),
+                LocaleController.getString("May", R.string.May).toLowerCase(),
+                LocaleController.getString("June", R.string.June).toLowerCase(),
+                LocaleController.getString("July", R.string.July).toLowerCase(),
+                LocaleController.getString("August", R.string.August).toLowerCase(),
+                LocaleController.getString("September", R.string.September).toLowerCase(),
+                LocaleController.getString("October", R.string.October).toLowerCase(),
+                LocaleController.getString("November", R.string.November).toLowerCase(),
+                LocaleController.getString("December", R.string.December).toLowerCase()
         };
 
         String[] monthsEng = new String[12];
@@ -744,7 +744,7 @@ public class FiltersView extends RecyclerListView {
                 if (data.chat instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) data.chat;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == user.id) {
-                        CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), works.heymate.beta.R.drawable.chats_saved);
+                        CombinedDrawable combinedDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), R.drawable.chats_saved);
                         combinedDrawable.setIconSize(AndroidUtilities.dp(16), AndroidUtilities.dp(16));
                         Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor(Theme.key_avatar_backgroundSaved), false);
                         Theme.setCombinedDrawableColor(combinedDrawable, getThemedColor(Theme.key_avatar_actionBarIconBlue), true);

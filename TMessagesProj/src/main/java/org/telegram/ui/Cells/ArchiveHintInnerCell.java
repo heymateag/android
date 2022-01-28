@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -47,28 +47,28 @@ public class ArchiveHintInnerCell extends FrameLayout {
                 addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 20, 8, 0));
 
                 imageView2 = new ImageView(context);
-                imageView2.setImageResource(works.heymate.beta.R.drawable.chats_archive_arrow);
+                imageView2.setImageResource(R.drawable.chats_archive_arrow);
                 imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_unreadCounter), PorterDuff.Mode.MULTIPLY));
                 addView(imageView2, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 20, 8, 0));
 
-                headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", works.heymate.beta.R.string.ArchiveHintHeader1));
-                messageTextView.setText(LocaleController.getString("ArchiveHintText1", works.heymate.beta.R.string.ArchiveHintText1));
-                imageView.setImageResource(works.heymate.beta.R.drawable.chats_archive_box);
+                headerTextView.setText(LocaleController.getString("ArchiveHintHeader1", R.string.ArchiveHintHeader1));
+                messageTextView.setText(LocaleController.getString("ArchiveHintText1", R.string.ArchiveHintText1));
+                imageView.setImageResource(R.drawable.chats_archive_box);
                 break;
             }
             case 1:
                 addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 18, 0, 0));
 
-                headerTextView.setText(LocaleController.getString("ArchiveHintHeader2", works.heymate.beta.R.string.ArchiveHintHeader2));
-                messageTextView.setText(LocaleController.getString("ArchiveHintText2", works.heymate.beta.R.string.ArchiveHintText2));
-                imageView.setImageResource(works.heymate.beta.R.drawable.chats_archive_muted);
+                headerTextView.setText(LocaleController.getString("ArchiveHintHeader2", R.string.ArchiveHintHeader2));
+                messageTextView.setText(LocaleController.getString("ArchiveHintText2", R.string.ArchiveHintText2));
+                imageView.setImageResource(R.drawable.chats_archive_muted);
                 break;
             case 2:
                 addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 18, 0, 0));
 
-                headerTextView.setText(LocaleController.getString("ArchiveHintHeader3", works.heymate.beta.R.string.ArchiveHintHeader3));
-                messageTextView.setText(LocaleController.getString("ArchiveHintText3", works.heymate.beta.R.string.ArchiveHintText3));
-                imageView.setImageResource(works.heymate.beta.R.drawable.chats_archive_pin);
+                headerTextView.setText(LocaleController.getString("ArchiveHintHeader3", R.string.ArchiveHintHeader3));
+                messageTextView.setText(LocaleController.getString("ArchiveHintText3", R.string.ArchiveHintText3));
+                imageView.setImageResource(R.drawable.chats_archive_pin);
                 break;
         }
     }

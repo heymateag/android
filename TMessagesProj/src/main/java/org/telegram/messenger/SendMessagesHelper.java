@@ -1462,7 +1462,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             entity instanceof TLRPC.TL_messageEntityItalic ||
                             entity instanceof TLRPC.TL_messageEntityPre ||
                             entity instanceof TLRPC.TL_messageEntityCode ||
-                            entity instanceof TLRPC.TL_messageEntityTextUrl) {
+                            entity instanceof TLRPC.TL_messageEntityTextUrl ||
+                            entity instanceof TLRPC.TL_messageEntitySpoiler) {
                         entities.add(entity);
                     }
                 }
@@ -1881,16 +1882,20 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         newMsg.from_id = peer_id;
                     }
                     newMsg.post = true;
-                } else if (ChatObject.shouldSendAnonymously(chat)) {
-                    newMsg.from_id = peer_id;
-                    if (rank != null) {
-                        newMsg.post_author = rank;
-                        newMsg.flags |= 65536;
-                    }
                 } else {
-                    newMsg.from_id = new TLRPC.TL_peerUser();
-                    newMsg.from_id.user_id = myId;
-                    newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
+                    long fromPeerId = ChatObject.getSendAsPeerId(chat, getMessagesController().getChatFull(-peer), true);
+
+                    if (fromPeerId == myId) {
+                        newMsg.from_id = new TLRPC.TL_peerUser();
+                        newMsg.from_id.user_id = myId;
+                        newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
+                    } else {
+                        newMsg.from_id = getMessagesController().getPeer(fromPeerId);
+                        if (rank != null) {
+                            newMsg.post_author = rank;
+                            newMsg.flags |= 65536;
+                        }
+                    }
                 }
                 if (newMsg.random_id == 0) {
                     newMsg.random_id = getNextRandomId();
@@ -2653,13 +2658,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         return voteSendTime.get(pollId, 0L);
     }
 
-    public void sendReaction(MessageObject messageObject, CharSequence reaction, ChatActivity parentFragment) {
+    public void sendReaction(MessageObject messageObject, CharSequence reaction, ChatActivity parentFragment, Runnable callback) {
         if (messageObject == null || parentFragment == null) {
             return;
         }
         TLRPC.TL_messages_sendReaction req = new TLRPC.TL_messages_sendReaction();
-        req.peer = getMessagesController().getInputPeer(messageObject.getDialogId());
-        req.msg_id = messageObject.getId();
+        if (messageObject.messageOwner.isThreadMessage) {
+            req.peer = getMessagesController().getInputPeer(messageObject.getFromChatId());
+            req.msg_id = messageObject.messageOwner.fwd_from.saved_from_msg_id;
+        } else {
+            req.peer = getMessagesController().getInputPeer(messageObject.getDialogId());
+            req.msg_id = messageObject.getId();
+        }
         if (reaction != null) {
             req.reaction = reaction.toString();
             req.flags |= 1;
@@ -2667,16 +2677,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (response != null) {
                 getMessagesController().processUpdates((TLRPC.Updates) response, false);
-            }
-            /*AndroidUtilities.runOnUIThread(new Runnable() {
-                @Override
-                public void run() {
-                    waitingForVote.remove(key);
-                    if (finishRunnable != null) {
-                        finishRunnable.run();
-                    }
+                if (callback != null) {
+                    AndroidUtilities.runOnUIThread(callback);
                 }
-            });*/
+            }
         });
     }
 
@@ -2788,7 +2792,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             }
                             AlertDialog.Builder builder = new AlertDialog.Builder(parentFragment.getParentActivity());
                             builder.setTitle(name);
-                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                             builder.setMessage(res.message);
                             parentFragment.showDialog(builder.create());
                         } else {
@@ -2822,14 +2826,14 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 if ("PASSWORD_HASH_INVALID".equals(error.text)) {
                     if (srp == null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(parentFragment.getParentActivity());
-                        builder.setTitle(LocaleController.getString("BotOwnershipTransfer", works.heymate.beta.R.string.BotOwnershipTransfer));
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferReadyAlertText", works.heymate.beta.R.string.BotOwnershipTransferReadyAlertText)));
-                        builder.setPositiveButton(LocaleController.getString("BotOwnershipTransferChangeOwner", works.heymate.beta.R.string.BotOwnershipTransferChangeOwner), (dialogInterface, i) -> {
+                        builder.setTitle(LocaleController.getString("BotOwnershipTransfer", R.string.BotOwnershipTransfer));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferReadyAlertText", R.string.BotOwnershipTransferReadyAlertText)));
+                        builder.setPositiveButton(LocaleController.getString("BotOwnershipTransferChangeOwner", R.string.BotOwnershipTransferChangeOwner), (dialogInterface, i) -> {
                             TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
                             fragment.setDelegate(password -> sendCallback(cache, messageObject, button, password, fragment, parentFragment));
                             parentFragment.presentFragment(fragment);
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                         parentFragment.showDialog(builder.create());
                     }
                 } else if ("PASSWORD_MISSING".equals(error.text) || error.text.startsWith("PASSWORD_TOO_FRESH_") || error.text.startsWith("SESSION_TOO_FRESH_")) {
@@ -2837,7 +2841,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         passwordFragment.needHideProgress();
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(parentFragment.getParentActivity());
-                    builder.setTitle(LocaleController.getString("EditAdminTransferAlertTitle", works.heymate.beta.R.string.EditAdminTransferAlertTitle));
+                    builder.setTitle(LocaleController.getString("EditAdminTransferAlertTitle", R.string.EditAdminTransferAlertTitle));
 
                     LinearLayout linearLayout = new LinearLayout(parentFragment.getParentActivity());
                     linearLayout.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(2), AndroidUtilities.dp(24), 0);
@@ -2848,7 +2852,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferAlertText", works.heymate.beta.R.string.BotOwnershipTransferAlertText)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferAlertText", R.string.BotOwnershipTransferAlertText)));
                     linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
                     LinearLayout linearLayout2 = new LinearLayout(parentFragment.getParentActivity());
@@ -2856,7 +2860,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     linearLayout.addView(linearLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 11, 0, 0));
 
                     ImageView dotImageView = new ImageView(parentFragment.getParentActivity());
-                    dotImageView.setImageResource(works.heymate.beta.R.drawable.list_circle);
+                    dotImageView.setImageResource(R.drawable.list_circle);
                     dotImageView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(11) : 0, AndroidUtilities.dp(9), LocaleController.isRTL ? 0 : AndroidUtilities.dp(11), 0);
                     dotImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
 
@@ -2864,7 +2868,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText1", works.heymate.beta.R.string.EditAdminTransferAlertText1)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText1", R.string.EditAdminTransferAlertText1)));
                     if (LocaleController.isRTL) {
                         linearLayout2.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                         linearLayout2.addView(dotImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT));
@@ -2878,7 +2882,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     linearLayout.addView(linearLayout2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 11, 0, 0));
 
                     dotImageView = new ImageView(parentFragment.getParentActivity());
-                    dotImageView.setImageResource(works.heymate.beta.R.drawable.list_circle);
+                    dotImageView.setImageResource(R.drawable.list_circle);
                     dotImageView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(11) : 0, AndroidUtilities.dp(9), LocaleController.isRTL ? 0 : AndroidUtilities.dp(11), 0);
                     dotImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogTextBlack), PorterDuff.Mode.MULTIPLY));
 
@@ -2886,7 +2890,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText2", works.heymate.beta.R.string.EditAdminTransferAlertText2)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("EditAdminTransferAlertText2", R.string.EditAdminTransferAlertText2)));
                     if (LocaleController.isRTL) {
                         linearLayout2.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                         linearLayout2.addView(dotImageView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT));
@@ -2896,17 +2900,17 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     }
 
                     if ("PASSWORD_MISSING".equals(error.text)) {
-                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", works.heymate.beta.R.string.EditAdminTransferSetPassword), (dialogInterface, i) -> parentFragment.presentFragment(new TwoStepVerificationSetupActivity(TwoStepVerificationSetupActivity.TYPE_INTRO, null)));
-                        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                        builder.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", R.string.EditAdminTransferSetPassword), (dialogInterface, i) -> parentFragment.presentFragment(new TwoStepVerificationSetupActivity(TwoStepVerificationSetupActivity.TYPE_INTRO, null)));
+                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     } else {
                         messageTextView = new TextView(parentFragment.getParentActivity());
                         messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                        messageTextView.setText(LocaleController.getString("EditAdminTransferAlertText3", works.heymate.beta.R.string.EditAdminTransferAlertText3));
+                        messageTextView.setText(LocaleController.getString("EditAdminTransferAlertText3", R.string.EditAdminTransferAlertText3));
                         linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 11, 0, 0));
 
-                        builder.setNegativeButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                        builder.setNegativeButton(LocaleController.getString("OK", R.string.OK), null);
                     }
                     parentFragment.showDialog(builder.create());
                 } else if ("SRP_ID_INVALID".equals(error.text)) {
@@ -3016,6 +3020,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         request.random_id = random_id != 0 ? random_id : getNextRandomId();
         request.message = "";
         request.media = game;
+        long fromId = ChatObject.getSendAsPeerId(getMessagesController().getChat(peer.chat_id), getMessagesController().getChatFull(peer.chat_id));
+        if (fromId != UserConfig.getInstance(currentAccount).getClientUserId()) {
+            request.send_as = getMessagesController().getInputPeer(fromId);
+        }
         final long newTaskId;
         if (taskId == 0) {
             NativeByteBuffer data = null;
@@ -3100,7 +3108,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         int type = -1;
         boolean isChannel = false;
         boolean forceNoSoundVideo = false;
-        boolean anonymously = false;
+        TLRPC.Peer fromPeer = null;
         String rank = null;
         long linkedToGroup = 0;
         TLRPC.EncryptedChat encryptedChat = null;
@@ -3119,14 +3127,12 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             }
         } else if (sendToPeer instanceof TLRPC.TL_inputPeerChannel) {
             TLRPC.Chat chat = getMessagesController().getChat(sendToPeer.channel_id);
+            TLRPC.ChatFull chatFull = getMessagesController().getChatFull(chat.id);
             isChannel = chat != null && !chat.megagroup;
-            if (isChannel && chat.has_link) {
-                TLRPC.ChatFull chatFull = getMessagesController().getChatFull(chat.id);
-                if (chatFull != null) {
-                    linkedToGroup = chatFull.linked_chat_id;
-                }
+            if (isChannel && chat.has_link && chatFull != null) {
+                linkedToGroup = chatFull.linked_chat_id;
             }
-            anonymously = ChatObject.shouldSendAnonymously(chat);
+            fromPeer = getMessagesController().getPeer(ChatObject.getSendAsPeerId(chat, chatFull, true));
         }
 
         try {
@@ -3426,8 +3432,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 if (isChannel && sendToPeer != null) {
                     newMsg.from_id = new TLRPC.TL_peerChannel();
                     newMsg.from_id.channel_id = sendToPeer.channel_id;
-                } else if (anonymously) {
-                    newMsg.from_id = getMessagesController().getPeer(peer);
+                } else if (fromPeer != null) {
+                    newMsg.from_id = fromPeer;
                     if (rank != null) {
                         newMsg.post_author = rank;
                         newMsg.flags |= 65536;
@@ -3637,6 +3643,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     reqSend.silent = newMsg.silent;
                     reqSend.peer = sendToPeer;
                     reqSend.random_id = newMsg.random_id;
+                    if (newMsg.from_id != null) {
+                        reqSend.send_as = getMessagesController().getInputPeer(newMsg.from_id);
+                    }
                     if (newMsg.reply_to != null && newMsg.reply_to.reply_to_msg_id != 0) {
                         reqSend.flags |= 1;
                         reqSend.reply_to_msg_id = newMsg.reply_to.reply_to_msg_id;
@@ -3996,6 +4005,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             request.reply_to_msg_id = newMsg.reply_to.reply_to_msg_id;
                         }
                         request.random_id = newMsg.random_id;
+                        if (newMsg.from_id != null) {
+                            request.send_as = getMessagesController().getInputPeer(newMsg.from_id);
+                        }
                         request.media = inputMedia;
                         request.message = caption;
                         if (entities != null && !entities.isEmpty()) {
@@ -4371,6 +4383,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 TLRPC.TL_messages_sendInlineBotResult reqSend = new TLRPC.TL_messages_sendInlineBotResult();
                 reqSend.peer = sendToPeer;
                 reqSend.random_id = newMsg.random_id;
+                if (newMsg.from_id != null) {
+                    reqSend.send_as = getMessagesController().getInputPeer(newMsg.from_id);
+                }
                 reqSend.hide_via = !params.containsKey("bot");
                 if (newMsg.reply_to != null && newMsg.reply_to.reply_to_msg_id != 0) {
                     reqSend.flags |= 1;
@@ -5751,7 +5766,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         return delayedMessages.get(location);
     }
 
-    public long getNextRandomId() {
+    protected long getNextRandomId() {
         long val = 0;
         while (val == 0) {
             val = Utilities.random.nextLong();
@@ -5866,7 +5881,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     if (size > 32 * 1024 * 1024) {
                         f.delete();
                         AndroidUtilities.runOnUIThread(() -> {
-                            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("ImportFileTooLarge", works.heymate.beta.R.string.ImportFileTooLarge), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("ImportFileTooLarge", R.string.ImportFileTooLarge), Toast.LENGTH_SHORT).show();
                             onStartImport.run(0);
                         });
                         return;
@@ -6423,7 +6438,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (error) {
                 AndroidUtilities.runOnUIThread(() -> {
                     try {
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString("UnsupportedAttachment", works.heymate.beta.R.string.UnsupportedAttachment));
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString("UnsupportedAttachment", R.string.UnsupportedAttachment));
                     } catch (Exception e) {
                         FileLog.e(e);
                     }

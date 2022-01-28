@@ -39,7 +39,7 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -100,9 +100,9 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("AddContactTitle", works.heymate.beta.R.string.AddContactTitle));
+        actionBar.setTitle(LocaleController.getString("AddContactTitle", R.string.AddContactTitle));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -158,10 +158,10 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                                     }
                                     showEditDoneProgress(false, true);
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                                    builder.setTitle(LocaleController.getString("ContactNotRegisteredTitle", works.heymate.beta.R.string.ContactNotRegisteredTitle));
-                                    builder.setMessage(LocaleController.formatString("ContactNotRegistered", works.heymate.beta.R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
-                                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
-                                    builder.setPositiveButton(LocaleController.getString("Invite", works.heymate.beta.R.string.Invite), (dialog, which) -> {
+                                    builder.setTitle(LocaleController.getString("ContactNotRegisteredTitle", R.string.ContactNotRegisteredTitle));
+                                    builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(inputPhoneContact.first_name, inputPhoneContact.last_name)));
+                                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                                    builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), (dialog, which) -> {
                                         try {
                                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", inputPhoneContact.phone, null));
                                             intent.putExtra("sms_body", ContactsController.getInstance(currentAccount).getInviteText(1));
@@ -187,8 +187,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         avatarDrawable.setInfo(5, "", "");
 
         ActionBarMenu menu = actionBar.createMenu();
-        editDoneItem = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56));
-        editDoneItem.setContentDescription(LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+        editDoneItem = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        editDoneItem.setContentDescription(LocaleController.getString("Done", R.string.Done));
 
         editDoneItemProgress = new ContextProgressView(context, 1);
         editDoneItem.addView(editDoneItemProgress, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -221,7 +221,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         firstNameField.setGravity(Gravity.LEFT);
         firstNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         firstNameField.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        firstNameField.setHint(LocaleController.getString("FirstName", works.heymate.beta.R.string.FirstName));
+        firstNameField.setHint(LocaleController.getString("FirstName", R.string.FirstName));
         firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         firstNameField.setCursorSize(AndroidUtilities.dp(20));
         firstNameField.setCursorWidth(1.5f);
@@ -267,7 +267,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         lastNameField.setGravity(Gravity.LEFT);
         lastNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         lastNameField.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        lastNameField.setHint(LocaleController.getString("LastName", works.heymate.beta.R.string.LastName));
+        lastNameField.setHint(LocaleController.getString("LastName", R.string.LastName));
         lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         lastNameField.setCursorSize(AndroidUtilities.dp(20));
         lastNameField.setCursorWidth(1.5f);
@@ -375,7 +375,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                 String text = PhoneFormat.stripExceptNumbers(codeField.getText().toString());
                 codeField.setText(text);
                 if (text.length() == 0) {
-                    countryButton.setText(LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
+                    countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                     phoneField.setHintText(null);
                     countryState = 1;
                 } else {
@@ -410,12 +410,12 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                             phoneField.setHintText(hint != null ? hint.replace('X', '–') : null);
                             countryState = 0;
                         } else {
-                            countryButton.setText(LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
+                            countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
                             phoneField.setHintText(null);
                             countryState = 2;
                         }
                     } else {
-                        countryButton.setText(LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
+                        countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
                         phoneField.setHintText(null);
                         countryState = 2;
                     }
@@ -609,7 +609,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                 }
             }
             if (codeField.length() == 0) {
-                countryButton.setText(LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
+                countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 phoneField.setHintText(null);
                 countryState = 1;
             }

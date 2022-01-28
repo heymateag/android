@@ -29,7 +29,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -199,7 +199,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (address != null) {
                 distanceTextView.setText(address);
             } else {
-                distanceTextView.setText(LocaleController.getString("Loading", works.heymate.beta.R.string.Loading));
+                distanceTextView.setText(LocaleController.getString("Loading", R.string.Loading));
             }
         }
     }

@@ -38,7 +38,6 @@ import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import org.checkerframework.checker.units.qual.A;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import works.heymate.beta.R;
@@ -48,6 +47,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 import java.util.ArrayList;
@@ -164,7 +164,7 @@ public class ActionBar extends FrameLayout {
                 actionBarMenuOnItemClick.onItemClick(-1);
             }
         });
-        backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", works.heymate.beta.R.string.AccDescrGoBack));
+        backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
     }
 
     public void setBackButtonDrawable(Drawable drawable) {
@@ -208,7 +208,7 @@ public class ActionBar extends FrameLayout {
                 manualStart = true;
                 if (snowflakesEffect == null) {
                     fireworksEffect = null;
-                    snowflakesEffect = new SnowflakesEffect();
+                    snowflakesEffect = new SnowflakesEffect(0);
                     titleTextView[0].invalidate();
                     invalidate();
                 } else {
@@ -256,7 +256,7 @@ public class ActionBar extends FrameLayout {
 
                 if (Theme.canStartHolidayAnimation()) {
                     if (snowflakesEffect == null) {
-                        snowflakesEffect = new SnowflakesEffect();
+                        snowflakesEffect = new SnowflakesEffect(0);
                     }
                 } else if (!manualStart) {
                     if (snowflakesEffect != null) {
@@ -1187,7 +1187,7 @@ public class ActionBar extends FrameLayout {
         }
         lastOverlayTitle = title;
 
-        CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : "Heymate";
+        CharSequence textToSet = title != null ? LocaleController.getString(title, titleId) : lastTitle;
         boolean ellipsize = false;
         if (title != null) {
             int index = TextUtils.indexOf(textToSet, "...");
@@ -1516,5 +1516,27 @@ public class ActionBar extends FrameLayout {
             color = parentFragment != null ? parentFragment.getThemedColor(key) : null;
         }
         return color != null ? color : Theme.getColor(key);
+    }
+
+    SizeNotifierFrameLayout contentView;
+    boolean blurredBackground;
+
+    public void setDrawBlurBackground(SizeNotifierFrameLayout contentView) {
+        blurredBackground = true;
+        this.contentView = contentView;
+        contentView.blurBehindViews.add(this);
+        setBackground(null);
+    }
+
+    Paint blurScrimPaint = new Paint();
+    Rect rectTmp = new Rect();
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        if (blurredBackground) {
+            rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            blurScrimPaint.setColor(actionBarColor);
+            contentView.drawBlur(canvas, 0, rectTmp, blurScrimPaint, true);
+        }
+        super.dispatchDraw(canvas);
     }
 }

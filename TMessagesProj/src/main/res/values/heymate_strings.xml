@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="HtChooseCategory">Choose Category</string>
+    <string name="HtChooseCategorySub">Choose Sub Category</string>
+    <string name="HtRate">Rate</string>
+    <string name="HtAvailability">Put to availability conditions here</string>
+    <string name="HtRateSymbol">Rate Symbol</string>
 
     <string name="hm_heymate">heymate AG</string>
     <string name="hm_logo_url">https://yashoid.com/peymate.png</string>

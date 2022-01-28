@@ -59,8 +59,8 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 
 import java.util.ArrayList;
@@ -328,13 +328,13 @@ public final class FloatingToolbar {
             mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(mContext, android.R.interpolator.linear_out_slow_in);
             mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(mContext, android.R.interpolator.fast_out_linear_in);
 
-            mArrow = mContext.getDrawable(works.heymate.beta.R.drawable.ft_avd_tooverflow).mutate();
+            mArrow = mContext.getDrawable(R.drawable.ft_avd_tooverflow).mutate();
             mArrow.setAutoMirrored(true);
-            mOverflow = mContext.getDrawable(works.heymate.beta.R.drawable.ft_avd_toarrow).mutate();
+            mOverflow = mContext.getDrawable(R.drawable.ft_avd_toarrow).mutate();
             mOverflow.setAutoMirrored(true);
-            mToArrow = (AnimatedVectorDrawable) mContext.getDrawable(works.heymate.beta.R.drawable.ft_avd_toarrow_animation).mutate();
+            mToArrow = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ft_avd_toarrow_animation).mutate();
             mToArrow.setAutoMirrored(true);
-            mToOverflow = (AnimatedVectorDrawable) mContext.getDrawable(works.heymate.beta.R.drawable.ft_avd_tooverflow_animation).mutate();
+            mToOverflow = (AnimatedVectorDrawable) mContext.getDrawable(R.drawable.ft_avd_tooverflow_animation).mutate();
             mToOverflow.setAutoMirrored(true);
 
             mOverflowButton = createOverflowButton();
@@ -668,7 +668,7 @@ public final class FloatingToolbar {
                 mOverflowPanel.setAlpha(1);
                 mOverflowPanel.setVisibility(View.VISIBLE);
                 mOverflowButton.setImageDrawable(mArrow);
-                mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
+                mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
 
                 if (isInRTLMode()) {
                     mContentContainer.setX(mMarginHorizontal);
@@ -700,7 +700,7 @@ public final class FloatingToolbar {
                 mOverflowPanel.setAlpha(0);
                 mOverflowPanel.setVisibility(View.INVISIBLE);
                 mOverflowButton.setImageDrawable(mOverflow);
-                mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
+                mOverflowButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
                 if (hasOverflow()) {
                     if (isInRTLMode()) {
                         mContentContainer.setX(mMarginHorizontal);

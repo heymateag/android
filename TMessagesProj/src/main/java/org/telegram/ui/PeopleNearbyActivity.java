@@ -37,7 +37,7 @@ import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -304,7 +304,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setBackgroundDrawable(null);
         actionBar.setTitleColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), false);
@@ -312,7 +312,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         actionBar.setCastShadows(false);
         actionBar.setAddToContainer(false);
         actionBar.setOccupyStatusBar(Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet());
-        actionBar.setTitle(LocaleController.getString("PeopleNearby", works.heymate.beta.R.string.PeopleNearby));
+        actionBar.setTitle(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
         actionBar.getTitleTextView().setAlpha(0.0f);
         if (!AndroidUtilities.isTablet()) {
             actionBar.showActionModeTop();
@@ -404,15 +404,15 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     updateRows(null);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", works.heymate.beta.R.string.MakeMyselfVisibleTitle));
-                    builder.setMessage(LocaleController.getString("MakeMyselfVisibleInfo", works.heymate.beta.R.string.MakeMyselfVisibleInfo));
-                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), (dialog, which) -> {
+                    builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", R.string.MakeMyselfVisibleTitle));
+                    builder.setMessage(LocaleController.getString("MakeMyselfVisibleInfo", R.string.MakeMyselfVisibleInfo));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
                         userConfig.sharingMyLocationUntil = 0x7fffffff;
                         userConfig.saveConfig(false);
                         sendRequest(false, 1);
                         updateRows(null);
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     showDialog(builder.create());
                 }
                 userConfig.saveConfig(false);
@@ -501,7 +501,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     private void openGroupCreate() {
         if (!canCreateGroup) {
-            AlertsCreator.showSimpleAlert(PeopleNearbyActivity.this, LocaleController.getString("YourLocatedChannelsTooMuch", works.heymate.beta.R.string.YourLocatedChannelsTooMuch));
+            AlertsCreator.showSimpleAlert(PeopleNearbyActivity.this, LocaleController.getString("YourLocatedChannelsTooMuch", R.string.YourLocatedChannelsTooMuch));
             return;
         }
         groupCreateActivity = new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_NEARBY_GROUP_CREATE);
@@ -883,7 +883,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
             messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             messageTextView.setGravity(Gravity.CENTER);
-            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearbyInfo2", works.heymate.beta.R.string.PeopleNearbyInfo2)));
+            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearbyInfo2", R.string.PeopleNearbyInfo2)));
             addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 40, top + 161, 40, 27));
         }
     }
@@ -997,35 +997,35 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 case 1:
                     ShadowSectionCell privacyCell = (ShadowSectionCell) holder.itemView;
                     if (position == usersSectionRow) {
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == chatsSectionRow) {
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == helpSectionRow) {
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 2:
                     ManageChatTextCell actionCell = (ManageChatTextCell) holder.itemView;
                     actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                     if (position == chatsCreateRow) {
-                        actionCell.setText(LocaleController.getString("NearbyCreateGroup", works.heymate.beta.R.string.NearbyCreateGroup), null, works.heymate.beta.R.drawable.groups_create, chatsStartRow != -1);
+                        actionCell.setText(LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup), null, R.drawable.groups_create, chatsStartRow != -1);
                     } else if (position == showMeRow) {
                         if (showingMe = (getUserConfig().sharingMyLocationUntil > getConnectionsManager().getCurrentTime())) {
-                            actionCell.setText(LocaleController.getString("StopShowingMe", works.heymate.beta.R.string.StopShowingMe), null, works.heymate.beta.R.drawable.actions_nearby_off, usersStartRow != -1);
+                            actionCell.setText(LocaleController.getString("StopShowingMe", R.string.StopShowingMe), null, R.drawable.actions_nearby_off, usersStartRow != -1);
                             actionCell.setColors(Theme.key_windowBackgroundWhiteRedText5, Theme.key_windowBackgroundWhiteRedText5);
                         } else {
-                            actionCell.setText(LocaleController.getString("MakeMyselfVisible", works.heymate.beta.R.string.MakeMyselfVisible), null, works.heymate.beta.R.drawable.actions_nearby_on, usersStartRow != -1);
+                            actionCell.setText(LocaleController.getString("MakeMyselfVisible", R.string.MakeMyselfVisible), null, R.drawable.actions_nearby_on, usersStartRow != -1);
                         }
                     } else if (position == showMoreRow) {
-                        actionCell.setText(LocaleController.formatPluralString("ShowVotes", users.size() - 5), null, works.heymate.beta.R.drawable.arrow_more, false);
+                        actionCell.setText(LocaleController.formatPluralString("ShowVotes", users.size() - 5), null, R.drawable.arrow_more, false);
                     }
                     break;
                 case 3:
                     HeaderCellProgress headerCell = (HeaderCellProgress) holder.itemView;
                     if (position == usersHeaderRow) {
-                        headerCell.setText(LocaleController.getString("PeopleNearbyHeader", works.heymate.beta.R.string.PeopleNearbyHeader));
+                        headerCell.setText(LocaleController.getString("PeopleNearbyHeader", R.string.PeopleNearbyHeader));
                     } else if (position == chatsHeaderRow) {
-                        headerCell.setText(LocaleController.getString("ChatsNearbyHeader", works.heymate.beta.R.string.ChatsNearbyHeader));
+                        headerCell.setText(LocaleController.getString("ChatsNearbyHeader", R.string.ChatsNearbyHeader));
                     }
                     break;
             }

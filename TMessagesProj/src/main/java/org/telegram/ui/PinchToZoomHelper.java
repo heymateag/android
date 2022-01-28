@@ -31,7 +31,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.WebFile;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AnimatedFileDrawable;
@@ -148,7 +148,7 @@ public class PinchToZoomHelper {
             isHardwareVideo = true;
             MediaController.getInstance().setTextureView(overlayView.videoTextureView, overlayView.aspectRatioFrameLayout, overlayView.videoPlayerContainer, true);
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) overlayView.videoPlayerContainer.getLayoutParams();
-            overlayView.videoPlayerContainer.setTag(works.heymate.beta.R.id.parent_tag, image);
+            overlayView.videoPlayerContainer.setTag(R.id.parent_tag, image);
             if (layoutParams.width != image.getImageWidth() || layoutParams.height != image.getImageHeight()) {
                 overlayView.aspectRatioFrameLayout.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
                 layoutParams.width = (int) image.getImageWidth();
@@ -369,7 +369,7 @@ public class PinchToZoomHelper {
                     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(works.heymate.beta.R.id.parent_tag);
+                        ImageReceiver imageReceiver = (ImageReceiver) view.getTag(R.id.parent_tag);
                         if (imageReceiver != null) {
                             int[] rad = imageReceiver.getRoundRadius();
                             int maxRad = 0;
@@ -392,7 +392,7 @@ public class PinchToZoomHelper {
                     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
                         super.onSizeChanged(w, h, oldw, oldh);
                         aspectPath.reset();
-                        ImageReceiver imageReceiver = (ImageReceiver) getTag(works.heymate.beta.R.id.parent_tag);
+                        ImageReceiver imageReceiver = (ImageReceiver) getTag(R.id.parent_tag);
                         if (imageReceiver != null) {
                             int[] rad = imageReceiver.getRoundRadius();
                             int maxRad = 0;

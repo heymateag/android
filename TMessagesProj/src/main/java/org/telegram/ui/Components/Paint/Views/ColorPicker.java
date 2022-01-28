@@ -20,7 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import org.telegram.messenger.AndroidUtilities;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
 
@@ -84,14 +84,14 @@ public class ColorPicker extends FrameLayout {
     public ColorPicker(Context context) {
         super(context);
         setWillNotDraw(false);
-        shadowDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.knob_shadow);
+        shadowDrawable = getResources().getDrawable(R.drawable.knob_shadow);
         backgroundPaint.setColor(0xffffffff);
         swatchStrokePaint.setStyle(Paint.Style.STROKE);
         swatchStrokePaint.setStrokeWidth(AndroidUtilities.dp(1));
 
         settingsButton = new ImageView(context);
         settingsButton.setScaleType(ImageView.ScaleType.CENTER);
-        settingsButton.setImageResource(works.heymate.beta.R.drawable.photo_paint_brush);
+        settingsButton.setImageResource(R.drawable.photo_paint_brush);
         addView(settingsButton, LayoutHelper.createFrame(46, 52));
         settingsButton.setOnClickListener(v -> {
             if (delegate != null) {
@@ -101,7 +101,7 @@ public class ColorPicker extends FrameLayout {
 
         undoButton = new ImageView(context);
         undoButton.setScaleType(ImageView.ScaleType.CENTER);
-        undoButton.setImageResource(works.heymate.beta.R.drawable.photo_undo);
+        undoButton.setImageResource(R.drawable.photo_undo);
         addView(undoButton, LayoutHelper.createFrame(46, 52));
         undoButton.setOnClickListener(v -> {
             if (delegate != null) {

@@ -27,7 +27,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -260,21 +260,21 @@ public class ClearHistoryAlert extends BottomSheet {
             messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
             linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 23, 16, 23, 5));
             if (user != null) {
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", works.heymate.beta.R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
             } else {
                 if (!ChatObject.isChannel(chat) || chat.megagroup && TextUtils.isEmpty(chat.username)) {
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", works.heymate.beta.R.string.AreYouSureClearHistoryWithChat, chat.title)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", R.string.AreYouSureClearHistoryWithChat, chat.title)));
                 } else if (chat.megagroup) {
-                    messageTextView.setText(LocaleController.getString("AreYouSureClearHistoryGroup", works.heymate.beta.R.string.AreYouSureClearHistoryGroup));
+                    messageTextView.setText(LocaleController.getString("AreYouSureClearHistoryGroup", R.string.AreYouSureClearHistoryGroup));
                 } else {
-                    messageTextView.setText(LocaleController.getString("AreYouSureClearHistoryChannel", works.heymate.beta.R.string.AreYouSureClearHistoryChannel));
+                    messageTextView.setText(LocaleController.getString("AreYouSureClearHistoryChannel", R.string.AreYouSureClearHistoryChannel));
                 }
             }
 
             if (canDeleteInbox && !UserObject.isDeleted(user)) {
                 cell = new CheckBoxCell(context, 1, resourcesProvider);
                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                cell.setText(LocaleController.formatString("ClearHistoryOptionAlso", works.heymate.beta.R.string.ClearHistoryOptionAlso, UserObject.getFirstName(user)), "", false, false);
+                cell.setText(LocaleController.formatString("ClearHistoryOptionAlso", R.string.ClearHistoryOptionAlso, UserObject.getFirstName(user)), "", false, false);
                 cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(5), 0, LocaleController.isRTL ? AndroidUtilities.dp(5) : AndroidUtilities.dp(16), 0);
                 linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
                 cell.setOnClickListener(v -> {
@@ -286,7 +286,7 @@ public class ClearHistoryAlert extends BottomSheet {
 
             BottomSheetCell clearButton = new BottomSheetCell(context, resourcesProvider);
             clearButton.setBackground(null);
-            clearButton.setText(LocaleController.getString("AlertClearHistory", works.heymate.beta.R.string.AlertClearHistory));
+            clearButton.setText(LocaleController.getString("AlertClearHistory", R.string.AlertClearHistory));
             clearButton.background.setOnClickListener(v -> {
                 if (dismissedDelayed) {
                     return;
@@ -309,7 +309,7 @@ public class ClearHistoryAlert extends BottomSheet {
         } else {
             RLottieImageView lottieImageView = new RLottieImageView(context);
             lottieImageView.setAutoRepeat(false);
-            lottieImageView.setAnimation(works.heymate.beta.R.raw.utyan_private, 120, 120);
+            lottieImageView.setAnimation(R.raw.utyan_private, 120, 120);
             lottieImageView.setPadding(0, AndroidUtilities.dp(20), 0, 0);
             lottieImageView.playAnimation();
             linearLayout.addView(lottieImageView, LayoutHelper.createLinear(160, 160, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 17, 0, 17, 0));
@@ -326,12 +326,12 @@ public class ClearHistoryAlert extends BottomSheet {
             infoTextView.setTextColor(getThemedColor(Theme.key_dialogTextGray3));
             infoTextView.setGravity(Gravity.CENTER_HORIZONTAL);
             if (user != null) {
-                infoTextView.setText(LocaleController.formatString("AutoDeleteAlertUserInfo", works.heymate.beta.R.string.AutoDeleteAlertUserInfo, UserObject.getFirstName(user)));
+                infoTextView.setText(LocaleController.formatString("AutoDeleteAlertUserInfo", R.string.AutoDeleteAlertUserInfo, UserObject.getFirstName(user)));
             } else {
                 if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                    infoTextView.setText(LocaleController.getString("AutoDeleteAlertChannelInfo", works.heymate.beta.R.string.AutoDeleteAlertChannelInfo));
+                    infoTextView.setText(LocaleController.getString("AutoDeleteAlertChannelInfo", R.string.AutoDeleteAlertChannelInfo));
                 } else {
-                    infoTextView.setText(LocaleController.getString("AutoDeleteAlertGroupInfo", works.heymate.beta.R.string.AutoDeleteAlertGroupInfo));
+                    infoTextView.setText(LocaleController.getString("AutoDeleteAlertGroupInfo", R.string.AutoDeleteAlertGroupInfo));
                 }
             }
             linearLayout.addView(infoTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 30, 22, 30, 20));
@@ -368,17 +368,17 @@ public class ClearHistoryAlert extends BottomSheet {
 
         TextInfoPrivacyCell infoCell = new TextInfoPrivacyCell(context, resourcesProvider);
 
-        infoCell.setText(LocaleController.getString("AutoDeleteInfo", works.heymate.beta.R.string.AutoDeleteInfo));
+        infoCell.setText(LocaleController.getString("AutoDeleteInfo", R.string.AutoDeleteInfo));
         buttonContainer.addView(infoCell);
 
         setTimerButton = new BottomSheetCell(context, resourcesProvider);
         setTimerButton.setBackgroundColor(getThemedColor(Theme.key_dialogBackground));
         if (autoDeleteOnly) {
-            setTimerButton.setText(LocaleController.getString("AutoDeleteSet", works.heymate.beta.R.string.AutoDeleteSet));
+            setTimerButton.setText(LocaleController.getString("AutoDeleteSet", R.string.AutoDeleteSet));
         } else if (full && currentTimer == 0) {
-            setTimerButton.setText(LocaleController.getString("EnableAutoDelete", works.heymate.beta.R.string.EnableAutoDelete));
+            setTimerButton.setText(LocaleController.getString("EnableAutoDelete", R.string.EnableAutoDelete));
         } else {
-            setTimerButton.setText(LocaleController.getString("AutoDeleteConfirm", works.heymate.beta.R.string.AutoDeleteConfirm));
+            setTimerButton.setText(LocaleController.getString("AutoDeleteConfirm", R.string.AutoDeleteConfirm));
         }
         setTimerButton.background.setOnClickListener(v -> {
             if (dismissedDelayed) {

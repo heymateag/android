@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -208,7 +208,7 @@ public class ColorPicker extends FrameLayout {
 
         setWillNotDraw(false);
 
-        circleDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.knob_shadow).mutate();
+        circleDrawable = context.getResources().getDrawable(R.drawable.knob_shadow).mutate();
 
         circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         colorWheelPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
@@ -580,11 +580,11 @@ public class ColorPicker extends FrameLayout {
         if (hasMenu) {
             menuItem = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             menuItem.setLongClickEnabled(false);
-            menuItem.setIcon(works.heymate.beta.R.drawable.ic_ab_other);
-            menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
-            menuItem.addSubItem(item_edit, works.heymate.beta.R.drawable.msg_edit, LocaleController.getString("OpenInEditor", works.heymate.beta.R.string.OpenInEditor));
-            menuItem.addSubItem(item_share, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("ShareTheme", works.heymate.beta.R.string.ShareTheme));
-            menuItem.addSubItem(item_delete, works.heymate.beta.R.drawable.msg_delete, LocaleController.getString("DeleteTheme", works.heymate.beta.R.string.DeleteTheme));
+            menuItem.setIcon(R.drawable.ic_ab_other);
+            menuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+            menuItem.addSubItem(item_edit, R.drawable.msg_edit, LocaleController.getString("OpenInEditor", R.string.OpenInEditor));
+            menuItem.addSubItem(item_share, R.drawable.msg_share, LocaleController.getString("ShareTheme", R.string.ShareTheme));
+            menuItem.addSubItem(item_delete, R.drawable.msg_delete, LocaleController.getString("DeleteTheme", R.string.DeleteTheme));
             menuItem.setMenuYOffset(-AndroidUtilities.dp(80));
             menuItem.setSubMenuOpenSide(2);
             menuItem.setDelegate(id -> {

@@ -1,5 +1,7 @@
 package org.telegram.ui.Components;
 
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -40,7 +42,7 @@ import androidx.dynamicanimation.animation.SpringForce;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -51,9 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
-public final class Bulletin {
+public class Bulletin {
 
     public static final int DURATION_SHORT = 1500;
     public static final int DURATION_LONG = 2750;
@@ -116,6 +116,12 @@ public final class Bulletin {
     public int currentBottomOffset;
     private Delegate currentDelegate;
     private Layout.Transition layoutTransition;
+
+    private Bulletin() {
+        layout = null;
+        parentLayout = null;
+        containerLayout = null;
+    }
 
     private Bulletin(@NonNull FrameLayout containerLayout, @NonNull Layout layout, int duration) {
         this.layout = layout;
@@ -214,7 +220,7 @@ public final class Bulletin {
     }
 
     private void setCanHide(boolean canHide) {
-        if (this.canHide != canHide) {
+        if (this.canHide != canHide && layout != null) {
             this.canHide = canHide;
             if (canHide) {
                 layout.postDelayed(hideRunnable, duration);
@@ -225,7 +231,7 @@ public final class Bulletin {
     }
 
     private void ensureLayoutTransitionCreated() {
-        if (layoutTransition == null) {
+        if (layout != null && layoutTransition == null) {
             layoutTransition = layout.createTransition();
         }
     }
@@ -239,6 +245,9 @@ public final class Bulletin {
     }
 
     public void hide(boolean animated, long duration) {
+        if (layout == null) {
+            return;
+        }
         if (showing) {
             showing = false;
 
@@ -1162,14 +1171,14 @@ public final class Bulletin {
                 undoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 undoTextView.setTextColor(undoCancelColor);
-                undoTextView.setText(LocaleController.getString("Undo", works.heymate.beta.R.string.Undo));
+                undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
                 undoTextView.setGravity(Gravity.CENTER_VERTICAL);
                 ViewHelper.setPaddingRelative(undoTextView, 16, 0, 16, 0);
                 addView(undoTextView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, 48, Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
             } else {
                 final ImageView undoImageView = new ImageView(getContext());
                 undoImageView.setOnClickListener(v -> undo());
-                undoImageView.setImageResource(works.heymate.beta.R.drawable.chats_undo);
+                undoImageView.setImageResource(R.drawable.chats_undo);
                 undoImageView.setColorFilter(new PorterDuffColorFilter(undoCancelColor, PorterDuff.Mode.MULTIPLY));
                 undoImageView.setBackground(Theme.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000));
                 ViewHelper.setPaddingRelative(undoImageView, 0, 12, 0, 12);
@@ -1216,4 +1225,16 @@ public final class Bulletin {
         }
     }
     //endregion
+
+    public static class EmptyBulletin extends Bulletin {
+
+        public EmptyBulletin() {
+            super();
+        }
+
+        @Override
+        public Bulletin show() {
+            return this;
+        }
+    }
 }

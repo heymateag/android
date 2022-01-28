@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -173,9 +173,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                         names[1] = null;
                     }
                     if (UserObject.isReplyUser(user)) {
-                        names[2] = LocaleController.getString("RepliesTitle", works.heymate.beta.R.string.RepliesTitle).toLowerCase();
+                        names[2] = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
                     } else if (user.self) {
-                        names[2] = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages).toLowerCase();
+                        names[2] = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
                     }
 
                     int found = 0;
@@ -369,7 +369,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     } else {
                         ProfileSearchCell profileSearchCell = (ProfileSearchCell) holder.itemView;
                         if (self) {
-                            name = LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages);
+                            name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
                         }
                         profileSearchCell.setData(object, null, name, username, false, self);
                         profileSearchCell.useSeparator = (position != getItemCount() - 1 && position != searchResult.size() - 1);
@@ -387,9 +387,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             case 1: {
                 GraySectionCell cell = (GraySectionCell) holder.itemView;
                 if (getItem(position) == null) {
-                    cell.setText(LocaleController.getString("GlobalSearch", works.heymate.beta.R.string.GlobalSearch));
+                    cell.setText(LocaleController.getString("GlobalSearch", R.string.GlobalSearch));
                 } else {
-                    cell.setText(LocaleController.getString("PhoneNumberSearch", works.heymate.beta.R.string.PhoneNumberSearch));
+                    cell.setText(LocaleController.getString("PhoneNumberSearch", R.string.PhoneNumberSearch));
                 }
                 break;
             }
@@ -397,7 +397,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 String str = (String) getItem(position);
                 TextCell cell = (TextCell) holder.itemView;
                 cell.setColors(null, Theme.key_windowBackgroundWhiteBlueText2);
-                cell.setText(LocaleController.formatString("AddContactByPhone", works.heymate.beta.R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + str)), false);
+                cell.setText(LocaleController.formatString("AddContactByPhone", R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + str)), false);
                 break;
             }
         }

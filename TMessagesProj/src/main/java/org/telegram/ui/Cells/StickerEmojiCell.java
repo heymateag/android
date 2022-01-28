@@ -27,7 +27,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
@@ -259,7 +259,7 @@ public class StickerEmojiCell extends FrameLayout {
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        String descr = LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker);
+        String descr = LocaleController.getString("AttachSticker", R.string.AttachSticker);
         if (sticker != null) {
             for (int a = 0; a < sticker.attributes.size(); a++) {
                 TLRPC.DocumentAttribute attribute = sticker.attributes.get(a);

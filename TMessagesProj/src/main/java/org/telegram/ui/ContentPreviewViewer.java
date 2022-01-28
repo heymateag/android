@@ -44,7 +44,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.WebFile;
@@ -166,8 +166,8 @@ public class ContentPreviewViewer {
                 ArrayList<Integer> icons = new ArrayList<>();
                 if (delegate != null) {
                     if (delegate.needSend() && !delegate.isInScheduleMode()) {
-                        items.add(LocaleController.getString("SendStickerPreview", works.heymate.beta.R.string.SendStickerPreview));
-                        icons.add(works.heymate.beta.R.drawable.outline_send);
+                        items.add(LocaleController.getString("SendStickerPreview", R.string.SendStickerPreview));
+                        icons.add(R.drawable.outline_send);
                         actions.add(0);
                     }
                     if (!delegate.isInScheduleMode()) {
@@ -176,13 +176,13 @@ public class ContentPreviewViewer {
                         actions.add(6);
                     }
                     if (delegate.canSchedule()) {
-                        items.add(LocaleController.getString("Schedule", works.heymate.beta.R.string.Schedule));
-                        icons.add(works.heymate.beta.R.drawable.msg_timer);
+                        items.add(LocaleController.getString("Schedule", R.string.Schedule));
+                        icons.add(R.drawable.msg_timer);
                         actions.add(3);
                     }
                     if (currentStickerSet != null && delegate.needOpen()) {
-                        items.add(LocaleController.formatString("ViewPackPreview", works.heymate.beta.R.string.ViewPackPreview));
-                        icons.add(works.heymate.beta.R.drawable.outline_pack);
+                        items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview));
+                        icons.add(R.drawable.outline_pack);
                         actions.add(1);
                     }
                     if (delegate.needRemove()) {
@@ -192,13 +192,13 @@ public class ContentPreviewViewer {
                     }
                 }
                 if (!MessageObject.isMaskDocument(currentDocument) && (inFavs || MediaDataController.getInstance(currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(currentDocument))) {
-                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", works.heymate.beta.R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", works.heymate.beta.R.string.AddToFavorites));
-                    icons.add(inFavs ? works.heymate.beta.R.drawable.outline_unfave : works.heymate.beta.R.drawable.outline_fave);
+                    items.add(inFavs ? LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites) : LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+                    icons.add(inFavs ? R.drawable.outline_unfave : R.drawable.outline_fave);
                     actions.add(2);
                 }
                 if (isRecentSticker) {
-                    items.add(LocaleController.getString("DeleteFromRecent", works.heymate.beta.R.string.DeleteFromRecent));
-                    icons.add(works.heymate.beta.R.drawable.msg_delete);
+                    items.add(LocaleController.getString("DeleteFromRecent", R.string.DeleteFromRecent));
+                    icons.add(R.drawable.msg_delete);
                     actions.add(4);
                 }
                 if (items.isEmpty()) {
@@ -272,25 +272,25 @@ public class ContentPreviewViewer {
                 ArrayList<Integer> icons = new ArrayList<>();
 
                 if (delegate.needSend() && !delegate.isInScheduleMode()) {
-                    items.add(LocaleController.getString("SendGifPreview", works.heymate.beta.R.string.SendGifPreview));
-                    icons.add(works.heymate.beta.R.drawable.outline_send);
+                    items.add(LocaleController.getString("SendGifPreview", R.string.SendGifPreview));
+                    icons.add(R.drawable.outline_send);
                     actions.add(0);
                 }
                 if (delegate.canSchedule()) {
-                    items.add(LocaleController.getString("Schedule", works.heymate.beta.R.string.Schedule));
-                    icons.add(works.heymate.beta.R.drawable.msg_timer);
+                    items.add(LocaleController.getString("Schedule", R.string.Schedule));
+                    icons.add(R.drawable.msg_timer);
                     actions.add(3);
                 }
 
                 boolean canDelete;
                 if (currentDocument != null) {
                     if (canDelete = MediaDataController.getInstance(currentAccount).hasRecentGif(currentDocument)) {
-                        items.add(LocaleController.formatString("Delete", works.heymate.beta.R.string.Delete));
-                        icons.add(works.heymate.beta.R.drawable.msg_delete);
+                        items.add(LocaleController.formatString("Delete", R.string.Delete));
+                        icons.add(R.drawable.msg_delete);
                         actions.add(1);
                     } else {
-                        items.add(LocaleController.formatString("SaveToGIFs", works.heymate.beta.R.string.SaveToGIFs));
-                        icons.add(works.heymate.beta.R.drawable.outline_add_gif);
+                        items.add(LocaleController.formatString("SaveToGIFs", R.string.SaveToGIFs));
+                        icons.add(R.drawable.outline_add_gif);
                         actions.add(2);
                     }
                 } else {
@@ -636,7 +636,7 @@ public class ContentPreviewViewer {
         }
         parentActivity = activity;
 
-        slideUpDrawable = parentActivity.getResources().getDrawable(works.heymate.beta.R.drawable.preview_arrow);
+        slideUpDrawable = parentActivity.getResources().getDrawable(R.drawable.preview_arrow);
 
         windowView = new FrameLayout(activity);
         windowView.setFocusable(true);

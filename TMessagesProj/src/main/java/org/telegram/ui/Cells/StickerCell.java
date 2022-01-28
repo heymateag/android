@@ -26,7 +26,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
@@ -182,9 +182,9 @@ public class StickerCell extends FrameLayout {
             }
         }
         if (emoji != null)
-            info.setText(emoji + " " + LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker));
+            info.setText(emoji + " " + LocaleController.getString("AttachSticker", R.string.AttachSticker));
         else
-            info.setText(LocaleController.getString("AttachSticker", works.heymate.beta.R.string.AttachSticker));
+            info.setText(LocaleController.getString("AttachSticker", R.string.AttachSticker));
         info.setEnabled(true);
     }
 }

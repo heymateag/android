@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
@@ -33,7 +33,7 @@ public class ChatListCell extends LinearLayout {
             setWillNotDraw(false);
 
             isThreeLines = threeLines;
-            setContentDescription(threeLines ? LocaleController.getString("ChatListExpanded", works.heymate.beta.R.string.ChatListExpanded) : LocaleController.getString("ChatListDefault", works.heymate.beta.R.string.ChatListDefault));
+            setContentDescription(threeLines ? LocaleController.getString("ChatListExpanded", R.string.ChatListExpanded) : LocaleController.getString("ChatListDefault", R.string.ChatListDefault));
 
             textPaint.setTextSize(AndroidUtilities.dp(13));
 
@@ -66,7 +66,7 @@ public class ChatListCell extends LinearLayout {
             Theme.dialogs_onlineCirclePaint.setColor(Color.argb((int) (31 * (1.0f - button.getProgress())), r, g, b));
             canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
 
-            String text = isThreeLines ? LocaleController.getString("ChatListExpanded", works.heymate.beta.R.string.ChatListExpanded) : LocaleController.getString("ChatListDefault", works.heymate.beta.R.string.ChatListDefault);
+            String text = isThreeLines ? LocaleController.getString("ChatListExpanded", R.string.ChatListExpanded) : LocaleController.getString("ChatListDefault", R.string.ChatListDefault);
             int width = (int) Math.ceil(textPaint.measureText(text));
 
             textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));

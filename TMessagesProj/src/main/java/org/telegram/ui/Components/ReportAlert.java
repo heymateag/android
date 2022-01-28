@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -79,7 +79,7 @@ public class ReportAlert extends BottomSheet {
         scrollView.addView(frameLayout, LayoutHelper.createScroll(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
 
         RLottieImageView imageView = new RLottieImageView(context);
-        imageView.setAnimation(works.heymate.beta.R.raw.report_police, 120, 120);
+        imageView.setAnimation(R.raw.report_police, 120, 120);
         imageView.playAnimation();
         frameLayout.addView(imageView, LayoutHelper.createFrame(160, 160, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 17, 14, 17, 0));
 
@@ -88,17 +88,17 @@ public class ReportAlert extends BottomSheet {
         percentTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
         percentTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         if (type == 0) {
-            percentTextView.setText(LocaleController.getString("ReportTitleSpam", works.heymate.beta.R.string.ReportTitleSpam));
+            percentTextView.setText(LocaleController.getString("ReportTitleSpam", R.string.ReportTitleSpam));
         } else if (type == 1) {
-            percentTextView.setText(LocaleController.getString("ReportTitleFake", works.heymate.beta.R.string.ReportTitleFake));
+            percentTextView.setText(LocaleController.getString("ReportTitleFake", R.string.ReportTitleFake));
         } else if (type == 2) {
-            percentTextView.setText(LocaleController.getString("ReportTitleViolence", works.heymate.beta.R.string.ReportTitleViolence));
+            percentTextView.setText(LocaleController.getString("ReportTitleViolence", R.string.ReportTitleViolence));
         } else if (type == 3) {
-            percentTextView.setText(LocaleController.getString("ReportTitleChild", works.heymate.beta.R.string.ReportTitleChild));
+            percentTextView.setText(LocaleController.getString("ReportTitleChild", R.string.ReportTitleChild));
         } else if (type == 4) {
-            percentTextView.setText(LocaleController.getString("ReportTitlePornography", works.heymate.beta.R.string.ReportTitlePornography));
+            percentTextView.setText(LocaleController.getString("ReportTitlePornography", R.string.ReportTitlePornography));
         } else if (type == 5) {
-            percentTextView.setText(LocaleController.getString("ReportChat", works.heymate.beta.R.string.ReportChat));
+            percentTextView.setText(LocaleController.getString("ReportChat", R.string.ReportChat));
         }
         frameLayout.addView(percentTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 17, 197, 17, 0));
 
@@ -106,7 +106,7 @@ public class ReportAlert extends BottomSheet {
         infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         infoTextView.setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
         infoTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        infoTextView.setText(LocaleController.getString("ReportInfo", works.heymate.beta.R.string.ReportInfo));
+        infoTextView.setText(LocaleController.getString("ReportInfo", R.string.ReportInfo));
         frameLayout.addView(infoTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 30, 235, 30, 44));
 
         editText = new EditTextBoldCursor(context);
@@ -121,7 +121,7 @@ public class ReportAlert extends BottomSheet {
         editText.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         editText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editText.setHint(LocaleController.getString("ReportHint", works.heymate.beta.R.string.ReportHint));
+        editText.setHint(LocaleController.getString("ReportHint", R.string.ReportHint));
         editText.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         editText.setCursorSize(AndroidUtilities.dp(20));
         editText.setCursorWidth(1.5f);
@@ -136,7 +136,7 @@ public class ReportAlert extends BottomSheet {
 
         clearButton = new BottomSheetCell(context);
         clearButton.setBackground(null);
-        clearButton.setText(LocaleController.getString("ReportSend", works.heymate.beta.R.string.ReportSend));
+        clearButton.setText(LocaleController.getString("ReportSend", R.string.ReportSend));
         clearButton.background.setOnClickListener(v -> {
             AndroidUtilities.hideKeyboard(editText);
             onSend(type, editText.getText().toString());

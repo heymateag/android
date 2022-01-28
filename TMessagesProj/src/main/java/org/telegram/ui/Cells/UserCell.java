@@ -26,7 +26,7 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.UserConfig;
@@ -87,7 +87,7 @@ public class UserCell extends FrameLayout {
             addButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             addButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             addButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
-            addButton.setText(LocaleController.getString("Add", works.heymate.beta.R.string.Add));
+            addButton.setText(LocaleController.getString("Add", R.string.Add));
             addButton.setPadding(AndroidUtilities.dp(17), 0, AndroidUtilities.dp(17), 0);
             addView(addButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 28, Gravity.TOP | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), LocaleController.isRTL ? 14 : 0, 15, LocaleController.isRTL ? 0 : 14, 0));
             additionalPadding = (int) Math.ceil((addButton.getPaint().measureText(addButton.getText().toString()) + AndroidUtilities.dp(34 + 14)) / AndroidUtilities.density);
@@ -126,7 +126,7 @@ public class UserCell extends FrameLayout {
             checkBoxBig = new CheckBoxSquare(context, false);
             addView(checkBoxBig, LayoutHelper.createFrame(18, 18, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, LocaleController.isRTL ? 19 : 0, 0, LocaleController.isRTL ? 0 : 19, 0));
         } else if (checkbox == 1) {
-            checkBox = new CheckBox(context, works.heymate.beta.R.drawable.round_check2);
+            checkBox = new CheckBox(context, R.drawable.round_check2);
             checkBox.setVisibility(INVISIBLE);
             checkBox.setColor(Theme.getColor(Theme.key_checkbox), Theme.getColor(Theme.key_checkboxCheck));
             addView(checkBox, LayoutHelper.createFrame(22, 22, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 0 : 37 + padding, 40, LocaleController.isRTL ? 37 + padding : 0, 0));
@@ -231,16 +231,16 @@ public class UserCell extends FrameLayout {
             delta -= ConnectionsManager.getInstance(currentAccount).getCurrentTime();
             if (delta <= 0) {
                 if (custom) {
-                    text = LocaleController.getString("NotificationsCustom", works.heymate.beta.R.string.NotificationsCustom);
+                    text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
                 } else {
-                    text = LocaleController.getString("NotificationsUnmuted", works.heymate.beta.R.string.NotificationsUnmuted);
+                    text = LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted);
                 }
             } else if (delta < 60 * 60) {
-                text = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
             } else if (delta < 60 * 60 * 24) {
-                text = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
             } else if (delta < 60 * 60 * 24 * 365) {
-                text = LocaleController.formatString("WillUnmuteIn", works.heymate.beta.R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
+                text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
             } else {
                 text = null;
             }
@@ -255,13 +255,13 @@ public class UserCell extends FrameLayout {
                 enabled = false;
             }
             if (enabled && custom) {
-                text = LocaleController.getString("NotificationsCustom", works.heymate.beta.R.string.NotificationsCustom);
+                text = LocaleController.getString("NotificationsCustom", R.string.NotificationsCustom);
             } else {
-                text = enabled ? LocaleController.getString("NotificationsUnmuted", works.heymate.beta.R.string.NotificationsUnmuted) : LocaleController.getString("NotificationsMuted", works.heymate.beta.R.string.NotificationsMuted);
+                text = enabled ? LocaleController.getString("NotificationsUnmuted", R.string.NotificationsUnmuted) : LocaleController.getString("NotificationsMuted", R.string.NotificationsMuted);
             }
         }
         if (text == null) {
-            text = LocaleController.getString("NotificationsOff", works.heymate.beta.R.string.NotificationsOff);
+            text = LocaleController.getString("NotificationsOff", R.string.NotificationsOff);
         }
 
         if (DialogObject.isEncryptedDialog(exception.did)) {
@@ -414,7 +414,7 @@ public class UserCell extends FrameLayout {
             ((LayoutParams) nameTextView.getLayoutParams()).topMargin = AndroidUtilities.dp(10);
             if (currentUser != null) {
                 if (selfAsSavedMessages && UserObject.isUserSelf(currentUser)) {
-                    nameTextView.setText(LocaleController.getString("SavedMessages", works.heymate.beta.R.string.SavedMessages), true);
+                    nameTextView.setText(LocaleController.getString("SavedMessages", R.string.SavedMessages), true);
                     statusTextView.setText(null);
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                     avatarImageView.setImage(null, "50_50", avatarDrawable, currentUser);
@@ -456,14 +456,14 @@ public class UserCell extends FrameLayout {
             if (currentUser.bot) {
                 statusTextView.setTextColor(statusColor);
                 if (currentUser.bot_chat_history || adminTextView != null && adminTextView.getVisibility() == VISIBLE) {
-                    statusTextView.setText(LocaleController.getString("BotStatusRead", works.heymate.beta.R.string.BotStatusRead));
+                    statusTextView.setText(LocaleController.getString("BotStatusRead", R.string.BotStatusRead));
                 } else {
-                    statusTextView.setText(LocaleController.getString("BotStatusCantRead", works.heymate.beta.R.string.BotStatusCantRead));
+                    statusTextView.setText(LocaleController.getString("BotStatusCantRead", R.string.BotStatusCantRead));
                 }
             } else {
                 if (currentUser.id == UserConfig.getInstance(currentAccount).getClientUserId() || currentUser.status != null && currentUser.status.expires > ConnectionsManager.getInstance(currentAccount).getCurrentTime() || MessagesController.getInstance(currentAccount).onlinePrivacy.containsKey(currentUser.id)) {
                     statusTextView.setTextColor(statusOnlineColor);
-                    statusTextView.setText(LocaleController.getString("Online", works.heymate.beta.R.string.Online));
+                    statusTextView.setText(LocaleController.getString("Online", R.string.Online));
                 } else {
                     statusTextView.setTextColor(statusColor);
                     statusTextView.setText(LocaleController.formatUserStatus(currentAccount, currentUser));

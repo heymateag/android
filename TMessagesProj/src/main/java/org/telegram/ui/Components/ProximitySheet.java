@@ -30,7 +30,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -92,7 +92,7 @@ public class ProximitySheet extends FrameLayout {
         touchSlop = vc.getScaledTouchSlop();
 
         Rect padding = new Rect();
-        Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.sheet_shadow_round).mutate();
+        Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
         shadowDrawable.getPadding(padding);
         backgroundPaddingLeft = padding.left;
@@ -161,7 +161,7 @@ public class ProximitySheet extends FrameLayout {
         customView.addView(titleLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 22, 0, 0, 4));
 
         TextView titleView = new TextView(context);
-        titleView.setText(LocaleController.getString("LocationNotifiation", works.heymate.beta.R.string.LocationNotifiation));
+        titleView.setText(LocaleController.getString("LocationNotifiation", R.string.LocationNotifiation));
         titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -189,9 +189,9 @@ public class ProximitySheet extends FrameLayout {
         linearLayout.addView(kmPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         kmPicker.setFormatter(value -> {
             if (useImperialSystem) {
-                return LocaleController.formatString("MilesShort", works.heymate.beta.R.string.MilesShort, value);
+                return LocaleController.formatString("MilesShort", R.string.MilesShort, value);
             } else {
-                return LocaleController.formatString("KMetersShort", works.heymate.beta.R.string.KMetersShort, value);
+                return LocaleController.formatString("KMetersShort", R.string.KMetersShort, value);
             }
         });
         kmPicker.setMinValue(0);
@@ -216,7 +216,7 @@ public class ProximitySheet extends FrameLayout {
         mPicker.setFormatter(value -> {
             if (useImperialSystem) {
                 if (value == 1) {
-                    return LocaleController.formatString("FootsShort", works.heymate.beta.R.string.FootsShort, 250);
+                    return LocaleController.formatString("FootsShort", R.string.FootsShort, 250);
                 } else {
                     if (value > 1) {
                         value--;
@@ -225,12 +225,12 @@ public class ProximitySheet extends FrameLayout {
                 }
             } else {
                 if (value == 1) {
-                    return LocaleController.formatString("MetersShort", works.heymate.beta.R.string.MetersShort, 50);
+                    return LocaleController.formatString("MetersShort", R.string.MetersShort, 50);
                 } else {
                     if (value > 1) {
                         value--;
                     }
-                    return LocaleController.formatString("MetersShort", works.heymate.beta.R.string.MetersShort, value * 100);
+                    return LocaleController.formatString("MetersShort", R.string.MetersShort, value * 100);
                 }
             }
         });
@@ -316,13 +316,13 @@ public class ProximitySheet extends FrameLayout {
         String distance = LocaleController.formatDistance(value, 2, useImperialSystem);
         if (onRadiusChange.run(move, (int) value) || currentUser == null) {
             if (currentUser == null) {
-                buttonTextView.setText(LocaleController.formatString("LocationNotifiationButtonGroup", works.heymate.beta.R.string.LocationNotifiationButtonGroup, distance));
+                buttonTextView.setText(LocaleController.formatString("LocationNotifiationButtonGroup", R.string.LocationNotifiationButtonGroup, distance));
             } else {
-                String format = LocaleController.getString("LocationNotifiationButtonUser", works.heymate.beta.R.string.LocationNotifiationButtonUser);
+                String format = LocaleController.getString("LocationNotifiationButtonUser", R.string.LocationNotifiationButtonUser);
                 int width = (int) Math.ceil(buttonTextView.getPaint().measureText(format));
                 int restWidth = (int) ((totalWidth - AndroidUtilities.dp(32 + 62)) * 1.5f - width);
                 CharSequence name = TextUtils.ellipsize(UserObject.getFirstName(currentUser), buttonTextView.getPaint(), Math.max(AndroidUtilities.dp(10), restWidth), TextUtils.TruncateAt.END);
-                buttonTextView.setText(LocaleController.formatString("LocationNotifiationButtonUser", works.heymate.beta.R.string.LocationNotifiationButtonUser, name, distance));
+                buttonTextView.setText(LocaleController.formatString("LocationNotifiationButtonUser", R.string.LocationNotifiationButtonUser, name, distance));
             }
             if (buttonTextView.getTag() != null) {
                 buttonTextView.setTag(null);
@@ -330,7 +330,7 @@ public class ProximitySheet extends FrameLayout {
                 infoTextView.animate().setDuration(180).alpha(0.0f).scaleX(0.5f).scaleY(0.5f).start();
             }
         } else {
-            infoTextView.setText(LocaleController.formatString("LocationNotifiationCloser", works.heymate.beta.R.string.LocationNotifiationCloser, distance));
+            infoTextView.setText(LocaleController.formatString("LocationNotifiationCloser", R.string.LocationNotifiationCloser, distance));
             if (buttonTextView.getTag() == null) {
                 buttonTextView.setTag(1);
                 buttonTextView.animate().setDuration(180).alpha(0.0f).scaleX(0.5f).scaleY(0.5f).start();

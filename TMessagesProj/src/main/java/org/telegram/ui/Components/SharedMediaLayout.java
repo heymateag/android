@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import static org.telegram.messenger.MediaDataController.MEDIA_PHOTOVIDEO;
-import static org.telegram.messenger.MediaDataController.getMediaType;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -71,8 +70,9 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
@@ -107,7 +107,7 @@ import org.telegram.ui.Cells.SharedPhotoVideoCell2;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.DialogsActivity;
-import org.telegram.ui.MediaCalendarActivity;
+import org.telegram.ui.CalendarActivity;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.ProfileActivity;
 
@@ -146,6 +146,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     boolean isInPinchToZoomTouchMode;
     boolean maybePinchToZoomTouchMode;
     boolean maybePinchToZoomTouchMode2;
+    boolean isPinnedToTop;
 
     private int pointerId1, pointerId2;
 
@@ -310,8 +311,23 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         return sharedMediaData[0].filterType;
     }
 
+    public boolean isPinnedToTop() {
+        return isPinnedToTop;
+    }
+
+    public void setPinnedToTop(boolean pinnedToTop) {
+        if (isPinnedToTop != pinnedToTop) {
+            isPinnedToTop = pinnedToTop;
+            for (int i = 0; i < mediaPages.length; i++) {
+                updateFastScrollVisibility(mediaPages[i], true);
+            }
+        }
+    }
+
     private static class MediaPage extends FrameLayout {
         public long lastCheckScrollTime;
+        public boolean fastScrollEnabled;
+        public ObjectAnimator fastScrollAnimator;
         private RecyclerListView listView;
         private RecyclerListView animationSupportingListView;
         private GridLayoutManager animationSupportingLayoutManager;
@@ -362,6 +378,43 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     showFastScrollHint(this, null, false);
                 }
             }
+        }
+
+    }
+
+    public void updateFastScrollVisibility(MediaPage mediaPage, boolean animated) {
+        boolean show = mediaPage.fastScrollEnabled && isPinnedToTop;
+        View view = mediaPage.listView.getFastScroll();
+        if (mediaPage.fastScrollAnimator != null) {
+            mediaPage.fastScrollAnimator.removeAllListeners();
+            mediaPage.fastScrollAnimator.cancel();
+        }
+        if (!animated) {
+            view.animate().setListener(null).cancel();
+            view.setVisibility(show ? View.VISIBLE : View.GONE);
+            view.setTag(show ? 1 : null);
+            view.setAlpha(1f);
+            view.setScaleX(1f);
+            view.setScaleY(1f);
+        } else if (show && view.getTag() == null) {
+            view.animate().setListener(null).cancel();
+            if (view.getVisibility() != View.VISIBLE) {
+                view.setVisibility(View.VISIBLE);
+                view.setAlpha(0f);
+            }
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, view.getAlpha(), 1f);
+            mediaPage.fastScrollAnimator = objectAnimator;
+            objectAnimator.setDuration(150).start();
+            view.setTag(1);
+        } else if (!show && view.getTag() != null) {
+
+            ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, View.ALPHA, view.getAlpha(), 0f);
+            objectAnimator.addListener(new HideViewAfterAnimation(view));
+            mediaPage.fastScrollAnimator = objectAnimator;
+            objectAnimator.setDuration(150).start();
+            view.animate().setListener(null).cancel();
+
+            view.setTag(null);
         }
     }
 
@@ -1068,6 +1121,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     private boolean isActionModeShowed;
 
     final Delegate delegate;
+    private HintView fwdRestrictedHint;
 
     public SharedMediaLayout(Context context, long did, SharedMediaPreloader preloader, int commonGroupsCount, ArrayList<Integer> sortedUsers, TLRPC.ChatFull chatInfo, boolean membersFirst, BaseFragment parent, Delegate delegate, int viewType) {
         super(context);
@@ -1144,7 +1198,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         searching = false;
         searchWas = false;
 
-        pinnedHeaderShadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.photos_header_shadow);
+        pinnedHeaderShadowDrawable = context.getResources().getDrawable(R.drawable.photos_header_shadow);
         pinnedHeaderShadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundGrayShadow), PorterDuff.Mode.MULTIPLY));
 
         if (scrollSlidingTextTabStrip != null) {
@@ -1228,8 +1282,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
         });
         searchItem.setTranslationY(AndroidUtilities.dp(10));
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
-        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
         searchItem.setVisibility(View.INVISIBLE);
 
         photoVideoOptionsItem = new ImageView(context);
@@ -1404,7 +1458,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         closeButton.setImageDrawable(backDrawable = new BackDrawable(true));
         backDrawable.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         closeButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 1));
-        closeButton.setContentDescription(LocaleController.getString("Close", works.heymate.beta.R.string.Close));
+        closeButton.setContentDescription(LocaleController.getString("Close", R.string.Close));
         actionModeLayout.addView(closeButton, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
         actionModeViews.add(closeButton);
         closeButton.setOnClickListener(v -> closeActionMode());
@@ -1418,28 +1472,36 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         if (!DialogObject.isEncryptedDialog(dialog_id)) {
             gotoItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            gotoItem.setIcon(works.heymate.beta.R.drawable.msg_message);
-            gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", works.heymate.beta.R.string.AccDescrGoToMessage));
+            gotoItem.setIcon(R.drawable.msg_message);
+            gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
             gotoItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(gotoItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
             actionModeViews.add(gotoItem);
-            gotoItem.setOnClickListener(v -> onActionBarItemClick(gotochat));
+            gotoItem.setOnClickListener(v -> onActionBarItemClick(v, gotochat));
 
             forwardItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-            forwardItem.setIcon(works.heymate.beta.R.drawable.msg_forward);
-            forwardItem.setContentDescription(LocaleController.getString("Forward", works.heymate.beta.R.string.Forward));
+            forwardItem.setIcon(R.drawable.msg_forward);
+            forwardItem.setContentDescription(LocaleController.getString("Forward", R.string.Forward));
             forwardItem.setDuplicateParentStateEnabled(false);
             actionModeLayout.addView(forwardItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
             actionModeViews.add(forwardItem);
-            forwardItem.setOnClickListener(v -> onActionBarItemClick(forward));
+            forwardItem.setOnClickListener(v -> onActionBarItemClick(v, forward));
+
+            boolean noforwards = profileActivity.getMessagesController().isChatNoForwards(-dialog_id);
+            forwardItem.setAlpha(noforwards ? 0.5f : 1f);
+            if (noforwards) {
+                if (forwardItem.getBackground() != null) forwardItem.setBackground(null);
+            } else if (forwardItem.getBackground() == null) {
+                forwardItem.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), 5));
+            }
         }
         deleteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-        deleteItem.setIcon(works.heymate.beta.R.drawable.msg_delete);
-        deleteItem.setContentDescription(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete));
+        deleteItem.setIcon(R.drawable.msg_delete);
+        deleteItem.setContentDescription(LocaleController.getString("Delete", R.string.Delete));
         deleteItem.setDuplicateParentStateEnabled(false);
         actionModeLayout.addView(deleteItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
         actionModeViews.add(deleteItem);
-        deleteItem.setOnClickListener(v -> onActionBarItemClick(delete));
+        deleteItem.setOnClickListener(v -> onActionBarItemClick(v, delete));
 
         photoVideoAdapter = new SharedPhotoVideoAdapter(context) {
             @Override
@@ -1668,13 +1730,13 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             }
                             drawingViews.addAll(animationSupportingSortedCells);
                             FastScroll fastScroll = getFastScroll();
-                            if (fastScroll != null) {
+                            if (fastScroll != null && fastScroll.getTag() != null) {
                                 float p1 = photoVideoAdapter.getScrollProgress(mediaPage.listView);
                                 float p2 = animationSupportingPhotoVideoAdapter.getScrollProgress(mediaPage.animationSupportingListView);
                                 float a1 = photoVideoAdapter.fastScrollIsVisible(mediaPage.listView) ? 1f : 0f;
                                 float a2 = animationSupportingPhotoVideoAdapter.fastScrollIsVisible(mediaPage.animationSupportingListView) ? 1f : 0f;
                                 fastScroll.setProgress(p1 * (1f - photoVideoChangeColumnsProgress) + p2 * photoVideoChangeColumnsProgress);
-                                fastScroll.setAlpha(a1 * (1f - photoVideoChangeColumnsProgress) + a2 * photoVideoChangeColumnsProgress);
+                                fastScroll.setVisibilityAlpha(a1 * (1f - photoVideoChangeColumnsProgress) + a2 * photoVideoChangeColumnsProgress);
                             }
                         }
 
@@ -1913,6 +1975,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             mediaPages[a].addView(mediaPages[a].animationSupportingListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             mediaPages[a].animationSupportingListView.setVisibility(View.GONE);
 
+
             mediaPages[a].listView.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
                 public void getItemOffsets(android.graphics.Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -2103,8 +2166,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             mediaPages[a].addView(mediaPages[a].emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             mediaPages[a].emptyView.setOnTouchListener((v, event) -> true);
             mediaPages[a].emptyView.showProgress(true, false);
-            mediaPages[a].emptyView.title.setText(LocaleController.getString("NoResult", works.heymate.beta.R.string.NoResult));
-            mediaPages[a].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", works.heymate.beta.R.string.SearchEmptyViewFilteredSubtitle2));
+            mediaPages[a].emptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            mediaPages[a].emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
             mediaPages[a].emptyView.addView(mediaPages[a].progressView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
             mediaPages[a].listView.setEmptyView(mediaPages[a].emptyView);
@@ -2141,6 +2204,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         if (hasMedia[0] >= 0) {
             loadFastScrollData(false);
         }
+    }
+
+    public void setForwardRestrictedHint(HintView hintView) {
+        fwdRestrictedHint = hintView;
     }
 
     private int getMessageId(View child) {
@@ -2262,8 +2329,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
             }
         }
-        MediaCalendarActivity calendarActivity = new MediaCalendarActivity(bundle, sharedMediaData[0].filterType, date);
-        calendarActivity.setCallback(new MediaCalendarActivity.Callback() {
+        bundle.putInt("type", CalendarActivity.TYPE_MEDIA_CALENDAR);
+        CalendarActivity calendarActivity = new CalendarActivity(bundle, sharedMediaData[0].filterType, date);
+        calendarActivity.setCallback(new CalendarActivity.Callback() {
             @Override
             public void onDateSelected(int messageId, int startOffset) {
                 int index = -1;
@@ -2346,7 +2414,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     if (photoVideoAdapter.getItemCount() == oldItemCount) {
                         AndroidUtilities.updateVisibleRows(mediaPage.listView);
                     } else {
-                        updatePhotosAdapter();
+                        photoVideoAdapter.notifyDataSetChanged();
                     }
 
                     if (pinchCenterPosition >= 0) {
@@ -2396,7 +2464,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             if (photoVideoAdapter.getItemCount() == oldItemCount) {
                                 AndroidUtilities.updateVisibleRows(finalMediaPage.listView);
                             } else {
-                                updatePhotosAdapter();
+                                photoVideoAdapter.notifyDataSetChanged();
                             }
                         }
                         finalMediaPage.animationSupportingListView.setVisibility(View.GONE);
@@ -2465,7 +2533,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     if (photoVideoAdapter.getItemCount() == oldItemCount) {
                         AndroidUtilities.updateVisibleRows(finalMediaPage.listView);
                     } else {
-                        updatePhotosAdapter();
+                        photoVideoAdapter.notifyDataSetChanged();
                     }
                     finalMediaPage.animationSupportingListView.setVisibility(View.GONE);
                     saveScrollPosition();
@@ -2932,38 +3000,15 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 if (!sharedMediaData[type].fastScrollPeriods.isEmpty()) {
                     for (int i = 0; i < mediaPages.length; i++) {
                         if (mediaPages[i].selectedType == type) {
-                            mediaPages[i].listView.setFastScrollVisible(true);
-                            mediaPages[i].listView.getFastScroll().setAlpha(0);
-                            mediaPages[i].listView.getFastScroll().animate().alpha(1f).setDuration(100).start();
-                            mediaPages[i].listView.checkSection(true);
+                            mediaPages[i].fastScrollEnabled = true;
+                            updateFastScrollVisibility(mediaPages[i], true);
                         }
                     }
                 }
-                updatePhotosAdapter();
+                photoVideoAdapter.notifyDataSetChanged();
             }));
             ConnectionsManager.getInstance(profileActivity.getCurrentAccount()).bindRequestToGuid(reqId, profileActivity.getClassGuid());
         }
-    }
-
-    private void updatePhotosAdapter() {
-//        MediaPage mediaPage = getMediaPage(0);
-//        if (mediaPage != null) {
-//            for (int i = 0; i < mediaPage.listView.getChildCount(); i++) {
-//                View child = mediaPage.listView.getChildAt(i);
-//                if (child instanceof SharedPhotoVideoCell2) {
-//                    ((SharedPhotoVideoCell2) child).moveImageToFront();
-//                }
-//            }
-//            if (mediaPage.animationSupportingListView.getVisibility() == View.VISIBLE) {
-//                for (int i = 0; i < mediaPage.animationSupportingListView.getChildCount(); i++) {
-//                    View child = mediaPage.animationSupportingListView.getChildAt(i);
-//                    if (child instanceof SharedPhotoVideoCell2) {
-//                        ((SharedPhotoVideoCell2) child).moveImageToFront();
-//                    }
-//                }
-//            }
-//        }
-        photoVideoAdapter.notifyDataSetChanged();
     }
 
 
@@ -3012,7 +3057,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         checkCurrentTabValid();
     }
 
-    public void onActionBarItemClick(int id) {
+    public void onActionBarItemClick(View v, int id) {
         if (id == delete) {
             TLRPC.Chat currentChat = null;
             TLRPC.User currentUser = null;
@@ -3030,6 +3075,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 cantDeleteMessagesCount = 0;
             }, null);
         } else if (id == forward) {
+            if (info != null) {
+                TLRPC.Chat chat = profileActivity.getMessagesController().getChat(info.id);
+                if (profileActivity.getMessagesController().isChatNoForwards(chat)) {
+                    if (fwdRestrictedHint != null) {
+                        fwdRestrictedHint.setText(ChatObject.isChannel(chat) && !chat.megagroup ? LocaleController.getString("ForwardsRestrictedInfoChannel", R.string.ForwardsRestrictedInfoChannel) :
+                                LocaleController.getString("ForwardsRestrictedInfoGroup", R.string.ForwardsRestrictedInfoGroup));
+                        fwdRestrictedHint.showForView(v, true);
+                    }
+                    return;
+                }
+            }
+
             Bundle args = new Bundle();
             args.putBoolean("onlySelect", true);
             args.putInt("dialogsType", 3);
@@ -3242,6 +3299,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     velocityTracker = VelocityTracker.obtain();
                 }
                 velocityTracker.addMovement(ev);
+
+                if (fwdRestrictedHint != null) {
+                    fwdRestrictedHint.hide();
+                }
             }
             if (ev != null && ev.getAction() == MotionEvent.ACTION_DOWN && !startedTracking && !maybeStartTracking && ev.getY() >= AndroidUtilities.dp(48)) {
                 startedTrackingPointerId = ev.getPointerId(0);
@@ -3581,7 +3642,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         if (photoVideoAdapter.getItemCount() == oldItemCount) {
                             AndroidUtilities.updateVisibleRows(listView);
                         } else {
-                            updatePhotosAdapter();
+                            photoVideoAdapter.notifyDataSetChanged();
                         }
                     } else {
                         adapter.notifyDataSetChanged();
@@ -3679,7 +3740,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (updated) {
                 scrolling = true;
                 if (photoVideoAdapter != null) {
-                    updatePhotosAdapter();
+                    photoVideoAdapter.notifyDataSetChanged();
                 }
                 if (documentsAdapter != null) {
                     documentsAdapter.notifyDataSetChanged();
@@ -3745,7 +3806,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         }
                         if (adapter != null) {
                             int count = adapter.getItemCount();
-                            updatePhotosAdapter();
+                            photoVideoAdapter.notifyDataSetChanged();
                             documentsAdapter.notifyDataSetChanged();
                             voiceAdapter.notifyDataSetChanged();
                             linksAdapter.notifyDataSetChanged();
@@ -3830,6 +3891,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 }
                 if (messageId != 0) {
                     int index = -1;
+                    if (mediaPages[k].selectedType < 0 || mediaPages[k].selectedType >= sharedMediaData.length) {
+                        continue;
+                    }
                     for (int i = 0; i < sharedMediaData[mediaPages[k].selectedType].messages.size(); i++) {
                         if (messageId == sharedMediaData[mediaPages[k].selectedType].messages.get(i).getId()) {
                             index = i;
@@ -3941,7 +4005,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     public void onResume() {
         scrolling = true;
         if (photoVideoAdapter != null) {
-            updatePhotosAdapter();
+            photoVideoAdapter.notifyDataSetChanged();
         }
         if (documentsAdapter != null) {
             documentsAdapter.notifyDataSetChanged();
@@ -3996,7 +4060,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
     public void updateAdapters() {
         if (photoVideoAdapter != null) {
-            updatePhotosAdapter();
+            photoVideoAdapter.notifyDataSetChanged();
         }
         if (documentsAdapter != null) {
             documentsAdapter.notifyDataSetChanged();
@@ -4118,32 +4182,32 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
             if (chatUsersAdapter.chatInfo != null) {
                 if (!scrollSlidingTextTabStrip.hasTab(7)) {
-                    scrollSlidingTextTabStrip.addTextTab(7, LocaleController.getString("GroupMembers", works.heymate.beta.R.string.GroupMembers), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(7, LocaleController.getString("GroupMembers", R.string.GroupMembers), idToView);
                 }
             }
             if (hasMedia[0] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(0)) {
                     if (hasMedia[1] == 0 && hasMedia[2] == 0 && hasMedia[3] == 0 && hasMedia[4] == 0 && hasMedia[5] == 0 && hasMedia[6] == 0 && chatUsersAdapter.chatInfo == null) {
-                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTabFull2", works.heymate.beta.R.string.SharedMediaTabFull2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTabFull2", R.string.SharedMediaTabFull2), idToView);
                     } else {
-                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", works.heymate.beta.R.string.SharedMediaTab2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", R.string.SharedMediaTab2), idToView);
                     }
                 }
             }
             if (hasMedia[1] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(1)) {
-                    scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", works.heymate.beta.R.string.SharedFilesTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", R.string.SharedFilesTab2), idToView);
                 }
             }
             if (!DialogObject.isEncryptedDialog(dialog_id)) {
                 if (hasMedia[3] > 0) {
                     if (!scrollSlidingTextTabStrip.hasTab(3)) {
-                        scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", works.heymate.beta.R.string.SharedLinksTab2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", R.string.SharedLinksTab2), idToView);
                     }
                 }
                 if (hasMedia[4] > 0) {
                     if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", works.heymate.beta.R.string.SharedMusicTab2), idToView);
+                        scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
                     }
                 }
             } else {
@@ -4155,17 +4219,17 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
             if (hasMedia[2] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(2)) {
-                    scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", works.heymate.beta.R.string.SharedVoiceTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", R.string.SharedVoiceTab2), idToView);
                 }
             }
             if (hasMedia[5] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(5)) {
-                    scrollSlidingTextTabStrip.addTextTab(5, LocaleController.getString("SharedGIFsTab2", works.heymate.beta.R.string.SharedGIFsTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(5, LocaleController.getString("SharedGIFsTab2", R.string.SharedGIFsTab2), idToView);
                 }
             }
             if (hasMedia[6] > 0) {
                 if (!scrollSlidingTextTabStrip.hasTab(6)) {
-                    scrollSlidingTextTabStrip.addTextTab(6, LocaleController.getString("SharedGroupsTab2", works.heymate.beta.R.string.SharedGroupsTab2), idToView);
+                    scrollSlidingTextTabStrip.addTextTab(6, LocaleController.getString("SharedGroupsTab2", R.string.SharedGroupsTab2), idToView);
                 }
             }
         }
@@ -4396,7 +4460,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
             mediaPages[a].listView.setVisibility(View.VISIBLE);
         }
-        mediaPages[a].listView.setFastScrollVisible(fastScrollVisible);
+        mediaPages[a].fastScrollEnabled = fastScrollVisible;
+        updateFastScrollVisibility(mediaPages[a], false);
         mediaPages[a].layoutManager.setSpanCount(spanCount);
         mediaPages[a].listView.setRecycledViewPool(viewPool);
         mediaPages[a].animationSupportingListView.setRecycledViewPool(viewPool);
@@ -4607,7 +4672,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
         }
         if (num == 0) {
-            updatePhotosAdapter();
+            photoVideoAdapter.notifyDataSetChanged();
         }
     }
 
@@ -4627,7 +4692,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (longPress) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(profileActivity.getParentActivity());
                 builder.setTitle(urlFinal);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", works.heymate.beta.R.string.Open), LocaleController.getString("Copy", works.heymate.beta.R.string.Copy)}, (dialog, which) -> {
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
                     if (which == 0) {
                         openUrl(urlFinal);
                     } else if (which == 1) {
@@ -5004,46 +5069,46 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (DialogObject.isEncryptedDialog(dialog_id)) {
                 emptyStubView.emptyTextView.setText(LocaleController.getString("NoMediaSecret", R.string.NoMediaSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMedia", works.heymate.beta.R.string.NoMedia));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoMedia", R.string.NoMedia));
             }
         } else if (currentType == 1) {
             emptyStubView.emptyImageView.setImageResource(R.drawable.tip2);
             if (DialogObject.isEncryptedDialog(dialog_id)) {
                 emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFilesSecret", R.string.NoSharedFilesSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFiles", works.heymate.beta.R.string.NoSharedFiles));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedFiles", R.string.NoSharedFiles));
             }
         } else if (currentType == 2) {
             emptyStubView.emptyImageView.setImageResource(R.drawable.tip5);
             if (DialogObject.isEncryptedDialog(dialog_id)) {
                 emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoiceSecret", R.string.NoSharedVoiceSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoice", works.heymate.beta.R.string.NoSharedVoice));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedVoice", R.string.NoSharedVoice));
             }
         } else if (currentType == 3) {
             emptyStubView.emptyImageView.setImageResource(R.drawable.tip3);
             if (DialogObject.isEncryptedDialog(dialog_id)) {
                 emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinksSecret", R.string.NoSharedLinksSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinks", works.heymate.beta.R.string.NoSharedLinks));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedLinks", R.string.NoSharedLinks));
             }
         } else if (currentType == 4) {
             emptyStubView.emptyImageView.setImageResource(R.drawable.tip4);
             if (DialogObject.isEncryptedDialog(dialog_id)) {
                 emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudioSecret", R.string.NoSharedAudioSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudio", works.heymate.beta.R.string.NoSharedAudio));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedAudio", R.string.NoSharedAudio));
             }
         } else if (currentType == 5) {
             emptyStubView.emptyImageView.setImageResource(R.drawable.tip1);
             if (DialogObject.isEncryptedDialog(dialog_id)) {
                 emptyStubView.emptyTextView.setText(LocaleController.getString("NoSharedGifSecret", R.string.NoSharedGifSecret));
             } else {
-                emptyStubView.emptyTextView.setText(LocaleController.getString("NoGIFs", works.heymate.beta.R.string.NoGIFs));
+                emptyStubView.emptyTextView.setText(LocaleController.getString("NoGIFs", R.string.NoGIFs));
             }
         } else if (currentType == 6) {
             emptyStubView.emptyImageView.setImageDrawable(null);
-            emptyStubView.emptyTextView.setText(LocaleController.getString("NoGroupsInCommon", works.heymate.beta.R.string.NoGroupsInCommon));
+            emptyStubView.emptyTextView.setText(LocaleController.getString("NoGroupsInCommon", R.string.NoGroupsInCommon));
         } else if (currentType == 7) {
             emptyStubView.emptyImageView.setImageDrawable(null);
             emptyStubView.emptyTextView.setText("");
@@ -5954,18 +6019,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         role = channelParticipant.rank;
                     } else {
                         if (channelParticipant instanceof TLRPC.TL_channelParticipantCreator) {
-                            role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
+                            role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                         } else if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin) {
-                            role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
+                            role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                         } else {
                             role = null;
                         }
                     }
                 } else {
                     if (part instanceof TLRPC.TL_chatParticipantCreator) {
-                        role = LocaleController.getString("ChannelCreator", works.heymate.beta.R.string.ChannelCreator);
+                        role = LocaleController.getString("ChannelCreator", R.string.ChannelCreator);
                     } else if (part instanceof TLRPC.TL_chatParticipantAdmin) {
-                        role = LocaleController.getString("ChannelAdmin", works.heymate.beta.R.string.ChannelAdmin);
+                        role = LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin);
                     } else {
                         role = null;
                     }

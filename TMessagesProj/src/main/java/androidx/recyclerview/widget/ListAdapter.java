@@ -51,7 +51,7 @@ import java.util.List;
  *     public void onCreate(Bundle savedState) {
  *         super.onCreate(savedState);
  *         MyViewModel viewModel = ViewModelProviders.of(this).get(MyViewModel.class);
- *         RecyclerView recyclerView = findViewById(works.heymate.beta.R.id.user_list);
+ *         RecyclerView recyclerView = findViewById(R.id.user_list);
  *         UserAdapter&lt;User> adapter = new UserAdapter();
  *         viewModel.usersList.observe(this, list -> adapter.submitList(list));
  *         recyclerView.setAdapter(adapter);

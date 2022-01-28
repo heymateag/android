@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -78,7 +78,7 @@ public class ChatActivityMemberRequestsDelegate {
             avatarsView = new AvatarsImageView(fragment.getParentActivity(), false) {
                 @Override
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    int width = count == 0 ? 0 : (20 * (count - 1) + 24);
+                    int width = avatarsDarawable.count == 0 ? 0 : (20 * (avatarsDarawable.count - 1) + 24);
                     super.onMeasure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(width), MeasureSpec.EXACTLY), heightMeasureSpec);
                 }
             };

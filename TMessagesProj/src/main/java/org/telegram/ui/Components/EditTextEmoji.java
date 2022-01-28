@@ -25,7 +25,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -166,10 +166,10 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         emojiButton.setImageDrawable(emojiIconDrawable = new ReplaceableIconDrawable(context));
         emojiIconDrawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
         if (style == STYLE_FRAGMENT) {
-            emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.smiles_tab_smiles, false);
+            emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, false);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), 0, 0, 0, 7));
         } else {
-            emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_smile, false);
+            emojiIconDrawable.setIcon(R.drawable.input_smile, false);
             addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 0, 0));
         }
         if (Build.VERSION.SDK_INT >= 21) {
@@ -187,7 +187,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 openKeyboardInternal();
             }
         });
-        emojiButton.setContentDescription(LocaleController.getString("Emoji", works.heymate.beta.R.string.Emoji));
+        emojiButton.setContentDescription(LocaleController.getString("Emoji", R.string.Emoji));
     }
 
     protected void onLineCountChanged(int oldLineCount, int newLineCount) {
@@ -414,7 +414,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             if (sizeNotifierLayout != null) {
                 emojiPadding = currentHeight;
                 sizeNotifierLayout.requestLayout();
-                emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_keyboard, true);
+                emojiIconDrawable.setIcon(R.drawable.input_keyboard, true);
                 onWindowSizeChanged();
             }
 
@@ -441,9 +441,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         } else {
             if (emojiButton != null) {
                 if (currentStyle == STYLE_FRAGMENT) {
-                      emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.smiles_tab_smiles, true);
+                      emojiIconDrawable.setIcon(R.drawable.smiles_tab_smiles, true);
                 } else {
-                      emojiIconDrawable.setIcon(works.heymate.beta.R.drawable.input_smile, true);
+                      emojiIconDrawable.setIcon(R.drawable.input_smile, true);
                 }
             }
             if (emojiView != null) {

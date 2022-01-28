@@ -58,7 +58,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
@@ -436,7 +436,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         updateFields();
                         adapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getContext(), LocaleController.getString("AddStickersNotFound", works.heymate.beta.R.string.AddStickersNotFound), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound), Toast.LENGTH_SHORT).show();
                         dismiss();
                     }
                 }));
@@ -740,11 +740,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         optionsButton.setIcon(R.drawable.ic_ab_other);
         optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_player_actionBarSelector), 1));
         containerView.addView(optionsButton, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 0, 5, 5, 0));
-        optionsButton.addSubItem(1, works.heymate.beta.R.drawable.msg_share, LocaleController.getString("StickersShare", works.heymate.beta.R.string.StickersShare));
-        optionsButton.addSubItem(2, works.heymate.beta.R.drawable.msg_link, LocaleController.getString("CopyLink", works.heymate.beta.R.string.CopyLink));
+        optionsButton.addSubItem(1, R.drawable.msg_share, LocaleController.getString("StickersShare", R.string.StickersShare));
+        optionsButton.addSubItem(2, R.drawable.msg_link, LocaleController.getString("CopyLink", R.string.CopyLink));
         optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
         optionsButton.setDelegate(this::onSubItemClick);
-        optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", works.heymate.beta.R.string.AccDescrMoreOptions));
+        optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         optionsButton.setVisibility(inputStickerSet != null ? View.VISIBLE : View.GONE);
 
         RadialProgressView progressView = new RadialProgressView(context);
@@ -834,7 +834,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             previewSendButton.setVisibility(View.VISIBLE);
             previewSendButtonShadow.setVisibility(View.VISIBLE);
         } else {
-            previewSendButton.setText(LocaleController.getString("Close", works.heymate.beta.R.string.Close).toUpperCase());
+            previewSendButton.setText(LocaleController.getString("Close", R.string.Close).toUpperCase());
             stickerImageView.setLayoutParams(LayoutHelper.createFrame(size, size, Gravity.CENTER));
             stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(size, size, Gravity.CENTER));
             previewSendButton.setVisibility(View.GONE);
@@ -926,9 +926,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (stickerSet.set == null || !MediaDataController.getInstance(currentAccount).isStickerPackInstalled(stickerSet.set.id)) {
                 String text;
                 if (stickerSet.set != null && stickerSet.set.masks) {
-                    text = LocaleController.formatString("AddStickersCount", works.heymate.beta.R.string.AddStickersCount, LocaleController.formatPluralString("MasksCount", stickerSet.documents.size())).toUpperCase();
+                    text = LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, LocaleController.formatPluralString("MasksCount", stickerSet.documents.size())).toUpperCase();
                 } else {
-                    text = LocaleController.formatString("AddStickersCount", works.heymate.beta.R.string.AddStickersCount, LocaleController.formatPluralString("Stickers", stickerSet.documents.size())).toUpperCase();
+                    text = LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, LocaleController.formatPluralString("Stickers", stickerSet.documents.size())).toUpperCase();
                 }
                 setButton(v -> {
                     dismiss();
@@ -951,7 +951,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                                     MediaDataController.getInstance(currentAccount).processStickerSetInstallResultArchive(parentFragment, true, type, (TLRPC.TL_messages_stickerSetInstallResultArchive) response);
                                 }
                             } else {
-                                Toast.makeText(getContext(), LocaleController.getString("ErrorOccurred", works.heymate.beta.R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             FileLog.e(e);
@@ -962,9 +962,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             } else {
                 String text;
                 if (stickerSet.set.masks) {
-                    text = LocaleController.formatString("RemoveStickersCount", works.heymate.beta.R.string.RemoveStickersCount, LocaleController.formatPluralString("MasksCount", stickerSet.documents.size())).toUpperCase();
+                    text = LocaleController.formatString("RemoveStickersCount", R.string.RemoveStickersCount, LocaleController.formatPluralString("MasksCount", stickerSet.documents.size())).toUpperCase();
                 } else {
-                    text = LocaleController.formatString("RemoveStickersCount", works.heymate.beta.R.string.RemoveStickersCount, LocaleController.formatPluralString("Stickers", stickerSet.documents.size())).toUpperCase();
+                    text = LocaleController.formatString("RemoveStickersCount", R.string.RemoveStickersCount, LocaleController.formatPluralString("Stickers", stickerSet.documents.size())).toUpperCase();
                 }
                 if (stickerSet.set.official) {
                     setButton(v -> {
@@ -995,7 +995,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 pickerBottomLayout.setEnabled(false);
             }
         } else {
-            String text = LocaleController.getString("Close", works.heymate.beta.R.string.Close).toUpperCase();
+            String text = LocaleController.getString("Close", R.string.Close).toUpperCase();
             setButton((v) -> dismiss(), text, Theme.key_dialogTextBlue2);
         }
     }

@@ -392,13 +392,13 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 break;
             case 2: {
                 HeaderCell headerCell = new HeaderCell(mContext);
-                headerCell.setText(LocaleController.getString("RecentlyViewed", works.heymate.beta.R.string.RecentlyViewed));
+                headerCell.setText(LocaleController.getString("RecentlyViewed", R.string.RecentlyViewed));
 
                 TextView textView = new TextView(mContext);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader));
-                textView.setText(LocaleController.getString("RecentlyViewedHide", works.heymate.beta.R.string.RecentlyViewedHide));
+                textView.setText(LocaleController.getString("RecentlyViewedHide", R.string.RecentlyViewedHide));
                 textView.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL);
                 headerCell.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 17, 15, 17, 0));
                 textView.setOnClickListener(view1 -> {
@@ -420,7 +420,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 };
                 frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
                 View v = new View(mContext);
-                v.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                v.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 frameLayout.addView(v, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
                 view = frameLayout;
                 break;
@@ -438,7 +438,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 break;
             case 8: {
                 view = new ShadowSectionCell(mContext);
-                Drawable drawable = Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
+                Drawable drawable = Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow);
                 CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundGray)), drawable);
                 combinedDrawable.setFullsize(true);
                 view.setBackgroundDrawable(combinedDrawable);
@@ -577,20 +577,20 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 HeaderCell cell = (HeaderCell) holder.itemView;
                 if (dialogsType == 11 || dialogsType == 12 || dialogsType == 13) {
                     if (i == 0) {
-                        cell.setText(LocaleController.getString("ImportHeader", works.heymate.beta.R.string.ImportHeader));
+                        cell.setText(LocaleController.getString("ImportHeader", R.string.ImportHeader));
                     } else {
-                        cell.setText(LocaleController.getString("ImportHeaderContacts", works.heymate.beta.R.string.ImportHeaderContacts));
+                        cell.setText(LocaleController.getString("ImportHeaderContacts", R.string.ImportHeaderContacts));
                     }
                 } else {
-                    cell.setText(LocaleController.getString("YourContacts", works.heymate.beta.R.string.YourContacts));
+                    cell.setText(LocaleController.getString("YourContacts", R.string.YourContacts));
                 }
                 break;
             }
             case 11: {
                 TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
-                cell.setText(LocaleController.getString("TapOnThePencil", works.heymate.beta.R.string.TapOnThePencil));
+                cell.setText(LocaleController.getString("TapOnThePencil", R.string.TapOnThePencil));
                 if (arrowDrawable == null) {
-                    arrowDrawable = mContext.getResources().getDrawable(works.heymate.beta.R.drawable.arrow_newchat);
+                    arrowDrawable = mContext.getResources().getDrawable(R.drawable.arrow_newchat);
                     arrowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4), PorterDuff.Mode.MULTIPLY));
                 }
                 TextView textView = cell.getTextView();
@@ -602,7 +602,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             case 12: {
                 TextCell cell = (TextCell) holder.itemView;
                 cell.setColors(Theme.key_windowBackgroundWhiteBlueText4, Theme.key_windowBackgroundWhiteBlueText4);
-                cell.setTextAndIcon(LocaleController.getString("CreateGroupForImport", works.heymate.beta.R.string.CreateGroupForImport), works.heymate.beta.R.drawable.groups_create, dialogsCount != 0);
+                cell.setTextAndIcon(LocaleController.getString("CreateGroupForImport", R.string.CreateGroupForImport), R.drawable.groups_create, dialogsCount != 0);
                 cell.setIsInDialogs();
                 cell.setOffsetFromImage(75);
                 break;
@@ -809,7 +809,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
         private boolean preloadIsAvilable() {
             return false;
-            // return DownloadController.getInstance(UserConfig.selectedAccount).getCurrentDownloadMask() != 0;
+           // return DownloadController.getInstance(UserConfig.selectedAccount).getCurrentDownloadMask() != 0;
         }
 
         public void updateList() {

@@ -13,14 +13,20 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Application;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.os.storage.StorageManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -29,17 +35,19 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import works.heymate.beta.R;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -57,6 +65,7 @@ import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
+import org.telegram.ui.Cells.TextCheckBoxCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.PhotoPickerActivity;
@@ -192,7 +201,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         ActionBarMenu menu = parentAlert.actionBar.createMenu();
-        searchItem = menu.addItem(search_button, works.heymate.beta.R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(search_button, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -223,15 +232,15 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 searchAdapter.updateFiltersView(true, null, null,true);
             }
         });
-        searchItem.setSearchFieldHint(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
-        searchItem.setContentDescription(LocaleController.getString("Search", works.heymate.beta.R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        searchItem.setContentDescription(LocaleController.getString("Search", R.string.Search));
         EditTextBoldCursor editText = searchItem.getSearchField();
         editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
         editText.setCursorColor(getThemedColor(Theme.key_dialogTextBlack));
         editText.setHintTextColor(getThemedColor(Theme.key_chat_messagePanelHint));
 
-        sortItem = menu.addItem(sort_button, sortByName ? works.heymate.beta.R.drawable.contacts_sort_time : works.heymate.beta.R.drawable.contacts_sort_name);
-        sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", works.heymate.beta.R.string.AccDescrContactSorting));
+        sortItem = menu.addItem(sort_button, sortByName ? R.drawable.contacts_sort_time : R.drawable.contacts_sort_name);
+        sortItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", R.string.AccDescrContactSorting));
 
         addView(loadingView = new FlickerLoadingView(context, resourcesProvider));
 
@@ -326,7 +335,13 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (object instanceof ListItem) {
                 ListItem item = (ListItem) object;
                 File file = item.file;
-                if (file == null) {
+                boolean isExternalStorageManager = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    isExternalStorageManager = Environment.isExternalStorageManager();
+                }
+                if (!BuildVars.NO_SCOPED_STORAGE && (item.icon == R.drawable.files_storage || item.icon == R.drawable.files_internal) && !isExternalStorageManager) {
+                    delegate.startDocumentSelectActivity();
+                } else if (file == null) {
                     if (item.icon == R.drawable.files_gallery) {
                         HashMap<Object, Object> selectedPhotos = new HashMap<>();
                         ArrayList<Object> selectedPhotosOrder = new ArrayList<>();
@@ -369,8 +384,6 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                         if (delegate != null) {
                             delegate.startMusicSelectActivity();
                         }
-                    } else if (!BuildVars.NO_SCOPED_STORAGE && item.icon == R.drawable.files_storage) {
-                        delegate.startDocumentSelectActivity();
                     } else {
                         int top = getTopForScroll();
                         HistoryEntry he = history.remove(history.size() - 1);
@@ -455,7 +468,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             sortRecentItems();
             sortFileItems();
             listAdapter.notifyDataSetChanged();
-            sortItem.setIcon(sortByName ? works.heymate.beta.R.drawable.contacts_sort_time : works.heymate.beta.R.drawable.contacts_sort_name);
+            sortItem.setIcon(sortByName ? R.drawable.contacts_sort_time : R.drawable.contacts_sort_name);
         }
     }
 
@@ -760,7 +773,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         listRoots();
         updateSearchButton();
         updateEmptyView();
-        parentAlert.actionBar.setTitle(LocaleController.getString("SelectFile", works.heymate.beta.R.string.SelectFile));
+        parentAlert.actionBar.setTitle(LocaleController.getString("SelectFile", R.string.SelectFile));
         sortItem.setVisibility(VISIBLE);
         layoutManager.scrollToPositionWithOffset(0, 0);
     }
@@ -866,7 +879,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     return true;
                 }
             }
-            showErrorBox(LocaleController.getString("AccessError", works.heymate.beta.R.string.AccessError));
+            showErrorBox(LocaleController.getString("AccessError", R.string.AccessError));
             return false;
         }
         File[] files;
@@ -877,7 +890,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             return false;
         }
         if (files == null) {
-            showErrorBox(LocaleController.getString("UnknownError", works.heymate.beta.R.string.UnknownError));
+            showErrorBox(LocaleController.getString("UnknownError", R.string.UnknownError));
             return false;
         }
         currentDir = dir;
@@ -891,8 +904,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             item.title = file.getName();
             item.file = file;
             if (file.isDirectory()) {
-                item.icon = works.heymate.beta.R.drawable.files_folder;
-                item.subtitle = LocaleController.getString("Folder", works.heymate.beta.R.string.Folder);
+                item.icon = R.drawable.files_folder;
+                item.subtitle = LocaleController.getString("Folder", R.string.Folder);
             } else {
                 hasFiles = true;
                 String fname = file.getName();
@@ -911,14 +924,14 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         if (history.size() > 0) {
             HistoryEntry entry = history.get(history.size() - 1);
             if (entry.dir == null) {
-                item.subtitle = LocaleController.getString("Folder", works.heymate.beta.R.string.Folder);
+                item.subtitle = LocaleController.getString("Folder", R.string.Folder);
             } else {
                 item.subtitle = entry.dir.toString();
             }
         } else {
-            item.subtitle = LocaleController.getString("Folder", works.heymate.beta.R.string.Folder);
+            item.subtitle = LocaleController.getString("Folder", R.string.Folder);
         }
-        item.icon = works.heymate.beta.R.drawable.files_folder;
+        item.icon = R.drawable.files_folder;
         item.file = null;
         items.add(0, item);
         sortFileItems();
@@ -942,13 +955,17 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         items.clear();
 
         HashSet<String> paths = new HashSet<>();
-        if (!BuildVars.NO_SCOPED_STORAGE) {
-            ListItem ext = new ListItem();
-            ext.title = LocaleController.getString("InternalStorage", R.string.InternalStorage);
-            ext.icon = R.drawable.files_storage;
-            ext.subtitle = LocaleController.getString("InternalFolderInfo", R.string.InternalFolderInfo);
-            items.add(ext);
-        } else {
+        boolean isExternalStorageManager = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            isExternalStorageManager = Environment.isExternalStorageManager();
+        }
+//        if (!BuildVars.NO_SCOPED_STORAGE && !isExternalStorageManager) {
+//            ListItem ext = new ListItem();
+//            ext.title = LocaleController.getString("InternalStorage", R.string.InternalStorage);
+//            ext.icon = R.drawable.files_storage;
+//            ext.subtitle = LocaleController.getString("InternalFolderInfo", R.string.InternalFolderInfo);
+//            items.add(ext);
+//        } else {
             String defaultPath = Environment.getExternalStorageDirectory().getPath();
             String defaultPathState = Environment.getExternalStorageState();
             if (defaultPathState.equals(Environment.MEDIA_MOUNTED) || defaultPathState.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
@@ -1023,16 +1040,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     }
                 }
             }
-        }
+        //}
 
         ListItem fs;
         try {
-            File telegramPath = new File(Environment.getExternalStorageDirectory(), "Telegram");
+            File telegramPath = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), "Telegram");
             if (telegramPath.exists()) {
                 fs = new ListItem();
                 fs.title = "Telegram";
-                fs.subtitle = LocaleController.getString("AppFolderInfo", works.heymate.beta.R.string.AppFolderInfo);
-                fs.icon = works.heymate.beta.R.drawable.files_folder;
+                fs.subtitle = LocaleController.getString("AppFolderInfo", R.string.AppFolderInfo);
+                fs.icon = R.drawable.files_folder;
                 fs.file = telegramPath;
                 items.add(fs);
             }
@@ -1041,17 +1058,17 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         fs = new ListItem();
-        fs.title = LocaleController.getString("Gallery", works.heymate.beta.R.string.Gallery);
-        fs.subtitle = LocaleController.getString("GalleryInfo", works.heymate.beta.R.string.GalleryInfo);
-        fs.icon = works.heymate.beta.R.drawable.files_gallery;
+        fs.title = LocaleController.getString("Gallery", R.string.Gallery);
+        fs.subtitle = LocaleController.getString("GalleryInfo", R.string.GalleryInfo);
+        fs.icon = R.drawable.files_gallery;
         fs.file = null;
         items.add(fs);
 
         if (allowMusic) {
             fs = new ListItem();
-            fs.title = LocaleController.getString("AttachMusic", works.heymate.beta.R.string.AttachMusic);
-            fs.subtitle = LocaleController.getString("MusicInfo", works.heymate.beta.R.string.MusicInfo);
-            fs.icon = works.heymate.beta.R.drawable.files_music;
+            fs.title = LocaleController.getString("AttachMusic", R.string.AttachMusic);
+            fs.subtitle = LocaleController.getString("MusicInfo", R.string.MusicInfo);
+            fs.icon = R.drawable.files_music;
             fs.file = null;
             items.add(fs);
         }
@@ -1072,7 +1089,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (total == 0) {
                 return "";
             }
-            return LocaleController.formatString("FreeOfTotal", works.heymate.beta.R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(total));
+            return LocaleController.formatString("FreeOfTotal", R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(total));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -1160,9 +1177,9 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 case 0:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (sortByName) {
-                        headerCell.setText(LocaleController.getString("RecentFilesAZ", works.heymate.beta.R.string.RecentFilesAZ));
+                        headerCell.setText(LocaleController.getString("RecentFilesAZ", R.string.RecentFilesAZ));
                     } else {
-                        headerCell.setText(LocaleController.getString("RecentFiles", works.heymate.beta.R.string.RecentFiles));
+                        headerCell.setText(LocaleController.getString("RecentFiles", R.string.RecentFiles));
                     }
                     break;
                 case 1:

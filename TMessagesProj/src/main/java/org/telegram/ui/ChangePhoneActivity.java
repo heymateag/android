@@ -59,7 +59,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.UserConfig;
@@ -147,13 +147,13 @@ public class ChangePhoneActivity extends BaseFragment {
 
     @Override
     public View createView(Context context) {
-        actionBar.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == done_button) {
-                    views[currentViewNum].onNextPressed();
+                    views[currentViewNum].onNextPressed(null);
                 } else if (id == -1) {
                     finishFragment();
                 }
@@ -161,7 +161,7 @@ public class ChangePhoneActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, works.heymate.beta.R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", works.heymate.beta.R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         ScrollView scrollView = new ScrollView(context) {
             @Override
@@ -211,7 +211,7 @@ public class ChangePhoneActivity extends BaseFragment {
         if (requestCode == 6) {
             checkPermissions = false;
             if (currentViewNum == 0) {
-                views[currentViewNum].onNextPressed();
+                views[currentViewNum].onNextPressed(null);
             }
         }
     }
@@ -439,7 +439,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     String text = PhoneFormat.stripExceptNumbers(codeField.getText().toString());
                     codeField.setText(text);
                     if (text.length() == 0) {
-                        countryButton.setText(LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
+                        countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                         phoneField.setHintText(null);
                         countryState = 1;
                     } else {
@@ -474,12 +474,12 @@ public class ChangePhoneActivity extends BaseFragment {
                                 phoneField.setHintText(hint != null ? hint.replace('X', '–') : null);
                                 countryState = 0;
                             } else {
-                                countryButton.setText(LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
+                                countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
                                 phoneField.setHintText(null);
                                 countryState = 2;
                             }
                         } else {
-                            countryButton.setText(LocaleController.getString("WrongCountry", works.heymate.beta.R.string.WrongCountry));
+                            countryButton.setText(LocaleController.getString("WrongCountry", R.string.WrongCountry));
                             phoneField.setHintText(null);
                             countryState = 2;
                         }
@@ -594,7 +594,7 @@ public class ChangePhoneActivity extends BaseFragment {
             });
             phoneField.setOnEditorActionListener((textView, i, keyEvent) -> {
                 if (i == EditorInfo.IME_ACTION_NEXT) {
-                    onNextPressed();
+                    onNextPressed(null);
                     return true;
                 }
                 return false;
@@ -610,7 +610,7 @@ public class ChangePhoneActivity extends BaseFragment {
             });
 
             textView2 = new TextView(context);
-            textView2.setText(LocaleController.getString("ChangePhoneHelp", works.heymate.beta.R.string.ChangePhoneHelp));
+            textView2.setText(LocaleController.getString("ChangePhoneHelp", R.string.ChangePhoneHelp));
             textView2.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             textView2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             textView2.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
@@ -660,7 +660,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 }
             }
             if (codeField.length() == 0) {
-                countryButton.setText(LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
+                countryButton.setText(LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 phoneField.setHintText(null);
                 countryState = 1;
             }
@@ -712,7 +712,7 @@ public class ChangePhoneActivity extends BaseFragment {
         }
 
         @Override
-        public void onNextPressed() {
+        public void onNextPressed(String code) {
             if (getParentActivity() == null || nextPressed) {
                 return;
             }
@@ -731,9 +731,9 @@ public class ChangePhoneActivity extends BaseFragment {
                         if (preferences.getBoolean("firstlogin", true) || getParentActivity().shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
                             preferences.edit().putBoolean("firstlogin", false).commit();
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                            builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
-                            builder.setMessage(LocaleController.getString("AllowReadCall", works.heymate.beta.R.string.AllowReadCall));
+                            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+                            builder.setMessage(LocaleController.getString("AllowReadCall", R.string.AllowReadCall));
                             permissionsDialog = showDialog(builder.create());
                         } else {
                             getParentActivity().requestPermissions(permissionsItems.toArray(new String[0]), 6);
@@ -744,11 +744,11 @@ public class ChangePhoneActivity extends BaseFragment {
             }
 
             if (countryState == 1) {
-                AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("ChooseCountry", works.heymate.beta.R.string.ChooseCountry));
+                AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("ChooseCountry", R.string.ChooseCountry));
                 return;
             }
             if (codeField.length() == 0) {
-                AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("InvalidPhoneNumber", works.heymate.beta.R.string.InvalidPhoneNumber));
+                AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                 return;
             }
             final TLRPC.TL_account_sendChangePhoneCode req = new TLRPC.TL_account_sendChangePhoneCode();
@@ -819,7 +819,7 @@ public class ChangePhoneActivity extends BaseFragment {
 
         @Override
         public String getHeaderName() {
-            return LocaleController.getString("ChangePhoneNewNumber", works.heymate.beta.R.string.ChangePhoneNewNumber);
+            return LocaleController.getString("ChangePhoneNewNumber", R.string.ChangePhoneNewNumber);
         }
     }
 
@@ -884,7 +884,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 addView(frameLayout, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
 
                 ImageView imageView = new ImageView(context);
-                imageView.setImageResource(works.heymate.beta.R.drawable.phone_activate);
+                imageView.setImageResource(R.drawable.phone_activate);
                 if (LocaleController.isRTL) {
                     frameLayout.addView(imageView, LayoutHelper.createFrame(64, 76, Gravity.LEFT | Gravity.CENTER_VERTICAL, 2, 2, 0, 0));
                     frameLayout.addView(confirmTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 64 + 18, 0, 0, 0));
@@ -900,26 +900,26 @@ public class ChangePhoneActivity extends BaseFragment {
 
                 if (currentType == 1) {
                     blackImageView = new ImageView(context);
-                    blackImageView.setImageResource(works.heymate.beta.R.drawable.sms_devices);
+                    blackImageView.setImageResource(R.drawable.sms_devices);
                     blackImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(blackImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
                     blueImageView = new RLottieImageView(context);
-                    blueImageView.setImageResource(works.heymate.beta.R.drawable.sms_bubble);
+                    blueImageView.setImageResource(R.drawable.sms_bubble);
                     blueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionBackground), PorterDuff.Mode.MULTIPLY));
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
-                    titleTextView.setText(LocaleController.getString("SentAppCodeTitle", works.heymate.beta.R.string.SentAppCodeTitle));
+                    titleTextView.setText(LocaleController.getString("SentAppCodeTitle", R.string.SentAppCodeTitle));
                 } else {
                     blueImageView = new RLottieImageView(context);
-                    hintDrawable = new RLottieDrawable(works.heymate.beta.R.raw.sms_incoming_info, "" + works.heymate.beta.R.raw.sms_incoming_info, AndroidUtilities.dp(64), AndroidUtilities.dp(64), true, null);
+                    hintDrawable = new RLottieDrawable(R.raw.sms_incoming_info, "" + R.raw.sms_incoming_info, AndroidUtilities.dp(64), AndroidUtilities.dp(64), true, null);
                     hintDrawable.setLayerColor("Bubble.**", Theme.getColor(Theme.key_chats_actionBackground));
                     hintDrawable.setLayerColor("Phone.**", Theme.getColor(Theme.key_chats_actionBackground));
                     blueImageView.setAnimation(hintDrawable);
 
                     frameLayout.addView(blueImageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 0));
 
-                    titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", works.heymate.beta.R.string.SentSmsCodeTitle));
+                    titleTextView.setText(LocaleController.getString("SentSmsCodeTitle", R.string.SentSmsCodeTitle));
                 }
                 addView(titleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 18, 0, 0));
                 addView(confirmTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 17, 0, 0));
@@ -966,9 +966,9 @@ public class ChangePhoneActivity extends BaseFragment {
             problemText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             problemText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
             if (currentType == 1) {
-                problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", works.heymate.beta.R.string.DidNotGetTheCodeSms));
+                problemText.setText(LocaleController.getString("DidNotGetTheCodeSms", R.string.DidNotGetTheCodeSms));
             } else {
-                problemText.setText(LocaleController.getString("DidNotGetTheCode", works.heymate.beta.R.string.DidNotGetTheCode));
+                problemText.setText(LocaleController.getString("DidNotGetTheCode", R.string.DidNotGetTheCode));
             }
             addView(problemText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
             problemText.setOnClickListener(v -> {
@@ -985,12 +985,12 @@ public class ChangePhoneActivity extends BaseFragment {
 
                         Intent mailer = new Intent(Intent.ACTION_SENDTO);
                         mailer.setData(Uri.parse("mailto:"));
-                        mailer.putExtra(Intent.EXTRA_EMAIL, new String[]{"reports@stel.com"});
+                        mailer.putExtra(Intent.EXTRA_EMAIL, new String[]{"sms@telegram.org"});
                         mailer.putExtra(Intent.EXTRA_SUBJECT, "Android registration/login issue " + version + " " + emailPhone);
                         mailer.putExtra(Intent.EXTRA_TEXT, "Phone: " + requestPhone + "\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + lastError);
                         getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                     } catch (Exception e) {
-                        AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("NoMailInstalled", works.heymate.beta.R.string.NoMailInstalled));
+                        AlertsCreator.showSimpleAlert(ChangePhoneActivity.this, LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                     }
                 }
             });
@@ -1072,7 +1072,7 @@ public class ChangePhoneActivity extends BaseFragment {
             if (currentType == 1) {
                 return phone;
             } else {
-                return LocaleController.getString("YourCode", works.heymate.beta.R.string.YourCode);
+                return LocaleController.getString("YourCode", R.string.YourCode);
             }
         }
 
@@ -1123,7 +1123,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     codeField[a].setCursorSize(AndroidUtilities.dp(20));
                     codeField[a].setCursorWidth(1.5f);
 
-                    Drawable pressedDrawable = getResources().getDrawable(works.heymate.beta.R.drawable.search_dark_activated).mutate();
+                    Drawable pressedDrawable = getResources().getDrawable(R.drawable.search_dark_activated).mutate();
                     pressedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), PorterDuff.Mode.MULTIPLY));
 
                     codeField[a].setBackgroundDrawable(pressedDrawable);
@@ -1178,7 +1178,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     codeField[num + 1].requestFocus();
                                 }
                                 if ((num == length - 1 || num == length - 2 && len >= 2) && getCode().length() == length) {
-                                    onNextPressed();
+                                    onNextPressed(null);
                                 }
                             }
                         }
@@ -1194,7 +1194,7 @@ public class ChangePhoneActivity extends BaseFragment {
                     });
                     codeField[a].setOnEditorActionListener((textView, i, keyEvent) -> {
                         if (i == EditorInfo.IME_ACTION_NEXT) {
-                            onNextPressed();
+                            onNextPressed(null);
                             return true;
                         }
                         return false;
@@ -1217,13 +1217,13 @@ public class ChangePhoneActivity extends BaseFragment {
             String number = PhoneFormat.getInstance().format(phone);
             CharSequence str = "";
             if (currentType == 1) {
-                str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", works.heymate.beta.R.string.SentAppCode));
+                str = AndroidUtilities.replaceTags(LocaleController.getString("SentAppCode", R.string.SentAppCode));
             } else if (currentType == 2) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", works.heymate.beta.R.string.SentSmsCode, LocaleController.addNbsp(number)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentSmsCode", R.string.SentSmsCode, LocaleController.addNbsp(number)));
             } else if (currentType == 3) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", works.heymate.beta.R.string.SentCallCode, LocaleController.addNbsp(number)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallCode", R.string.SentCallCode, LocaleController.addNbsp(number)));
             } else if (currentType == 4) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", works.heymate.beta.R.string.SentCallOnly, LocaleController.addNbsp(number)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString("SentCallOnly", R.string.SentCallOnly, LocaleController.addNbsp(number)));
             }
             confirmTextView.setText(str);
 
@@ -1245,18 +1245,18 @@ public class ChangePhoneActivity extends BaseFragment {
                 problemText.setVisibility(GONE);
                 timeText.setVisibility(VISIBLE);
                 if (nextType == 4) {
-                    timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, 1, 0));
+                    timeText.setText(LocaleController.formatString("CallText", R.string.CallText, 1, 0));
                 } else if (nextType == 2) {
-                    timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, 1, 0));
+                    timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 1, 0));
                 }
                 createTimer();
             } else if (currentType == 2 && (nextType == 4 || nextType == 3)) {
-                timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, 2, 0));
+                timeText.setText(LocaleController.formatString("CallText", R.string.CallText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
                 createTimer();
             } else if (currentType == 4 && nextType == 2) {
-                timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, 2, 0));
+                timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, 2, 0));
                 problemText.setVisibility(time < 1000 ? VISIBLE : GONE);
                 timeText.setVisibility(time < 1000 ? GONE : VISIBLE);
                 createTimer();
@@ -1325,9 +1325,9 @@ public class ChangePhoneActivity extends BaseFragment {
                             int minutes = time / 1000 / 60;
                             int seconds = time / 1000 - minutes * 60;
                             if (nextType == 4 || nextType == 3) {
-                                timeText.setText(LocaleController.formatString("CallText", works.heymate.beta.R.string.CallText, minutes, seconds));
+                                timeText.setText(LocaleController.formatString("CallText", R.string.CallText, minutes, seconds));
                             } else if (nextType == 2) {
-                                timeText.setText(LocaleController.formatString("SmsText", works.heymate.beta.R.string.SmsText, minutes, seconds));
+                                timeText.setText(LocaleController.formatString("SmsText", R.string.SmsText, minutes, seconds));
                             }
                             if (progressView != null) {
                                 progressView.setProgress(1.0f - (float) time / (float) timeout);
@@ -1346,9 +1346,9 @@ public class ChangePhoneActivity extends BaseFragment {
                             } else if (currentType == 2 || currentType == 4) {
                                 if (nextType == 4 || nextType == 2) {
                                     if (nextType == 4) {
-                                        timeText.setText(LocaleController.getString("Calling", works.heymate.beta.R.string.Calling));
+                                        timeText.setText(LocaleController.getString("Calling", R.string.Calling));
                                     } else {
-                                        timeText.setText(LocaleController.getString("SendingSms", works.heymate.beta.R.string.SendingSms));
+                                        timeText.setText(LocaleController.getString("SendingSms", R.string.SendingSms));
                                     }
                                     createCodeTimer();
                                     TLRPC.TL_auth_resendCode req = new TLRPC.TL_auth_resendCode();
@@ -1398,11 +1398,11 @@ public class ChangePhoneActivity extends BaseFragment {
         }
 
         @Override
-        public void onNextPressed() {
+        public void onNextPressed(String code) {
             if (nextPressed) {
                 return;
             }
-            String code = getCode();
+            code = getCode();
             if (TextUtils.isEmpty(code)) {
                 AndroidUtilities.shakeView(codeFieldContainer, 2, 0);
                 return;
@@ -1471,10 +1471,10 @@ public class ChangePhoneActivity extends BaseFragment {
         public boolean onBackPressed(boolean force) {
             if (!force) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                builder.setMessage(LocaleController.getString("StopVerification", works.heymate.beta.R.string.StopVerification));
-                builder.setPositiveButton(LocaleController.getString("Continue", works.heymate.beta.R.string.Continue), null);
-                builder.setNegativeButton(LocaleController.getString("Stop", works.heymate.beta.R.string.Stop), (dialogInterface, i) -> {
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.getString("StopVerification", R.string.StopVerification));
+                builder.setPositiveButton(LocaleController.getString("Continue", R.string.Continue), null);
+                builder.setNegativeButton(LocaleController.getString("Stop", R.string.Stop), (dialogInterface, i) -> {
                     onBackPressed(true);
                     setPage(0, true, null, true);
                 });
@@ -1550,7 +1550,7 @@ public class ChangePhoneActivity extends BaseFragment {
             }
             if (id == NotificationCenter.didReceiveSmsCode) {
                 codeField[0].setText("" + args[0]);
-                onNextPressed();
+                onNextPressed(null);
             } else if (id == NotificationCenter.didReceiveCall) {
                 String num = "" + args[0];
                 if (!AndroidUtilities.checkPhonePattern(pattern, num)) {
@@ -1559,7 +1559,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 ignoreOnTextChange = true;
                 codeField[0].setText(num);
                 ignoreOnTextChange = false;
-                onNextPressed();
+                onNextPressed(null);
             }
         }
     }

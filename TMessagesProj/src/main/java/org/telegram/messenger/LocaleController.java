@@ -33,10 +33,12 @@ import java.io.FileWriter;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class LocaleController {
@@ -411,6 +413,13 @@ public class LocaleController {
             return null;
         }
         return languagesDict.get(key.toLowerCase().replace("-", "_"));
+    }
+    public LocaleInfo getBuiltinLanguageByPlural(String plural) {
+        Collection<LocaleInfo> values = languagesDict.values();
+        for (LocaleInfo l : values)
+            if (l.pathToFile != null && l.pathToFile.equals("remote") && l.pluralLangCode != null && l.pluralLangCode.equals(plural))
+                return l;
+        return null;
     }
 
     private void addRules(String[] languages, PluralRules rules) {
@@ -930,7 +939,7 @@ public class LocaleController {
 
     public static String getCurrentLanguageName() {
         LocaleInfo localeInfo = getInstance().currentLocaleInfo;
-        return localeInfo == null || TextUtils.isEmpty(localeInfo.name) ? getString("LanguageName", works.heymate.beta.R.string.LanguageName) : localeInfo.name;
+        return localeInfo == null || TextUtils.isEmpty(localeInfo.name) ? getString("LanguageName", R.string.LanguageName) : localeInfo.name;
     }
 
     private String getStringInternal(String key, int res) {
@@ -1460,7 +1469,7 @@ public class LocaleController {
             if (dateDay == day && year == dateYear) {
                 return getInstance().formatterDay.format(new Date(date));
             } else if (dateDay + 1 == day && year == dateYear) {
-                return getString("Yesterday", works.heymate.beta.R.string.Yesterday);
+                return getString("Yesterday", R.string.Yesterday);
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
                 return getInstance().formatterDayMonth.format(new Date(date));
             } else {
@@ -1484,16 +1493,16 @@ public class LocaleController {
 
             if (dateDay == day && year == dateYear) {
                 if (shortFormat) {
-                    return LocaleController.formatString("TodayAtFormatted", works.heymate.beta.R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                    return LocaleController.formatString("TodayAtFormatted", R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date)));
                 } else {
-                    return LocaleController.formatString("TodayAtFormattedWithToday", works.heymate.beta.R.string.TodayAtFormattedWithToday, getInstance().formatterDay.format(new Date(date)));
+                    return LocaleController.formatString("TodayAtFormattedWithToday", R.string.TodayAtFormattedWithToday, getInstance().formatterDay.format(new Date(date)));
                 }
             } else if (dateDay + 1 == day && year == dateYear) {
-                return LocaleController.formatString("YesterdayAtFormatted", works.heymate.beta.R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
-                return LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
-                return LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -1514,11 +1523,11 @@ public class LocaleController {
             if (dateDay == day && year == dateYear) {
                 return getInstance().formatterDay.format(new Date(date));
             } else if (dateDay + 1 == day && year == dateYear) {
-                return LocaleController.formatString("YesterdayAtFormatted", works.heymate.beta.R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date)));
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
-                return LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().chatDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
-                return LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().chatFullDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().chatFullDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -1539,19 +1548,19 @@ public class LocaleController {
             if (dateDay == day && year == dateYear) {
                 int diff = (int) (ConnectionsManager.getInstance(UserConfig.selectedAccount).getCurrentTime() - date / 1000) / 60;
                 if (diff < 1) {
-                    return LocaleController.getString("LocationUpdatedJustNow", works.heymate.beta.R.string.LocationUpdatedJustNow);
+                    return LocaleController.getString("LocationUpdatedJustNow", R.string.LocationUpdatedJustNow);
                 } else if (diff < 60) {
                     return LocaleController.formatPluralString("UpdatedMinutes", diff);
                 }
-                return LocaleController.formatString("LocationUpdatedFormatted", works.heymate.beta.R.string.LocationUpdatedFormatted, LocaleController.formatString("TodayAtFormatted", works.heymate.beta.R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date))));
+                return LocaleController.formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, LocaleController.formatString("TodayAtFormatted", R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date))));
             } else if (dateDay + 1 == day && year == dateYear) {
-                return LocaleController.formatString("LocationUpdatedFormatted", works.heymate.beta.R.string.LocationUpdatedFormatted, LocaleController.formatString("YesterdayAtFormatted", works.heymate.beta.R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date))));
+                return LocaleController.formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, LocaleController.formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date))));
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
-                String format = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return LocaleController.formatString("LocationUpdatedFormatted", works.heymate.beta.R.string.LocationUpdatedFormatted, format);
+                String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, format);
             } else {
-                String format = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return LocaleController.formatString("LocationUpdatedFormatted", works.heymate.beta.R.string.LocationUpdatedFormatted, format);
+                String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("LocationUpdatedFormatted", R.string.LocationUpdatedFormatted, format);
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -1586,23 +1595,23 @@ public class LocaleController {
             int dateYear = rightNow.get(Calendar.YEAR);
 
             if (dateDay == day && year == dateYear) {
-                return LocaleController.formatString("LastSeenFormatted", works.heymate.beta.R.string.LastSeenFormatted, LocaleController.formatString("TodayAtFormatted", works.heymate.beta.R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date))));
+                return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, LocaleController.formatString("TodayAtFormatted", R.string.TodayAtFormatted, getInstance().formatterDay.format(new Date(date))));
                 /*int diff = (int) (ConnectionsManager.getInstance().getCurrentTime() - date) / 60;
                 if (diff < 1) {
-                    return LocaleController.getString("LastSeenNow", works.heymate.beta.R.string.LastSeenNow);
+                    return LocaleController.getString("LastSeenNow", R.string.LastSeenNow);
                 } else if (diff < 60) {
                     return LocaleController.formatPluralString("LastSeenMinutes", diff);
                 } else {
                     return LocaleController.formatPluralString("LastSeenHours", (int) Math.ceil(diff / 60.0f));
                 }*/
             } else if (dateDay + 1 == day && year == dateYear) {
-                return LocaleController.formatString("LastSeenFormatted", works.heymate.beta.R.string.LastSeenFormatted, LocaleController.formatString("YesterdayAtFormatted", works.heymate.beta.R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date))));
+                return LocaleController.formatString("LastSeenFormatted", R.string.LastSeenFormatted, LocaleController.formatString("YesterdayAtFormatted", R.string.YesterdayAtFormatted, getInstance().formatterDay.format(new Date(date))));
             } else if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
-                String format = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return LocaleController.formatString("LastSeenDateFormatted", works.heymate.beta.R.string.LastSeenDateFormatted, format);
+                String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
             } else {
-                String format = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
-                return LocaleController.formatString("LastSeenDateFormatted", works.heymate.beta.R.string.LastSeenDateFormatted, format);
+                String format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                return LocaleController.formatString("LastSeenDateFormatted", R.string.LastSeenDateFormatted, format);
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -1639,35 +1648,35 @@ public class LocaleController {
                 || currentLocaleInfo != null && currentLocaleInfo.isRtl;
         nameDisplayOrder = lang.equals("ko") ? 2 : 1;
 
-        formatterMonthYear = createFormatter(locale, getStringInternal("formatterMonthYear", works.heymate.beta.R.string.formatterMonthYear), "MMM yyyy");
-        formatterDayMonth = createFormatter(locale, getStringInternal("formatterMonth", works.heymate.beta.R.string.formatterMonth), "dd MMM");
-        formatterYear = createFormatter(locale, getStringInternal("formatterYear", works.heymate.beta.R.string.formatterYear), "dd.MM.yy");
-        formatterYearMax = createFormatter(locale, getStringInternal("formatterYearMax", works.heymate.beta.R.string.formatterYearMax), "dd.MM.yyyy");
-        chatDate = createFormatter(locale, getStringInternal("chatDate", works.heymate.beta.R.string.chatDate), "d MMMM");
-        chatFullDate = createFormatter(locale, getStringInternal("chatFullDate", works.heymate.beta.R.string.chatFullDate), "d MMMM yyyy");
-        formatterWeek = createFormatter(locale, getStringInternal("formatterWeek", works.heymate.beta.R.string.formatterWeek), "EEE");
-        formatterWeekLong = createFormatter(locale, getStringInternal("formatterWeekLong", works.heymate.beta.R.string.formatterWeekLong), "EEEE");
-        formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateSchedule", works.heymate.beta.R.string.formatDateSchedule), "MMM d");
-        formatterScheduleYear = createFormatter(locale, getStringInternal("formatDateScheduleYear", works.heymate.beta.R.string.formatDateScheduleYear), "MMM d yyyy");
-        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? getStringInternal("formatterDay24H", works.heymate.beta.R.string.formatterDay24H) : getStringInternal("formatterDay12H", works.heymate.beta.R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
-        formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", works.heymate.beta.R.string.formatterStats24H) : getStringInternal("formatterStats12H", works.heymate.beta.R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
-        formatterBannedUntil = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntil24H", works.heymate.beta.R.string.formatterBannedUntil24H) : getStringInternal("formatterBannedUntil12H", works.heymate.beta.R.string.formatterBannedUntil12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
-        formatterBannedUntilThisYear = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntilThisYear24H", works.heymate.beta.R.string.formatterBannedUntilThisYear24H) : getStringInternal("formatterBannedUntilThisYear12H", works.heymate.beta.R.string.formatterBannedUntilThisYear12H), is24HourFormat ? "MMM dd, HH:mm" : "MMM dd, h:mm a");
-        formatterScheduleSend[0] = createFormatter(locale, getStringInternal("SendTodayAt", works.heymate.beta.R.string.SendTodayAt), "'Send today at' HH:mm");
-        formatterScheduleSend[1] = createFormatter(locale, getStringInternal("SendDayAt", works.heymate.beta.R.string.SendDayAt), "'Send on' MMM d 'at' HH:mm");
-        formatterScheduleSend[2] = createFormatter(locale, getStringInternal("SendDayYearAt", works.heymate.beta.R.string.SendDayYearAt), "'Send on' MMM d yyyy 'at' HH:mm");
-        formatterScheduleSend[3] = createFormatter(locale, getStringInternal("RemindTodayAt", works.heymate.beta.R.string.RemindTodayAt), "'Remind today at' HH:mm");
-        formatterScheduleSend[4] = createFormatter(locale, getStringInternal("RemindDayAt", works.heymate.beta.R.string.RemindDayAt), "'Remind on' MMM d 'at' HH:mm");
-        formatterScheduleSend[5] = createFormatter(locale, getStringInternal("RemindDayYearAt", works.heymate.beta.R.string.RemindDayYearAt), "'Remind on' MMM d yyyy 'at' HH:mm");
-        formatterScheduleSend[6] = createFormatter(locale, getStringInternal("StartTodayAt", works.heymate.beta.R.string.StartTodayAt), "'Start today at' HH:mm");
-        formatterScheduleSend[7] = createFormatter(locale, getStringInternal("StartDayAt", works.heymate.beta.R.string.StartDayAt), "'Start on' MMM d 'at' HH:mm");
-        formatterScheduleSend[8] = createFormatter(locale, getStringInternal("StartDayYearAt", works.heymate.beta.R.string.StartDayYearAt), "'Start on' MMM d yyyy 'at' HH:mm");
-        formatterScheduleSend[9] = createFormatter(locale, getStringInternal("StartShortTodayAt", works.heymate.beta.R.string.StartShortTodayAt), "'Today,' HH:mm");
-        formatterScheduleSend[10] = createFormatter(locale, getStringInternal("StartShortDayAt", works.heymate.beta.R.string.StartShortDayAt), "MMM d',' HH:mm");
-        formatterScheduleSend[11] = createFormatter(locale, getStringInternal("StartShortDayYearAt", works.heymate.beta.R.string.StartShortDayYearAt), "MMM d yyyy, HH:mm");
-        formatterScheduleSend[12] = createFormatter(locale, getStringInternal("StartsTodayAt", works.heymate.beta.R.string.StartsTodayAt), "'Starts today at' HH:mm");
-        formatterScheduleSend[13] = createFormatter(locale, getStringInternal("StartsDayAt", works.heymate.beta.R.string.StartsDayAt), "'Starts on' MMM d 'at' HH:mm");
-        formatterScheduleSend[14] = createFormatter(locale, getStringInternal("StartsDayYearAt", works.heymate.beta.R.string.StartsDayYearAt), "'Starts on' MMM d yyyy 'at' HH:mm");
+        formatterMonthYear = createFormatter(locale, getStringInternal("formatterMonthYear", R.string.formatterMonthYear), "MMM yyyy");
+        formatterDayMonth = createFormatter(locale, getStringInternal("formatterMonth", R.string.formatterMonth), "dd MMM");
+        formatterYear = createFormatter(locale, getStringInternal("formatterYear", R.string.formatterYear), "dd.MM.yy");
+        formatterYearMax = createFormatter(locale, getStringInternal("formatterYearMax", R.string.formatterYearMax), "dd.MM.yyyy");
+        chatDate = createFormatter(locale, getStringInternal("chatDate", R.string.chatDate), "d MMMM");
+        chatFullDate = createFormatter(locale, getStringInternal("chatFullDate", R.string.chatFullDate), "d MMMM yyyy");
+        formatterWeek = createFormatter(locale, getStringInternal("formatterWeek", R.string.formatterWeek), "EEE");
+        formatterWeekLong = createFormatter(locale, getStringInternal("formatterWeekLong", R.string.formatterWeekLong), "EEEE");
+        formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateSchedule", R.string.formatDateSchedule), "MMM d");
+        formatterScheduleYear = createFormatter(locale, getStringInternal("formatDateScheduleYear", R.string.formatDateScheduleYear), "MMM d yyyy");
+        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
+        formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
+        formatterBannedUntil = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntil24H", R.string.formatterBannedUntil24H) : getStringInternal("formatterBannedUntil12H", R.string.formatterBannedUntil12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
+        formatterBannedUntilThisYear = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntilThisYear24H", R.string.formatterBannedUntilThisYear24H) : getStringInternal("formatterBannedUntilThisYear12H", R.string.formatterBannedUntilThisYear12H), is24HourFormat ? "MMM dd, HH:mm" : "MMM dd, h:mm a");
+        formatterScheduleSend[0] = createFormatter(locale, getStringInternal("SendTodayAt", R.string.SendTodayAt), "'Send today at' HH:mm");
+        formatterScheduleSend[1] = createFormatter(locale, getStringInternal("SendDayAt", R.string.SendDayAt), "'Send on' MMM d 'at' HH:mm");
+        formatterScheduleSend[2] = createFormatter(locale, getStringInternal("SendDayYearAt", R.string.SendDayYearAt), "'Send on' MMM d yyyy 'at' HH:mm");
+        formatterScheduleSend[3] = createFormatter(locale, getStringInternal("RemindTodayAt", R.string.RemindTodayAt), "'Remind today at' HH:mm");
+        formatterScheduleSend[4] = createFormatter(locale, getStringInternal("RemindDayAt", R.string.RemindDayAt), "'Remind on' MMM d 'at' HH:mm");
+        formatterScheduleSend[5] = createFormatter(locale, getStringInternal("RemindDayYearAt", R.string.RemindDayYearAt), "'Remind on' MMM d yyyy 'at' HH:mm");
+        formatterScheduleSend[6] = createFormatter(locale, getStringInternal("StartTodayAt", R.string.StartTodayAt), "'Start today at' HH:mm");
+        formatterScheduleSend[7] = createFormatter(locale, getStringInternal("StartDayAt", R.string.StartDayAt), "'Start on' MMM d 'at' HH:mm");
+        formatterScheduleSend[8] = createFormatter(locale, getStringInternal("StartDayYearAt", R.string.StartDayYearAt), "'Start on' MMM d yyyy 'at' HH:mm");
+        formatterScheduleSend[9] = createFormatter(locale, getStringInternal("StartShortTodayAt", R.string.StartShortTodayAt), "'Today,' HH:mm");
+        formatterScheduleSend[10] = createFormatter(locale, getStringInternal("StartShortDayAt", R.string.StartShortDayAt), "MMM d',' HH:mm");
+        formatterScheduleSend[11] = createFormatter(locale, getStringInternal("StartShortDayYearAt", R.string.StartShortDayYearAt), "MMM d yyyy, HH:mm");
+        formatterScheduleSend[12] = createFormatter(locale, getStringInternal("StartsTodayAt", R.string.StartsTodayAt), "'Starts today at' HH:mm");
+        formatterScheduleSend[13] = createFormatter(locale, getStringInternal("StartsDayAt", R.string.StartsDayAt), "'Starts on' MMM d 'at' HH:mm");
+        formatterScheduleSend[14] = createFormatter(locale, getStringInternal("StartsDayYearAt", R.string.StartsDayYearAt), "'Starts on' MMM d yyyy 'at' HH:mm");
     }
 
     public static boolean isRTLCharacter(char ch) {
@@ -1725,18 +1734,18 @@ public class LocaleController {
             int month = rightNow.get(Calendar.MONTH);
 
             final String[] months = new String[]{
-                    LocaleController.getString("January", works.heymate.beta.R.string.January),
-                    LocaleController.getString("February", works.heymate.beta.R.string.February),
-                    LocaleController.getString("March", works.heymate.beta.R.string.March),
-                    LocaleController.getString("April", works.heymate.beta.R.string.April),
-                    LocaleController.getString("May", works.heymate.beta.R.string.May),
-                    LocaleController.getString("June", works.heymate.beta.R.string.June),
-                    LocaleController.getString("July", works.heymate.beta.R.string.July),
-                    LocaleController.getString("August", works.heymate.beta.R.string.August),
-                    LocaleController.getString("September", works.heymate.beta.R.string.September),
-                    LocaleController.getString("October", works.heymate.beta.R.string.October),
-                    LocaleController.getString("November", works.heymate.beta.R.string.November),
-                    LocaleController.getString("December", works.heymate.beta.R.string.December)
+                    LocaleController.getString("January", R.string.January),
+                    LocaleController.getString("February", R.string.February),
+                    LocaleController.getString("March", R.string.March),
+                    LocaleController.getString("April", R.string.April),
+                    LocaleController.getString("May", R.string.May),
+                    LocaleController.getString("June", R.string.June),
+                    LocaleController.getString("July", R.string.July),
+                    LocaleController.getString("August", R.string.August),
+                    LocaleController.getString("September", R.string.September),
+                    LocaleController.getString("October", R.string.October),
+                    LocaleController.getString("November", R.string.November),
+                    LocaleController.getString("December", R.string.December)
             };
             if (year == dateYear && !alwaysShowYear) {
                 return months[month];
@@ -1833,11 +1842,11 @@ public class LocaleController {
             date *= 1000;
             String format;
             if (Math.abs(System.currentTimeMillis() - date) < 31536000000L) {
-                format = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterDayMonth.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             } else {
-                format = LocaleController.formatString("formatDateAtTime", works.heymate.beta.R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+                format = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, getInstance().formatterYear.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
             }
-            return formatString("ChannelOtherSubscriberJoined", works.heymate.beta.R.string.ChannelOtherSubscriberJoined, format);
+            return formatString("ChannelOtherSubscriberJoined", R.string.ChannelOtherSubscriberJoined, format);
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -1870,27 +1879,27 @@ public class LocaleController {
                 if (isOnline != null) {
                     isOnline[0] = true;
                 }
-                return getString("Online", works.heymate.beta.R.string.Online);
+                return getString("Online", R.string.Online);
             }
         }
         if (user == null || user.status == null || user.status.expires == 0 || UserObject.isDeleted(user) || user instanceof TLRPC.TL_userEmpty) {
-            return getString("ALongTimeAgo", works.heymate.beta.R.string.ALongTimeAgo);
+            return getString("ALongTimeAgo", R.string.ALongTimeAgo);
         } else {
             int currentTime = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
             if (user.status.expires > currentTime) {
                 if (isOnline != null) {
                     isOnline[0] = true;
                 }
-                return getString("Online", works.heymate.beta.R.string.Online);
+                return getString("Online", R.string.Online);
             } else {
                 if (user.status.expires == -1) {
-                    return getString("Invisible", works.heymate.beta.R.string.Invisible);
+                    return getString("Invisible", R.string.Invisible);
                 } else if (user.status.expires == -100) {
-                    return getString("Lately", works.heymate.beta.R.string.Lately);
+                    return getString("Lately", R.string.Lately);
                 } else if (user.status.expires == -101) {
-                    return getString("WithinAWeek", works.heymate.beta.R.string.WithinAWeek);
+                    return getString("WithinAWeek", R.string.WithinAWeek);
                 } else if (user.status.expires == -102) {
-                    return getString("WithinAMonth", works.heymate.beta.R.string.WithinAMonth);
+                    return getString("WithinAMonth", R.string.WithinAMonth);
                 }  else {
                     return formatDateOnline(user.status.expires);
                 }
@@ -3052,12 +3061,12 @@ public class LocaleController {
             if (distance < 1000) {
                 switch (type) {
                     case 0:
-                        return formatString("FootsAway", works.heymate.beta.R.string.FootsAway, String.format("%d", (int) Math.max(1, distance)));
+                        return formatString("FootsAway", R.string.FootsAway, String.format("%d", (int) Math.max(1, distance)));
                     case 1:
-                        return formatString("FootsFromYou", works.heymate.beta.R.string.FootsFromYou, String.format("%d", (int) Math.max(1, distance)));
+                        return formatString("FootsFromYou", R.string.FootsFromYou, String.format("%d", (int) Math.max(1, distance)));
                     case 2:
                     default:
-                        return formatString("FootsShort", works.heymate.beta.R.string.FootsShort, String.format("%d", (int) Math.max(1, distance)));
+                        return formatString("FootsShort", R.string.FootsShort, String.format("%d", (int) Math.max(1, distance)));
                 }
             } else {
                 String arg;
@@ -3068,12 +3077,12 @@ public class LocaleController {
                 }
                 switch (type) {
                     case 0:
-                        return formatString("MilesAway", works.heymate.beta.R.string.MilesAway, arg);
+                        return formatString("MilesAway", R.string.MilesAway, arg);
                     case 1:
-                        return formatString("MilesFromYou", works.heymate.beta.R.string.MilesFromYou, arg);
+                        return formatString("MilesFromYou", R.string.MilesFromYou, arg);
                     default:
                     case 2:
-                        return formatString("MilesShort", works.heymate.beta.R.string.MilesShort, arg);
+                        return formatString("MilesShort", R.string.MilesShort, arg);
                 }
 
             }
@@ -3081,12 +3090,12 @@ public class LocaleController {
             if (distance < 1000) {
                 switch (type) {
                     case 0:
-                        return formatString("MetersAway2", works.heymate.beta.R.string.MetersAway2, String.format("%d", (int) Math.max(1, distance)));
+                        return formatString("MetersAway2", R.string.MetersAway2, String.format("%d", (int) Math.max(1, distance)));
                     case 1:
-                        return formatString("MetersFromYou2", works.heymate.beta.R.string.MetersFromYou2, String.format("%d", (int) Math.max(1, distance)));
+                        return formatString("MetersFromYou2", R.string.MetersFromYou2, String.format("%d", (int) Math.max(1, distance)));
                     case 2:
                     default:
-                        return formatString("MetersShort", works.heymate.beta.R.string.MetersShort, String.format("%d", (int) Math.max(1, distance)));
+                        return formatString("MetersShort", R.string.MetersShort, String.format("%d", (int) Math.max(1, distance)));
                 }
             } else {
                 String arg;
@@ -3097,12 +3106,12 @@ public class LocaleController {
                 }
                 switch (type) {
                     case 0:
-                        return formatString("KMetersAway2", works.heymate.beta.R.string.KMetersAway2, arg);
+                        return formatString("KMetersAway2", R.string.KMetersAway2, arg);
                     case 1:
-                        return formatString("KMetersFromYou2", works.heymate.beta.R.string.KMetersFromYou2, arg);
+                        return formatString("KMetersFromYou2", R.string.KMetersFromYou2, arg);
                     case 2:
                     default:
-                        return formatString("KMetersShort", works.heymate.beta.R.string.KMetersShort, arg);
+                        return formatString("KMetersShort", R.string.KMetersShort, arg);
                 }
             }
         }

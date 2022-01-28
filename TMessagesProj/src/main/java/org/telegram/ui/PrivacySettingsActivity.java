@@ -25,7 +25,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.FileLog;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -140,7 +140,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             if (newSync) {
                 getContactsController().forceImportContacts();
                 if (getParentActivity() != null) {
-                    Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsAdded", works.heymate.beta.R.string.SyncContactsAdded), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getParentActivity(), LocaleController.getString("SyncContactsAdded", R.string.SyncContactsAdded), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -175,9 +175,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString("PrivacySettings", works.heymate.beta.R.string.PrivacySettings));
+        actionBar.setTitle(LocaleController.getString("PrivacySettings", R.string.PrivacySettings));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -231,7 +231,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     selected = 3;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("DeleteAccountTitle", works.heymate.beta.R.string.DeleteAccountTitle));
+                builder.setTitle(LocaleController.getString("DeleteAccountTitle", R.string.DeleteAccountTitle));
                 String[] items = new String[]{
                         LocaleController.formatPluralString("Months", 1),
                         LocaleController.formatPluralString("Months", 3),
@@ -283,7 +283,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         }));
                     });
                 }
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position == lastSeenRow) {
                 presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN));
@@ -302,7 +302,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     return;
                 }
                 if (!TwoStepVerificationActivity.canHandleCurrentPassword(currentPassword, false)) {
-                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", works.heymate.beta.R.string.UpdateAppAlert), true);
+                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
                 }
                 if (currentPassword.has_password) {
                     TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
@@ -362,9 +362,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 final TextCheckCell cell = (TextCheckCell) view;
                 if (newSuggest) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("SuggestContactsTitle", works.heymate.beta.R.string.SuggestContactsTitle));
-                    builder.setMessage(LocaleController.getString("SuggestContactsAlert", works.heymate.beta.R.string.SuggestContactsAlert));
-                    builder.setPositiveButton(LocaleController.getString("MuteDisable", works.heymate.beta.R.string.MuteDisable), (dialogInterface, i) -> {
+                    builder.setTitle(LocaleController.getString("SuggestContactsTitle", R.string.SuggestContactsTitle));
+                    builder.setMessage(LocaleController.getString("SuggestContactsAlert", R.string.SuggestContactsAlert));
+                    builder.setPositiveButton(LocaleController.getString("MuteDisable", R.string.MuteDisable), (dialogInterface, i) -> {
                         TLRPC.TL_payments_clearSavedInfo req = new TLRPC.TL_payments_clearSavedInfo();
                         req.credentials = clear[1];
                         req.info = clear[0];
@@ -375,7 +375,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             cell.setChecked(newSuggest);
                         }));
                     });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     AlertDialog alertDialog = builder.create();
                     showDialog(alertDialog);
                     TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -398,8 +398,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 AlertsCreator.showSecretLocationAlert(getParentActivity(), currentAccount, () -> listAdapter.notifyDataSetChanged(), false, null);
             } else if (position == paymentsClearRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", works.heymate.beta.R.string.PrivacyPaymentsClearAlertTitle));
-                builder.setMessage(LocaleController.getString("PrivacyPaymentsClearAlertText", works.heymate.beta.R.string.PrivacyPaymentsClearAlertText));
+                builder.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", R.string.PrivacyPaymentsClearAlertTitle));
+                builder.setMessage(LocaleController.getString("PrivacyPaymentsClearAlertText", R.string.PrivacyPaymentsClearAlertText));
 
                 LinearLayout linearLayout = new LinearLayout(getParentActivity());
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -427,7 +427,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         cell.setChecked(clear[num], true);
                     });
                 }
-                builder.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton), (dialogInterface, i) -> {
+                builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), (dialogInterface, i) -> {
                     try {
                         if (visibleDialog != null) {
                             visibleDialog.dismiss();
@@ -436,9 +436,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         FileLog.e(e);
                     }
                     AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                    builder1.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", works.heymate.beta.R.string.PrivacyPaymentsClearAlertTitle));
-                    builder1.setMessage(LocaleController.getString("PrivacyPaymentsClearAlert", works.heymate.beta.R.string.PrivacyPaymentsClearAlert));
-                    builder1.setPositiveButton(LocaleController.getString("ClearButton", works.heymate.beta.R.string.ClearButton), (dialogInterface2, i2) -> {
+                    builder1.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", R.string.PrivacyPaymentsClearAlertTitle));
+                    builder1.setMessage(LocaleController.getString("PrivacyPaymentsClearAlert", R.string.PrivacyPaymentsClearAlert));
+                    builder1.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), (dialogInterface2, i2) -> {
                         TLRPC.TL_payments_clearSavedInfo req = new TLRPC.TL_payments_clearSavedInfo();
                         req.credentials = clear[1];
                         req.info = clear[0];
@@ -449,17 +449,17 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         });
                         String text;
                         if (clear[0] && clear[1]) {
-                            text = LocaleController.getString("PrivacyPaymentsPaymentShippingCleared", works.heymate.beta.R.string.PrivacyPaymentsPaymentShippingCleared);
+                            text = LocaleController.getString("PrivacyPaymentsPaymentShippingCleared", R.string.PrivacyPaymentsPaymentShippingCleared);
                         } else if (clear[0]) {
-                            text = LocaleController.getString("PrivacyPaymentsShippingInfoCleared", works.heymate.beta.R.string.PrivacyPaymentsShippingInfoCleared);
+                            text = LocaleController.getString("PrivacyPaymentsShippingInfoCleared", R.string.PrivacyPaymentsShippingInfoCleared);
                         } else if (clear[1]) {
-                            text = LocaleController.getString("PrivacyPaymentsPaymentInfoCleared", works.heymate.beta.R.string.PrivacyPaymentsPaymentInfoCleared);
+                            text = LocaleController.getString("PrivacyPaymentsPaymentInfoCleared", R.string.PrivacyPaymentsPaymentInfoCleared);
                         } else {
                             return;
                         }
-                        BulletinFactory.of(PrivacySettingsActivity.this).createSimpleBulletin(works.heymate.beta.R.raw.chats_infotip, text).show();
+                        BulletinFactory.of(PrivacySettingsActivity.this).createSimpleBulletin(R.raw.chats_infotip, text).show();
                     });
-                    builder1.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder1.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     showDialog(builder1.create());
                     AlertDialog alertDialog = builder1.create();
                     showDialog(alertDialog);
@@ -468,7 +468,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
 
                 showDialog(builder.create());
                 AlertDialog alertDialog = builder.create();
@@ -588,9 +588,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         ArrayList<TLRPC.PrivacyRule> privacyRules = accountInstance.getContactsController().getPrivacyRules(rulesType);
         if (privacyRules.size() == 0) {
             if (rulesType == 3) {
-                return LocaleController.getString("P2PNobody", works.heymate.beta.R.string.P2PNobody);
+                return LocaleController.getString("P2PNobody", R.string.P2PNobody);
             } else {
-                return LocaleController.getString("LastSeenNobody", works.heymate.beta.R.string.LastSeenNobody);
+                return LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody);
             }
         }
         int type = -1;
@@ -635,55 +635,55 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         if (type == 0 || type == -1 && minus > 0) {
             if (rulesType == 3) {
                 if (minus == 0) {
-                    return LocaleController.getString("P2PEverybody", works.heymate.beta.R.string.P2PEverybody);
+                    return LocaleController.getString("P2PEverybody", R.string.P2PEverybody);
                 } else {
-                    return LocaleController.formatString("P2PEverybodyMinus", works.heymate.beta.R.string.P2PEverybodyMinus, minus);
+                    return LocaleController.formatString("P2PEverybodyMinus", R.string.P2PEverybodyMinus, minus);
                 }
             } else {
                 if (minus == 0) {
-                    return LocaleController.getString("LastSeenEverybody", works.heymate.beta.R.string.LastSeenEverybody);
+                    return LocaleController.getString("LastSeenEverybody", R.string.LastSeenEverybody);
                 } else {
-                    return LocaleController.formatString("LastSeenEverybodyMinus", works.heymate.beta.R.string.LastSeenEverybodyMinus, minus);
+                    return LocaleController.formatString("LastSeenEverybodyMinus", R.string.LastSeenEverybodyMinus, minus);
                 }
             }
         } else if (type == 2 || type == -1 && minus > 0 && plus > 0) {
             if (rulesType == 3) {
                 if (plus == 0 && minus == 0) {
-                    return LocaleController.getString("P2PContacts", works.heymate.beta.R.string.P2PContacts);
+                    return LocaleController.getString("P2PContacts", R.string.P2PContacts);
                 } else {
                     if (plus != 0 && minus != 0) {
-                        return LocaleController.formatString("P2PContactsMinusPlus", works.heymate.beta.R.string.P2PContactsMinusPlus, minus, plus);
+                        return LocaleController.formatString("P2PContactsMinusPlus", R.string.P2PContactsMinusPlus, minus, plus);
                     } else if (minus != 0) {
-                        return LocaleController.formatString("P2PContactsMinus", works.heymate.beta.R.string.P2PContactsMinus, minus);
+                        return LocaleController.formatString("P2PContactsMinus", R.string.P2PContactsMinus, minus);
                     } else {
-                        return LocaleController.formatString("P2PContactsPlus", works.heymate.beta.R.string.P2PContactsPlus, plus);
+                        return LocaleController.formatString("P2PContactsPlus", R.string.P2PContactsPlus, plus);
                     }
                 }
             } else {
                 if (plus == 0 && minus == 0) {
-                    return LocaleController.getString("LastSeenContacts", works.heymate.beta.R.string.LastSeenContacts);
+                    return LocaleController.getString("LastSeenContacts", R.string.LastSeenContacts);
                 } else {
                     if (plus != 0 && minus != 0) {
-                        return LocaleController.formatString("LastSeenContactsMinusPlus", works.heymate.beta.R.string.LastSeenContactsMinusPlus, minus, plus);
+                        return LocaleController.formatString("LastSeenContactsMinusPlus", R.string.LastSeenContactsMinusPlus, minus, plus);
                     } else if (minus != 0) {
-                        return LocaleController.formatString("LastSeenContactsMinus", works.heymate.beta.R.string.LastSeenContactsMinus, minus);
+                        return LocaleController.formatString("LastSeenContactsMinus", R.string.LastSeenContactsMinus, minus);
                     } else {
-                        return LocaleController.formatString("LastSeenContactsPlus", works.heymate.beta.R.string.LastSeenContactsPlus, plus);
+                        return LocaleController.formatString("LastSeenContactsPlus", R.string.LastSeenContactsPlus, plus);
                     }
                 }
             }
         } else if (type == 1 || plus > 0) {
             if (rulesType == 3) {
                 if (plus == 0) {
-                    return LocaleController.getString("P2PNobody", works.heymate.beta.R.string.P2PNobody);
+                    return LocaleController.getString("P2PNobody", R.string.P2PNobody);
                 } else {
-                    return LocaleController.formatString("P2PNobodyPlus", works.heymate.beta.R.string.P2PNobodyPlus, plus);
+                    return LocaleController.formatString("P2PNobodyPlus", R.string.P2PNobodyPlus, plus);
                 }
             } else {
                 if (plus == 0) {
-                    return LocaleController.getString("LastSeenNobody", works.heymate.beta.R.string.LastSeenNobody);
+                    return LocaleController.getString("LastSeenNobody", R.string.LastSeenNobody);
                 } else {
-                    return LocaleController.formatString("LastSeenNobodyPlus", works.heymate.beta.R.string.LastSeenNobodyPlus, plus);
+                    return LocaleController.formatString("LastSeenNobodyPlus", R.string.LastSeenNobodyPlus, plus);
                 }
             }
         }
@@ -763,28 +763,28 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     if (position == blockedRow) {
                         int totalCount = getMessagesController().totalBlockedCount;
                         if (totalCount == 0) {
-                            textCell.setTextAndValue(LocaleController.getString("BlockedUsers", works.heymate.beta.R.string.BlockedUsers), LocaleController.getString("BlockedEmpty", works.heymate.beta.R.string.BlockedEmpty), true);
+                            textCell.setTextAndValue(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("BlockedEmpty", R.string.BlockedEmpty), true);
                         } else if (totalCount > 0) {
-                            textCell.setTextAndValue(LocaleController.getString("BlockedUsers", works.heymate.beta.R.string.BlockedUsers), String.format("%d", totalCount), true);
+                            textCell.setTextAndValue(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), String.format("%d", totalCount), true);
                         } else {
                             showLoading = true;
                             textCell.setText(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), true);
                         }
                     } else if (position == sessionsRow) {
-                        textCell.setText(LocaleController.getString("SessionsTitle", works.heymate.beta.R.string.SessionsTitle), false);
+                        textCell.setText(LocaleController.getString("SessionsTitle", R.string.SessionsTitle), false);
                     } else if (position == webSessionsRow) {
-                        textCell.setText(LocaleController.getString("WebSessionsTitle", works.heymate.beta.R.string.WebSessionsTitle), false);
+                        textCell.setText(LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), false);
                     } else if (position == passwordRow) {
                         if (currentPassword == null) {
                             showLoading = true;
                         } else if (currentPassword.has_password) {
-                            value = LocaleController.getString("PasswordOn", works.heymate.beta.R.string.PasswordOn);
+                            value = LocaleController.getString("PasswordOn", R.string.PasswordOn);
                         } else {
-                            value = LocaleController.getString("PasswordOff", works.heymate.beta.R.string.PasswordOff);
+                            value = LocaleController.getString("PasswordOff", R.string.PasswordOff);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("TwoStepVerification", works.heymate.beta.R.string.TwoStepVerification), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), value, true);
                     } else if (position == passcodeRow) {
-                        textCell.setText(LocaleController.getString("Passcode", works.heymate.beta.R.string.Passcode), true);
+                        textCell.setText(LocaleController.getString("Passcode", R.string.Passcode), true);
                     } else if (position == phoneNumberRow) {
                         if (getContactsController().getLoadingPrivicyInfo(ContactsController.PRIVACY_RULES_TYPE_PHONE)) {
                             showLoading = true;
@@ -792,7 +792,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else {
                             value = formatRulesString(getAccountInstance(), ContactsController.PRIVACY_RULES_TYPE_PHONE);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("PrivacyPhone", works.heymate.beta.R.string.PrivacyPhone), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("PrivacyPhone", R.string.PrivacyPhone), value, true);
                     } else if (position == lastSeenRow) {
                         if (getContactsController().getLoadingPrivicyInfo(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN)) {
                             showLoading = true;
@@ -800,7 +800,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else {
                             value = formatRulesString(getAccountInstance(), ContactsController.PRIVACY_RULES_TYPE_LASTSEEN);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("PrivacyLastSeen", works.heymate.beta.R.string.PrivacyLastSeen), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), value, true);
                     } else if (position == groupsRow) {
                         if (getContactsController().getLoadingPrivicyInfo(ContactsController.PRIVACY_RULES_TYPE_INVITE)) {
                             showLoading = true;
@@ -808,7 +808,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else {
                             value = formatRulesString(getAccountInstance(), ContactsController.PRIVACY_RULES_TYPE_INVITE);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("GroupsAndChannels", works.heymate.beta.R.string.GroupsAndChannels), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), value, false);
                     } else if (position == callsRow) {
                         if (getContactsController().getLoadingPrivicyInfo(ContactsController.PRIVACY_RULES_TYPE_CALLS)) {
                             showLoading = true;
@@ -816,7 +816,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else {
                             value = formatRulesString(getAccountInstance(), ContactsController.PRIVACY_RULES_TYPE_CALLS);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("Calls", works.heymate.beta.R.string.Calls), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("Calls", R.string.Calls), value, true);
                     } else if (position == profilePhotoRow) {
                         if (getContactsController().getLoadingPrivicyInfo(ContactsController.PRIVACY_RULES_TYPE_PHOTO)) {
                             showLoading = true;
@@ -824,7 +824,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else {
                             value = formatRulesString(getAccountInstance(), ContactsController.PRIVACY_RULES_TYPE_PHOTO);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("PrivacyProfilePhoto", works.heymate.beta.R.string.PrivacyProfilePhoto), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("PrivacyProfilePhoto", R.string.PrivacyProfilePhoto), value, true);
                     } else if (position == forwardsRow) {
                         if (getContactsController().getLoadingPrivicyInfo(ContactsController.PRIVACY_RULES_TYPE_FORWARDS)) {
                             showLoading = true;
@@ -832,9 +832,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else {
                             value = formatRulesString(getAccountInstance(), ContactsController.PRIVACY_RULES_TYPE_FORWARDS);
                         }
-                        textCell.setTextAndValue(LocaleController.getString("PrivacyForwards", works.heymate.beta.R.string.PrivacyForwards), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("PrivacyForwards", R.string.PrivacyForwards), value, true);
                     } else if (position == passportRow) {
-                        textCell.setText(LocaleController.getString("TelegramPassport", works.heymate.beta.R.string.TelegramPassport), true);
+                        textCell.setText(LocaleController.getString("TelegramPassport", R.string.TelegramPassport), true);
                     } else if (position == deleteAccountRow) {
                         if (getContactsController().getLoadingDeleteInfo()) {
                             showLoading = true;
@@ -848,89 +848,89 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                 value = LocaleController.formatPluralString("Days", ttl);
                             }
                         }
-                        textCell.setTextAndValue(LocaleController.getString("DeleteAccountIfAwayFor3", works.heymate.beta.R.string.DeleteAccountIfAwayFor3), value, false);
+                        textCell.setTextAndValue(LocaleController.getString("DeleteAccountIfAwayFor3", R.string.DeleteAccountIfAwayFor3), value, false);
                     } else if (position == paymentsClearRow) {
-                        textCell.setText(LocaleController.getString("PrivacyPaymentsClear", works.heymate.beta.R.string.PrivacyPaymentsClear), true);
+                        textCell.setText(LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), true);
                     } else if (position == secretMapRow) {
                         switch (SharedConfig.mapPreviewType) {
                             case 0:
-                                value = LocaleController.getString("MapPreviewProviderTelegram", works.heymate.beta.R.string.MapPreviewProviderTelegram);
+                                value = LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram);
                                 break;
                             case 1:
-                                value = LocaleController.getString("MapPreviewProviderGoogle", works.heymate.beta.R.string.MapPreviewProviderGoogle);
+                                value = LocaleController.getString("MapPreviewProviderGoogle", R.string.MapPreviewProviderGoogle);
                                 break;
                             case 2:
-                                value = LocaleController.getString("MapPreviewProviderNobody", works.heymate.beta.R.string.MapPreviewProviderNobody);
+                                value = LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody);
                                 break;
                             case 3:
                             default:
-                                value = LocaleController.getString("MapPreviewProviderYandex", works.heymate.beta.R.string.MapPreviewProviderYandex);
+                                value = LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex);
                                 break;
                         }
-                        textCell.setTextAndValue(LocaleController.getString("MapPreviewProvider", works.heymate.beta.R.string.MapPreviewProvider), value, true);
+                        textCell.setTextAndValue(LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), value, true);
                     } else if (position == contactsDeleteRow) {
-                        textCell.setText(LocaleController.getString("SyncContactsDelete", works.heymate.beta.R.string.SyncContactsDelete), true);
+                        textCell.setText(LocaleController.getString("SyncContactsDelete", R.string.SyncContactsDelete), true);
                     }
                     textCell.setDrawLoading(showLoading, loadingLen, animated);
                     break;
                 case 1:
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == deleteAccountDetailRow) {
-                        privacyCell.setText(LocaleController.getString("DeleteAccountHelp", works.heymate.beta.R.string.DeleteAccountHelp));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("DeleteAccountHelp", R.string.DeleteAccountHelp));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == groupsDetailRow) {
-                        privacyCell.setText(LocaleController.getString("GroupsAndChannelsHelp", works.heymate.beta.R.string.GroupsAndChannelsHelp));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("GroupsAndChannelsHelp", R.string.GroupsAndChannelsHelp));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == sessionsDetailRow) {
-                        privacyCell.setText(LocaleController.getString("SessionsInfo", works.heymate.beta.R.string.SessionsInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("SessionsInfo", R.string.SessionsInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == secretDetailRow) {
-                        privacyCell.setText(LocaleController.getString("SecretWebPageInfo", works.heymate.beta.R.string.SecretWebPageInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("SecretWebPageInfo", R.string.SecretWebPageInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == botsDetailRow) {
-                        privacyCell.setText(LocaleController.getString("PrivacyBotsInfo", works.heymate.beta.R.string.PrivacyBotsInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("PrivacyBotsInfo", R.string.PrivacyBotsInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == contactsDetailRow) {
                         /*if (newSync) {
-                            privacyCell.setText(LocaleController.getString("SyncContactsInfoOn", works.heymate.beta.R.string.SyncContactsInfoOn));
+                            privacyCell.setText(LocaleController.getString("SyncContactsInfoOn", R.string.SyncContactsInfoOn));
                         } else {
-                            privacyCell.setText(LocaleController.getString("SyncContactsInfoOff", works.heymate.beta.R.string.SyncContactsInfoOff));
+                            privacyCell.setText(LocaleController.getString("SyncContactsInfoOff", R.string.SyncContactsInfoOff));
                         }*/
-                        privacyCell.setText(LocaleController.getString("SuggestContactsInfo", works.heymate.beta.R.string.SuggestContactsInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("SuggestContactsInfo", R.string.SuggestContactsInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == newChatsSectionRow) {
-                        privacyCell.setText(LocaleController.getString("ArchiveAndMuteInfo", works.heymate.beta.R.string.ArchiveAndMuteInfo));
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setText(LocaleController.getString("ArchiveAndMuteInfo", R.string.ArchiveAndMuteInfo));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == privacySectionRow) {
-                        headerCell.setText(LocaleController.getString("PrivacyTitle", works.heymate.beta.R.string.PrivacyTitle));
+                        headerCell.setText(LocaleController.getString("PrivacyTitle", R.string.PrivacyTitle));
                     } else if (position == securitySectionRow) {
-                        headerCell.setText(LocaleController.getString("SecurityTitle", works.heymate.beta.R.string.SecurityTitle));
+                        headerCell.setText(LocaleController.getString("SecurityTitle", R.string.SecurityTitle));
                     } else if (position == advancedSectionRow) {
-                        headerCell.setText(LocaleController.getString("DeleteMyAccount", works.heymate.beta.R.string.DeleteMyAccount));
+                        headerCell.setText(LocaleController.getString("DeleteMyAccount", R.string.DeleteMyAccount));
                     } else if (position == secretSectionRow) {
-                        headerCell.setText(LocaleController.getString("SecretChat", works.heymate.beta.R.string.SecretChat));
+                        headerCell.setText(LocaleController.getString("SecretChat", R.string.SecretChat));
                     } else if (position == botsSectionRow) {
-                        headerCell.setText(LocaleController.getString("PrivacyBots", works.heymate.beta.R.string.PrivacyBots));
+                        headerCell.setText(LocaleController.getString("PrivacyBots", R.string.PrivacyBots));
                     } else if (position == contactsSectionRow) {
-                        headerCell.setText(LocaleController.getString("Contacts", works.heymate.beta.R.string.Contacts));
+                        headerCell.setText(LocaleController.getString("Contacts", R.string.Contacts));
                     } else if (position == newChatsHeaderRow) {
-                        headerCell.setText(LocaleController.getString("NewChatsFromNonContacts", works.heymate.beta.R.string.NewChatsFromNonContacts));
+                        headerCell.setText(LocaleController.getString("NewChatsFromNonContacts", R.string.NewChatsFromNonContacts));
                     }
                     break;
                 case 3:
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     if (position == secretWebpageRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SecretWebPage", works.heymate.beta.R.string.SecretWebPage), getMessagesController().secretWebpagePreview == 1, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("SecretWebPage", R.string.SecretWebPage), getMessagesController().secretWebpagePreview == 1, false);
                     } else if (position == contactsSyncRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SyncContacts", works.heymate.beta.R.string.SyncContacts), newSync, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("SyncContacts", R.string.SyncContacts), newSync, true);
                     } else if (position == contactsSuggestRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SuggestContacts", works.heymate.beta.R.string.SuggestContacts), newSuggest, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("SuggestContacts", R.string.SuggestContacts), newSuggest, false);
                     } else if (position == newChatsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("ArchiveAndMute", works.heymate.beta.R.string.ArchiveAndMute), archiveChats, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ArchiveAndMute", R.string.ArchiveAndMute), archiveChats, false);
                     }
                     break;
             }

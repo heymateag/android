@@ -29,13 +29,13 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import works.heymate.beta.BuildConfig;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -103,7 +103,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("UpdateTelegram", works.heymate.beta.R.string.UpdateTelegram));
+        titleTextView.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
         container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
 
         textView = new TextView(context);
@@ -233,16 +233,16 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public static boolean checkApkInstallPermissions(final Context context) {
         if (Build.VERSION.SDK_INT >= 26 && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-            builder.setMessage(LocaleController.getString("ApkRestricted", works.heymate.beta.R.string.ApkRestricted));
-            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialogInterface, i) -> {
+            builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+            builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
+            builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialogInterface, i) -> {
                 try {
                     context.startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName())));
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             builder.show();
             return false;
         }
@@ -339,9 +339,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         MessageObject.addEntitiesToText(builder, update.entities, false, false, false, false);
         textView.setText(builder);
         if (update.document instanceof TLRPC.TL_document) {
-            acceptTextView.setText(LocaleController.getString("Update", works.heymate.beta.R.string.Update) + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
+            acceptTextView.setText(LocaleController.getString("Update", R.string.Update) + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
         } else {
-            acceptTextView.setText(LocaleController.getString("Update", works.heymate.beta.R.string.Update));
+            acceptTextView.setText(LocaleController.getString("Update", R.string.Update));
         }
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoadFailed);

@@ -100,24 +100,24 @@ public class AcceptDeclineView extends View {
         textPaint.setTextSize(AndroidUtilities.dp(11));
         textPaint.setColor(Color.WHITE);
 
-        String acceptStr = LocaleController.getString("AcceptCall", works.heymate.beta.R.string.AcceptCall);
-        String declineStr = LocaleController.getString("DeclineCall", works.heymate.beta.R.string.DeclineCall);
-        String retryStr = LocaleController.getString("RetryCall", works.heymate.beta.R.string.RetryCall);
+        String acceptStr = LocaleController.getString("AcceptCall", R.string.AcceptCall);
+        String declineStr = LocaleController.getString("DeclineCall", R.string.DeclineCall);
+        String retryStr = LocaleController.getString("RetryCall", R.string.RetryCall);
 
         acceptLayout = new StaticLayout(acceptStr, textPaint, (int) textPaint.measureText(acceptStr), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         declineLayout = new StaticLayout(declineStr, textPaint, (int) textPaint.measureText(declineStr), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
         retryLayout = new StaticLayout(retryStr, textPaint, (int) textPaint.measureText(retryStr), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
-        callDrawable = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.calls_decline).mutate();
-        cancelDrawable = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.ic_close_white).mutate();
+        callDrawable = ContextCompat.getDrawable(context, R.drawable.calls_decline).mutate();
+        cancelDrawable = ContextCompat.getDrawable(context, R.drawable.ic_close_white).mutate();
         cancelDrawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY));
 
         acceptCirclePaint.setColor(0x3f45bc4d);
         rippleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(52), 0, ColorUtils.setAlphaComponent(Color.WHITE, (int) (255 * 0.3f)));
         rippleDrawable.setCallback(this);
 
-        arrowDrawable = ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.call_arrow_right);
+        arrowDrawable = ContextCompat.getDrawable(context, R.drawable.call_arrow_right);
     }
 
 

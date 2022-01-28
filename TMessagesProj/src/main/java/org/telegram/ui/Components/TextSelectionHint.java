@@ -19,7 +19,7 @@ import android.view.animation.OvershootInterpolator;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.util.regex.Matcher;
@@ -78,7 +78,7 @@ public class TextSelectionHint extends View {
                 a.cancel();
             }
 
-            String text = LocaleController.getString("TextSelectionHit", works.heymate.beta.R.string.TextSelectionHit);
+            String text = LocaleController.getString("TextSelectionHit", R.string.TextSelectionHit);
             Pattern pattern = Pattern.compile("\\*\\*.*\\*\\*");
             Matcher matcher = pattern.matcher(text);
             String word = null;

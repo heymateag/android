@@ -39,7 +39,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -164,12 +164,12 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         if (creatingNewTheme) {
-            actionBar.setTitle(LocaleController.getString("NewThemeTitle", works.heymate.beta.R.string.NewThemeTitle));
+            actionBar.setTitle(LocaleController.getString("NewThemeTitle", R.string.NewThemeTitle));
         } else {
-            actionBar.setTitle(LocaleController.getString("EditThemeTitle", works.heymate.beta.R.string.EditThemeTitle));
+            actionBar.setTitle(LocaleController.getString("EditThemeTitle", R.string.EditThemeTitle));
         }
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -183,7 +183,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItem(done_button, LocaleController.getString("Done", works.heymate.beta.R.string.Done).toUpperCase());
+        doneButton = menu.addItem(done_button, LocaleController.getString("Done", R.string.Done).toUpperCase());
 
         fragmentView = new LinearLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
@@ -197,7 +197,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         linearLayout.addView(linearLayoutTypeContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         headerCell = new HeaderCell(context, 23);
-        headerCell.setText(LocaleController.getString("Info", works.heymate.beta.R.string.Info));
+        headerCell.setText(LocaleController.getString("Info", R.string.Info));
         linearLayoutTypeContainer.addView(headerCell);
 
         nameField = new EditTextBoldCursor(context);
@@ -215,7 +215,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         nameField.setFilters(inputFilters);
         nameField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         nameField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        nameField.setHint(LocaleController.getString("ThemeNamePlaceholder", works.heymate.beta.R.string.ThemeNamePlaceholder));
+        nameField.setHint(LocaleController.getString("ThemeNamePlaceholder", R.string.ThemeNamePlaceholder));
         nameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         nameField.setCursorSize(AndroidUtilities.dp(20));
         nameField.setCursorWidth(1.5f);
@@ -266,7 +266,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         linkField.setSingleLine(true);
         linkField.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         linkField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        linkField.setHint(LocaleController.getString("SetUrlPlaceholder", works.heymate.beta.R.string.SetUrlPlaceholder));
+        linkField.setHint(LocaleController.getString("SetUrlPlaceholder", R.string.SetUrlPlaceholder));
         linkField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         linkField.setCursorSize(AndroidUtilities.dp(20));
         linkField.setCursorWidth(1.5f);
@@ -299,7 +299,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 }
                 if (linkField.length() > 0) {
                     String url = "https://" + getMessagesController().linkPrefix + "/addtheme/" + linkField.getText();
-                    String text = LocaleController.formatString("ThemeHelpLink", works.heymate.beta.R.string.ThemeHelpLink, url);
+                    String text = LocaleController.formatString("ThemeHelpLink", R.string.ThemeHelpLink, url);
                     int index = text.indexOf(url);
                     SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
                     if (index >= 0) {
@@ -314,15 +314,15 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (creatingNewTheme) {
             linkField.setOnFocusChangeListener((v, hasFocus) -> {
                 if (hasFocus) {
-                    helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp2", works.heymate.beta.R.string.ThemeCreateHelp2)));
+                    helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp2", R.string.ThemeCreateHelp2)));
                 } else {
-                    helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp", works.heymate.beta.R.string.ThemeCreateHelp)));
+                    helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp", R.string.ThemeCreateHelp)));
                 }
             });
         }
 
         checkInfoCell = new TextInfoPrivacyCell(context);
-        checkInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+        checkInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         checkInfoCell.setVisibility(View.GONE);
         checkInfoCell.setBottomPadding(0);
         linearLayout.addView(checkInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -331,20 +331,20 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         helpInfoCell.getTextView().setMovementMethod(new LinkMovementMethodMy());
         helpInfoCell.getTextView().setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
         if (creatingNewTheme) {
-            helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp", works.heymate.beta.R.string.ThemeCreateHelp)));
+            helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp", R.string.ThemeCreateHelp)));
         } else {
-            helpInfoCell.setText(infoText = AndroidUtilities.replaceTags(LocaleController.getString("ThemeSetUrlHelp", works.heymate.beta.R.string.ThemeSetUrlHelp)));
+            helpInfoCell.setText(infoText = AndroidUtilities.replaceTags(LocaleController.getString("ThemeSetUrlHelp", R.string.ThemeSetUrlHelp)));
         }
         linearLayout.addView(helpInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         if (creatingNewTheme) {
-            helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+            helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
             messagesCell = new ThemePreviewMessagesCell(context, parentLayout, 1);
             linearLayout.addView(messagesCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
             createCell = new TextSettingsCell(context);
             createCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-            createCell.setText(LocaleController.getString("UseDifferentTheme", works.heymate.beta.R.string.UseDifferentTheme), false);
+            createCell.setText(LocaleController.getString("UseDifferentTheme", R.string.UseDifferentTheme), false);
             linearLayout.addView(createCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             createCell.setOnClickListener(v -> {
                 if (getParentActivity() == null) {
@@ -357,7 +357,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 container.setOrientation(LinearLayout.VERTICAL);
 
                 TextView titleView = new TextView(context);
-                titleView.setText(LocaleController.getString("ChooseTheme", works.heymate.beta.R.string.ChooseTheme));
+                titleView.setText(LocaleController.getString("ChooseTheme", R.string.ChooseTheme));
                 titleView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
                 titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -385,11 +385,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             });
 
             createInfoCell = new TextInfoPrivacyCell(context);
-            createInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("UseDifferentThemeInfo", works.heymate.beta.R.string.UseDifferentThemeInfo)));
-            createInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            createInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("UseDifferentThemeInfo", R.string.UseDifferentThemeInfo)));
+            createInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             linearLayout.addView(createInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         } else {
-            helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         }
 
         if (info != null) {
@@ -458,24 +458,24 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         lastNameAvailable = false;
         if (url != null) {
             if (url.startsWith("_") || url.endsWith("_")) {
-                setCheckText(LocaleController.getString("SetUrlInvalid", works.heymate.beta.R.string.SetUrlInvalid), Theme.key_windowBackgroundWhiteRedText4);
+                setCheckText(LocaleController.getString("SetUrlInvalid", R.string.SetUrlInvalid), Theme.key_windowBackgroundWhiteRedText4);
                 return false;
             }
             for (int a = 0; a < url.length(); a++) {
                 char ch = url.charAt(a);
                 if (a == 0 && ch >= '0' && ch <= '9') {
                     if (alert) {
-                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("SetUrlInvalidStartNumber", works.heymate.beta.R.string.SetUrlInvalidStartNumber));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("SetUrlInvalidStartNumber", R.string.SetUrlInvalidStartNumber));
                     } else {
-                        setCheckText(LocaleController.getString("SetUrlInvalidStartNumber", works.heymate.beta.R.string.SetUrlInvalidStartNumber), Theme.key_windowBackgroundWhiteRedText4);
+                        setCheckText(LocaleController.getString("SetUrlInvalidStartNumber", R.string.SetUrlInvalidStartNumber), Theme.key_windowBackgroundWhiteRedText4);
                     }
                     return false;
                 }
                 if (!(ch >= '0' && ch <= '9' || ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_')) {
                     if (alert) {
-                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("SetUrlInvalid", works.heymate.beta.R.string.SetUrlInvalid));
+                        AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("SetUrlInvalid", R.string.SetUrlInvalid));
                     } else {
-                        setCheckText(LocaleController.getString("SetUrlInvalid", works.heymate.beta.R.string.SetUrlInvalid), Theme.key_windowBackgroundWhiteRedText4);
+                        setCheckText(LocaleController.getString("SetUrlInvalid", R.string.SetUrlInvalid), Theme.key_windowBackgroundWhiteRedText4);
                     }
                     return false;
                 }
@@ -483,17 +483,17 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }
         if (url == null || url.length() < 5) {
             if (alert) {
-                AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("SetUrlInvalidShort", works.heymate.beta.R.string.SetUrlInvalidShort));
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("SetUrlInvalidShort", R.string.SetUrlInvalidShort));
             } else {
-                setCheckText(LocaleController.getString("SetUrlInvalidShort", works.heymate.beta.R.string.SetUrlInvalidShort), Theme.key_windowBackgroundWhiteRedText4);
+                setCheckText(LocaleController.getString("SetUrlInvalidShort", R.string.SetUrlInvalidShort), Theme.key_windowBackgroundWhiteRedText4);
             }
             return false;
         }
         if (url.length() > 64) {
             if (alert) {
-                AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("SetUrlInvalidLong", works.heymate.beta.R.string.SetUrlInvalidLong));
+                AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("SetUrlInvalidLong", R.string.SetUrlInvalidLong));
             } else {
-                setCheckText(LocaleController.getString("SetUrlInvalidLong", works.heymate.beta.R.string.SetUrlInvalidLong), Theme.key_windowBackgroundWhiteRedText4);
+                setCheckText(LocaleController.getString("SetUrlInvalidLong", R.string.SetUrlInvalidLong), Theme.key_windowBackgroundWhiteRedText4);
             }
             return false;
         }
@@ -501,11 +501,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (!alert) {
             String currentUrl = info != null && info.slug != null ? info.slug : "";
             if (url.equals(currentUrl)) {
-                setCheckText(LocaleController.formatString("SetUrlAvailable", works.heymate.beta.R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
+                setCheckText(LocaleController.formatString("SetUrlAvailable", R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
                 return true;
             }
 
-            setCheckText(LocaleController.getString("SetUrlChecking", works.heymate.beta.R.string.SetUrlChecking), Theme.key_windowBackgroundWhiteGrayText8);
+            setCheckText(LocaleController.getString("SetUrlChecking", R.string.SetUrlChecking), Theme.key_windowBackgroundWhiteGrayText8);
             lastCheckName = url;
             checkRunnable = () -> {
                 TLRPC.TL_account_createTheme req = new TLRPC.TL_account_createTheme();
@@ -516,10 +516,10 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     checkReqId = 0;
                     if (lastCheckName != null && lastCheckName.equals(url)) {
                         if (error == null || !"THEME_SLUG_INVALID".equals(error.text) && !"THEME_SLUG_OCCUPIED".equals(error.text)) {
-                            setCheckText(LocaleController.formatString("SetUrlAvailable", works.heymate.beta.R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
+                            setCheckText(LocaleController.formatString("SetUrlAvailable", R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
                             lastNameAvailable = true;
                         } else {
-                            setCheckText(LocaleController.getString("SetUrlInUse", works.heymate.beta.R.string.SetUrlInUse), Theme.key_windowBackgroundWhiteRedText4);
+                            setCheckText(LocaleController.getString("SetUrlInUse", R.string.SetUrlInUse), Theme.key_windowBackgroundWhiteRedText4);
                             lastNameAvailable = false;
                         }
                     }
@@ -534,9 +534,9 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (TextUtils.isEmpty(text)) {
             checkInfoCell.setVisibility(View.GONE);
             if (creatingNewTheme) {
-                helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(getParentActivity(), works.heymate.beta.R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(getParentActivity(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
             } else {
-                helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(getParentActivity(), works.heymate.beta.R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(getParentActivity(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             }
         } else {
             checkInfoCell.setVisibility(View.VISIBLE);
@@ -544,7 +544,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             checkInfoCell.setTag(colorKey);
             checkInfoCell.setTextColor(colorKey);
             if (creatingNewTheme) {
-                helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(getParentActivity(), works.heymate.beta.R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow));
+                helpInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(getParentActivity(), R.drawable.greydivider_top, Theme.key_windowBackgroundGrayShadow));
             } else {
                 helpInfoCell.setBackgroundDrawable(null);
             }
@@ -559,7 +559,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             return;
         }
         if (nameField.length() == 0) {
-            AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", works.heymate.beta.R.string.Theme), LocaleController.getString("ThemeNameInvalid", works.heymate.beta.R.string.ThemeNameInvalid));
+            AlertsCreator.showSimpleAlert(this, LocaleController.getString("Theme", R.string.Theme), LocaleController.getString("ThemeNameInvalid", R.string.ThemeNameInvalid));
             return;
         }
         if (creatingNewTheme) {

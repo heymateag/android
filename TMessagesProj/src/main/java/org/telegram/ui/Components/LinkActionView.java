@@ -32,7 +32,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -89,7 +89,7 @@ public class LinkActionView extends LinearLayout {
 
         frameLayout.addView(linkView);
         optionsView = new ImageView(context);
-        optionsView.setImageDrawable(ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.ic_ab_other));
+        optionsView.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_ab_other));
         optionsView.setScaleType(ImageView.ScaleType.CENTER);
         frameLayout.addView(optionsView, LayoutHelper.createFrame(40, 48, Gravity.RIGHT | Gravity.CENTER_VERTICAL));
         addView(frameLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, 4, 0));
@@ -100,9 +100,9 @@ public class LinkActionView extends LinearLayout {
         copyView = new TextView(context);
         copyView.setGravity(Gravity.CENTER_HORIZONTAL);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.msg_copy_filled)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_copy_filled)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
-        spannableStringBuilder.append(LocaleController.getString("LinkActionCopy", works.heymate.beta.R.string.LinkActionCopy));
+        spannableStringBuilder.append(LocaleController.getString("LinkActionCopy", R.string.LinkActionCopy));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         copyView.setText(spannableStringBuilder);
         copyView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
@@ -114,9 +114,9 @@ public class LinkActionView extends LinearLayout {
         shareView = new TextView(context);
         shareView.setGravity(Gravity.CENTER_HORIZONTAL);
         spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.msg_share_filled)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_share_filled)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
-        spannableStringBuilder.append(LocaleController.getString("LinkActionShare", works.heymate.beta.R.string.LinkActionShare));
+        spannableStringBuilder.append(LocaleController.getString("LinkActionShare", R.string.LinkActionShare));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         shareView.setText(spannableStringBuilder);
         shareView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
@@ -130,9 +130,9 @@ public class LinkActionView extends LinearLayout {
         removeView = new TextView(context);
         removeView.setGravity(Gravity.CENTER_HORIZONTAL);
         spannableStringBuilder = new SpannableStringBuilder();
-        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, works.heymate.beta.R.drawable.msg_delete_filled)), 0, 1, 0);
+        spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_delete_filled)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8)), 1, 2, 0);
-        spannableStringBuilder.append(LocaleController.getString("DeleteLink", works.heymate.beta.R.string.DeleteLink));
+        spannableStringBuilder.append(LocaleController.getString("DeleteLink", R.string.DeleteLink));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         removeView.setText(spannableStringBuilder);
         removeView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
@@ -178,7 +178,7 @@ public class LinkActionView extends LinearLayout {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, link);
-                fragment.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", works.heymate.beta.R.string.InviteToGroupByLink)), 500);
+                fragment.startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteToGroupByLink", R.string.InviteToGroupByLink)), 500);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -186,14 +186,14 @@ public class LinkActionView extends LinearLayout {
 
         removeView.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("DeleteLink", works.heymate.beta.R.string.DeleteLink));
-            builder.setMessage(LocaleController.getString("DeleteLinkHelp", works.heymate.beta.R.string.DeleteLinkHelp));
-            builder.setPositiveButton(LocaleController.getString("Delete", works.heymate.beta.R.string.Delete), (dialogInterface2, i2) -> {
+            builder.setTitle(LocaleController.getString("DeleteLink", R.string.DeleteLink));
+            builder.setMessage(LocaleController.getString("DeleteLinkHelp", R.string.DeleteLinkHelp));
+            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialogInterface2, i2) -> {
                 if (delegate != null) {
                     delegate.removeLink();
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             fragment.showDialog(builder.create());
         });
 
@@ -206,7 +206,7 @@ public class LinkActionView extends LinearLayout {
             ActionBarMenuSubItem subItem;
             if (!this.permanent && canEdit) {
                 subItem = new ActionBarMenuSubItem(context, true, false);
-                subItem.setTextAndIcon(LocaleController.getString("Edit", works.heymate.beta.R.string.Edit), works.heymate.beta.R.drawable.msg_edit);
+                subItem.setTextAndIcon(LocaleController.getString("Edit", R.string.Edit), R.drawable.msg_edit);
                 layout.addView(subItem, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 subItem.setOnClickListener(view12 -> {
                     if (actionBarPopupWindow != null) {
@@ -217,7 +217,7 @@ public class LinkActionView extends LinearLayout {
             }
 
             subItem = new ActionBarMenuSubItem(context, true, false);
-            subItem.setTextAndIcon(LocaleController.getString("GetQRCode", works.heymate.beta.R.string.GetQRCode), works.heymate.beta.R.drawable.msg_qrcode);
+            subItem.setTextAndIcon(LocaleController.getString("GetQRCode", R.string.GetQRCode), R.drawable.msg_qrcode);
             layout.addView(subItem, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             subItem.setOnClickListener(view12 -> {
                 showQrCode();
@@ -225,7 +225,7 @@ public class LinkActionView extends LinearLayout {
 
             if (!hideRevokeOption) {
                 subItem = new ActionBarMenuSubItem(context, false, true);
-                subItem.setTextAndIcon(LocaleController.getString("RevokeLink", works.heymate.beta.R.string.RevokeLink), works.heymate.beta.R.drawable.msg_delete);
+                subItem.setTextAndIcon(LocaleController.getString("RevokeLink", R.string.RevokeLink), R.drawable.msg_delete);
                 subItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteRedText), Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
                 subItem.setOnClickListener(view1 -> {
                     if (actionBarPopupWindow != null) {
@@ -303,7 +303,7 @@ public class LinkActionView extends LinearLayout {
                 actionBarPopupWindow.setOutsideTouchable(true);
                 actionBarPopupWindow.setFocusable(true);
                 actionBarPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                actionBarPopupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation);
+                actionBarPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                 actionBarPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
                 actionBarPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
 
@@ -353,7 +353,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     private void showQrCode() {
-        qrCodeBottomSheet = new QRCodeBottomSheet(getContext(), link, isChannel ? LocaleController.getString("QRCodeLinkHelpChannel", works.heymate.beta.R.string.QRCodeLinkHelpChannel) : LocaleController.getString("QRCodeLinkHelpGroup", works.heymate.beta.R.string.QRCodeLinkHelpGroup)) {
+        qrCodeBottomSheet = new QRCodeBottomSheet(getContext(), link, isChannel ? LocaleController.getString("QRCodeLinkHelpChannel", R.string.QRCodeLinkHelpChannel) : LocaleController.getString("QRCodeLinkHelpGroup", R.string.QRCodeLinkHelpGroup)) {
             @Override
             public void dismiss() {
                 super.dismiss();
@@ -389,7 +389,7 @@ public class LinkActionView extends LinearLayout {
     public void setLink(String link) {
         this.link = link;
         if (link == null) {
-            linkView.setText(LocaleController.getString("Loading", works.heymate.beta.R.string.Loading));
+            linkView.setText(LocaleController.getString("Loading", R.string.Loading));
         } else if (link.startsWith("https://")) {
             linkView.setText(link.substring("https://".length()));
         } else {
@@ -420,7 +420,7 @@ public class LinkActionView extends LinearLayout {
         if (hideRevokeOption != b) {
             hideRevokeOption = b;
             optionsView.setVisibility(View.VISIBLE);
-            optionsView.setImageDrawable(ContextCompat.getDrawable(optionsView.getContext(), works.heymate.beta.R.drawable.ic_ab_other));
+            optionsView.setImageDrawable(ContextCompat.getDrawable(optionsView.getContext(), R.drawable.ic_ab_other));
         }
     }
 
@@ -462,14 +462,14 @@ public class LinkActionView extends LinearLayout {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setMessage(LocaleController.getString("RevokeAlert", works.heymate.beta.R.string.RevokeAlert));
-        builder.setTitle(LocaleController.getString("RevokeLink", works.heymate.beta.R.string.RevokeLink));
-        builder.setPositiveButton(LocaleController.getString("RevokeButton", works.heymate.beta.R.string.RevokeButton), (dialogInterface, i) -> {
+        builder.setMessage(LocaleController.getString("RevokeAlert", R.string.RevokeAlert));
+        builder.setTitle(LocaleController.getString("RevokeLink", R.string.RevokeLink));
+        builder.setPositiveButton(LocaleController.getString("RevokeButton", R.string.RevokeButton), (dialogInterface, i) -> {
             if (delegate != null) {
                 delegate.revokeLink();
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         builder.show();
     }
 

@@ -26,7 +26,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -173,7 +173,7 @@ public class JoinGroupAlert extends BottomSheet {
                                     layout.titleTextView.setText(LocaleController.getString("RequestToJoinSent", R.string.RequestToJoinSent));
                                     String subTitle = isChannel
                                             ? LocaleController.getString("RequestToJoinChannelSentDescription", R.string.RequestToJoinChannelSentDescription)
-                                            : LocaleController.getString("RequestToJoinSentDescription", R.string.RequestToJoinGroupSentDescription);
+                                            : LocaleController.getString("RequestToJoinGroupSentDescription", R.string.RequestToJoinGroupSentDescription);
                                     layout.subtitleTextView.setText(subTitle);
                                     Bulletin.make(fragment, layout, Bulletin.DURATION_LONG).show();
                                 });

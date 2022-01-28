@@ -22,7 +22,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
@@ -99,7 +99,7 @@ public class MaxFileSizeCell extends FrameLayout {
                         }
                     }
                 }
-                sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", works.heymate.beta.R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+                sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
                 currentSize = size;
                 didChangedSizeValue(size);
             }
@@ -174,7 +174,7 @@ public class MaxFileSizeCell extends FrameLayout {
 
     public void setSize(long size) {
         currentSize = size;
-        sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", works.heymate.beta.R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+        sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
 
         float progress = 0.0f;
         size -= 500 * 1024;

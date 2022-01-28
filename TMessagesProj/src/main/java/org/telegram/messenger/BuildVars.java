@@ -22,8 +22,8 @@ public class BuildVars {
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = true;
     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
-    public static int BUILD_VERSION = 2462;
-    public static String BUILD_VERSION_STRING = "8.2.1";
+    public static int BUILD_VERSION = 2538;
+    public static String BUILD_VERSION_STRING = "8.4.4";
     public static int APP_ID = 23167;
     public static String APP_HASH = "86f8ef5614337213cac8e2bcfafa7261";
     public static String SMS_HASH = isStandaloneApp() ? "w0lkcmTZkKh" : (DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT");

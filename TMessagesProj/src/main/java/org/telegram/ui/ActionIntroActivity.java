@@ -41,7 +41,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -80,6 +80,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     private String currentGroupCreateAddress;
     private String currentGroupCreateDisplayAddress;
     private Location currentGroupCreateLocation;
+    private boolean showingAsBottomSheet;
 
     private ActionIntroQRLoginDelegate qrLoginDelegate;
 
@@ -103,23 +104,26 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        actionBar.setBackButtonImage(works.heymate.beta.R.drawable.ic_ab_back);
-        actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
-        actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
-        actionBar.setCastShadows(false);
-        actionBar.setAddToContainer(false);
-        if (!AndroidUtilities.isTablet()) {
-            actionBar.showActionModeTop();
-        }
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) {
-                    finishFragment();
-                }
+        if (actionBar != null) {
+            actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+
+            actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+            actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
+            actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
+            actionBar.setCastShadows(false);
+            actionBar.setAddToContainer(false);
+            if (!AndroidUtilities.isTablet()) {
+                actionBar.showActionModeTop();
             }
-        });
+            actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+                @Override
+                public void onItemClick(int id) {
+                    if (id == -1) {
+                        finishFragment();
+                    }
+                }
+            });
+        }
 
         fragmentView = new ViewGroup(context) {
 
@@ -128,8 +132,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 int width = MeasureSpec.getSize(widthMeasureSpec);
                 int height = MeasureSpec.getSize(heightMeasureSpec);
 
-                actionBar.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), heightMeasureSpec);
-
+                if (actionBar != null) {
+                    actionBar.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), heightMeasureSpec);
+                }
                 switch (currentType) {
                     case ACTION_TYPE_CHANNEL_CREATE: {
                         if (width > height) {
@@ -146,7 +151,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         break;
                     }
                     case ACTION_TYPE_QR_LOGIN: {
-                        if (width > height) {
+                        if (showingAsBottomSheet) {
+                            imageView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int) (height * 0.32f), MeasureSpec.EXACTLY));
+                            titleTextView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED));
+                            descriptionLayout.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED));
+                            buttonTextView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42), MeasureSpec.EXACTLY));
+                            height = imageView.getMeasuredHeight() + titleTextView.getMeasuredHeight() + AndroidUtilities.dp(20) + titleTextView.getMeasuredHeight() + descriptionLayout.getMeasuredHeight() + buttonTextView.getMeasuredHeight();
+                        } else if (width > height) {
                             imageView.measure(MeasureSpec.makeMeasureSpec((int) (width * 0.45f), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec((int) (height * 0.68f), MeasureSpec.EXACTLY));
                             titleTextView.measure(MeasureSpec.makeMeasureSpec((int) (width * 0.6f), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED));
                             descriptionLayout.measure(MeasureSpec.makeMeasureSpec((int) (width * 0.6f), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED));
@@ -214,7 +225,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
 
             @Override
             protected void onLayout(boolean changed, int l, int t, int r, int b) {
-                actionBar.layout(0, 0, r, actionBar.getMeasuredHeight());
+                if (actionBar != null) {
+                    actionBar.layout(0, 0, r, actionBar.getMeasuredHeight());
+                }
 
                 int width = r - l;
                 int height = b - t;
@@ -247,7 +260,21 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         break;
                     }
                     case ACTION_TYPE_QR_LOGIN: {
-                        if (r > b) {
+                        if (showingAsBottomSheet) {
+                            int y;
+
+                            y = 0;
+                            imageView.layout(0, y, imageView.getMeasuredWidth(), y + imageView.getMeasuredHeight());
+                            y = (int) (height * 0.403f);
+                            titleTextView.layout(0, y, titleTextView.getMeasuredWidth(), y + titleTextView.getMeasuredHeight());
+                            y = (int) (height * 0.631f);
+
+                            int x = (getMeasuredWidth() - descriptionLayout.getMeasuredWidth()) / 2;
+                            descriptionLayout.layout(x, y, x + descriptionLayout.getMeasuredWidth(), y + descriptionLayout.getMeasuredHeight());
+                            x = (width - buttonTextView.getMeasuredWidth()) / 2;
+                            y = (int) (height * 0.853f);
+                            buttonTextView.layout(x, y, x + buttonTextView.getMeasuredWidth(), y + buttonTextView.getMeasuredHeight());
+                        } else if (r > b) {
                             int y = (height - imageView.getMeasuredHeight()) / 2;
                             imageView.layout(0, y, imageView.getMeasuredWidth(), y + imageView.getMeasuredHeight());
                             int x = (int) (width * 0.4f);
@@ -383,7 +410,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         ViewGroup viewGroup = (ViewGroup) fragmentView;
         viewGroup.setOnTouchListener((v, event) -> true);
 
-        viewGroup.addView(actionBar);
+        if (actionBar != null) {
+            viewGroup.addView(actionBar);
+        }
 
         imageView = new RLottieImageView(context);
         viewGroup.addView(imageView);
@@ -447,7 +476,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 if (a == 0) {
                     desctiptionLines[a * 2 + 1].setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
                     desctiptionLines[a * 2 + 1].setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
-                    String text = LocaleController.getString("AuthAnotherClientInfo1", works.heymate.beta.R.string.AuthAnotherClientInfo1);
+                    String text = LocaleController.getString("AuthAnotherClientInfo1", R.string.AuthAnotherClientInfo1);
                     SpannableStringBuilder spanned = new SpannableStringBuilder(text);
                     int index1 = text.indexOf('*');
                     int index2 = text.lastIndexOf('*');
@@ -455,7 +484,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         desctiptionLines[a * 2 + 1].setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
                         spanned.replace(index2, index2 + 1, "");
                         spanned.replace(index1, index1 + 1, "");
-                        spanned.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", works.heymate.beta.R.string.AuthAnotherClientDownloadClientUrl)), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spanned.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherClientDownloadClientUrl", R.string.AuthAnotherClientDownloadClientUrl)), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                     desctiptionLines[a * 2 + 1].setText(spanned);
                 } else if (a == 1) {
@@ -565,10 +594,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 }
                 case ACTION_TYPE_CHANGE_PHONE_NUMBER: {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", works.heymate.beta.R.string.PhoneNumberChangeTitle));
-                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", works.heymate.beta.R.string.PhoneNumberAlert));
-                    builder.setPositiveButton(LocaleController.getString("Change", works.heymate.beta.R.string.Change), (dialogInterface, i) -> presentFragment(new ChangePhoneActivity(), true));
-                    builder.setNegativeButton(LocaleController.getString("Cancel", works.heymate.beta.R.string.Cancel), null);
+                    builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", R.string.PhoneNumberChangeTitle));
+                    builder.setMessage(LocaleController.getString("PhoneNumberAlert", R.string.PhoneNumberAlert));
+                    builder.setPositiveButton(LocaleController.getString("Change", R.string.Change), (dialogInterface, i) -> presentFragment(new ChangePhoneActivity(), true));
+                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     showDialog(builder.create());
                     break;
                 }
@@ -578,10 +607,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         switch (currentType) {
             case ACTION_TYPE_CHANNEL_CREATE: {
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageView.setAnimation(works.heymate.beta.R.raw.channel_create, 200, 200);
-                titleTextView.setText(LocaleController.getString("ChannelAlertTitle", works.heymate.beta.R.string.ChannelAlertTitle));
-                descriptionText.setText(LocaleController.getString("ChannelAlertText", works.heymate.beta.R.string.ChannelAlertText));
-                buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", works.heymate.beta.R.string.ChannelAlertCreate2));
+                imageView.setAnimation(R.raw.channel_create, 200, 200);
+                titleTextView.setText(LocaleController.getString("ChannelAlertTitle", R.string.ChannelAlertTitle));
+                descriptionText.setText(LocaleController.getString("ChannelAlertText", R.string.ChannelAlertText));
+                buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", R.string.ChannelAlertCreate2));
                 imageView.playAnimation();
                 flickerButton = true;
                 break;
@@ -590,46 +619,46 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100), Theme.getColor(Theme.key_chats_archiveBackground)));
                 imageView.setImageDrawable(new ShareLocationDrawable(context, 3));
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                titleTextView.setText(LocaleController.getString("PeopleNearby", works.heymate.beta.R.string.PeopleNearby));
-                descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", works.heymate.beta.R.string.PeopleNearbyAccessInfo));
-                buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", works.heymate.beta.R.string.PeopleNearbyAllowAccess));
+                titleTextView.setText(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
+                descriptionText.setText(LocaleController.getString("PeopleNearbyAccessInfo", R.string.PeopleNearbyAccessInfo));
+                buttonTextView.setText(LocaleController.getString("PeopleNearbyAllowAccess", R.string.PeopleNearbyAllowAccess));
                 break;
             }
             case ACTION_TYPE_NEARBY_LOCATION_ENABLED: {
                 imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100), Theme.getColor(Theme.key_chats_archiveBackground)));
                 imageView.setImageDrawable(new ShareLocationDrawable(context, 3));
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                titleTextView.setText(LocaleController.getString("PeopleNearby", works.heymate.beta.R.string.PeopleNearby));
-                descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", works.heymate.beta.R.string.PeopleNearbyGpsInfo));
-                buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", works.heymate.beta.R.string.PeopleNearbyGps));
+                titleTextView.setText(LocaleController.getString("PeopleNearby", R.string.PeopleNearby));
+                descriptionText.setText(LocaleController.getString("PeopleNearbyGpsInfo", R.string.PeopleNearbyGpsInfo));
+                buttonTextView.setText(LocaleController.getString("PeopleNearbyGps", R.string.PeopleNearbyGps));
                 break;
             }
             case ACTION_TYPE_QR_LOGIN: {
                 colors = new int[8];
                 updateColors();
-                imageView.setAnimation(works.heymate.beta.R.raw.qr_login, 334, 334, colors);
+                imageView.setAnimation(R.raw.qr_login, 334, 334, colors);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
-                titleTextView.setText(LocaleController.getString("AuthAnotherClient", works.heymate.beta.R.string.AuthAnotherClient));
-                buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", works.heymate.beta.R.string.AuthAnotherClientScan));
+                titleTextView.setText(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient));
+                buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
                 imageView.playAnimation();
                 break;
             }
             case ACTION_TYPE_NEARBY_GROUP_CREATE: {
                 subtitleTextView.setVisibility(View.VISIBLE);
                 descriptionText2.setVisibility(View.VISIBLE);
-                imageView.setImageResource(Theme.getCurrentTheme().isDark() ? works.heymate.beta.R.drawable.groupsintro2 : works.heymate.beta.R.drawable.groupsintro);
+                imageView.setImageResource(Theme.getCurrentTheme().isDark() ? R.drawable.groupsintro2 : R.drawable.groupsintro);
                 imageView.setScaleType(ImageView.ScaleType.CENTER);
                 subtitleTextView.setText(currentGroupCreateDisplayAddress != null ? currentGroupCreateDisplayAddress : "");
-                titleTextView.setText(LocaleController.getString("NearbyCreateGroup", works.heymate.beta.R.string.NearbyCreateGroup));
-                descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", works.heymate.beta.R.string.NearbyCreateGroupInfo));
-                descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", works.heymate.beta.R.string.NearbyCreateGroupInfo2));
-                buttonTextView.setText(LocaleController.getString("NearbyStartGroup", works.heymate.beta.R.string.NearbyStartGroup));
+                titleTextView.setText(LocaleController.getString("NearbyCreateGroup", R.string.NearbyCreateGroup));
+                descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", R.string.NearbyCreateGroupInfo));
+                descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", R.string.NearbyCreateGroupInfo2));
+                buttonTextView.setText(LocaleController.getString("NearbyStartGroup", R.string.NearbyStartGroup));
                 break;
             }
             case ACTION_TYPE_CHANGE_PHONE_NUMBER: {
                 subtitleTextView.setVisibility(View.VISIBLE);
-                drawable1 = context.getResources().getDrawable(works.heymate.beta.R.drawable.sim_old);
-                drawable2 = context.getResources().getDrawable(works.heymate.beta.R.drawable.sim_new);
+                drawable1 = context.getResources().getDrawable(R.drawable.sim_old);
+                drawable2 = context.getResources().getDrawable(R.drawable.sim_new);
                 drawable1.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image), PorterDuff.Mode.MULTIPLY));
                 drawable2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_changephoneinfo_image2), PorterDuff.Mode.MULTIPLY));
                 imageView.setImageDrawable(new CombinedDrawable(drawable1, drawable2));
@@ -642,9 +671,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 if (user != null) {
                     subtitleTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
                 }
-                titleTextView.setText(LocaleController.getString("PhoneNumberChange2", works.heymate.beta.R.string.PhoneNumberChange2));
-                descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", works.heymate.beta.R.string.PhoneNumberHelp)));
-                buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", works.heymate.beta.R.string.PhoneNumberChange2));
+                titleTextView.setText(LocaleController.getString("PhoneNumberChange2", R.string.PhoneNumberChange2));
+                descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", R.string.PhoneNumberHelp)));
+                buttonTextView.setText(LocaleController.getString("PhoneNumberChange2", R.string.PhoneNumberChange2));
                 break;
             }
         }
@@ -695,9 +724,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-        builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+        builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
+        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
             if (getParentActivity() == null) {
                 return;
             }
@@ -709,7 +738,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 FileLog.e(e);
             }
         });
-        builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         showDialog(builder.create());
     }
 
@@ -749,9 +778,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             if (grantResults != null && grantResults.length != 0) {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                    builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", works.heymate.beta.R.string.PermissionNoLocationPosition));
-                    builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
+                    builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
+                    builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                         if (getParentActivity() == null) {
                             return;
                         }
@@ -763,7 +792,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                             FileLog.e(e);
                         }
                     });
-                    builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                     showDialog(builder.create());
                 } else {
                     AndroidUtilities.runOnUIThread(() -> presentFragment(new PeopleNearbyActivity(), true));
@@ -774,9 +803,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 processOpenQrReader();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", works.heymate.beta.R.string.AppName));
-                builder.setMessage(LocaleController.getString("QRCodePermissionNoCamera", works.heymate.beta.R.string.QRCodePermissionNoCamera));
-                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", works.heymate.beta.R.string.PermissionOpenSettings), (dialog, which) -> {
+                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                builder.setMessage(LocaleController.getString("QRCodePermissionNoCamera", R.string.QRCodePermissionNoCamera));
+                builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
                     try {
                         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -785,7 +814,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         FileLog.e(e);
                     }
                 });
-                builder.setPositiveButton(LocaleController.getString("OK", works.heymate.beta.R.string.OK), null);
+                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
                 builder.show();
             }
         }
@@ -796,7 +825,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     private void processOpenQrReader() {
-        CameraScanActivity.showAsSheet(this, false, new CameraScanActivity.CameraScanActivityDelegate() {
+        CameraScanActivity.showAsSheet(this, false, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
             @Override
             public void didFindQr(String text) {
                 finishFragment(false);
@@ -809,6 +838,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         return currentType;
     }
 
+    public void setShowingAsBottomSheet(boolean showingAsBottomSheet) {
+        this.showingAsBottomSheet = showingAsBottomSheet;
+    }
+
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
@@ -817,9 +850,11 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
 
         themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, delegate, Theme.key_windowBackgroundWhite));
 
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarWhiteSelector));
+        if (actionBar != null) {
+            themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
+            themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+            themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarWhiteSelector));
+        }
 
         themeDescriptions.add(new ThemeDescription(titleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, delegate, Theme.key_windowBackgroundWhiteBlackText));
         themeDescriptions.add(new ThemeDescription(subtitleTextView, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText));

@@ -38,7 +38,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.MessageObject;
-import works.heymate.beta.R;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.FloatingActionMode;
@@ -445,7 +445,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         popupRect = new android.graphics.Rect();
                         popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(textSelectionOverlay.getContext());
                         popupLayout.setPadding(AndroidUtilities.dp(1), AndroidUtilities.dp(1), AndroidUtilities.dp(1), AndroidUtilities.dp(1));
-                        popupLayout.setBackgroundDrawable(textSelectionOverlay.getContext().getResources().getDrawable(works.heymate.beta.R.drawable.menu_copy));
+                        popupLayout.setBackgroundDrawable(textSelectionOverlay.getContext().getResources().getDrawable(R.drawable.menu_copy));
                         popupLayout.setAnimationEnabled(false);
                         popupLayout.setOnTouchListener((v, event) -> {
                             if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
@@ -472,7 +472,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                         popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
                         popupWindow.setAnimationEnabled(false);
-                        popupWindow.setAnimationStyle(works.heymate.beta.R.style.PopupContextAnimation);
+                        popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
                         popupWindow.setOutsideTouchable(true);
 
                         if (popupLayout != null) {
