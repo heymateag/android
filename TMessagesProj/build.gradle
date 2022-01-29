@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 repositories {
     maven { url "https://raw.githubusercontent.com/yasharpm/repo/master/" }
-    google()
     mavenCentral()
     jcenter()
 
-    maven {
-        url  "https://dl.bintray.com/celo/celo"
-    }
+//    maven {
+//        url  "https://dl.bintray.com/celo/celo"
+//    }
+    google()
 }
 
 configurations {
@@ -335,7 +335,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2462 * 83 // HeymateConfig
+    defaultConfig.versionCode = 2462 * 84 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -354,14 +354,14 @@ android {
     defaultConfig {
         minSdkVersion 21 // 21 Only for Zoom SDK
         targetSdkVersion 30
-        versionName "8.2.1 - 83" // HeymateConfig
+        versionName "8.2.1 - 84" // HeymateConfig
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
         externalNativeBuild {
             cmake {
                 version '3.10.2'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', "-j=21"
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21'//, "-j=21"
             }
         }
     }
