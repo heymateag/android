@@ -6,12 +6,10 @@ repositories {
     google()
     jcenter()
 
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://button.passbase.com/__android' }
-
 //    maven {
 //        url  "https://dl.bintray.com/celo/celo"
 //    }
+    google()
 }
 
 configurations {
@@ -342,7 +340,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2538 * 83 // HeymateConfig
+    defaultConfig.versionCode = 2462 * 84 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -361,14 +359,14 @@ android {
     defaultConfig {
         minSdkVersion 21 // 21 Only for Zoom SDK
         targetSdkVersion 30
-        versionName "8.4.4 - 83" // HeymateConfig
+        versionName "8.2.1 - 84" // HeymateConfig
 
         vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
         externalNativeBuild {
             cmake {
                 version '3.10.2'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21', "-j=21"
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21'//, "-j=21"
             }
         }
     }
