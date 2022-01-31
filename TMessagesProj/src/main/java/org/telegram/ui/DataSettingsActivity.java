@@ -27,7 +27,7 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.voip.Instance;
 import org.telegram.tgnet.TLRPC;

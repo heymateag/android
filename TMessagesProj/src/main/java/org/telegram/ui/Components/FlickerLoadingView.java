@@ -36,6 +36,7 @@ public class FlickerLoadingView extends View {
     public final static int MEMBER_REQUESTS_TYPE = 15;
     public final static int REACTED_TYPE = 16;
     public final static int QR_TYPE = 17;
+    public static final int OFFER_TYPE = 111;
 
     private int gradientWidth;
     private LinearGradient gradient;
@@ -524,6 +525,41 @@ public class FlickerLoadingView extends View {
                 }
             }
         }
+        else if (getViewType() == OFFER_TYPE) {
+            int k = 0;
+            while (h <= getMeasuredHeight()) {
+                int childH = getCellHeight(getMeasuredWidth());
+
+                rectF.set(
+                        AndroidUtilities.dp(16),
+                        h + AndroidUtilities.dp(8),
+                        getMeasuredWidth() - AndroidUtilities.dp(56),
+                        h + childH - AndroidUtilities.dp(62));
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(8), AndroidUtilities.dp(8), paint);
+
+                float backgroundWidth = rectF.width();
+
+                rectF.set(
+                        AndroidUtilities.dp(16),
+                        h + childH - AndroidUtilities.dp(58),
+                        AndroidUtilities.dp(16) + backgroundWidth / 2 - AndroidUtilities.dp(8),
+                        h + childH - AndroidUtilities.dp(12)
+                );
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(8), AndroidUtilities.dp(8), paint);
+
+                rectF.offset(backgroundWidth / 2 + AndroidUtilities.dp(8), 0);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(8), AndroidUtilities.dp(8), paint);
+
+                canvas.drawCircle(getMeasuredWidth() - AndroidUtilities.dp(32), h + childH - AndroidUtilities.dp(78), AndroidUtilities.dp(16), paint);
+                canvas.drawCircle(getMeasuredWidth() - AndroidUtilities.dp(32), h + childH - AndroidUtilities.dp(122), AndroidUtilities.dp(16), paint);
+
+                h += getCellHeight(getMeasuredWidth());
+                k++;
+                if (isSingleCell && k >= itemsCount) {
+                    break;
+                }
+            }
+        }
         invalidate();
     }
 
@@ -630,6 +666,8 @@ public class FlickerLoadingView extends View {
             return AndroidUtilities.dp(107);
         } else if (getViewType() == REACTED_TYPE) {
             return AndroidUtilities.dp(48);
+        } else if (getViewType() == OFFER_TYPE) {
+            return AndroidUtilities.dp(300);
         }
         return 0;
     }

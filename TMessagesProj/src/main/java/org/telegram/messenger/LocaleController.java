@@ -41,6 +41,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import works.heymate.beta.R;
+
 public class LocaleController {
 
     static final int QUANTITY_OTHER = 0x0000;

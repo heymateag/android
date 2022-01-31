@@ -24,6 +24,9 @@ import java.util.concurrent.CountDownLatch;
 
 import androidx.core.content.FileProvider;
 
+import works.heymate.beta.BuildConfig;
+import works.heymate.beta.R;
+
 public class FeedWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {

@@ -81,6 +81,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import works.heymate.beta.R;
+
 public class SendMessagesHelper extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
     private HashMap<String, ArrayList<DelayedMessage>> delayedMessages = new HashMap<>();
@@ -5766,7 +5768,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         return delayedMessages.get(location);
     }
 
-    protected long getNextRandomId() {
+    public long getNextRandomId() {
         long val = 0;
         while (val == 0) {
             val = Utilities.random.nextLong();

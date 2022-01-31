@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import androidx.collection.LongSparseArray;
 
+import works.heymate.beta.R;
+
 public class ContactsWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {

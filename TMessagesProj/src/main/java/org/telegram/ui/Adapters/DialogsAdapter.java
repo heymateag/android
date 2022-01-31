@@ -62,6 +62,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
+import works.heymate.beta.R;
+
 public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     private static final int VIEW_TYPE_SHOP = 13;

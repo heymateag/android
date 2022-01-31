@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import works.heymate.beta.BuildConfig;
+
 public class NotificationImageProvider extends ContentProvider implements NotificationCenter.NotificationCenterDelegate {
 
 	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".notification_image_provider";

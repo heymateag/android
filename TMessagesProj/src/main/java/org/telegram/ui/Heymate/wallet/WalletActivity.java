@@ -98,7 +98,7 @@ public class WalletActivity extends BaseFragment {
                 }
 
                 if (id == 1) {
-                    CameraScanActivity.showAsSheet(WalletActivity.this, false, true, new CameraScanActivity.CameraScanActivityDelegate() {
+                    CameraScanActivity.showAsSheet(WalletActivity.this, false, CameraScanActivity.TYPE_ANY_QR, new CameraScanActivity.CameraScanActivityDelegate() {
 
                         @Override
                         public void didFindMrzInfo(MrzRecognizer.Result result) {

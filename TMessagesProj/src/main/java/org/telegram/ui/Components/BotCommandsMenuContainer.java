@@ -19,7 +19,7 @@ import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.ui.ActionBar.Theme;
 
 public class BotCommandsMenuContainer extends FrameLayout implements NestedScrollingParent {

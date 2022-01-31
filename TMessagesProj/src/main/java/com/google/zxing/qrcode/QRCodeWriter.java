@@ -32,7 +32,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
 
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 

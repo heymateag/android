@@ -16,6 +16,8 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 
+import works.heymate.beta.R;
+
 public class ChatsWidgetProvider extends AppWidgetProvider {
 
     @Override

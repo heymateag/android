@@ -421,6 +421,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private float tabsYOffset;
     private float scrollAdditionalOffset;
 
+    private int debugLastUpdateAction = -1;
+
+    public final Property<DialogsActivity, Float> SCROLL_Y = new AnimationProperties.FloatProperty<DialogsActivity>("animationValue") {
+        @Override
+        public void setValue(DialogsActivity object, float value) {
+            object.setScrollY(value);
+        }
+
         @Override
         public Float get(DialogsActivity object) {
             return actionBar.getTranslationY();
@@ -890,6 +898,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     allowMoving = true;
                 }
             }
+            return checkTabsAnimationInProgress() || filterTabsView != null && filterTabsView.isAnimatingIndicator() || onTouchEvent(ev);
+        }
 
         @Override
         public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
@@ -5184,18 +5194,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         animatorSet.start();
     }
 
-    private void updateFloatingButtonOffset() {
-        floatingButtonContainer.setTranslationY(floatingButtonTranslation - Math.max(additionalFloatingTranslation, additionalFloatingTranslation2) * (1f - floatingButtonHideProgress));
-    }
-
-    private boolean hasHiddenArchive() {
-        return !onlySelect && initialDialogsType == 0 && folderId == 0 && getMessagesController().hasHiddenArchive();
-    }
-
-    private boolean waitingForDialogsAnimationEnd(ViewPage viewPage) {
-        return viewPage.dialogsItemAnimator.isRunning() || dialogRemoveFinished != 0 || dialogInsertFinished != 0 || dialogChangeFinished != 0;
-    }
-
     private void hideActionMode(boolean animateCheck) {
         actionBar.hideActionMode();
         if (menuDrawable != null) {
@@ -6244,70 +6242,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         doneItemAnimator.start();
     }
 
-    private AnimatorSet doneItemAnimator;
-    private void showDoneItem(boolean show) {
-        if (doneItem == null) {
-            return;
-        }
-        if (doneItemAnimator != null) {
-            doneItemAnimator.cancel();
-            doneItemAnimator = null;
-        }
-        doneItemAnimator = new AnimatorSet();
-        doneItemAnimator.setDuration(180);
-        if (show) {
-            doneItem.setVisibility(View.VISIBLE);
-        } else {
-            doneItem.setSelected(false);
-            Drawable background = doneItem.getBackground();
-            if (background != null) {
-                background.setState(StateSet.NOTHING);
-                background.jumpToCurrentState();
-            }
-            if (searchItem != null) {
-                searchItem.setVisibility(View.VISIBLE);
-            }
-            if (proxyItem != null && proxyItemVisible) {
-                proxyItem.setVisibility(View.VISIBLE);
-            }
-            if (passcodeItem != null && passcodeItemVisible) {
-                passcodeItem.setVisibility(View.VISIBLE);
-            }
-        }
-        ArrayList<Animator> arrayList = new ArrayList<>();
-        arrayList.add(ObjectAnimator.ofFloat(doneItem, View.ALPHA, show ? 1.0f : 0.0f));
-        if (proxyItemVisible) {
-            arrayList.add(ObjectAnimator.ofFloat(proxyItem, View.ALPHA, show ? 0.0f : 1.0f));
-        }
-        if (passcodeItemVisible) {
-            arrayList.add(ObjectAnimator.ofFloat(passcodeItem, View.ALPHA, show ? 0.0f : 1.0f));
-        }
-        arrayList.add(ObjectAnimator.ofFloat(searchItem, View.ALPHA, show ? 0.0f : 1.0f));
-        doneItemAnimator.playTogether(arrayList);
-        doneItemAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                doneItemAnimator = null;
-                if (show) {
-                    if (searchItem != null) {
-                        searchItem.setVisibility(View.INVISIBLE);
-                    }
-                    if (proxyItem != null && proxyItemVisible) {
-                        proxyItem.setVisibility(View.INVISIBLE);
-                    }
-                    if (passcodeItem != null && passcodeItemVisible) {
-                        passcodeItem.setVisibility(View.INVISIBLE);
-                    }
-                } else {
-                    if (doneItem != null) {
-                        doneItem.setVisibility(View.GONE);
-                    }
-                }
-            }
-        });
-        doneItemAnimator.start();
-    }
-
     private void updateSelectedCount() {
         if (commentView != null) {
             if (selectedDialogs.isEmpty()) {
@@ -6868,6 +6802,45 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         animatorSet.setDuration(300);
         animatorSet.setInterpolator(floatingInterpolator);
         floatingButtonContainer.setClickable(!hide);
+        animatorSet.start();
+    }
+
+    boolean floatingButtonIsShop;
+    float floatingButtonConvertProgress = 0;
+    boolean floatingButtonBackgroundIsShop;
+    private void convertFloatingButton(boolean shop) {
+        if (floatingButtonIsShop == shop) {
+            return;
+        }
+        floatingButtonBackgroundIsShop = floatingButtonIsShop;
+        floatingButtonIsShop = shop;
+        AnimatorSet animatorSet = new AnimatorSet();
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(floatingButtonConvertProgress, shop ? 1f : 0f);
+        valueAnimator.addUpdateListener(animation -> {
+            floatingButtonConvertProgress = (float) animation.getAnimatedValue();
+            if (floatingButtonConvertProgress < 0.5f) {
+                floatingButton.setScaleX(1 - floatingButtonConvertProgress * 2);
+                floatingButton.setScaleY(1 - floatingButtonConvertProgress * 2);
+                if (floatingButtonBackgroundIsShop) {
+                    floatingButtonBackgroundIsShop = false;
+                    floatingButton.setBackground(floatingButtonNewMessageBackground);
+                    floatingButton.setAnimation(works.heymate.beta.R.raw.write_contacts_fab_icon, 52, 52);
+                }
+            }
+            else {
+                floatingButton.setScaleX(floatingButtonConvertProgress * 2 - 1);
+                floatingButton.setScaleY(floatingButtonConvertProgress * 2 - 1);
+                if (!floatingButtonBackgroundIsShop) {
+                    floatingButtonBackgroundIsShop = true;
+                    floatingButton.setBackground(floatingButtonNewShopBackground);
+                    floatingButton.setImageResource(works.heymate.beta.R.drawable.ic_addshop);
+                }
+            }
+            updateFloatingButtonOffset();
+        });
+        animatorSet.playTogether(valueAnimator);
+        animatorSet.setDuration(300);
+        animatorSet.setInterpolator(floatingInterpolator);
         animatorSet.start();
     }
 

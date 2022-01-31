@@ -55,7 +55,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MrzRecognizer;
-import org.telegram.messenger.R;
+import works.heymate.beta.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.messenger.camera.CameraSession;
@@ -107,6 +107,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     public static final int TYPE_MRZ = 0;
     public static final int TYPE_QR = 1;
     public static final int TYPE_QR_LOGIN = 2;
+    public static final int TYPE_ANY_QR = 3;
 
     public interface CameraScanActivityDelegate {
         default void didFindMrzInfo(MrzRecognizer.Result result) {
@@ -267,7 +268,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     actionBar.layout(0, 0, actionBar.getMeasuredWidth(), actionBar.getMeasuredHeight());
                     cameraView.layout(0, 0, cameraView.getMeasuredWidth(), cameraView.getMeasuredHeight());
                     int size = (int) (Math.min(cameraView.getWidth(), cameraView.getHeight()) / 1.5f);
-                    if (currentType == TYPE_QR) {
+                    if (currentType == TYPE_QR || currentType == TYPE_ANY_QR) {
                         y = (cameraView.getMeasuredHeight() - size) / 2 - titleTextView.getMeasuredHeight() - AndroidUtilities.dp(30);
                     } else {
                         y = (cameraView.getMeasuredHeight() - size) / 2 - titleTextView.getMeasuredHeight() - AndroidUtilities.dp(64);
@@ -430,7 +431,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             if (needGalleryButton) {
                 //titleTextView.setText(LocaleController.getString("WalletScanCode", R.string.WalletScanCode));
             } else {
-                if (currentType == TYPE_QR) {
+                if (currentType == TYPE_QR || currentType == TYPE_ANY_QR) {
                     titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", R.string.AuthAnotherClientScan));
                 } else {
                     String text = LocaleController.getString("AuthAnotherClientInfo5", R.string.AuthAnotherClientInfo5);
@@ -729,7 +730,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 Uri uri = Uri.parse(text);
                 String path = uri.getPath().replace("/", "");
             } else {
-                if (!text.startsWith("tg://login?token=")) {
+                if (currentType != TYPE_ANY_QR && !text.startsWith("tg://login?token=")) {
                     onNoQrFound();
                     return null;
                 }
@@ -743,7 +744,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
 
 
     private boolean isQr() {
-        return currentType == TYPE_QR || currentType == TYPE_QR_LOGIN;
+        return currentType == TYPE_QR || currentType == TYPE_QR_LOGIN || currentType == TYPE_ANY_QR;
     }
 
     @Override

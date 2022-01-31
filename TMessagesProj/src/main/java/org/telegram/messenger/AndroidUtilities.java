@@ -153,6 +153,9 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import works.heymate.beta.BuildConfig;
+import works.heymate.beta.R;
+
 public class AndroidUtilities {
 
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();

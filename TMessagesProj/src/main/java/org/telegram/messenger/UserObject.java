@@ -68,11 +68,4 @@ public class UserObject {
         return hasPhoto(user) ? user.photo : null;
     }
 
-    public static boolean hasPhoto(TLRPC.User user) {
-        return user != null && user.photo != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty);
-    }
-
-    public static TLRPC.UserProfilePhoto getPhoto(TLRPC.User user) {
-        return hasPhoto(user) ? user.photo : null;
-    }
 }

@@ -74,6 +74,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import works.heymate.beta.BuildConfig;
+import works.heymate.beta.R;
+
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
     private static Pattern BOLD_PATTERN = Pattern.compile("\\*\\*(.+?)\\*\\*"),

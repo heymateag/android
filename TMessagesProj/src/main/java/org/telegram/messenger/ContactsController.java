@@ -39,6 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import androidx.collection.LongSparseArray;
 
+import works.heymate.beta.R;
+
 public class ContactsController extends BaseController {
 
     private Account systemAccount;

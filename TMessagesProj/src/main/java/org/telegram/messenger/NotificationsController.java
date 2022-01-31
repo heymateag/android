@@ -71,6 +71,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import works.heymate.beta.BuildConfig;
+import works.heymate.beta.R;
+
 public class NotificationsController extends BaseController {
 
     public static final String EXTRA_VOICE_REPLY = "extra_voice_reply";

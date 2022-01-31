@@ -67,6 +67,8 @@ import java.util.regex.Pattern;
 import androidx.collection.LongSparseArray;
 import androidx.core.math.MathUtils;
 
+import works.heymate.beta.R;
+
 public class MessageObject {
 
     public static final int MESSAGE_SEND_STATE_SENT = 0;

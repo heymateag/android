@@ -36,6 +36,8 @@ import java.util.Collections;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import works.heymate.beta.R;
+
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;

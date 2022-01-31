@@ -48,6 +48,8 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
+import works.heymate.beta.R;
+
 public class MessagesStorage extends BaseController {
 
     public ArrayList<Integer> getCachedMessagesInRange(long dialogId, int minDate, int maxDate) {

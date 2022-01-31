@@ -32,6 +32,8 @@ import java.util.ArrayList;
 
 import androidx.collection.LongSparseArray;
 
+import works.heymate.beta.R;
+
 public class ChatsWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {

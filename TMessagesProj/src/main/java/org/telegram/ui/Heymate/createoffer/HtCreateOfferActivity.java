@@ -578,9 +578,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
 
             if (errors.length() > 0) {
-                undoView.showWithAction(0, UndoView.ACTION_OFFER_DATA_INCOMPLETE, errors.toString(), null, () -> {
-                    undoView.setVisibility(View.GONE);
-                });
+                Toast.makeText(getParentActivity(), "Please fill all the feilds", Toast.LENGTH_SHORT).show();
             } else {
                 WalletExistence.ensure(this::acquirePromotionPlan);
             }
