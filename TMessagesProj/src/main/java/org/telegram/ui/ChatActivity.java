@@ -25098,6 +25098,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (position >= messagesStartRow && position < messagesEndRow) {
                 ArrayList<MessageObject> messages = isFrozen ? frozenMessages : ChatActivity.this.messages;
+                MessageObject message = messages.get(position - messagesStartRow);
+                AtomicReference<String> inputUrl = new AtomicReference<>();
+                if(message.messageOwner.entities != null && message.messageOwner.entities.stream().anyMatch((e) -> e instanceof TLRPC.TL_messageEntityTextUrl)){
+                    message.messageOwner.entities.stream()
+                            .filter((e) -> e instanceof TLRPC.TL_messageEntityTextUrl)
+                            .forEach((e) -> {
+                                inputUrl.set(e.url);
+                            });
+                }
+                String finalMessage = inputUrl.get() != null ? inputUrl.get() : message.messageText.toString();
+                if(OfferUtils.urlFromPhrase(finalMessage) != null) {
+                    return 10;
+                }
+                if (ReservationUtils.urlFromPhrase(finalMessage) != null) {
+                    return 11;
+                }
                 return messages.get(position - messagesStartRow).contentType;
             } else if (position == botInfoRow) {
                 return 3;
