@@ -1,11 +1,15 @@
 package works.heymate.core;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.tgnet.ConnectionsManager;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -92,6 +96,14 @@ public class Utils {
         else {
             return object;
         }
+    }
+
+    public static boolean hasInternet(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+
+        return ni != null && ni.isConnected();
     }
 
     public static void runOnUIThread(Runnable runnable) {

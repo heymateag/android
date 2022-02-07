@@ -117,39 +117,30 @@ public class WalletConnection {
 
         if (client != null) {
             if (!client.isConnected()) {
-                new Thread() {
-
-                    @Override
-                    public void run() {
-                        client.connect(session, mPeerMeta, mPeerId, null);
-                    }
-
-                }.start();
+                client.connect(session, mPeerMeta, mPeerId, null);
             }
-
             return;
         }
 
-        new Thread() {
-
-            @Override
-            public void run() {
-                newClient(session.toUri()).connect(session, mPeerMeta, mPeerId, null);
-            }
-
-        }.start();
+        newClient(session.toUri()).connect(session, mPeerMeta, mPeerId, null);
     }
 
     private WCClient newClient(String sSession) {
         WCClient client = new WCClient(mGson, mOkHttpClient);
 
         client.setOnFailure(throwable -> {
+            if (client.isConnected()) {
+                client.disconnect();
+            }
+
             Utils.runOnUIThread(() -> {
-                Activity activity = ActivityMonitor.get().getCurrentActivity();
+                if (mClients.remove(sSession) != null) {
+                    Activity activity = ActivityMonitor.get().getCurrentActivity();
 
-                String errorMessage = throwable == null ? "Failure with no error!" : (throwable.getMessage() == null ? (throwable.getStackTrace()[0].toString()) : throwable.getMessage());
-
-                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
+                    if (activity != null && Utils.hasInternet(activity)) {
+                        start();
+                    }
+                }
             });
             return null;
         });
@@ -166,13 +157,15 @@ public class WalletConnection {
                 new AlertDialog.Builder(activity)
                         .setTitle("Connection request")
                         .setMessage(wcPeerMeta.component1() + " wants to connect to your heymate wallet.")
-                        .setPositiveButton("Accept", (dialogInterface, i) -> {
-                            client.approveSession(Arrays.asList(mWallet.getAddress()), Wallet.CELO_CONTEXT.chainId);
-
-                            mClients.put(sSession, client);
-
-                            addSessionToSessions(sSession, client.getRemotePeerId());
-                        })
+                        .setPositiveButton("Accept", (dialogInterface, i) -> new Thread() {
+                            @Override
+                            public void run() {
+                                if (client.approveSession(Arrays.asList(mWallet.getAddress()), Wallet.CELO_CONTEXT.chainId)) {
+                                    mClients.put(sSession, client);
+                                    addSessionToSessions(sSession, client.getRemotePeerId());
+                                }
+                            }
+                        }.start())
                         .setNegativeButton("Reject", (dialogInterface, i) -> client.rejectSession("Session request rejected by user."))
                         .setOnCancelListener(dialogInterface -> client.rejectSession("Session request rejected by user."))
                         .show();
@@ -291,7 +284,14 @@ public class WalletConnection {
         switch (request.getType()) {
             case MESSAGE:
             case PERSONAL_MESSAGE:
-                client.approveRequest(requestId, sign(request.getData()));
+                new Thread() {
+
+                    @Override
+                    public void run() {
+                        client.approveRequest(requestId, sign(request.getData()));
+                    }
+
+                }.start();
                 return;
             case TYPED_MESSAGE:
                 // TODO

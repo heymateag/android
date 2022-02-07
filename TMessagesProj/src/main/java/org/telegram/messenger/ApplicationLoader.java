@@ -55,6 +55,7 @@ import works.heymate.api.APIObject;
 import works.heymate.api.APIs;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
+import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
 import works.heymate.model.User;
 import works.heymate.model.Users;
@@ -134,6 +135,14 @@ public class ApplicationLoader extends Application {
                     for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
                         ConnectionsManager.getInstance(a).checkConnection();
                         FileLoader.getInstance(a).onNetworkChanged(isSlow);
+                    }
+
+                    if (Utils.hasInternet(applicationContext)) {
+                        Wallet wallet = TG2HM.getWallet();
+
+                        if (wallet != null) {
+                            wallet.getConnection().start();
+                        }
                     }
                 }
             };
