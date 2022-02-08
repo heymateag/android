@@ -88,6 +88,61 @@ public class Ramp {
         });
     }
 
+    public static void initAddMoney(String userAddress, Currency currency, RampNetworkCallback callback) {
+        RampSDK rampSDK = new RampSDK();
+
+        String sCurrency;
+
+        if (currency.equals(Currency.USD)) {
+            sCurrency = "CUSD";
+        }
+        else if (currency.equals(Currency.EUR)) {
+            sCurrency = "CEUR";
+        }
+        else if (currency.equals(Currency.REAL)) {
+            sCurrency = "CREAL"; // TODO Really?
+        }
+        else {
+            callback.onRampDone(false);
+            return;
+        }
+
+        Config config = new Config(
+                Texts.get(Texts.HEYMATE).toString(),
+                Texts.get(Texts.LOGO_URL).toString(),
+                URL,
+                sCurrency,
+                "",
+                "",
+                "",
+                userAddress,
+                "",
+                "",
+                "",
+                "",
+                API_KEY
+        );
+
+        rampSDK.startTransaction(ActivityMonitor.get().getCurrentActivity(), config, new RampCallback() {
+
+            @Override
+            public void onPurchaseFailed() {
+                callback.onRampDone(false);
+            }
+
+            @Override
+            public void onPurchaseCreated(@NotNull Purchase purchase, @NotNull String purchaseViewToken, @NotNull String apiUrl) {
+                callback.onRampDone(true);
+            }
+
+            @Override
+            public void onWidgetClose() {
+                // Nothing to do: Called when Ramp finishes the flow and can be closed, or user closed it manually.
+            }
+
+        });
+    }
+
     public static RampDialog getDialog(Context context, String userAddress, String amount, RampDialog.OnRampDoneListener listener) {
         Uri uri = new Uri.Builder()
                 .scheme("https")

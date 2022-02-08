@@ -57,6 +57,7 @@ import works.heymate.core.Money;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.ramp.Ramp;
 import works.heymate.ramp.alphafortress.AlphaFortressness;
 import works.heymate.ramp.alphafortress.BeneficiaryModel;
 import works.heymate.walletconnect.WalletConnection;
@@ -259,6 +260,11 @@ public class WalletActivity extends BaseFragment {
         addMoney.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         addMoney.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_windowBackgroundWhiteBlueButton)));
         addMoney.setText("Add Money");
+        addMoney.setOnClickListener(v -> {
+            if (mWallet != null) {
+                Ramp.initAddMoney(mWallet.getAddress(), TG2HM.getDefaultCurrency(), successful -> {});
+            }
+        });
 
         content.findViewById(R.id.spacer).setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
