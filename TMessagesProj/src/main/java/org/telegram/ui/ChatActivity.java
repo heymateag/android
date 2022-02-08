@@ -24682,12 +24682,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     OfferUtils.PhraseInfo phraseInfo = OfferUtils.readBeautiful(finalMessage);
                     offerCell.setPhraseInfo(phraseInfo);
                     APIObject offer = phraseInfo.offer;
+                    offerCell.setOffer(offer, false);
                     if (phraseInfo.offerId != null) {
                         APIs.get().getOffer(offer.getString(Offer.ID), result -> {
                             if (result.success) {
-                                Utils.runOnUIThread(() -> {
-                                    offerCell.setOffer(result.response, true);
-                                });
+                                offerCell.setOffer(result.response, true);
                             }
                         });
                     }
@@ -24705,7 +24704,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                            }
 //                        });
                     }
-                    offerCell.setOffer(offer, false);
                 }
                 else if (view instanceof MeetingMessageItem) {
                     ReservationUtils.PhraseInfo phraseInfo = ReservationUtils.readBeautiful(message.messageText.toString());
