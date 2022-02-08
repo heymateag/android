@@ -70,6 +70,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -2217,7 +2218,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         return;
                     }
                     ArrayList<MessagesController.DialogFilter> dialogFilters = getMessagesController().dialogFilters;
-                    if (id != Integer.MAX_VALUE && (id < 0 || id >= dialogFilters.size())) {
+                    if (id != Integer.MAX_VALUE && id != Integer.MAX_VALUE - 1 && (id < 0 || id >= dialogFilters.size())) {
                         return;
                     }
                     if (parentLayout != null) {
@@ -3171,7 +3172,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             drawable = combinedDrawable;
         }
-        floatingButton.setBackgroundDrawable(drawable);
+        floatingButtonNewMessageBackground = drawable;
+        drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme), ContextCompat.getColor(context, works.heymate.beta.R.color.ht_theme));
+        if (Build.VERSION.SDK_INT < 21) {
+            Drawable shadowDrawable = context.getResources().getDrawable(works.heymate.beta.R.drawable.floating_shadow).mutate();
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
+            CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
+            combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+            drawable = combinedDrawable;
+        }
+        floatingButtonNewShopBackground = drawable;
+        floatingButton.setBackground(floatingButtonNewMessageBackground);
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
         if (initialDialogsType == 10) {
             floatingButton.setImageResource(R.drawable.floating_check);
@@ -3971,7 +3982,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
                 for (int a = 0; a < viewPages.length; a++) {
-                    if (viewPages[a].selectedType != Integer.MAX_VALUE && viewPages[a].selectedType >= filters.size()) {
+                    if (viewPages[a].selectedType != Integer.MAX_VALUE && viewPages[a].selectedType != Integer.MAX_VALUE - 1 && viewPages[a].selectedType >= filters.size()) {
                         viewPages[a].selectedType = filters.size() - 1;
                     }
                     viewPages[a].listView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING);
