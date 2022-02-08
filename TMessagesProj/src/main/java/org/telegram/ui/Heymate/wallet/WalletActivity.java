@@ -38,6 +38,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.TG2HM;
+import org.telegram.ui.Heymate.log.LogToGroup;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 
 import java.io.IOException;
@@ -414,6 +415,7 @@ public class WalletActivity extends BaseFragment {
             mTextBalance.setText("");
 
             wallet.getBalance((success, usd, eur, real, errorCause) -> {
+                LogToGroup.log("Wallet error", errorCause.getMainCause().getCause());
                 if (success) {
                     mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur, real).toString());
                 }
