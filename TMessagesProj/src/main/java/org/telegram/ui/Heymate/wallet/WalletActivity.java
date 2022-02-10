@@ -421,11 +421,14 @@ public class WalletActivity extends BaseFragment {
             mTextBalance.setText("");
 
             wallet.getBalance((success, usd, eur, real, errorCause) -> {
-                LogToGroup.log("Wallet error", errorCause.getMainCause().getCause());
                 if (success) {
                     mTextBalance.setText(TG2HM.pickTheRightMoney(usd, eur, real).toString());
                 }
                 else {
+                    if (errorCause != null) {
+                        LogToGroup.log("Wallet error", errorCause.getMainCause().getCause());
+                    }
+
                     mTextBalance.setText("[Connection problem]");
                 }
             });

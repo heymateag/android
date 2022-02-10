@@ -3,6 +3,45 @@
 -keepclassmembernames class * {
     @com.google.android.gms.common.annotation.KeepName *;
 }
+
+# heymate
+-keep class org.web3j.** { *; }
+-keep class org.telegram.ui.Heymate.OffersActivity { *; }
+-keep class org.telegram.ui.Heymate.myschedule.MyScheduleActivity { *; }
+-keep class org.telegram.ui.Heymate.TimeSlotSelectionActivity { *; }
+-keep class org.telegram.ui.Heymate.payment.PaymentInvoiceActivity { *; }
+-keep class org.telegram.ui.Heymate.payment.PaymentMethodSelectionActivity { *; }
+-keep class org.telegram.ui.Heymate.payment.BankTransferInformationActivity { *; }
+-keep class org.telegram.ui.Heymate.payment.BankTransferResultActivity { *; }
+
+# Ramp.network
+-keepattributes Annotation
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+
+# Zoom
+-keep class us.zoom**{
+    *;
+}
+-keep interface us.zoom**{
+    *;
+}
+
+-keep class org.webrtc**{
+    *;
+}
+
+-keep class com.zipow**{
+    *;
+}
+
 -keep class org.webrtc.* { *; }
 -keep class org.webrtc.audio.* { *; }
 -keep class org.webrtc.voiceengine.* { *; }
