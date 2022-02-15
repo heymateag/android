@@ -565,7 +565,7 @@ public class OnlineMeeting {
         public String toString() {
             JSONObject jUserInfo = new JSONObject();
             try {
-                jUserInfo.put("n", name);
+                jUserInfo.put("f", name);
                 jUserInfo.put("i", id);
             } catch (JSONException e) { }
             return Base64.encodeToString(jUserInfo.toString().getBytes(), Base64.NO_WRAP | Base64.URL_SAFE);
