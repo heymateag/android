@@ -147,6 +147,7 @@ public class OfferMessageItem extends SequenceLayout {
         mMoreDetails = findViewById(R.id.more_details);
         mBook = findViewById(R.id.book);
         mShare = findViewById(R.id.share);
+        mShare.setVisibility(INVISIBLE); // TODO to be removed when web supports deep links
         mForward = findViewById(R.id.forward);
 
         int cornerRadius = AndroidUtilities.dp(8);

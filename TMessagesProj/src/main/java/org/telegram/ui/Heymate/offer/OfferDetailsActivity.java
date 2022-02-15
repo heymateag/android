@@ -277,7 +277,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         promote.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         promote.setText("Promote"); // TODO Texts
         promote.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_windowBackgroundWhite)));
-        promote.setOnClickListener(v -> WalletExistence.ensure(() -> promote(true)));
+        promote.setOnClickListener(v -> WalletExistence.ensure(() -> promote(false))); // TODO share is true when web supports deeplink or referral works?
 
         book.setTextColor(Theme.getColor(Theme.key_chats_actionIcon));
         book.setText("Book Now");
