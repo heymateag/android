@@ -89,13 +89,13 @@ public class AlphaFortressness {
         AlphaTransaction.clearPendingTransaction();
     }
 
-    public static void sell(Currency currency, BigInteger amount, float rate, BeneficiaryModel model, APICallback<AlphaTransaction.Transaction> callback) {
-        BeneficiaryModel.get(currency, (success, previousModel, exception) -> {
+    public static void sell(Currency sellCurrency, BigInteger amount, float rate, Currency beneficiaryCurrency, BeneficiaryModel model, APICallback<AlphaTransaction.Transaction> callback) {
+        BeneficiaryModel.get(beneficiaryCurrency, (success, previousModel, exception) -> {
             if (previousModel != null) {
                 if (previousModel.hasChanges(model)) {
-                    BeneficiaryModel.createBeneficiary(currency, model, (success1, result, exception1) -> {
+                    BeneficiaryModel.createBeneficiary(beneficiaryCurrency, model, (success1, result, exception1) -> {
                         if (success1) {
-                            sellWithBeneficiary(currency, amount, rate, model, callback);
+                            sellWithBeneficiary(sellCurrency, amount, rate, model, callback);
                         }
                         else {
                             callback.onAPICallResult(false, null, exception1);
@@ -103,7 +103,7 @@ public class AlphaFortressness {
                     });
                 }
                 else {
-                    sellWithBeneficiary(currency, amount, rate, model, callback);
+                    sellWithBeneficiary(sellCurrency, amount, rate, model, callback);
                 }
             }
             else {

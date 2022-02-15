@@ -294,7 +294,7 @@ public class WalletActivity extends BaseFragment {
 
         new AlertDialog.Builder(getParentActivity())
                 .setTitle("Cash out")
-                .setMessage("Maximum amount possible to cash out is " + maximumMoney.toString() + ". You will get " + resultMoney.toString() + ".")
+                .setMessage("Maximum amount possible to cash out is " + maximumMoney + ". You will get " + resultMoney.toString() + ".")
                 .setPositiveButton("Cash out", (dialogInterface, i) -> cashOutConfirmBeneficiary(maximumAmount, rate))
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
                 .show();
@@ -303,7 +303,7 @@ public class WalletActivity extends BaseFragment {
     private void cashOutConfirmBeneficiary(BigInteger amount, float rate) {
         LoadingUtil.onLoadingStarted();
 
-        AlphaFortressness.getBeneficiaryModel(TG2HM.getDefaultCurrency(), (success, model, exception) -> {
+        AlphaFortressness.getBeneficiaryModel(TG2HM.getOffRampCurrency(), (success, model, exception) -> {
             LoadingUtil.onLoadingFinished();
 
             if (model != null) {
@@ -346,7 +346,7 @@ public class WalletActivity extends BaseFragment {
     private void initiateCashOut(BigInteger amount, float rate, BeneficiaryModel beneficiary) {
         LoadingUtil.onLoadingStarted();
 
-        AlphaFortressness.sell(TG2HM.getDefaultCurrency(), amount, rate, beneficiary, (success, transaction, exception) -> {
+        AlphaFortressness.sell(TG2HM.getDefaultCurrency(), amount, rate, TG2HM.getOffRampCurrency(), beneficiary, (success, transaction, exception) -> {
             LoadingUtil.onLoadingFinished();
 
             if (transaction != null) {

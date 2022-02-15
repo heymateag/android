@@ -29,7 +29,8 @@ import works.heymate.core.wallet.Wallet;
 
 public class TG2HM {
 
-    private static final String BRASIL = "BR"; // Brasil
+    private static final String BRASIL = "BR";
+    private static final String INDIA = "IN";
 
     private static final List<String> EUROPEAN_UNION_COUNTRIES = Arrays.asList(
             "AT", // Austria
@@ -62,6 +63,7 @@ public class TG2HM {
     );
 
     static Currency defaultCurrency = null;
+    static Currency offRampCurrency = null;
 
     public static Currency getDefaultCurrency() {
         if (defaultCurrency == null) {
@@ -69,6 +71,27 @@ public class TG2HM {
         }
 
         return defaultCurrency;
+    }
+
+    public static Currency getOffRampCurrency() {
+        if (offRampCurrency == null) {
+            String phoneNumber = getCurrentPhoneNumber();
+
+            if (phoneNumber == null) {
+                return null;
+            }
+
+            String country = getCountryForPhoneNumber(phoneNumber);
+
+            if (INDIA.equals(country)) {
+                offRampCurrency = Currency.INR;
+            }
+            else {
+                offRampCurrency = getDefaultCurrency();
+            }
+        }
+
+        return offRampCurrency;
     }
 
     public static Money pickTheRightMoney(Money usd, Money eur, Money real) {
