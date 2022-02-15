@@ -47,6 +47,7 @@ import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.widget.OfferImagePlaceHolderDrawable;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -689,7 +690,14 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d y", Locale.getDefault());
 
         if (mOffer.getString(Offer.CREATED_AT) != null) {
-            time.setText(dateFormat.format(mOffer.getLong(Offer.CREATED_AT)));
+            final String createTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // 2022-01-12T19:13:03.397Z
+            final SimpleDateFormat createTimeFormat = new SimpleDateFormat(createTimePattern, Locale.getDefault());
+            try {
+                long createTime = createTimeFormat.parse(mOffer.getString(Offer.CREATED_AT)).getTime();
+                time.setText(dateFormat.format(createTime));
+            } catch (ParseException e) {
+                time.setText("");
+            }
         }
     }
 
@@ -699,7 +707,7 @@ public class OfferDetailsActivity extends BaseFragment implements OfferPricingVi
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d y", Locale.getDefault());
 
         if (mOffer.getString(Offer.EXPIRATION) != null) {
-            time.setText(dateFormat.format(mOffer.getLong(Offer.EXPIRATION)));
+            time.setText(dateFormat.format(mOffer.getLong(Offer.EXPIRATION) * 1000L));
         }
     }
 
