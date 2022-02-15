@@ -40,7 +40,7 @@ import works.heymate.model.Pricing;
 public class PriceInputItem extends ExpandableItem {
 
     private static final Currency[] DEMO_CURRENCIES = { Currency.REAL, Currency.EUR, Currency.USD };
-    private static final Currency[] REAL_CURRENCIES = { Currency.REAL, Currency.EUR };
+    private static final Currency[] REAL_CURRENCIES = { Currency.REAL, Currency.EUR, Currency.USD };
 
     private static final String[] DEMO_RATE_TYPES = { "Per Session", "Per Hour" };
     private static final String[] REAL_RATE_TYPES = { "Per Session" };
