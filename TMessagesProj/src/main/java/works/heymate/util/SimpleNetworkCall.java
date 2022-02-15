@@ -97,6 +97,7 @@ public class SimpleNetworkCall {
 
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setInstanceFollowRedirects(true);
 
             connection.setRequestMethod(method);
 
@@ -151,6 +152,7 @@ public class SimpleNetworkCall {
             output = new FileOutputStream(destination);
 
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setInstanceFollowRedirects(true);
 
             for (int i = 0; i < headers.length; i += 2) {
                 connection.setRequestProperty(headers[i], headers[i + 1]);
