@@ -548,7 +548,7 @@ public class OnlineMeeting {
 
                 JSONObject jUserInfo = new JSONObject(userInfo);
 
-                tName = jUserInfo.getString("n");
+                tName = jUserInfo.getString("f");
                 tId = jUserInfo.getString("i");
             } catch (JSONException e) {
                 tName = "[ERROR]";
