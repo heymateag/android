@@ -95,7 +95,7 @@ public class AlphaFortressness {
                 if (previousModel.hasChanges(model)) {
                     BeneficiaryModel.createBeneficiary(beneficiaryCurrency, model, (success1, result, exception1) -> {
                         if (success1) {
-                            sellWithBeneficiary(sellCurrency, amount, rate, model, callback);
+                            sellWithBeneficiary(sellCurrency, amount, rate, beneficiaryCurrency, model, callback);
                         }
                         else {
                             callback.onAPICallResult(false, null, exception1);
@@ -103,7 +103,7 @@ public class AlphaFortressness {
                     });
                 }
                 else {
-                    sellWithBeneficiary(sellCurrency, amount, rate, model, callback);
+                    sellWithBeneficiary(sellCurrency, amount, rate, beneficiaryCurrency, model, callback);
                 }
             }
             else {
@@ -112,10 +112,10 @@ public class AlphaFortressness {
         });
     }
 
-    private static void sellWithBeneficiary(Currency currency, BigInteger amount, float rate, BeneficiaryModel model, APICallback<AlphaTransaction.Transaction> callback) {
-        long beneficiaryId = BeneficiaryModel.getBeneficiaryId(currency);
+    private static void sellWithBeneficiary(Currency sellCurrency, BigInteger amount, float rate, Currency beneficiaryCurrency, BeneficiaryModel model, APICallback<AlphaTransaction.Transaction> callback) {
+        long beneficiaryId = BeneficiaryModel.getBeneficiaryId(beneficiaryCurrency);
 
-        AlphaWallet.getWalletAddress(currency, (success, walletInfo, exception) -> {
+        AlphaWallet.getWalletAddress(sellCurrency, (success, walletInfo, exception) -> {
             if (walletInfo != null) {
                 Wallet wallet = Wallet.get(ApplicationLoader.applicationContext, TG2HM.getCurrentPhoneNumber());
 
@@ -128,15 +128,15 @@ public class AlphaFortressness {
                             if (contractKit != null) {
                                 StableTokenWrapper token;
 
-                                if (Currency.USD.equals(currency)) {
+                                if (Currency.USD.equals(sellCurrency)) {
                                     token = contractKit.contracts.getStableToken();
                                     contractKit.setFeeCurrency(CeloContract.StableToken);
                                 }
-                                else if (Currency.EUR.equals(currency)) {
+                                else if (Currency.EUR.equals(sellCurrency)) {
                                     token = contractKit.contracts.getStableTokenEUR();
                                     contractKit.setFeeCurrency(CeloContract.StableTokenEUR);
                                 }
-                                else if (Currency.REAL.equals(currency)) {
+                                else if (Currency.REAL.equals(sellCurrency)) {
                                     token = contractKit.contracts.getStableTokenBRL();
                                     contractKit.setFeeCurrency(CeloContract.StableTokenBRL);
                                 }

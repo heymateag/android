@@ -355,6 +355,8 @@ public class WalletActivity extends BaseFragment {
                         .setMessage("The cash out takes at most 15 minutes.")
                         .setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
                         .show();
+
+                checkBalance();
             }
             else {
                 new AlertDialog.Builder(getParentActivity())
