@@ -54,7 +54,7 @@ public class Ramp {
 
         Config config = new Config(
                 Texts.get(Texts.HEYMATE).toString(),
-                Texts.get(Texts.LOGO_URL).toString(),
+                "https://nothing.com/guess.jpg",
                 URL,
                 currency,
                 CurrencyUtil.centsToBlockChainValue(money.getCents()).toString(),
@@ -109,7 +109,7 @@ public class Ramp {
 
         Config config = new Config(
                 Texts.get(Texts.HEYMATE).toString(),
-                Texts.get(Texts.LOGO_URL).toString(),
+                "https://nothing.com/guess.jpg",
                 URL,
                 sCurrency,
                 "",
