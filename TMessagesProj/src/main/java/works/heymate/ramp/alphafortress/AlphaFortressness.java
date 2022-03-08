@@ -119,8 +119,8 @@ public class AlphaFortressness {
             if (walletInfo != null) {
                 Wallet wallet = Wallet.get(ApplicationLoader.applicationContext, TG2HM.getCurrentPhoneNumber());
 
-                long sourceAmount = Math.round(CurrencyUtil.blockChainValueToCents(amount) / 100d);
-                long destinationAmount = Math.round(applyRate(amount, rate) / 100d);
+                double sourceAmount = CurrencyUtil.blockChainValueToCents(amount) / 100d;
+                double destinationAmount = applyRate(amount, rate) / 100d;
 
                 AlphaTransaction.newTransaction(wallet.getAddress(), walletInfo, beneficiaryId, model, sourceAmount, destinationAmount, (success1, result, exception1) -> {
                     if (result != null) {

@@ -83,7 +83,7 @@ public class AlphaTransaction {
 
     static void newTransaction(String walletAddress, AlphaWallet.WalletInfo walletInfo,
                                long beneficiaryId, BeneficiaryModel beneficiary,
-                               long sourceAmount, long destinationAmount,
+                               double sourceAmount, double destinationAmount,
                                APICallback<Transaction> callback) {
         AlphaToken.get().getToken((success, token, exception) -> {
             if (token != null) {
