@@ -86,6 +86,9 @@ public class ApplicationLoader extends Application {
 
     public static boolean hasPlayServices;
 
+    private static String fcmToken = null;
+    private static boolean deviceInfoUpdated = false;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -238,10 +241,12 @@ public class ApplicationLoader extends Application {
                         }
                     });
                 }
+
+                updateDeviceInfo();
             }
 
 //            APIs.get().getUserByTelegramId(String.valueOf(telegramUser.id), result -> {
-//                Log.d("AAA", "Asdasda");
+//                Log.d("AAA", "Asdasda"); // TODO
 //            });
         });
     }
@@ -393,23 +398,9 @@ public class ApplicationLoader extends Application {
                                     if (!TextUtils.isEmpty(token)) {
                                         GcmPushListenerService.sendRegistrationToServer(token);
 
-                                        String deviceId = HeymateConfig.getGeneral().get("deviceId");
+                                        fcmToken = token;
 
-                                        if (deviceId == null) {
-                                            deviceId = UUID.randomUUID().toString();
-
-                                            HeymateConfig.getGeneral().set("deviceId", deviceId);
-                                        }
-
-                                        Wallet wallet = TG2HM.getWallet();
-
-                                        APIs.get().updateUserDevices(
-                                                wallet == null ? null : wallet.getAddress(),
-                                                TG2HM.getDefaultCurrency().name(),
-                                                Build.BRAND + " " + Build.MODEL,
-                                                deviceId, token, result -> {
-                                                    Log.d("AAA", "ASSDsadada");
-                                                });
+                                        updateDeviceInfo();
                                     }
                                 });
                     } catch (Throwable e) {
@@ -424,6 +415,32 @@ public class ApplicationLoader extends Application {
                 GcmPushListenerService.sendRegistrationToServer(null);
             }
         }, 1000);
+    }
+
+    synchronized private static void updateDeviceInfo() {
+        if (deviceInfoUpdated || fcmToken == null) {
+            return;
+        }
+
+        deviceInfoUpdated = true;
+
+        String deviceId = HeymateConfig.getGeneral().get("deviceId");
+
+        if (deviceId == null) {
+            deviceId = UUID.randomUUID().toString();
+
+            HeymateConfig.getGeneral().set("deviceId", deviceId);
+        }
+
+        Wallet wallet = TG2HM.getWallet();
+
+        APIs.get().updateUserDevices(
+                wallet == null ? null : wallet.getAddress(),
+                TG2HM.getDefaultCurrency().name(),
+                Build.BRAND + " " + Build.MODEL,
+                deviceId, fcmToken, result -> { // TODO
+                    Log.d("AAA", "ASSDsadada");
+                });
     }
 
     private boolean checkPlayServices() {
