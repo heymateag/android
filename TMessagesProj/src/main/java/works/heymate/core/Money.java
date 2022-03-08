@@ -45,6 +45,10 @@ public class Money implements Parcelable, Comparable<Money> {
         return mAmount;
     }
 
+    public void setCents(long cents) {
+        mAmount = cents;
+    }
+
     public Money plus(Money money) {
         return Money.create(mAmount + money.mAmount, mCurrency);
     }
@@ -74,9 +78,14 @@ public class Money implements Parcelable, Comparable<Money> {
 
     @Override
     public String toString() {
-        String cents = String.valueOf(mAmount % 100);
+        if (mAmount % 100 != 0) {
+            String cents = String.valueOf(mAmount % 100);
 
-        return mCurrency.format(mAmount / 100 + "." + (cents.length() == 1 ? "0" + cents : cents));
+            return mCurrency.format(mAmount / 100 + "." + (cents.length() == 1 ? "0" + cents : cents));
+        }
+        else {
+            return mCurrency.format(String.valueOf(mAmount / 100));
+        }
     }
 
     @Override

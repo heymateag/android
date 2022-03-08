@@ -23,8 +23,9 @@ import static works.heymate.core.Utils.quickMap;
 class HeymateAPIImpl implements IHeymateAPI {
 
     private static final String GET_USER_INFO_URL = HeymateConfig.API_BASE_URL + "/users/getUserById";
-    private static final String UPDATE_PUSH_TOKEN_URL = HeymateConfig.API_BASE_URL + "/users/putPushToken";
+    private static final String GET_USER_BY_TELEGRAM_ID_URL = HeymateConfig.API_BASE_URL + "/users/{telegramId}/getUser";
     private static final String UPDATE_USER_INFO_URL = HeymateConfig.API_BASE_URL + "/users/updateUserInfo";
+    private static final String UPDATE_USER_DEVICES_URL = HeymateConfig.API_BASE_URL + "/users/updateUserDevices";
     private static final String UPLOAD_FILE_URL = HeymateConfig.API_BASE_URL + "/upload-file/getUploadUrl";
     private static final String DOWNLOAD_FILE_URL = HeymateConfig.API_BASE_URL + "/upload-file?fileKey=";
     private static final String CREATE_OFFER_URL = HeymateConfig.API_BASE_URL + "/offer";
@@ -56,12 +57,26 @@ class HeymateAPIImpl implements IHeymateAPI {
     }
 
     @Override
-    public void updatePushToken(String deviceId, String pushId, APICallback callback) {
+    public void getUserByTelegramId(String telegramId, APICallback callback) {
+        String url = GET_USER_BY_TELEGRAM_ID_URL.replace("{telegramId}", telegramId);
+
         authorizedCall(result -> {
             if (callback != null) {
-                callback.onAPIResult(new APIResult(result.responseCode == 201, result.exception));
+                if (result.responseCode == 200) {
+                    APIArray users = new APIObject(result.response).getArray("data");
+
+                    if (users.size() > 0) {
+                        callback.onAPIResult(new APIResult(users.getObject(0)));
+                    }
+                    else {
+                        callback.onAPIResult(new APIResult(false));
+                    }
+                }
+                else {
+                    callback.onAPIResult(new APIResult(result.exception));
+                }
             }
-        }, callback , "POST", UPDATE_PUSH_TOKEN_URL, "deviceId", deviceId, "pushId", pushId);
+        }, callback, "GET", url);
     }
 
     @Override
@@ -71,6 +86,21 @@ class HeymateAPIImpl implements IHeymateAPI {
                 callback.onAPIResult(new APIResult(result.responseCode >= 200 && result.responseCode < 300, result.exception));
             }
         }, callback, "PATCH", UPDATE_USER_INFO_URL, "fullName", fullName, "userName", username, "avatarHash", avatarHash, "telegramId", telegramId);
+    }
+
+    @Override
+    public void updateUserDevices(String walletAddress, String currency, String deviceName, String deviceId, String pushToken, APICallback callback) {
+        authorizedCall(result -> {
+            if (callback != null) {
+                callback.onAPIResult(new APIResult(result.responseCode >= 200 && result.responseCode < 300, result.exception));
+            }
+        }, callback , "PATCH", UPDATE_USER_DEVICES_URL,
+                "deviceType", "Android",
+                "walletAddress", walletAddress,
+                "currency", currency,
+                "deviceName", deviceName,
+                "deviceUUID", deviceId,
+                "pushToken", pushToken);
     }
 
     @Override

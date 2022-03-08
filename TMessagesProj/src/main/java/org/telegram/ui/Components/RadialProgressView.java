@@ -14,6 +14,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.Keep;
+
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -51,12 +53,24 @@ public class RadialProgressView extends View {
     private boolean noProgress = true;
     private final Theme.ResourcesProvider resourcesProvider;
 
+    public RadialProgressView(Context context, AttributeSet attrs, int defStyleRes) {
+        this(context, attrs, null);
+    }
+
+    public RadialProgressView(Context context, AttributeSet attrs) {
+        this(context, attrs, null);
+    }
+
     public RadialProgressView(Context context) {
-        this(context, null);
+        this(context, (Theme.ResourcesProvider) null);
     }
 
     public RadialProgressView(Context context, Theme.ResourcesProvider resourcesProvider) {
-        super(context);
+        this(context, null, resourcesProvider);
+    }
+
+    public RadialProgressView(Context context, AttributeSet attrs, Theme.ResourcesProvider resourcesProvider) {
+        super(context, attrs);
         this.resourcesProvider = resourcesProvider;
 
         size = AndroidUtilities.dp(40);

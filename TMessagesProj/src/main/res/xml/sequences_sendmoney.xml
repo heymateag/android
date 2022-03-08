@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical id="spine">
+        <Span id="spine" size="0dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span id="spine" size="1px"/>
+    </Horizontal>
+
+
+
+    <!-- Main screen -->
+
+    <Vertical start="start@spine" end="end@spine">
+        <Span size="32w"/>
+        <Span id="title_send" size="wrap"/>
+        <Span size="4w" visibleIf="title_send"/>
+        <Span id="input_send_background" size="64dp"/>
+        <Span size="8w" visibleIf="exchange"/>
+        <Span id="exchange" size="wrap"/>
+        <Span size="8w"/>
+        <Span id="balance_title" size="wrap"/>
+        <Span size="16w"/>
+        <Span id="description" size="92dp"/>
+        <Span size="28w"/>
+        <Span id="send" size="60dp"/>
+        <Span size="12dp"/>
+    </Vertical>
+
+    <Vertical start="start@title_send">
+        <Span id="title_receive" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span id="input_receive_background" size="100%"/>
+    </Vertical>
+
+    <Vertical start="start@balance_title">
+        <Span id="balance" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@balance_title">
+        <Span id="balance_error" size="wrap"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_send_currency" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_send" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_receive_currency" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_receive" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="arrow" size="24dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal id="receive">
+        <Span size="24dp"/>
+        <Span id="input_send_background" size="1w"/>
+        <Span size="12dp" visibleIf="input_receive_background"/>
+        <Span id="input_receive_background" size="1w"/>
+        <Span size="24dp"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="arrow" size="20dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background">
+        <Span size="10dp"/>
+        <Span id="title_send" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_receive_background">
+        <Span size="10dp"/>
+        <Span id="title_receive" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_send" size="wrap" min="64dp" max="50%input_send_background"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal end="start@input_send">
+        <Span size="1w"/>
+        <Span id="input_send_currency" size="wrap"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_receive_background" end="end@input_receive_background">
+        <Span size="1w"/>
+        <Span id="input_receive" size="wrap" min="64dp" max="50%input_receive_background"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal end="start@title_receive">
+        <Span size="1w"/>
+        <Span id="input_receive_currency" size="wrap"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background" end="end@input_receive_background">
+        <Span id="description" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background" end="end@input_receive_background">
+        <Span id="send" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_send">
+        <Span id="exchange" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@title_send">
+        <Span id="balance_title" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="balance" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="balance_error" size="wrap"/>
+    </Horizontal>
+
+
+
+    <!-- Loading screen -->
+
+    <Vertical start="start@spine" end="end@spine">
+        <Span size="1w"/>
+        <Span id="loading_background" size="86dp"/>
+        <Span size="24dp"/>
+        <Span id="loading_text" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@loading_background" end="end@loading_background">
+        <Span size="1w"/>
+        <Span id="loading" size="86dp"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="loading_background" size="86dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="loading" size="86dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="loading_text" size="wrap"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+
+
+    <!-- Result screen -->
+
+    <Vertical start="start@spine" end="start@send">
+        <Span size="1w"/>
+        <Span id="image_result" size="72dp"/>
+        <Span size="12dp"/>
+        <Span id="text_result" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="image_result" size="72dp"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="44dp"/>
+        <Span id="text_result" size="1w"/>
+        <Span size="44dp"/>
+    </Horizontal>
+
+</Sequences>

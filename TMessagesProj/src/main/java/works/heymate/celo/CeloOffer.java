@@ -86,7 +86,7 @@ public class CeloOffer {
 
         long cents =  isBundle ? pricing.getBundleTotalPrice() * 100L : pricing.getSubscriptionPrice() * 100L;
 
-        adjustGasPayment(currency);
+        CeloUtils.adjustGasPayment(mContractKit, currency);
         transfer(cents, currency);
 
         try {
@@ -162,12 +162,12 @@ public class CeloOffer {
         initialDeposit = new BigInteger(String.valueOf(offer.getLong(works.heymate.model.Offer.PAYMENT_TERMS + "." + works.heymate.model.Offer.PaymentTerms.DEPOSIT)));
         List<BigInteger> config = getConfig(offer.getObject(works.heymate.model.Offer.PAYMENT_TERMS), pricing);
 
-        adjustGasPayment(nativeCurrency);
+        CeloUtils.adjustGasPayment(mContractKit, currency);
 
         if (rate > 0) {
             if (!currency.equals(nativeCurrency)) {
-                ExchangeWrapper currencyExchange = getExchange(currency);
-                ExchangeWrapper nativeCurrencyExchange = getExchange(nativeCurrency);
+                ExchangeWrapper currencyExchange = CeloUtils.getExchange(mContractKit, currency);
+                ExchangeWrapper nativeCurrencyExchange = CeloUtils.getExchange(mContractKit, nativeCurrency);
 
                 try {
                     BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(2000));
@@ -175,7 +175,7 @@ public class CeloOffer {
                     BigInteger goldToSell = currencyExchange.getSellTokenAmount(amount.add(cautionAmount), true).send();
                     BigInteger nativeToSell = nativeCurrencyExchange.getSellTokenAmount(goldToSell, false).send();
 
-                    getToken(nativeCurrency).approve(nativeCurrencyExchange.getContractAddress(), nativeToSell.add(cautionAmount)).send();
+                    CeloUtils.getToken(mContractKit, nativeCurrency).approve(nativeCurrencyExchange.getContractAddress(), nativeToSell.add(cautionAmount)).send();
                     nativeCurrencyExchange.buy(goldToSell, nativeToSell.add(cautionAmount), true).send();
 
                     mContractKit.contracts.getGoldToken().approve(currencyExchange.getContractAddress(), goldToSell.add(cautionAmount)).send();
@@ -217,25 +217,10 @@ public class CeloOffer {
         }
     }
 
-    private void adjustGasPayment(Currency currency) throws CeloException {
-        if (currency == Currency.USD) {
-            mContractKit.setFeeCurrency(CeloContract.StableToken);
-        }
-        else if (currency == Currency.EUR) {
-            mContractKit.setFeeCurrency(CeloContract.StableTokenEUR);
-        }
-        else if (currency == Currency.REAL) {
-            mContractKit.setFeeCurrency(CeloContract.StableTokenBRL);
-        }
-        else {
-            throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Unknown currency: " + currency)); // TODO Unrelated error
-        }
-    }
-
     private void transfer(long cents, Currency currency) throws CeloException {
         BigInteger amount = CurrencyUtil.centsToBlockChainValue(cents);
 
-        StableTokenWrapper token = getToken(currency);
+        StableTokenWrapper token = CeloUtils.getToken(mContractKit, currency);
 
         if (token == null) {
             throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Unknown currency: " + currency)); // TODO Unrelated error
@@ -277,7 +262,7 @@ public class CeloOffer {
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        adjustGasPayment(currency);
+        CeloUtils.adjustGasPayment(mContractKit, currency);
 
         try {
             mContract.startService(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
@@ -315,7 +300,7 @@ public class CeloOffer {
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        adjustGasPayment(currency);
+        CeloUtils.adjustGasPayment(mContractKit, currency);
 
         try {
             mContract.release(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
@@ -353,7 +338,7 @@ public class CeloOffer {
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        adjustGasPayment(currency);
+        CeloUtils.adjustGasPayment(mContractKit, currency);
 
         try {
             if (consumerCancelled) {
@@ -491,38 +476,6 @@ public class CeloOffer {
 
         if (Currency.REAL.equals(currency)) {
             return mContractKit.contracts.getStableTokenBRL().getContractAddress();
-        }
-
-        return null;
-    }
-
-    private StableTokenWrapper getToken(Currency currency) {
-        if (Currency.USD.equals(currency)) {
-            return mContractKit.contracts.getStableToken();
-        }
-
-        if (Currency.EUR.equals(currency)) {
-            return mContractKit.contracts.getStableTokenEUR();
-        }
-
-        if (Currency.REAL.equals(currency)) {
-            return mContractKit.contracts.getStableTokenBRL();
-        }
-
-        return null;
-    }
-
-    private ExchangeWrapper getExchange(Currency currency) {
-        if (Currency.USD.equals(currency)) {
-            return mContractKit.contracts.getExchange();
-        }
-
-        if (Currency.EUR.equals(currency)) {
-            return mContractKit.contracts.getExchangeEUR();
-        }
-
-        if (Currency.REAL.equals(currency)) {
-            return mContractKit.contracts.getExchangeBRL();
         }
 
         return null;

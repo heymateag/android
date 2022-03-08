@@ -11,9 +11,11 @@ public interface IHeymateAPI {
 
     void getUserInfo(String userId, APICallback callback);
 
-    void updatePushToken(String deviceId, String pushId, APICallback callback);
+    void getUserByTelegramId(String telegramId, APICallback callback);
 
     void updateUserInfo(String fullName, String username, String avatarHash, String telegramId, APICallback callback);
+
+    void updateUserDevices(String walletAddress, String currency, String deviceName, String deviceId, String pushToken, APICallback callback);
 
     void uploadFile(File file, APICallback callback);
 

@@ -1,5 +1,6 @@
 package org.telegram.ui.Heymate;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,9 +16,11 @@ import org.telegram.ui.Heymate.payment.BankTransferResultActivity;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.payment.PaymentInvoiceActivity;
 import org.telegram.ui.Heymate.payment.PaymentMethodSelectionActivity;
+import org.telegram.ui.Heymate.user.SendMoneySheet;
 import org.telegram.ui.LaunchActivity;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,21 +32,24 @@ import works.heymate.walletconnect.WalletConnection;
 
 public class HeymateRouter {
 
-    private static final String INTERNAL_SCHEME = "heymate";
+    public static final String INTERNAL_SCHEME = "heymate";
 
     private static final String EXTERNAL_HOST = "heymate.works";
 
-    private static final Map<String, Class<? extends BaseFragment>> HOST_MAP = new HashMap<>();
+    private static final Map<String, Class<? extends BaseFragment>> FRAGMENT_HOST_MAP = new HashMap<>();
+    private static final Map<String, Class<? extends Dialog>> DIALOG_HOST_MAP = new HashMap<>();
     private static final Map<String, Class<? extends BaseFragment>> EXTERNAL_PATH_MAP = new HashMap<>();
 
     static {
-        HOST_MAP.put(OffersActivity.HOST, OffersActivity.class);
-        HOST_MAP.put(MyScheduleActivity.HOST, MyScheduleActivity.class);
-        HOST_MAP.put(TimeSlotSelectionActivity.HOST, TimeSlotSelectionActivity.class);
-        HOST_MAP.put(PaymentInvoiceActivity.HOST, PaymentInvoiceActivity.class);
-        HOST_MAP.put(PaymentMethodSelectionActivity.HOST, PaymentMethodSelectionActivity.class);
-        HOST_MAP.put(BankTransferInformationActivity.HOST, BankTransferInformationActivity.class);
-        HOST_MAP.put(BankTransferResultActivity.HOST, BankTransferResultActivity.class);
+        FRAGMENT_HOST_MAP.put(OffersActivity.HOST, OffersActivity.class);
+        FRAGMENT_HOST_MAP.put(MyScheduleActivity.HOST, MyScheduleActivity.class);
+        FRAGMENT_HOST_MAP.put(TimeSlotSelectionActivity.HOST, TimeSlotSelectionActivity.class);
+        FRAGMENT_HOST_MAP.put(PaymentInvoiceActivity.HOST, PaymentInvoiceActivity.class);
+        FRAGMENT_HOST_MAP.put(PaymentMethodSelectionActivity.HOST, PaymentMethodSelectionActivity.class);
+        FRAGMENT_HOST_MAP.put(BankTransferInformationActivity.HOST, BankTransferInformationActivity.class);
+        FRAGMENT_HOST_MAP.put(BankTransferResultActivity.HOST, BankTransferResultActivity.class);
+
+        DIALOG_HOST_MAP.put(SendMoneySheet.HOST, SendMoneySheet.class);
 
         EXTERNAL_PATH_MAP.put(OfferDetailsActivity.PATH, OfferDetailsActivity.class);
     }
@@ -80,20 +86,29 @@ public class HeymateRouter {
             if (INTERNAL_SCHEME.equalsIgnoreCase(uri.getScheme())) {
                 String host = uri.getHost();
 
-                Class<? extends BaseFragment> clazz = HOST_MAP.get(host);
+                Class<? extends BaseFragment> fragmentClass = FRAGMENT_HOST_MAP.get(host);
                 Bundle args = intent.getExtras();
 
                 BaseFragment fragment;
 
                 if (args == null || args.isEmpty()) {
-                    fragment = newFragmentInstance(clazz);
+                    fragment = newFragmentInstance(fragmentClass);
                 }
                 else {
-                    fragment = newFragmentInstance(clazz, args);
+                    fragment = newFragmentInstance(fragmentClass, args);
                 }
 
                 if (fragment != null) {
                     Utils.postOnUIThread(() -> activity.presentFragment(fragment, false, true));
+                }
+                else {
+                    Class<? extends Dialog> dialogClass = DIALOG_HOST_MAP.get(host);
+
+                    Dialog dialog = newDialogInstance(dialogClass, activity, uri);
+
+                    if (dialog != null) {
+                        Utils.postOnUIThread(dialog::show);
+                    }
                 }
 
                 return true;
@@ -148,6 +163,14 @@ public class HeymateRouter {
             Constructor<? extends BaseFragment> constructor = clazz.getConstructor(List.class);
 
             return constructor.newInstance(pathSegments);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private static Dialog newDialogInstance(Class<? extends Dialog> clazz, Context context, Uri data) {
+        try {
+            return clazz.getConstructor(Context.class, Uri.class).newInstance(context, data);
         } catch (Throwable t) {
             return null;
         }

@@ -30,6 +30,7 @@ public class Users {
     private static String processingCurrentUser = null;
 
     private static final Map<String, APIObject> sUsers = new HashMap<>();
+    private static final Map<String, APIObject> sUsersByTelegramId = new HashMap<>();
 
     private static final Map<String, List<APICallback>> sPendingUserRequests = new HashMap<>();
 
@@ -61,7 +62,8 @@ public class Users {
             try {
                 currentUser = new APIObject(new JSONObject(sUser));
 
-                sUsers.put(currentUser.getString(currentUser.getString(User.ID)), currentUser);
+                sUsers.put(currentUser.getString(User.ID), currentUser);
+                sUsersByTelegramId.put(currentUser.getString(User.TELEGRAM_ID), currentUser);
 
                 if (callback != null) {
                     Utils.postOnUIThread(() -> callback.onAPIResult(new APIResult(currentUser)));
@@ -90,7 +92,8 @@ public class Users {
                     if (result.success) {
                         currentUser = result.response;
 
-                        sUsers.put(currentUser.getString(currentUser.getString(User.ID)), currentUser);
+                        sUsers.put(currentUser.getString(User.ID), currentUser);
+                        sUsersByTelegramId.put(currentUser.getString(User.TELEGRAM_ID), currentUser);
 
                         config.set(KEY_USER, currentUser.asJSON().toString());
 
@@ -130,6 +133,7 @@ public class Users {
         APIs.get().getUserInfo(userId, result -> {
             if (result.response != null) {
                 sUsers.put(userId, result.response);
+                sUsersByTelegramId.put(result.response.getString(User.TELEGRAM_ID), result.response);
             }
 
             List<APICallback> pendingCallbacks = new ArrayList<>(sPendingUserRequests.remove(userId));
@@ -137,6 +141,22 @@ public class Users {
             for (APICallback pendingCallback: pendingCallbacks) {
                 pendingCallback.onAPIResult(result);
             }
+        });
+    }
+
+    public static void getUserByTelegramId(String telegramId, APICallback callback) {
+        if (sUsersByTelegramId.containsKey(telegramId)) {
+            Utils.postOnUIThread(() -> callback.onAPIResult(new APIResult(sUsersByTelegramId.get(telegramId))));
+            return;
+        }
+
+        APIs.get().getUserByTelegramId(telegramId, result -> {
+            if (result.response != null) {
+                sUsers.put(result.response.getString(User.ID), result.response);
+                sUsersByTelegramId.put(telegramId, result.response);
+            }
+
+            callback.onAPIResult(result);
         });
     }
 

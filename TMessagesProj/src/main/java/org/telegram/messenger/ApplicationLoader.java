@@ -22,6 +22,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -29,6 +30,7 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -204,38 +206,44 @@ public class ApplicationLoader extends Application {
         onUserChanged();
     }
 
-    public static void onUserChanged() {
-        startWalletConnection();
+    synchronized public static void onUserChanged() {
+        Utils.runOnUIThread(() -> {
+            startWalletConnection();
 
-        String phoneNumber = TG2HM.getCurrentPhoneNumber();
+            String phoneNumber = TG2HM.getCurrentPhoneNumber();
 
-        if (phoneNumber == null) {
-            return;
-        }
-
-        TLRPC.User telegramUser = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();;
-
-        if (telegramUser == null) {
-            return;
-        }
-
-        boolean theCallIsNew = Users.onCurrentUserChanged(null);
-
-        if (theCallIsNew) {
-            long telegramId = telegramUser.id;
-            String username = telegramUser.username;
-            String fullName = UserObject.getUserName(telegramUser);
-
-            if (Users.currentUser == null || Users.currentUser.getLong(User.TELEGRAM_ID) != telegramId ||
-                    !TextUtils.equals(username, Users.currentUser.getString(User.USERNAME)) ||
-                    !TextUtils.equals(fullName, Users.currentUser.getString(User.FULL_NAME))) {
-                APIs.get().updateUserInfo(fullName, username, null, String.valueOf(telegramId), result -> {
-                    if (result.success) {
-                        Users.onCurrentUserChanged(null);
-                    }
-                });
+            if (phoneNumber == null) {
+                return;
             }
-        }
+
+            TLRPC.User telegramUser = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();;
+
+            if (telegramUser == null) {
+                return;
+            }
+
+            boolean theCallIsNew = Users.onCurrentUserChanged(null);
+
+            if (theCallIsNew) {
+                long telegramId = telegramUser.id;
+                String username = telegramUser.username;
+                String fullName = UserObject.getUserName(telegramUser);
+
+                if (Users.currentUser == null || Users.currentUser.getLong(User.TELEGRAM_ID) != telegramId ||
+                        !TextUtils.equals(username, Users.currentUser.getString(User.USERNAME)) ||
+                        !TextUtils.equals(fullName, Users.currentUser.getString(User.FULL_NAME))) {
+                    APIs.get().updateUserInfo(fullName, username, null, String.valueOf(telegramId), result -> {
+                        if (result.success) {
+                            Users.onCurrentUserChanged(null);
+                        }
+                    });
+                }
+            }
+
+//            APIs.get().getUserByTelegramId(String.valueOf(telegramUser.id), result -> {
+//                Log.d("AAA", "Asdasda");
+//            });
+        });
     }
 
     public static void startWalletConnection() {
@@ -393,7 +401,15 @@ public class ApplicationLoader extends Application {
                                             HeymateConfig.getGeneral().set("deviceId", deviceId);
                                         }
 
-                                        APIs.get().updatePushToken(deviceId, token, null);
+                                        Wallet wallet = TG2HM.getWallet();
+
+                                        APIs.get().updateUserDevices(
+                                                wallet == null ? null : wallet.getAddress(),
+                                                TG2HM.getDefaultCurrency().name(),
+                                                Build.BRAND + " " + Build.MODEL,
+                                                deviceId, token, result -> {
+                                                    Log.d("AAA", "ASSDsadada");
+                                                });
                                     }
                                 });
                     } catch (Throwable e) {

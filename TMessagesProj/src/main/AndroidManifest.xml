@@ -380,9 +380,13 @@
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>
         </service>
+
         <service android:name="works.heymate.ramp.PeymateService" android:enabled="true"/>
         <service android:name="org.telegram.ui.Heymate.payment.PaymentNotifierService" android:enabled="true"
             android:foregroundServiceType="dataSync"/>
+        <service android:name="org.telegram.ui.Heymate.payment.AwaitSettlementService" android:enabled="true"
+            android:foregroundServiceType="dataSync"/>
+        <receiver android:name="org.telegram.ui.Heymate.payment.AwaitSettlementReceiver" android:enabled="true"/>
 
 		<receiver android:name="org.telegram.messenger.MusicPlayerReceiver" >
             <intent-filter>
