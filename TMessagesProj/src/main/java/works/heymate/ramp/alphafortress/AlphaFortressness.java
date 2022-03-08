@@ -30,8 +30,8 @@ public class AlphaFortressness {
 
     private static final String KEY_BENEFICIARY_ID = "alphafortress_beneficiary_id";
 
-    public static void getConversionRate(Currency currency, APICallback<Float> callback) {
-        AlphaConversion.getConversionRate(currency, callback);
+    public static void getConversionRate(Currency fromCurrency, Currency toCurrency, APICallback<Float> callback) {
+        AlphaConversion.getConversionRate(fromCurrency, toCurrency, callback);
     }
 
     public static long applyRate(BigInteger weiValue, float rate) {

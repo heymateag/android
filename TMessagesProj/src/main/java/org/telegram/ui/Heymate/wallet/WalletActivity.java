@@ -203,7 +203,7 @@ public class WalletActivity extends BaseFragment {
                 else {
                     LoadingUtil.onLoadingStarted();
 
-                    AlphaFortressness.getConversionRate(TG2HM.getDefaultCurrency(), (success, rate, exception) -> {
+                    AlphaFortressness.getConversionRate(TG2HM.getDefaultCurrency(), TG2HM.getOffRampCurrency(), (success, rate, exception) -> {
                         LoadingUtil.onLoadingFinished();
 
                         if (rate != null && rate > 0) {
@@ -290,11 +290,11 @@ public class WalletActivity extends BaseFragment {
         Money maximumMoney = Money.create(cents, TG2HM.getDefaultCurrency());
 
         long resultCents = AlphaFortressness.applyRate(maximumAmount, rate);
-        Money resultMoney = Money.create(resultCents, TG2HM.getDefaultCurrency());
+        Money resultMoney = Money.create(resultCents, TG2HM.getOffRampCurrency());
 
         new AlertDialog.Builder(getParentActivity())
                 .setTitle("Cash out")
-                .setMessage("Maximum amount possible to cash out is " + maximumMoney + ". You will get " + resultMoney.toString() + ".")
+                .setMessage("Maximum amount possible to cash out is " + maximumMoney + ". You will get " + resultMoney + ".")
                 .setPositiveButton("Cash out", (dialogInterface, i) -> cashOutConfirmBeneficiary(maximumAmount, rate))
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
                 .show();

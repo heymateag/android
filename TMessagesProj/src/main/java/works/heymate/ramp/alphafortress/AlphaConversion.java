@@ -11,21 +11,35 @@ public class AlphaConversion {
 
     private static final String CONVERSION_URL = AlphaFortressness.BASE_URL + "conversions?source={{src}}&destination={{dst}}";
 
-    static void getConversionRate(Currency currency, APICallback<Float> callback) {
+    static void getConversionRate(Currency fromCurrency, Currency toCurrency, APICallback<Float> callback) {
         String src;
         String dst;
 
-        if (Currency.USD.equals(currency)) {
+        if (Currency.USD.equals(fromCurrency)) {
             src = "cUSD";
+        }
+        else if (Currency.EUR.equals(fromCurrency)) {
+            src = "cEUR";
+        }
+        else if (Currency.REAL.equals(fromCurrency)) { // TODO really?
+            src = "cREAL";
+        }
+        else {
+            Utils.postOnUIThread(() -> callback.onAPICallResult(false, -1F, null));
+            return;
+        }
+
+        if (Currency.USD.equals(toCurrency)) {
             dst = "USD";
         }
-        else if (Currency.EUR.equals(currency)) {
-            src = "cEUR";
+        else if (Currency.EUR.equals(toCurrency)) {
             dst = "EUR";
         }
-        else if (Currency.REAL.equals(currency)) { // TODO really?
-            src = "cREAL";
+        else if (Currency.REAL.equals(toCurrency)) { // TODO really?
             dst = "REAL";
+        }
+        else if (Currency.INR.equals(toCurrency)) {
+            dst = "INR";
         }
         else {
             Utils.postOnUIThread(() -> callback.onAPICallResult(false, -1F, null));
