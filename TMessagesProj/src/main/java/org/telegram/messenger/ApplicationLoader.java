@@ -434,6 +434,10 @@ public class ApplicationLoader extends Application {
 
         Wallet wallet = TG2HM.getWallet();
 
+        if (wallet == null) {
+            return;
+        }
+
         APIs.get().updateUserDevices(
                 wallet == null ? null : wallet.getAddress(),
                 TG2HM.getDefaultCurrency().name(),
