@@ -11,6 +11,8 @@ public class Currency {
     public static final Currency REAL = new Currency("REAL", "R$");
     public static final Currency INR = new Currency("INR", "₹");
 
+    public static final String[] CURRENCY_NAMES = { USD.name, EUR.name, REAL.name };
+
     public static Currency forName(String name) {
         if (USD.name.equals(name)) {
             return USD;

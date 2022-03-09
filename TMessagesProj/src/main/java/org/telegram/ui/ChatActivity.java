@@ -115,6 +115,7 @@ import works.heymate.beta.R;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.reservation.ReservationUtils;
+import works.heymate.core.wallet.Wallet;
 import works.heymate.model.Offer;
 
 import org.telegram.messenger.BuildVars;
@@ -262,6 +263,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate;
 import org.telegram.ui.Heymate.offer.OfferMessageItem;
 import org.telegram.ui.Heymate.onlinemeeting.MeetingMessageItem;
+import org.telegram.ui.Heymate.user.SendMoneySheet;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20234,6 +20236,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         messageText = null; // message fully consists of emojis, do not translate
                 }
 
+                if (messageText != null) {
+                    String walletAddress = Wallet.extraWalletAddress(messageText.toString());
+
+                    if (walletAddress != null) {
+                        items.add("Payment");
+                        options.add(9876);
+                        icons.add(R.drawable.hm_pay);
+                    }
+                }
+
                 if (type == -1) {
                     if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !getMessagesController().isChatNoForwards(currentChat)) {
                         items.add(LocaleController.getString("Copy", R.string.Copy));
@@ -22286,6 +22298,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         SendMessagesHelper.getInstance(currentAccount).editMessage(message, null, false, ChatActivity.this, null, scheduleDate);
                     }
                 }, null, themeDelegate);
+                break;
+            }
+            case 9876: {
+                if (selectedObject.messageText != null) {
+                    String walletAddress = Wallet.extraWalletAddress(selectedObject.messageText.toString());
+
+                    if (walletAddress != null) {
+                        showDialog(new SendMoneySheet(getParentActivity(), walletAddress));
+                    }
+                }
                 break;
             }
         }

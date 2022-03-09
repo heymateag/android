@@ -1,6 +1,5 @@
 package org.telegram.ui.Heymate.user;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,6 +24,7 @@ import com.yashoid.sequencelayout.SequenceLayout;
 import org.celo.contractkit.wrapper.ExchangeWrapper;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgressView;
@@ -63,6 +63,7 @@ public class SendMoneySheet extends BottomSheet {
     private static final String KEY_RECEIVER_ID = "r_i";
     private static final String KEY_WALLET_ADDRESS = "w_a";
     private static final String KEY_SEND_AMOUNT = "s_a";
+    private static final String KEY_SEND_CURRENCY = "s_c";
 
     private static final int STATE_IDLE = 0;
     private static final int STATE_SENDING = 1;
@@ -112,20 +113,28 @@ public class SendMoneySheet extends BottomSheet {
         this(context);
 
         String receiverId = data.getQueryParameter(KEY_RECEIVER_ID);
-        mReceiverWalletAddress = data.getQueryParameter(KEY_WALLET_ADDRESS);
+        setReceiverWalletAddress(data.getQueryParameter(KEY_WALLET_ADDRESS), true);
         long sendAmount = Long.parseLong(data.getQueryParameter(KEY_SEND_AMOUNT));
+        setToCurrency(Currency.forName(data.getQueryParameter(KEY_SEND_CURRENCY)));
 
         mSendAmount.setCents(sendAmount);
         mInputSend.setText(String.valueOf(sendAmount / 100f));
 
-        Users.getUser(receiverId, result -> {
-            if (result.response != null) {
-                setReceiver(result.response);
-            }
-            else {
-                dismiss();
-            }
-        });
+        if (receiverId != null) {
+            Users.getUser(receiverId, result -> {
+                if (result.response != null) {
+                    setReceiver(result.response);
+                } else {
+                    dismiss();
+                }
+            });
+        }
+    }
+
+    public SendMoneySheet(Context context, String walletAddress) {
+        this(context);
+
+        mReceiverWalletAddress = walletAddress;
     }
 
     public SendMoneySheet(Context context) {
@@ -133,7 +142,7 @@ public class SendMoneySheet extends BottomSheet {
 
         setDimBehindAlpha(0x4D);
         setDimBehind(true);
-        setTitle("Send to ", true);
+        setTitle("Send money", true);
 
         mLayout = (SequenceLayout) LayoutInflater.from(context).inflate(R.layout.sheet_sendmoney, null, false);
 
@@ -192,6 +201,17 @@ public class SendMoneySheet extends BottomSheet {
         mCurrencySend.setText(mFromCurrency.symbol());
 
         updateStateViews();
+
+        mCurrencySend.setOnClickListener(v -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Change currency")
+                    .setMessage("Select a currency for the receiver.")
+                    .setItems(Currency.CURRENCY_NAMES, (dialog, which) -> {
+                        setToCurrency(Currency.forName(Currency.CURRENCY_NAMES[which]));
+                        updateStateViews();
+                    })
+                    .show();
+        });
 
         mInputSend.addTextChangedListener(new TextWatcher() {
 
@@ -504,7 +524,7 @@ public class SendMoneySheet extends BottomSheet {
         mReceiver = user;
 
         if (mReceiver == null) {
-            mToCurrency = null;
+            setToCurrency(null);
         }
         else {
             setTitle("Send to " + user.getString(User.FULL_NAME), true);
@@ -515,7 +535,6 @@ public class SendMoneySheet extends BottomSheet {
                 mCurrencyReceive.setText(mToCurrency.symbol());
             }
             else {
-                Toast.makeText(getContext(), "User's wallet not found.", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
@@ -542,6 +561,9 @@ public class SendMoneySheet extends BottomSheet {
         APIObject device = devices.getObject(0);
 
         if (device == null) {
+            if (mReceiverWalletAddress == null) {
+                Toast.makeText(getContext(), "User's wallet not found.", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
@@ -552,14 +574,32 @@ public class SendMoneySheet extends BottomSheet {
             return;
         }
 
-        mToCurrency = Currency.forName(currencyName);
+        setToCurrency(Currency.forName(currencyName));
+        setReceiverWalletAddress(walletAddress, false);
+    }
 
-        if (mReceiverWalletAddress == null) {
-            mReceiverWalletAddress = walletAddress;
+    private void setToCurrency(Currency currency) {
+        mToCurrency = currency;
+
+        if (mToCurrency != null) {
+            mCurrencyReceive.setText(mToCurrency.symbol());
+        }
+    }
+
+    private void setReceiverWalletAddress(String walletAddress, boolean override) {
+        if (mReceiverWalletAddress != null && !override) {
+            return;
         }
 
+        mReceiverWalletAddress = walletAddress;
+
         if (mDescription.length() == 0) {
-            mDescription.setText("Hi " + mReceiver.getString(User.FULL_NAME) + ", here is my payment to your wallet address: " + mReceiverWalletAddress);
+            if (mReceiver != null) {
+                mDescription.setText("Hi " + mReceiver.getString(User.FULL_NAME) + ", here is my payment to your wallet address: " + mReceiverWalletAddress);
+            }
+            else {
+                mDescription.setText("Hi, here is my payment to your wallet address: " + mReceiverWalletAddress);
+            }
         }
     }
 
@@ -617,6 +657,7 @@ public class SendMoneySheet extends BottomSheet {
     protected void onStart() {
         super.onStart();
 
+        updateStateViews();
         checkBalance();
         checkHasError();
     }
@@ -826,9 +867,13 @@ public class SendMoneySheet extends BottomSheet {
     private Uri createUri() {
         StringBuilder url = new StringBuilder(HeymateRouter.INTERNAL_SCHEME + "://" + HOST + "?");
 
-        url.append(KEY_RECEIVER_ID).append("=").append(mReceiver.getString(User.ID)).append("&");
+        if (mReceiver != null) {
+            url.append(KEY_RECEIVER_ID).append("=").append(mReceiver.getString(User.ID)).append("&");
+        }
+
         url.append(KEY_WALLET_ADDRESS).append("=").append(mReceiverWalletAddress).append("&");
         url.append(KEY_SEND_AMOUNT).append("=").append(mSendAmount.getCents()).append("&");
+        url.append(KEY_SEND_CURRENCY).append("=").append(mToCurrency == null ? mFromCurrency.name() : mToCurrency.name());
 
         return Uri.parse(url.toString());
     }

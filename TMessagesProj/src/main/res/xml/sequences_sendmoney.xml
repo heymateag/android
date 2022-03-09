@@ -117,7 +117,7 @@
         <Span size="1w"/>
     </Horizontal>
 
-    <Horizontal end="start@title_receive">
+    <Horizontal end="start@input_receive">
         <Span size="1w"/>
         <Span id="input_receive_currency" size="wrap"/>
         <Span size="8dp"/>

@@ -545,4 +545,34 @@ public class Wallet {
         return phoneNumber.substring(1);
     }
 
+    public static String extraWalletAddress(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        int startIndex = text.indexOf("0x");
+
+        if (startIndex == -1) {
+            return null;
+        }
+
+        int endIndex = text.indexOf(" ", startIndex);
+
+        if (endIndex == -1) {
+            endIndex = text.length();
+        }
+
+        if (endIndex - startIndex != 42) {
+            return null;
+        }
+
+        String candid = text.substring(startIndex + 2, endIndex);
+
+        if (candid.matches("[a-fA-F0-9]*")) {
+            return candid;
+        }
+
+        return null;
+    }
+
 }

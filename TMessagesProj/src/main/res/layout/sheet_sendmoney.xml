@@ -103,7 +103,7 @@
         android:textSize="14sp"
         android:padding="10dp"
         android:gravity="top"
-        android:inputType="textAutoComplete|textAutoCorrect|textImeMultiLine"/>
+        android:inputType="textMultiLine"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/send"

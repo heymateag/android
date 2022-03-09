@@ -209,7 +209,7 @@ public class ApplicationLoader extends Application {
         onUserChanged();
     }
 
-    synchronized public static void onUserChanged() {
+    public static void onUserChanged() {
         Utils.runOnUIThread(() -> {
             startWalletConnection();
 
