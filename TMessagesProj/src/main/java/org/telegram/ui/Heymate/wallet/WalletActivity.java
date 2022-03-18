@@ -236,7 +236,7 @@ public class WalletActivity extends BaseFragment {
                                         if (maximumAmount.compareTo(BigInteger.ZERO) <= 0) {
                                             Utils.runOnUIThread(() -> Toast.makeText(getParentActivity(), "Balance is not enough for cash out", Toast.LENGTH_LONG).show());
                                             return;
-                                        }Integer.MAX_VALUE
+                                        }
 
                                         Utils.runOnUIThread(() -> cashOutConfirmAmount(maximumAmount, rate));
                                     } catch (Exception e) {

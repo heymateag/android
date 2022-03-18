@@ -260,13 +260,23 @@ public class ApplicationLoader extends Application {
 
         Wallet wallet = Wallet.get(applicationContext, phoneNumber);
 
-        if (!wallet.isCreated()) {
-            wallet.createNew();
-            return;
-        }
+        synchronized (wallet) {
+            if (!wallet.isCreated()) {
+                if (!wallet.isCreating()) {
+                    wallet.createNew();
+                }
 
-        wallet.getConnection().start();
+                HeymateEvents.register(HeymateEvents.WALLET_CREATED, walletCreatedObserver);
+                return;
+            } else {
+                wallet.getConnection().start();
+            }
+        }
     }
+
+    private static final HeymateEvents.HeymateEventObserver walletCreatedObserver = (event, args) -> {
+        startWalletConnection();
+    };
 
     private static final HeymateEvents.HeymateEventObserver sWalletCreatedObserver = (event, args) -> {
         startWalletConnection();

@@ -170,7 +170,7 @@ public class CeloOffer {
                 ExchangeWrapper nativeCurrencyExchange = CeloUtils.getExchange(mContractKit, nativeCurrency);
 
                 try {
-                    BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(2000));
+                    BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(500));
 
                     BigInteger goldToSell = currencyExchange.getSellTokenAmount(amount.add(cautionAmount), true).send();
                     BigInteger nativeToSell = nativeCurrencyExchange.getSellTokenAmount(goldToSell, false).send();
@@ -178,8 +178,8 @@ public class CeloOffer {
                     CeloUtils.getToken(mContractKit, nativeCurrency).approve(nativeCurrencyExchange.getContractAddress(), nativeToSell.add(cautionAmount)).send();
                     nativeCurrencyExchange.buy(goldToSell, nativeToSell.add(cautionAmount), true).send();
 
-                    mContractKit.contracts.getGoldToken().approve(currencyExchange.getContractAddress(), goldToSell.add(cautionAmount)).send();
-                    currencyExchange.buy(amount, goldToSell.add(cautionAmount), false).send();
+                    mContractKit.contracts.getGoldToken().approve(currencyExchange.getContractAddress(), goldToSell).send();
+                    currencyExchange.buy(amount, goldToSell, false).send();
                 } catch (Exception e) {
                     throw new CeloException(CeloError.NETWORK_ERROR, new Exception("Failed to convert the currency", e));
                 }

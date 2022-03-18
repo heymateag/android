@@ -83,6 +83,7 @@ public class WalletConnection {
 
     public void start() {
         try {
+            mWallet.getPreferences().edit().putString(KEY_SESSIONS, "[]").apply(); // TODO REMOVE
             JSONArray jSessions = new JSONArray(mWallet.getPreferences().getString(KEY_SESSIONS, "[]"));
 
             for (int i = 0; i < jSessions.length(); i++) {
@@ -122,7 +123,14 @@ public class WalletConnection {
             return;
         }
 
-        newClient(session.toUri()).connect(session, mPeerMeta, mPeerId, null);
+        WCClient finalClient = newClient(session.toUri());
+
+        new Thread() {
+            @Override
+            public void run() {
+                finalClient.connect(session, mPeerMeta, mPeerId, null);
+            }
+        }.start();
     }
 
     private WCClient newClient(String sSession) {

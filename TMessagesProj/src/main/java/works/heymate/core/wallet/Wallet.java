@@ -119,7 +119,7 @@ public class Wallet {
         return mConnection;
     }
 
-    public boolean isCreated() {
+    synchronized public boolean isCreated() {
         if (mPreferences.contains(KEY_PRIVATE_KEY)) {
             return true;
         }
@@ -140,15 +140,15 @@ public class Wallet {
         return false;
     }
 
-    public boolean isCreating() {
+    synchronized public boolean isCreating() {
         return mCreating;
     }
 
-    public boolean isCreatedOrCreating() {
+    synchronized public boolean isCreatedOrCreating() {
         return isCreated() || mCreating;
     }
 
-    public void createNew() {
+    synchronized public void createNew() {
         if (isCreated()) {
             throw new IllegalStateException("Wallet already created.");
         }
@@ -168,7 +168,10 @@ public class Wallet {
                     .apply();
 
             Utils.runOnUIThread(() -> {
-                mCreating = false;
+                synchronized (Wallet.this) {
+                    mCreating = false;
+                }
+
                 HeymateEvents.notify(HeymateEvents.WALLET_CREATED, Wallet.this);
             });
         });

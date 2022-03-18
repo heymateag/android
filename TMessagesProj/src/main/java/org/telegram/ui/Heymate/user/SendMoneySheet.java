@@ -21,6 +21,8 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.yashoid.sequencelayout.SequenceLayout;
 
+import org.celo.contractkit.protocol.CeloRawTransaction;
+import org.celo.contractkit.protocol.CeloTransaction;
 import org.celo.contractkit.wrapper.ExchangeWrapper;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.telegram.messenger.AndroidUtilities;
@@ -31,7 +33,12 @@ import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.payment.AwaitSettlement;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
@@ -56,7 +63,7 @@ public class SendMoneySheet extends BottomSheet {
 
     private static final String TAG = "SendMoneySheet";
 
-    private static final BigInteger TRANSACTION_COST = CurrencyUtil.WEI.divide(CurrencyUtil.ONE_HUNDRED).divide(CurrencyUtil.ONE_HUNDRED);
+    private static final BigInteger TRANSACTION_COST = CurrencyUtil.WEI.divide(BigInteger.valueOf(500L));
 
     public static final String HOST = "SendMoney";
 
@@ -403,7 +410,7 @@ public class SendMoneySheet extends BottomSheet {
                 BigInteger receiveAmount = CurrencyUtil.centsToBlockChainValue(receive.getCents());
 
                 try {
-                    BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(2000));
+                    BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(500));
 
                     BigInteger goldToSell = receiveExchange.getSellTokenAmount(receiveAmount.add(cautionAmount), true).send();
                     BigInteger nativeToSell = sendExchange.getSellTokenAmount(goldToSell, false).send();
@@ -425,8 +432,8 @@ public class SendMoneySheet extends BottomSheet {
                             sendToken.approve(sendExchange.getContractAddress(), nativeToSell.add(cautionAmount)).send();
                             sendExchange.buy(goldToSell, nativeToSell.add(cautionAmount), true).send();
 
-                            contractKit.contracts.getGoldToken().approve(receiveExchange.getContractAddress(), goldToSell.add(cautionAmount)).send();
-                            receiveExchange.buy(receiveAmount, goldToSell.add(cautionAmount), false).send();
+                            contractKit.contracts.getGoldToken().approve(receiveExchange.getContractAddress(), goldToSell).send();
+                            receiveExchange.buy(receiveAmount, goldToSell, false).send();
 
                             TransactionReceipt receipt = receiveToken.transfer(targetWallet, receiveAmount).send();
 
