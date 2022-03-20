@@ -578,7 +578,7 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
 
             if (errors.length() > 0) {
-                Toast.makeText(getParentActivity(), "Please fill all the feilds", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getParentActivity(), "Some required field(s) are left blank.", Toast.LENGTH_SHORT).show();
             } else {
                 WalletExistence.ensure(this::acquirePromotionPlan);
             }
