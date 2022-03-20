@@ -167,6 +167,7 @@ import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.TimerDrawable;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
+import org.telegram.ui.Heymate.quickoffer.QuickOfferSheet;
 import org.telegram.ui.Heymate.user.SendMoneySheet;
 
 import java.io.BufferedInputStream;
@@ -199,9 +200,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private AudioPlayerAlert.ClippingTextViewSwitcher mediaCounterTextView;
     private RLottieImageView writeButton;
     private RLottieImageView payButton;
+    private RLottieImageView quickOfferButton;
     private APIObject heymateUser = null;
     private AnimatorSet writeButtonAnimation;
     private AnimatorSet payButtonAnimation;
+    private AnimatorSet quickOfferButtonAnimation;
     private AnimatorSet qrItemAnimation;
     private Drawable lockIconDrawable;
     private Drawable verifiedDrawable;
@@ -2339,7 +2342,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                if (pinchToZoomHelper.isInOverlayMode() && (child == avatarContainer2 || child == actionBar || child == writeButton || child == payButton)) {
+                if (pinchToZoomHelper.isInOverlayMode() && (child == avatarContainer2 || child == actionBar || child == writeButton || child == payButton || child == quickOfferButton)) {
                     return true;
                 }
                 return super.drawChild(canvas, child, drawingTime);
@@ -3154,6 +3157,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         writeButton = new RLottieImageView(context);
         payButton = new RLottieImageView(context);
+        quickOfferButton = new RLottieImageView(context);
 
         Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
         shadowDrawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY));
@@ -3163,6 +3167,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
         writeButton.setBackground(combinedDrawable);
         payButton.setBackground(combinedDrawable);
+        quickOfferButton.setBackground(combinedDrawable);
+
         if (userId != 0) {
             if (imageUpdater != null) {
                 cameraDrawable = new RLottieDrawable(R.raw.camera_outline, "" + R.raw.camera_outline, AndroidUtilities.dp(56), AndroidUtilities.dp(56), false, null);
@@ -3172,6 +3178,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 writeButton.setPadding(AndroidUtilities.dp(2), 0, 0, AndroidUtilities.dp(2));
 
                 payButton.setVisibility(View.INVISIBLE);
+
+                quickOfferButton.setVisibility(View.INVISIBLE); // TODO quick offer make visible
+                quickOfferButton.setImageResource(R.drawable.offer);
+                quickOfferButton.setContentDescription("Quick offers");
             } else {
                 writeButton.setImageResource(R.drawable.profile_newmsg);
                 writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
@@ -3180,9 +3190,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 payButton.setImageResource(R.drawable.hm_pay);
                 payButton.setContentDescription("Send money");
 
+                quickOfferButton.setVisibility(View.INVISIBLE);
+                quickOfferButton.setImageResource(R.drawable.offer);
+                quickOfferButton.setContentDescription("Quick offers");
+
                 Users.getUserByTelegramId(String.valueOf(userId), result -> {
                     if (result.success && result.response != null) {
                         payButton.setVisibility(View.VISIBLE);
+                        //quickOfferButton.setVisibility(View.VISIBLE); TODO quick offer
 
                         heymateUser = result.response;
                     }
@@ -3193,12 +3208,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             writeButton.setContentDescription(LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
 
             payButton.setVisibility(View.INVISIBLE);
+            quickOfferButton.setVisibility(View.INVISIBLE);
         }
         writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
 
         payButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
         payButton.setScaleType(ImageView.ScaleType.CENTER);
+
+        quickOfferButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_profile_actionIcon), PorterDuff.Mode.MULTIPLY));
+        quickOfferButton.setScaleType(ImageView.ScaleType.CENTER);
 
         frameLayout.addView(writeButton, LayoutHelper.createFrame(60, 60, Gravity.RIGHT | Gravity.TOP, 0, 0, 16, 0));
         writeButton.setOnClickListener(v -> {
@@ -3220,6 +3239,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 showDialog(dialog);
             }
         });
+
+        frameLayout.addView(quickOfferButton, LayoutHelper.createFrame(60, 60, Gravity.RIGHT | Gravity.TOP, 0, 0, 168, 0));
+        quickOfferButton.setOnClickListener(v -> {
+            if (quickOfferButton.getTag() != null) {
+                return;
+            }
+
+            if (userId != 0 && imageUpdater != null) {
+                // TODO self quick offer
+                showDialog(new QuickOfferSheet(getParentActivity()));
+            }
+            else if (heymateUser != null) {
+                // TODO someone else offer
+                showDialog(new QuickOfferSheet(getParentActivity()));
+            }
+        });
         needLayout(false);
 
         if (scrollTo != -1) {
@@ -3233,6 +3268,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 payButton.setScaleX(0.2f);
                 payButton.setScaleY(0.2f);
                 payButton.setAlpha(0.0f);
+
+                quickOfferButton.setTag(0);
+                quickOfferButton.setScaleX(0.2f);
+                quickOfferButton.setScaleY(0.2f);
+                quickOfferButton.setAlpha(0.0f);
             }
         }
 
@@ -3403,6 +3443,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (payButton != null) {
                     payButton.invalidate();
                 }
+                if (quickOfferButton != null) {
+                    quickOfferButton.invalidate();
+                }
             }
 
             @Override
@@ -3440,6 +3483,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         canvas.scale(s, s, payButton.getX() + payButton.getMeasuredWidth() / 2f, payButton.getY() + payButton.getMeasuredHeight() / 2f);
                         canvas.translate(payButton.getX(), payButton.getY());
                         payButton.draw(canvas);
+                        canvas.restore();
+                    }
+
+                    if (quickOfferButton != null && quickOfferButton.getVisibility() == View.VISIBLE && quickOfferButton.getAlpha() > 0) {
+                        canvas.save();
+                        float s = 0.5f + 0.5f * alpha;
+                        canvas.scale(s, s, quickOfferButton.getX() + quickOfferButton.getMeasuredWidth() / 2f, quickOfferButton.getY() + quickOfferButton.getMeasuredHeight() / 2f);
+                        canvas.translate(quickOfferButton.getX(), quickOfferButton.getY());
+                        quickOfferButton.draw(canvas);
                         canvas.restore();
                     }
                     canvas.restore();
@@ -4443,46 +4495,57 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             payButton.setAlpha(setVisible ? 1.0f : 0.0f);
                         }
                     }
+                }
+            }
 
-                    if (qrItem != null) {
-                        boolean setQrVisible = diff > 0.5f;
-                        if (setQrVisible != isQrItemVisible) {
-                            isQrItemVisible = setQrVisible;
-                            if (qrItemAnimation != null) {
-                                qrItemAnimation.cancel();
-                                qrItemAnimation = null;
-                            }
-                            if (animated) {
-                                qrItemAnimation = new AnimatorSet();
-                                if (setQrVisible) {
-                                    qrItemAnimation.setInterpolator(new DecelerateInterpolator());
-                                    qrItemAnimation.playTogether(
-                                            ObjectAnimator.ofFloat(qrItem, View.ALPHA, 1.0f),
-                                            ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 1f),
-                                            ObjectAnimator.ofFloat(avatarsViewPagerIndicatorView, View.TRANSLATION_X, -AndroidUtilities.dp(48))
-                                    );
-                                } else {
-                                    qrItemAnimation.setInterpolator(new AccelerateInterpolator());
-                                    qrItemAnimation.playTogether(
-                                            ObjectAnimator.ofFloat(qrItem, View.ALPHA, 0.0f),
-                                            ObjectAnimator.ofFloat(qrItem, View.SCALE_Y, 0f),
-                                            ObjectAnimator.ofFloat(avatarsViewPagerIndicatorView, View.TRANSLATION_X, 0)
-                                    );
-                                }
-                                qrItemAnimation.setDuration(150);
-                                qrItemAnimation.addListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        qrItemAnimation = null;
-                                    }
-                                });
-                                qrItemAnimation.start();
+            if (quickOfferButton != null) {
+                quickOfferButton.setTranslationY((actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight() + extraHeight + searchTransitionOffset - AndroidUtilities.dp(29.5f));
+
+                if (!openAnimationInProgress) {
+                    boolean setVisible = diff > 0.2f && !searchMode && (imageUpdater == null || setAvatarRow == -1) && userId != 0;
+                    boolean currentVisible = quickOfferButton.getTag() == null;
+                    if (setVisible != currentVisible) {
+                        if (setVisible) {
+                            quickOfferButton.setTag(null);
+                        } else {
+                            quickOfferButton.setTag(0);
+                        }
+                        if (quickOfferButtonAnimation != null) {
+                            AnimatorSet old = quickOfferButtonAnimation;
+                            quickOfferButtonAnimation = null;
+                            old.cancel();
+                        }
+                        if (animated) {
+                            quickOfferButtonAnimation = new AnimatorSet();
+                            if (setVisible) {
+                                quickOfferButtonAnimation.setInterpolator(new DecelerateInterpolator());
+                                quickOfferButtonAnimation.playTogether(
+                                        ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_X, 1.0f),
+                                        ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_Y, 1.0f),
+                                        ObjectAnimator.ofFloat(quickOfferButton, View.ALPHA, 1.0f)
+                                );
                             } else {
-                                qrItem.setAlpha(setQrVisible ? 1.0f : 0.0f);
-                                float translation = AndroidUtilities.dp(48) * qrItem.getAlpha();
-                                qrItem.setTranslationX(translation);
-                                avatarsViewPagerIndicatorView.setTranslationX(translation - AndroidUtilities.dp(48));
+                                quickOfferButtonAnimation.setInterpolator(new AccelerateInterpolator());
+                                quickOfferButtonAnimation.playTogether(
+                                        ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_X, 0.2f),
+                                        ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_Y, 0.2f),
+                                        ObjectAnimator.ofFloat(quickOfferButton, View.ALPHA, 0.0f)
+                                );
                             }
+                            quickOfferButtonAnimation.setDuration(150);
+                            quickOfferButtonAnimation.addListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    if (quickOfferButtonAnimation != null && quickOfferButtonAnimation.equals(animation)) {
+                                        quickOfferButtonAnimation = null;
+                                    }
+                                }
+                            });
+                            quickOfferButtonAnimation.start();
+                        } else {
+                            quickOfferButton.setScaleX(setVisible ? 1.0f : 0.2f);
+                            quickOfferButton.setScaleY(setVisible ? 1.0f : 0.2f);
+                            quickOfferButton.setAlpha(setVisible ? 1.0f : 0.0f);
                         }
                     }
                 }
@@ -5386,6 +5449,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     animators.add(ObjectAnimator.ofFloat(payButton, View.SCALE_Y, 1.0f));
                     animators.add(ObjectAnimator.ofFloat(payButton, View.ALPHA, 1.0f));
                 }
+                if (quickOfferButton != null && quickOfferButton.getTag() == null) {
+                    quickOfferButton.setScaleX(0.2f);
+                    quickOfferButton.setScaleY(0.2f);
+                    quickOfferButton.setAlpha(0.0f);
+                    animators.add(ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_X, 1.0f));
+                    animators.add(ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_Y, 1.0f));
+                    animators.add(ObjectAnimator.ofFloat(quickOfferButton, View.ALPHA, 1.0f));
+                }
                 if (playProfileAnimation == 2) {
                     avatarColor = AndroidUtilities.calcBitmapColor(avatarImage.getImageReceiver().getBitmap());
                     nameTextView[1].setTextColor(Color.WHITE);
@@ -5452,6 +5523,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     animators.add(ObjectAnimator.ofFloat(payButton, View.SCALE_X, 0.2f));
                     animators.add(ObjectAnimator.ofFloat(payButton, View.SCALE_Y, 0.2f));
                     animators.add(ObjectAnimator.ofFloat(payButton, View.ALPHA, 0.0f));
+                }
+                if (quickOfferButton != null) {
+                    animators.add(ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_X, 0.2f));
+                    animators.add(ObjectAnimator.ofFloat(quickOfferButton, View.SCALE_Y, 0.2f));
+                    animators.add(ObjectAnimator.ofFloat(quickOfferButton, View.ALPHA, 0.0f));
                 }
                 for (int a = 0; a < 2; a++) {
                     animators.add(ObjectAnimator.ofFloat(nameTextView[a], View.ALPHA, a == 0 ? 1.0f : 0.0f));
@@ -8428,6 +8504,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             writeButton.setBackground(combinedDrawable);
             payButton.setBackground(combinedDrawable);
+            quickOfferButton.setBackground(combinedDrawable);
         } catch (Exception e) {}
     }
 
