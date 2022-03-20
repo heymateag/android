@@ -15,7 +15,7 @@ public class HeymateConfig {
     public static final boolean DEBUG = true;
     public static final boolean DEMO = false;
 
-    public static final int INTERNAL_VERSION = 101;
+    public static final int INTERNAL_VERSION = 102;
 
     public static final String API_BASE_URL_PRODUCTION = "https://api.heymate.works";
     public static final String API_BASE_URL_STAGING = "https://lar9nm8ay9.execute-api.us-east-1.amazonaws.com/dev";
