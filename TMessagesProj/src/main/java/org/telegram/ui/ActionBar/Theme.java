@@ -63,6 +63,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
 import org.json.JSONArray;
@@ -9145,6 +9146,11 @@ public class Theme {
     }
 
     public static int getColor(String key, boolean[] isDefault, boolean ignoreAnimation) {
+        // heymate theme override
+        if (key_actionBarDefault.equals(key) || key_chats_menuTopBackgroundCats.equals(key)) {
+            return ContextCompat.getColor(ApplicationLoader.applicationContext, R.color.ht_theme);
+        }
+
         if (!ignoreAnimation && animatingColors != null) {
             Integer color = animatingColors.get(key);
             if (color != null) {
