@@ -1,8 +1,6 @@
 package org.telegram.ui.Heymate.createoffer;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.text.InputFilter;
 import android.view.Gravity;
 import android.view.View;
@@ -15,12 +13,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 
 import works.heymate.beta.R;
@@ -29,7 +25,7 @@ import works.heymate.core.Texts;
 public class ParticipantsInputItem extends ExpandableItem {
 
     private EditText mEditCount;
-    private AppCompatCheckBox mCheckBox;
+    private CheckBoxSquare mCheckBox;
 
     public ParticipantsInputItem(@NonNull Context context) {
         super(context);
@@ -48,7 +44,7 @@ public class ParticipantsInputItem extends ExpandableItem {
         textDescription.setText(Texts.get(Texts.PARTICIPANTS_INPUT_DESCRIPTION));
         content.addView(textDescription, LayoutHelper.createRelative(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, HEADER_LEFT_MARGIN, 0, HEADER_RIGHT_MARGIN, 0, RelativeLayout.ALIGN_PARENT_TOP));
 
-        mEditCount = new AppCompatEditText(getContext()) {
+        mEditCount = new EditText(getContext()) {
 
             @Override
             public void setEnabled(boolean enabled) {
@@ -84,9 +80,8 @@ public class ParticipantsInputItem extends ExpandableItem {
         LinearLayout radioLayout = new LinearLayout(getContext());
         radioLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        mCheckBox = new AppCompatCheckBox(getContext());
-        mCheckBox.setButtonTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.ht_theme)));
-        radioLayout.addView(mCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
+        mCheckBox = new CheckBoxSquare(getContext(), false);
+        radioLayout.addView(mCheckBox, LayoutHelper.createLinear(22, 22, Gravity.BOTTOM));
 
         TextView unlimitedLabel = new TextView(getContext());
         unlimitedLabel.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
@@ -100,10 +95,8 @@ public class ParticipantsInputItem extends ExpandableItem {
         params.leftMargin = AndroidUtilities.dp(24);
         content.addView(radioLayout, params);
 
-        mCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> mEditCount.setEnabled(!mCheckBox.isChecked()));
-
         radioLayout.setOnClickListener(v -> {
-            mCheckBox.setChecked(!mCheckBox.isChecked());
+            mCheckBox.setChecked(!mCheckBox.isChecked(), true);
             mEditCount.setEnabled(!mCheckBox.isChecked());
         });
 
@@ -117,18 +110,18 @@ public class ParticipantsInputItem extends ExpandableItem {
     public void setMaximumParticipants(int maximumParticipants) {
         switch (maximumParticipants) {
             case -1:
-                mCheckBox.setChecked(false);
+                mCheckBox.setChecked(false, true);
                 mEditCount.setEnabled(true);
                 mEditCount.setText("");
                 break;
             case 0:
             case Integer.MAX_VALUE:
-                mCheckBox.setChecked(true);
+                mCheckBox.setChecked(true, true);
                 mEditCount.setEnabled(false);
                 mEditCount.setText("");
                 break;
             default:
-                mCheckBox.setChecked(false);
+                mCheckBox.setChecked(false, true);
                 mEditCount.setText(String.valueOf(maximumParticipants));
                 break;
         }

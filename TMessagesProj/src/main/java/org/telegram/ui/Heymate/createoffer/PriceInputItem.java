@@ -52,7 +52,7 @@ public class PriceInputItem extends ExpandableItem {
     private EditText mFixedPrice;
     private TextView mCurrency;
     private TextView mRateType;
-    private AppCompatCheckBox mCheckBundle;
+    private AppCompatCheckBox mCheckBundle; // TODO CheckBoxCell
     private EditText mBundleSessionCount;
     private EditText mBundleDiscountPercent;
     private TextView mBundleCalculatedPrice;

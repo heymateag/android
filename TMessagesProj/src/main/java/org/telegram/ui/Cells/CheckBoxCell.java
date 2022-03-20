@@ -11,6 +11,7 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -39,6 +40,79 @@ public class CheckBoxCell extends FrameLayout {
     private boolean isMultiline;
     private int currentType;
     private int checkBoxSize = 18;
+
+    public CheckBoxCell(Context context) {
+        this(context, 0);
+    }
+
+    public CheckBoxCell(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public CheckBoxCell(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        final int type = 0;
+        final int padding = 17;
+        resourcesProvider = null;
+
+        currentType = type;
+
+        textView = new TextView(context);
+        textView.setTextColor(getThemedColor(type == 1 || type == 5 ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
+        textView.setLinkTextColor(getThemedColor(type == 1 || type == 5 ? Theme.key_dialogTextLink : Theme.key_windowBackgroundWhiteLinkText));
+        textView.setTag(getThemedColor(type == 1 || type == 5 ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        textView.setLines(1);
+        textView.setMaxLines(1);
+        textView.setSingleLine(true);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+        if (type == 3) {
+            textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 29, 0, 0, 0));
+            textView.setPadding(0, 0, 0, AndroidUtilities.dp(3));
+        } else {
+            textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+            if (type == 2) {
+                addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 29), 0, (LocaleController.isRTL ? 29 : 0), 0));
+            } else {
+                int offset = type == 4 ? 56 : 46;
+                addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? padding : offset + (padding - 17)), 0, (LocaleController.isRTL ? offset + (padding - 17) : padding), 0));
+            }
+        }
+
+        valueTextView = new TextView(context);
+        valueTextView.setTextColor(getThemedColor(type == 1 || type == 5 ? Theme.key_dialogTextBlue : Theme.key_windowBackgroundWhiteValueText));
+        valueTextView.setTag(type == 1 || type == 5 ? Theme.key_dialogTextBlue : Theme.key_windowBackgroundWhiteValueText);
+        valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        valueTextView.setLines(1);
+        valueTextView.setMaxLines(1);
+        valueTextView.setSingleLine(true);
+        valueTextView.setEllipsize(TextUtils.TruncateAt.END);
+        valueTextView.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL);
+        addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, padding, 0, padding, 0));
+
+        if (type == TYPE_CHECK_BOX_ROUND) {
+            checkBox = checkBoxRound = new CheckBox2(context, 21, resourcesProvider);
+            checkBoxRound.setDrawUnchecked(true);
+            checkBoxRound.setChecked(true, false);
+            checkBoxRound.setDrawBackgroundAsArc(10);
+            checkBoxSize = 21;
+            addView(checkBox, LayoutHelper.createFrame(checkBoxSize, checkBoxSize, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : padding), 16, (LocaleController.isRTL ? padding : 0), 0));
+        } else {
+            checkBox = checkBoxSquare = new CheckBoxSquare(context, type == 1 || type == 5, resourcesProvider);
+            checkBoxSize = 18;
+            if (type == 5) {
+                addView(checkBox, LayoutHelper.createFrame(checkBoxSize, checkBoxSize, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, (LocaleController.isRTL ? 0 : padding), 0, (LocaleController.isRTL ? padding : 0), 0));
+            } else if (type == 3) {
+                addView(checkBox, LayoutHelper.createFrame(checkBoxSize, checkBoxSize, Gravity.LEFT | Gravity.TOP, 0, 15, 0, 0));
+            } else if (type == 2) {
+                addView(checkBox, LayoutHelper.createFrame(checkBoxSize, checkBoxSize, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 0, 15, 0, 0));
+            } else {
+                addView(checkBox, LayoutHelper.createFrame(checkBoxSize, checkBoxSize, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : padding), 16, (LocaleController.isRTL ? padding : 0), 0));
+            }
+        }
+    }
 
     public CheckBoxCell(Context context, int type) {
         this(context, type, 17, null);
