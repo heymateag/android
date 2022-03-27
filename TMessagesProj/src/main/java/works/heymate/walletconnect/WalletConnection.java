@@ -83,7 +83,6 @@ public class WalletConnection {
 
     public void start() {
         try {
-            mWallet.getPreferences().edit().putString(KEY_SESSIONS, "[]").apply(); // TODO REMOVE
             JSONArray jSessions = new JSONArray(mWallet.getPreferences().getString(KEY_SESSIONS, "[]"));
 
             for (int i = 0; i < jSessions.length(); i++) {
