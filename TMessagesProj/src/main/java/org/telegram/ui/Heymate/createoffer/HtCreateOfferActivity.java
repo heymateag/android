@@ -525,6 +525,11 @@ public class HtCreateOfferActivity extends BaseFragment {
                         break;
                     }
 
+                    if (start < System.currentTimeMillis()) {
+                        errors.append("Timeslot can not be in the past.\n");
+                        break;
+                    }
+
                     for (int j = 0; j < i; j += 2) {
                         if (Math.max(start, timeSlots.get(j)) < Math.min(end, timeSlots.get(j + 1))) {
                             if (!hasOverLapError) {
