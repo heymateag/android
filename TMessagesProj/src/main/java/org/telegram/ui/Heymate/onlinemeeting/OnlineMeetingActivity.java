@@ -2,9 +2,12 @@ package org.telegram.ui.Heymate.onlinemeeting;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -238,7 +241,17 @@ public class OnlineMeetingActivity extends BaseFragment implements HeymateEvents
         super.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
 
         if (getMissingPermissions().length > 0) {
-            finishFragment();
+            new AlertDialog.Builder(getParentActivity())
+                    .setTitle("Missing permissions")
+                    .setMessage("Camera and record audio permissions are required for the video conference.")
+                    .setPositiveButton("Open Settings", (dialog, which) -> {
+                        Intent settingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getParentActivity().getPackageName()));
+                        settingsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getParentActivity().startActivity(settingsIntent);
+                    })
+                    .setNegativeButton("Leave", (dialog, which) -> finishFragment())
+                    .show();
         }
         else {
             checkSessionAndStart();
