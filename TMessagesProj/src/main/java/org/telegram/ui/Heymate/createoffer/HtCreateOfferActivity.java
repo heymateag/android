@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -23,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
-
-import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -578,7 +577,9 @@ public class HtCreateOfferActivity extends BaseFragment {
             }
 
             if (errors.length() > 0) {
-                Toast.makeText(getParentActivity(), "Some required field(s) are left blank.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getParentActivity(), errors, Toast.LENGTH_SHORT).show();
+
+                Log.d(TAG, "Error on fields: " + errors);
             } else {
                 WalletExistence.ensure(this::acquirePromotionPlan);
             }
