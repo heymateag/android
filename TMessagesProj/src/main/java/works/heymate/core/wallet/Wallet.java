@@ -314,7 +314,7 @@ public class Wallet {
         });
     }
 
-    public void createPaymentPlan(APIObject offer, APIObject purchasedPlan, List<String> referrers, OfferOperationCallback callback) {
+    public void createPaymentPlan(APIObject offer, APIObject purchasedPlan, List<String> referrers, Currency nativeCurrency, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -324,7 +324,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.createPaymentPlan(offer, purchasedPlan, referrers);
+                    mCeloOffer.createPaymentPlan(offer, purchasedPlan, referrers, nativeCurrency);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
@@ -366,7 +366,7 @@ public class Wallet {
         });
     }
 
-    public void startOffer(APIObject offer, APIObject purchasedPlan, APIObject reservation, OfferOperationCallback callback) {
+    public void startOffer(APIObject offer, APIObject purchasedPlan, APIObject reservation, Currency nativeCurrency, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -376,7 +376,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.startService(offer, purchasedPlan, reservation, getAddress());
+                    mCeloOffer.startService(offer, purchasedPlan, reservation, getAddress(), nativeCurrency);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
@@ -391,7 +391,7 @@ public class Wallet {
         });
     }
 
-    public void finishOffer(APIObject offer, APIObject purchasedPlan, APIObject reservation, OfferOperationCallback callback) {
+    public void finishOffer(APIObject offer, APIObject purchasedPlan, APIObject reservation, Currency nativeCurrency, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -401,7 +401,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.finishService(offer, purchasedPlan, reservation, getAddress());
+                    mCeloOffer.finishService(offer, purchasedPlan, reservation, getAddress(), nativeCurrency);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
@@ -416,7 +416,7 @@ public class Wallet {
         });
     }
 
-    public void cancelOffer(APIObject offer, APIObject purchasedPlan, APIObject reservation, boolean consumerCancelled, OfferOperationCallback callback) {
+    public void cancelOffer(APIObject offer, APIObject purchasedPlan, APIObject reservation, boolean consumerCancelled, Currency nativeCurrency, OfferOperationCallback callback) {
         ensureCeloSDK();
 
         mCeloSDK.getContractKit((success, contractKit, errorCause) -> {
@@ -426,7 +426,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.cancelService(offer, purchasedPlan, reservation, getAddress(), consumerCancelled);
+                    mCeloOffer.cancelService(offer, purchasedPlan, reservation, getAddress(), consumerCancelled, nativeCurrency);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {

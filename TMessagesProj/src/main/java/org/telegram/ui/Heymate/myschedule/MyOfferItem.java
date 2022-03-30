@@ -456,7 +456,7 @@ public class MyOfferItem extends SequenceLayout implements View.OnClickListener 
 
         APIObject reservation = remainingReservations.remove(0);
 
-        wallet.cancelOffer(mOffer, null, reservation, false, (success, errorCause) -> {
+        wallet.cancelOffer(mOffer, null, reservation, false, TG2HM.getDefaultCurrency(), (success, errorCause) -> {
             if (success) {
                 cancelReservations(remainingReservations, wallet, noErrors);
             }

@@ -322,7 +322,7 @@ public class OnlineReservation {
     private static void confirmStarted(Context context, APIObject reservation, APIObject purchasedPlan, APIObject offer) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
-        wallet.startOffer(offer, purchasedPlan, reservation, (success, errorCause) -> {
+        wallet.startOffer(offer, purchasedPlan, reservation, TG2HM.getDefaultCurrency(), (success, errorCause) -> {
             if (success) {
                 APIs.get().updateReservation(reservation.getString(Reservation.ID), HtTimeSlotStatus.STARTED.name(), result -> {
                     sOnGoingReservationStabilizations.remove(reservation.getString(Reservation.ID));
@@ -341,7 +341,7 @@ public class OnlineReservation {
     private static void confirmFinished(Context context, APIObject reservation, APIObject purchasedPlan, APIObject offer) {
         Wallet wallet = Wallet.get(context, TG2HM.getCurrentPhoneNumber());
 
-        wallet.finishOffer(offer, purchasedPlan, reservation, (success, errorCause) -> {
+        wallet.finishOffer(offer, purchasedPlan, reservation, TG2HM.getDefaultCurrency(), (success, errorCause) -> {
             if (success) {
                 APIs.get().updateReservation(reservation.getString(Reservation.ID), HtTimeSlotStatus.FINISHED.name(), result -> {
                     sOnGoingReservationStabilizations.remove(reservation.getString(Reservation.ID));

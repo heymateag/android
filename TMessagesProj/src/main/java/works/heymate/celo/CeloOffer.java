@@ -67,7 +67,7 @@ public class CeloOffer {
     }
 
     public void createPaymentPlan(APIObject offer,
-                                  APIObject purchasePlan, List<String> referrers) throws JSONException, CeloException {
+                                  APIObject purchasePlan, List<String> referrers, Currency nativeCurrency) throws JSONException, CeloException {
         Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
         Currency currency = Currency.forName(pricing.getCurrency());
 
@@ -86,7 +86,7 @@ public class CeloOffer {
 
         long cents =  isBundle ? pricing.getBundleTotalPrice() * 100L : pricing.getSubscriptionPrice() * 100L;
 
-        CeloUtils.adjustGasPayment(mContractKit, currency);
+        CeloUtils.adjustGasPayment(mContractKit, nativeCurrency);
         transfer(cents, currency);
 
         try {
@@ -162,7 +162,7 @@ public class CeloOffer {
         initialDeposit = new BigInteger(String.valueOf(offer.getLong(works.heymate.model.Offer.PAYMENT_TERMS + "." + works.heymate.model.Offer.PaymentTerms.DEPOSIT)));
         List<BigInteger> config = getConfig(offer.getObject(works.heymate.model.Offer.PAYMENT_TERMS), pricing);
 
-        CeloUtils.adjustGasPayment(mContractKit, currency);
+        CeloUtils.adjustGasPayment(mContractKit, nativeCurrency);
 
         if (rate > 0) {
             if (!currency.equals(nativeCurrency)) {
@@ -238,7 +238,7 @@ public class CeloOffer {
         }
     }
 
-    public void startService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress) throws CeloException, JSONException {
+    public void startService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress, Currency nativeCurrency) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getString(Reservation.TRADE_ID).replaceAll("-", ""));
 
         Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
@@ -260,9 +260,9 @@ public class CeloOffer {
                 throw new IllegalArgumentException("Purchase plan type not provided."); // TODO not runtime exception! (has repetitions in this class)
         }
 
-        BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
+        BigInteger amount = CurrencyUtil.centsToBlockChainValue(rate * 100);
 
-        CeloUtils.adjustGasPayment(mContractKit, currency);
+        CeloUtils.adjustGasPayment(mContractKit, nativeCurrency);
 
         try {
             mContract.startService(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
@@ -276,7 +276,7 @@ public class CeloOffer {
         }
     }
 
-    public void finishService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress) throws CeloException, JSONException {
+    public void finishService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress, Currency nativeCurrency) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getString(Reservation.TRADE_ID).replaceAll("-", ""));
 
         Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
@@ -300,7 +300,7 @@ public class CeloOffer {
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        CeloUtils.adjustGasPayment(mContractKit, currency);
+        CeloUtils.adjustGasPayment(mContractKit, nativeCurrency);
 
         try {
             mContract.release(tradeId, offer.getString(works.heymate.model.Offer.WALLET_ADDRESS), consumerAddress, amount, BigInteger.ONE).send();
@@ -314,7 +314,7 @@ public class CeloOffer {
         }
     }
 
-    public void cancelService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress, boolean consumerCancelled) throws CeloException, JSONException {
+    public void cancelService(APIObject offer, APIObject purchasedPlan, APIObject reservation, String consumerAddress, boolean consumerCancelled, Currency nativeCurrency) throws CeloException, JSONException {
         byte[] tradeId = Numeric.hexStringToByteArray(reservation.getString(Reservation.TRADE_ID).replaceAll("-", ""));
 
         Pricing pricing = new Pricing(offer.getObject(works.heymate.model.Offer.PRICING).asJSON());
@@ -338,7 +338,7 @@ public class CeloOffer {
 
         BigInteger amount = CurrencyUtil.centsToBlockChainValue((long) (rate) * 100);
 
-        CeloUtils.adjustGasPayment(mContractKit, currency);
+        CeloUtils.adjustGasPayment(mContractKit, nativeCurrency);
 
         try {
             if (consumerCancelled) {

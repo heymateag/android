@@ -332,7 +332,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-        wallet.cancelOffer(mOffer, null, mReservation, true, (success, errorCause) -> {
+        wallet.cancelOffer(mOffer, null, mReservation, true, TG2HM.getDefaultCurrency(), (success, errorCause) -> {
             loading.dismiss();
 
             if (success) {
@@ -375,7 +375,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-        wallet.startOffer(mOffer, null, mReservation, (success, errorCause) -> {
+        wallet.startOffer(mOffer, null, mReservation, TG2HM.getDefaultCurrency(), (success, errorCause) -> {
             LoadingUtil.onLoadingFinished();
 
             if (success) {
@@ -418,7 +418,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());
 
-        wallet.finishOffer(mOffer, null, mReservation, (success, errorCause) -> {
+        wallet.finishOffer(mOffer, null, mReservation, TG2HM.getDefaultCurrency(), (success, errorCause) -> {
             LoadingUtil.onLoadingFinished();
 
             if (success) {
