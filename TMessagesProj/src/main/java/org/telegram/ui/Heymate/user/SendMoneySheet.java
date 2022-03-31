@@ -64,6 +64,9 @@ public class SendMoneySheet extends BottomSheet {
     private static final String TAG = "SendMoneySheet";
 
     private static final BigInteger TRANSACTION_COST = CurrencyUtil.WEI.divide(BigInteger.valueOf(500L));
+    private static final BigInteger TOTAL_TRANSACTION_COST = TRANSACTION_COST.multiply(BigInteger.valueOf(5));
+    private static final BigInteger CAUTION_AMOUNT = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(500));
+    private static final BigInteger EXTRA_CAUTION_AMOUNT = CAUTION_AMOUNT.add(CAUTION_AMOUNT);
 
     public static final String HOST = "SendMoney";
 
@@ -256,7 +259,27 @@ public class SendMoneySheet extends BottomSheet {
                 long cents = s.length() == 0 ? 0 : (long) (Float.parseFloat(s.toString()) * 100);
                 mReceiveAmount = Money.create(cents, mToCurrency);
 
-                long sendCents = cents * mReferenceFrom.getCents() / mReferenceTo.getCents();
+                long sendCents;
+
+                if (cents == 0) {
+                    sendCents = 0;
+                }
+                else {
+                    BigInteger receiveAmount = CurrencyUtil.centsToBlockChainValue(cents);
+
+                    BigInteger referenceFrom = CurrencyUtil.centsToBlockChainValue(mReferenceFrom.getCents());
+                    BigInteger referenceTo = CurrencyUtil.centsToBlockChainValue(mReferenceTo.getCents());
+
+                    BigInteger sendAmount =
+                            receiveAmount
+                            .add(EXTRA_CAUTION_AMOUNT)
+                            .multiply(referenceFrom)
+                            .divide(referenceTo)
+                            .add(EXTRA_CAUTION_AMOUNT)
+                            .add(TOTAL_TRANSACTION_COST);
+                    sendCents = CurrencyUtil.blockChainValueToCents(sendAmount);
+                }
+
                 mSendAmount.setCents(sendCents);
 
                 mInputSend.setText(String.valueOf(sendCents / 100f));
@@ -410,13 +433,11 @@ public class SendMoneySheet extends BottomSheet {
                 BigInteger receiveAmount = CurrencyUtil.centsToBlockChainValue(receive.getCents());
 
                 try {
-                    BigInteger cautionAmount = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(500));
-
-                    BigInteger goldToSell = receiveExchange.getSellTokenAmount(receiveAmount.add(cautionAmount), true).send();
+                    BigInteger goldToSell = receiveExchange.getSellTokenAmount(receiveAmount.add(CAUTION_AMOUNT), true).send();
                     BigInteger nativeToSell = sendExchange.getSellTokenAmount(goldToSell, false).send();
 
                     BigInteger requiredBalance = nativeToSell
-                            .add(cautionAmount)
+                            .add(CAUTION_AMOUNT)
                             .add(TRANSACTION_COST) // approve to buy gold
                             .add(TRANSACTION_COST) // buy gold
                             .add(TRANSACTION_COST) // approve to but target amount
@@ -429,8 +450,8 @@ public class SendMoneySheet extends BottomSheet {
                         try {
                             CeloUtils.adjustGasPayment(contractKit, send.getCurrency());
 
-                            sendToken.approve(sendExchange.getContractAddress(), nativeToSell.add(cautionAmount)).send();
-                            sendExchange.buy(goldToSell, nativeToSell.add(cautionAmount), true).send();
+                            sendToken.approve(sendExchange.getContractAddress(), nativeToSell.add(CAUTION_AMOUNT)).send();
+                            sendExchange.buy(goldToSell, nativeToSell.add(CAUTION_AMOUNT), true).send();
 
                             contractKit.contracts.getGoldToken().approve(receiveExchange.getContractAddress(), goldToSell).send();
                             receiveExchange.buy(receiveAmount, goldToSell, false).send();
@@ -519,7 +540,19 @@ public class SendMoneySheet extends BottomSheet {
     private void updateReceiveMoney() {
         mUpdatingConversion = true;
 
-        long receiveCents = mSendAmount.getCents() * mReferenceTo.getCents() / mReferenceFrom.getCents();
+        BigInteger sendAmount = CurrencyUtil.centsToBlockChainValue(mSendAmount.getCents());
+        BigInteger referenceTo = CurrencyUtil.centsToBlockChainValue(mReferenceTo.getCents());
+        BigInteger referenceFrom = CurrencyUtil.centsToBlockChainValue(mReferenceFrom.getCents());
+
+        BigInteger receiveAmount =
+                sendAmount
+                        .subtract(EXTRA_CAUTION_AMOUNT)
+                        .subtract(TOTAL_TRANSACTION_COST)
+                        .multiply(referenceTo)
+                        .divide(referenceFrom)
+                        .subtract(EXTRA_CAUTION_AMOUNT)
+                        .max(BigInteger.ZERO);
+        long receiveCents = CurrencyUtil.blockChainValueToCents(receiveAmount);
         mReceiveAmount = Money.create(receiveCents, mToCurrency);
 
         mInputReceive.setText(String.valueOf(receiveCents / 100f));
