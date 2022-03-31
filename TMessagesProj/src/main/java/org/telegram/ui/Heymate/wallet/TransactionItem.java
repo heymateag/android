@@ -83,7 +83,20 @@ public class TransactionItem extends SequenceLayout {
             BigInteger value = new BigInteger(transaction.getString("value"));
             String contract = transaction.getString("contractAddress");
 
-            Currency currency = mREALAddress.equals(contract) ? Currency.REAL : (mEURAddress.equals(contract) ? Currency.EUR : Currency.USD);
+            Currency currency;
+
+            if (mREALAddress.equals(contract)) {
+                currency = Currency.REAL;
+            }
+            else if (mEURAddress.equals(contract)) {
+                currency = Currency.EUR;
+            }
+            else if (mUSDAddress.equals(contract)) {
+                currency = Currency.USD;
+            }
+            else {
+                currency = Currency.GOLD;
+            }
 
             boolean received = mAddress.equals(to);
 

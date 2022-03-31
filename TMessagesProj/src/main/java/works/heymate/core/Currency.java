@@ -6,6 +6,7 @@ import works.heymate.ramp.Nimiq;
 
 public class Currency {
 
+    public static final Currency GOLD = new Currency("GOLD", "Gold");
     public static final Currency USD = new Currency("USD", "$");
     public static final Currency EUR = new Currency("EUR", "€");
     public static final Currency REAL = new Currency("REAL", "R$");
@@ -14,6 +15,10 @@ public class Currency {
     public static final String[] CURRENCY_NAMES = { USD.name, EUR.name, REAL.name };
 
     public static Currency forName(String name) {
+        if (GOLD.name.equals(name)) {
+            return GOLD;
+        }
+
         if (USD.name.equals(name)) {
             return USD;
         }
@@ -50,6 +55,10 @@ public class Currency {
     }
 
     public works.heymate.celo.Currency celoCurrency() {
+        if (this.equals(GOLD)) {
+            return works.heymate.celo.Currency.GOLD;
+        }
+
         if (this.equals(REAL)) {
             return works.heymate.celo.Currency.REAL;
         }
