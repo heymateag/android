@@ -339,7 +339,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2462 * 102 // HeymateConfig
+    defaultConfig.versionCode = 2462 * 104 // HeymateConfig
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
