@@ -24,7 +24,6 @@ import com.yashoid.sequencelayout.Span;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SendMessagesHelper;
@@ -39,7 +38,7 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
-import org.telegram.ui.Heymate.MeetingType;
+import works.heymate.model.MeetingType;
 import org.telegram.ui.Heymate.ReferralUtils;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.payment.PaymentController;

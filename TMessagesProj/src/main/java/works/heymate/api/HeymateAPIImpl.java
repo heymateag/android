@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import works.heymate.model.Offer;
 import works.heymate.model.Pricing;
 import works.heymate.util.SimpleNetworkCall;
 
@@ -164,13 +165,15 @@ class HeymateAPIImpl implements IHeymateAPI {
     }
 
     @Override
-    public void createOffer(String title, String description, String category, String subcategory, long expiration, String address, String latitude, String longitude, String meetingType, int participants, String terms, Pricing pricing, APIObject paymentTerms, String walletAddress, List<Long> timeSlots, List<String> images, APICallback callback) {
+    public void createOffer(String title, String description, String category, String subcategory, long expiration, String address, String latitude, String longitude, String offerType, String meetingType, String meetingLink, int participants, String terms, Pricing pricing, APIObject paymentTerms, String walletAddress, List<Long> timeSlots, List<String> images, APICallback callback) {
         Map<String, Object> body;
 
         body = quickMap(
                 "location", quickMap("lat", latitude, "long", longitude, "address", address),
                 "participants", participants,
+                Offer.OFFER_TYPE, offerType,
                 "meeting_type", meetingType,
+                Offer.MEETING_LINK, meetingLink,
                 "payment_terms", paymentTerms.asJSON(),
                 "schedules", createSchedules(timeSlots),
                 "referral_plan", "REF",

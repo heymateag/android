@@ -4,23 +4,17 @@ import android.content.Context;
 
 import com.google.android.exoplayer2.util.Log;
 
-import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.UserConfig;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import works.heymate.api.APICallback;
 import works.heymate.api.APIObject;
 import works.heymate.api.APIResult;
 import works.heymate.api.APIs;
 import works.heymate.core.HeymateEvents;
-import works.heymate.core.reservation.ReservationUtils;
 import works.heymate.core.wallet.Wallet;
+import works.heymate.model.MeetingType;
 import works.heymate.model.Reservation;
 import works.heymate.model.TimeSlot;
 

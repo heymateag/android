@@ -45,7 +45,7 @@ import org.telegram.ui.Heymate.HeymateConfig;
 import org.telegram.ui.Heymate.payment.WalletExistence;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.LoadingUtil;
-import org.telegram.ui.Heymate.MeetingType;
+import works.heymate.model.MeetingType;
 import org.telegram.ui.Heymate.TG2HM;
 
 import java.text.SimpleDateFormat;
@@ -772,7 +772,9 @@ public class HtCreateOfferActivity extends BaseFragment {
                         locationInfo == null ? null : locationInfo.address,
                         locationInfo == null ? null : String.valueOf(locationInfo.latitude),
                         locationInfo == null ? null : String.valueOf(locationInfo.longitude),
+                        locationInputCell.getOfferType(),
                         locationInputCell.getMeetingType(),
+                        null,
                         participantsInputCell.getMaximumParticipants(),
                         termsInputCell.getRes(ARGUMENTS_TERMS),
                         pricing,

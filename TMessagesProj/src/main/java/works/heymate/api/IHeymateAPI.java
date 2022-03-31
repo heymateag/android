@@ -23,7 +23,8 @@ public interface IHeymateAPI {
 
     void createOffer(String title, String description, String category, String subcategory,
                      long expiration, String address, String latitude, String longitude,
-                     String meetingType, int participants, String terms,
+                     String offerType, String meetingType, String meetingLink,
+                     int participants, String terms,
                      Pricing pricing, APIObject paymentTerms,
                      String walletAddress, List<Long> timeSlots, List<String> images,
                      APICallback callback);

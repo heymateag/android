@@ -27,7 +27,7 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.Heymate.LoadingUtil;
 import org.telegram.ui.Heymate.log.LogToGroup;
-import org.telegram.ui.Heymate.MeetingType;
+import works.heymate.model.MeetingType;
 import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.offer.OfferDetailsActivity;

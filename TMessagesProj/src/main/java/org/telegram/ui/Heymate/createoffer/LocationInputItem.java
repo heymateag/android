@@ -40,7 +40,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Heymate.MeetingType;
+import works.heymate.model.MeetingType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +49,7 @@ import java.util.List;
 import works.heymate.beta.R;
 import works.heymate.core.Texts;
 import works.heymate.core.Utils;
+import works.heymate.model.OfferType;
 
 public class LocationInputItem extends ExpandableItem {
 
@@ -292,6 +293,10 @@ public class LocationInputItem extends ExpandableItem {
 
     public String getMeetingType() {
         return mOnlineMeetingCheckBox.isChecked() ? MeetingType.ONLINE_MEETING : MeetingType.DEFAULT;
+    }
+
+    public String getOfferType() {
+        return mOnlineMeetingCheckBox.isChecked() ? OfferType.ONLINE : OfferType.DEFAULT;
     }
 
     public void setMeetingType(String type) {

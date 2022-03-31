@@ -3,7 +3,7 @@ package works.heymate.core.offer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.telegram.ui.Heymate.MeetingType;
+import works.heymate.model.MeetingType;
 import org.telegram.ui.Heymate.createoffer.LocationInputItem;
 
 import java.util.ArrayList;

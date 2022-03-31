@@ -45,7 +45,9 @@ public interface Offer {
     String ID = "id";
     String LOCATION = "location";
     String PARTICIPANTS = "participants";
+    String OFFER_TYPE = "offer_type";
     String MEETING_TYPE = "meeting_type";
+    String MEETING_LINK = "meeting_link";
     String CREATED_AT = "createdAt";
     String PAYMENT_TERMS = "payment_terms";
     String TIMESLOTS = "schedules";
