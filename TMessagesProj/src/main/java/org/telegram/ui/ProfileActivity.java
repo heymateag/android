@@ -82,6 +82,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -3194,7 +3196,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 quickOfferButton.setImageResource(R.drawable.offer);
                 quickOfferButton.setContentDescription("Quick offers");
 
+                Log.d("AAA", "requesting for: " + userId);
                 Users.getUserByTelegramId(String.valueOf(userId), result -> {
+                    Log.d("AAA", "received for " + result.success);
                     if (result.success && result.response != null) {
                         payButton.setVisibility(View.VISIBLE);
                         //quickOfferButton.setVisibility(View.VISIBLE); TODO quick offer

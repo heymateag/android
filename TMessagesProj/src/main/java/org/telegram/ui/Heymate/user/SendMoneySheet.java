@@ -59,6 +59,10 @@ import works.heymate.model.User;
 import works.heymate.model.Users;
 import works.heymate.ramp.Ramp;
 
+/**
+ * a. Doing the exchange
+ * b. Calculating the exchange
+ */
 public class SendMoneySheet extends BottomSheet {
 
     private static final String TAG = "SendMoneySheet";
@@ -440,7 +444,7 @@ public class SendMoneySheet extends BottomSheet {
                             .add(CAUTION_AMOUNT)
                             .add(TRANSACTION_COST) // approve to buy gold
                             .add(TRANSACTION_COST) // buy gold
-                            .add(TRANSACTION_COST) // approve to but target amount
+                            .add(TRANSACTION_COST) // approve to buy target amount
                             .add(TRANSACTION_COST) // buy target amount
                             .add(TRANSACTION_COST); // final transfer
 
@@ -475,7 +479,7 @@ public class SendMoneySheet extends BottomSheet {
                     }
                     else {
                         BigInteger missingAmount = requiredBalance.add(balance.negate());
-                        BigInteger oneCent = CurrencyUtil.centsToBlockChainValue(1);
+                        BigInteger oneCent = CurrencyUtil.centsToBlockChainValue(1); // TODO round up to one cents
                         BigInteger topUpAmount = missingAmount.max(oneCent);
 
                         Utils.postOnUIThread(() -> {

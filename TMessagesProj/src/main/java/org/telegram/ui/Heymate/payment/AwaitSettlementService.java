@@ -26,7 +26,7 @@ import works.heymate.core.wallet.Wallet;
 
 public class AwaitSettlementService extends Service {
 
-    private static final long BALANCE_CHECK_INTERVAL = 3L * 60L * 60L * 1000L;
+    private static final long BALANCE_CHECK_INTERVAL = 3L * 60L * 60L * 1000L; // TODO Make sure it is up to 2 days
 
     private static final String CHANNEL_ID = AwaitSettlement.CHANNEL_ID;
     private static final int NOTIFICATION_ID = 12309;
