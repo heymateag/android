@@ -26,6 +26,7 @@ import org.celo.contractkit.protocol.CeloTransaction;
 import org.celo.contractkit.wrapper.ExchangeWrapper;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -51,6 +52,7 @@ import works.heymate.celo.CeloUtils;
 import works.heymate.celo.CurrencyUtil;
 import works.heymate.core.Currency;
 import works.heymate.core.Money;
+import works.heymate.core.Texts;
 import works.heymate.core.Utils;
 import works.heymate.core.wallet.AwaitBalance;
 import works.heymate.core.wallet.Prices;
@@ -58,6 +60,8 @@ import works.heymate.core.wallet.Wallet;
 import works.heymate.model.User;
 import works.heymate.model.Users;
 import works.heymate.ramp.Ramp;
+import works.heymate.util.DefaultObjectProvider;
+import works.heymate.util.Template;
 
 /**
  * a. Doing the exchange
@@ -220,10 +224,7 @@ public class SendMoneySheet extends BottomSheet {
             new AlertDialog.Builder(getContext())
                     .setTitle("Change currency")
                     .setMessage("Select a currency for the receiver.")
-                    .setItems(Currency.CURRENCY_NAMES, (dialog, which) -> {
-                        setToCurrency(Currency.forName(Currency.CURRENCY_NAMES[which]));
-                        updateStateViews();
-                    })
+                    .setItems(Currency.CURRENCY_NAMES, (dialog, which) -> setReceiveCurrency(Currency.forName(Currency.CURRENCY_NAMES[which])))
                     .show();
         });
 
@@ -258,39 +259,12 @@ public class SendMoneySheet extends BottomSheet {
                     return;
                 }
 
-                mUpdatingConversion = true;
-
                 long cents = s.length() == 0 ? 0 : (long) (Float.parseFloat(s.toString()) * 100);
                 mReceiveAmount = Money.create(cents, mToCurrency);
 
-                long sendCents;
-
-                if (cents == 0) {
-                    sendCents = 0;
-                }
-                else {
-                    BigInteger receiveAmount = CurrencyUtil.centsToBlockChainValue(cents);
-
-                    BigInteger referenceFrom = CurrencyUtil.centsToBlockChainValue(mReferenceFrom.getCents());
-                    BigInteger referenceTo = CurrencyUtil.centsToBlockChainValue(mReferenceTo.getCents());
-
-                    BigInteger sendAmount =
-                            receiveAmount
-                            .add(EXTRA_CAUTION_AMOUNT)
-                            .multiply(referenceFrom)
-                            .divide(referenceTo)
-                            .add(EXTRA_CAUTION_AMOUNT)
-                            .add(TOTAL_TRANSACTION_COST);
-                    sendCents = CurrencyUtil.blockChainValueToCents(sendAmount);
-                }
-
-                mSendAmount.setCents(sendCents);
-
-                mInputSend.setText(String.valueOf(sendCents / 100f));
+                updateSendMoney();
 
                 checkHasError();
-
-                mUpdatingConversion = false;
             }
 
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -343,12 +317,14 @@ public class SendMoneySheet extends BottomSheet {
 
                         try {
                             TransactionReceipt receipt = token.transfer(targetWallet, sendAmount).send();
+                            final String transactionHash = receipt.getTransactionHash();
 
-                            Log.i(TAG, "Transfer successful: " + receipt.getTransactionHash());
+                            Log.i(TAG, "Transfer successful: " + transactionHash);
 
                             Utils.postOnUIThread(() -> {
                                 mState = STATE_SUCCESS;
                                 updateStateViews();
+                                moneySentToRecipient(transactionHash);
                             });
                         } catch (Exception transferException) {
                             Log.e(TAG, "Transfer failed", transferException);
@@ -461,12 +437,14 @@ public class SendMoneySheet extends BottomSheet {
                             receiveExchange.buy(receiveAmount, goldToSell, false).send();
 
                             TransactionReceipt receipt = receiveToken.transfer(targetWallet, receiveAmount).send();
+                            final String transactionHash = receipt.getTransactionHash();
 
-                            Log.i(TAG, "Transfer successful: " + receipt.getTransactionHash());
+                            Log.i(TAG, "Transfer successful: " + transactionHash);
 
                             Utils.postOnUIThread(() -> {
                                 mState = STATE_SUCCESS;
                                 updateStateViews();
+                                moneySentToRecipient(transactionHash);
                             });
                         } catch (Exception transferException) {
                             Log.e(TAG, "Transfer failed", transferException);
@@ -534,11 +512,64 @@ public class SendMoneySheet extends BottomSheet {
         });
     }
 
+    private void moneySentToRecipient(String transactionHash) {
+        if (mReceiver == null) {
+            return;
+        }
+
+        String message = SendMoneyUtils.serialize(mReceiver, mSendAmount, mReceiverWalletAddress, mDescription.getText().toString(), transactionHash);
+
+        long userId = mReceiver.getLong(User.TELEGRAM_ID);
+
+        if (userId == 0) {
+            return;
+        }
+
+        SendMessagesHelper.getInstance(getCurrentAccount()).sendMessage(message, userId, null, null, null, false, null, null, null, true, 0, null);
+    }
+
     private void checkHasError() {
         boolean hasError = mTotalBalance != null && mSendAmount.getCents() > 0 && mTotalBalance.getCents() < mSendAmount.getCents();
 
         setHasError(hasError);
         updateButton("Send", true);
+    }
+
+    private void updateSendMoney() {
+        if (mReferenceTo == null) {
+            return;
+        }
+
+        mUpdatingConversion = true;
+
+        long cents = mReceiveAmount.getCents();
+
+        long sendCents;
+
+        if (cents == 0) {
+            sendCents = 0;
+        }
+        else {
+            BigInteger receiveAmount = CurrencyUtil.centsToBlockChainValue(cents);
+
+            BigInteger referenceFrom = CurrencyUtil.centsToBlockChainValue(mReferenceFrom.getCents());
+            BigInteger referenceTo = CurrencyUtil.centsToBlockChainValue(mReferenceTo.getCents());
+
+            BigInteger sendAmount =
+                    receiveAmount
+                            .add(EXTRA_CAUTION_AMOUNT)
+                            .multiply(referenceFrom)
+                            .divide(referenceTo)
+                            .add(EXTRA_CAUTION_AMOUNT)
+                            .add(TOTAL_TRANSACTION_COST);
+            sendCents = CurrencyUtil.blockChainValueToCents(sendAmount);
+        }
+
+        mSendAmount.setCents(sendCents);
+
+        mInputSend.setText(String.valueOf(sendCents / 100f));
+
+        mUpdatingConversion = false;
     }
 
     private void updateReceiveMoney() {
@@ -602,7 +633,15 @@ public class SendMoneySheet extends BottomSheet {
             return;
         }
 
-        APIObject device = devices.getObject(0);
+        APIObject device = null;
+
+        for (int i = devices.size() - 1; i >= 0; i--) {
+            APIObject d = devices.getObject(i);
+
+            if (d.getString(User.Device.WALLET_ADDRESS) != null && d.getString(User.Device.CURRENCY) != null) {
+                device = d;
+            }
+        }
 
         if (device == null) {
             if (mReceiverWalletAddress == null) {
@@ -614,12 +653,24 @@ public class SendMoneySheet extends BottomSheet {
         String currencyName = device.getString(User.Device.CURRENCY);
         String walletAddress = device.getString(User.Device.WALLET_ADDRESS);
 
-        if (currencyName == null || (walletAddress == null && mReceiverWalletAddress == null)) {
-            return;
-        }
-
         setToCurrency(Currency.forName(currencyName));
         setReceiverWalletAddress(walletAddress, false);
+    }
+
+    public void setReceiveCurrency(Currency currency) {
+        setToCurrency(currency);
+        updateStateViews();
+    }
+
+    public void setReceiveCents(long cents) {
+        if (mFromCurrency.equals(mToCurrency)) {
+            mSendAmount.setCents(cents);
+            mInputSend.setText(String.valueOf(cents / 100f));
+        }
+        else {
+            mReceiveAmount = Money.create(cents, mToCurrency);
+            mInputReceive.setText(String.valueOf(cents / 100f));
+        }
     }
 
     private void setToCurrency(Currency currency) {
@@ -669,7 +720,14 @@ public class SendMoneySheet extends BottomSheet {
                         if (!mReferenceFrom.equals(money)) {
                             mReferenceTo = money;
 
-                            updateReceiveMoney();
+                            if (mReceiveAmount != null && mReceiveAmount.getCents() > 0) {
+                                updateSendMoney();
+                            }
+                            else {
+                                updateReceiveMoney();
+                            }
+
+                            checkHasError();
 
                             mExchange.setText(mReferenceFrom.multiplyBy(0.01f) + " = " + mReferenceTo.multiplyBy(0.01f));
                         }

@@ -25,6 +25,52 @@ public class Money implements Parcelable, Comparable<Money> {
         return money;
     }
 
+    public static Money create(String string) {
+        if (string == null) {
+            return null;
+        }
+
+        string = string.trim();
+
+        if (string.length() == 0) {
+            return null;
+        }
+
+        int spaceIndex = string.indexOf(" ");
+
+        try {
+            long cents;
+            Currency currency;
+
+            if (spaceIndex > 0) {
+                cents = Math.round(Double.parseDouble(string.substring(0, spaceIndex)) * 100);
+                currency = getCurrencyForSymbol(string.substring(spaceIndex + 1));
+            } else {
+                currency = getCurrencyForSymbol(string.substring(0, 1));
+                cents = Math.round(Double.parseDouble(string.substring(1)) * 100);
+            }
+
+            Money money = new Money();
+
+            money.mAmount = cents;
+            money.mCurrency = currency;
+
+            return money;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private static Currency getCurrencyForSymbol(String symbol) {
+        for (Currency currency: Currency.CELO_CURRENCIES) {
+            if (currency.symbol().equals(symbol)) {
+                return currency;
+            }
+        }
+
+        return null;
+    }
+
     private Currency mCurrency;
     private long mAmount;
 

@@ -112,7 +112,6 @@ import works.heymate.api.APIObject;
 import works.heymate.api.APIs;
 import works.heymate.beta.BuildConfig;
 import works.heymate.beta.R;
-import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.reservation.ReservationUtils;
 import works.heymate.core.wallet.Wallet;
@@ -263,7 +262,12 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.Delegates.ChatActivityMemberRequestsDelegate;
 import org.telegram.ui.Heymate.offer.OfferMessageItem;
 import org.telegram.ui.Heymate.onlinemeeting.MeetingMessageItem;
+import org.telegram.ui.Heymate.user.PaymentRequestItem;
+import org.telegram.ui.Heymate.user.PaymentRequestSheet;
+import org.telegram.ui.Heymate.user.PaymentRequestUtils;
 import org.telegram.ui.Heymate.user.SendMoneySheet;
+import org.telegram.ui.Heymate.user.SendMoneyUtils;
+import org.telegram.ui.Heymate.user.SentMoneyItem;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10561,6 +10565,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } catch (Exception e) {
                 FileLog.e(e);
             }
+        }
+        else if (which == 100) {
+            new PaymentRequestSheet(getParentActivity(), dialog_id).show();
         }
     }
 
@@ -23717,6 +23724,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 view = new MeetingMessageItem(mContext);
                 ((MeetingMessageItem) view).setParent(ChatActivity.this);
             }
+            else if (viewType == 12) {
+                view = new SentMoneyItem(mContext);
+                ((SentMoneyItem) view).setParent(ChatActivity.this);
+            }
+            else if (viewType == 13) {
+                view = new PaymentRequestItem(mContext);
+                ((PaymentRequestItem) view).setParent(ChatActivity.this);
+            }
             else if (viewType == 0) {
                 if (!chatMessageCellsCache.isEmpty()) {
                     view = chatMessageCellsCache.get(0);
@@ -24731,6 +24746,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     ReservationUtils.PhraseInfo phraseInfo = ReservationUtils.readBeautiful(message.messageText.toString());
                     ((MeetingMessageItem) view).setReservation(phraseInfo.reservation);
                 }
+                else if (view instanceof SentMoneyItem) {
+                    ((SentMoneyItem) view).setContent(message.messageText.toString());
+                }
+                else if (view instanceof PaymentRequestItem) {
+                    ((PaymentRequestItem) view).setContent(message.messageText.toString());
+                }
                 else if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;
                     MessageObject.GroupedMessages groupedMessages = getValidGroupedMessage(message);
@@ -25133,6 +25154,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 if (ReservationUtils.urlFromPhrase(finalMessage) != null) {
                     return 11;
+                }
+                if (SendMoneyUtils.parseMessage(finalMessage) != null) {
+                    return 12;
+                }
+                if (PaymentRequestUtils.parseMessage(finalMessage) != null) {
+                    return 13;
                 }
                 return messages.get(position - messagesStartRow).contentType;
             } else if (position == botInfoRow) {

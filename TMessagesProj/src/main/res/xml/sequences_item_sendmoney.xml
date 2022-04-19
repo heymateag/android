@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical>
+        <Span size="4dp"/>
+        <Span size="8dp"/>
+        <Span id="title_from" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="image_from" size="36dp"/>
+        <Span size="12dp"/>
+        <Span id="title_to" size="wrap"/>
+        <Span size="4dp"/>
+        <Span id="image_to" size="36dp"/>
+        <Span size="12dp"/>
+        <Span id="money" size="wrap"/>
+        <Span size="12dp"/>
+        <Span id="description" size="wrap"/>
+        <Span size="12dp"/>
+        <Span id="receipt" size="36dp"/>
+        <Span size="8dp"/>
+        <Span size="4dp"/>
+    </Vertical>
+
+    <Vertical start="start@image_from" end="end@image_from">
+        <Span size="1w"/>
+        <Span id="text_from" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@image_to" end="end@image_to">
+        <Span size="1w"/>
+        <Span id="text_to" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@title_from" end="end@receipt">
+        <Span size="-8dp"/>
+        <Span id="background" size="1w"/>
+        <Span size="-8dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span size="12dp"/>
+        <Span id="background" size="1w"/>
+        <Span size="12dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="8dp"/>
+        <Span id="title_from" size="1w"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="8dp"/>
+        <Span id="image_from" size="36dp"/>
+        <Span size="8dp"/>
+        <Span id="text_from" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="8dp"/>
+        <Span id="title_to" size="1w"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="8dp"/>
+        <Span id="image_to" size="36dp"/>
+        <Span size="8dp"/>
+        <Span id="text_to" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal>
+        <Span size="1w"/>
+        <Span id="money" size="wrap"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="8dp"/>
+        <Span id="description" size="1w"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@background" end="end@background">
+        <Span size="8dp"/>
+        <Span id="receipt" size="1w"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+</Sequences>

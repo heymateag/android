@@ -12,26 +12,27 @@ public class Currency {
     public static final Currency REAL = new Currency("REAL", "R$");
     public static final Currency INR = new Currency("INR", "₹");
 
+    public static final Currency[] CELO_CURRENCIES = { USD, EUR, REAL };
     public static final String[] CURRENCY_NAMES = { USD.name, EUR.name, REAL.name };
 
     public static Currency forName(String name) {
-        if (GOLD.name.equals(name)) {
+        if (GOLD.name.equalsIgnoreCase(name)) {
             return GOLD;
         }
 
-        if (USD.name.equals(name)) {
+        if (USD.name.equalsIgnoreCase(name)) {
             return USD;
         }
 
-        if (EUR.name.equals(name)) {
+        if (EUR.name.equalsIgnoreCase(name)) {
             return EUR;
         }
 
-        if (REAL.name.equals(name)) {
+        if (REAL.name.equalsIgnoreCase(name)) {
             return REAL;
         }
 
-        if (INR.name.equals(name)) {
+        if (INR.name.equalsIgnoreCase(name)) {
             return INR;
         }
 
@@ -86,7 +87,7 @@ public class Currency {
 
         Currency currency = (Currency) o;
 
-        return name.equals(currency.name);
+        return name.equalsIgnoreCase(currency.name);
     }
 
     @Override

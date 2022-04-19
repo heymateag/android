@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequences>
+
+    <Vertical id="spine">
+        <Span id="spine" size="340dp"/>
+    </Vertical>
+
+    <Horizontal>
+        <Span id="spine" size="1px"/>
+    </Horizontal>
+
+    <Vertical start="start@spine" end="end@spine">
+        <Span size="32w"/>
+        <Span id="title_send" size="wrap"/>
+        <Span size="4w" visibleIf="title_send"/>
+        <Span id="input_send_background" size="64dp"/>
+        <Span size="16w"/>
+        <Span id="description" size="92dp"/>
+        <Span size="28w"/>
+        <Span id="send" size="60dp"/>
+        <Span size="12dp"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_send_currency" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Vertical start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_send" size="wrap"/>
+        <Span size="1w"/>
+    </Vertical>
+
+    <Horizontal id="receive">
+        <Span size="24dp"/>
+        <Span id="input_send_background" size="1w"/>
+        <Span size="24dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background">
+        <Span size="10dp"/>
+        <Span id="title_send" size="wrap"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background" end="end@input_send_background">
+        <Span size="1w"/>
+        <Span id="input_send" size="wrap" min="64dp" max="50%input_send_background"/>
+        <Span size="1w"/>
+    </Horizontal>
+
+    <Horizontal end="start@input_send">
+        <Span size="1w"/>
+        <Span id="input_send_currency" size="wrap"/>
+        <Span size="8dp"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background" end="end@input_send_background">
+        <Span id="description" size="100%"/>
+    </Horizontal>
+
+    <Horizontal start="start@input_send_background" end="end@input_send_background">
+        <Span id="send" size="100%"/>
+    </Horizontal>
+
+</Sequences>

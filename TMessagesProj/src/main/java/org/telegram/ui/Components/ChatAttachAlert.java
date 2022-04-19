@@ -28,14 +28,12 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.text.util.Linkify;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -46,7 +44,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
@@ -90,6 +87,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.Keep;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.ColorUtils;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -492,10 +490,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             super.onMeasure(MeasureSpec.makeMeasureSpec(attachItemSize, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(84), MeasureSpec.EXACTLY));
         }
 
-        public void setTextAndIcon(int id, CharSequence text, RLottieDrawable drawable, String background, String textColor) {
+        public void setTextAndIcon(int id, CharSequence text, Drawable drawable, String background, String textColor) {
             currentId = id;
             textView.setText(text);
-            imageView.setAnimation(drawable);
+            if (drawable instanceof RLottieDrawable) {
+                imageView.setAnimation((RLottieDrawable) drawable);
+            }
+            else {
+                imageView.setImageDrawable(drawable);
+            }
             backgroundKey = background;
             textKey = textColor;
             textView.setTextColor(ColorUtils.blendARGB(getThemedColor(Theme.key_dialogTextGray2), getThemedColor(textKey), checkedState));
@@ -2692,6 +2695,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         private int pollButton;
         private int contactButton;
         private int locationButton;
+        private int paymentRequestButton;
         private int buttonsCount;
 
         public ButtonsAdapter(Context context) {
@@ -2736,6 +2740,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     } else if (position == contactButton) {
                         attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", R.string.AttachContact), Theme.chat_attachButtonDrawables[3], Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
                         attachButton.setTag(5);
+                    } else if (position == paymentRequestButton) {
+                        attachButton.setTextAndIcon(100, "Payment", AppCompatResources.getDrawable(mContext, R.drawable.hm_pay), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
+                        attachButton.setTag(100);
                     }
                     break;
                 case 1:
@@ -2775,6 +2782,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             pollButton = -1;
             contactButton = -1;
             locationButton = -1;
+            paymentRequestButton = -1;
             if (!(baseFragment instanceof ChatActivity)) {
                 galleryButton = buttonsCount++;
                 documentButton = buttonsCount++;
@@ -2796,6 +2804,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     documentButton = buttonsCount++;
                 }
                 locationButton = buttonsCount++;
+                if (baseFragment instanceof ChatActivity) {
+                    paymentRequestButton = buttonsCount++;
+                }
                 if (pollsEnabled) {
                     pollButton = buttonsCount++;
                 } else {
