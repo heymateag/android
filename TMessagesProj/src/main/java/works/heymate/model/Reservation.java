@@ -11,6 +11,7 @@ public interface Reservation {
     String STATUS = "status";
     String MEETING_ID = "meetingId";
     String MEETING_PASSWORD = "meetingPassword";
+    String CONSUMER_WALLET_ADDRESS = "user_wallet_address";
 
     String OFFER = "offer";
     String TIMESLOT = "time_slot";

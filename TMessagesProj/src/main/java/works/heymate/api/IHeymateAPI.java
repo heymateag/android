@@ -43,7 +43,7 @@ public interface IHeymateAPI {
 
     void getPurchasedPlan(String planId, APICallback callback);
 
-    void createReservation(String offerId, String serviceProviderId, String timeSlotId, String tradeId, APICallback callback);
+    void createReservation(String offerId, String serviceProviderId, String timeSlotId, String tradeId, String consumerWalletAddress, APICallback callback);
 
     void getMyOrders(APICallback callback);
 

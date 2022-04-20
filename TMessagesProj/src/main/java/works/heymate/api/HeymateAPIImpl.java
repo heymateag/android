@@ -326,7 +326,7 @@ class HeymateAPIImpl implements IHeymateAPI {
     }
 
     @Override
-    public void createReservation(String offerId, String serviceProviderId, String timeSlotId, String tradeId, APICallback callback) {
+    public void createReservation(String offerId, String serviceProviderId, String timeSlotId, String tradeId, String consumerWalletAddress, APICallback callback) {
         authorizedCall(result -> {
             if (result.responseCode == 201) {
                 callback.onAPIResult(new APIResult(new APIObject(result.response).getObject("data")));
@@ -334,7 +334,7 @@ class HeymateAPIImpl implements IHeymateAPI {
             else {
                 callback.onAPIResult(new APIResult(result.exception));
             }
-        }, callback, "POST", CREATE_RESERVATION_URL, "offerId", offerId, "serviceProviderId", serviceProviderId, "timeSlotId", timeSlotId, "tradeId", tradeId);
+        }, callback, "POST", CREATE_RESERVATION_URL, "offerId", offerId, "serviceProviderId", serviceProviderId, "timeSlotId", timeSlotId, "tradeId", tradeId, "user_wallet_address", consumerWalletAddress);
     }
 
     @Override

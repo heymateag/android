@@ -276,7 +276,7 @@ public class PaymentController {
 
         wallet.createAcceptedOffer(offer, timeSlot, tradeId, purchasedPlan, referrers, TG2HM.getDefaultCurrency(), (success1, errorCause) -> {
             if (success1) {
-                APIs.get().createReservation(offer.getString(Offer.ID), offer.getString(Offer.USER_ID), timeSlot.getString(TimeSlot.ID), tradeId, result -> {
+                APIs.get().createReservation(offer.getString(Offer.ID), offer.getString(Offer.USER_ID), timeSlot.getString(TimeSlot.ID), tradeId, wallet.getAddress(), result -> {
                     onPaymentFinished();
 
                     if (result.success) {

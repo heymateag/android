@@ -41,6 +41,7 @@ import works.heymate.core.HeymateEvents;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
 import works.heymate.model.Pricing;
+import works.heymate.model.Reservation;
 import works.heymate.walletconnect.WalletConnection;
 
 public class Wallet {
@@ -426,7 +427,7 @@ public class Wallet {
                 }
 
                 try {
-                    mCeloOffer.cancelService(offer, purchasedPlan, reservation, getAddress(), consumerCancelled, nativeCurrency);
+                    mCeloOffer.cancelService(offer, purchasedPlan, reservation, consumerCancelled ? getAddress() : reservation.getString(Reservation.CONSUMER_WALLET_ADDRESS), consumerCancelled, nativeCurrency);
 
                     Utils.runOnUIThread(() -> callback.onOfferOperationResult(true, null));
                 } catch (CeloException exception) {
