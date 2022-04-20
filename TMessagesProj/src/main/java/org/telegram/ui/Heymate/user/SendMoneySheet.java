@@ -21,8 +21,10 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.yashoid.sequencelayout.SequenceLayout;
 
+import org.celo.contractkit.ContractKit;
 import org.celo.contractkit.protocol.CeloRawTransaction;
 import org.celo.contractkit.protocol.CeloTransaction;
+import org.celo.contractkit.wrapper.BaseWrapper;
 import org.celo.contractkit.wrapper.ExchangeWrapper;
 import org.celo.contractkit.wrapper.StableTokenWrapper;
 import org.telegram.messenger.AndroidUtilities;
@@ -71,8 +73,15 @@ public class SendMoneySheet extends BottomSheet {
 
     private static final String TAG = "SendMoneySheet";
 
-    private static final BigInteger TRANSACTION_COST = CurrencyUtil.WEI.divide(BigInteger.valueOf(500L));
-    private static final BigInteger TOTAL_TRANSACTION_COST = TRANSACTION_COST.multiply(BigInteger.valueOf(5));
+    /*
+    Actual gas log:
+    approve1: 80973
+    exchange1: 180631
+    approve2: 81502
+    exchange2: 182925
+    transfer: 88041
+     */
+    private static final BigInteger TRANSACTION_GAS = BigInteger.valueOf(200_000L);
     private static final BigInteger CAUTION_AMOUNT = Convert.toWei(BigDecimal.ONE, Convert.Unit.ETHER).toBigInteger().divide(BigInteger.valueOf(500));
     private static final BigInteger EXTRA_CAUTION_AMOUNT = CAUTION_AMOUNT.add(CAUTION_AMOUNT);
 
@@ -112,6 +121,9 @@ public class SendMoneySheet extends BottomSheet {
 
     private final Currency mFromCurrency;
     private Currency mToCurrency = null;
+
+    private BigInteger mTransactionCost = null;
+    private BigInteger mTotalTransactionCost = null;
 
     private final Money mReferenceFrom;
     private Money mReferenceTo;
@@ -310,7 +322,7 @@ public class SendMoneySheet extends BottomSheet {
                 try {
                     BigInteger balance = token.balanceOf(wallet.getAddress()).send();
                     BigInteger sendAmount = CurrencyUtil.centsToBlockChainValue(send.getCents());
-                    BigInteger requiredBalance = sendAmount.add(TRANSACTION_COST);
+                    BigInteger requiredBalance = sendAmount.add(getTransactionCost());
 
                     if (balance.compareTo(requiredBalance) >= 0) {
                         CeloUtils.adjustGasPayment(contractKit, send.getCurrency());
@@ -425,11 +437,11 @@ public class SendMoneySheet extends BottomSheet {
 
                     BigInteger requiredBalance = nativeToSell
                             .add(CAUTION_AMOUNT)
-                            .add(TRANSACTION_COST) // approve to buy gold
-                            .add(TRANSACTION_COST) // buy gold
-                            .add(TRANSACTION_COST) // approve to buy target amount
-                            .add(TRANSACTION_COST) // buy target amount
-                            .add(TRANSACTION_COST); // final transfer
+                            .add(getTransactionCost()) // approve to buy gold
+                            .add(getTransactionCost()) // buy gold
+                            .add(getTransactionCost()) // approve to buy target amount
+                            .add(getTransactionCost()) // buy target amount
+                            .add(getTransactionCost()); // final transfer
 
                     BigInteger balance = sendToken.balanceOf(wallet.getAddress()).send();
 
@@ -575,7 +587,7 @@ public class SendMoneySheet extends BottomSheet {
                             .multiply(referenceFrom)
                             .divide(referenceTo)
                             .add(EXTRA_CAUTION_AMOUNT)
-                            .add(TOTAL_TRANSACTION_COST);
+                            .add(getTotalTransactionCost());
             sendCents = CurrencyUtil.blockChainValueToCents(sendAmount);
         }
 
@@ -596,7 +608,7 @@ public class SendMoneySheet extends BottomSheet {
         BigInteger receiveAmount =
                 sendAmount
                         .subtract(EXTRA_CAUTION_AMOUNT)
-                        .subtract(TOTAL_TRANSACTION_COST)
+                        .subtract(getTotalTransactionCost())
                         .multiply(referenceTo)
                         .divide(referenceFrom)
                         .subtract(EXTRA_CAUTION_AMOUNT)
@@ -779,20 +791,56 @@ public class SendMoneySheet extends BottomSheet {
     }
 
     private void checkBalance() {
-        TG2HM.getWallet().getBalance((success, usdBalance, eurBalance, realBalance, errorCause) -> {
+        TG2HM.getWallet().getContractKit((success, contractKit, errorCause) -> {
             if (success) {
-                mTotalBalance = TG2HM.pickTheRightMoney(usdBalance, eurBalance, realBalance);
+                try {
+                    StableTokenWrapper token = CeloUtils.getToken(contractKit, TG2HM.getDefaultCurrency());
+                    BigInteger balance = token.balanceOf(contractKit.getAddress()).send();
 
-                mBalance.setText(mTotalBalance.toString());
+                    calculateTransactionCosts(contractKit);
+
+                    Utils.runOnUIThread(() -> {
+                        mTotalBalance = Money.create(CurrencyUtil.blockChainValueToCents(balance), TG2HM.getDefaultCurrency());
+                        mBalance.setText(mTotalBalance.toString());
+                    });
+                } catch (Exception e) {
+                    Utils.runOnUIThread(() -> {
+                        Log.e(TAG, "Failed to query balance", e);
+
+                        mBalance.setText("Error!");
+                    });
+                }
             }
             else {
                 Log.e(TAG, "Failed to query balance", errorCause);
 
                 mBalance.setText("Error!");
             }
-
-            checkHasError();
         });
+    }
+
+    private void calculateTransactionCosts(ContractKit contractKit) throws Exception {
+        if (mTransactionCost != null) {
+            return;
+        }
+
+        String tokenAddress = CeloUtils.getToken(contractKit, TG2HM.getDefaultCurrency()).getContractAddress();
+
+        BigInteger gasPrice = contractKit.getGasPriceMinimum(tokenAddress, BigInteger.ZERO);
+        gasPrice = BigDecimal.valueOf(gasPrice.doubleValue() * contractKit.config.gasInflationFactor).toBigInteger();
+
+        synchronized (SendMoneySheet.this) {
+            mTransactionCost = TRANSACTION_GAS.multiply(gasPrice);
+            mTotalTransactionCost = mTransactionCost.multiply(BigInteger.valueOf(5L));
+        }
+    }
+
+    synchronized private BigInteger getTransactionCost() {
+        return mTransactionCost == null ? CurrencyUtil.WEI.divide(BigInteger.valueOf(500L)) : mTransactionCost;
+    }
+
+    synchronized private BigInteger getTotalTransactionCost() {
+        return getTransactionCost().multiply(BigInteger.valueOf(5L));
     }
 
     private void layoutToMainSameCurrency() {
