@@ -336,12 +336,19 @@ public class SendMoneySheet extends BottomSheet {
                         }
                     }
                     else {
-                        BigInteger missingAmount = requiredBalance.add(balance.negate());
+                        BigInteger missingAmount = requiredBalance.subtract(balance);
                         BigInteger oneCent = CurrencyUtil.centsToBlockChainValue(1);
                         BigInteger topUpAmount = missingAmount.max(oneCent);
+                        BigInteger reminder = topUpAmount.remainder(oneCent);
+
+                        if (reminder.compareTo(BigInteger.ZERO) != 0) {
+                            topUpAmount = topUpAmount.add(oneCent.subtract(reminder));
+                        }
+
+                        BigInteger finalTopUpAmount = topUpAmount;
 
                         Utils.postOnUIThread(() -> {
-                            Ramp.init(wallet.getAddress(), Money.create(CurrencyUtil.blockChainValueToCents(topUpAmount), send.getCurrency()), successful -> {
+                            Ramp.init(wallet.getAddress(), Money.create(CurrencyUtil.blockChainValueToCents(finalTopUpAmount), send.getCurrency()), successful -> {
                                 if (successful) {
                                     AwaitBalance.on(wallet, send.getCurrency(), onRampSuccess -> {
                                         if (onRampSuccess) {
@@ -456,12 +463,19 @@ public class SendMoneySheet extends BottomSheet {
                         }
                     }
                     else {
-                        BigInteger missingAmount = requiredBalance.add(balance.negate());
-                        BigInteger oneCent = CurrencyUtil.centsToBlockChainValue(1); // TODO round up to one cents
+                        BigInteger missingAmount = requiredBalance.subtract(balance);
+                        BigInteger oneCent = CurrencyUtil.centsToBlockChainValue(1);
                         BigInteger topUpAmount = missingAmount.max(oneCent);
+                        BigInteger reminder = topUpAmount.remainder(oneCent);
+
+                        if (reminder.compareTo(BigInteger.ZERO) != 0) {
+                            topUpAmount = topUpAmount.add(oneCent.subtract(reminder));
+                        }
+
+                        BigInteger finalTopUpAmount = topUpAmount;
 
                         Utils.postOnUIThread(() -> {
-                            Ramp.init(wallet.getAddress(), Money.create(CurrencyUtil.blockChainValueToCents(topUpAmount), send.getCurrency()), successful -> {
+                            Ramp.init(wallet.getAddress(), Money.create(CurrencyUtil.blockChainValueToCents(finalTopUpAmount), send.getCurrency()), successful -> {
                                 if (successful) {
                                     AwaitBalance.on(wallet, send.getCurrency(), onRampSuccess -> {
                                         if (onRampSuccess) {
