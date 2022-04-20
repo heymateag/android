@@ -37,10 +37,12 @@ import org.telegram.ui.Heymate.HeymateRouter;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.payment.AwaitSettlement;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthEstimateGas;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
 
@@ -320,7 +322,7 @@ public class SendMoneySheet extends BottomSheet {
                 StableTokenWrapper token = CeloUtils.getToken(contractKit, send.getCurrency());
 
                 try {
-                    BigInteger balance = token.balanceOf(wallet.getAddress()).send();
+                    BigInteger balance = call(token.balanceOf(wallet.getAddress()));
                     BigInteger sendAmount = CurrencyUtil.centsToBlockChainValue(send.getCents());
                     BigInteger requiredBalance = sendAmount.add(getTransactionCost());
 
@@ -328,7 +330,7 @@ public class SendMoneySheet extends BottomSheet {
                         CeloUtils.adjustGasPayment(contractKit, send.getCurrency());
 
                         try {
-                            TransactionReceipt receipt = token.transfer(targetWallet, sendAmount).send();
+                            TransactionReceipt receipt = call(token.transfer(targetWallet, sendAmount));
                             final String transactionHash = receipt.getTransactionHash();
 
                             Log.i(TAG, "Transfer successful: " + transactionHash);
@@ -432,8 +434,8 @@ public class SendMoneySheet extends BottomSheet {
                 BigInteger receiveAmount = CurrencyUtil.centsToBlockChainValue(receive.getCents());
 
                 try {
-                    BigInteger goldToSell = receiveExchange.getSellTokenAmount(receiveAmount.add(CAUTION_AMOUNT), true).send();
-                    BigInteger nativeToSell = sendExchange.getSellTokenAmount(goldToSell, false).send();
+                    BigInteger goldToSell = call(receiveExchange.getSellTokenAmount(receiveAmount.add(CAUTION_AMOUNT), true));
+                    BigInteger nativeToSell = call(sendExchange.getSellTokenAmount(goldToSell, false));
 
                     BigInteger requiredBalance = nativeToSell
                             .add(CAUTION_AMOUNT)
@@ -443,19 +445,19 @@ public class SendMoneySheet extends BottomSheet {
                             .add(getTransactionCost()) // buy target amount
                             .add(getTransactionCost()); // final transfer
 
-                    BigInteger balance = sendToken.balanceOf(wallet.getAddress()).send();
+                    BigInteger balance = call(sendToken.balanceOf(wallet.getAddress()));
 
                     if (balance.compareTo(requiredBalance) >= 0) {
                         try {
                             CeloUtils.adjustGasPayment(contractKit, send.getCurrency());
 
-                            sendToken.approve(sendExchange.getContractAddress(), nativeToSell.add(CAUTION_AMOUNT)).send();
-                            sendExchange.buy(goldToSell, nativeToSell.add(CAUTION_AMOUNT), true).send();
+                            call(sendToken.approve(sendExchange.getContractAddress(), nativeToSell.add(CAUTION_AMOUNT)));
+                            call(sendExchange.buy(goldToSell, nativeToSell.add(CAUTION_AMOUNT), true));
 
-                            contractKit.contracts.getGoldToken().approve(receiveExchange.getContractAddress(), goldToSell).send();
-                            receiveExchange.buy(receiveAmount, goldToSell, false).send();
+                            call(contractKit.contracts.getGoldToken().approve(receiveExchange.getContractAddress(), goldToSell));
+                            call(receiveExchange.buy(receiveAmount, goldToSell, false));
 
-                            TransactionReceipt receipt = receiveToken.transfer(targetWallet, receiveAmount).send();
+                            TransactionReceipt receipt = call(receiveToken.transfer(targetWallet, receiveAmount));
                             final String transactionHash = receipt.getTransactionHash();
 
                             Log.i(TAG, "Transfer successful: " + transactionHash);
@@ -536,6 +538,16 @@ public class SendMoneySheet extends BottomSheet {
                 });
             }
         });
+    }
+
+    private<T> T call(RemoteFunctionCall<T> call) throws Exception {
+        try {
+            return call.send();
+        } catch (TransactionException e) {
+            throw e;
+        } catch (Throwable t) {
+            return call.send();
+        }
     }
 
     private void moneySentToRecipient(String transactionHash) {
