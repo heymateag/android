@@ -423,8 +423,6 @@ public class ApplicationLoader extends Application {
             return;
         }
 
-        deviceInfoUpdated = true;
-
         String deviceId = HeymateConfig.getGeneral().get("deviceId");
 
         if (deviceId == null) {
@@ -439,12 +437,16 @@ public class ApplicationLoader extends Application {
             return;
         }
 
+        deviceInfoUpdated = true;
+
         APIs.get().updateUserDevices(
                 wallet == null ? null : wallet.getAddress(),
                 TG2HM.getDefaultCurrency().name(),
                 Build.BRAND + " " + Build.MODEL,
                 deviceId, fcmToken, result -> {
-                    // User device updated.
+                    if (!result.success) {
+                        deviceInfoUpdated = false;
+                    }
                 });
     }
 
