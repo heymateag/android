@@ -30,7 +30,6 @@ import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.google.android.exoplayer2.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -41,7 +40,6 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.HeymateConfig;
-import org.telegram.ui.Heymate.OnlineReservation;
 import org.telegram.ui.Heymate.TG2HM;
 
 import java.io.File;
@@ -53,7 +51,6 @@ import java.util.UUID;
 
 import androidx.multidex.MultiDex;
 
-import works.heymate.api.APIObject;
 import works.heymate.api.APIs;
 import works.heymate.core.HeymateEvents;
 import works.heymate.core.Texts;
@@ -61,8 +58,6 @@ import works.heymate.core.Utils;
 import works.heymate.core.wallet.Wallet;
 import works.heymate.model.User;
 import works.heymate.model.Users;
-
-import androidx.multidex.MultiDex;
 
 public class ApplicationLoader extends Application {
 
@@ -235,7 +230,7 @@ public class ApplicationLoader extends Application {
                 if (Users.currentUser == null || Users.currentUser.getLong(User.TELEGRAM_ID) != telegramId ||
                         !TextUtils.equals(username, Users.currentUser.getString(User.USERNAME)) ||
                         !TextUtils.equals(fullName, Users.currentUser.getString(User.FULL_NAME))) {
-                    APIs.get().updateUserInfo(fullName, username, null, String.valueOf(telegramId), result -> {
+                    APIs.get().updateUserInfo(phoneNumber, fullName, username, null, String.valueOf(telegramId), result -> {
                         if (result.success) {
                             Users.onCurrentUserChanged(null);
                         }
@@ -244,10 +239,6 @@ public class ApplicationLoader extends Application {
 
                 updateDeviceInfo();
             }
-
-//            APIs.get().getUserByTelegramId(String.valueOf(telegramUser.id), result -> {
-//                Log.d("AAA", "Asdasda"); // TODO
-//            });
         });
     }
 
@@ -452,8 +443,8 @@ public class ApplicationLoader extends Application {
                 wallet == null ? null : wallet.getAddress(),
                 TG2HM.getDefaultCurrency().name(),
                 Build.BRAND + " " + Build.MODEL,
-                deviceId, fcmToken, result -> { // TODO
-                    Log.d("AAA", "ASSDsadada");
+                deviceId, fcmToken, result -> {
+                    // User device updated.
                 });
     }
 

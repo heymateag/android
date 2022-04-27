@@ -81,12 +81,12 @@ class HeymateAPIImpl implements IHeymateAPI {
     }
 
     @Override
-    public void updateUserInfo(String fullName, String username, String avatarHash, String telegramId, APICallback callback) {
+    public void updateUserInfo(String phoneNumber, String fullName, String username, String avatarHash, String telegramId, APICallback callback) {
         authorizedCall(result -> {
             if (callback != null) {
                 callback.onAPIResult(new APIResult(result.responseCode >= 200 && result.responseCode < 300, result.exception));
             }
-        }, callback, "PATCH", UPDATE_USER_INFO_URL, "fullName", fullName, "userName", username, "avatarHash", avatarHash, "telegramId", telegramId);
+        }, callback, "PATCH", UPDATE_USER_INFO_URL, "phoneNumber", phoneNumber, "fullName", fullName, "userName", username, "avatarHash", avatarHash, "telegramId", telegramId);
     }
 
     @Override

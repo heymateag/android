@@ -13,7 +13,7 @@ public interface IHeymateAPI {
 
     void getUserByTelegramId(String telegramId, APICallback callback);
 
-    void updateUserInfo(String fullName, String username, String avatarHash, String telegramId, APICallback callback);
+    void updateUserInfo(String phoneNumber, String fullName, String username, String avatarHash, String telegramId, APICallback callback);
 
     void updateUserDevices(String walletAddress, String currency, String deviceName, String deviceId, String pushToken, APICallback callback);
 
