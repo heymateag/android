@@ -96,7 +96,7 @@ class HeymateAPIImpl implements IHeymateAPI {
                 callback.onAPIResult(new APIResult(result.responseCode >= 200 && result.responseCode < 300, result.exception));
             }
         }, callback , "PATCH", UPDATE_USER_DEVICES_URL,
-                "deviceType", "Android",
+                "deviceType", "ANDROID",
                 "walletAddress", walletAddress,
                 "currency", currency,
                 "deviceName", deviceName,
