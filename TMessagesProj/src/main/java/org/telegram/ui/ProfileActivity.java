@@ -3196,9 +3196,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 quickOfferButton.setImageResource(R.drawable.offer);
                 quickOfferButton.setContentDescription("Quick offers");
 
-                Log.d("AAA", "requesting for: " + userId);
                 Users.getUserByTelegramId(String.valueOf(userId), result -> {
-                    Log.d("AAA", "received for " + result.success);
                     if (result.success && result.response != null) {
                         payButton.setVisibility(View.VISIBLE);
                         //quickOfferButton.setVisibility(View.VISIBLE); TODO quick offer

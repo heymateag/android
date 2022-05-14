@@ -55,6 +55,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -2695,7 +2696,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         private int pollButton;
         private int contactButton;
         private int locationButton;
-        private int paymentRequestButton;
+        private int getPaidButton;
+        private int payButton;
         private int buttonsCount;
 
         public ButtonsAdapter(Context context) {
@@ -2740,9 +2742,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     } else if (position == contactButton) {
                         attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", R.string.AttachContact), Theme.chat_attachButtonDrawables[3], Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
                         attachButton.setTag(5);
-                    } else if (position == paymentRequestButton) {
-                        attachButton.setTextAndIcon(100, "Payment", AppCompatResources.getDrawable(mContext, R.drawable.hm_pay), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
+                    } else if (position == payButton) {
+                        attachButton.setTextAndIcon(100, "Pay", AppCompatResources.getDrawable(mContext, R.drawable.hm_pay), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
                         attachButton.setTag(100);
+                    } else if (position == getPaidButton) {
+                        attachButton.setTextAndIcon(101, "Get paid", AppCompatResources.getDrawable(mContext, R.drawable.hm_pay), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
+                        attachButton.setTag(101);
                     }
                     break;
                 case 1:
@@ -2782,7 +2787,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             pollButton = -1;
             contactButton = -1;
             locationButton = -1;
-            paymentRequestButton = -1;
+            payButton = -1;
+            getPaidButton = -1;
             if (!(baseFragment instanceof ChatActivity)) {
                 galleryButton = buttonsCount++;
                 documentButton = buttonsCount++;
@@ -2805,7 +2811,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
                 locationButton = buttonsCount++;
                 if (baseFragment instanceof ChatActivity) {
-                    paymentRequestButton = buttonsCount++;
+                    long dialogId = ((ChatActivity) baseFragment).getDialogId();
+                    if (DialogObject.isUserDialog(dialogId)) {
+                        payButton = buttonsCount++;
+                    }
+                    getPaidButton = buttonsCount++;
                 }
                 if (pollsEnabled) {
                     pollButton = buttonsCount++;

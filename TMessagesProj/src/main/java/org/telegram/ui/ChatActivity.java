@@ -116,6 +116,7 @@ import works.heymate.core.offer.OfferUtils;
 import works.heymate.core.reservation.ReservationUtils;
 import works.heymate.core.wallet.Wallet;
 import works.heymate.model.Offer;
+import works.heymate.model.Users;
 
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
@@ -10567,6 +10568,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
         else if (which == 100) {
+            SendMoneySheet dialog = new SendMoneySheet(getParentActivity());
+            showDialog(dialog);
+
+            Users.getUserByTelegramId(String.valueOf(dialog_id), result -> {
+                if (result.response != null) {
+                    if (!dialog.setReceiver(result.response)) {
+                        dialog.dismiss();
+                    }
+                }
+                else {
+                    dialog.dismiss();
+
+                    if (result.error == null) {
+                        Toast.makeText(getParentActivity(), "Recipient is not a heymate user.", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(getParentActivity(), "Network error", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+        else if (which == 101) {
             new PaymentRequestSheet(getParentActivity(), dialog_id).show();
         }
     }
