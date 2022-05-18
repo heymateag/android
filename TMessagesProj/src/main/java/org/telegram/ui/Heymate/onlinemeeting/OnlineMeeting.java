@@ -12,7 +12,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.log.HMLog;
 import org.telegram.ui.Heymate.log.LogToGroup;
 
@@ -152,14 +151,15 @@ public class OnlineMeeting {
 
         UserInfo userInfo = new UserInfo();
 
-        HtAmplify.getInstance(mContext).getZoomToken(userInfo.id, sessionId, System.currentTimeMillis() / 1000, (success, result, exception) -> {
+        APIs.get().getZoomToken(sessionId, sessionPassword, result -> {
             LogToGroup.logIfCrashed(() -> {
                 if (!sessionId.equals(mSessionId)) {
                     return;
                 }
 
                 HMLog.d(TAG, "Received Zoom token: " + result);
-                if (success) {
+
+                if (result.success) {
                     // Setup audio options
                     ZoomInstantSDKAudioOption audioOptions = new ZoomInstantSDKAudioOption();
                     audioOptions.connect = true; // Auto connect to audio upon joining
@@ -174,7 +174,7 @@ public class OnlineMeeting {
                     params.sessionName = sessionId;
                     params.sessionPassword = sessionPassword;
                     params.userName = userInfo.toString();
-                    params.token = result;
+                    params.token = result.response.getString("data");
 
                     HMLog.d(TAG, "Called join session with user name: " + params.userName);
                     ZoomInstantSDKSession session = mSDK.joinSession(params);

@@ -2,8 +2,6 @@ package org.telegram.ui.Heymate;
 
 import android.net.Uri;
 
-import com.amplifyframework.api.ApiException;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import works.heymate.api.APIObject;
+import works.heymate.core.APICallback;
 import works.heymate.core.URLs;
 import works.heymate.core.Utils;
 import works.heymate.core.offer.OfferUtils;
@@ -24,10 +23,10 @@ public class ReferralUtils {
 
     private static final String TAG = "ReferralUtils";
 
-    public static void getReferralId(OfferUtils.PhraseInfo phraseInfo, HtAmplify.APICallback<String> callback) {
+    public static void getReferralId(OfferUtils.PhraseInfo phraseInfo, APICallback<String> callback) {
         if (phraseInfo == null) {
             Utils.postOnUIThread(() -> {
-                callback.onCallResult(false, null, new ApiException("No phrase info", null, null));
+                callback.onAPICallResult(false, null, new Exception("No phrase info"));
             });
             return;
         }
@@ -40,7 +39,7 @@ public class ReferralUtils {
         }
         else {
             Utils.postOnUIThread(() -> {
-                callback.onCallResult(false, null, new ApiException("Invalid URL", null, null));
+                callback.onAPICallResult(false, null, new Exception("Invalid URL"));
             });
         }
     }
@@ -71,13 +70,13 @@ public class ReferralUtils {
         return referrers;
     }
 
-    private static void getReferralLinkFromOfferUrl(OfferUtils.PhraseInfo phraseInfo, HtAmplify.APICallback<String> callback) {
+    private static void getReferralLinkFromOfferUrl(OfferUtils.PhraseInfo phraseInfo, APICallback<String> callback) {
         getReferralId(phraseInfo.offerId, null, new ArrayList<>(1), callback);
     }
 
-    private static void getReferralLinkFromReferralUrl(OfferUtils.PhraseInfo phraseInfo, HtAmplify.APICallback<String> callback) {
+    private static void getReferralLinkFromReferralUrl(OfferUtils.PhraseInfo phraseInfo, APICallback<String> callback) {
         // TODO
-        callback.onCallResult(false, null, new ApiException("not implemented", "not implemented"));
+        callback.onAPICallResult(false, null, new Exception("not implemented"));
 //        HtAmplify.getInstance(ApplicationLoader.applicationContext)
 //                .getReferralInfo(phraseInfo.referralId, (success, data, exception) -> {
 //                    if (success) {
@@ -89,7 +88,7 @@ public class ReferralUtils {
 //                });
     }
 
-    private static void getReferralId(String offerId, String referralId, List<Referrer> referrers, HtAmplify.APICallback<String> callback) {
+    private static void getReferralId(String offerId, String referralId, List<Referrer> referrers, APICallback<String> callback) {
         if (!referrers.isEmpty()) {
             referrers.get(referrers.size() - 1).referralId = referralId;
         }
@@ -109,14 +108,14 @@ public class ReferralUtils {
 
             String referralLink = Uri.withAppendedPath(Uri.parse(URLs.getBaseURL(URLs.PATH_REFERRAL)), me.referralId).toString();
 
-            callback.onCallResult(true, referralLink, null);
+            callback.onAPICallResult(true, referralLink, null);
             return;
         }
 
         referrers.add(me);
 
         // TODO
-        callback.onCallResult(false, null, new ApiException("not implemented", "not implemented"));
+        callback.onAPICallResult(false, null, new Exception("not implemented"));
 //        HtAmplify.getInstance(ApplicationLoader.applicationContext)
 //                .createReferral(offerId, encodeReferrers(referrers), (success, data, exception) -> {
 //                    if (success) {

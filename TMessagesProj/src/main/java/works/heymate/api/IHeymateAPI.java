@@ -53,4 +53,6 @@ public interface IHeymateAPI {
 
     void updateReservation(String reservationId, String status, APICallback callback);
 
+    void getZoomToken(String topic, String password, APICallback callback);
+
 }

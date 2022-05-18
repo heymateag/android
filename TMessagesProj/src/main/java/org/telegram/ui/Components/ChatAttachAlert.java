@@ -88,7 +88,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import androidx.annotation.Keep;
-import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -2743,10 +2743,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", R.string.AttachContact), Theme.chat_attachButtonDrawables[3], Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
                         attachButton.setTag(5);
                     } else if (position == payButton) {
-                        attachButton.setTextAndIcon(100, "Pay", AppCompatResources.getDrawable(mContext, R.drawable.hm_pay), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
+                        attachButton.setTextAndIcon(100, "Pay", ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.hm_pay, null), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
                         attachButton.setTag(100);
                     } else if (position == getPaidButton) {
-                        attachButton.setTextAndIcon(101, "Get paid", AppCompatResources.getDrawable(mContext, R.drawable.hm_pay), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
+                        attachButton.setTextAndIcon(101, "Get paid", ResourcesCompat.getDrawable(mContext.getResources(), R.drawable.hm_pay, null), Theme.key_actionBarDefault, Theme.key_chat_attachContactText);
                         attachButton.setTag(101);
                     }
                     break;

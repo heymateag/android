@@ -22,7 +22,6 @@ import org.telegram.ui.Heymate.ActivityMonitor;
 import org.telegram.ui.Heymate.Constants;
 import org.telegram.ui.Heymate.FileCache;
 import org.telegram.ui.Heymate.HeymateRouter;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.TG2HM;
 import org.telegram.ui.Heymate.widget.RoundedCornersImageView;
 

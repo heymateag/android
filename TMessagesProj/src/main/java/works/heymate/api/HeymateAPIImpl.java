@@ -42,6 +42,7 @@ class HeymateAPIImpl implements IHeymateAPI {
     private static final String GET_TIMESLOT_RESERVATIONS_URL = HeymateConfig.API_BASE_URL + "/offer/{timeslotId}/offerParticipant";
     private static final String GET_RESERVATION_URL = HeymateConfig.API_BASE_URL + "/reservation/";
     private static final String UPDATE_RESERVATION_URL = HeymateConfig.API_BASE_URL + "/reservation/";
+    private static final String GET_ZOOM_TOKEN_URL = HeymateConfig.API_BASE_URL + "/base-info-service/getZoomJwt?topic={topic}&passWord={password}";
 
     @Override
     public void getUserInfo(String userId, APICallback callback) {
@@ -392,6 +393,20 @@ class HeymateAPIImpl implements IHeymateAPI {
                 callback.onAPIResult(new APIResult(result.exception));
             }
         }, callback, "PUT", url, "status", status);
+    }
+
+    @Override
+    public void getZoomToken(String topic, String password, APICallback callback) {
+        String url = GET_ZOOM_TOKEN_URL.replace("{topic}", topic).replace("{password}", password);
+
+        authorizedCall(result -> {
+            if (result.responseCode == 200) {
+                callback.onAPIResult(new APIResult(new APIObject(result.response)));
+            }
+            else {
+                callback.onAPIResult(new APIResult(result.exception));
+            }
+        }, callback, "GET", url);
     }
 
     private void authorizedCall(SimpleNetworkCall.NetworkCallCallback networkCallback, APICallback callback, String method, String url, Object... body) {

@@ -30,7 +30,6 @@ import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.Heymate.HtAmplify;
 import org.telegram.ui.Heymate.HtTimeSlotStatus;
 import org.telegram.ui.LaunchActivity;
 

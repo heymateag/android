@@ -16,16 +16,13 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Heymate.HtAmplify;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import works.heymate.api.APIArray;
 import works.heymate.api.APIObject;
 import works.heymate.api.APIs;
 import works.heymate.core.Texts;

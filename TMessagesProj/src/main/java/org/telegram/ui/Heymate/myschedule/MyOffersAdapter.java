@@ -18,11 +18,9 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Heymate.HtAmplify;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

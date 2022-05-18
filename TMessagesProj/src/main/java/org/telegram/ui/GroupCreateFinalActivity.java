@@ -71,7 +71,6 @@ import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Heymate.CreateShopActivity;
-import org.telegram.ui.Heymate.HtAmplify;
 
 import java.util.ArrayList;
 import java.util.UUID;
