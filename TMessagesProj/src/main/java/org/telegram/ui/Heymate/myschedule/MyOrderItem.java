@@ -327,7 +327,7 @@ public class MyOrderItem extends SequenceLayout implements View.OnClickListener 
         }
 
         AlertDialog loading = new AlertDialog(getContext(), 3);
-        loading.setCanCacnel(false);
+        loading.setCanCancel(false);
         loading.show();
 
         Wallet wallet = Wallet.get(getContext(), TG2HM.getCurrentPhoneNumber());

@@ -513,7 +513,11 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         }
         ArrayList<TLRPC.Dialog> dialogs;
         if (filterId != 0) {
-            dialogs = messagesController.dialogFiltersById.get(filterId).dialogs;
+            MessagesController.DialogFilter filter = messagesController.dialogFiltersById.get(filterId);
+            if (filter == null) {
+                return null;
+            }
+            dialogs = filter.dialogs;
         } else {
             dialogs = messagesController.getDialogs(folderId);
         }
@@ -610,7 +614,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             canvas.restore();
         }
 
-        textPaint2.setAlpha(oldAlpha);
+        textPaint2.setAlpha(oldAlphaText);
         composeBackgroundPaint.setAlpha(oldAlpha);
     }
 

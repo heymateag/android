@@ -36,6 +36,7 @@ public class FlickerLoadingView extends View {
     public final static int MEMBER_REQUESTS_TYPE = 15;
     public final static int REACTED_TYPE = 16;
     public final static int QR_TYPE = 17;
+    public final static int CONTACT_TYPE = 18;
     public static final int OFFER_TYPE = 111;
 
     private int gradientWidth;
@@ -116,7 +117,9 @@ public class FlickerLoadingView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (isSingleCell) {
-            if (itemsCount > 1 && MeasureSpec.getSize(heightMeasureSpec) > 0) {
+            if (itemsCount > 1 && ignoreHeightCheck()) {
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(getCellHeight(MeasureSpec.getSize(widthMeasureSpec)) * itemsCount, MeasureSpec.EXACTLY));
+            } else if (itemsCount > 1 && MeasureSpec.getSize(heightMeasureSpec) > 0) {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(Math.min(MeasureSpec.getSize(heightMeasureSpec), getCellHeight(MeasureSpec.getSize(widthMeasureSpec)) * itemsCount), MeasureSpec.EXACTLY));
             } else {
                 super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(getCellHeight(MeasureSpec.getSize(widthMeasureSpec)), MeasureSpec.EXACTLY));
@@ -124,6 +127,10 @@ public class FlickerLoadingView extends View {
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
+    }
+
+    private boolean ignoreHeightCheck() {
+        return viewType == CONTACT_TYPE;
     }
 
     @Override
@@ -181,6 +188,34 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
+        } else if (getViewType() == CONTACT_TYPE) {
+            int k = 0;
+            while (h <= getMeasuredHeight()) {
+                int r = AndroidUtilities.dp(25);
+                canvas.drawCircle(checkRtl(paddingLeft + AndroidUtilities.dp(9) + r), h + AndroidUtilities.dp(32), r, paint);
+
+                int textStart = 76;
+                int firstNameWidth = k % 2 == 0 ? 52 : 72;
+                rectF.set(AndroidUtilities.dp(textStart), h + AndroidUtilities.dp(20), AndroidUtilities.dp(textStart + firstNameWidth), h + AndroidUtilities.dp(28));
+                checkRtl(rectF);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(4), AndroidUtilities.dp(4), paint);
+
+                rectF.set(AndroidUtilities.dp(textStart + firstNameWidth + 8), h + AndroidUtilities.dp(20), AndroidUtilities.dp(textStart + firstNameWidth + 8 + 84), h + AndroidUtilities.dp(28));
+                checkRtl(rectF);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(4), AndroidUtilities.dp(4), paint);
+
+                rectF.set(AndroidUtilities.dp(textStart), h + AndroidUtilities.dp(42), AndroidUtilities.dp(textStart + 64), h + AndroidUtilities.dp(50));
+                checkRtl(rectF);
+                canvas.drawRoundRect(rectF, AndroidUtilities.dp(4), AndroidUtilities.dp(4), paint);
+
+                canvas.drawLine(AndroidUtilities.dp(textStart), h + getCellHeight(getMeasuredWidth()), getMeasuredWidth(), h + getCellHeight(getMeasuredWidth()), paint);
+
+                h += getCellHeight(getMeasuredWidth());
+                k++;
+                if (isSingleCell && k >= itemsCount) {
+                    break;
+                }
+            }
         } else if (getViewType() == DIALOG_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
@@ -224,7 +259,7 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        } else if (getViewType() == 3) {
+        } else if (getViewType() == FILES_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
                 rectF.set(AndroidUtilities.dp(12), h + AndroidUtilities.dp(8), AndroidUtilities.dp(52), h + AndroidUtilities.dp(48));
@@ -251,7 +286,7 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        } else if (getViewType() == 4) {
+        } else if (getViewType() == AUDIO_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
                 int radius = AndroidUtilities.dp(44) >> 1;
@@ -277,7 +312,7 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        } else if (getViewType() == 5) {
+        } else if (getViewType() == LINKS_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
                 rectF.set(AndroidUtilities.dp(10), h + AndroidUtilities.dp(11), AndroidUtilities.dp(62), h + AndroidUtilities.dp(11 + 52));
@@ -308,7 +343,7 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
-        } else if (getViewType() == 6 || getViewType() == USERS2_TYPE) {
+        } else if (getViewType() == USERS_TYPE || getViewType() == USERS2_TYPE) {
             int k = 0;
             while (h <= getMeasuredHeight()) {
                 int r = AndroidUtilities.dp(23);
@@ -637,37 +672,38 @@ public class FlickerLoadingView extends View {
     }
 
     private int getCellHeight(int width) {
-        if (getViewType() == DIALOG_CELL_TYPE) {
-            return AndroidUtilities.dp((SharedConfig.useThreeLinesLayout ? 78 : 72) + 1);
-        } else if (getViewType() == DIALOG_TYPE) {
-            return AndroidUtilities.dp(78) + 1;
-        } else if (getViewType() == PHOTOS_TYPE) {
-            int photoWidth = (width - (AndroidUtilities.dp(2) * (getColumnsCount() - 1))) / getColumnsCount();
-            return photoWidth + AndroidUtilities.dp(2);
-        } else if (getViewType() == 3) {
-            return AndroidUtilities.dp(56);
-        } else if (getViewType() == 4) {
-            return AndroidUtilities.dp(56);
-        } else if (getViewType() == 5) {
-            return AndroidUtilities.dp(80);
-        } else if (getViewType() == USERS_TYPE) {
-            return AndroidUtilities.dp(64);
-        } else if (getViewType() == INVITE_LINKS_TYPE) {
-            return AndroidUtilities.dp(66);
-        } else if (getViewType() == USERS2_TYPE) {
-            return AndroidUtilities.dp(58);
-        } else if (getViewType() == CALL_LOG_TYPE) {
-            return AndroidUtilities.dp(61);
-        } else if (getViewType() == BOTS_MENU_TYPE) {
-            return AndroidUtilities.dp(36);
-        } else if (getViewType() == SHARE_ALERT_TYPE) {
-            return AndroidUtilities.dp(103);
-        } else if (getViewType() == MEMBER_REQUESTS_TYPE) {
-            return AndroidUtilities.dp(107);
-        } else if (getViewType() == REACTED_TYPE) {
-            return AndroidUtilities.dp(48);
-        } else if (getViewType() == OFFER_TYPE) {
-            return AndroidUtilities.dp(300);
+        switch (getViewType()) {
+            case DIALOG_CELL_TYPE:
+                return AndroidUtilities.dp((SharedConfig.useThreeLinesLayout ? 78 : 72) + 1);
+            case DIALOG_TYPE:
+                return AndroidUtilities.dp(78) + 1;
+            case PHOTOS_TYPE:
+                int photoWidth = (width - (AndroidUtilities.dp(2) * (getColumnsCount() - 1))) / getColumnsCount();
+                return photoWidth + AndroidUtilities.dp(2);
+            case FILES_TYPE:
+            case AUDIO_TYPE:
+                return AndroidUtilities.dp(56);
+            case LINKS_TYPE:
+                return AndroidUtilities.dp(80);
+            case USERS_TYPE:
+            case CONTACT_TYPE:
+                return AndroidUtilities.dp(64);
+            case INVITE_LINKS_TYPE:
+                return AndroidUtilities.dp(66);
+            case USERS2_TYPE:
+                return AndroidUtilities.dp(58);
+            case CALL_LOG_TYPE:
+                return AndroidUtilities.dp(61);
+            case BOTS_MENU_TYPE:
+                return AndroidUtilities.dp(36);
+            case SHARE_ALERT_TYPE:
+                return AndroidUtilities.dp(103);
+            case MEMBER_REQUESTS_TYPE:
+                return AndroidUtilities.dp(107);
+            case REACTED_TYPE:
+                return AndroidUtilities.dp(48);
+            case OFFER_TYPE:
+                return AndroidUtilities.dp(300);
         }
         return 0;
     }
